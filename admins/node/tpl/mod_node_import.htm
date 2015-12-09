@@ -1,0 +1,79 @@
+<!--{include_file name="_smenu_node.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>素材管理</span>
+&nbsp;&gt;&nbsp;
+<a href="#/node/music" class="oplink">音乐列表</a>&nbsp;&gt;&nbsp;<span>导入音乐素材</span>
+</div>
+<div class="dtnav"></div>
+
+<div class="dtContent">
+
+  <form name="formPost" action="" method="post" id="formPost" onsubmit="return false;">
+    <table class="frmTable frmGamePost">
+      <tr><th class="c1">音乐来源&nbsp;&nbsp;</th><th style="text-align:left">&nbsp;&nbsp;来源地址</th></tr>
+	    <tr>
+	      <td class="c1">
+         <select name="source_id" id="frm_source_id" style="width:100px;">
+         <!--{foreach from=$sourceList item=it}-->
+         <!--{if $it.source_id neq 'bd'}-->
+           <option value="<!--{$it.source_id}-->"><!--{$it.source_name}--></option>
+         <!--{/if}-->
+         <!--{/foreach}-->
+         </select>
+	      </td>
+	      <td class="c2">
+	       <input type="text" name="source_url" value="" class="inptxt inplong" id="frm_source_url" style="width:700px;"  />
+	      </td>
+	    </tr>
+	    <tr class="rbtn">
+	     <th class="c1"></th>
+	     <td class="c2"><input type="submit" name="btnsubmit" value="导入" class="frmbtn" id="btnsubmit" />&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="oplink undl" title="返回素材列表页" onclick="return F.hashRefer('#/node/music');">返回</a></td>
+	    </tr>
+    </table>
+  </form>
+
+<script>var _nav_second = '<!--{$nav_second}-->';
+$(function(){
+	$('#frm_source_url').focus();
+});
+F.formPost = function() {
+	  var post_data = {};
+	  
+	  // source id
+	  post_data.source_id = $('#frm_source_id').val();
+	  
+	  // source url
+	  var $target = $('#frm_source_url');
+	  post_data.source_url = $target.val().trim();
+
+		if(''==post_data.source_url || !(/^http:\/\/.{4,}/i).test(post_data.source_url)){
+		  showTopPrompt('请输入有效的URL地址', 'error', 2, function(){
+			  $target.val('').focus();
+		  });
+		  return false;
+		}
+	  
+	  // Submit
+	  var $btnsubmit = $('#btnsubmit');
+	  $btnsubmit.prop('disabled',true);
+	  F.post(genurl('node/import/'+_nav_second),post_data,function(data){
+	    
+	    if (data.flag=='OK') {
+	      F.clearCacheAll();      
+	      showTopPrompt(data.msg, 'ok', 3, function(){
+	        F.hashRefer('#/node'+((''==_nav_second||'word'==_nav_second) ? '' : '/'+_nav_second));
+	      });
+	    }
+	    else {
+	      showTopPrompt(data.msg,'error',2,function(){F.locatePoint($target.get(0), $target.val().length);});
+	    }
+	    
+	    $btnsubmit.prop('disabled',false);
+	  });
+};
+</script>
+
+</div>
+
+</section>

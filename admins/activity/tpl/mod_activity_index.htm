@@ -1,0 +1,74 @@
+<!--{include_file name="_smenu_activity.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>活动管理</span>&nbsp;&gt;&nbsp;<span>活动列表</span></div>
+<div class="listnav">
+
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListDelete(this, 'activity/delete');">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>删除</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="#/activity/add" class="listbtn-link listbtn-hlink">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>添加活动</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+  
+</div>
+<div class="listContent">
+	<table class="listTable">
+	<tr class="rh">
+	  <th class="c0"><input type="checkbox" name="chkall" value="0" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+	  <th class="c1 sortfield" data-rel="<!--{$qparturl}-->,orderby=nid">ID<!--{sortfield field='nid'}--></th>
+	  <th class="c4">标题</th>
+	  <th class="c5">图片</th>
+	  <th class="c6 sortfield" data-rel="<!--{$qparturl}-->,orderby=changedbyname">最后修改者<!--{sortfield field='changedbyname'}--></th>
+	  <th class="c7 sortfield" data-rel="<!--{$qparturl}-->,orderby=changed">最后修改时间<!--{sortfield field='changed'}--></th>
+	  <th class="cl">操作</th>
+	</tr>
+	<!--{foreach from=$recordList item=it}-->
+  <tr class="rb">
+    <td class="c0"><input type="checkbox" name="rids[]" value="<!--{$it.aid}-->" class="chkrid" /></td>
+    <td class="c1"><!--{$it.aid}--></td>
+    <td class="c2"><!--{$it.title}--></td>
+    <td class="c2"><img src="<!--{$it.img}-->" style="max-width:50px;" /></td>
+    <td class="c6"><!--{$it.changedbyname}--></td>
+    <td class="c7"><!--{trans_time time=$it.changed}--></td>
+    <td class="cl">
+      <a href="#/activity/<!--{$it.aid}-->/edit" class="oplink hashreq">编辑</a>
+      <span class="wsep">|</span><a href="#/activity/<!--{$it.aid}-->/delete" class="oplink" data-rid="<!--{$it.aid}-->" onclick="return F.confirmListDelete(this, 'activity/delete');">删除</a>
+      <span class="wsep">|</span>
+      <a href="#/activity/related/<!--{$it.aid}-->" >关联</a>
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="8">暂没有相应的记录</td></tr>
+	<!--{/foreach}-->
+	</table>
+</div>
+
+</section>

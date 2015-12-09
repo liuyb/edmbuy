@@ -1,0 +1,25 @@
+CACHE MANIFEST
+
+# Version 1.0.21
+
+# Explicitly cached 'master entries'.
+CACHE:
+
+/misc/js/ext/jquery-2.1.3.min.js
+/misc/js/fm.min.js
+/misc/js/fst.min.js
+#
+/themes/mobiles/css/c.min.css
+#
+/misc/images/b.gif
+/misc/images/bloading.gif
+/misc/images/napp/touch-icon-114.png
+/misc/images/napp/touch-icon-144.png
+/themes/mobiles/img/guide.png
+
+# Resources that require the user to be online.
+NETWORK:
+*
+
+# Backup resources for un-available resources
+#FALLBACK:

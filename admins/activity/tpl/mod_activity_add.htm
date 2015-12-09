@@ -1,0 +1,135 @@
+<!--{include_file name="_smenu_activity.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>活动管理</span>
+&nbsp;&gt;&nbsp;
+<!--{if $nav_second eq ''}-->
+<a href="#/activity" class="oplink">活动列表</a>&nbsp;&gt;&nbsp;<span><!--{if $is_edit}-->编辑活动<!--{else}-->添加活动<!--{/if}--></span>
+<!--{/if}-->
+</div>
+
+<div class="dtnav"></div>
+<div class="dtContent">
+
+<!--{if $nav_second eq '' }-->
+
+	<form name="formPost" action="" method="post" id="formPost" onsubmit="return false;">
+	  <input type="hidden" name="aid" value="<!--{$ninfo.aid}-->" id="frm_id" />	
+	  <table class="frmTable frmGamePost">
+	    <tbody>
+        <tr>
+          <th class="c1">活动名称：</th>
+          <td class="c2"><input type="text" name="title" value="<!--{$ninfo.title}-->" class="inptxt inplong" id="frm_title"  /></td>
+        </tr>
+        <tr>
+          <th class="c1">活动模板：</th>
+          <td class="c2">
+            <select name="tpl" id="frm_tpl">
+              <option value="0" <!--{if $ninfo.tpl==0}-->selected="selectd"<!--{/if}-->>默认</option>
+              <option value="1" <!--{if $ninfo.tpl==1}-->selected="selectd"<!--{/if}-->>精简</option>
+            </select> 
+          </td>
+        </tr>
+        <tr>
+          <th class="c1">活动封面：</th>
+          <td class="c2"><input type="text" name="img" value="<!--{$ninfo.img}-->" class="inptxt inplong" id="frm_img"  /><span class="required">*</span>
+          <a href="javascript:;" class="asslink" onclick="return popUpload('上传图片','/upload/upfile',pop_cb_succ,pop_cb_fail);">上传</a>
+          <span id="frm_cover_img"><!--{if $ninfo.img neq ''}-->&nbsp;&nbsp;<a href="<!--{$ninfo.img}-->" target="_blank"><img src="<!--{$ninfo.img}-->" alt="" style="height:20px;" /></a><!--{/if}--></span>
+          </td>
+        </tr>
+        <tr>
+          <th class="c1">活动链接：</th>
+          <td class="c2"><input type="text" name="link" value="<!--{$ninfo.link}-->" class="inptxt inplong" id="frm_link"  /></td>
+        </tr>
+        <tr>
+          <th class="c1">活动开始时间：</th>
+          <td class="c2"><input type="text" name="start_time" value="<!--{if $ninfo.start_time==0}--><!--{else}--><!--{$ninfo.start_time|date_format:"%Y-%m-%d %H:%M:%S"}--><!--{/if}-->" class="inptxt inplong" id="frm_start_time"  /> <span style="color:red;">格式：2014-01-01 00:00:00</span></td>
+        </tr>
+        <tr>
+          <th class="c1">活动结束时间：</th>
+          <td class="c2"><input type="text" name="end_time" value="<!--{if $ninfo.end_time==0}--><!--{else}--><!--{$ninfo.end_time|date_format:"%Y-%m-%d %H:%M:%S"}--><!--{/if}-->" class="inptxt inplong" id="frm_end_time"  /><span style="color:red;">格式：2014-01-01 00:00:00</span></td>
+        </tr>
+        <tr>
+          <th class="c1">活动详情：</th>
+          <td class="c2"><script id="content"  name="content" type="text/plain"></script></td>
+        </tr>
+	      <tr class="rbtn">
+	       <th class="c1"></th>
+	       <td class="c2"><input type="submit" name="btnsubmit" value="提交" class="frmbtn" id="btnsubmit" />&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="oplink undl" title="返回" onclick="return F.hashRefer('#/activity');">返回</a></td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</form>
+	<!-- 配置文件 -->
+  <script type="text/javascript" src="/misc/editor/ueditor_full/ueditor.config.js"></script>
+  <!-- 编辑器源码文件 -->
+  <script type="text/javascript" src="/misc/editor/ueditor_full/ueditor.all.js"></script>
+  <!-- 实例化编辑器 -->
+  <script type="text/javascript">
+      var content = UE.getEditor('content', {initialFrameWidth:360,initialFrameHeight:480 });
+      //对编辑器的操作最好在编辑器ready之后再做
+      content.ready(function() {
+          //设置编辑器的内容
+          content.setContent('<!--{$ninfo.content}-->');
+      });
+     
+  </script>
+<!--{/if}-->
+
+<script>
+var _nav_second = '<!--{$nav_second}-->';
+function pop_cb_succ(data,status){
+  if (data.flag=='OK') {
+    showTopPrompt('上传成功！', 'ok');
+    $('#frm_img').val(data.path);
+    $('#frm_img').html('&nbsp;&nbsp;<a href="'+data.path+'" target="_blank"><img src="'+data.path+'" alt="" style="height:20px;" /></a>');
+  }
+  else {
+    showTopPrompt('上传失败！', 'error');
+  }
+  closePopup();
+};
+
+function pop_cb_fail(xhr,status,e){
+  closePopup();
+};
+
+F.formPost = function() {
+	var post_data = {};
+	
+	// node id
+	var _aid = parseInt($('#frm_id').val());
+	post_data.aid = _aid;
+
+	// node title
+	var $title      = $('#frm_title');
+	post_data.title = $title.val().trim();
+	
+	post_data.img        = $('#frm_img').val().trim();
+	post_data.start_time = $('#frm_start_time').val().trim();
+	post_data.end_time   = $('#frm_end_time').val().trim();
+	post_data.link       = $('#frm_link').val().trim();
+	post_data.content    = content.getContent();
+  post_data.tpl = $('#frm_tpl').val().trim();
+	
+	// Submit
+	var $btnsubmit = $('#btnsubmit');
+	$btnsubmit.prop('disabled',true);
+  F.post(genurl('activity/add'),post_data,function(data){
+	  
+    if (data.flag=='OK') {
+      F.clearCacheAll();      
+      showTopPrompt(data.msg, 'ok', 3, function(){
+        F.hashRefer('#/activity'+((''==_nav_second) ? '' : '/'+_nav_second));
+      });
+    }
+    else {
+    	showTopPrompt(data.msg,'error',2,function(){F.locatePoint($title.get(0), $title.val().length);});
+    }
+    
+    $btnsubmit.prop('disabled',false);
+  });
+};
+</script>
+
+</section>

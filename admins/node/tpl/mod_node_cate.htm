@@ -1,0 +1,102 @@
+<!--{include_file name="_smenu_node.htm"}-->
+<style type="text/css">
+	h2 {font-size:16px;margin:5px 2px;font-weight: 600}
+	.list li{float: left;width:100px;height: 32px;line-height:32px;text-align:center;margin: 5px;}
+	.list li:hover{border:1px solid #D7D7D7;cursor: pointer;height: 30px;line-height: 30px;}
+	.list li.add{width:200px;}
+	.toolbar {width: 100%;height: 40px;margin:5px 5px;font-size: 14px;}
+</style>
+<section id="ifr-main" class="ifr-main">
+<div class="breadcrumb">当前位置：<span>素材管理</span>&nbsp;&gt;&nbsp;<span>类别管理</span></div>
+
+<div class="toolbar"><input type="radio" name="mode" value="edit" id="bar_edit" checked="checked" />&nbsp;<label for="bar_edit">编辑</label> &nbsp;&nbsp; <input type="radio" name="mode" value="del"  id="bar_del" />&nbsp;<label for="bar_del">删除</label></div>
+<!--{foreach from=$category item=it}-->
+<div class="blk clearfix">
+<h2><!--{$it.cate_name}--></h2>
+<ul class="list">
+	<!--{foreach from=$categoryRTag[$it.cate_id] item=v}-->
+	<li class="item" data="<!--{$it.cate_id}-->,<!--{$v.tag_id}-->,<!--{$v.rank}-->"><!--{$v.tag_name}-->(R<!--{$v.rank}-->)</li>
+	<!--{/foreach}-->
+	<li class="add"><form class="add_tags"><input type="hidden" name="cate_id" value="<!--{$it.cate_id}-->"  /><input type="text" class="inptxt inptiny" name="tag_name" />&nbsp;&nbsp;<input type="submit" value="添加" /></form></li>
+</ul>
+</div>
+<!--{/foreach}-->
+
+
+<form name="" action="" method="post" style="display:none;">
+<h2>添加新分类</h2>
+<input type="input" name="cate_name" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="添加" />
+</form>
+
+</section>
+<script type="text/javascript">
+var mode = 'edit';
+	$(document).ready(function(){
+
+		$("[name='mode'] ").bind('focus', function(){
+			mode = $(this).val();
+		});
+
+		//添加关联
+		$('.add_tags').bind('submit', function (){
+			var cate_id = $("[name='cate_id']",this).val();
+			var tag_name = $("[name='tag_name']", this).val();
+			
+			$.post('node/addTag', {'cate_id':cate_id, 'tag_name':tag_name}, function(data){
+				//alert(data.msg);
+				if(data.flag=='SUC'){
+					go_hashreq('#/node/cate,p='+Math.random());
+				}
+			}, 'json');
+
+			return false;
+		});
+		//删除关联
+		function delRelation(){
+			if(!confirm('您确定要删除该元素吗？')){
+				return false;
+			}
+			var data = $(this).attr('data');
+			data = data.split(',');
+			if(data.length<2){
+				return false;
+			}
+			$.post('node/delTag',{'cate_id':data[0], 'tag_id':data[1]}, function(data){
+				if(data.flag=='SUC'){
+					F.clearCacheAll();
+					go_hashreq('#/node/cate');
+				}
+			},'json');
+		}
+		//更新排序值
+		function updateRank(){
+			var data = $(this).attr('data');
+			data = data.split(',');
+			if(data.length<2){
+				return false;
+			}
+			var cate_id = data[0];
+			var tag_id = data[1];
+			var rank = data[2];
+			new_rank = prompt('请输入新的排序值：',rank);
+			if(new_rank==rank||new_rank==null){
+				return;
+			}
+			
+			$.post('node/updateTag',{'cate_id':cate_id,'tag_id':tag_id,'rank':new_rank}, function(data){
+				if(data.flag=='SUC'){
+					F.clearCacheAll();
+					go_hashreq('#/node/cate');
+				}
+			},'json');
+		}
+		$('.item').bind('click', function(){
+			if(mode=='edit'){
+				updateRank.apply(this);
+			}else if(mode=='del'){
+				delRelation.apply(this);
+			}
+		});
+		
+	});
+</script>

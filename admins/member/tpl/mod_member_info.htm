@@ -1,0 +1,95 @@
+<!--{include_file name="_smenu_member.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>用户管理</span>&nbsp;&gt;&nbsp;<a href="#/member" class="oplink hashreq">用户列表</a>&nbsp;&gt;&nbsp;<span>编辑用户信息</span></div>
+
+<div class="dtnav"></div>
+<div class="dtContent">
+	<form name="member"  action="/member/save" method="post" id="member" onsubmit="return false;">
+	  <table class="frmTable frmGamePost">
+	    <tbody>
+	      <tr>
+	        <th class="c1">账号：</th>
+	        <td class="c2"><input type="hidden" name="uid" value="<!--{$member.uid}-->"  /><!--{$member.username}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">平台币：</th>
+	        <td class="c2"><!--{$member.coin}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">积分：</th>
+	        <td class="c2"><!--{$member.score}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">密码：</th>
+	        <td class="c2"><input type="password" name="password" value="" class="inptxt" id="password" /></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">手机：</th>
+	        <td class="c2"><input type="text" name="mobile" value="<!--{$member.mobile}-->" class="inptxt" id="mobile" /></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">邮箱：</th>
+	        <td class="c2"><input type="text" name="email" value="<!--{$member.email}-->" class="inptxt" id="email" /></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">Logo：</th>
+	        <td class="c2"><!--{if $member.logo!=''}--><img src="<!--{$picsavedir}--><!--{$member.logo}-->"  width=20 height=20 /><!--{else}-->无<!--{/if}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">注册IP：</th>
+	        <td class="c2"><!--{$member.regip}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">注册时间：</th>
+	        <td class="c2"><!--{$member.regtime|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">最近登录IP：</th>
+	        <td class="c2"><!--{$member.lastip}--></td>
+	      </tr>
+	      <tr>
+	        <th class="c1">最近登录时间：</th>
+	        <td class="c2"><!--{$member.lasttime|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
+	      </tr>
+	      <tr class="rbtn">
+	       <th class="c1"></th>
+	       <td class="c2"><input type="submit" name="btnsubmit" value="提交" class="frmbtn" id="btnsubmit" />&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="oplink undl" title="返回用户列表页" onclick="return F.hashRefer('#/member');">返回</a></td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</form>
+</div>
+</section>
+<script type="text/javascript">
+function updateMember(){
+	var _self = updateMember;
+	if(typeof _self.doing == 'undefined'){
+		_self.doing = 0;
+	}
+	if(_self.doing==1){
+		return false;
+	}
+	_self.doing = 1;
+	$("#member").ajaxSubmit({
+		success:function(data){
+			_self.doing = 0;
+			if(data.flag=='SUC'){
+				showTopPrompt(data.msg,3,'ok',function(){
+					F.clearCacheAll();
+					F.hashRedirect('#/member');	
+				});
+			}else{
+				showTopPrompt(data.msg,3,'error',function(){});
+			}
+		},
+		error:function(){
+			_self.doing = 0;
+		}
+	});
+	return false;
+}
+$(document).ready(function(){
+	$("#member").bind('submit',updateMember);
+});
+</script>

@@ -1,0 +1,201 @@
+<?php defined('IN_SIMPHP') or die('Access Denied');?>
+<style type="text/css">
+    .songlist {
+      background: none repeat scroll 0 0 #ecf0f1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      position: relative;
+      text-align: left;
+    }
+    .songlist dl {
+      width: 100%;
+    }
+    .songlist dl dd {
+      border-bottom: 1px solid #ddd;
+      padding: 3% 6.06061%;
+    }
+    .dd_song {
+      border-bottom: 1px solid #d4d4d4;
+      border-top: 1px solid #fff;
+    }
+    .dd_song:first-child {
+      border-top: 1px solid #d4d4d4;
+    }
+    .songlist .list_item {
+      height: 60px;
+      width: 100%;
+    }
+    .fl {
+      float: left !important;
+    }
+    .btn {
+      background-size: contain;
+      display: inline-block;
+      height: 50%;
+      margin: 3% 3% 0 0;
+      min-height: 25px;
+      width: 12%;
+    }
+    .play {
+      background: url('/misc/images/play.png') no-repeat scroll 0 0 ;
+      background-size:contain;
+    }
+    .icon_play {
+      cursor: pointer;
+    }
+    .hault {
+      background: url('/misc/images/hault.png') no-repeat scroll 0 0;
+      background-size:contain;
+    }
+    .song_info {
+      height: 110%;
+      overflow: hidden;
+      width: 60%;
+    }
+    .fs-x18 {
+      font-size: 1.125em;
+    }
+    .mt_4 {
+      margin-top: 4%;
+    }
+    .toverflow {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+    .fs-x14 {
+      font-size: 0.875em;
+    }
+    .mt_2 {
+      margin-top: 2%;
+    }
+    .g8 {
+      color: #888;
+    }
+    .fr {
+      float: right !important;
+    }
+    .list_item .tools {
+      height: 100%;
+      margin: 2% 0 0;
+      width: 22%;
+    }
+    .favor {
+      background: url("/misc/images/favor.png") no-repeat scroll 0 0;
+      background-size:contain;
+      margin-right: 15%;
+      width: 35%;
+      margin-top:10%;
+    }
+    .favor_flag{
+        background-image: url("/misc/images/favor_flag.png");
+    }
+</style>
+
+<section class="songlist">
+    <dl>
+        <?php foreach($music as $val):?>
+        <dd class="dd_song">
+            <div s_src="<?=$val['music_url']?>" class="list_item">
+                <span class="fl btn icon_play play" style=""></span>
+                <div class="song_info fl">
+                    <div class="fs-x18 mt_4 toverflow" >
+                        <?=$val['title']?>
+                    </div>
+                    <h4 class="g8 fs-x14 mt_2">
+                        <?=$val['singer_name']?>
+                    </h4>
+                </div>
+                <div class="fr tools" onclick="favor(<?=$val['nid']?>,'love')">
+                    <span class="favor btn <?php if($val['love']):?>favor_flag<?php endif;?>"></span>
+                </div>
+            </div>
+        </dd>       
+    <?php endforeach;?>
+    </dl>
+    <audio height="0px" width="0px" id="media">你的手机不支持音乐播放</audio>
+</section>
+<script>
+var player =  document.getElementById("media");
+var canPlayType   = function( file ){
+    return !!( player.canPlayType && player.canPlayType( 'audio/' + file.split( '.' ).pop().toLowerCase() + ';' ).replace( /no/, '' ) );
+};
+player.addEventListener('loadeddata',function(){
+    player.play();
+});
+player.addEventListener('play',function(){
+    $('.icon_play').removeClass('hault').addClass('play');
+    var index = $(player).data('index');
+    $('.icon_play').eq(index).toggleClass('hault play');
+});
+player.addEventListener('ended',function(){
+    $('.icon_play').removeClass('hault').addClass('play');
+    var index = $(player).data('index');
+    var maxlength = $('.icon_play').length;
+    if(maxlength >1){
+        index = (index+1>= maxlength)?0:index+1;
+        var next = $('.icon_play').eq(index);
+        next.trigger('click');
+    }
+});
+$(function (){
+//播放
+    $('.icon_play').click(function(e){
+        e.stopPropagation();
+        var isPlaying = !player.paused;
+        var i = $(player).data('index');
+        var index = $('.icon_play').index($(this));
+        if(isPlaying && i == index){
+            player.pause();
+            $(this).toggleClass('hault play');
+        }else if(!isPlaying && i == index){
+            player.play();
+        }else{
+            var src = $(this).parent('.list_item').attr('s_src');
+            if(src && src.substring(src.lastIndexOf(".")+1,src.length) == "mp3" ){
+                player.src = src;
+                player.load();
+            }else{
+                alert('不支持该音乐格式');
+            };
+            $(player).data('index',index);
+        }
+    });
+});
+
+//标记为喜欢
+function favor(nid, act){
+  var _this = favor;
+  var ev = window.event || favor.caller.arguments[0];
+  var src = ev.target || ev.srcElement;
+  if(src.nodeName=='SPAN'){
+    src = src.parentNode;
+  }
+
+  if(typeof _this.running =='undefined' || _this.running == 0){
+    _this.running = 1;
+    F.loadingStart();
+  }else{
+    return;
+  }
+
+  $.post('/node/action/'+act, {nid:nid}, function(data){
+    F.loadingStop();
+    _this.running = 0;
+    if(data.flag=='SUC'){
+      F.clearCacheAll();
+      if(act=='love'){
+        if(data.data.acted==1){
+          $(src).children().first().addClass('favor_flag');
+        }else{
+          $(src).children().first().removeClass('favor_flag');
+        }   
+      }
+    }else{
+        alert(data.msg);
+    }
+  }, 'json');
+}
+
+</script>

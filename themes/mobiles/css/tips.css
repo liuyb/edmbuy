@@ -1,0 +1,62 @@
+html,body {
+	display: block;
+	height: auto;
+	min-height: 100%;
+}
+#rtWrap {
+	background: #fff;
+	height: 100%;
+	position: relative;
+	margin: 0 auto;
+	width: 100%;
+	padding:0px 5%;
+}
+#rtWrap img {
+	width: 100%;
+	vertical-align: middle;
+}
+#rtWrap span,#rtWrap img{
+	display: block;
+}
+.marAuto {
+	margin: 0 auto;
+	text-align: center;
+}
+#rtWrap header {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 30px 0px;
+}
+#tips_head {
+	width: 100%;
+	max-width: 378px;
+	display: block;
+}
+#tips_word {
+	font-size: 20px;
+	font-size: 2rem;
+	color:#ff3333;
+}
+#public_no {
+	background-color: #ff3333;
+	color: #fff;
+	font-size: 22px;
+	font-size: 2.2rem;
+	margin: 20px 0px 30px;
+	padding: 10px 10px;
+	height: 48px;
+	line-height: 48px;
+}
+#public_no span {
+	width: 20%;
+	float:left;
+	margin-right: 5px;
+}
+#public_no_img {
+	max-width: 57px;
+	vertical-align: middle;
+}
+#wechat_img {
+	max-width: 430px;
+}

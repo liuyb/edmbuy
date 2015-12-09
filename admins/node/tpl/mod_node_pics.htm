@@ -1,0 +1,104 @@
+<!--{include_file name="_smenu_node.htm"}-->
+<style type="text/css">
+.picw img {height:50px;border:1px solid #ccc;padding:1px;}
+.picw a.del{margin-left:5px;}
+.pupw{margin-bottom:10px;}
+</style>
+
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>游戏管理</span>&nbsp;&gt;&nbsp;<a href="#/game" class="oplink hashreq">游戏列表</a>&nbsp;&gt;&nbsp;<span>添加游戏图片</span></div>
+
+<div class="dtnav"></div>
+<div class="dtContent">
+  <form name="formPost" action="" method="post" id="formPost" onsubmit="return false;">
+    <table class="frmTable frmGamePost">
+      <tbody>
+        <tr>
+          <th class="c1">游戏名称：</th>
+          <td class="c2"><!--{$ginfo.game_name}--><input type="hidden" name="game_id" value="<!--{$ginfo.game_id}-->" id="frm_id" /></td>
+        </tr>
+        <tr>
+          <th class="c1">图片列表：</th>
+          <td class="c2" id="pics_list">
+            <input type="hidden" name="game_pic_ids" value="<!--{$ginfo.game_pic_ids}-->" id="frm_game_pic_ids" />
+          <!--{foreach from=$gpics item=it}-->
+            <p class="picw">
+              <input type="hidden" name="pic_ids[]" value="<!--{$it.pic_id}-->" class="pic_ids" />
+              <a href="<!--{$it.path}-->" target="_blank"><img src="<!--{$it.path}-->" alt="" /></a>
+              <a href="javascript:;" onclick="return delete_pic_comfirm();" class="del">删除</a>
+            </p>
+          <!--{/foreach}-->
+            <p class="pupw"><a href="javascript:;" class="asslink" onclick="return popUpload('上传游戏图片','/upload/upfile?dbsave=1&ref_id=<!--{$ginfo.game_id}-->',pop_cb_succ,pop_cb_fail);">上传新图</a></p>
+          </td>
+        </tr>
+        <tr class="rbtn">
+         <th class="c1"></th>
+         <td class="c2">
+          <input type="submit" name="btnsubmit" value="提交" class="frmbtn" id="btnsubmit" />
+          &nbsp;&nbsp;&nbsp;<a href="javascript:;" class="oplink undl" title="返回游戏列表页" onclick="return F.hashRefer('#/game');">返回</a>
+         </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+
+<script>
+function pop_cb_succ(data,status){
+  if (data.flag=='OK') {
+	    showTopPrompt('上传成功！', 'ok');
+	    var _h = '<p class="picw">'
+             + '<input type="hidden" name="pic_ids[]" value="'+data.mid+'" class="pic_ids" />'
+             + '<a href="'+data.path+'" target="_blank"><img src="'+data.path+'" alt="" /></a>'
+             + '<a href="javascript:;" onclick="return delete_pic_comfirm();" class="del">删除</a>'
+             + '</p>';
+	    $('#pics_list').append(_h);
+  }
+  else {
+    showTopPrompt('上传失败！', 'error');
+  }
+  closePopup();
+};
+function pop_cb_fail(xhr,status,e){
+  closePopup();
+};
+function delete_pic_comfirm(obj) {
+  if(confirm('确定删除此图片？')) {
+    $(obj).parent().remove();
+  }
+  return false;
+};
+$(function(){
+  
+});
+// form post
+F.formPost = function() {
+  var post_data = {};
+  
+  // game id
+  var g_id = parseInt($('#frm_id').val());
+  post_data.game_id = g_id;
+  
+  // game pics
+  post_data.game_pics = F.getListChkIds('#formPost .pic_ids');
+  
+  // Submit
+  var $btnsubmit = $('#btnsubmit');
+  $btnsubmit.prop('disabled',true);
+  F.post(genurl('game/pics'),post_data,function(data){
+    if (data.flag=='OK') {   
+      showTopPrompt(data.msg, 'ok', 3, function(){
+        F.hashReload();
+      });
+    }
+    else {
+      showTopPrompt(data.msg,'error');
+    }
+    
+    $btnsubmit.prop('disabled',false);
+  });
+};
+</script>
+
+</section>

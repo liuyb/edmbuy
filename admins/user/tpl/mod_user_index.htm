@@ -1,0 +1,46 @@
+<!--{include_file name="_smenu.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+您好！<font color="red"><!--{$admin.admin_uname}--></font>，欢迎来到8558手游平台！
+<div class="introWrap">
+	<div class="tit"><strong>系统信息</strong></div>
+	<table class="listTable introList">
+	  <tr>
+	    <th class="first">服务器操作系统：</th>
+	    <td><!--{$srvinfo.PHP_OS}--></td>
+	    <th>Web服务器：</th>
+	    <td><!--{$srvinfo.SERVER_SOFTWARE}--></td>
+	  </tr>
+	  <tr>
+	    <th class="first">PHP版本：</th>
+	    <td><!--{$srvinfo.PHP_VERSION}--></td>
+	    <th>数据库版本：</th>
+	    <td><!--{$srvinfo.DB_VERSION}--></td>
+	  </tr>
+	  <tr>
+	    <th class="first">访问者IP：</th>
+	    <td><!--{$srvinfo.CLIENT_IP}--></td>
+	    <th>访问者环境：</th>
+	    <td><!--{$srvinfo.CLIENT_UA}--></td>
+	  </tr>
+	  <tr>
+	    <th class="first">系统版本：</th>
+	    <td><!--{$srvinfo.SYS_VERSION}--></td>
+	    <th>系统时区：</th>
+	    <td><!--{$srvinfo.SYS_TIMEZONE}--></td>
+	  </tr>
+	  <tr>
+	    <th class="first">系统时间：</th>
+	    <td><!--{$srvinfo.SYS_TIME}--></td>
+	    <th>数据库时间：</th>
+	    <td><!--{$srvinfo.DB_TIME}--></td>
+	  </tr>
+	  <tr>
+	   <th class="first">脚本最大执行时间：</th>
+	   <td><!--{$srvinfo.PHP_EXECTIME}--></td>
+	   <th>允许文件上传大小：</th>
+	   <td><!--{$srvinfo.PHP_UPLOAD}--></td>
+	 </tr>
+	</table>
+</div>
+</section>

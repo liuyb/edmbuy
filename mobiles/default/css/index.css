@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+section .main img {width: 100%;height: auto;}
+  
+#content .main ul {padding: 15px 10px 38px;}
+#content .main li {float: left;width: 155px;text-align: center;position: relative;margin-bottom: 10px;}
+#content .main li img {width: 141px;height: auto;}
+#content .main li a {position: absolute;left: 0; top: 0;width: 155px;height: 141px;}
+#content .main li p {overflow: hidden;height: 18px;font-size: 14px;}
+
+/* iPhone [portrait + landscape] */
+@media only screen and (max-device-width: 480px) {
+  #content .main li {width: 75px;}
+  #content .main li img {width: 70px;}
+  #content .main li a {width: 75px;height: 70px;}
+}

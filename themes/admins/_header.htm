@@ -1,0 +1,40 @@
+<div class="headerMain">
+  <div class="headLogo"><a href="/">福小秘管理后台</a></div>
+  <div class="headLink">
+    <span>当前登录用户：</span><span style="font-weight:bold;"><!--{$admin.admin_uname}--></span>
+    <span class="wsep">|</span><a href="javascript:;" onclick="return clear_cache();">清除缓存</a>
+    <span class="wsep">|</span><a href="/logout">退出</a>
+  </div>
+</div>
+<nav class="headerNav">
+  <ul id="htabs-bar" class="htabs-bar">
+    <li class="htabs-list sy htabs-list-on" id="hMainTab">
+      <a href="#/home" class="link hashreq"><span class="htabs-item-text">首页</span></a>
+    </li>
+    <li class="htabs-list sc">
+      <a href="#/node" class="link hashreq"><span>素材管理</span></a>
+    </li>
+    <li class="htabs-list hd">
+      <a href="#/activity" class="link hashreq"><span>活动管理</span></a>
+    </li>
+    <li class="htabs-list xw">
+      <a href="#/news" class="link hashreq"><span>新闻管理</span></a>
+    </li>
+    <li class="htabs-list yh">
+      <a href="#/member" class="link hashreq"><span>用户管理</span></a>
+    </li>
+    <li class="htabs-list other">
+      <a href="#/other" class="link hashreq"><span>其它</span></a>
+    </li>
+  </ul>
+  <div class="bgx hline"></div>
+</nav>
+<div id="toploading"><b></b><span>数据加载中...</span></div>
+<div id="mainMsgBox"><span class="msg msg-error">数据保存中...</span></div>
+<script>
+function clear_cache(){
+  F.clearCacheAll();
+  showTopPrompt('缓存已清除', 'ok');
+	return false;
+}
+</script>

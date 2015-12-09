@@ -1,0 +1,22 @@
+<footer id="ifr-foot" class="ifr-foot"></footer>
+<section class="ifr-copyrt">&copy;&nbsp;Donglong Inc.</section>
+<script>
+//list head click event
+$('#ifr-body .listTable .sortfield').attr('title', '点击排序')
+.bind('click', function(){
+  var hashurl = $(this).attr('data-rel');
+  var ow = $(this).find('b.icon').hasClass('icon-list-down') ? 'asc' : 'desc';
+  if(hashurl.indexOf(',')<0) {
+    hashurl += ',order='+ow;
+  }
+  else {
+    hashurl += '&order='+ow;
+  }
+  F.setHash(hashurl);
+  return false;    
+});
+$(function() {
+  set_curnav('<!--{$nav}-->');
+  $(window).resize();
+});
+</script>

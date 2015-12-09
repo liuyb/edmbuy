@@ -1,0 +1,149 @@
+<!--{include_file name="_smenu_node.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>素材管理</span>&nbsp;&gt;&nbsp;<span>文字祝福语列表</span></div>
+
+<div class="boxSearch">
+  <div class="boxBod">
+    <form target="_top" id="node_search" method="post" action="/node/?_hr=1" name="node_search">
+      <table width="99%" align="center" cellspacing="2" cellpadding="2" border="0"><tbody>
+        <tr><td width="200">关键字：<input type="text" value="<!--{$_query_node.keyword}-->" size="20" name="keyword"></td>
+        <td width="100">
+          <select name="status" id="status">
+              <option value="" >全部</option>
+              <option value="N" <!--{if $_query_node.status=='N'}-->selected="selected"<!--{/if}-->>新建</option>
+              <option value="R" <!--{if $_query_node.status=='R'}-->selected="selected"<!--{/if}-->>展示</option>
+              <option value="S" <!--{if $_query_node.status=='S'}-->selected="selected"<!--{/if}-->>挂起</option>
+            </select>
+        </td>
+        <td><input type="submit" style="padding:2px 5px" value="提交查询" name="Submit"></td></tr>
+      </tbody></table>
+    </form>
+  </div>
+</div>
+
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListDelete(this, 'node/delete');">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>删除</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListRecommend(this, 'node/recommend', 1);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>推荐</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListRecommend(this, 'node/recommend', 0);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>解除推荐</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListSuspend(this, 'node/suspend', 1);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>挂起</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListSuspend(this, 'node/suspend', 0);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>激活</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="#/node/add" class="listbtn-link listbtn-hlink">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>添加文字祝福语</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+  
+</div>
+<div class="listContent">
+	<table class="listTable">
+	<tr class="rh">
+	  <th class="c0"><input type="checkbox" name="chkall" value="0" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+	  <th class="c1 sortfield" data-rel="<!--{$qparturl}-->,orderby=nid">ID<!--{sortfield field='nid'}--></th>
+	  <th class="c2 sortfield" data-rel="<!--{$qparturl}-->,orderby=cate_id">分类<!--{sortfield field='cate_id'}--></th>
+	  <th class="c4">祝福语内容</th>
+	  <th class="c5">关键词</th>
+	  <th class="c6 sortfield" data-rel="<!--{$qparturl}-->,orderby=created">首次创建<!--{sortfield field='created'}--></th>
+	  <th class="c7 sortfield" data-rel="<!--{$qparturl}-->,orderby=changed">最后修改<!--{sortfield field='changed'}--></th>
+    <th class="c5">状态</th>
+	  <th class="cl">操作</th>
+	</tr>
+	<!--{foreach from=$recordList item=it}-->
+  <tr class="rb">
+    <td class="c0"><input type="checkbox" name="rids[]" value="<!--{$it.nid}-->" class="chkrid" /></td>
+    <td class="c1"><!--{$it.nid}--></td>
+    <td class="c2"><!--{$it.cate_name}--></td>
+    <td class="c4"><!--{$it.content}--></td>
+    <td class="c5"><!--{$it.keyword}--></td>
+    <td class="c6"><!--{$it.createdbyname}--> @ <!--{trans_time time=$it.created}--></td>
+    <td class="c7"><!--{$it.changedbyname}--> @ <!--{trans_time time=$it.changed}--></td>
+    <td><!--{$it.status}--></td>
+    <td class="cl">
+      <a href="#/node/<!--{$it.nid}-->/recommend" class="oplink" data-rid="<!--{$it.nid}-->" onclick="return F.confirmListRecommend(this, 'node/recommend', <!--{if $it.recommend}-->0<!--{else}-->1<!--{/if}-->);"><!--{if $it.recommend}--><em style="color:red;">解推荐</em><!--{else}-->推荐<!--{/if}--></a>
+      <span class="wsep">|</span><a href="#/node/<!--{$it.nid}-->/suspend" class="oplink" data-rid="<!--{$it.nid}-->" onclick="return F.confirmListSuspend(this, 'node/suspend', <!--{if $it.status eq 'S'}-->0<!--{else}-->1<!--{/if}-->);"><!--{if $it.status eq 'S'}--><em style="color:green;">激活</em><!--{else}-->挂起<!--{/if}--></a>
+      <span class="wsep">|</span><a href="#/node/<!--{$it.nid}-->/edit" class="oplink hashreq">编辑</a>
+      <span class="wsep">|</span><a href="#/node/<!--{$it.nid}-->/delete" class="oplink" data-rid="<!--{$it.nid}-->" onclick="return F.confirmListDelete(this, 'node/delete');">删除</a>
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="8">暂没有相应的记录</td></tr>
+	<!--{/foreach}-->
+	</table>
+</div>
+
+</section>
+<script>
+$(document).ready(function() {
+        $('#node_search').on('submit', function(e) {
+            e.preventDefault(); // <-- important
+            $(this).ajaxSubmit({
+                //target: '#output'
+                dataType:'json',
+                success:function(data){
+                  F.clearCacheAll();
+                  $("#ifr-body").html(data.body);
+                }
+            });
+        });
+    });
+
+</script>

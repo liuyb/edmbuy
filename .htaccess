@@ -1,0 +1,48 @@
+# Add manifest type
+AddType text/cache-manifest manifest
+
+# Rewrite setting.
+<IfModule mod_rewrite.c>
+  #
+  # Set Rewrite On
+  RewriteEngine On
+	
+  #
+  # Set Rewrite Base
+  RewriteBase /
+  
+  #
+  # Rewrite URLs of the form 'x' to the form 'admin.php?q=x'.
+  RewriteCond %{HTTP_HOST} ^edmadm\.fxmapp\.com$
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteRule ^(.*)$ admin.php?q=$1 [QSA,L]
+  
+  #
+  # Rewrite URLs of the form 'x' to the form 'api.php?q=x'.
+  RewriteCond %{HTTP_HOST} ^edmapi\.fxmapp\.com$
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteRule ^(.*)$ api.php?q=$1 [QSA,L]
+  
+  #
+  # Rewrite fst.js
+  RewriteRule ^fst\.(js|gif)$ fst.php [L,QSA]
+  
+  # Rewrite URLs of the form 'x' to the form 'mobile.php?q=x'.
+  RewriteCond %{HTTP_HOST} ^edm\.fxmapp\.com$
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteRule ^(.*)$ mobile.php?q=$1 [QSA,L]
+  
+  #
+  # Rewrite URLs of the form 'x' to the form 'index.php?q=x'.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteRule ^(.*)$ index.php?q=$1 [QSA,L]
+  
+</IfModule>

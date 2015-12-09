@@ -1,0 +1,147 @@
+<!--{include_file name="_smenu_activity.htm"}-->
+<style type="text/css">
+  .listbtn-grp{margin-right: 20px;line-height: 30px;}
+</style>
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>活动管理</span>&nbsp;&gt;&nbsp;<span>活动列表</span>&nbsp;&gt;&nbsp;<span>关联列表</span></div>
+<!-- 筛选 -->
+<div class="listnav">
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      筛选
+    </div>  
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      类别：
+      <select name="type_id" id="type_id">
+        <option value="">全部</option>
+        <!--{foreach from=$typelist item=val }-->
+        <option value="<!--{$val.type_id}-->" <!--{if $val.type_id==$type_id}-->selected="selected"<!--{/if}--> ><!--{$val.type_name}--></option>
+        <!--{/foreach}-->
+      </select>
+    </div>
+  </div>
+  <div class="listbtn">
+      <input type="checkbox" name="viewRelated" value="1"  id="viewRelated" <!--{if $viewRelated}-->checked="checked"<!--{/if}--> />&nbsp;&nbsp;<label for="viewRelated">只显示已关联元素</label>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link"  onclick="return query()">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>查询</span>
+      </a>
+    </div>  
+  </div>
+</div>
+
+<!-- 批量操作 -->
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListRelated(this, 'activity/relatedU/<!--{$aid}-->', 1);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>添加关联</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListRelated(this, 'activity/relatedU/<!--{$aid}-->', 0);">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>取消关联</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+  
+</div>
+<div class="listContent">
+	<table class="listTable" style="text-align:center;">
+	<tr class="rh">
+	  <th class="c0"><input type="checkbox" name="chkall" value="0" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+	  <th class="c1" >ID</th>
+	  <th class="c4" width="800">标题</th>
+    <th class="c4" width="60">类别</th>
+	  <th class="c5" width="50">状态</th>
+	  <th class="c5" width="130">排序</th>
+	  <th class="cl" width="80">操作</th>
+	</tr>
+	<!--{foreach from=$list item=it}-->
+  <tr class="rb">
+    <td class="c0"><input type="checkbox" name="rids[]" value="<!--{$it.nid}-->" class="chkrid" /></td>
+    <td class="c1"><!--{$it.nid}--></td>
+    <td class="c2"><!--{if $it.title!=''}--><!--{$it.title}--><!--{else}--><!--{$it.content}--><!--{/if}--></td>
+    <td class="c2"><!--{$types[$it.type_id]}--></td>
+    <td class="c2 relation"><!--{if $it.rank!=null}-->已关联<!--{else}--><!--{/if}--></td>
+    <td class="c6" ><!--{if $it.rank!=null}--><input type="text" name="rank" value="<!--{$it.rank}-->" class="inptiny" /><input type="button" value="更新"  id=""  data-nid="<!--{$it.nid}-->"  onclick="updateRank(this)" /><!--{/if}--></td>
+    <td class="cl">
+      <!--{if $it.rank==null}-->
+      <a href="javascrip:void(0);" class="oplink hashreq" data-rid="<!--{$it.nid}-->" onclick="return F.confirmListRelated(this, 'activity/relatedU/<!--{$aid}-->', 1);">添加关联</a>
+      <!--{else}-->
+      <a href="javascrip:void(0);" class="oplink" data-rid="<!--{$it.nid}-->" onclick="return F.confirmListRelated(this, 'activity/relatedU/<!--{$aid}-->', 0);">取消关联</a>
+      <!--{/if}-->
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="8">暂没有相应的记录</td></tr>
+	<!--{/foreach}-->
+	</table>
+</div>
+
+</section>
+<script type="text/javascript">
+var aid = '<!--{$aid}-->';
+  function query(){
+    type_id = $('#type_id').val();
+    viewRelated = $('#viewRelated').filter(':checked').length>0 ? 1:'';
+    $.post('/activity/related/'+aid+'?_hr=1',{type_id:type_id, viewRelated:viewRelated},function(data){
+      $("#ifr-body").html(data.body);
+    },'json');
+  }
+
+  //更新排序值
+  function updateRank(_this){
+    var new_rank=$(_this).prev().val();
+    var nid = $(_this).attr('data-nid');
+
+    $.post('/activity/relatedRank/?_hr=1',{nid:nid,aid:aid,new_rank:new_rank},function(data){
+      if(data.flag="SUC"){
+        alert('更新成功');
+      }else{
+        alert(data.msg);
+      }
+      F.clearCacheAll();
+      location.reload();
+    });
+  }
+
+ //已关联元素高亮显示
+ function highlight(){
+    $('.relation').each(function(){
+      if($(this).text().trim()=='已关联'){
+        $(this).parent().css('color', 'blue');
+      }
+    });
+ } 
+ highlight();
+
+</script>

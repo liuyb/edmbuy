@@ -1,0 +1,158 @@
+/* clearfix */
+.clearfix:after              { visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;}
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+* {
+	padding: 0px;
+	margin: 0px;
+}
+li {
+	list-style: none;
+	float:left;
+}
+img {
+	width: 100%;
+}
+.bbsizing {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box;}
+#tgd {
+	background: url("../img/tgd_2.png") no-repeat;
+	background-position: right bottom;
+	-webkit-background-size: contain;
+	background-size: contain;
+	background-color: #ed3e4b;
+	width: 100%;/*
+	margin: 0px auto;
+	height: 100%;*/
+	padding-bottom:80px;
+}
+#w90 {
+	width:90%;
+	margin: 0px auto;
+	
+}
+#tgd_share {
+	display: block;
+	max-width: 640px;
+	margin: 0px auto;
+}
+#tgd_title {
+	max-width: 120px;
+	margin: 30px auto;
+}
+#tgd_ul  {
+	margin: 0px auto 20px;
+}
+#tgd_ul li{
+	width:26.6666666666%;
+	min-width: 76px;
+	height: 35px;
+	margin: 20px 10% 0 0;
+}
+#tgd_ul li:nth-child(3n+0) {
+	margin-right: 0px;
+}
+#tgd_ul li span{
+	display: block;
+	background-color: #ffc901;
+	color: #ff3333;
+	border-radius: 5px;
+	text-align: center;
+	min-height: 30px;
+	line-height: 30px;
+}
+.active_giveto{
+	background-color:#fff!important;
+}
+.giveto_wish {
+  border: 1px solid #fff;
+  border-radius: 8px;
+  color: #fff;
+  line-height: 30px;
+  padding: 5px 10px;
+}
+#energy {
+
+	display: block;
+	margin: 0px auto;
+	text-align: center;
+}
+#energy img{
+	max-width: 210px;
+	margin: 15px auto ;
+	display: block;
+}
+#energy p {
+	color: #fff;
+	line-height: 35px;
+	font-size: 1.6rem;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: left;
+	padding-left: 25px;
+}
+#tgd_wish {
+	background: url("../img/tgd_5.png") no-repeat ;
+	background-position: bottom right;
+	-webkit-background-size: 64px 64px;
+	background-size: 64px 64px;
+	width: 100%;
+	height: 120px;
+	position: relative;
+}
+#wish_logo {
+	position: absolute;
+	left: -15px;
+	top:-35px;
+}
+#wish_logo img {
+	max-width: 40px;
+}
+#tgd_wish textarea{
+	border:none;
+	width: 100%;
+	height: 100%;
+	border-radius: 8px;
+	padding: 10px;
+	line-height: 24px;
+}
+#tgd_share_btn {
+	-webkit-appearance:none;
+	background-color: #ffc901;
+	color: #ed3e4b;
+	font-weight: bold;
+	border: none;
+	border-radius: 5px;
+	min-height: 40px;
+	width: 30%;
+	min-width: 150px;
+	margin: 30px auto;
+	display: block;
+	font-size: 18px;
+}
+#activity_rule {
+	background-color: #fff;
+	border-radius: 8px;
+	/*margin-bottom: 50px;*/
+	padding-bottom: 30px;
+}
+#rule_title {
+	color: #33cccc;
+	font-family: "Microsoft YaHei";
+	font-size: 25px;
+	margin:0px 0px 0px 20px ;
+	padding: 30px 0px;
+}
+#activity_rule p {
+	color: #999;
+	margin:0px 15px 0px 30px;
+	line-height: 25px;
+}
+.xyd {
+	border-radius: 50px;
+	background-color: #999;
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	margin-right: 10px;
+	vertical-align: middle;
+}

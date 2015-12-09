@@ -1,0 +1,132 @@
+<!--{include_file name="_smenu_member.htm"}-->
+<script type="text/javascript" src="/misc/js/ext/date/jquery.calendar.js"></script>
+<link href="/misc/js/ext/date/calendars.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+$(document).ready(function(){
+  	//日期选择器
+	$("#stime").cld();
+	$("#etime").cld();
+  
+	//排序事件
+	$(".sort").parent().bind('click',function(){
+		var sort_field = $(this).attr("id");
+		var sort = $("i",this).hasClass("desc") ? "asc":"desc";
+		var sort_val = sort_field+"_"+sort;
+		$("#sort").val(sort_val);
+		$("#member_search").submit();
+	});
+	var sort = $("#sort").val();
+	if(sort!=''){
+		var a = sort.split('_');
+		if(a.length==2){
+			$("#"+a[0]+' i').addClass(a[1]);
+		}
+	}
+});
+</script>
+
+<section id="ifr-main" class="ifr-main">
+<div class="breadcrumb">当前位置：<span>用户管理</span>&nbsp;&gt;&nbsp;<span>用户列表</span></div>
+<div class="boxSearch">
+	<div class="boxBod">
+	<form name="member_search" action="/member" method="post"  id="member_search" target="_top">
+	<table width="99%" border="0" cellspacing="2" cellpadding="2" align="center">
+	  <tr>
+	    <td width="390">时间：
+			<select name="time_type">
+				<option value="1" <!--{if $search.time_type==1}-->selected="selected"<!--{/if}--> >注册时间</option>
+				<option value="2" <!--{if $search.time_type==2}-->selected="selected"<!--{/if}--> >最后登陆时间</option>
+			</select>&nbsp;
+			<input id="stime" name="stime" type="text" size="15" value="<!--{$search.stime}-->"  bj="cBj" />
+			-
+			<input id="etime" name="etime" type="text" size="15" value="<!--{$search.etime}-->"  bj="cBj" /></td>
+	    <td width="200">用户名：
+	      <input name="username" type="text" size="20" value="<!--{$search.username}-->" /></td>
+	    <td width="200">昵称：
+	      <input name="nickname" type="text" size="20" value="<!--{$search.nickname}-->" /></td>
+	    <td width="110">ID：
+	      <input name="uid" type="text" size="8" value="<!--{$search.uid}-->" /><input type="hidden" value="<!--{$search.sort}-->" name="sort"  id="sort" /></td>
+	    <td width="100"><label><input type="checkbox" name="has_coin" value="1" <!--{if $search.has_coin>0}-->checked="checked"<!--{/if}--> />有平台币</label></td>
+	    <td width="100"><label><input type="checkbox" name="disabled_user" value="1" <!--{if $search.disabled_user>0}-->checked="checked"<!--{/if}--> />封停</label></td>
+	    <td><input type="submit" name="Submit" value="提交查询" style="padding:2px 5px" /></td>
+	  </tr>
+	</table>
+	</form>	
+	</div>
+</div>
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" data-rid="batch" onclick="return F.confirmListDelete(this, 'member/delete');">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>删除</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  
+</div>
+<div class="listContent">
+	<table class="listTable">
+	<tr class="rh">
+	  <th class="c0"><input type="checkbox" name="chkall" value="0" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+	  <th class="c1" id="uid">用户ID<i class="sort"></i></th>
+	  <th class="c2">账号</th>
+	  <th class="c3" id="coin" >平台币<i class="sort"></i></th>
+	  <th class="c4" id="score" >积分<i class="sort"></i></th>
+	  <th class="c5">注册时间</th>
+	  <th class="c6">最后登录时间</th>
+	  <th class="c7">状态</th>	  
+	</tr>
+	<!--{foreach from=$members item=val}-->
+  <tr class="rb">
+    <td class="c0"><input type="checkbox" name="rids[]" value="<!--{$val.uid}-->" class="chkrid" /></td>
+    <td class="c1"><!--{$val.uid}--></td>
+    <td class="c2"><a href="#/member/<!--{$val.uid}-->/edit" class="hashreq"><!--{$val.username}--></a></td>
+    <td class="c3"><!--{$val.coin}--></td>
+    <td class="c4"><!--{$val.score}--></td>
+    <td class="c5"><!--{$val.regtime|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
+    <td class="c6"><!--{if $val.lasttime!=0}--><!--{$val.lasttime|date_format:"%Y-%m-%d %H:%M:%S"}--><!--{/if}--></td>
+    <td class="c7"><!--{if $val.state==1}-->正常<!--{else}-->已封<!--{/if}-->&nbsp;/&nbsp;<!--{if $val.state==1}--><a href="javascript:void(0);" onclick="updateMemberState(<!--{$val.uid}-->,0)">封停</a><!--{else}--><a href="javascript:void(0);" onclick="updateMemberState(<!--{$val.uid}-->,1)">解封</a><!--{/if}--></td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="9">暂没有相应的记录</td></tr>
+	<!--{/foreach}-->
+	</table>
+</div>
+</section>
+<script type="text/javascript">
+function updateMemberState(uid,state){
+	var url = 'member/';
+	if(state==1){
+		url += 'amount';
+	}else if(state==0){
+		url += 'unAmount';
+	}else{
+		return false;
+	}
+	F.post(url,{uid:uid},function(data){
+		if(data.flag=='SUC'){
+			showTopPrompt(data.msg,3,'ok',function(){
+				F.clearCacheAll();
+				F.hashReload();
+			});
+		}else{
+			showTopPrompt(data.msg,3,'error',function(){
+				
+			});
+		}
+	});
+}
+</script>
+
