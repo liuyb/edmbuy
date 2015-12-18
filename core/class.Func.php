@@ -27,14 +27,11 @@ class Func extends CStatic {
   /**
    * create a length = $len random charactor string
    * @param $len
+   * @param $prefix
    * @return string
    */
-  public static function randchar($len = 6) {
-    $str = '';
-    for ($i = 0; $i < $len; $i++){
-      $str .= chr(mt_rand(97, 122));
-    }
-    return $str;
+  public static function randstr($len = 6, $prefix = '') {
+    return randstr($len, $prefix);
   }
   
   /**

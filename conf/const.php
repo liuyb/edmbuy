@@ -6,21 +6,22 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-// fxmgou平台名称
-define('APP_PLATFORM', 'fxmgou');
+// edmbuy平台名称
+define('APP_PLATFORM', 'edmbuy');
 
 // ecshop数据库名称
-define('ECDB', 'fxmshop');
+define('ECDB', 'edmshop');
 define('ECDB_PRE', 'fxs_');
 
 // 服务器内部对外通信加密key
 define('INTERNAL_ENC_KEY', 'w$zc8kH&cRJ&sVaG74A%DVQuetGpb$6CGYCWLeyz');
 
-
+// 用于会话token加密
+define('SESS_TOKEN', 'shwipgm5h1t8my2zoe7l8hma5sudlrv2');
 
 /*----------以下为ECSHOP中的常量----------*/
 
-/*原产地分类顶级id*/
+/* 原产地分类顶级id */
 define('ORIGIN_PLACE_TOP_CAT_ID',  30);
 
 /* 商品属性类型常数 */

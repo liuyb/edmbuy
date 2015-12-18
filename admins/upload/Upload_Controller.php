@@ -76,7 +76,7 @@ class Upload_Controller extends Controller {
 	    }
 	  
 	    //~ create directory
-	    $targetfilecode = date('d_His').'_'.randchar();
+	    $targetfilecode = date('d_His').'_'.randstr();
 	    $targetfile = $targetfilecode.$extpart;
 	    $targetdir  = ltrim($this->_uproot_dir,'/')."{$filetype}/".date('Ym').'/';
 	    if(!is_dir($targetdir)) {

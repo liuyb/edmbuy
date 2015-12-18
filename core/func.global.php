@@ -28,14 +28,22 @@ function mkdirs($dir, $mode='', $recursive=TRUE)
 /**
  * create a length = $len random charactor string
  * @param $len
+ * @param $prefix
  * @return string
  */
-function randchar($len = 6) {
-  $str = '';
-  for ($i = 0; $i < $len; $i++){
-    $str .= chr(mt_rand(97, 122));
-  }
-  return $str;
+function randstr($len = 6, $prefix = '') {
+  static $_charset = array('a','b','c','d','e','f','g',
+  		                     'h','i','j','k','l','m','n',
+  		                     'o','p','q','r','s','t',
+  		                     'u','v','w','x','y','z',
+													 '0','1','2','3','4','5','6','7','8','9');
+	$rlen = count($_charset) - 1;
+	$str = '';
+	for ($i = 0; $i < $len; $i++) {
+		//$str .= chr(mt_rand(97, 122)); //48~57
+		$str .= $_charset[mt_rand(0, $rlen)];
+	}
+	return $prefix.$str;
 }
 
 /**
@@ -571,7 +579,7 @@ function upload($upload, $mode = false, $ext='jpg,jpeg,gif,png', $type="pic", &$
 					$get_ext=get_ext($upload['name'][$key]);
 					if(check_ext($get_ext,$ext)){
 						$name = date('d_His');
-						$name.= "_" .randchar();
+						$name.= "_" .randstr();
 						$name.= ".".$get_ext;
 						if (upload_move_file($upload['tmp_name'][$key],$target_dir.$name)){
 							$array[]=$picsavedir.$relative_dir.$name; //记录相对于网站根路径的文件路径
@@ -591,7 +599,7 @@ function upload($upload, $mode = false, $ext='jpg,jpeg,gif,png', $type="pic", &$
 		$tempName_noExt = '';//不带后缀的文件名
 		$tempPath = '';//临时文件绝对路径
 		$tempName = date('d_His');
-		$tempName .= "_".randchar();
+		$tempName .= "_".randstr();
 		$tempName_noExt = $tempName;
 		$tempName .=".tmp";
 		$tempPath = $target_dir.$tempName;

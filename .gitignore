@@ -1,5 +1,7 @@
 # App
 var/
+conf-pro/
+t.php
 
 # Eclipse
 .buildpath

@@ -729,4 +729,13 @@ function shorttotime($short, $format='') {
   return $thetime;
 }
 
+/**
+ * 返回页面会话TOKEN，用于确定客户端来源，防止非法提交
+ * @return string
+ */
+function sess_token() {
+	$enckey = defined('SESS_TOKEN') ? SESS_TOKEN : md5('SimPHP Session Token');
+	return md5(session_id().$enckey);
+}
+
 /*----- END FILE: func.simphp.php -----*/

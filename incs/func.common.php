@@ -652,9 +652,10 @@ function headscript()
   $appName = L('appname');
   $currUri = Request::uri();
   $ctxpath = C('env.contextpath');
+  $sesstoken=sess_token();
   
   $script  = '<script type="text/javascript">';
-  $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}'},gUser={};";
+  $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',token:'{$sesstoken}'},gUser={};";
   foreach (((array)$user) AS $k => $v) {
     if (in_array($k, ['uid','openid','unionid','subscribe','username','nickname','sex','logo','ec_user_id'])) {
       $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";

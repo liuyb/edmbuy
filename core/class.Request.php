@@ -317,6 +317,15 @@ class Request {
 	}
 	
 	/**
+	 * check whether the current post is a valid post
+	 * @return boolean
+	 */
+	public static function is_token_post() {
+		$token = self::post('token', '');
+		return (empty($token) || $token!=sess_token()) ? FALSE : TRUE;
+	}
+	
+	/**
 	 * check whether the current request is hash request
 	 * @return boolean
 	 */
