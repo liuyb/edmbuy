@@ -16,7 +16,8 @@ define('ECDB_PRE', 'fxs_');
 // 服务器内部对外通信加密key
 define('INTERNAL_ENC_KEY', 'w$zc8kH&cRJ&sVaG74A%DVQuetGpb$6CGYCWLeyz');
 
-
+// 用于会话token加密
+define('SESS_TOKEN', 'shwipgm5h1t8my2zoe7l8hma5sudlrv2');
 
 /*----------以下为ECSHOP中的常量----------*/
 
