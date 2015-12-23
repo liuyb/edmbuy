@@ -423,14 +423,11 @@ class DB {
    *
    * @param boolean $returnid
    *  whether return insert id
-   *  
-   * @param boolean $rawmode
-   *  whether raw mode, when in raw mode, $tablename use original value, rather than with table prefix
    *
    * @return int
    *  insert id if set $returnid=1, else affected rows
    */
-  public function insert($tablename, Array $insertarr, $returnid = TRUE, $rawmode = FALSE) {
+  public function insert($tablename, Array $insertarr, $returnid = TRUE) {
     $server_mode  = self::WRITABLE; //Because of 'INSERT', so use self::WRITABLE
     $insertkeysql = $insertvaluesql = $comma = '';
     foreach ($insertarr as $insert_key => $insert_value) {
@@ -438,9 +435,8 @@ class DB {
       $insertvaluesql .= $comma.'\''.$this->escape_string($insert_value, $server_mode).'\'';
       $comma = ',';
     }
-    if (!$rawmode) {
-      $tablename = '`' . $this->tablePrefix . $tablename . '`';
-    }
+    
+    $tablename = $this->true_table_name($tablename);
     $this->realtime_query = TRUE;  //make sure use writable mode
     $rs = $this->raw_query("INSERT INTO {$tablename} ({$insertkeysql}) VALUES ({$insertvaluesql})");
     $this->realtime_query = FALSE; //restore
@@ -458,14 +454,11 @@ class DB {
    *
    * @param array $wherearr
    *  where condition
-   *  
-   * @param boolean $rawmode
-   *  whether raw mode, when in raw mode, $tablename use original value, rather than with table prefix
    *
    * @return int
    *  affected rows
    */
-  public function update($tablename, Array $setarr, Array $wherearr, $rawmode = FALSE) {
+  public function update($tablename, Array $setarr, Array $wherearr) {
     $server_mode = self::WRITABLE; //Because of 'UPDATE', so use self::WRITABLE
     $setsql = $comma = '';
     foreach ($setarr as $set_key => $set_value) {
@@ -485,9 +478,8 @@ class DB {
     else {
       $where = $wherearr; //unsafe
     }
-    if (!$rawmode) {
-      $tablename = '`' . $this->tablePrefix . $tablename . '`';
-    }
+    
+    $tablename = $this->true_table_name($tablename);
     $this->realtime_query = TRUE;  //make sure use writable mode
     $rs = $this->raw_query("UPDATE {$tablename} SET {$setsql} WHERE {$where}");
     $this->realtime_query = FALSE; //restore
@@ -499,12 +491,11 @@ class DB {
    * 
    * @param string $tablename
    * @param array $wherearr
-   * @param boolean $rawmode
    *  whether raw mode, when in raw mode, $tablename use original value, rather than with table prefix
    * @return int
    *   affected rows
    */
-  public function delete($tablename, Array $wherearr, $rawmode = FALSE) {
+  public function delete($tablename, Array $wherearr) {
     $server_mode = self::WRITABLE; //Because of 'DELETE', so use self::WRITABLE
     $where = '';
     if(empty($wherearr)) {
@@ -521,57 +512,11 @@ class DB {
       $where = $wherearr; //unsafe
     }
     
-    if (!$rawmode) {
-      $tablename = '`' . $this->tablePrefix . $tablename . '`';
-    }
+    $tablename = $this->true_table_name($tablename);
     $this->realtime_query = TRUE;  //make sure use writable mode
     $rs = $this->raw_query("DELETE FROM {$tablename} WHERE {$where}");
     $this->realtime_query = FALSE; //restore 
     return $rs->affected_rows();
-  }
-  
-  /**
-   * insert data to a table
-   *
-   * @param string $tablename
-   *  table name
-   *
-   * @param array $insertarr
-   *  insert key-value array
-   *
-   * @param boolean $returnid
-   *  whether return insert id
-   *
-   * @return
-   *  insert id if set $returnid=1, else affected rows
-   *  
-   * @deprecated
-   *  use $this->insert() method instead
-   */
-  public function insert_table($tablename, Array $insertarr, $returnid = TRUE) {
-    return $this->insert($tablename, $insertarr, $returnid);
-  }
-  
-  /**
-   * update data to table
-   *
-   * @param string $tablename
-   *  table name
-   *
-   * @param array $setarr
-   *  set sql key-value array
-   *
-   * @param array $wherearr
-   *  where condition
-   *
-   * @return int
-   *  affected rows
-   *  
-   * @deprecated
-   *  use $this->update() method instead
-   */
-  public function update_table($tablename, Array $setarr, Array $wherearr) {
-    return $this->update($tablename, $setarr, $wherearr);
   }
   
   /**
@@ -637,20 +582,7 @@ class DB {
     $this->_sql = '';//begin with this
     $this->_select_cache = array();
     $this->_select_mode  = $server_mode;
-    $table_refes = trim($table_refes);
-    if (strpos($table_refes, '`')!==false ||
-      strpos($table_refes, '{')!==false ||
-      strpos($table_refes, '.')!==false) {
-      //no need parsing, directly passthrough or hand over to the lower logic
-    }
-    else {
-      if (strpos($table_refes, $this->tablePrefix)===0) { //begin with table prefix, such as 'tb_xxx'
-        //no need parsing, directly passthrough
-      }
-      else {
-        $table_refes = $this->tablePrefix . $table_refes;
-      }
-    }
+    $table_refes = $this->true_table_name($table_refes);
     $this->_sql .= " FROM {$table_refes}";
     return $this;
   }
@@ -825,6 +757,32 @@ class DB {
   }
   
   /**
+   * Build IN query condition
+   * @param string $field
+   * @param array $value_set
+   * @param boolean $NOT_IN
+   * @return string
+   */
+  public function in($field, Array $value_set, $NOT_IN = FALSE) {
+  	if (empty($value_set)) return '0';
+  	foreach ($value_set AS &$val) {
+  		$val = $this->escape_string($val, self::READONLY);
+  		$val = "'{$val}'";
+  	}
+  	return $field.($NOT_IN ? ' NOT': '').' IN('.implode(',', $value_set).')';
+  }
+  
+  /**
+   * Build NOT IN query condition
+   * @param string $field
+   * @param array $value_set
+   * @return string
+   */
+  public function not_in($field, Array $value_set) {
+  	return $this->in($field, $value_set, TRUE);
+  }
+  
+  /**
    * Append a database prefix to all tables in a query.
    *
    * Queries sent to Drupal should wrap all table names in curly brackets. This
@@ -861,6 +819,30 @@ class DB {
       return strtr($sql, array('{' => $db_prefix, '}' => ''));
     }
     
+  }
+  
+  /**
+   * Get true table name
+   * @param string $table_name
+   * @return string
+   */
+  protected function true_table_name($table_name) {
+  	$table_name = trim($table_name);
+  	if (strpos($table_name, '{')!==false) {
+  		$table_name = strtr($table_name, array('{' => $this->tablePrefix, '}' => ''));
+  	}
+  	elseif (strpos($table_name, '`')!==false || strpos($table_name, '.')!==false) {
+  				//no need parsing, directly passthrough or hand over to the lower logic
+  	}
+  	else {
+			if (0===strpos($table_name, $this->tablePrefix)) { //begin with table prefix, such as 'tb_xxx'
+				//no need parsing, directly passthrough
+			}
+			else {
+				$table_name = $this->tablePrefix . $table_name;
+			}
+  	}
+  	return $table_name;
   }
   
   /**

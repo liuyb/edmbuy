@@ -31,8 +31,8 @@ return [
   'tpldebug' => 1,
   //站点信息
   'site' => [
-  	'mobile' => 'http://m.fxmgou.com',
-  	'shop'   => 'http://pic.fxmgou.com'
+  	'mobile' => 'http://m.edmbuy.com',
+  	'shop'   => 'http://pic.edmbuy.com'
   ],
   //debug白名单uid
   'debug_white_list' => [],

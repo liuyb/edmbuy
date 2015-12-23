@@ -11,9 +11,9 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> '1lnf@lP2PPVhB6db',
-      'name'		=> 'fxmgou',
+      'user'		=> 'dbuser',
+      'pass'		=> 'phipcb0upxy7527f',
+      'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
     ],
@@ -22,9 +22,9 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> '1lnf@lP2PPVhB6db',
-      'name'		=> 'fxmgou',
+      'user'		=> 'dbuser',
+      'pass'		=> 'phipcb0upxy7527f',
+      'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
     ],
@@ -37,7 +37,7 @@ return [
   ],
   'memcache' => [
     'node' => [
-      ['host' => '127.0.0.1', 'port' => '11211', 'prefix' => 'FXM_'],
+      ['host' => '127.0.0.1', 'port' => '11211', 'prefix' => 'EDM_'],
     ],
   ],
   'session' => [
@@ -58,23 +58,23 @@ return [
   ],
   'cookie' => [
     'default' => [
-      'domain'	  => 'm.fxmgou.com',
+      'domain'	  => 'edm.fxmapp.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,
       'httponly'  => 0,
-      'prefix'    => 'FXM',
+      'prefix'    => 'EDM',
     ],
     'api' => [
-      'domain'	  => 'api.fxmgou.com',
+      'domain'	  => 'edmapi.fxmapp.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,
       'httponly'  => 0,
-      'prefix'    => 'FXM',
+      'prefix'    => 'EDM',
     ],
     'adm' => [
-      'domain'	  => 'adm.fxmgou.com',
+      'domain'	  => 'edmadm.fxmapp.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,

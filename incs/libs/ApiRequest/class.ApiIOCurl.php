@@ -23,6 +23,9 @@ class ApiIOCurl extends ApiIO {
 		
 		$query_string  = $request->makeQueryString($request->params);
 		$cookie_string = $request->makeCookieString($request->cookies);
+		if ($request->packto) {
+			$query_string = 'd='.base64_encode($query_string);
+		}
 
 		$ch = curl_init();
 

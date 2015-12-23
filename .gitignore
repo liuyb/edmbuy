@@ -2,6 +2,7 @@
 var/
 conf-pro/
 t.php
+tapi.php
 
 # Eclipse
 .buildpath

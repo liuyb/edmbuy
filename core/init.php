@@ -420,7 +420,7 @@ class SimPHP {
    */
   protected static function loadPubClass($className) {
     
-    $class_folder = array('core', 'incs');
+    $class_folder = array('core', 'core/interface', 'incs', 'incs/model');
     $class_file = 'class.'.$className.'.php';
     foreach ($class_folder as $folder) {
     	if (file_exists(SIMPHP_ROOT . "/{$folder}/{$class_file}")) {

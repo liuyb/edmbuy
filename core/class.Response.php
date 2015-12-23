@@ -209,6 +209,23 @@ class Response {
   }
   
   /**
+   * send API response
+   * @param array $res
+   * @param number $code
+   * @param string $msg
+   */
+  public static function sendAPI(Array $res = array(), $code = 0, $msg = NULL) {
+  	if (!is_numeric($code)) {
+  		$msg = $code;
+  		$code= 0;
+  	}
+  	if (!$msg) {
+  		$msg = Api::code($code);
+  	}
+  	self::sendJSON(array('code' => $code, 'msg' => $msg, 'res' => $res));
+  }
+  
+  /**
    * @param string $url, can be "back" as shortcut for the refer url.
    * @param int $status "302" by default, and can be set as "301"
    * @throws Exception when set wrong status code.

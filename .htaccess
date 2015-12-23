@@ -21,7 +21,7 @@ AddType text/cache-manifest manifest
   
   #
   # Rewrite URLs of the form 'x' to the form 'api.php?q=x'.
-  RewriteCond %{HTTP_HOST} ^edmapi\.fxmapp\.com$
+  RewriteCond %{HTTP_HOST} ^api\.edmbuy\.com$
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !=/favicon.ico

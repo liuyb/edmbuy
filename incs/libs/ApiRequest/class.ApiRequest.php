@@ -57,6 +57,7 @@ class ApiRequest implements ApiRequestInterface {
               ),
               'protocol'=> 'http',      //请求协议，http/https
               'method'  => 'get',       //请求方法, get/post
+              'packto'  => '',       		//当请求方法为get时，设置此参数可以让所有提交参数(包括签名字段)都用base64编码打包到一个参数，比如'd'
               'outfile' => '',          //输出目标地，当非空和不等于STDOUT时，将输出重定向到该参数指定的文件路径
               'timeout' => 10,          //请求执行超时时间(单位：秒)
               'timeout_connect' => 5,   //请求连接超时时间(单位：秒)

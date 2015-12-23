@@ -30,13 +30,14 @@ class Fn extends Func {
    *
    * @param string $msg 显示的消息
    * @param boolean $with_back_btn 带“返回”按钮
-   * @param string $title 文档标题
+   * @param string $title 文档标题(不包括appname部分)
    */
-  static function show_error_message($msg='非法访问！', $with_back_btn=false, $title='错误发生 - 福小蜜') {
+  static function show_error_message($msg='非法访问！', $with_back_btn=false, $title='错误发生') {
     $ctrl_str = '';
     if ($with_back_btn) {
       $ctrl_str .= '<a href="javascript:history.back()">返回</a>&nbsp;|&nbsp;';
     }
+    $title .= ' - '.L('appname');
     $str = '<!DOCTYPE html>';
     $str.= '<html>';
     $str.= '<head>';

@@ -30,19 +30,18 @@ class User_Model extends Model {
 		return $fid;
 	}
 	
-	static function checkAccessToken($token){
+	static function checkAccessToken($token, $idfield = 'openid'){
 		$record = D()->get_one("SELECT * FROM {access_token} WHERE token='%s'", $token);
 		if(empty($record)){
 			return FALSE;
 		}
 		else{
-			$timestamp = time();
-			if($timestamp>$record['lifetime']){
+			$now = simphp_time();
+			if($now > $record['lifetime']){
 				return FALSE;
 			}
 			else{
-				//D()->update('access_token', ['lifetime'=>0], ['openid'=>$record['openid']]);
-				return $record['openid'];
+				return $record[$idfield];
 			}
 		}
 	}

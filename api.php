@@ -5,7 +5,7 @@
  * @author Gavin<laigw.vip@gmail.com>
  */
 if (!isset($_GET['q']) || empty($_GET['q'])) {
-  $_GET['q'] = 'weixin/fxmgou';
+  $_GET['q'] = 'weixin/edmbuy';
 }
 
 //~ require init.php
@@ -16,11 +16,11 @@ $response = new Response();
 
 try {
   SimPHP::I(['modroot'=>'apis'])
-  ->boot(RC_DATABASE)
-  ->dispatch($request,$response);
+	  ->boot(RC_DATABASE)
+	  ->dispatch($request,$response);
 }
-catch (SimPHPException $me) {
-  $response->dump($me->getMessage());
+catch (ApiException $eapi) {
+  $response->sendAPI($eapi->getResponse(), $eapi->getCode(), $eapi->getMessage());
 }
 catch (Exception $e) {
   $response->dump($e->getMessage());

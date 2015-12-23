@@ -11,7 +11,7 @@ class Request {
   const HASH_TAG = '_hr';
   
   protected static $singleton;
-  protected $params = [];
+  public $params = [];
   
   /**
    * Constructor

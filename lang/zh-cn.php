@@ -7,6 +7,6 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 return array(
-  'appname' => '福小蜜海外购',
+  'appname' => '益多米',
 );
 
