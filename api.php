@@ -11,6 +11,9 @@ if (!isset($_GET['q']) || empty($_GET['q'])) {
 //~ require init.php
 require (__DIR__.'/core/init.php');
 
+ignore_user_abort(TRUE);
+set_time_limit(60);
+
 $request  = new Request();
 $response = new Response();
 

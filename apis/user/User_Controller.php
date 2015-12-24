@@ -47,9 +47,9 @@ class User_Controller extends Controller {
 		]);
 		
 		$unionId    = $request->unionid;
-		$parentUnid = $request->parent_id; //是一个 parent unionid
-		$mobile     = $request->mobile;
-		$regtime    = $request->regtime;
+		$parentUnid = $request->parent_id ? : ''; //是一个 parent unionid
+		$mobile     = $request->mobile    ? : '';
+		$regtime    = $request->regtime   ? : simphp_time();
 		
 		if (empty($unionId)) {
 			throw new ApiException(4000);
@@ -59,12 +59,12 @@ class User_Controller extends Controller {
 		}
 		
 		$aUser = Users::load_by_unionid($unionId);
-		$res = ['user_id'=>0, 'act_type'=>'none', 'parent_id'=>0];
+		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>0];
 		if (empty($aUser)) { //未注册
 			$aUser = new Users();
 			$aUser->unionid  = $unionId;
 			$aUser->mobilephone = $mobile;
-			$aUser->regip    = $request->ip();
+			//$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
 			$aUser->parentid = Users::get_userid($parentUnid);
 			$aUser->from     = $request->appid;

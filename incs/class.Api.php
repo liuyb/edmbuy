@@ -35,6 +35,7 @@ class Api extends Model {
 	
 	static function check(Request $request, Response $response) {
 		$params = [];
+		$method = 'post';
 		if($request->is_post()) {
 			$params['args']  = $request->post('args',   []);
 			$params['appid'] = $request->post('appid',  '');
@@ -47,7 +48,10 @@ class Api extends Model {
 			 $d = $request->get('d','');
 			 $d = base64_decode($d);
 			 parse_str($d, $params);
+			 $method = 'get';
 		}
+		
+		//trace_debug('api_request_params', array_merge($params,['method'=>$method]));
 		
 		if (empty($params)) {
 			throw new ApiException(1000);
