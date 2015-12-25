@@ -1,0 +1,88 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<style>
+.track{
+	margin-top:20px;
+}
+.track_l{
+	margin:0 20px;
+	float:left;
+}
+.track_r{
+	width:auto;
+  	margin-right: 12px;	
+}
+.line{
+	margin-top:10px;
+	border-right:1px solid #d0d0d0;
+}
+
+</style>
+<body class="white_bg">
+
+<div class="header">
+	物流跟踪
+	<a href="javascript:history.back();" class="back"></a>
+	<a href="ydm_member.html" class="back_r"></a>
+</div>
+
+<div class="track">
+	<div class="track_l">
+		<div class="line"></div>
+	</div>
+	
+	<div class="track_r">
+		<div style="margin-bottom:30px;">
+			<p style="margin-bottom:12px;">【深圳市】快件由川港四十分部发往南通川港(0513-66007000)</p>
+			<p>2012-2-15 10:10:15</p>
+		</div>		
+		<div style="margin-bottom:30px;">
+			<p style="margin-bottom:12px;">【深圳市】快件由川港四十分部发往南通快件由川港四十分部发往南通川港川港(0513-66007000)</p>
+			<p>2012-2-15 10:10:15</p>
+		</div>	
+		<div style="margin-bottom:30px;">
+			<p style="margin-bottom:12px;">【深圳市】快件由川港四十分部发往南通快件由川港四十分部发往南通川港川港(0513-66007000)</p>
+			<p>2012-2-15 10:10:15</p>
+		</div>		
+		<div style="margin-bottom:30px;">
+			<p style="margin-bottom:12px;">【深圳市】快件由川港四十分部发往南通快件由川港四十分部发往南通川港川港(0513-66007000)</p>
+			<p>2012-2-15 10:10:15</p>
+		</div>			
+	</div>
+	
+</div>
+<script>
+$(function(){
+	$(".track_r div").each(function(){
+		var _offset = $(".track_r div:last").offset().top +65;
+		var _offsetTop = $(".track_r div:last").offset().top - 65;
+		$(".line").height(_offsetTop);
+		$(".track_l").height(_offset);
+		
+		var _setTop = $(this).offset().top + 2;
+		var _setTop1 = $(this).offset().top - 65;
+		if(_setTop < 68){
+			$(".track_l").append('<div style="margin-left: -8px;position: absolute;top:'+_setTop+'px"><img src="./img/gly.png" style="width:18px;"></div>')
+		}else{
+			$(".track_l").append('<div style="margin-left: -8px;position: absolute;top:'+_setTop+'px"><img src="./img/hsy.png" style="width:18px;"></div>')
+		}
+	})
+	
+
+})
+</script>

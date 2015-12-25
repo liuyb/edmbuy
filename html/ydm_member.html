@@ -1,0 +1,124 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+
+<body style="background:#eee;"> 
+
+<a href="ydm_personInfo.html">
+<div class="mem_bg">
+	<div class="mem_l">
+		<img src="./img/mt.png">
+	</div>
+	
+	<div class="mem_c">
+		<div class="c_name">彭向成向向成</div>
+		<div class="c_id">多米号： 235623</div>
+	</div>
+	
+	<div class="mem_r">
+		<img src="./img/set.png">
+	</div>
+	<div class="clear"></div>
+</div>
+</a>
+
+<div class="mem_refer">
+	<div class="refer_tit order_bg1">我的推荐人</div>
+	<div class="refer_info">
+		<span class="refer_name">彭彭先诚先诚</span>
+		<button class="refer_but">加好友</button>
+	</div>
+</div>
+
+<div style="height:10px;background:#eee"></div>
+
+<div class="mem_my_order">
+	<div class="my_order_l  order_bg2">我的订单</div>
+	<a href="javascript:;"><div class="my_order_r">全部订单</div></a>
+</div>
+<div class="my_order_state">
+	<ul>
+		<a href="my_order.html"><li><img src="./img/fk1.png"></li></a>
+		<a href="my_order.html"><li><img src="./img/fh2.png"></li></a>
+		<a href="my_order.html">
+			<li class="dsh">
+				<img src="./img/sh3.png">
+				<span class="d_nums">12</span>
+			</li>
+		</a>
+		<a href="my_order.html"><li><img src="./img/sh4.png"></li></a>
+	</ul>
+</div>
+
+<div style="height:10px;background:#eee"></div>
+
+<div class="mem_my_apply order_bg3">
+	我的应用
+</div>
+<div class="mem_my_applylist">
+	<ul>
+		<li><img src="./img/tym.png"></li>
+		<li><img src="./img/sxy.png"></li>
+		<li> </li>
+		<li style="border-right:0;"> </li>
+	</ul>
+</div>
+
+<div class="footer">
+	<ul>
+		<a href="#">
+			<li id="f_sy" class="on"></li>
+		</a>
+		<a href="cart_list.html">
+			<li id="f_gwc"><span class="f_num">864</span></li>
+		</a>
+		<a href="#">
+			<li id="f_hhr"></li>
+		</a>
+		<a href="#">
+			<li id="f_hy"></li>
+		</a>
+	</ul>
+</div>
+
+<script>
+$(function(){	
+	var length = $(".c_name").text().length;
+	var _length = $(".refer_name").text().length;
+	if(length >4){
+		 var str = $(".c_name").text();
+		 var name = str.substr(1,4);
+		 $(".c_name").text(name + '...');
+	}
+	if(_length >3){
+		 var str = $(".refer_name").text();
+		 var name = str.substr(1,3);
+		 $(".refer_name").text(name + '...');
+	}
+})
+</script>
+
+
+
+
+
+
+
+
+
+
+

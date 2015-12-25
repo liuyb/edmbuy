@@ -228,12 +228,23 @@ function simphp_gmtime($time = NULL) {
 /**
  * Return system require timestamp
  *
- * @param $strict, when $strict is TRUE, then use microtime() for current strict time
+ * @param $strict, when $strict is TRUE, then use microtime(TRUE) for current strict time
  * @return
  *   $_SERVER["REQUEST_TIME"]
  */
 function simphp_time($strict = FALSE) {
-  return $strict ? (int)microtime(TRUE) : (isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
+  return $strict ? microtime(TRUE) : (isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
+}
+
+/**
+ * Return the current system timestamp with milliseconds union
+ * 
+ * @param float $time
+ * @return number 13 bitwidth integer
+ */
+function simphp_msec($time = NULL) {
+	$time = isset($time) ? $time : microtime(TRUE);
+	return round($time*1000);
 }
 
 /**
@@ -241,13 +252,13 @@ function simphp_time($strict = FALSE) {
  *
  * Require PHP 5 >= 5.2.0
  * @param string $format: format type: 'std' or 'w3c'
- * @param int $time, when $time === TRUE, then use microtime() for current strict time
+ * @param int $time, optional, is an integer Unix timestamp that defaults to the current local time if a timestamp is not given
  * @return
  *   date('Y-m-d\TH:i:sP',$time)
  */
 function simphp_dtime($format = 'std',$time = NULL) {
   $dtformat = $format=='std'?'Y-m-d H:i:s':DateTime::W3C;
-  return date($dtformat, isset($time) ? (TRUE===$time ? (int)microtime(TRUE) : $time) : (isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time()));
+  return date($dtformat, isset($time) ? $time : (isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time()));
 }
 
 /**

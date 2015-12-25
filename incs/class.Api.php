@@ -14,6 +14,7 @@ class Api extends Model {
 			'1002' => 'Parameter \'format\' invalid',
 			'1003' => 'Appid not exist',
 			'1004' => 'Signature fail',
+			'1005' => '\'ts\' require milliseconds',
 			//...
 			'1300' => 'Wait for define',
 			//...
@@ -35,7 +36,6 @@ class Api extends Model {
 	
 	static function check(Request $request, Response $response) {
 		$params = [];
-		$method = 'post';
 		if($request->is_post()) {
 			$params['args']  = $request->post('args',   []);
 			$params['appid'] = $request->post('appid',  '');
@@ -48,20 +48,31 @@ class Api extends Model {
 			 $d = $request->get('d','');
 			 $d = base64_decode($d);
 			 parse_str($d, $params);
-			 $method = 'get';
 		}
 		
-		//trace_debug('api_request_params', array_merge($params,['method'=>$method]));
+		$request->__apilog->appId    = $params['appid'];
+		$request->__apilog->args     = json_encode($params['args']);
+		$request->__apilog->resp     = '';
+		$request->__apilog->format   = $params['format'];
+		$request->__apilog->sig      = $params['sig'];
+		$request->__apilog->sigSrv   = '';
+		$request->__apilog->ts       = $params['ts'];
+		$request->__apilog->v        = $params['v'];
+		$request->__apilog->ip       = $request->ip();
+		$request->__apilog->method   = $request->method();
+		$request->__apilog->dealTime = 0;
 		
 		if (empty($params)) {
 			throw new ApiException(1000);
 		}
-		
 		if (!self::check_version($params['v'])) {
 			throw new ApiException(1001);
 		}
 		if (!self::check_format($params['format'])) {
 			throw new ApiException(1002);
+		}
+		if (strlen($params['ts'])!=13) {
+			throw new ApiException(1005);
 		}
 		
 		$app = App::load($params['appid']);
@@ -70,6 +81,7 @@ class Api extends Model {
 		}
 		else {
 			$sign = self::sign($params, $app->appSecret);
+			$request->__apilog->sigSrv = $sign;
 			if ($sign != $params['sig']) {
 				throw new ApiException(1004);
 			}
@@ -169,14 +181,33 @@ class ApiException extends Exception {
 	 */
 	protected $res = [];
 	
-	public function __construct($code = null, $message = null, Array $res = []) {
-		parent::__construct($message, $code);
+	public function __construct($code = -1, $msg = null, Array $res = []) {
+		if (!is_numeric($code)) {
+			$msg = $code;
+			$code= 0;
+		}
+		if (!$msg) {
+			$msg = Api::code($code);
+		}
+		parent::__construct($msg, $code);
 		$this->res = $res;
 	}
 	
+	/**
+	 * Get response content
+	 * @return array:
+	 */
 	public function getResponse() {
 		return $this->res;
 	}
+}
+
+class ApiResponse extends ApiException {
+	
+	public function __construct(Array $res = [], $code = 0, $msg = null) {
+		parent::__construct($code, $msg, $res);
+	}
+	
 }
 
 /*----- END FILE: class.Api.php -----*/

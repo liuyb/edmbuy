@@ -64,7 +64,7 @@ class User_Controller extends Controller {
 			$aUser = new Users();
 			$aUser->unionid  = $unionId;
 			$aUser->mobilephone = $mobile;
-			//$aUser->regip    = $request->ip();
+			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
 			$aUser->parentid = Users::get_userid($parentUnid);
 			$aUser->from     = $request->appid;
@@ -87,7 +87,7 @@ class User_Controller extends Controller {
 				}
 			}
 		}
-		$response->sendAPI($res);
+		throw new ApiResponse($res);
 	}
 	
 }

@@ -37,7 +37,7 @@ abstract class StorageNode extends Model {
 	 * @param int|string $id
 	 */
 	public function __construct($id = NULL) {
-		if (!is_null($id)) {
+		if (isset($id)) {
 			$this->id = $id;
 		}
 	}
@@ -86,9 +86,8 @@ abstract class StorageNode extends Model {
 	
 	final public function save() {
 		$this->save_before();
-		$clsname = get_class($this);
 		$id  = self::storage()->save($this->__DATA__);
-		$key = $clsname::meta()['key'];
+		$key = $this->meta()['key'];
 		if ($id) {
 			$this->$key = $id;
 			self::removeStaticCache($id);//for safe
@@ -101,8 +100,7 @@ abstract class StorageNode extends Model {
 	 * @return number
 	 */
 	final public function remove() {
-		$clsname = get_class($this);
-		$key = $clsname::meta()['key'];
+		$key = $this->meta()['key'];
 		return self::remove_by_ids([$this->$key]);
 	}
 	
@@ -123,8 +121,7 @@ abstract class StorageNode extends Model {
 	 * @return boolean
 	 */
 	public function is_exist() {
-		$clsname = get_class($this);
-		$key = $clsname::meta()['key'];
+		$key = $this->meta()['key'];
 		return self::getStaticCache($this->$key) ? TRUE : FALSE;
 	}
 	
@@ -137,23 +134,45 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
-	 * Return storage column name
+	 * Return meta 'table' value
 	 * @return string
 	 */
-	public static function column($key) {
+	public static function table() {
 		$clsname = get_called_class();
 		$meta = $clsname::meta();
-		return is_array($meta['columns']) ? $meta['columns'][$key] : $key;
+		return $meta['table'];
 	}
 	
 	/**
-	 * Return storage primary key name
+	 * Return meta 'key' value
 	 * @return string
 	 */
-	public static function storage_key() {
+	public static function key() {
 		$clsname = get_called_class();
 		$meta = $clsname::meta();
-		return is_array($meta['columns']) ? $meta['columns'][$meta['key']] : $meta['key'];
+		return $meta['key'];
+	}
+	
+	/**
+	 * Return meta 'columns[meta[key]]' value
+	 * @return string
+	 */
+	public static function id() {
+		return self::column();
+	}
+
+	/**
+	 * Return meta 'columns[$key]' value
+	 * 
+	 * @param $key when $key is NULL, then return the primary key value
+	 * @return string
+	 */
+	public static function column($key = NULL) {
+		$clsname = get_called_class();
+		$meta = $clsname::meta();
+		return is_array($meta['columns'])
+		       ? (!isset($key) ? $meta['columns'][$meta['key']]  : (isset($meta['columns'][$key]) ? $meta['columns'][$key] : null))
+		       : (!isset($key) ? $meta['key'] : $key);
 	}
 	
 	/**
@@ -219,10 +238,9 @@ abstract class StorageNode extends Model {
 	public function __get($name) {
 		if (array_key_exists($name, $this->__DATA__)) return $this->__DATA__[$name];
 		else { //默认加一个'id'属性(只用于获取显示，不保存)
-			if ('id'==$name) {
-				$clsname = get_class($this);
-				$key = $clsname::meta()['key'];
-				return isset($this->__DATA__[$key]) ? $this->__DATA__[$key] : null;
+			$meta = $this->meta();
+			if ('id'==$name) { // Hack 'id' field
+				return isset($this->__DATA__[$meta['key']]) ? $this->__DATA__[$meta['key']] : null;
 			}
 		}
 		return null;
@@ -236,8 +254,7 @@ abstract class StorageNode extends Model {
 	 */
 	public function __set($name, $value) {
 		if ('id'==$name) { //对'id'列特殊处理
-			$clsname = get_class($this);
-			$key     = $clsname::meta()['key'];
+			$key = $this->meta()['key'];
 			$this->__DATA__[$key] = $value;
 		}
 		else {

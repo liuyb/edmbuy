@@ -161,6 +161,14 @@ class Request {
 	}
 
 	/**
+	 * Request method
+	 * @return string
+	 */
+	public static function method() {
+		return isset($_SERVER['REQUEST_METHOD']) ? strtolower($_SERVER['REQUEST_METHOD']) : '';
+	}
+	
+	/**
 	 * Request user ip
 	 */
 	public static function ip() {

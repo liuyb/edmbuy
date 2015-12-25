@@ -1,0 +1,43 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<body class="white_bg has_footer">
+
+<div class="header">
+	个人信息
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div style="border-top: 0;">
+	<div class="wx_uploading">
+		<img id="avatar1" src="./img/tianj.png" style="height:200px;"> 
+		<input type="file" id="file" name="file" onchange="fileupload()" class="dia_file"> 
+		<input type="hidden" id="picUrl" name="picUrl" value="">
+	</div>
+	
+	<div style="text-align:center;margin:20px 0 ">
+		<span style="font-size:14px;color:#aaa;">请上传个人二维码</span>
+	</div>
+</div>
+
+<div class="wx_info">
+	<p style="font-size: 18px;padding-bottom: 20px;color: #4a6fdb;">如何保存个人微信二维码？</p>
+	<p style="font-size: 15px;color: #333;line-height: 25px;">
+		打开“微信” → 点击“我” → 点击“头像” → 选择“我的二维码” → 点击右上角按钮“ ... ” → 保存图片到本地相册。
+	</p>
+</div>

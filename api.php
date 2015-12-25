@@ -17,16 +17,31 @@ set_time_limit(60);
 $request  = new Request();
 $response = new Response();
 
+//记录日志
+$apilog = new ApiLog();
+$apilog->reqTime   = simphp_msec();
+$request->__apilog = $apilog;
+$ret = ['code' => -1, 'msg' => Api::code(-1), 'res' => []];
+
 try {
   SimPHP::I(['modroot'=>'apis'])
 	  ->boot(RC_DATABASE)
 	  ->dispatch($request,$response);
 }
 catch (ApiException $eapi) {
-  $response->sendAPI($eapi->getResponse(), $eapi->getCode(), $eapi->getMessage());
+	$ret['code'] = $eapi->getCode();
+	$ret['msg']  = $eapi->getMessage();
+	$ret['res']  = $eapi->getResponse();
 }
 catch (Exception $e) {
-  $response->dump($e->getMessage());
+	$ret['code'] = 1503;
+	$ret['msg']  = Api::code($ret['code']);
 }
+
+//保存日志
+$apilog->dealTime = simphp_msec() - $apilog->reqTime;
+$apilog->resp     = json_encode($ret);
+$apilog->save();
+$response->sendJSON($ret);
  
 /*----- END FILE: api.php -----*/

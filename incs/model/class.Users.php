@@ -75,9 +75,7 @@ class Users extends StorageNode {
 	 * @return Users
 	 */
 	static function load_by_unionid($unionid, $from = 'weixin') {
-		$meta   = self::meta();
-		$prikey = is_array($meta['columns']) ? $meta['columns'][$meta['key']] : $meta['key'];
-		$user_id = D()->from($meta['table'])->where("`unionid`='%s'",$unionid)->select($prikey)->result();
+		$user_id = D()->from(self::table())->where("`unionid`='%s'",$unionid)->select(self::id())->result();
 		return self::load($user_id);
 	}
 	
@@ -88,16 +86,14 @@ class Users extends StorageNode {
 	 */
 	static function get_unionid($user_id) {
 		if (empty($user_id)) return '';
-		$meta = self::meta();
-		$id   = D()->from($meta['table'])->where("`user_id`=%d",$user_id)->select("unionid")->result();
-		return $id ? $id : '';
+		$id = D()->from(self::table())->where("`user_id`=%d",$user_id)->select("unionid")->result();
+		return $id ? : '';
 	}
 	
 	static function get_userid($unionid) {
 		if (empty($unionid)) return 0;
-		$meta = self::meta();
-		$id   = D()->from($meta['table'])->where("`unionid`='%s'",$unionid)->select("user_id")->result();
-		return $id ? $id : 0;
+		$id = D()->from(self::table())->where("`unionid`='%s'",$unionid)->select("user_id")->result();
+		return $id ? : 0;
 	}
 	
 	/**

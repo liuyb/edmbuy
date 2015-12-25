@@ -1,0 +1,40 @@
+.swiper-scrollbar {
+	border-radius: 10px;
+	position: relative;
+	-ms-touch-action: none;
+	background: rgba(0,0,0,0.1)
+}
+.swiper-scrollbar-drag {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	background: rgba(0,0,0,0.5);
+	border-radius: 10px;
+}
+.swiper-scrollbar-cursor-drag {
+	cursor: move;
+}
+.scroll-container {
+	height: 100%;
+	width: 100%;
+}
+.scroll-container .swiper-slide {
+	width: 100%;
+}
+/* Scrollbars */
+.swiper-scrollbar {
+	position: absolute;
+	right: 3px;
+	top: 2%;
+	width: 3px;
+	height: 96%;
+	background: rgba(255,255,255,0.7);	
+	z-index: 10;
+}
+.swiper-scrollbar-drag {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	border-radius: 10px;
+	background: rgba(0,0,0,0.4);	
+}

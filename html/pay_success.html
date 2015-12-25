@@ -1,0 +1,179 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<style>
+.pay_logo{
+	text-align:center;
+	margin:87px 0 30px;
+}
+.pay_logo img{
+	width:91px;
+	height:95px;
+}
+.pay_price{
+	text-align:center;	
+}
+.pay_tit{
+	font-size:18px;
+	color:#333;
+	margin-bottom:15px;
+}
+.pay_p{
+	font-size:14px;
+	color:#333;
+}
+.price_sucee{
+	color:#ff0101;
+}
+.becmoe_rice{
+	text-align:center;
+	margin:40px 0 20px;
+	font-size:16px;
+	color:#333;	
+}
+.pay_check_order_but{
+	background:#fff;
+	border:1px solid #eee;
+	border-radius:4px;
+	margin-right:6px;
+	height:40px;
+	width:128px;
+	font-size:16px;
+	color:#333;
+	cursor:pointer;
+}
+.pay_m_plan_but{
+	cursor:pointer;	
+	font-size:16px;
+	color:#fff;	
+	border-radius:4px;	
+	margin-left:6px;	
+	height:40px;
+	width:128px;
+	background:#ff6d14;
+}
+.pay_tier{
+	display:none;
+  	background:rgba(0,0,0,0.5); 
+	position:fixed; 	
+  	top: 0;	
+  	width: 100%;
+  	height: 100%;	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        	
+}
+.tier_tit img{
+	width:119px;
+	height:119px;
+}
+.tier_tit{
+  	position: absolute;
+  	left: 54px;
+  	top: -56px;	
+}
+.tier_c{
+	border-radius: 4px;
+  	position: relative;	
+	height:195px;
+	width:228px;
+	background:#fff;
+	margin:125px auto 10px;
+}
+.c_tit{
+	padding-top:74px;
+	font-size:17px;
+	color:#000;
+}
+.c_tit1{
+	padding-top:10px;
+	font-size:14px;
+	color:#ff0000;
+}
+.c_input{
+ 	margin-top:10px;
+}
+.c_input input{
+	height:40px;
+	width:183px;
+	border:1px solid #eee;
+	border-radius:4px;
+	padding-left:5px;
+}
+.tier_but{
+	margin:0 auto;
+	width:228px;
+	height:40px;
+	background:#ff6d14;
+	line-height:40px;
+	font-size:16px;
+	color:#fff;
+	border-radius:4px;
+	cursor:pointer;
+}
+</style>
+<body class="white_bg has_footer">
+
+<div class="pay_logo">
+	<img src="./img/icon.png">
+</div>
+
+<div class="pay_price">
+	<p class="pay_tit">订单支付成功</p>
+	<p class="pay_p">订单金额：<span class="price_sucee">￥138.00</span></p>
+<div>
+
+<div class="becmoe_rice">
+	恭喜您，已成为米商!
+</div>
+
+<div>
+	<button class="pay_check_order_but">查看订单</button>
+	<button class="pay_m_plan_but">米商计划</button>
+</div>
+
+<div class="pay_tier">
+	<div class="tier_c">
+		<p class="c_tit">绑定手机号，追踪物流</p>
+		<p class="c_tit1">如果不绑定，会追踪不到物流</p>
+		<p class="c_input"><input class="input_val" type="text" maxlength="15" placeholder="请输入你的手机号" value="" ></p>
+		<div class="tier_tit"><img src="./img/zwl.png"></div>
+	</div>
+	
+	<div class="tier_but">
+		确认手机号
+	</div>
+</div>
+
+<script>
+	$(function(){
+		$(".pay_tier").show();
+	})
+	
+	$(".tier_but").live("click",function(){
+		var text = $(".input_val").val();
+		if(text == ''){
+			boxalert("请输入电话号码");
+		}else{
+			$(".pay_tier").hide();
+		}
+			
+	})
+</script>
+
+
+
+
+

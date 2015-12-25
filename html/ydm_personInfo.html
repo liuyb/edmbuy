@@ -1,0 +1,154 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<style>
+.person_head{
+	cursor: pointer;
+	background: url(./img/back.png) no-repeat 97% center;	
+	background-size: 16px;	
+	height:69px;
+	position: relative;
+	margin-left: 12px;
+}
+.head_l{
+	float:left;
+	font-size:17px;
+	color:#333;
+	line-height:69px;
+}
+.head_r{
+	float:right;
+	margin: 10px 30px 0;
+}
+.head_r img{
+	width:50px;
+	heifht:50px;
+}
+.person_head_comm{
+	cursor: pointer;
+	background: url(./img/back.png) no-repeat 97% center;	
+	background-size: 16px;	
+	height:46px;
+	border-top:1px solid #eee;
+	margin-left: 12px;
+}
+.person_head_comment{
+	cursor: pointer;
+	height:48px;
+	border-top:1px solid #eee;
+	margin-left: 12px;
+}
+.head_l_com{
+	float:left;
+	font-size:17px;
+	color:#333;
+	line-height:46px;
+}
+.head_r_com{
+	font-size:17px;
+	float:right;
+	line-height:46px;	
+	color:#666;
+	margin-right: 30px;	
+}
+.head_r_com img{
+	height:19px;
+  	margin-bottom: -3px;	
+}
+.personInfo_but{
+	background:#fff;
+	border:1px solid #ff6d14;
+	width:80px;
+	height:27px;
+	color:#ff6d14;
+  	cursor: pointer;
+  	border-radius:3px;	
+	padding: 0;
+}
+</style>
+<body style="background:#eee;">
+
+<div class="header">
+	个人信息
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div style="background: #fff;">
+	<div class="person_head">
+		<span class="head_l">我的头像</span>
+		<span class="head_r"><img src="./img/mt.png"></span>
+		<input type="file" id="file" name="file" onchange="fileupload()" class="dia_file">	
+		<input type="hidden" id="picUrl" name="picUrl" value="">
+	</div>
+	<a href="update_phone.html"> 
+		<div class="person_head_comm">
+			<span class="head_l_com">手机号</span>
+			<span class="head_r_com">12345678945</span>
+		</div>
+	</a>
+	<a href="update_wx.html"> 
+		<div class="person_head_comm">
+			<span class="head_l_com">微信二维码</span>
+			<span class="head_r_com"><img src="./img/e.png"></span>
+		</div>
+	</a>
+</div> 
+
+<div style="height:20px;background:#eee"></div>
+
+<div style="background: #fff;">
+	<a href="javascript:;"> 
+		<div class="person_head_comm"  style="border-top:0;">
+			<span class="head_l_com">收货地址</span>
+		</div>
+	</a>
+</div>
+<div style="height:20px;background:#eee"></div>
+
+<div style="background: #fff;">
+	<div class="person_head_comment" style="border-top:0;">
+		<span class="head_l_com">我的ID</span>
+		<span class="head_r_com" style="margin-right:12px;">132465</span>
+	</div>
+	<div class="person_head_comment">
+		<span class="head_l_com">我的角色</span>
+		<span class="head_r_com" style="margin-right:12px;">
+			<span>消费者</span>
+			<button class="personInfo_but" id="partner" style="font-size:13px;">成为合伙人</button>
+		</span>
+	</div>
+	<div class="person_head_comment">
+		<span class="head_l_com">推荐人</span>
+		<span class="head_r_com" style="margin-right:12px;">
+			<span class="fre">五五零后零后</span>
+			<button class="personInfo_but" id="friend" style="font-size:14px;">加好友</button>
+		</span>
+	</div>
+</div>
+
+<div style="height:auto;background:#eee"></div>
+
+<script>
+$(function(){	
+	var length = $(".fre").text().length;
+	if(length >5){
+		 var str = $(".fre").text();
+		 var name = str.substr(1,5);
+		 $(".fre").text(name + '...');
+	}
+})
+</script>

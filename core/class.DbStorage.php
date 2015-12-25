@@ -1,5 +1,4 @@
 <?php
-use OSS\Result\Result;
 /**
  * DB storage
  *
