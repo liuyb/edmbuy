@@ -349,7 +349,7 @@ class User_Controller extends Controller {
     
     //通过openid或unionid获取用户信息
     $user = Users::load_by_unionid($unionid);
-    if(empty($user)){
+    if(!$user->is_exist()){
       Fn::show_error_message();
     }
     

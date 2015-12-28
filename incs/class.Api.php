@@ -76,7 +76,7 @@ class Api extends Model {
 		}
 		
 		$app = App::load($params['appid']);
-		if (empty($app)) {
+		if (!$app->is_exist()) {
 			throw new ApiException(1003);
 		}
 		else {

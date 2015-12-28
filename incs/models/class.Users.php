@@ -75,25 +75,29 @@ class Users extends StorageNode {
 	 * @return Users
 	 */
 	static function load_by_unionid($unionid, $from = 'weixin') {
-		$user_id = D()->from(self::table())->where("`unionid`='%s'",$unionid)->select(self::id())->result();
-		return self::load($user_id);
+		return self::find_one(new Query('unionid', $unionid));
 	}
 	
 	/**
 	 * Get parent union id by parent_id
-	 * @param integer $user_id
+	 * @param integer $uid
 	 * @return string
 	 */
-	static function get_unionid($user_id) {
-		if (empty($user_id)) return '';
-		$id = D()->from(self::table())->where("`user_id`=%d",$user_id)->select("unionid")->result();
-		return $id ? : '';
+	static function get_unionid($uid) {
+		if (empty($uid)) return '';
+		$u = self::find_one(new Query('uid', $uid));
+		return $u->is_exist() ? $u->unionid : '';
 	}
 	
+	/**
+	 * Get user id by union id
+	 * @param string $unionid
+	 * @return integer
+	 */
 	static function get_userid($unionid) {
 		if (empty($unionid)) return 0;
-		$id = D()->from(self::table())->where("`unionid`='%s'",$unionid)->select("user_id")->result();
-		return $id ? : 0;
+		$u = self::find_one(new Query('unionid', $unionid));
+		return $u->is_exist() ? $u->uid : 0;
 	}
 	
 	/**

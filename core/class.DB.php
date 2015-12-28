@@ -204,7 +204,7 @@ class DB {
    * @param string $qstring, query SQL string
    * @return string WRITABLE or READONLY
    */
-  protected function check_server_mode($qstring) {
+  public function check_server_mode($qstring) {
     return ($this->realtime_query || preg_match( '/^\s*(insert|delete|update|replace|create|alter|truncate|drop|lock|unlock)\s/i', $qstring ))
            ? self::WRITABLE : self::READONLY;
   }
@@ -853,7 +853,7 @@ class DB {
    * @param string $server_mode
    *   self::READONLY or self::WRITABLE or NULL(default)
    */
-  protected function query_callback($match, $init = FALSE, $server_mode = NULL) {
+  public function query_callback($match, $init = FALSE, $server_mode = NULL) {
     static $args = NULL, $the_mode = NULL;
     if ($init) {
       $args = $match;

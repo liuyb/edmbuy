@@ -60,7 +60,7 @@ class User_Controller extends Controller {
 		
 		$aUser = Users::load_by_unionid($unionId);
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>0];
-		if (empty($aUser)) { //未注册
+		if (!$aUser->is_exist()) { //未注册
 			$aUser = new Users();
 			$aUser->unionid  = $unionId;
 			$aUser->mobilephone = $mobile;

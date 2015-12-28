@@ -5,7 +5,18 @@
  * @author Gavin<laigw.vip@gmail.com>
  */
 defined('IN_SIMPHP') or die('Access Denied');
- 
+
+/**
+ * traversal object to array
+ * 
+ * @param object $arrayOfObjects
+ * @param string $key
+ * @return array
+ */
+function object_map($arrayOfObjects, $key) {
+	return array_map(function($o) use ($key) {return $o->$key;}, $arrayOfObjects);
+}
+
 /**
  * create a directory recursively
  * 

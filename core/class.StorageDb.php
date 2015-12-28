@@ -4,7 +4,7 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-class DbStorage extends Storage {
+class StorageDb extends Storage {
 	
 	protected $table;
 	protected $columns;
@@ -26,6 +26,23 @@ class DbStorage extends Storage {
 		return $ret;
 	}
 	
+	public function find(BaseQuery $query, Array $opts = []) {
+		list($where, $order, $limit) = $this->cause($query, $opts);
+		$sql = "SELECT `{$this->columns[$this->key]}` AS `id` " .
+		       "FROM {$this->table} {$where} {$order} {$limit}";
+		$ids = D()->query($sql)->fetch_column('id');
+		return $ids;
+	}
+	
+	public function findUnique($field, BaseQuery $query, Array $opts = []) {
+		list($where, $order, $limit) = $this->cause($query, $opts);
+		$field = $this->columns[$field];
+		$sql = "SELECT DISTINCT `{$field}` AS `id` " .
+		       "FROM {$this->table} {$where} {$order} {$limit}";
+		$ids = D()->query($sql)->fetch_column('id');
+		return $ids;
+	}
+	
 	public function save(Array $data) {
 		$id     = 0;
 		$params = [];
@@ -41,7 +58,7 @@ class DbStorage extends Storage {
 		}
 		
 		if (empty($params)) return FALSE;
-		if ($id && $this->idExist($id)) { //更新
+		if ($id && $this->id_exists($id)) { //更新
 			unset($params[$primary_key]); //id字段不更新
 			D()->update($this->table, $params, [$primary_key => $id]);
 		}
@@ -63,10 +80,33 @@ class DbStorage extends Storage {
 		return D()->affected_rows();
 	}
 	
-	public function idExist($id) {
+	public function id_exists($id) {
 		$idcol = $this->column($this->key);
 		$idval = D()->query("SELECT {$idcol} FROM ".$this->table." WHERE {$idcol}='%s'", $id)->result();
 		return $idval ? : FALSE;
+	}
+	
+	public static function escape($string) {
+		return D()->escape_string($string);
+	}
+	
+	private function cause(BaseQuery $query, Array $opts = []) {
+		$where = "WHERE " . (new QueryBuilderMysql($query, $this->columns))->query();
+	
+		$order = '';
+		if (isset($opts['sort']) && $opts['sort']) {
+			$ords = [];
+			foreach ($opts['sort'] as $field => $order) {
+				$ords[] = "`{$this->columns[$field]}` {$order}";
+			}
+			$order = "ORDER BY " . join(', ', $ords);
+		}
+	
+		if (!isset($opts['size'])) $opts['size'] = 10;
+		if (!isset($opts['from'])) $opts['from'] = 0;
+		$limit = "LIMIT {$opts['from']},{$opts['size']}";
+	
+		return [$where, $order, $limit];
 	}
 	
 	private function column($key) {
@@ -88,4 +128,4 @@ class DbStorage extends Storage {
 	
 }
  
-/*----- END FILE: class.DbStorage.php -----*/
+/*----- END FILE: class.StorageDb.php -----*/

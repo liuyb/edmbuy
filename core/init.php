@@ -61,6 +61,7 @@ require (SIMPHP_ROOT.'/conf/const.php');
 require (SIMPHP_CORE.'/func.simphp.php');
 require (SIMPHP_CORE.'/func.global.php');
 require (SIMPHP_INCS.'/func.common.php');
+require (SIMPHP_CORE.'/class.Query.php');
 
 /**
  * set core class autoload
@@ -420,7 +421,7 @@ class SimPHP {
    */
   protected static function loadPubClass($className) {
     
-    $class_folder = array('core', 'core/interface', 'incs', 'incs/model');
+    $class_folder = array('core', 'core/interfaces', 'incs', 'incs/models');
     $class_file = 'class.'.$className.'.php';
     foreach ($class_folder as $folder) {
     	if (file_exists(SIMPHP_ROOT . "/{$folder}/{$class_file}")) {

@@ -52,7 +52,8 @@ abstract class StorageNode extends Model {
 	 */
 	final public static function load($id, $refresh = FALSE) {
 		
-		if (empty($id)) return [];
+		$clsname = get_called_class();
+		if (empty($id)) return is_array($id) ? [] : new $clsname(); //确保单个id查询时返回一个StorageNode对象
 		$ids = is_array($id) ? array_filter($id) : [$id];
 		$ids = array_combine($ids, $ids);
 		
@@ -63,7 +64,6 @@ abstract class StorageNode extends Model {
 		$cached_data  = self::getStaticCache($ids);
 		$storage_data = self::storage()->load(array_diff_key($ids, $cached_data));
 		$caching_data = $return = [];
-		$clsname = get_called_class();
 		foreach ($ids as $_id) {
 			if (isset($cached_data[$_id])) {
 				$return[$_id] = $cached_data[$_id];
@@ -81,9 +81,54 @@ abstract class StorageNode extends Model {
 		}
 		self::setStaticCache($caching_data);
 		
-		return is_array($id) ? $return : current($return);
+		return is_array($id) ? $return : (!empty($return) ? current($return) :  new $clsname()); //确保单个id查询时返回一个StorageNode对象
 	}
 	
+	/**
+	 * Find nodes
+	 * @param BaseQuery $query
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array)
+	 * @return array StorageNode list
+	 */
+	final public static function find(BaseQuery $query = null, $option = []) {
+		return self::load(self::find_ids($query, $option));
+	}
+	
+	/**
+	 * Find one node
+	 * @param BaseQuery $query
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array)
+	 * @return StorageNode
+	 */
+	final public static function find_one(BaseQuery $query = null, $option = []) {
+		$ids = self::find_ids($query, $option);
+		return self::load(isset($ids[0]) ? $ids[0] : 0);
+	}
+	
+	/**
+	 * Find nodes ids
+	 * @param BaseQuery $query
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array)
+	 * @return array id list
+	 */
+	final public static function find_ids(BaseQuery $query = null, $option = []) {
+		return self::storage()->find($query ? : new TrueQuery(), $option);
+	}
+	
+	/**
+	 * Find DISTINCT a field as a unique column 
+	 * @param string $field
+	 * @param BaseQuery $query
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array)
+	 * @return array id list
+	 */
+	final public static function find_unique_ids($field, BaseQuery $query = null, $option = []) {
+		return self::storage()->findUnique($field, $query ? : new TrueQuery(), $option);
+	}
+	
+	/**
+	 * Save(insert or update) a node
+	 */
 	final public function save() {
 		$this->save_before();
 		$id  = self::storage()->save($this->__DATA__);
@@ -121,16 +166,19 @@ abstract class StorageNode extends Model {
 	 * @return boolean
 	 */
 	public function is_exist() {
-		$key = $this->meta()['key'];
-		return self::getStaticCache($this->$key) ? TRUE : FALSE;
+		return $this->id ? TRUE : FALSE;
 	}
 	
 	/**
 	 * Check whether id exist
-	 * @param int|string $id
+	 * @param int|string $id value of id filed
 	 */
-	public static function id_exist($id) {
-		return self::storage()->idExist($id);
+	public static function id_exists($id) {
+		$cache_node = self::getStaticCache($id);
+		if (!$cache_node) {
+			return self::storage()->id_exists($id);
+		}
+		return true;
 	}
 	
 	/**
@@ -225,7 +273,7 @@ abstract class StorageNode extends Model {
 	private static function storage() {
 		$clsname = get_called_class();
 		if (!isset(self::$_storage[$clsname])) {
-			self::$_storage[$clsname] = new DbStorage($clsname::meta());
+			self::$_storage[$clsname] = new StorageDb($clsname::meta());
 		}
 		return self::$_storage[$clsname];
 	}

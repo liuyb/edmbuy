@@ -7,7 +7,7 @@
 interface ReadableStorage {
 	
 	public function load(Array $ids);
-	//public function find(BaseQuery $query, Array $opts = []);
+	public function find(BaseQuery $query, Array $opts = []);
 	
 }
  
