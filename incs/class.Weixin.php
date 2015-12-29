@@ -25,7 +25,7 @@ class Weixin {
 	 * Allow weixin public account
 	 * @var array
 	 */
-	public static $allowAccount = array('fxmgou');
+	public static $allowAccount = array('edmbuy');
 
 	/**
 	 * Weixin constant name
@@ -164,9 +164,9 @@ class Weixin {
 	/**
 	 * 初始化配置
 	 * @param array $plugins, 额外的插件，如 'jssdk', 'wxpay' 等
-	 * @param string $target, 目标平台，可选值：'fxmgou' 等
+	 * @param string $target, 目标平台，可选值：'edmbuy' 等
 	 */
-	private function init(Array $plugins = array(), $target = 'fxmgou')
+	private function init(Array $plugins = array(), $target = 'edmbuy')
 	{
 	  if (!in_array($target, self::$allowAccount)) {
 	    throw new Exception("Weixin public account not allowed: {$target}");
@@ -196,9 +196,9 @@ class Weixin {
 	/**
 	 * 初始化构造函数
 	 * @param array $plugins, 额外的插件，如 'jssdk', 'wxpay' 等
-	 * @param string $target, 目标平台，可选值：'fxmgou' 等
+	 * @param string $target, 目标平台，可选值：'edmbuy' 等
 	 */
-	public function __construct(Array $plugins = array(), $target = 'fxmgou')
+	public function __construct(Array $plugins = array(), $target = 'edmbuy')
 	{
 		$this->init($plugins, $target); //该句必须出现在所有对外方法的最开始
 	}
