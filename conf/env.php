@@ -16,7 +16,7 @@ return [
   'sitetheme'=> 'default',
   'contextpath' => '/',
   'cleanurl' => 1,
-  'usecdn'   => 1,
+  'usecdn'   => 0,
   'allowed_moddirs' => ['modules','mobiles','admins','apis'],
   //[Log]
   'log_dir' => '/var/log',
@@ -31,8 +31,8 @@ return [
   'tpldebug' => 1,
   //站点信息
   'site' => [
-  	'mobile' => 'http://ydm.fxmapp.com',
-  	'shop' => 'http://shop.fxmapp.com',
+  	'mobile' => 'http://edm.fxmapp.com',
+  	'shop' => 'http://edmshop.fxmapp.com',
   ],
   //debug白名单uid
   //'debug_white_list' => ['10001'],

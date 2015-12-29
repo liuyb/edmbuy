@@ -66,6 +66,24 @@ class Fn extends Func {
   }
   
   /**
+   * 根据输入id生成二维码目录
+   * 
+   * @param integer $id
+   * @param string  $prefix
+   * @param boolean $is_absolute
+   * @return string
+   */
+  static function gen_qrcode_dir($id, $prefix = 'item', $is_absolute = FALSE) {
+  	$dir = ($is_absolute ? SIMPHP_ROOT : '').'/a/qrcode/';
+  	$folder_limit = 30000; //Linux ext3 limit 32000
+  	if (!empty($prefix)) {
+  		$dir .= $prefix . '/';
+  	}
+  	$dir .= intval($id / $folder_limit) . '/';
+  	return $dir;
+  }
+  
+  /**
    * 通用状态读取逻辑
    * 
    * @param array $status_set

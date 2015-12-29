@@ -24,8 +24,6 @@ class Common_Controller extends Controller {
    */
   public static function menu_init() {
     return [
-      '!^item/(\d+)$!i'      => 'default/item/$1',
-      '!^item/([a-z_]+)$!i'  => 'default/item_$1',
       '!^explore$!i'         => 'default/explore',
       '!^about$!i'           => 'default/about',
     ];
@@ -62,20 +60,10 @@ class Common_Controller extends Controller {
     //读取最新用户信息以客户端缓存
     global $user;
     if ($user->uid) {
-      $uinfo = Member::getTinyInfoByUid($user->uid, TRUE);
-      $user->openid    = $uinfo['openid'];
-      $user->unionid   = $uinfo['unionid'];
-      $user->subscribe = $uinfo['subscribe'];
-      $user->username  = $uinfo['username'];
-      $user->nickname  = $uinfo['nickname'];
-      $user->sex       = $uinfo['sex'];
-      $user->logo      = $uinfo['logo'];
-      $user->ec_user_id= $uinfo['ec_user_id'];
-      
-      if (!$request->is_hashreq()) { //不是hash request，则查看购物车是否有商品
-        $cartNum = Goods::getUserCartNum($user->ec_user_id);
-        $user->ec_cart_num = $cartNum;
-      }
+    	$curUser = Users::load($user->uid);
+    	$curUser->session = $user->session; //改写之前要先保存已有的session
+    	$user = $curUser;
+    	unset($curUser);
     }
     
   }

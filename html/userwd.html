@@ -1,0 +1,205 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+
+<body style="background:#eee;">
+
+<div class="header">
+	申请提现
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div class="ydm_tx_item" style="border-top: 0;margin-top:14px;">
+    <a href="deposit.html">
+		<div class="ydm_tx_ydtem">
+			<div>	
+				<span style="display:block;margin-bottom:-20px;font-size:15px;" id="bankName">请设置银行名称</span>
+				<span id="bankNo">请设置银行卡账号</span>
+			</div>
+		</div>
+    </a>
+</div>
+
+<div style="background:#fff;margin:0 0 10px;height:170px;">
+	<p class="tx_money">
+		<span style="font-size:14px;">提现金额：</span>
+		<span style="font-size:18px;color:#e54040;" id="wdmoney">0元</span>
+		<span style="font-size:12px;padding-left:20px;">(每次提现需一次性提完)</span>
+	</p>
+	<p class="aq_phone">	
+		<span style="font-size:16px;">安全手机号：</span>
+		<span style="font-size:15px;color:#000;">136******52</span>
+	</p>
+	<p class="auth_code">
+		<input type="text" id="code" style="font-size:15px;padding-left:10px;" placeholder="请输入提现安全码">
+		<button type="button" class="getcode" id="getCode">获取验证码</button>
+	</p>
+</div>
+
+<div style="margin:15px 10px; 0;font-size:12px;">
+	<span>* 提现每笔提现扣除1% 的手续费，个人所得税暂时由益多米承担。</span>
+</div>
+
+<div style="text-align:center;">
+	<button type="button" class="atonce_but" style="background:#ff6d14;">立即提现</button>
+</div>
+
+<div style="margin:-20px 0 0 0;text-align:center;font-size:12px;">
+	<span>预计到账时间：2016-01-07 23:59:59</span>
+</div>
+
+
+
+<script>
+var num = 60;
+var count = num;
+var time;
+
+//发送验证码
+$("#getCode").live("click", function(){
+	
+	_this = $(this);
+	
+	//仍在倒数中
+	if(_this.hasClass("sending")){
+		return false;
+	}
+	
+	//获取验证码
+	$.ajax({
+		url:"",
+		type:"post",
+		success:function(dat){
+			if(dat.msg=='success'){
+				boxalert("验证码已发送");
+			}else{
+				boxalert("验证码发送失败");
+			}
+		}
+	})
+	
+	
+	_this.addClass("sending");
+	refresh();
+	time = setInterval("refresh();", 1000);
+	
+});
+
+function refresh(){
+	
+	num = num - 1;
+	var msg = num + "秒";
+	
+	$("#getCode").html(msg);
+		
+    if(num == 0){
+    	num = count;
+    	$("#getCode").removeClass("sending").html("重新获取");
+    	clearInterval(time);
+    	return false;
+    }
+}
+
+
+//确认
+$(".atonce_but").live("click", function(){
+	
+		var code = trim($("#code").val());
+		var wdmoney='0';
+			if(wdmoney=="" || wdmoney=="0.00" || wdmoney<100){
+				boxalert("提现金额不能为空，且需大于等于100元！");
+				return false;
+			}
+		var bankName=$('#hbankName').val();
+			if(bankName==""){
+				boxalert("发卡银行不能为空！");
+				return false;
+			}
+		var cidstr=$('#hcidstr').val();
+			if(cidstr==""){
+				boxalert("提现cid不能为空！");
+				return false;
+			}
+			if(code == ""){
+				boxalert("请输入验证码");
+				$("#code").focus();
+				return false;
+			}
+			var dat = $.ajax({
+				url:"",
+					data:{"code":code},
+					type:"post",
+					async:false
+					}).responseText;
+				if(dat=="success"){
+					$.ajax({
+						url:"cash!lwd.jsp",
+						data:{},
+						type:"post",
+						success:function(data){
+							
+						}
+					})
+					
+			}else if(dat=="error"){
+					boxalert("验证码不正确！");
+					return false;
+			}	
+	});
+
+$(function(){
+	var bankNoStr='';
+	var bankName='';
+	//银行账号
+	if(bankNoStr!=null && bankNoStr!=''){
+		$('#bankNo').html(bankNoStr);
+	}else{
+		$('#bankNo').html("请设置银行卡账号");
+	}
+	
+	//银行名称
+	if(bankName!=null && bankName!=''){
+		$('#bankName').html(bankName);
+	}else{
+		$('#bankName').html("请设置银行名称");
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

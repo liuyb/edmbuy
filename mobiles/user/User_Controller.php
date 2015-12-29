@@ -6,19 +6,12 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class User_Controller extends Controller {
-  
-  private $nav_no     = 1;       //主导航id
-  private $topnav_no  = 0;       //顶部导航id
-  private $nav_flag1  = 'user';  //导航标识1
-  private $nav_flag2  = '';      //导航标识2
-  private $nav_flag3  = '';      //导航标识3
+class User_Controller extends MobileController {
   
   public function menu() {
     return [
       'user' => 'index',
       'user/oauth/%s' => 'oauth',
-      'user/collect/cancel' => 'collect_cancel',
     ];
   }
   
@@ -31,16 +24,8 @@ class User_Controller extends Controller {
    */
   public function init($action, Request $request, Response $response)
   {
-    if (!$request->is_post()) {
-      $this->v = new PageView();
-      $this->v->add_render_filter(function(View $v){
-        $v->assign('nav_no',     $this->nav_no)
-          ->assign('topnav_no',  $this->topnav_no)
-          ->assign('nav_flag1',  $this->nav_flag1)
-          ->assign('nav_flag2',  $this->nav_flag2)
-          ->assign('nav_flag3',  $this->nav_flag3);
-      });
-    }
+  	$this->nav_flag1 = 'user';
+    parent::init($action, $request, $response);
   }
   
   /**
@@ -63,90 +48,6 @@ class User_Controller extends Controller {
     }
     
     $response->send($this->v);
-  }
-  
-  /**
-   * [feedback description]
-   * @param  Request  $request  [description]
-   * @param  Response $response [description]
-   * @return [type]             [description]
-   */
-  public function feedback(Request $request, Response $response){
-    
-    if ($request->is_post()) {
-      
-      $res = ['flag'=>'FAIL', 'msg'=>''];
-      
-      $content = $request->post('content', '');
-      $contact = $request->post('contact', '');
-      $content = trim($content);
-      $contact = trim($contact);
-      
-      if($content==''){
-        $res['msg'] = '内容不能为空';
-        $response->sendJSON($res);
-      }
-      
-      $fid = User_Model::saveFeedback(['msg_content'=>$content, 'user_email'=> $contact]);
-      if($fid>0){
-        $res['flag'] = 'SUC';
-        $res['backurl'] = U('user');
-      }else{
-        $res['msg']= '系统繁忙，请稍后再试！';
-      }
-      $response->sendJSON($res);
-      
-    }
-    else {
-      
-      $this->v->set_tplname('mod_user_feedback');
-      if ($request->is_hashreq()) {
-      
-      }
-      $response->send($this->v);
-      
-    }
-  }
-  
-  public function collect(Request $request, Response $response){
-    $this->v->set_tplname('mod_user_collect');
-
-    if ($request->is_hashreq()) {
-      $collect_list = Goods::getUserCollectList();
-      $this->v->assign('collect_list', $collect_list);
-      $this->v->assign('collect_num', count($collect_list));
-    }
-
-    $response->send($this->v); 
-  }
-  
-  public function collect_cancel(Request $request, Response $response){
-    
-    if ($request->is_post()) {
-      
-      $res = ['flag'=>'FAIL','msg'=>'取消失败'];
-      
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
-        $res['msg'] = '未登录, 请登录';
-        $response->sendJSON($res);
-      }
-      
-      $rec_id = $request->post('rec_id', 0);
-      if (!$rec_id) {
-        $res['msg'] = '记录id为空';
-        $response->sendJSON($res);
-      }
-      
-      $b = Goods::goodsCollectCancel($rec_id);
-      if ($b) {
-        $res = ['flag'=>'SUC','msg'=>'取消成功'];
-      }
-      
-      $response->sendJSON($res);
-      
-    }
-    
   }
 
   /**
@@ -218,14 +119,12 @@ class User_Controller extends Controller {
     //获取到openid
     $openid = $code_ret['openid'];
     $unionid= isset($code_ret['unionid']) ? $code_ret['unionid'] : '';
-    $uid    = 0;
     
     //查询本地是否存在对应openid的用户
-    $uinfo_bd = Member::getTinyInfoByOpenid($openid, $from);
-    if (0&&!empty($uinfo_bd)) { //用户已存在，对state='base'，则仅需设置登录状态；而对state='detail'，需保存或更新用户数据
-    	$uid = intval($uinfo_bd['uid']);
+    $loginedUser = $localUser = Users::load_by_unionid($unionid);
+    if ($localUser->is_exist()) { //用户已存在，对state='base'，则仅需设置登录状态；而对state='detail'，需保存或更新用户数据
     
-    	if ('detail'===$state) { //detail认证模式，需更新用户数据
+    	if ('detail'==$state) { //detail认证模式，需更新用户数据
     
     		$auth_method = 'oauth2_detail';//OAuth2详细认证方式
     
@@ -235,72 +134,76 @@ class User_Controller extends Controller {
     		}
     
     		//保存微信用户信息到本地库
-    		$udata = [
-    				//'openid'   => $openid,
-    				'unionid'  => isset($uinfo_wx['unionid']) ? $uinfo_wx['unionid'] : '',
-    				'subscribe'=> isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0,
-    				'subscribe_time'=> isset($uinfo_wx['subscribe_time']) ? $uinfo_wx['subscribe_time'] : 0,
-    				'nickname' => isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '',
-    				'logo'     => isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '',
-    				'sex'      => isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0,
-    				'lang'     => isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '',
-    				'country'  => isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '',
-    				'province' => isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '',
-    				'city'     => isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '',
-    				'auth_method'=> $auth_method
-    		];
-    		Member::updateUser($udata,$openid,$from);
+    		$upUser = new Users($localUser->uid);
+    		//$upUser->unionid   = $unionid;
+    		$upUser->openid    = $openid;
+    		if (isset($uinfo_wx['subscribe'])) {
+    			$upUser->subscribe = $uinfo_wx['subscribe'];
+    			$upUser->subscribetime = $uinfo_wx['subscribe_time'];
+    		}
+    		if ($localUser->logo) {
+    			$upUser->nickname  = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+    			$upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+    			$upUser->sex       = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+    			$upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+    			$upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+    			$upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+    			$upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
+    		}
     
     		//尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
-    		if (!$uinfo_bd['subscribe'] && !$udata['subscribe']) {
+    		if (!$localUser->subscribe && !$upUser->subscribe) {
     			$uinfo_wx = $wx->userInfo($openid);
     			//trace_debug('weixin_basic_userinfo', $uinfo_wx);
     			if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
     
     			}
     			else { //成功！说明之前已经关注，得更新关注标记
-    				$udata = [
-    						'subscribe'=> isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0,
-    						'subscribe_time'=> isset($uinfo_wx['subscribe_time']) ? $uinfo_wx['subscribe_time'] : 0,
-    				];
-    				Member::updateUser($udata,$openid,$from);
+    				$upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
+    				$upUser->subscribetime = isset($uinfo_wx['subscribe_time']) ? $uinfo_wx['subscribe_time'] : 0;
     			}
     		}
+    		
+    		$upUser->save();
+    		$loginedUser = $upUser;
     
     	} //End: if ('detail'===$state)
     
     }
     else { //用户不存在，则要尝试建立
-    	/*
-    	if ('base'===$state) { //基本授权方式
+    	
+    	if ('base'==$state) { //基本授权方式
     
-    	$auth_method = 'oauth2_base';//基本认证方式
+	    	$auth_method = 'oauth2_base';//基本认证方式
+	    	
+	    	$upUser = new Users();
+	    	$upUser->unionid = $unionid;
+	    	$upUser->openid  = $openid;
+	    	$upUser->regip   = $request->ip();
+	    	$upUser->regtime = simphp_time();
+	    	$upUser->salt    = gen_salt();
+	    	$upUser->state   = 0; //0:正常;1:禁止
+	    	$upUser->from    = $from;
+	    	$upUser->authmethod = $auth_method;
+	    	$upUser->save();
+	    	$loginedUser = $upUser;
     
-    	//保存微信用户信息到本地库
-    	$udata = [
-    	'openid'     => $openid,
-    	'auth_method'=> $auth_method
-    	];
-    	$uid = Member::createUser($udata, $from);
+    	} //END: if ('base'==$state)
     
-    	}
-    	*/
+    } //END: if ($localUser->is_exist()) else
     
+		//设置本地登录状态
+		if ('login'==$auth_action) {
     
-    	} //End: if (!empty($uinfo_bd)) else
-    
-    		//设置本地登录状态
-    	if ('login'==$auth_action) {
-    
-    		if (empty($uid)) {
+    		if (!$loginedUser->is_exist()) {
     			Fn::show_error_message('微信授权登录失败！');
     		}
     
-    		Member::setLocalLogin($uid);
-    	}
-    	    
-    	//跳转
-    	$response->redirect($refer);
+    		$loginedUser->set_logined_status();
+		}
+		
+		//跳转
+		$response->redirect($refer);
   }
 
   /**
@@ -357,7 +260,7 @@ class User_Controller extends Controller {
     $user->set_logined_status();
     
     //Token登录后去到当前页(避免session没写成功走正常流程)
-    $response->redirect(preg_replace('/&?token=[a-z0-9]+/i', '', $request->url()));
+    $response->redirect(preg_replace('/\??&?token=[a-z0-9]+/i', '', $request->url()));
   }
   
   /**
@@ -367,6 +270,32 @@ class User_Controller extends Controller {
    */
   public function tips(Request $request, Response $response){
     $this->v = new PageView('','tips');
+    $q = $request->q();
+    $qrcode = '/misc/images/qrcode/edmbuy_258.jpg';
+    if (preg_match('/^item\/(\d+)$/', $q, $matches)) {
+    	
+    	$id   = $matches[1];
+    	$item = Items::load($id);
+    	if ($item->is_exist()) {
+    		$dir     = Fn::gen_qrcode_dir($id,'item',true);
+    		$locfile = $dir . $id . '.png';
+    		if (!file_exists($locfile)) {
+    			if (mkdirs($dir)) {
+    				$qrinfo  = $item->url('qrcode');
+    				include_once SIMPHP_INCS .'/libs/phpqrcode/qrlib.php';
+    				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+    				if (file_exists($locfile)) {
+    					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+    				}
+    			}
+    		}
+    		else {
+    			$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+    		}
+    	}
+    	
+    }
+    $this->v->assign('qrcode', $qrcode);
     $response->send($this->v);
   }
   

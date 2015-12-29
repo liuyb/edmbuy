@@ -305,6 +305,7 @@ class Weixin {
       case 'SCAN':
         break;
       case 'CLICK':
+      	return '';//临时屏蔽
         switch ($postObj->EventKey) {
           case '200': //最新文章
             $latest_news = $this->helper->latestArticles();
@@ -362,7 +363,7 @@ class Weixin {
     $keyword      = trim($postObj->Content);
     $openid       = $fromUserName;
     $reqtime      = intval($postObj->CreateTime);
-    trace_debug('weixin_reply_'.($is_voice?'voice':'text'), $keyword);
+    //trace_debug('weixin_reply_'.($is_voice?'voice':'text'), $keyword);
     
     $responseText = '';
     $queryResult  = $this->helper->onTextQuery($keyword, $result_type);
@@ -1079,29 +1080,37 @@ class WeixinHelper {
    * @return string
    */
   public function onSubscribe($openid, $reqtime, $toUserName = '') {
-    $uinfo = $this->wx->userInfo($openid);
-    if (empty($uinfo['errcode'])) {
-      $from  = $this->from;
-      $udata = ['openid' => $openid, 'subscribe' => $uinfo['subscribe']];
-      if ($uinfo['subscribe']) { //已关注
-        $udata['unionid']  = isset($uinfo['unionid']) ? $uinfo['unionid'] : ''; //UnionID
-        $udata['subscribe_time'] = $uinfo['subscribe_time'];
-        $udata['nickname'] = $uinfo['nickname'];
-        $udata['logo']     = $uinfo['headimgurl'];
-        $udata['sex']      = $uinfo['sex'];
-        $udata['lang']     = $uinfo['language'];
-        $udata['country']  = $uinfo['country'];
-        $udata['province'] = $uinfo['province'];
-        $udata['city']     = $uinfo['city'];
-        $udata['auth_method'] = 'base';
-      }
-      if (!Member::checkExistByOpenid($openid, $from)) { //用户不存在
-        Member::createUser($udata, $from);
-      }
-      else { //用户已存在
-        unset($udata['openid'],$udata['auth_method']);
-        Member::updateUser($udata, $openid, $from);
-      }
+    $wxuinfo = $this->wx->userInfo($openid);
+    if (empty($wxuinfo['errcode'])) {
+    	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
+    		
+    		$aUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
+    		if ($aUser->is_exist()) { //已存在
+    			$upUser = new Users($aUser->id);
+    		}
+    		else { //未存在
+    			$upUser = new Users();
+    			$upUser->unionid   = $wxuinfo['unionid'];
+    			$upUser->state     = 0; //0:正常;1:禁止
+    			$upUser->from      = $this->from;
+    			$upUser->authmethod= 'base';
+    		}
+    		
+    		$upUser->openid      = $openid;
+    		$upUser->subscribe   = $wxuinfo['subscribe'];
+    		$upUser->subscribetime = $wxuinfo['subscribe_time'];
+    		if ($aUser->logo) { //未设过时才更新
+    			$upUser->nickname  = $wxuinfo['nickname'];
+    			$upUser->logo      = $wxuinfo['headimgurl'];
+    			$upUser->sex       = $wxuinfo['sex'];
+    			$upUser->lang      = $wxuinfo['lang'];
+    			$upUser->country   = $wxuinfo['country'];
+    			$upUser->province  = $wxuinfo['province'];
+    			$upUser->city      = $wxuinfo['city'];
+    		}
+    		$upUser->save();
+    		
+    	}
     }
     
     $msg = $this->about(1);
@@ -1117,7 +1126,13 @@ class WeixinHelper {
    * @return string
    */
   public function onUnsubscribe($openid, $reqtime) {
-    Member::updateUser(['subscribe' => 0, 'subscribe_time' => $reqtime], $openid, $this->from);
+    $aUser = Users::load_by_openid($openid, $this->from);
+    if ($aUser->is_exist()) {
+    	$upUser = new Users($aUser->id);
+    	$upUser->subscribe     = 0;
+    	$upUser->subscribetime = $reqtime;
+    	$upUser->save();
+    }
     return '';
   }
 
@@ -1132,7 +1147,14 @@ class WeixinHelper {
    * @return string
    */
   public function onLocation($openid, $reqtime, $longitude, $latitude, $precision) {
-    Member::updateUser(['longitude' => $longitude, 'latitude' => $latitude, 'precision' => $precision], $openid, $this->from);
+    $aUser = Users::load_by_openid($openid, $this->from);
+    if ($aUser->is_exist()) {
+    	$upUser = new Users($aUser->id);
+    	$upUser->longitude = $longitude;
+    	$upUser->latitude  = $latitude;
+    	$upUser->precision = $precision;
+    	$upUser->save();
+    }
     return '';
   }
 
@@ -1251,21 +1273,13 @@ class WeixinHelper {
   }
   
   /**
-   * "关于小蜜" 的返回文字
+   * "关于" 的返回文字
    * 
    * @param int $type
    * @return string
    */
   public function about($type = 0) {
-    $ext = $ext2 = '';
-    if (1==$type) {
-      $ext2= "，小蜜还会定期为你发布一些可能会对你有用的资讯文章";
-    }
-    elseif (2==$type) {
-      $text = "你好，我是福小蜜/::)\n\n福小蜜海外购，专注于海外商品的代购，让你足不出户即可享受来自澳洲、新西兰、加拿大等海外的放心商品。\n\n觉得小蜜还行的话就帮忙向好友推荐一下吧，这是小蜜的公众号：fxmgou，\n谢谢/::*";
-      return $text;
-    }
-    $text = "你好，欢迎关注小蜜/:rose\n\n{$ext}你可以将底部菜单切换到回复模式跟小蜜文字或语音对话，希望能给你带来点小惊喜/::$\n\n福小蜜海外购，让你足不出户即可享受来自澳洲、新西兰、加拿大等海外的放心商品{$ext2}。\n\n觉得小蜜还行的话就帮忙向好友推荐一下吧，这是小蜜的公众号：fxmgou，\n谢谢/::*";
+    $text = "你好，欢迎关注益多米/:rose";
     return $text;
   }
   

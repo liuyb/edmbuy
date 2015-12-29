@@ -16,6 +16,13 @@ class StorageDb extends Storage {
 		$this->columns = $config['columns'];
 	}
 	
+	/**
+	 * Load node from db
+	 * 
+	 * @param array $ids
+	 * @return array
+	 * @see Storage::load()
+	 */
 	public function load(Array $ids) {
 		if (empty($ids)) return [];
 		$res = D()->from($this->table)->where(D()->in($this->column($this->key), $ids))->select($this->getColumnAlias())->fetch_assoc_all();
@@ -26,6 +33,14 @@ class StorageDb extends Storage {
 		return $ret;
 	}
 	
+	/**
+	 * Find nodes from db
+	 * 
+	 * @param BaseQuery $query
+	 * @param array $opts
+	 * @return array
+	 * @see Storage::find()
+	 */
 	public function find(BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$sql = "SELECT `{$this->columns[$this->key]}` AS `id` " .
@@ -34,6 +49,14 @@ class StorageDb extends Storage {
 		return $ids;
 	}
 	
+	/**
+	 * Find DISTINCT nodes from db
+	 *
+	 * @param string $field
+	 * @param BaseQuery $query
+	 * @param array $opts
+	 * @return array
+	 */
 	public function findUnique($field, BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$field = $this->columns[$field];
@@ -43,6 +66,13 @@ class StorageDb extends Storage {
 		return $ids;
 	}
 	
+	/**
+	 * Insert or update data to db
+	 * 
+	 * @param array $data
+	 * @return string
+	 * @see Storage::save()
+	 */
 	public function save(Array $data) {
 		$id     = 0;
 		$params = [];
@@ -74,18 +104,37 @@ class StorageDb extends Storage {
 		return strval($id);
 	}
 	
+	/**
+	 * Remove nodes from db
+	 * 
+	 * @param array $ids
+	 * @return integer affected rows
+	 * @see Storage::remove()
+	 */
 	public function remove(Array $ids) {
 		if (!array_filter($ids)) return 0;
 		D()->query("DELETE FROM ".$this->table." WHERE ".D()->in($this->column($this->key), $ids));
 		return D()->affected_rows();
 	}
 	
+	/**
+	 * Chec whether id exists
+	 *
+	 * @param string $id
+	 * @return bool
+	 * @see Storage::remove()
+	 */
 	public function id_exists($id) {
 		$idcol = $this->column($this->key);
 		$idval = D()->query("SELECT {$idcol} FROM ".$this->table." WHERE {$idcol}='%s'", $id)->result();
 		return $idval ? : FALSE;
 	}
 	
+	/**
+	 * Escape input string
+	 * @param string $string
+	 * @return string
+	 */
 	public static function escape($string) {
 		return D()->escape_string($string);
 	}
@@ -110,7 +159,7 @@ class StorageDb extends Storage {
 	}
 	
 	private function column($key) {
-		return is_array($this->columns) ? $this->columns[$key] : $key;
+		return is_array($this->columns) ? (isset($this->columns[$key]) ? $this->columns[$key] : null) : $key;
 	}
 	
 	private function getColumnAlias() {

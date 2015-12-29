@@ -7,28 +7,6 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 class User_Model extends Model {
-
-	static function saveFeedback($data){
-	  $user_id = $GLOBALS['user']->ec_user_id;
-	  if ($user_id) { //对于登录用户，获取用户信息
-	    $uinfo = D()->from(ectable('users'))->where(['user_id'=>$user_id])
-	                ->select('user_id,email,user_name,nick_name')->get_one();
-	    if (!empty($uinfo)) {
-	      $uinfo_append = [
-	        'user_id'   => $uinfo['user_id'],
-	        'user_name' => $uinfo['user_name'],
-	        'nick_name' => $uinfo['nick_name']
-	      ];
-	      if (''==$data['user_email'] && ''!=$uinfo['email']) {
-	        $data['user_email'] = $uinfo['email'];
-	      }
-	      $data = array_merge($data, $uinfo_append);
-	    }
-	  }
-	  
-		$fid = D()->insert(ectable('feedback'), $data, true, true);
-		return $fid;
-	}
 	
 	static function checkAccessToken($token, $idfield = 'openid'){
 		$record = D()->get_one("SELECT * FROM {access_token} WHERE token='%s'", $token);

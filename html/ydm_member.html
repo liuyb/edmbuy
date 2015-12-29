@@ -16,6 +16,12 @@
 <!-- head end -->
 </head>
 
+<script>
+$(function(){
+	$("#f_ms").addClass("on");  //底部导航高亮
+});
+</script>
+
 <body style="background:#eee;"> 
 
 <a href="ydm_personInfo.html">
@@ -81,21 +87,62 @@
 <div class="footer">
 	<ul>
 		<a href="#">
-			<li id="f_sy" class="on"></li>
+			<li id="f_sy"></li>
 		</a>
 		<a href="cart_list.html">
 			<li id="f_gwc"><span class="f_num">864</span></li>
 		</a>
-		<a href="#">
+		<a href="ydm_partner.html">
 			<li id="f_hhr"></li>
 		</a>
-		<a href="#">
-			<li id="f_hy"></li>
+		<a href="ydm_member.html">
+			<li id="f_ms"></li>
 		</a>
 	</ul>
 </div>
 
+<!-- 遮罩层 -->
+<a href="javascript:;"><div class="mask"></div></a>
+
+<!-- 加好友弹出框1 -->
+<div class="add_friend"> 
+	<div class="add_f_img"><img src="./img/ydm.png"></div>
+	<div class="add_f_tit">长按加好友，请注明来自：益多米</div>
+	<div class="add_f_phone">电话：<a href="tel:400-0755-888" style="color:#111">12345678912</a></div>
+	<div class="w_wx_colse close_f"><img src="./img/gub.png"></div>
+</div>
+
+<!-- 加好友弹出框2 -->
+<div class="add_friend1">
+	<div class="friend_ts">温馨提示</div>
+	<div class="friend_nr">
+		推荐人未完善个人信息</br>
+		提醒TA完善信息
+	</div>
+	<div class="goods_btn">
+		<button type="button" class="order_comm feiend_yes">马上提醒</button>
+		<button type="button" class="order_comm friend_no" style="color:#999;font-weight:normal;">暂不提醒</button>
+	</div>
+</div>
+
+<!-- 加好友弹出框3 -->
+<div class="add_friend2">
+	<div style="font-size:18px;color:#111;text-align:center;line-height:64px;">电话：12345678941</div>
+	<div class="w_wx_colse"><img src="./img/gub.png"></div>
+</div>
+
 <script>
+
+//好友弹框
+$(".refer_but").live("click",function(){
+	$(".add_friend1").fadeIn(300);
+	$(".mask").fadeIn(300);
+})
+$(".close_f,.mask,.friend_no,.w_wx_colse").live("click",function(){
+	$(".add_friend1").fadeOut(300);
+	$(".mask").fadeOut(300);
+})
+
 $(function(){	
 	var length = $(".c_name").text().length;
 	var _length = $(".refer_name").text().length;

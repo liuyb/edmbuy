@@ -25,34 +25,59 @@
 <?php headscript();?>
 </head>
 <body>
-<div id="rtWrap">
-  <?php include T($tpl_header);?>
+<div id="gtop"></div>
+<div id="root">
+  <nav id="topnav" class="topnav topnav-<?=$topnav_no?>"></nav>
   <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea"></section>
     <div class="pageBg"><em>“正品保证”</em>不仅仅是一句口号</div>
   </div>
   <div id="loadingCanvas" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
   <div class="hide"><img src="<?php echo ploadingimg()?>" alt=""/></div>
-  <?php include T('_nav');?>
-  <?php include T('_popdlg');?>
 </div>
+<?php include T('_nav');?>
+<?php include T('_popdlg');?>
 </body>
-<?php footscript();?>
+<?php /*footscript();*/?>
 <?php tplholder('FOOT_JS');?>
+<script>
+function show_gtop(html) {
+	if (typeof(show_gtop.dom)=='undefined') {
+		show_gtop.dom = $('#gtop');
+	}
+	show_gtop.dom.html(html).show();
+}
+function show_topnav(html) {
+	if (typeof(show_topnav.dom)=='undefined') {
+		show_topnav.dom = $('#topnav');
+	}
+	show_topnav.dom.html(html).show();
+}
+function show_nav(html) {
+	if (typeof(show_nav.dom)=='undefined') {
+		show_nav.dom = $('#nav').show();
+	}
+	show_nav.dom.html(html);
+}
+function append_to_body(html) {
+	$(document.body).append(html);
+}
+</script>
 <script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>
 <script type="text/javascript" src="<?=$contextpath;?>misc/js/fst.min.js"></script>
 </html><?php
 
 //: add css & js files
 if (C('env.usecdn')):
-add_css('http://fcdn.qiniudn.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
-add_js('http://fcdn.qiniudn.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('http://fcdn.qiniudn.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
+add_css('http://fcdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
+add_js('http://fcdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_js('http://fcdn.fxmapp.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('fm.min.js',['pos'=>'foot','ver'=>'none']);
+add_js('fm.min.js',['pos'=>'head','ver'=>'none']);
 endif;
 add_css('m.css',['scope'=>'global']);
+add_js('g.js',['pos'=>'head']);
 add_js('m.js',['pos'=>'foot']);
 
 ?>

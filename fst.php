@@ -216,7 +216,7 @@ function V($url='', $params = array(), $action = 'poststatus') {
       'changed'  => $now,
       'status'   => 'N'
     );
-    $vid = D()->insert_table('visiting', $vinfo);
+    $vid = D()->insert('visiting', $vinfo);
   }
 
   return $vid;

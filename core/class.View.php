@@ -317,5 +317,30 @@ class View extends CBase {
   }
   
 }
+
+/**
+ * View Exception
+ */
+class ViewException extends SimPHPException {
+	protected $view;
+	
+	public function __construct(View $view, $message = null, $code = null) {
+		parent::__construct($message, $code);
+		$this->view = $view;
+	}
+	
+	public function getView() {
+		return $this->view;
+	}
+}
+
+/**
+ * View Exception
+ */
+class ViewResponse extends ViewException {
+	public function __construct(View $view, $message = '', $code = 0) {
+		parent::__construct($view, $message, $code);
+	}
+}
  
 /*----- END FILE: class.View.php -----*/

@@ -18,6 +18,10 @@ try {
   ->boot(RC_ALL ^ RC_MEMCACHE)
   ->dispatch($request,$response);
 }
+catch (ViewException $ve) {
+	$ve->getView()->assign('errmsg', $ve->getMessage());
+	$response->send($ve->getView());
+}
 catch (SimPHPException $me) {
   $response->dump($me->getMessage());
 }

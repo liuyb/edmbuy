@@ -30,7 +30,8 @@
     #tips_word a { color: #34aea3 }
     #public_no { background-color: #f05e23;color: #fff;font-size: 22px;font-size: 2.2rem;margin: 20px 0px 30px;padding: 10px;height: 48px;line-height: 48px; }
     #public_no img { vertical-align: middle;margin-right: 10px; }
-    @media only screen and (min-width:1024px){ .wrapper {max-width: 640px;} }
+    .tip { color: #999; }
+    @media only screen and (min-width:1024px){ .wrapper {max-width: 480px;} }
   </style>
 </head>
 <body>
@@ -39,7 +40,8 @@
 	  <h1 id="tips_head"><img src="/themes/mobiles/img/tips_head.png" alt=""></h1>
 	  <p id="tips_word">请在微信客户端中打开"益多米" 或 <a href="//www.edmbuy.com">访问官网</a></p>
 	  <div id="public_no"><img src="/themes/mobiles/img/tips_logo.png" alt=""><span>微信公众号：edmbuy</span></div>
-	  <p><img src="misc/images/qrcode/edmbuy_258.jpg" alt="qrcode"/></p>
+	  <p class="tip">手机微信扫以下二维码访问：</p>
+	  <p><img src="<?=$qrcode?>" alt="qrcode"/></p>
   </div>
 </body>
 </html>

@@ -9,7 +9,7 @@
 	F.isDownpullDisplay = true;
 	
 	// Set dom constants
-	F.doms = {wrapper:"#rtWrap",activepage:"#activePage",nav:"#nav-1",scroller:".scrollArea",loading:"#loadingCanvas"};
+	F.doms = {wrapper:"#root",activepage:"#activePage",nav:"#nav-1",scroller:".scrollArea",loading:"#loadingCanvas"};
 	
 	// Cache doms
 	F.pageactive = $(F.doms.activepage);
@@ -316,59 +316,6 @@
 	
 })(jQuery, FUI, this);
 
-/***** Util Functions *****/
-;function checkUsername(username){
-	var _self = checkUsername;
-	if(typeof _self.error == 'undefined'){
-		_self.error = '';
-	}
-	var msg = '用户名规则为5-15个字母数字或下划线(首字母不能为数字)';
-	var re = /^[a-zA-Z_][a-zA-Z_\d]{4,14}$/;
-	if(username.match(re)==null){
-		_self.error = msg;
-		return false;
-	}
-	return true;
-}
-;function checkPwd(pwd){
-	var _self = checkPwd;
-	if(typeof _self.error == 'undefined'){
-		_self.error = '';
-	}
-	var msg = '密码应为6-20个字符';
-	if(pwd.length<6||pwd.length>20){
-		_self.error = msg;
-		return false;
-	}
-	return true;
-}
-;function checkEmail(email){
-	var _self = checkEmail;
-	if(typeof _self.error == 'undefined'){
-		_self.error = '';
-	}
-	var msg = '邮箱格式不正确';
-	var re = /^[\w\-\.]+@[\w\-]+(\.\w+)+$/;
-	if(email.length<6||email.match(re)==null){
-		_self.error = msg;
-		return false;
-	}
-	return true;
-}
-;function checkMobile(mobile){
-	var _self = checkMobile;
-	if(typeof _self.error == 'undefined'){
-		_self.error = '';
-	}
-	var msg = '手机号格式不正确';
-	var re = /^[0-9]{11}$/;
-	if(mobile.match(re)==null){
-		_self.error = msg;
-		return false;
-	}
-	return true;
-}
-
 //显示和隐藏弹出框
 ;function show_popdlg(title,content) {
   var me = show_popdlg;
@@ -438,15 +385,6 @@
 	else $('#nav-'+nav_no).hide();
 	return false;
 }
-
-//去文本输入框末尾
-;function toEditText(id) {
-	var ele = id;
-	if (typeof(id)=='string') ele = document.getElementById(id);
-	F.placeCaretAtEnd(ele);
-	return false;
-}
-
 //查看更多内容
 ;function see_more(_self, callback) {
     var page = $(_self).attr('data-next-page');
@@ -513,22 +451,6 @@
     }
   }, 'json');
 }
-
-;function imgLoaded(img) {
-	img.setAttribute('data-loaded','1');
-}
-;function imgLazyLoad(img, thesrc) {
-	img.onerror = img.onload = null;
-	var _img = new Image();
-	_img.onload = function() {
-		this.onload = null;
-		img.src = thesrc;
-		imgLoaded(img);
-	};
-	_img.src = thesrc;
-	return;
-}
-
 //设置购物车页面操作动作
 ;function set_cart_action(cart_num, record_num) {
 	cart_num = parseInt(cart_num);

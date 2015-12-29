@@ -13,8 +13,20 @@ defined('IN_SIMPHP') or die('Access Denied');
  * @param string $key
  * @return array
  */
-function object_map($arrayOfObjects, $key) {
+function object_map($arrayOfObjects, $key)
+{
 	return array_map(function($o) use ($key) {return $o->$key;}, $arrayOfObjects);
+}
+
+/**
+ * Returns the remainder (modulo) of the division of the arguments(Support big int)
+ * @param integer $bn dividend
+ * @param integer $sn divisor
+ * @return integer remainder
+ */
+function kmod($bn, $sn = 10)
+{
+	return intval(fmod(floatval($bn), $sn));
 }
 
 /**

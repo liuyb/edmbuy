@@ -119,6 +119,10 @@ function emptyimg()
                          : C('env.contextpath').'misc/images/b.gif';
 }
 
+/**
+ * 预加载图片
+ * @return string
+ */
 function ploadingimg()
 {
   return C('env.usecdn') ? 'http://fcdn.qiniudn.com/img/bloading.gif' 
@@ -171,7 +175,7 @@ function treat_input_str($str, $is_strip_tags=true)
 /**
  * 生成指定长度的随机密码
  * 
- * @param unknown_type $len
+ * @param integer $len
  * @param char $type 类型	both(混合),number(数字)
  */
 function create_randcode($len=10,$type='both')
@@ -656,8 +660,8 @@ function headscript()
   
   $script  = '<script type="text/javascript">';
   $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',token:'{$sesstoken}'},gUser={};";
-  foreach (((array)$user) AS $k => $v) {
-    if (in_array($k, ['uid','openid','unionid','subscribe','username','nickname','sex','logo','ec_user_id'])) {
+  foreach ($user->column_data() AS $k => $v) {
+    if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
       $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
       $script .= 'gUser.'.$k."={$v};";
     }

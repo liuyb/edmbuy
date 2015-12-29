@@ -17,22 +17,201 @@
 <!-- head end -->
 </head>
 <style>
-.broke li{
-	font-size:18px;
-	float:left;
-	width:49%;
-	color:#ff6d14;
-}
+
 </style>
 
-<body style="color:#eee;">
+<body style="background:#eee;">
 
 <div class="header broke">
 	<ul>
-		<li>已生效</li>
-		<li>未生效</li>
+		<li class="broke_on" id="broke1" onclick="f(1)">已生效</li>
+		<li class="" style="margin-left:20%;" id="broke2" onclick="f(2)">未生效</li>
+		<a href="javascript:history.back();" class="back"></a>
+		<span class="broke_line"></span>
 	</ul>
-	<a href="javascript:history.back();" class="back"></a>
 </div>
+
+<div class="broke_list" id="list1">
+	<div class="broke_tab">
+		<table cellspacing="0" cellpadding="0" class="broke_table" style="border-collapse:inherit">
+			<tr>
+				<td class="broke_tab_on" id="tab1" onclick="t(1)">
+					一层用户
+				</td>
+				<td class="" id="tab2" onclick="t(2)">
+					二层用户
+				</td>
+				<td class="" id="tab3" onclick="t(3)" style="border-right:0;">
+					三层用户
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="broke_list_info">
+		<div class="broke_order">
+			<span class="broke_order_l">订单金额合计(元)</span>
+			<span class="broke_order_r">20,000</span>
+		</div>
+		<div class="broke_hj">
+			<span class="broke_order_l">佣金合计(元)</span>
+			<span class="broke_order_r">1,000</span>
+		</div>
+		<div class="broke_order_num">
+			<span class="broke_order_l">订单个数(元)</span>
+			<span class="broke_order_r">20</span>
+		</div>
+	</div>
+	<div class="sx_broke_list">
+		<table cellspacing="0" cellpadding="0" class="sx_table_list">
+			<tr>
+				<th>昵称</th>
+				<th>付款时间</th>
+				<th>订单金额</th>
+				<th>佣金</th>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			
+		</table>
+	</div>
+</div>
+
+<div class="broke_list" id="list2" style="display:none">
+	<div class="wsx_broke_ts">
+		<p class="wsx_ts_tit">怎样才能生效?</p>
+	</div>
+	<div class="broke_tab">
+		<table cellspacing="0" cellpadding="0" class="broke_table" style="border-collapse:inherit">
+			<tr>
+				<td class="broke_tab_on" id="tab1" onclick="t(1)">
+					一层用户
+				</td>
+				<td class="" id="tab2" onclick="t(2)">
+					二层用户
+				</td>
+				<td class="" id="tab3" onclick="t(3)" style="border-right:0;">
+					三层用户
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="broke_list_info">
+		<div class="broke_order">
+			<span class="broke_order_l">订单金额合计(元)</span>
+			<span class="broke_order_r">20,000</span>
+		</div>
+		<div class="broke_hj">
+			<span class="broke_order_l">佣金合计(元)</span>
+			<span class="broke_order_r">1,000</span>
+		</div>
+		<div class="broke_order_num">
+			<span class="broke_order_l">订单个数(元)</span>
+			<span class="broke_order_r">20</span>
+		</div>
+	</div>
+	<div class="sx_broke_list">
+		<table cellspacing="0" cellpadding="0" class="sx_table_list">
+			<tr>
+				<th>昵称</th>
+				<th>付款时间</th>
+				<th>订单金额</th>
+				<th>佣金</th>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			<tr>
+				<td>五菱反</td>
+				<td class="sx_table_list_time">2015-12-12</br>12:12:12</td>
+				<td>288元</td>
+				<td>15元</td>
+			</tr>
+			
+		</table>
+	</div>
+</div>
+
+<!-- 遮罩层 -->
+<a href="javascript:;"><div class="mask"></div></a>
+
+<!-- 加好友弹出框 -->
+<div class="broke_wsx_t"> 
+	<p class="wxt_t_title">佣金什么时候才能生效?</p>
+	<p class="wxt_t_text">交易遵循T+7原则：客户付款，商家发货后客户确认收货（如果买家没有及时确认收货，那么从发货开始7天后系统自动确认收货），及交易完成。</br>交易完成后7天（国家规定7天无理由退货），分销商佣金都可以提现了。</p>
+	<p class="wxt_t_close">关闭</p>
+</div>
+
+
+<script>
+var _broke = getQueryString('broke');
+
+$(function(){
+	f(_broke);
+})
+//切换
+function f(a){
+	var li = '#broke' + a;
+	var list = '#list' + a;
+	$(".broke li").removeClass("broke_on");
+	$(".broke_list").hide();
+	
+	$(li).addClass("broke_on");
+	$(list).show();
+}
+
+function t(a){
+	var tab = '#tab' + a;
+	$(".broke_tab td").removeClass("broke_tab_on");
+	
+	$(tab).addClass("broke_tab_on");
+}
+
+//未生效弹出框
+$(".wsx_broke_ts").live("click",function(){
+	$(".mask").fadeIn(200);
+	$(".broke_wsx_t").fadeIn(200);
+})
+$(".mask,.broke_wsx_t").live("click",function(){
+	$(".mask").fadeOut(200);
+	$(".broke_wsx_t").fadeOut(200);
+})
+</script>
 
 

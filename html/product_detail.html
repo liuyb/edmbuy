@@ -21,13 +21,6 @@
 </head>
 <body class="white_bg has_footer">
 
-<div class="header p_header_bar">
-	<div class="p_header_bar_main">
-		<a href="javascript:history.back();" class="back"></a>
-		<a href="javascript:;" class="ph_btn"></a>
-	</div>
-</div>
-
 <div class="p_header_btn">
 	<span class="p_detail_back cursor"></span>
 	<span class="p_detail_more cursor"></span>
@@ -46,10 +39,10 @@
 	<div class="swiper-container" id="product_banner">
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
-				<img src="./img/pro.jpg">
+				<img src="./img/123.jpg">
 			</div>
 			<div class="swiper-slide">
-				<img src="./img/share_01.jpg">
+				<img src="./img/456.jpg">
 			</div>
 		</div>
 		<div class="pagination" id="banner_pagination"></div>
@@ -59,7 +52,11 @@
 <div class="p_detail_msg">
 	<div class="p_d_title">美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋</div>
 	<div class="p_d_intro">月销上千，应季情路经典爆款，性价比超高防滑耐磨，冬季必备！</div>
-	<div class="p_d_price"><span>￥320.00</span><b>￥560.00</b></div>
+	<div class="p_d_price">
+		<span>￥320.00</span>
+		<b>￥560.00</b>
+		<span class="product_zyj">总佣金：￥100.00 </span>
+	</div>
 	<div class="p_d_sale"><span class="fr">销量：100笔</span><span class="fl">快递：免运费</span></div>
 </div>
 
@@ -85,16 +82,19 @@
 <div class="p_detail_info">
 	<div class="p_i_title"><span>图文详情</span></div>
 	<div class="product_detail">
-		<p><img src="./img/pro.jpg"></p>
-		<p><img src="./img/pro.jpg"></p>
-		<p><img src="./img/pro.jpg"></p>
+		<p><img src="./img/123.jpg"></p>
+		<p><img src="./img/456.jpg"></p>
+		<p><img src="./img/789.jpg"></p>
+		<p><img src="./img/369.jpg"></p>
 	</div>
 </div>
 			
 
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><p></p></div>
-	<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
+	<a href="cart_list_no.html">
+		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
+	</a>
 	<div class="fl cursor p_d_t3">加入购物车</div>
 	<div class="fl cursor p_d_t4">立即购买</div>
 </div>
@@ -168,14 +168,48 @@
 	<div class="w_wx_colse"><img src="./img/gub.png"></div>
 </div>
 
+<!-- 佣金分配  -->
+<div class="cart_yj_f">
+	<div class="yi_artio_tit">佣金分配比例</div>
+	<div class="yi_artio_1">一级佣金：35%</div>
+	<div class="yi_artio_2">二级佣金：40%</div>
+	<div class="yi_artio_3">三级佣金：25%</div>
+	<div class="yi_artio_ts">提示：此佣金只有米商可见</div>
+	<div class="w_wx_colse"><img src="./img/gub.png"></div>
+</div>
+
+
 <script>
+
+$(".product_zyj").live("click",function(){
+	$(".cart_yj_f").fadeIn(255);
+	$(".mask").fadeIn(255);
+})
+
+$(".mask,.w_wx_colse").live("click",function(){
+	$(".cart_yj_f").fadeOut(255);
+	$(".mask").fadeOut(255);
+})
+
+//广告图片大小
+$(function(){
+	var _width = $(".swiper-slide img").width();
+	$(".swiper-slide img,.swiper-container").height(_width);
+	
+})
+
 //弹出二维码
 $(".p_detail_follow").live("click",function(){
 	$(".cart_wx").fadeIn(300);
 	$(".mask").fadeIn(300);
 })
-
-
+$(".mask,.w_wx_colse").live("click",function(){
+	$(".cart_wx").addClass("is_confirmwx");
+	$(".mask").hide();
+	setTimeout(function(){
+		$(".cart_wx").hide().attr("class","cart_wx");
+	},500);
+})
 //可视屏幕高度
 var clientHeight = document.documentElement.clientHeight;
 var swiper_banner = new Swiper('#product_banner', {
@@ -192,19 +226,6 @@ $(".p_cart_bd").height(main_h);
 //拖动字样
 var p_length = ($(".p_detail_pull p").text().length + 1) * 13;
 $(".p_detail_pull p").css("width",p_length);
-
-$(function(){
-	$(window).scroll(function(){
-		var scrollTop = document.body.scrollTop
-		if(scrollTop > 50){
-			$(".p_header_bar").show();
-			$(".p_header_btn").hide();
-		}else{
-			$(".p_header_bar").hide();
-			$(".p_header_btn").show();
-		}
-	});
-});
 
 //菜单开启
 $(".p_detail_more,.ph_btn").live("click", function(){
@@ -224,9 +245,10 @@ $(".p_d_t3").live("click", function(){
 });
 
 //购物车关闭
-$(".p_cart_close,.mask,.w_wx_colse").live("click", function(){
-	$(".cart_wx").fadeOut(300);
-	$(".mask").hide(300);
+$(".p_cart_close,.mask").live("click", function(){
+	
+	
+	$(".mask").hide(255);
 	$(".p_cart_main").addClass("is_hide");
 	setTimeout(function(){
 		$(".p_cart_main").hide().attr("class","p_cart_main");
@@ -301,6 +323,7 @@ $(".p_cart_btn").live("click", function(){
 		$("#cart_number").text(cart_number + select_number).show();
 	},500);
 });
+
 </script>
 
 <script>

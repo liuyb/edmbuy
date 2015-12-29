@@ -15,18 +15,6 @@ class Weixin_Controller extends Controller {
   }
   
   /**
-   * hook init
-   *
-   * @param string $action
-   * @param Request $request
-   * @param Response $response
-   */
-  public function init($action, Request $request, Response $response)
-  {
-    
-  }
-  
-  /**
    * default action 'index'
    *
    * @param Request $request

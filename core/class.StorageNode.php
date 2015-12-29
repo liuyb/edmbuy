@@ -162,6 +162,14 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
+	 * Return the column data
+	 * @return array
+	 */
+	public function column_data() {
+		return $this->__DATA__;
+	}
+	
+	/**
 	 * Check node object whether exist
 	 * @return boolean
 	 */
@@ -202,25 +210,27 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
-	 * Return meta 'columns[meta[key]]' value
+	 * Return meta id column name('columns[meta[key]]')
 	 * @return string
 	 */
-	public static function id() {
-		return self::column();
+	public static function id_column() {
+		$clsname = get_called_class();
+		$meta = $clsname::meta();
+		return self::column($meta['key']);
 	}
 
 	/**
 	 * Return meta 'columns[$key]' value
 	 * 
-	 * @param $key when $key is NULL, then return the primary key value
+	 * @param $key when $key is NULL, then return the whole $meta['columns']
 	 * @return string
 	 */
 	public static function column($key = NULL) {
 		$clsname = get_called_class();
 		$meta = $clsname::meta();
-		return is_array($meta['columns'])
-		       ? (!isset($key) ? $meta['columns'][$meta['key']]  : (isset($meta['columns'][$key]) ? $meta['columns'][$key] : null))
-		       : (!isset($key) ? $meta['key'] : $key);
+		return !isset($key)
+		       ? $meta['columns']
+		       : (is_array($meta['columns']) ? (isset($meta['columns'][$key]) ? $meta['columns'][$key] : null) : $key);
 	}
 	
 	/**

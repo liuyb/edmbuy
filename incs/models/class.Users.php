@@ -79,6 +79,16 @@ class Users extends StorageNode {
 	}
 	
 	/**
+	 * Load user by OpenID
+	 * @param unknown $openid
+	 * @param string $from
+	 * @return Users
+	 */
+	static function load_by_openid($openid, $from = 'weixin') {
+		return self::find_one(new Query('openid', $openid));
+	}
+	
+	/**
 	 * Get parent union id by parent_id
 	 * @param integer $uid
 	 * @return string
@@ -109,7 +119,7 @@ class Users extends StorageNode {
 		$GLOBALS['user']->uid = $this->id;
 		
 		//新起一个对象来编辑，避免过多更新
-		$nUser = new Users($this->id);
+		$nUser = new self($this->id);
 		$nUser->lastlogin = simphp_time();
 		$nUser->lastip    = Request::ip();
 		$nUser->save();
