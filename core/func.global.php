@@ -38,7 +38,11 @@ function kmod($bn, $sn = 10)
  */
 function mkdirs($dir, $mode='', $recursive=TRUE)
 {
-  if (!$mode) {
+  if (is_dir($dir)) {
+  	return TRUE;
+  }
+  
+	if (!$mode) {
     $mode = 0777;
   }
 
