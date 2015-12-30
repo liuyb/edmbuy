@@ -6,6 +6,9 @@
  */
 abstract class Storage implements ReadableStorage, WritableStorage {
 	
+	const SAVE_INSERT = 1;
+	const SAVE_UPDATE = 2;
+	
 	abstract public function load(Array $ids);
 	
 	abstract public function find(BaseQuery $query, Array $opts = []);

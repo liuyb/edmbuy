@@ -6,16 +6,16 @@ use OSS\OssClient;
 use OSS\Core\OssException;
 
 /**
- * Class Common
+ * Class OssCommon
  *
- * 示例程序【Samples/*.php】 的Common类，用于获取OssClient实例和其他公用方法
+ * 示例程序【Samples/*.php】 的OssCommon类，用于获取OssClient实例和其他公用方法
  */
-class Common
+class OssCommon
 {
     const endpoint        = 'oss-cn-hangzhou.aliyuncs.com';
     const accessKeyId     = 'DezqmGVURg7snFsD';
     const accessKeySecret = 'HhifDR04j6W8We92Nz7mygAxEN90zV';
-    const bucket          = 'edmbuy';
+    const bucket          = 'edmdev';
 
     /**
      * 根据Config配置，得到一个OssClient实例

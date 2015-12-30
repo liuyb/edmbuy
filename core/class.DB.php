@@ -765,11 +765,16 @@ class DB {
    */
   public function in($field, Array $value_set, $NOT_IN = FALSE) {
   	if (empty($value_set)) return '0';
-  	foreach ($value_set AS &$val) {
-  		$val = $this->escape_string($val, self::READONLY);
-  		$val = "'{$val}'";
+  	if (count($value_set)==1) { // only one value
+  		return '`'.$field.'`'.($NOT_IN ? '<>': '=')."'".array_pop($value_set)."'";
   	}
-  	return $field.($NOT_IN ? ' NOT': '').' IN('.implode(',', $value_set).')';
+  	else { // more than one value
+  		foreach ($value_set AS &$val) {
+  			$val = $this->escape_string($val, self::READONLY);
+  			$val = "'{$val}'";
+  		}
+  		return '`'.$field.'`'.($NOT_IN ? ' NOT': '').' IN('.implode(',', $value_set).')';
+  	}
   }
   
   /**

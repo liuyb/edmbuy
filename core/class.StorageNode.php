@@ -128,10 +128,11 @@ abstract class StorageNode extends Model {
 	
 	/**
 	 * Save(insert or update) a node
+	 * @param $flag
 	 */
-	final public function save() {
+	final public function save($flag = NULL) {
 		$this->save_before();
-		$id  = self::storage()->save($this->__DATA__);
+		$id  = self::storage()->save($this->__DATA__, $flag);
 		$key = $this->meta()['key'];
 		if ($id) {
 			$this->$key = $id;

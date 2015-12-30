@@ -30,6 +30,7 @@ try {
 }
 catch (ApiException $eapi) {
 	$ret['code'] = $eapi->getCode();
+	$ret['code'] = intval($ret['code']);
 	$ret['msg']  = $eapi->getMessage();
 	$ret['res']  = $eapi->getResponse();
 }

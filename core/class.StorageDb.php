@@ -70,10 +70,11 @@ class StorageDb extends Storage {
 	 * Insert or update data to db
 	 * 
 	 * @param array $data
+	 * @param integer $flag
 	 * @return string
 	 * @see Storage::save()
 	 */
-	public function save(Array $data) {
+	public function save(Array $data, $flag = NULL) {
 		$id     = 0;
 		$params = [];
 		$primary_key = $this->column($this->key);
@@ -88,17 +89,31 @@ class StorageDb extends Storage {
 		}
 		
 		if (empty($params)) return FALSE;
-		if ($id && $this->id_exists($id)) { //更新
-			unset($params[$primary_key]); //id字段不更新
-			D()->update($this->table, $params, [$primary_key => $id]);
+		
+		$is_insert = FALSE;
+		if (isset($flag)) {
+			$is_insert = $flag===self::SAVE_INSERT ? TRUE : FALSE;
 		}
-		else { //插入
+		else {
+			if ($id && $this->id_exists($id)) {
+				$is_insert = FALSE;
+			}
+			else {
+				$is_insert = TRUE;
+			}
+		}
+		
+		if ($is_insert) { //插入
 			if (D()->insert($this->table, $params, FALSE)) {
 				$id = D()->insert_id(DB::WRITABLE);
 				if (0===$id) { //表示不是AUTO_INCREMENT的主键
 					$id = $params[$primary_key];
 				}
 			}
+		}
+		else { //更新
+			unset($params[$primary_key]); //id字段不更新
+			D()->update($this->table, $params, [$primary_key => $id]);
 		}
 		
 		return strval($id);
