@@ -138,18 +138,18 @@ function V($url='', $params = array(), $action = 'poststatus') {
         case 'onload_stat':
           $onload_time= isset($params['onloadTime']) ? intval($params['onloadTime']) : 0;
           $vinfo = array('onload_time'=>$onload_time, 'changed'=>time());
-          D()->update_table('visiting', $vinfo, array('vid'=>$vid));
+          D()->update('visiting', $vinfo, array('vid'=>$vid));
           break;
         case 'retention_stat':
           $retention_time= isset($params['retentionTime']) ? intval($params['retentionTime']) : 0;
           $vinfo = array('retention_time'=>$retention_time, 'changed'=>time());
-          D()->update_table('visiting', $vinfo, array('vid'=>$vid));
+          D()->update('visiting', $vinfo, array('vid'=>$vid));
           break;
         case 'poststatus':
           $uid   = isset($params['uid']) ? intval($params['uid']) : 0;
           $status= isset($params['status']) ? trim($params['status']) : 'R';
           $vinfo = array('uid'=>$uid, 'changed'=>time(), 'status'=>$status);
-          D()->update_table('visiting', $vinfo, array('vid'=>$vid));
+          D()->update('visiting', $vinfo, array('vid'=>$vid));
           break;
       }
     }

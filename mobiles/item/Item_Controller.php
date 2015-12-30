@@ -60,18 +60,20 @@ class Item_Controller extends MobileController {
 				$this->v->assign('galleries', $galleries);
 				$this->v->assign('gallerynum', count($galleries));
 				
-				include (SIMPHP_CORE.'/libs/htmlparser/simple_html_dom.php');
-				$dom = str_get_html($item->item_desc);
-				$imgs= $dom->find('img');
-				$imgs_src = [];
-				if (!empty($imgs)) {
-					foreach ($imgs AS $img) {
-						$imgs_src[] = $img->getAttribute('src');
-					}
-				
-					foreach($imgs_src as $psrc) {
-						if(preg_match('/^\//', $psrc)) { //表示本地上传图片
-							$item->item_desc = str_replace('src="'.$psrc.'"', 'src="'.$purl . $psrc.'"', $item->item_desc);
+				if (trim($item->item_desc)!='') {
+					include (SIMPHP_CORE.'/libs/htmlparser/simple_html_dom.php');
+					$dom = str_get_html($item->item_desc);
+					$imgs= $dom->find('img');
+					$imgs_src = [];
+					if (!empty($imgs)) {
+						foreach ($imgs AS $img) {
+							$imgs_src[] = $img->getAttribute('src');
+						}
+					
+						foreach($imgs_src as $psrc) {
+							if(preg_match('/^\//', $psrc)) { //表示本地上传图片
+								$item->item_desc = str_replace('src="'.$psrc.'"', 'src="'.$purl . $psrc.'"', $item->item_desc);
+							}
 						}
 					}
 				}
