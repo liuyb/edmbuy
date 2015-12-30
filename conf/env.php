@@ -29,6 +29,8 @@ return [
   'tplcompile_check' => 1,
   'tplforce_compile' => 1,
   'tpldebug' => 1,
+	//当前服务器ID(用于多web服务器部署)
+  'server_id'=> 1,
   //站点信息
   'site' => [
   	'mobile' => 'http://edm.fxmapp.com',
