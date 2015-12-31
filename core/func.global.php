@@ -30,6 +30,20 @@ function kmod($bn, $sn = 10)
 }
 
 /**
+ * Get file mime type
+ * @param string $file
+ * @return string
+ */
+function get_mime($file)
+{
+	if (!file_exists($file)) {
+		return '';
+	}
+	$fi = new finfo(FILEINFO_MIME_TYPE);
+	return $fi->file($file);
+}
+
+/**
  * create a directory recursively
  * 
  * @param string $dir, the directory path

@@ -4,12 +4,6 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-//阿里云OSS库
-require SIMPHP_INCS . '/libs/aliyun_oss/OssCommon.php';
-
-use OSS\OssClient;
-use OSS\Core\OssException;
-
 class Media extends StorageNode {
 
 	protected static function meta() {
@@ -18,10 +12,13 @@ class Media extends StorageNode {
 				'key'     => 'mid',
 				'columns' => array(
 						'mid'     => 'media_id',
+						'mtype'   => 'media_type',
+						'mime'    => 'mime',
 						'sid'     => 'server_id',
 						'oripath' => 'ori_path',
 						'osspath' => 'oss_path',
-						'synced'  => 'synced'
+						'synced'  => 'synced',
+						'locked'  => 'locked'
 				)
 		);
 	}
@@ -40,51 +37,59 @@ class Media extends StorageNode {
 	 */
 	static function path($ori_path) {
 		$ori_path = trim($ori_path);
-		if (empty($ori_path) || preg_match('/^http(s?):\/\//i', $ori_path)) {
+		if (empty($ori_path)) {
 			return $ori_path;
 		}
 		
 		if (!isset(self::$server_id)) {
-			self::$server_id = Config::get('env.server_id');
+			self::$server_id = Config::get('env.server_id', 1);
 		}
 		
-		$mkey = $ori_path; //standardizing media key
+		$std_path = $ori_path; //standardizing media key
 		if ($ori_path{0} != '/') {
-			$mkey = '/'.$ori_path;
+			$std_path = '/'.$ori_path;
 		}
-		$mkey = md5(self::$server_id.':'.$mkey);
+		$mkey = md5(self::$server_id.':'.$std_path);
 		
 		$media = Media::load($mkey);
 		if (!$media->is_exist()) { //不存在，则先登记进数据库，让后台cron job同步
 			$media->mid     = $mkey;
+			$media->mime    = get_mime(SIMPHP_ROOT . $std_path);
+			$media->mtype   = self::get_media_type($media->mime);
 			$media->sid     = self::$server_id;
 			$media->oripath = $ori_path;
 			$media->osspath = '';
 			$media->synced  = 0;
+			$media->locked  = 0;
 			$media->save(Storage::SAVE_INSERT);
-			return $ori_path;
 		}
-		else {
-			return preg_match('/^http(s?):\/\//i', $media->osspath) ? $media->osspath : $ori_path;
-		}
+		return preg_match('/^http(s?):\/\//i', $media->osspath) ? $media->osspath : $ori_path;
 	}
 	
-	static function sync_to_oss($ori_path) {
-		
-		$ossClient = OssCommon::getOssClient();
-		$bucket    = OssCommon::getBucketName();
-		
-		if ($ori_path{0} != '/') {
-			$ori_path = '/'.$ori_path;
-		}
-		
-		$local_file = SIMPHP_ROOT . $ori_path;
-		$file_ext   = strtolower(substr($ori_path, strrpos($ori_path, '.')));
-		$remote_file= 'img/'.date('Ym').'/'.date('d').'_'.time().'_'.randstr(6).$file_ext;//format: img/{yyyy}{mm}/{dd}_{time}_{rand:6}
-		$ossClient->uploadFile($bucket, $remote_file, $local_file);
-		OssCommon::println("{$remote_file} is created");
+	/**
+	 * Get oss path of a media
+	 * @param string $file
+	 * @param number $server_id
+	 * @param string $prefix, default 'img'
+	 * @return string
+	 */
+	public function oss_path() {
+		$mime_arr  = explode('/', $this->mime);
+		return "{$this->sid}/{$this->mtype}/{$this->mid}.".end($mime_arr);
 	}
 
+	/**
+	 * Get file media type, option values: img,video,music,flash,attach and so on.
+	 * @param string $file
+	 * @return string
+	 */
+	static function get_media_type($mime) {
+		$type = '';
+		if (preg_match('/^image\//', $mime)) {
+			$type = 'img';
+		}
+		return $type;
+	}
 }
 
 /*----- END FILE: class.Media.php -----*/
