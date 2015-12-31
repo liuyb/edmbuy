@@ -9,6 +9,9 @@ defined('IN_SIMPHP') or die('Access Denied');
 // edmbuy平台名称
 define('APP_PLATFORM', 'edmbuy');
 
+// edmshop目录名称
+define('SHOP_PLATFORM', 'edmshop');
+
 // ecshop数据库名称
 define('ECDB', 'edmshop');
 define('ECDB_PRE', 'fxs_');

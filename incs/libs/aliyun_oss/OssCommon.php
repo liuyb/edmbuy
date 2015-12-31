@@ -20,7 +20,8 @@ class OssCommon
     //Production environment
     /*
     const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
-    const endpoint        = 'oss-cn-hangzhou-internal.aliyuncs.com';
+    const endpoint        = 'oss-cn-hangzhou.aliyuncs.com';
+    //const endpoint        = 'oss-cn-hangzhou-internal.aliyuncs.com';
     const bucket          = 'edmbuy';
     */
     //Access key

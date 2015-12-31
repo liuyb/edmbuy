@@ -39,7 +39,7 @@ class SyncFilesToOssJob extends CronJob {
 				
 				if ($it->sid == $cur_server_id) { //表示当前web服务器下生成的文件
 					
-					$local_file = SIMPHP_ROOT . '/' . ltrim($it->oripath,'/');
+					$local_file = SIMPHP_ROOT . '/../' . SHOP_PLATFORM . '/' . ltrim($it->oripath,'/'); //TODO 这里要改成下载的方式
 					$remote_file= $it->oss_path();
 					if (!file_exists($local_file)) {
 						$this->log("[FAIL]rid: {$it->mid}, file: [{$it->sid}]{$it->oripath}, msg: file not found.");
@@ -54,6 +54,7 @@ class SyncFilesToOssJob extends CronJob {
 						//更新同步标志位
 						$upMedia = new Media($it->mid);
 						$upMedia->osspath = $remote_file;
+						$upMedia->changed = simphp_dtime();
 						$upMedia->synced  = 1;
 						$upMedia->save(Storage::SAVE_UPDATE);
 					}

@@ -101,8 +101,9 @@ class Items extends StorageNode {
 	 */
 	static function imgurl($img_path) {
 		static $urlpre;
-		if (!isset($urlpre)) $urlpre = C('env.site.shop').'/';
-		return $urlpre.$img_path;
+		if (!isset($urlpre)) $urlpre = C('env.site.shop');
+		$img_path = Media::path($img_path);
+		return preg_match('/^http:\/\//i', $img_path) ? $img_path : ($urlpre.$img_path);
 	}
 	
 }

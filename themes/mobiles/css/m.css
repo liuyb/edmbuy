@@ -1060,7 +1060,7 @@ a.h_btn{
   width: 40px;
   height: 40px;
   right: 12px;
-  z-index: 99;  
+  z-index: 199;  
 }
 .p_detail_follow{
   background: url(../img/wxg.png) no-repeat;

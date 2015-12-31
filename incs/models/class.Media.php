@@ -17,6 +17,8 @@ class Media extends StorageNode {
 						'sid'     => 'server_id',
 						'oripath' => 'ori_path',
 						'osspath' => 'oss_path',
+						'created' => 'created',
+						'changed' => 'changed',
 						'synced'  => 'synced',
 						'locked'  => 'locked'
 				)
@@ -54,16 +56,18 @@ class Media extends StorageNode {
 		$media = Media::load($mkey);
 		if (!$media->is_exist()) { //不存在，则先登记进数据库，让后台cron job同步
 			$media->mid     = $mkey;
-			$media->mime    = get_mime(SIMPHP_ROOT . $std_path);
+			$media->mime    = get_mime(SIMPHP_ROOT . '/../' . SHOP_PLATFORM . $std_path); //TODO 这里要改成下载的方式
 			$media->mtype   = self::get_media_type($media->mime);
 			$media->sid     = self::$server_id;
-			$media->oripath = $ori_path;
+			$media->oripath = $std_path;
 			$media->osspath = '';
+			$media->created = simphp_dtime();
+			$media->changed = $media->created;
 			$media->synced  = 0;
 			$media->locked  = 0;
 			$media->save(Storage::SAVE_INSERT);
 		}
-		return preg_match('/^http(s?):\/\//i', $media->osspath) ? $media->osspath : $ori_path;
+		return preg_match('/^http(s?):\/\//i', $media->osspath) ? $media->osspath : $std_path;
 	}
 	
 	/**
@@ -74,8 +78,15 @@ class Media extends StorageNode {
 	 * @return string
 	 */
 	public function oss_path() {
-		$mime_arr  = explode('/', $this->mime);
-		return "{$this->sid}/{$this->mtype}/{$this->mid}.".end($mime_arr);
+		if ($this->mime) {
+			$mime_arr=explode('/', $this->mime);
+		}
+		else {
+			$mime_arr=explode('.', $media->oripath);
+		}
+		$file_ext = end($mime_arr);
+		$file_ext = 'jpeg'==$file_ext ? 'jpg' : $file_ext;
+		return "{$this->sid}/{$this->mtype}/{$this->mid}.{$file_ext}";
 	}
 
 	/**

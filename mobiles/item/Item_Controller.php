@@ -51,8 +51,6 @@ class Item_Controller extends MobileController {
 				// 更新访问数
 				$item->add_click_count();
 				
-				$purl = C('env.site.shop');
-				
 				// 相册
 				$galleries = ItemsGallery::find(new Query('item_id', $item_id));
 				foreach ($galleries AS $g) {
@@ -72,8 +70,9 @@ class Item_Controller extends MobileController {
 						}
 					
 						foreach($imgs_src as $psrc) {
-							if(preg_match('/^\//', $psrc)) { //表示本地上传图片
-								$item->item_desc = str_replace('src="'.$psrc.'"', 'src="'.$purl . $psrc.'"', $item->item_desc);
+							$src_parsed = Items::imgurl($psrc);
+							if('/'==$psrc{0} && '/'!=$psrc{1}) { //表示本地上传图片
+								$item->item_desc = str_replace('src="'.$psrc.'"', 'src="'.$src_parsed.'"', $item->item_desc);
 							}
 						}
 					}
