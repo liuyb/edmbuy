@@ -115,7 +115,7 @@ function config_set($key, $val = '', $encode = 'R')
  */
 function emptyimg()
 {
-  return C('env.usecdn') ? 'http://fcdn.qiniudn.com/img/b.gif'
+  return C('env.usecdn') ? 'http://fdn.fxmapp.com/img/b.gif'
                          : C('env.contextpath').'misc/images/b.gif';
 }
 
@@ -125,7 +125,7 @@ function emptyimg()
  */
 function ploadingimg()
 {
-  return C('env.usecdn') ? 'http://fcdn.qiniudn.com/img/bloading.gif' 
+  return C('env.usecdn') ? 'http://fdn.fxmapp.com/img/bloading.gif' 
                          : C('env.contextpath').'misc/images/bloading.gif';
 }
 
@@ -657,9 +657,10 @@ function headscript()
   $currUri = Request::uri();
   $ctxpath = C('env.contextpath');
   $sesstoken=sess_token();
+  $rendermode = View::RENDER_MODE_DEFAULT;
   
   $script  = '<script type="text/javascript">';
-  $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',token:'{$sesstoken}'},gUser={};";
+  $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
   foreach ($user->column_data() AS $k => $v) {
     if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
       $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";

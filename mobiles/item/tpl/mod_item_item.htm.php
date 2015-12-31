@@ -6,14 +6,13 @@
 
 <?php else:?>
 
+<script>$(function(){
+	show_gtop($('#forGTop').html());
+	show_nav($('#forNav').html());
+	append_to_body($('#forBody').html());
+});
+</script>
 <script id="forGTop" type="text/html">
-<div class="header p_header_bar">
-	<div class="p_header_bar_main">
-		<a href="javascript:history.back();" class="back"></a>
-		<a href="javascript:;" class="ph_btn"></a>
-	</div>
-</div>
-
 <div class="p_header_btn">
 	<span class="p_detail_back cursor"></span>
 	<span class="p_detail_more cursor"></span>
@@ -28,24 +27,24 @@
 	</ul>
 </div>
 </script>
-<script>show_gtop($('#forGTop').html())</script>
 <script id="forNav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><p></p></div>
-	<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
+	<a href="cart_list_no.html">
+		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
+	</a>
 	<div class="fl cursor p_d_t3">加入购物车</div>
 	<div class="fl cursor p_d_t4">立即购买</div>
 </div>
 </script>
-<script>show_nav($('#forNav').html())</script>
 <script id="forBody" type="text/html">
 <div class="mask_menu cursor"></div>
 
 <div class="cursor p_detail_button p_detail_follow"></div>
 <div class="cursor p_detail_button p_detail_gotop"></div>
 
-<div class="mask" style="display: ;"></div>
-<div class="p_cart_main" style="display: ;">
+<div class="mask" style="display:none;"></div>
+<div class="p_cart_main" style="display:none;">
 	<div class="p_cart_content">
 		<div class="p_cart_hd clearfix">
 			<div class="p_cart_hl fl">
@@ -107,14 +106,23 @@
 	<div class="c_wx_ewm">长按识别二维码，关注益多米</div>
 	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
 </div>
+
+<!-- 佣金分配  -->
+<div class="cart_yj_f">
+	<div class="yi_artio_tit">佣金分配比例</div>
+	<div class="yi_artio_1">一级佣金：35%</div>
+	<div class="yi_artio_2">二级佣金：40%</div>
+	<div class="yi_artio_3">三级佣金：25%</div>
+	<div class="yi_artio_ts">提示：此佣金只有米商可见</div>
+	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
+</div>
 </script>
-<script>append_to_body($('#forBody').html())</script>
 
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
     <?php foreach ($galleries AS $g):?>
-    <li><a href=""><img src="<?=$g->img_url?>" alt="" /></a></li>
+    <li><a href="javascript:;"><img src="<?=$g->img_url?>" alt="" /></a></li>
     <?php endforeach;?>
     </ul>
     <div id="pagenavi" class="pagenavi clearfix">
@@ -131,7 +139,8 @@ $(function(){
   
   t1 = new TouchSlider({
      id:'slider',
-     speed:600,
+     auto: false,
+     speed:300,
      timeout:6000,
      before:function(newIndex, oldSlide){
        $_ap.get(_active).className = '';
@@ -150,25 +159,11 @@ $(function(){
   setTimeout(function(){t1.resize();},500);
 });
 </script>
-<!-- 
-<div class="p_detail_banner">
-	<div class="swiper-container" id="product_banner">
-		<div class="swiper-wrapper">
-			<div class="swiper-slide">
-				<img src="/themes/mobile/img/pro.jpg">
-			</div>
-			<div class="swiper-slide">
-				<img src="/themes/mobile/img/share_01.jpg">
-			</div>
-		</div>
-		<div class="pagination" id="banner_pagination"></div>
-	</div>
-</div>
--->
+
 <div class="p_detail_msg">
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b></div>
+	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><span class="product_zyj">总佣金：￥100.00 </span></div>
 	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_order_count?>笔</span><span class="fl">快递：免运费</span></div>
 </div>
 
@@ -197,15 +192,49 @@ $(function(){
 </div>
 
 <script>
+$(document).on("click",".p_detail_gotop",function(){
+	F.set_scroller(true);
+})
+
+$(document).on("click",".product_zyj",function(){
+	$(".cart_yj_f").fadeIn(255);
+	$(".mask").fadeIn(255);
+})
+
+$(document).on("click",".mask,.w_wx_colse",function(){
+	$(".cart_yj_f").fadeOut(255);
+	$(".mask").fadeOut(255);
+})
+
+//广告图片大小
+/*
+$(function(){
+	var _width = $(".swiper-slide img").width();
+	$(".swiper-slide img,.swiper-container").height(_width);
+})
+*/
 //弹出二维码
-$(".p_detail_follow").on("click",function(){
+$(document).on("click",".p_detail_follow",function(){
 	$(".cart_wx").fadeIn(300);
 	$(".mask").fadeIn(300);
 })
-//goto顶部
-$(".p_detail_gotop").on("click", function(){
-	F.set_scroller(true);
+$(document).on("click",".mask,.w_wx_colse",function(){
+	$(".cart_wx").addClass("is_confirmwx");
+	$(".mask").hide();
+	setTimeout(function(){
+		$(".cart_wx").hide().attr("class","cart_wx");
+	},500);
+})
+/*
+//可视屏幕高度
+var clientHeight = document.documentElement.clientHeight;
+var swiper_banner = new Swiper('#product_banner', {
+	pagination : '#banner_pagination',
+	grabCursor : true,
+	autoplay : false,
+	paginationClickable : true,
 });
+*/
 //加入购物车
 var main_h = $(".p_cart_main").height() - 176;
 $(".p_cart_bd").height(main_h);
@@ -215,26 +244,25 @@ var p_length = ($(".p_detail_pull p").text().length + 1) * 13;
 $(".p_detail_pull p").css("width",p_length);
 
 //菜单开启
-$(".p_detail_more,.ph_btn").on("click", function(){
+$(document).on("click", ".p_detail_more,.ph_btn", function(){
 	$(".p_detail_menulist,.mask_menu").show();
 });
 
 //菜单关闭
-$(".mask_menu").on("click", function(){
+$(document).on("click", ".mask_menu", function(){
 	$(".p_detail_menulist,.mask_menu").hide();
 });
 
 //加入购物车
-$(".p_d_t3").on("click", function(){
+$(document).on("click", ".p_d_t3", function(){
 	$(".mask").show();
 	$(".p_cart_main").show().addClass("is_show");
 	showSelect();
 });
 
 //购物车关闭
-$(".p_cart_close,.mask,.w_wx_colse").on("click", function(){
-	$(".cart_wx").fadeOut(300);
-	$(".mask").hide(300);
+$(document).on("click", ".p_cart_close,.mask", function(){
+	$(".mask").hide(255);
 	$(".p_cart_main").addClass("is_hide");
 	setTimeout(function(){
 		$(".p_cart_main").hide().attr("class","p_cart_main");
@@ -242,7 +270,7 @@ $(".p_cart_close,.mask,.w_wx_colse").on("click", function(){
 });
 
 //加入购物车选项
-$(".p_cart_ul li").on("click", function(){
+$(document).on("click", ".p_cart_ul li", function(){
 	var t = $(this);
 	var style = t.data("stype");
 	t.parent().find("li").removeClass("on");
@@ -252,7 +280,7 @@ $(".p_cart_ul li").on("click", function(){
 });
 
 //产品数量填写
-$(".cart_inp").on("input propertychange", function(){
+$(document).on("input propertychange", ".cart_inp", function(){
 	var t = $(this);
 	var num = t.val();
 	if(!isZZ(num)){
@@ -264,7 +292,7 @@ $(".cart_inp").on("input propertychange", function(){
 });
 
 //产品数量减少
-$(".btn_minus").on("click", function(){
+$(document).on("click", ".btn_minus", function(){
 	var t = $(this);
 	var inp = t.parent().find(".cart_inp");
 	var num = inp.val()*1-1;
@@ -278,7 +306,7 @@ $(".btn_minus").on("click", function(){
 });
 
 //产品数量增加
-$(".btn_plus").on("click", function(){
+$(document).on("click", ".btn_plus", function(){
 	var t = $(this);
 	var inp = t.parent().find(".cart_inp");
 	var num = inp.val()*1+1;
@@ -299,7 +327,7 @@ function showSelect(){
 }
 
 //确定加入
-$(".p_cart_btn").on("click", function(){
+$(document).on("click", ".p_cart_btn", function(){
 	$(".mask").hide();
 	$(".p_cart_main").addClass("is_confirm");
 	setTimeout(function(){
@@ -309,6 +337,7 @@ $(".p_cart_btn").on("click", function(){
 		$("#cart_number").text(cart_number + select_number).show();
 	},500);
 });
+
 </script>
 
 <script>
@@ -318,6 +347,9 @@ $(".product_detail table").css({"width":"100%"});
 $(".product_detail img").css({"height":"auto"});
 $(".product_detail img").parent().css({"text-indent":"0"});
 $(".product_detail iframe").css({"width":"100%","border":"0"});
+$(window).load(function(){
+	F.set_scroller();
+});
 </script>
 
 <?php endif;?>

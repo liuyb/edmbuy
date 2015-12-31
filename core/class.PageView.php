@@ -79,11 +79,14 @@ class PageView extends View {
     $this->tpl_header  = $_header . $this->tpl_postfix;
     $this->tpl_footer  = $_footer . $this->tpl_postfix;
     $this->tpl_content = $this->tpl_realpath($tpl_name);
+    $this->page_render_mode = parent::RENDER_MODE_HASH;
     
     $this->assign('tpl_header', $this->tpl_header)
          ->assign('tpl_footer', $this->tpl_footer)
          ->assign('tpl_content', $this->tpl_content)
-         ->assign('seo',Config::get('seo.default'));
+         ->assign('seo',Config::get('seo.default'))
+         ->assign('page_render_mode', $this->page_render_mode)
+    		 ;
   }
   
   /**

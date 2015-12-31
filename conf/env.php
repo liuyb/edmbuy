@@ -16,7 +16,7 @@ return [
   'sitetheme'=> 'default',
   'contextpath' => '/',
   'cleanurl' => 1,
-  'usecdn'   => 0,
+  'usecdn'   => 1,
   'allowed_moddirs' => ['modules','mobiles','admins','apis'],
   //[Log]
   'log_dir' => '/var/log',

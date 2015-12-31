@@ -12,6 +12,7 @@ class MobileController extends Controller {
 	protected $topnav_no  = 0;       //顶部导航id，当为0时表示不存在
 	protected $nav_flag1  = '';      //导航标识1
 	protected $nav_flag2  = '';      //导航标识2
+	protected $extra_css  = '';      //添加给section.scrollArea的额外css类
 	
 	/**
 	 * hook init
@@ -28,7 +29,8 @@ class MobileController extends Controller {
 			  ->assign('topnav_no',  $this->topnav_no)
 			  ->assign('nav_flag1',  $this->nav_flag1)
 			  ->assign('nav_flag2',  $this->nav_flag2)
-			;
+			  ->assign('extra_css',  $this->extra_css)
+			  ;
 		});
 	}
 	

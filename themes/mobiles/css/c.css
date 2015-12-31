@@ -38,6 +38,7 @@ button::-moz-focus-inner {border: 0; padding: 0;}
 
 .bbsizing {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box;}
 .autoflow {overflow: auto;zoom: 1;}
+.clear {clear: both;}
 
 /* grid layout */
 .c-lt,.c-rt,.c-md { height: 100%; }

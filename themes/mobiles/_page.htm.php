@@ -12,10 +12,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black"> -->
 <meta name="format-detection" content="telephone=no">
-<link rel="dns-prefetch" href="fp.xurl.cn" />
+<link rel="dns-prefetch" href="merchant.fxmapp.com" />
 <link rel="dns-prefetch" href="res.wx.qq.com" />
 <?php if (C('env.usecdn')):?>
-<link rel="dns-prefetch" href="fcdn.qiniudn.com" />
+<link rel="dns-prefetch" href="fdn.fxmapp.com" />
 <?php endif;?>
 <link rel="shortcut icon" href="<?=$contextpath;?>favicon.ico" type="image/x-icon" />
 <link rel="apple-touch-icon" sizes="114x114" href="<?=$contextpath;?>misc/images/napp/touch-icon-114.png" />
@@ -23,12 +23,13 @@
 <?php tplholder('HEAD_CSS');?>
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
+<script>gData.page_render_mode=parseInt('<?=$page_render_mode?>');</script>
 </head>
 <body>
 <div id="gtop"></div>
 <div id="root">
   <nav id="topnav" class="topnav topnav-<?=$topnav_no?>"></nav>
-  <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea"></section>
+  <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>"><?php if(1===$page_render_mode):?><?php include T($tpl_content);?><script>$(function(){F.set_scroller(false,100);});</script><?php endif;?></section>
     <div class="pageBg"><em>“正品保证”</em>不仅仅是一句口号</div>
   </div>
   <div id="loadingCanvas" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
@@ -68,9 +69,9 @@ function append_to_body(html) {
 
 //: add css & js files
 if (C('env.usecdn')):
-add_css('http://fcdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
-add_js('http://fcdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('http://fcdn.fxmapp.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
+add_css('http://fdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
+add_js('http://fdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_js('http://fdn.fxmapp.com/js/fm.min.js',['pos'=>'head','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);

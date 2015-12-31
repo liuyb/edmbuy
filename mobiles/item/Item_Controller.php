@@ -37,8 +37,9 @@ class Item_Controller extends MobileController {
 		$this->v->set_tplname('mod_item_item');
 		$this->nav_no    = 1;
 		$this->nav_flag1 = 'item';
+		$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
 		
-		if ($request->is_hashreq()) {
+		if (1||$request->is_hashreq()) {
 			$item_id = $request->arg(1);
 			$this->v->assign('the_item_id', $item_id);
 			

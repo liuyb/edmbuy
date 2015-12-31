@@ -8,6 +8,21 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class View extends CBase {
   
+	/**
+	 * Page render mode enum values
+	 *
+	 * @var constant
+	 */
+	const RENDER_MODE_GENERAL = 1;
+	const RENDER_MODE_HASH    = 2;
+	const RENDER_MODE_DEFAULT = 2;
+	
+	/**
+	 * Page render mode, option value: 1:'general',2:'hash'
+	 * @var enum
+	 */
+	protected $page_render_mode = self::RENDER_MODE_DEFAULT;
+	
   /**
    * Template Object
    * @var Template
@@ -255,6 +270,17 @@ class View extends CBase {
     catch (Exception $e) {
       trigger_error($e->getMessage(), E_USER_WARNING);
     }
+  }
+  
+  /**
+   * set page render mode
+   * @param enum $mode View::RENDER_MODE_GENERAL, View::RENDER_MODE_HASH
+   * @return View
+   */
+  public function set_page_render_mode($mode = self::RENDER_MODE_HASH) {
+  	$this->page_render_mode = $mode;
+  	$this->assign('page_render_mode', $this->page_render_mode);
+  	return $this;
   }
   
   /**
