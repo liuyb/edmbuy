@@ -35,7 +35,7 @@ class Item_Controller extends MobileController {
 	public function item(Request $request, Response $response)
 	{
 		$this->v->set_tplname('mod_item_item');
-		$this->nav_no    = 0;
+		$this->nav_no    = 1;
 		$this->nav_flag1 = 'item';
 		$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
 		

@@ -79,9 +79,6 @@
 	</div>
 </div>
 
-<!-- 遮罩层 -->
-<a href="javascript:;"><div class="mask"></div></a>
-
 <!-- 二维码 -->
 <div class="cart_wx">
 	<div class="c_wx_tit">益多米</div>
@@ -100,7 +97,7 @@
 	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
 </div>
 </script>
-<script>/*show_mtop($('#forMtop').html());*/
+<script>show_mtop($('#forMtop').html());
 append_to_body($('#forBody').html());
 </script>
 
