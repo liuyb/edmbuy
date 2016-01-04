@@ -28,43 +28,29 @@
 
 <div class="mask" style="display:none;"></div>
 <div class="p_cart_main" style="display:none;">
-	<div class="p_cart_content">
+	<div class="p_cart_content" id="p_cart_content">
 		<div class="p_cart_hd clearfix">
 			<div class="p_cart_hl fl">
-				<img src="/themes/mobiles/img/pro.jpg">
+				<img src="<?=$item->item_thumb?>">
 			</div>
 			<div class="p_cart_hr fl">
-				<div class="p_hr_price">￥138</div>
-				<div class="p_hr_stock">库存30件</div>
+				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?=$item->shop_price?>"><?=$item->shop_price?></span></div>
+				<div class="p_hr_stock">库存<?=$item->item_number?>件</div>
 				<div class="p_hr_select">已选：<span id="product_select">"蓝色","45"</span></div>
 			</div>
 		</div>
 		<div class="p_cart_bd">
+<?php foreach ($attr_grp AS $attrgrp): ?>
 			<div class="p_cart_item">
-				<div class="p_cart_btit">颜色</div>
+				<div class="p_cart_btit"><?=$attrgrp['attr_name']?></div>
 				<ul class="p_cart_ul clearfix">
-					<li data-style="" class="on">蓝色</li>
-					<li data-style="">红色</li>
-					<li data-style="">酒红色</li>
-					<li data-style="">卡其色</li>
-					<li data-style="">黑色</li>
-					<li data-style="">深蓝色</li>
-					<li data-style="">米黄色</li>
-					<input type="hidden">
+	<?php $i=0; foreach ($attrgrp['attrs'] AS $attr): ?>
+					<li <?php if(0===$i): ?>class="on"<?php endif;?> data-style="" data-attr_id="<?=$attr['attr_id']?>" data-attr_price="<?=$attr['attr_price']?>"><?=$attr['attr_value']?></li>
+	<?php $i++; endforeach;?>
+					<input type="hidden"/>
 				</ul>
 			</div>
-			<div class="p_cart_item">
-				<div class="p_cart_btit">尺码</div>
-				<ul class="p_cart_ul clearfix">
-					<li data-style="" class="on">36</li>
-					<li data-style="">37</li>
-					<li data-style="">38</li>
-					<li data-style="">39</li>
-					<li data-style="">40</li>
-					<li data-style="">41</li>
-					<input type="hidden">
-				</ul>
-			</div>
+<?php endforeach;?>
 			<div class="cart_p_price p_cart_number">
 				<b>购买数量</b>
 				<p>
@@ -110,7 +96,7 @@ append_to_body($('#forBody').html());
     </ul>
     <div id="slinav" class="slinav clearfix">
     <?php for ($i=0; $i<$gallerynum; $i++):?>
-    <a href="javascript:void(0);" class="<?php if(0==$i):?>active<?php endif;?>">1</a>
+    <a href="javascript:void(0);" class="hwspeed <?php if(0==$i):?>active<?php endif;?>">1</a>
     <?php endfor;?>
      </div>
   </div>
@@ -181,30 +167,33 @@ $(document).ready(function(){
 
 	$('#Mgotop').on("click",function(){
 		F.set_scroller(true);
-	})
+	});
 	
 	$('#product_zyj').on("click",function(){
 		$("#cart_yj_f").fadeIn(255);
 		$(".mask").fadeIn(255);
-	})
-	
-	$(document).on("click",".mask,.w_wx_colse",function(){
+	});
+
+	$(document.body).on('touchmove','.mask',function(e){
+		e.preventDefault();
+	});
+	$(document.body).on("click",".mask,.w_wx_colse",function(){
 		$("#cart_yj_f").fadeOut(255);
 		$(".mask").fadeOut(255);
-	})
+	});
 	
 	//弹出二维码
-	$(document).on("click",".p_detail_follow",function(){
+	$(document.body).on("click",".p_detail_follow",function(){
 		$(".cart_wx").fadeIn(300);
 		$(".mask").fadeIn(300);
-	})
-	$(document).on("click",".mask,.w_wx_colse",function(){
+	});
+	$(document.body).on("click",".mask,.w_wx_colse",function(){
 		$(".cart_wx").addClass("is_confirmwx");
 		$(".mask").hide();
 		setTimeout(function(){
 			$(".cart_wx").hide().attr("class","cart_wx");
 		},500);
-	})
+	});
 	
 	//加入购物车
 	var main_h = $(".p_cart_main").height() - 176;
@@ -215,24 +204,25 @@ $(document).ready(function(){
 	$(".p_detail_pull p").css("width",p_length);
 	
 	//菜单开启
-	$(document).on("click", ".p_detail_more,.ph_btn", function(){
+	$(document.body).on("click", ".p_detail_more,.ph_btn", function(){
 		$(".p_detail_menulist,.mask_menu").show();
 	});
 	
 	//菜单关闭
-	$(document).on("click", ".mask_menu", function(){
+	$(document.body).on("click", ".mask_menu", function(){
 		$(".p_detail_menulist,.mask_menu").hide();
 	});
 	
 	//加入购物车
-	$(document).on("click", ".p_d_t3", function(){
+	$(document.body).on("click", ".p_d_t3", function(){
 		$(".mask").show();
 		$(".p_cart_main").show().addClass("is_show");
 		showSelect();
 	});
 	
 	//购物车关闭
-	$(document).on("click", ".p_cart_close,.mask", function(){
+	var $cartwrap = $('#p_cart_content');
+	$cartwrap.on("click", ".p_cart_close,.mask", function(){
 		$(".mask").hide(255);
 		$(".p_cart_main").addClass("is_hide");
 		setTimeout(function(){
@@ -241,7 +231,7 @@ $(document).ready(function(){
 	});
 	
 	//加入购物车选项
-	$(document).on("click", ".p_cart_ul li", function(){
+	$cartwrap.on("click", ".p_cart_ul li", function(){
 		var t = $(this);
 		var style = t.data("stype");
 		t.parent().find("li").removeClass("on");
@@ -251,7 +241,7 @@ $(document).ready(function(){
 	});
 	
 	//产品数量填写
-	$(document).on("input propertychange", ".cart_inp", function(){
+	$cartwrap.on("input propertychange", ".cart_inp", function(){
 		var t = $(this);
 		var num = t.val();
 		if(!isZZ(num)){
@@ -263,7 +253,7 @@ $(document).ready(function(){
 	});
 	
 	//产品数量减少
-	$(document).on("click", ".btn_minus", function(){
+	$cartwrap.on("click", ".btn_minus", function(){
 		var t = $(this);
 		var inp = t.parent().find(".cart_inp");
 		var num = inp.val()*1-1;
@@ -277,7 +267,7 @@ $(document).ready(function(){
 	});
 	
 	//产品数量增加
-	$(document).on("click", ".btn_plus", function(){
+	$cartwrap.on("click", ".btn_plus", function(){
 		var t = $(this);
 		var inp = t.parent().find(".cart_inp");
 		var num = inp.val()*1+1;
@@ -286,7 +276,7 @@ $(document).ready(function(){
 	});
 	
 	//确定加入
-	$(document).on("click", ".p_cart_btn", function(){
+	$cartwrap.on("click", ".p_cart_btn", function(){
 		$(".mask").hide();
 		$(".p_cart_main").addClass("is_confirm");
 		setTimeout(function(){
@@ -301,14 +291,19 @@ $(document).ready(function(){
 
 //已选择的所有属性
 function showSelect(){
-	var select = '';
-	$(".p_cart_ul").each(function(){
-		var li = $(this).find("li.on").text();
-		select += '"' + li + '",';
+	if (typeof(showSelect.base_price)=='undefined') {
+		showSelect.base_price = parseFloat($('#cart_shop_price').attr('data-base_price'));
+	}
+	var select = '', price = showSelect.base_price;
+	$("#p_cart_content .p_cart_ul").each(function(){
+		var li = $(this).find("li.on");
+		select += '"' + li.text() + '",';
+		price += parseFloat(li.attr('data-attr_price'));
 	});
 	var length = select.length;
 	select = select.substr(0,length-1);
-	$("#product_select").text(select);
+	$("#product_select").text(select);//cart_shop_price
+	$('#cart_shop_price').text(price.toFixed(2));
 }
 
 </script>

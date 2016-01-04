@@ -25,8 +25,8 @@ class Items extends StorageNode {
 					'paid_order_count'=> 'paid_order_count',
 					'brand_id'        => 'brand_id',
 					'provider_name'   => 'provider_name',
-					'goods_number'    => 'goods_number',
-					'goods_weight'    => 'goods_weight',
+					'item_number'     => 'goods_number',
+					'item_weight'     => 'goods_weight',
 					'market_price'    => 'market_price',
 					'shop_price'      => 'shop_price',
 					'income_price'    => 'income_price',
@@ -105,6 +105,20 @@ class Items extends StorageNode {
 		if (!isset($urlpre)) $urlpre = C('env.site.shop');
 		$img_path = Media::path($img_path);
 		return preg_match('/^http:\/\//i', $img_path) ? $img_path : ($urlpre.$img_path);
+	}
+	
+	/**
+	 * get item attributes
+	 * @param integer $item_id
+	 * @return array
+	 */
+	static function attrs($item_id) {
+		$sql = "SELECT ga.*,a.attr_name
+FROM `shp_goods_attr` AS ga INNER JOIN `shp_attribute` AS a ON ga.attr_id=a.attr_id
+WHERE ga.goods_id=%d
+ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
+		$rows = D()->query($sql, $item_id)->fetch_array_all();
+		return $rows;
 	}
 	
 }

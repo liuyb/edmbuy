@@ -77,7 +77,19 @@ class Item_Controller extends MobileController {
 				}
 				
 				// assign item
+				$item->item_thumb = $item->imgurl($item->item_thumb);
 				$this->v->assign('item', $item);
+				
+				//商品规格、属性
+				$item_attrs = Items::attrs($item->id);
+				$attr_grp = [];
+				foreach ($item_attrs AS $attr) {
+					if (!isset($attr_grp[$attr['attr_id']])) {
+						$attr_grp[$attr['attr_id']] = ['attr_name'=>$attr['attr_name'], 'attrs'=>array()];
+					}
+					$attr_grp[$attr['attr_id']]['attrs'][] = $attr;
+				}
+				$this->v->assign('attr_grp', $attr_grp);
 				
 				//SEO信息
 				$seo = [
