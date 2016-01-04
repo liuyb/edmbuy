@@ -893,43 +893,43 @@ class WeixinJSSDK {
     return $result;
   }
   
-
   /**
    * 获取前端html Weinxin JS-SDK引入代码及初始配置
    *
    * @param array $jsApiList
+   * @param string $readyJs wx.ready 函数中执行的js字串
    * @return string
    */
-  public function js(Array $jsApiList = array()) {
-    if (empty($jsApiList)) {
-      $jsApiList = [
-      'onMenuShareTimeline',
-      'onMenuShareAppMessage',
-      'onMenuShareQQ',
-      'onMenuShareWeibo',
-      'chooseImage',
-      'previewImage',
-      'uploadImage',
-      'downloadImage',
-      'getNetworkType',
-      'openLocation',
-      'getLocation',
-      'hideOptionMenu',
-      'showOptionMenu',
-      'closeWindow',
-      'scanQRCode',
-      'chooseWXPay',
-      ];
-    }
+  public function js(Array $jsApiList = array(), $readyJs = '') {
+  	if (empty($jsApiList)) {
+  		$jsApiList = [
+  				'onMenuShareTimeline',
+  				'onMenuShareAppMessage',
+  				'onMenuShareQQ',
+  				'onMenuShareWeibo',
+  				'chooseImage',
+  				'previewImage',
+  				'uploadImage',
+  				'downloadImage',
+  				'getNetworkType',
+  				'openLocation',
+  				'getLocation',
+  				'hideOptionMenu',
+  				'showOptionMenu',
+  				'closeWindow',
+  				'scanQRCode',
+  				'chooseWXPay',
+  		];
+  	}
   
-    $debugWhiteList = C('env.debug_white_list');
-    $signPackage = $this->getSignPackage();
-    $jsApiStr    = "'" . implode("','", $jsApiList) . "'";
-    $debugStr    = in_array($GLOBALS['user']->uid, $debugWhiteList) ? 'true' : 'false';
-    $now         = time();
+  	$debugWhiteList = C('env.debug_white_list');
+  	$signPackage = $this->getSignPackage();
+  	$jsApiStr    = "'" . implode("','", $jsApiList) . "'";
+  	$debugStr    = in_array($GLOBALS['user']->uid, $debugWhiteList) ? 'true' : 'false';
+  	$now         = time();
   
-    $jsfile = '<script type="text/javascript" src="'.self::$sdkFile.'"></script>';
-    $jsconf =<<<HEREDOC
+  	$jsfile = '<script type="text/javascript" src="'.self::$sdkFile.'"></script>';
+  	$jsconf =<<<HEREDOC
 <script type="text/javascript">
 if (typeof(wx)=='object') {
   wx.config({
@@ -940,12 +940,12 @@ if (typeof(wx)=='object') {
     signature: '{$signPackage["signature"]}',
     jsApiList: [{$jsApiStr}]
   });
-  wx.ready(function(){wxData.isReady=true});
+  wx.ready(function(){wxData.isReady=true;{$readyJs}});
 }
 </script>
 HEREDOC;
   
-    return $jsfile . $jsconf;
+  	return $jsfile . $jsconf;
   
   }
 }

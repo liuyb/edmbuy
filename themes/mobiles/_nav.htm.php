@@ -1,14 +1,10 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
-<nav id="nav" class="nav no-bounce nav-<?=$nav_no?>"></nav>
-<script>
-$(function(){
-	$('#nav a').click(function(){
-		$(this).parents('.nav').find('a').removeClass('cur');
-		$(this).addClass('cur');
-	});
-});
-</script>
-
-<!-- 微信操作提示 -->
-<div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
+<div class="p_detail_tool">
+	<div class="fl cursor p_d_t1"><p></p></div>
+	<a href="cart_list_no.html">
+		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
+	</a>
+	<div class="fl cursor p_d_t3">加入购物车</div>
+	<div class="fl cursor p_d_t4">立即购买</div>
+</div>

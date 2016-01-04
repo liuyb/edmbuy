@@ -6,17 +6,16 @@
 (function( $, F, w, UNDEF ) {
 	
 	F.isTouch = "createTouch" in document;
-	F.isDownpullDisplay = true;
 	//gData.downpull_display = true; //允许下拉显示标志位，默认允许，页面可改变此变量以改变其默认行为 (不能在这个位置设置该值，放这里是提醒有这么一个全局变量)
 	//gData.page_render_mode = 2; //1: general一般请求页面；2: hash请求页面 (不能在这个位置设置该值，放这里是提醒有这么一个全局变量)
 	
 	// Set dom constants
-	F.doms = {wrapper:"#root",activepage:"#activePage",nav:"#nav-1",scroller:".scrollArea",loading:"#loadingCanvas"};
+	F.doms = {wrapper:"#Mbody",nav:"#Mnav",activepage:"#activePage",loading:"#loadingCover",scroller:".scrollArea"};
 	
 	// Cache doms
-	F.pageactive = $(F.doms.activepage);
-	F.scrollarea = $('>'+F.doms.scroller,F.pageactive);
-	F.pagebg     = $('>.pageBg',F.pageactive);
+	F.activePage = $(F.doms.activepage);
+	F.scrollArea = $('>'+F.doms.scroller,F.activePage);
+	F.pageBg     = $('>.pageBg',F.activePage);
 	
 	// Scroll cookie initialization
 	F.scroll2old = false;
@@ -34,7 +33,7 @@
 		var opacity = 1;
 		switch (effect) {
 		case 'switch':
-			F.pageactive.hide();
+			F.activePage.hide();
 			break;
 		case 'overlay':
 			opacity = .75;
@@ -76,7 +75,7 @@
 		F.loading_canvas.hide();
 		switch (effect) {
 		case 'switch':
-			F.pageactive.show();
+			F.activePage.show();
 			break;
 		case 'overlay':
 			break;
@@ -89,12 +88,12 @@
 		if (typeof F.pagenav_height == 'undefined' || !F.pagenav_height) {
 			F.pagenav_height = $(F.doms.nav).height();
 		}
-		if (typeof F.pageactive == 'undefined') {
-			F.pageactive = $(F.doms.activepage);
+		if (typeof F.activePage == 'undefined' || !F.activePage) {
+			F.activePage = $(F.doms.activepage);
 		}
 		var _bh=$(document).height()-F.pagenav_height;
-		if (F.scrollarea.size()>0) {
-			F.scrollarea.css({minHeight:_bh+'px'});
+		if (F.scrollArea.size()>0) {
+			F.scrollArea.css({minHeight:_bh+'px'});
 		}
 	};
 	// set iScroll object
@@ -157,7 +156,7 @@
 			
 			if (can_dpshow && !F.event.flag.showbg) {
 				F.event.flag.showbg = true;
-				F.pagebg.show();
+				F.pageBg.show();
 			}
 			
 			if(this.y > 50 && F.event.flag.downpull) {
@@ -170,7 +169,7 @@
 		else {
 			if (F.event.flag.showbg) {
 				F.event.flag.showbg = false;
-				F.pagebg.hide();
+				F.pageBg.hide();
 			}
 		}
 		F.event.execEvent('scrolling',this);
@@ -224,15 +223,15 @@
 	};
 	//ajax document ready
 	F._onAjaxDocReady= function(wrap) {
-		if (typeof(wrap)=='undefined') wrap = F.scrollarea;
+		if (typeof(wrap)=='undefined') wrap = F.scrollArea;
 		$('img',wrap).attr('data-loaded',0).load(function(){ $(this).attr('data-loaded',1); });
 		F.set_scroller(false,100);
 	};
 	
 	//获取内容包裹元素
 	F.getContainerEle = function() {
-		var $_c = F.scrollarea;
-		if ($_c.size()==0) $_c = F.pageactive;
+		var $_c = F.scrollArea;
+		if ($_c.size()==0) $_c = F.activePage;
 		return $_c;
 	};
 	
@@ -265,17 +264,17 @@
 		}
 		
 		F.hashLoad(hash,data,function(ret){
-			var _ct = F.scrollarea;
+			var _ct = F.scrollArea;
 			var toPreClass = 'ui-page-pre-in';
 			var toClass = 'slide in';
-			if (_effect=='slide_right_in') {
+			if (_effect=='slide_in_right') {
 				_ct.addClass(toPreClass);
 				_ct.animationComplete(function(){
 					_ct.removeClass(toClass);
 				});
 			}
 			F.loadingStop('switch');
-			if (_effect=='slide_right_in') {
+			if (_effect=='slide_in_right') {
 				_ct.removeClass( toPreClass ).addClass( toClass );
 			}
 			F.set_scroller(true,500);
@@ -308,9 +307,11 @@
 		},100);
 
 		// Prevent default scroll action
+		/*
 		w.document.addEventListener('touchmove', function (e) {
-			//e.preventDefault();
+			e.preventDefault();
 		}, false);
+		*/
 		
 		// Bind window.onhashchange event
 		//$(w).hashchange(function(){w.go_hashreq();});
@@ -365,39 +366,6 @@
   show_popdlg._wrap.addClass(outClass);
 }
 
-//主导航显示和隐藏
-;function nav_show(nav_no, nav, nav_second) {
-	if (nav_no===undefined) nav_no = 1;
-	
-	var $thenav = $('#nav-'+nav_no);
-	$('a', $thenav).removeClass('cur');
-	$('a[rel='+nav+']', $thenav).addClass('cur');
-	$('.nav').hide();
-	$thenav.show();
-
-	nav_no = parseInt(nav_no);
-	F.pagenav_height = $thenav.height();
-	
-	switch (nav_no) {
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	}
-	
-	return false;
-}
-;function nav_hide(nav_no) {
-	if (nav_no===undefined) no = 0;
-	nav_no = parseInt(nav_no);
-	if (0===nav_no) $('.nav').hide();
-	else $('#nav-'+nav_no).hide();
-	return false;
-}
 //查看更多内容
 ;function see_more(_self, callback) {
     var page = $(_self).attr('data-next-page');

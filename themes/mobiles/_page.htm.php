@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title><?php echo L('appname')?></title>
+<title><?php echo $seo['title']?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="keywords" content="<?php echo $seo['keyword']?>">
@@ -23,59 +23,59 @@
 <?php tplholder('HEAD_CSS');?>
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
-<script>gData.page_render_mode=parseInt('<?=$page_render_mode?>');</script>
-</head>
-<body>
-<div id="gtop"></div>
-<div id="root">
-  <nav id="topnav" class="topnav topnav-<?=$topnav_no?>"></nav>
-  <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>"><?php if(1===$page_render_mode):?><?php include T($tpl_content);?><script>$(function(){F.set_scroller(false,100);});</script><?php endif;?></section>
-    <div class="pageBg"><em>“正品保证”</em>不仅仅是一句口号</div>
-  </div>
-  <div id="loadingCanvas" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
-  <div class="hide"><img src="<?php echo ploadingimg()?>" alt=""/></div>
-</div>
-<?php include T('_nav');?>
-<?php include T('_popdlg');?>
-</body>
-<?php /*footscript();*/?>
-<?php tplholder('FOOT_JS');?>
-<script>
-function show_gtop(html) {
-	if (typeof(show_gtop.dom)=='undefined') {
-		show_gtop.dom = $('#gtop');
+<script>gData.page_render_mode=parseInt('<?=$page_render_mode?>');
+function show_mtop(html) {
+	if (typeof(show_mtop.dom)=='undefined' || !show_mtop.dom) {
+		show_mtop.dom = $('#Mtop');
 	}
-	show_gtop.dom.html(html).show();
+	show_mtop.dom.html(html).show();
 }
 function show_topnav(html) {
-	if (typeof(show_topnav.dom)=='undefined') {
+	if (typeof(show_topnav.dom)=='undefined' || !show_topnav.dom) {
 		show_topnav.dom = $('#topnav');
 	}
 	show_topnav.dom.html(html).show();
-}
-function show_nav(html) {
-	if (typeof(show_nav.dom)=='undefined') {
-		show_nav.dom = $('#nav').show();
-	}
-	show_nav.dom.html(html);
 }
 function append_to_body(html) {
 	$(document.body).append(html);
 }
 </script>
+</head>
+<body>
+<div id="Mtop"></div>
+<div id="Mbody">
+  <nav id="topnav" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
+  <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>">
+  	<?php if(1==$page_render_mode):?>
+  		<?php include T($tpl_content);?>
+  		<script>$(window).load(function(){F.set_scroller(false,100)})</script>
+  	<?php endif;?>
+  	</section>
+    <div class="pageBg"><em>“正品保证”</em>不仅仅是一句口号</div>
+  </div>
+  <div id="loadingCover" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
+</div>
+<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
+<!-- 微信操作提示 -->
+<div id="cover-wxtips" class="cover" style="display:none;"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
+<div style="display:none;"><img src="<?php echo ploadingimg()?>" alt=""/></div>
+</body>
+<?php tplholder('FOOT_JS');?>
 <script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>
 <script type="text/javascript" src="<?=$contextpath;?>misc/js/fst.min.js"></script>
+<?php shareinfo(isset($share_info) ? $share_info : array());?>
+<?php footscript();?>
 </html><?php
 
 //: add css & js files
 if (C('env.usecdn')):
 add_css('http://fdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('http://fdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('http://fdn.fxmapp.com/js/fm.min.js',['pos'=>'head','ver'=>'none']);
+add_js('http://fdn.fxmapp.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('fm.min.js',['pos'=>'head','ver'=>'none']);
+add_js('fm.min.js',['pos'=>'foot','ver'=>'none']);
 endif;
 add_css('m.css',['scope'=>'global']);
 add_js('g.js',['pos'=>'head']);

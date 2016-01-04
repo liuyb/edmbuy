@@ -14,6 +14,7 @@ class Items extends StorageNode {
 				'key'   => 'item_id',   //该key是应用逻辑的列，当columns为array时，为columns的key，否则，则要设成实际存储字段
 				'columns' => array( //命名特点：'goods_%s'=>'item_%s'，其他不变
 					'item_id'     => 'goods_id',
+					'user_id'     => 'user_id',
 					'cat_id'      => 'cat_id',
 					'origin_place_id' => 'origin_place_id',
 					'item_sn'     => 'goods_sn',

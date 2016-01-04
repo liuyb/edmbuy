@@ -651,7 +651,7 @@ function headscript()
   $wxVer   = Weixin::browserVer();
   $wxVer   = $wxVer ? "'".$wxVer."'" : 0;
   $isWxBro = $wxVer ? 'true' : 'false';
-  $wxConf  = C('api.weixin_fxmgou');
+  $wxConf  = C('api.weixin_edmbuy');
   $wxAppId = $wxConf['appId'];
   $appName = L('appname');
   $currUri = Request::uri();
@@ -673,143 +673,167 @@ function headscript()
 }
 
 /**
- * 显示在html foot后的js，如微信JS-SDK
+ * 显示在html foot后的js
  */
 function footscript()
 {
-  $q = Request::q();
-  if (!$q) $q = '/';
-  
-  $resjs = '';
-  $wx = new Weixin([Weixin::PLUGIN_JSSDK]);
-  $base_url = C('env.site.mobile').'/';
-  $shop_url = C('env.site.shop').'/';
-  
-  $wxjs_init = '';
-  $wxjs_api  = '';
-  $wxjs_api_extra = '';
-  $wxapi_init= ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo'];
-  
-  if (preg_match('!item/(\d+)!i', $q, $match)) { //分享商品详情页
-    $goods_id = $match[1];
-    $goods_info = Goods::getGoodsInfo($goods_id, array('is_on_sale'=>0,'goods_img'=>1));
-    if (!empty($goods_info)) {
-      
-      $goods_name = str_replace("'", "\\'", $goods_info['goods_name']);
-      
-      $cat_chain= Goods::getParentCatesChain($goods_info['cat_id']);
-      $cat_pre  = '';
-      foreach ($cat_chain AS $c) {
-        $cat_pre .= $c['cat_name'] . '//';
-      }
-      if (''!=$cat_pre) {
-        $cat_pre  = rtrim($cat_pre,'/');
-        $cat_pre  = '['.$cat_pre.']';
-      }
-      
-      //$fx_desc  = str_replace("'", "\\'", $goods_info['goods_name']);
-      $fx_title = $cat_pre. $goods_name;
-      $fx_desc  = $goods_name;
-      $fx_link  = $base_url.'item/'.$goods_info['goods_id'];
-      $fx_pic   = $shop_url.$goods_info['goods_thumb'];
-      
-      $goods_gallery = Goods::getGoodsGallery($goods_id);
-      $fx_picset= [];
-      if (!empty($goods_gallery)) {
-        foreach ($goods_gallery AS $ga) {
-          $fx_picset[] = $shop_url.$ga['img_url'];
-        }
-        $fx_picset_str = implode("','", $fx_picset);
-        $wxjs_api_extra =<<<HREDOC_0
-$('.gpic img').click(function(){
-  wx.previewImage({
-    current: '{$fx_picset[0]}',
-    urls: ['{$fx_picset_str}']
-  });
-});
-HREDOC_0;
-      }
-      
-      $wxjs_init = $wx->jssdk->js($wxapi_init+['previewImage']);
-      
-    }
+	$resjs  = '';
 
-  }
-  else { //其他页都只分享首页
-    
-    $fx_title = "福小蜜";
-    $fx_desc  = '福小蜜海外购，专注于海外商品的代购，让你足不出户即可享受来自澳洲、新西兰、加拿大等海外的放心商品。';
-    $fx_link  = $base_url;
-    $fx_pic   = $base_url.'misc/images/napp/touch-icon-144.png';
-    
-    $wxjs_init = $wx->jssdk->js($wxapi_init);
-  }
-  
-  //API接口
-  $wxjs_api  =<<<HEREDOC_1
-wx.ready(function(){
+	// Weixin js
+	$resjs .= weixin_js();
+
+	echo $resjs;
+}
+
+/**
+ * 返回weixin全局js
+ * @return string
+ */
+function weixin_js() {
+
+	$wx = new Weixin([Weixin::PLUGIN_JSSDK]);
+
+	$wxapi_list= ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','previewImage'];
+
+	return $wx->jssdk->js($wxapi_list, "wxData.shareinfo.refresh();");
+}
+
+/**
+ * 返回share信息的js数据
+ *
+ * @param array $data
+ * @return string
+ */
+function shareinfo( Array $data = array() ){
+	$data_js =<<<HEREDOC_SHARE_JS0
+wxData.shareinfo = {
+  title: document.title,
+  desc : $('html > head > meta[name=description]').attr('content'),
+  link : document.location.href,
+  pic  : '',
+  cover: null
+};
+HEREDOC_SHARE_JS0;
+	
+	if (empty($data)) {
+		$q = Request::q();
+		$appname = L('appname');
+		if (preg_match('/item\/(\d+)/', $q, $matches)) { //商品详情页
+			$item_id = $matches[1];
+			$item = Items::load($item_id);
+			if ($item->is_exist()) {
+				$spm_key = Spm::gen_key('user',$GLOBALS['user']->uid);
+				$spmNode = Spm::find_one(new Query('key', $spm_key));
+				if (!$spmNode->is_exist()) {
+					$spmNode = new Spm();
+					$spmNode->key = $spm_key;
+					$spmNode->flag1 = 'user';
+					$spmNode->flag2 = $GLOBALS['user']->uid;
+					$spmNode->data  = $spmNode->flag2;
+					$spmNode->dtime = simphp_dtime();
+					$spmNode->save(Storage::SAVE_INSERT);
+				}
+				
+				$item_url = $item->url($spmNode->gen_spm());
+				$item_pic = $item->imgurl($item->item_thumb);
+				$data_js .=<<<HEREDOC_SHARE_JS0
+wxData.shareinfo.title = '{$item->item_name}';
+wxData.shareinfo.desc  = '{$item->item_brief}';
+wxData.shareinfo.link  = '{$item_url}';
+wxData.shareinfo.pic   = '{$item_pic}';
+HEREDOC_SHARE_JS0;
+			}
+		}
+	}
+	else {
+		$share_title = $data['title'];
+		$share_desc  = $data['desc'];
+		$share_link  = $data['link'];
+		$share_pic   = $data['pic'];
+		$data_js =<<<HEREDOC_SHARE_JS1
+wxData.shareinfo = {
+  title: '{$share_title}',
+  desc : '{$share_desc}',
+  link : '{$share_link}',
+  pic  : '{$share_pic}',
+  cover: null
+};
+HEREDOC_SHARE_JS1;
+	}
+
+	$func_js = <<<HEREDOC_SHARE_JS3
+wxData.shareinfo.show_cover = function(){ if(typeof(wxData.shareinfo.cover)=='object') wxData.shareinfo.cover.show() };
+wxData.shareinfo.hide_cover = function(){ if(typeof(wxData.shareinfo.cover)=='object') wxData.shareinfo.cover.hide() };
+wxData.shareinfo.refresh = function(){
+  if (typeof(wx)!='object') return;
   //分享给微信好友
   wx.onMenuShareAppMessage({
-    title: '{$fx_title}',
-    desc: '{$fx_desc}',
-    link: '{$fx_link}',
-    imgUrl: '{$fx_pic}',
+    title: wxData.shareinfo.title,
+    desc: wxData.shareinfo.desc,
+    link: wxData.shareinfo.link,
+    imgUrl: wxData.shareinfo.pic,
     success: function (res) {
         alert('谢谢分享！');
+        wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
-        //alert('已取消');
+        wxData.shareinfo.hide_cover();
     }
   });
   //分享到朋友圈
   wx.onMenuShareTimeline({
-    title: '{$fx_title}',
-    link: '{$fx_link}',
-    imgUrl: '{$fx_pic}',
+    title: wxData.shareinfo.title,
+    link: wxData.shareinfo.link,
+    imgUrl: wxData.shareinfo.pic,
     success: function (res) {
       alert('谢谢分享！');
+      wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
-      //alert('已取消');
+      wxData.shareinfo.hide_cover();
     }
   });
   //分享到QQ
   wx.onMenuShareQQ({
-    title: '{$fx_title}',
-    desc: '{$fx_desc}',
-    link: '{$fx_link}',
-    imgUrl: '{$fx_pic}',
+    title: wxData.shareinfo.title,
+    desc: wxData.shareinfo.desc,
+    link: wxData.shareinfo.link,
+    imgUrl: wxData.shareinfo.pic,
     success: function (res) {
       alert('谢谢分享！');
+      wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
-      //alert('已取消');
+      wxData.shareinfo.hide_cover();
     }
   });
   //分享到微博
   wx.onMenuShareWeibo({
-    title: '{$fx_title}',
-    desc: '{$fx_desc}',
-    link: '{$fx_link}',
-    imgUrl: '{$fx_pic}',
+    title: wxData.shareinfo.title,
+    desc: wxData.shareinfo.desc,
+    link: wxData.shareinfo.link,
+    imgUrl: wxData.shareinfo.pic,
     success: function (res) {
       alert('谢谢分享！');
+      wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
-      //alert('已取消');
+      wxData.shareinfo.hide_cover();
     }
   });
-  {$wxjs_api_extra}
+};
+$(function(){
+wxData.shareinfo.cover = $('#cover-wxtips');
+wxData.shareinfo.cover.click(function(){ $(this).hide() });
 });
-HEREDOC_1;
-  
-  if (''!=$wxjs_init) {
-    $resjs = "{$wxjs_init}\n<script>if (typeof(wx)=='object') {\n{$wxjs_api}\n}</script>";
-  }
-  
-  echo $resjs;
+HEREDOC_SHARE_JS3;
+	echo "<script type=\"text/javascript\">{$data_js}{$func_js}</script>";
 }
 
+/**
+ * to pay form script
+ * @param string $back_url
+ */
 function form_topay_script($back_url) {
   $frm_action = U('trade/order/topay');
   $html =<<<HEREDOC
@@ -844,6 +868,9 @@ HEREDOC;
   echo $html;
 }
 
+/**
+ * require scroll to old position
+ */
 function require_scroll2old() {
   $html =<<<HEREDOC
 <script>

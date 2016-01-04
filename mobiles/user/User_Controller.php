@@ -164,7 +164,7 @@ class User_Controller extends MobileController {
     			}
     		}
     		
-    		$upUser->save();
+    		$upUser->save(Storage::SAVE_UPDATE);
     		$loginedUser = $upUser;
     
     	} //End: if ('detail'===$state)
@@ -185,7 +185,18 @@ class User_Controller extends MobileController {
 	    	$upUser->state   = 0; //0:正常;1:禁止
 	    	$upUser->from    = $from;
 	    	$upUser->authmethod = $auth_method;
-	    	$upUser->save();
+	    	
+	    	//检查spm
+	    	$parent_id = 0;
+	    	$spm = Spm::check_spm($refer);
+	    	if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+	    		if (Users::id_exists($matchspm[1])) {
+	    			$parent_id = $matchspm[1];
+	    		}
+	    	}
+	    	$upUser->parentid = $parent_id;
+	    	
+	    	$upUser->save(Storage::SAVE_INSERT);
 	    	$loginedUser = $upUser;
     
     	} //END: if ('base'==$state)

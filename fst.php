@@ -85,6 +85,7 @@ $params['flashVersion']    = isset($_GET['fl']) ? rawurldecode($_GET['fl']) : ''
 $params['referrer']        = isset($_GET['rf']) ? rawurldecode($_GET['rf']) : '';
 $params['uvid']            = isset($_GET['uv']) ? rawurldecode($_GET['uv']) : '';
 $params['uid']             = isset($_GET['ud']) ? intval($_GET['ud']) : 0;
+$params['spm']             = isset($_GET['pm']) ? rawurldecode($_GET['pm']) : '';
 $params['cflag1']          = isset($_GET['c1']) ? rawurldecode($_GET['c1']) : '';
 $params['cflag2']          = isset($_GET['c2']) ? rawurldecode($_GET['c2']) : '';
 $params['cflag3']          = isset($_GET['c3']) ? rawurldecode($_GET['c3']) : '';
@@ -179,6 +180,7 @@ function V($url='', $params = array(), $action = 'poststatus') {
     
     $flashVersion    = isset($params['flashVersion']) ? $params['flashVersion'] : '';
     $referrer        = isset($params['referrer']) ? $params['referrer'] : '';
+    $spm             = isset($params['spm']) ? $params['spm'] : '';
     $cflag1          = isset($params['cflag1']) ? $params['cflag1'] : '';
     $cflag2          = isset($params['cflag2']) ? $params['cflag2'] : '';
     $cflag3          = isset($params['cflag3']) ? $params['cflag3'] : '';
@@ -209,6 +211,7 @@ function V($url='', $params = array(), $action = 'poststatus') {
       'window_orientation'=> $params['winOrientation'],
       'flash_ver'    => $flashVersion,
        
+      'spm'      => $spm,
       'cflag1'   => $cflag1,
       'cflag2'   => $cflag2,
       'cflag3'   => $cflag3,

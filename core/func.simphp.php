@@ -547,6 +547,12 @@ function U($uri = '', $vars = '', $domain = FALSE) {
     $uri .= (strpos($uri,'?')===false?'?':'&'). $vars;
   }
   
+  // spm
+  $spm = isset($_GET['spm']) ? $_GET['spm'] : '';
+  if (!empty($spm)) {
+  	$uri .= (strpos($uri,'?')===false?'?':'&'). 'spm='.$spm;
+  }
+  
   // Check domain
   if ($domain && ''!=$site_domain) {
     $uri = $site_domain . $uri;

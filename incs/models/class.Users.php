@@ -8,6 +8,14 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Users extends StorageNode {
 	
+	/**
+	 * User level constant
+	 * @var constant
+	 */
+	const USER_LEVEL_0 = 0; //米客
+	const USER_LEVEL_1 = 1; //米商
+	const USER_LEVEL_2 = 2; //合伙人
+	
 	protected static function meta() {
 		return array(
 				'table' => '`shp_users`',
@@ -61,6 +69,7 @@ class Users extends StorageNode {
 						'creditline'  => 'credit_line',
 						'passwdquestion'=> 'passwd_question',
 						'passwdanswer'=> 'passwd_answer',
+						'level'       => 'level',
 						'state'       => 'state',
 						'from'        => 'from',
 						'authmethod'  => 'auth_method',

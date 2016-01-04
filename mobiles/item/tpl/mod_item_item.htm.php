@@ -6,18 +6,11 @@
 
 <?php else:?>
 
-<script>$(function(){
-	show_gtop($('#forGTop').html());
-	show_nav($('#forNav').html());
-	append_to_body($('#forBody').html());
-});
-</script>
-<script id="forGTop" type="text/html">
+<script id="forMtop" type="text/html">
 <div class="p_header_btn">
 	<span class="p_detail_back cursor"></span>
 	<span class="p_detail_more cursor"></span>
 </div>
-
 <div class="p_detail_menulist cursor">
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu">
@@ -27,21 +20,11 @@
 	</ul>
 </div>
 </script>
-<script id="forNav" type="text/html">
-<div class="p_detail_tool">
-	<div class="fl cursor p_d_t1"><p></p></div>
-	<a href="cart_list_no.html">
-		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display: none;">0</span></div>
-	</a>
-	<div class="fl cursor p_d_t3">加入购物车</div>
-	<div class="fl cursor p_d_t4">立即购买</div>
-</div>
-</script>
 <script id="forBody" type="text/html">
 <div class="mask_menu cursor"></div>
 
 <div class="cursor p_detail_button p_detail_follow"></div>
-<div class="cursor p_detail_button p_detail_gotop"></div>
+<div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
 
 <div class="mask" style="display:none;"></div>
 <div class="p_cart_main" style="display:none;">
@@ -108,7 +91,7 @@
 </div>
 
 <!-- 佣金分配  -->
-<div class="cart_yj_f">
+<div class="cart_yj_f" id="cart_yj_f">
 	<div class="yi_artio_tit">佣金分配比例</div>
 	<div class="yi_artio_1">一级佣金：35%</div>
 	<div class="yi_artio_2">二级佣金：40%</div>
@@ -116,6 +99,9 @@
 	<div class="yi_artio_ts">提示：此佣金只有米商可见</div>
 	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
 </div>
+</script>
+<script>/*show_mtop($('#forMtop').html());*/
+append_to_body($('#forBody').html());
 </script>
 
 <div class="mainb">
@@ -125,7 +111,7 @@
     <li><a href="javascript:;"><img src="<?=$g->img_url?>" alt="" /></a></li>
     <?php endforeach;?>
     </ul>
-    <div id="pagenavi" class="pagenavi clearfix">
+    <div id="slinav" class="slinav clearfix">
     <?php for ($i=0; $i<$gallerynum; $i++):?>
     <a href="javascript:void(0);" class="<?php if(0==$i):?>active<?php endif;?>">1</a>
     <?php endfor;?>
@@ -135,7 +121,7 @@
 <script type="text/javascript">
 var t1;
 $(function(){
-	var _active = 0, $_ap = $('#pagenavi a');
+	var _active = 0, $_ap = $('#slinav a');
   
   t1 = new TouchSlider({
      id:'slider',
@@ -163,14 +149,16 @@ $(function(){
 <div class="p_detail_msg">
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><span class="product_zyj">总佣金：￥100.00 </span></div>
+	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if($user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥100.00 </span><?php endif;?></div>
 	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_order_count?>笔</span><span class="fl">快递：免运费</span></div>
 </div>
 
+<?php if($referee):?>
 <div class="p_detail_friend">
-	<div class="fl p_friend_left"><img src="/themes/mobiles/img/mt.png"></div>
-	<div class="fl p_friend_right">你的好友“<b>彭先灿</b>”向你推荐！</div>
+	<div class="fl p_friend_left"><img src="<?php echo !empty($referee->logo) ? $referee->logo : '/themes/mobiles/img/mt.png' ?>" alt=""/></div>
+	<div class="fl p_friend_right">你的好友“<b><?=$referee->nickname?></b>”向你推荐！</div>
 </div>
+<?php endif;?>
 
 <div class="p_detail_serv clearfix">
 	<ul>
@@ -188,130 +176,130 @@ $(function(){
 
 <div class="p_detail_info">
 	<div class="p_i_title"><span>图文详情</span></div>
-	<div class="product_detail"><?=$item->item_desc?></div>
+	<div class="product_detail" id="product_detail"><?=$item->item_desc?></div>
 </div>
 
 <script>
-$(document).on("click",".p_detail_gotop",function(){
-	F.set_scroller(true);
-})
+$(document).ready(function(){
 
-$(document).on("click",".product_zyj",function(){
-	$(".cart_yj_f").fadeIn(255);
-	$(".mask").fadeIn(255);
-})
-
-$(document).on("click",".mask,.w_wx_colse",function(){
-	$(".cart_yj_f").fadeOut(255);
-	$(".mask").fadeOut(255);
-})
-
-//广告图片大小
-/*
-$(function(){
-	var _width = $(".swiper-slide img").width();
-	$(".swiper-slide img,.swiper-container").height(_width);
-})
-*/
-//弹出二维码
-$(document).on("click",".p_detail_follow",function(){
-	$(".cart_wx").fadeIn(300);
-	$(".mask").fadeIn(300);
-})
-$(document).on("click",".mask,.w_wx_colse",function(){
-	$(".cart_wx").addClass("is_confirmwx");
-	$(".mask").hide();
-	setTimeout(function(){
-		$(".cart_wx").hide().attr("class","cart_wx");
-	},500);
-})
-/*
-//可视屏幕高度
-var clientHeight = document.documentElement.clientHeight;
-var swiper_banner = new Swiper('#product_banner', {
-	pagination : '#banner_pagination',
-	grabCursor : true,
-	autoplay : false,
-	paginationClickable : true,
-});
-*/
-//加入购物车
-var main_h = $(".p_cart_main").height() - 176;
-$(".p_cart_bd").height(main_h);
-
-//拖动字样
-var p_length = ($(".p_detail_pull p").text().length + 1) * 13;
-$(".p_detail_pull p").css("width",p_length);
-
-//菜单开启
-$(document).on("click", ".p_detail_more,.ph_btn", function(){
-	$(".p_detail_menulist,.mask_menu").show();
-});
-
-//菜单关闭
-$(document).on("click", ".mask_menu", function(){
-	$(".p_detail_menulist,.mask_menu").hide();
-});
-
-//加入购物车
-$(document).on("click", ".p_d_t3", function(){
-	$(".mask").show();
-	$(".p_cart_main").show().addClass("is_show");
-	showSelect();
-});
-
-//购物车关闭
-$(document).on("click", ".p_cart_close,.mask", function(){
-	$(".mask").hide(255);
-	$(".p_cart_main").addClass("is_hide");
-	setTimeout(function(){
-		$(".p_cart_main").hide().attr("class","p_cart_main");
-	},500);
-});
-
-//加入购物车选项
-$(document).on("click", ".p_cart_ul li", function(){
-	var t = $(this);
-	var style = t.data("stype");
-	t.parent().find("li").removeClass("on");
-	t.addClass("on");
-	t.parent().find("input").val(style);
-	showSelect();
-});
-
-//产品数量填写
-$(document).on("input propertychange", ".cart_inp", function(){
-	var t = $(this);
-	var num = t.val();
-	if(!isZZ(num)){
-		t.val('1');
-	    boxalert("请输入大于零的整数!");
-	    return false;
-	}
-	showSelect();
-});
-
-//产品数量减少
-$(document).on("click", ".btn_minus", function(){
-	var t = $(this);
-	var inp = t.parent().find(".cart_inp");
-	var num = inp.val()*1-1;
-	if(isZZ(num)){
+	$('#Mgotop').on("click",function(){
+		F.set_scroller(true);
+	})
+	
+	$('#product_zyj').on("click",function(){
+		$("#cart_yj_f").fadeIn(255);
+		$(".mask").fadeIn(255);
+	})
+	
+	$(document).on("click",".mask,.w_wx_colse",function(){
+		$("#cart_yj_f").fadeOut(255);
+		$(".mask").fadeOut(255);
+	})
+	
+	//弹出二维码
+	$(document).on("click",".p_detail_follow",function(){
+		$(".cart_wx").fadeIn(300);
+		$(".mask").fadeIn(300);
+	})
+	$(document).on("click",".mask,.w_wx_colse",function(){
+		$(".cart_wx").addClass("is_confirmwx");
+		$(".mask").hide();
+		setTimeout(function(){
+			$(".cart_wx").hide().attr("class","cart_wx");
+		},500);
+	})
+	
+	//加入购物车
+	var main_h = $(".p_cart_main").height() - 176;
+	$(".p_cart_bd").height(main_h);
+	
+	//拖动字样
+	var p_length = ($(".p_detail_pull p").text().length + 1) * 13;
+	$(".p_detail_pull p").css("width",p_length);
+	
+	//菜单开启
+	$(document).on("click", ".p_detail_more,.ph_btn", function(){
+		$(".p_detail_menulist,.mask_menu").show();
+	});
+	
+	//菜单关闭
+	$(document).on("click", ".mask_menu", function(){
+		$(".p_detail_menulist,.mask_menu").hide();
+	});
+	
+	//加入购物车
+	$(document).on("click", ".p_d_t3", function(){
+		$(".mask").show();
+		$(".p_cart_main").show().addClass("is_show");
+		showSelect();
+	});
+	
+	//购物车关闭
+	$(document).on("click", ".p_cart_close,.mask", function(){
+		$(".mask").hide(255);
+		$(".p_cart_main").addClass("is_hide");
+		setTimeout(function(){
+			$(".p_cart_main").hide().attr("class","p_cart_main");
+		},500);
+	});
+	
+	//加入购物车选项
+	$(document).on("click", ".p_cart_ul li", function(){
+		var t = $(this);
+		var style = t.data("stype");
+		t.parent().find("li").removeClass("on");
+		t.addClass("on");
+		t.parent().find("input").val(style);
+		showSelect();
+	});
+	
+	//产品数量填写
+	$(document).on("input propertychange", ".cart_inp", function(){
+		var t = $(this);
+		var num = t.val();
+		if(!isZZ(num)){
+			t.val('1');
+		    boxalert("请输入大于零的整数!");
+		    return false;
+		}
+		showSelect();
+	});
+	
+	//产品数量减少
+	$(document).on("click", ".btn_minus", function(){
+		var t = $(this);
+		var inp = t.parent().find(".cart_inp");
+		var num = inp.val()*1-1;
+		if(isZZ(num)){
+			inp.val(num);
+		}else{
+		    boxalert("产品数量不能再少啦!");
+		    return false;
+		}
+		showSelect();
+	});
+	
+	//产品数量增加
+	$(document).on("click", ".btn_plus", function(){
+		var t = $(this);
+		var inp = t.parent().find(".cart_inp");
+		var num = inp.val()*1+1;
 		inp.val(num);
-	}else{
-	    boxalert("产品数量不能再少啦!");
-	    return false;
-	}
-	showSelect();
-});
+		showSelect();
+	});
+	
+	//确定加入
+	$(document).on("click", ".p_cart_btn", function(){
+		$(".mask").hide();
+		$(".p_cart_main").addClass("is_confirm");
+		setTimeout(function(){
+			$(".p_cart_main").hide().attr("class","p_cart_main");
+			var cart_number = $("#cart_number").text()*1;
+			var select_number = $(".cart_inp").val()*1;
+			$("#cart_number").text(cart_number + select_number).show();
+		},500);
+	});
 
-//产品数量增加
-$(document).on("click", ".btn_plus", function(){
-	var t = $(this);
-	var inp = t.parent().find(".cart_inp");
-	var num = inp.val()*1+1;
-	inp.val(num);
-	showSelect();
 });
 
 //已选择的所有属性
@@ -326,30 +314,6 @@ function showSelect(){
 	$("#product_select").text(select);
 }
 
-//确定加入
-$(document).on("click", ".p_cart_btn", function(){
-	$(".mask").hide();
-	$(".p_cart_main").addClass("is_confirm");
-	setTimeout(function(){
-		$(".p_cart_main").hide().attr("class","p_cart_main");
-		var cart_number = $("#cart_number").text()*1;
-		var select_number = $(".cart_inp").val()*1;
-		$("#cart_number").text(cart_number + select_number).show();
-	},500);
-});
-
-</script>
-
-<script>
-/* 详情样式强制转换 */
-$(".product_detail *").css({"max-width":"100%"});
-$(".product_detail table").css({"width":"100%"});
-$(".product_detail img").css({"height":"auto"});
-$(".product_detail img").parent().css({"text-indent":"0"});
-$(".product_detail iframe").css({"width":"100%","border":"0"});
-$(window).load(function(){
-	F.set_scroller();
-});
 </script>
 
 <?php endif;?>

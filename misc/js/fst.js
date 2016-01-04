@@ -66,6 +66,13 @@ var _browserHeight = function() {
 };
 //Generate UUID
 var _uuid = (function() { var a = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split(""); return function(b, f) { var h = a, e = [], d = Math.random; f = f || h.length; if (b) { for (var c = 0; c < b; c++) { e[c] = h[0 | d() * f]; } } else { var g; e[8] = e[13] = e[18] = e[23] = "-"; e[14] = "4"; for (var c = 0; c < 36; c++) { if (!e[c]) { g = 0 | d() * 16; e[c] = h[(c == 19) ? (g & 3) | 8 : g & 15]; } } } return e.join("").toLowerCase(); }; })();
+//Get query string
+var _getQueryString = function(name) {
+  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+  var r = w.location.search.substr(1).match(reg);
+  if(r!=null) return  unescape(r[2]);
+  return null;
+};
 //Simulating jQuery some method
 var $ = {
 	extend: function(){
@@ -348,6 +355,8 @@ if (typeof fst.start == UNDEF) {
 	}
 	
 	//Client info
+	var _spm = _getQueryString('spm');
+	_spm = _spm ? _spm : '';
 	var _data = {
 	  lo : w.location.href,
 	  bn : oThis.props.browserName,
@@ -367,6 +376,7 @@ if (typeof fst.start == UNDEF) {
 	  rf : doc.referrer ? doc.referrer : '',
 	  uv : !!oThis.uvid ? oThis.uvid : '',
 	  ud : oThis.uid,
+	  pm : _spm,
 	  c1 : oThis.cflag1,
 	  c2 : oThis.cflag2,
 	  c3 : oThis.cflag3

@@ -35,14 +35,12 @@ class Item_Controller extends MobileController {
 	public function item(Request $request, Response $response)
 	{
 		$this->v->set_tplname('mod_item_item');
-		$this->nav_no    = 1;
+		$this->nav_no    = 0;
 		$this->nav_flag1 = 'item';
 		$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
 		
 		if (1||$request->is_hashreq()) {
 			$item_id = $request->arg(1);
-			$this->v->assign('the_item_id', $item_id);
-			
 			$item = Items::load($item_id);
 			if (!$item->is_exist()) {
 				throw new ViewException($this->v, "查询商品不存在或已下架(商品id: {$item_id})");
@@ -80,13 +78,31 @@ class Item_Controller extends MobileController {
 				
 				// assign item
 				$this->v->assign('item', $item);
+				
+				//SEO信息
+				$seo = [
+						'title'   => $item->item_name . ' - '.L('appname'),
+						'keyword' => $item->item_name,
+						'desc'    => $item->item_brief
+				];
+				$this->v->assign('seo', $seo);
+				
+				//Spm信息
+				$referee = false;
+				$spm = Spm::check_spm();
+				if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+					$referee = Users::load($matchspm[1]);
+					if (!$referee->is_exist()) {
+						$referee =  false;
+					}
+				}
+				$this->v->assign('referee', $referee);
 			}
 		}
 		else {
 			
 		}
 		
-		//$response->send($this->v);
 		throw new ViewResponse($this->v);
 	}
 	
