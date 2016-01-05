@@ -45,6 +45,9 @@ class Item_Controller extends MobileController {
 			if (!$item->is_exist()) {
 				throw new ViewException($this->v, "查询商品不存在或已下架(商品id: {$item_id})");
 			}
+			elseif (!$item->is_on_sale) {
+				throw new ViewException($this->v, "查询商品已下架(商品id: {$item_id})");
+			}
 			else {
 				// 更新访问数
 				$item->add_click_count();
@@ -104,7 +107,7 @@ class Item_Controller extends MobileController {
 				$spm = Spm::check_spm();
 				if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
 					$referee = Users::load($matchspm[1]);
-					if (!$referee->is_exist()) {
+					if (!$referee->is_exist() || !$referee->nickname) {
 						$referee =  false;
 					}
 				}

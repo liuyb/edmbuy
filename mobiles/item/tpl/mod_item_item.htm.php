@@ -26,17 +26,17 @@
 <div class="cursor p_detail_button p_detail_follow"></div>
 <div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
 
-<div class="mask" style="display:none;"></div>
-<div class="p_cart_main" style="display:none;">
-	<div class="p_cart_content" id="p_cart_content">
+<div class="mask no-bounce" id="bodymask" style="display:none;"></div>
+<div class="p_cart_main no-bounce" id="p_cart_main" style="display:none;">
+	<div class="p_cart_content">
 		<div class="p_cart_hd clearfix">
 			<div class="p_cart_hl fl">
-				<img src="<?=$item->item_thumb?>">
+				<img src="<?=$item->item_thumb?>" alt="" class="img_item_thumb">
 			</div>
 			<div class="p_cart_hr fl">
 				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?=$item->shop_price?>"><?=$item->shop_price?></span></div>
 				<div class="p_hr_stock">库存<?=$item->item_number?>件</div>
-				<div class="p_hr_select">已选：<span id="product_select">"蓝色","45"</span></div>
+				<div class="p_hr_select <?php if(empty($attr_grp)):?>hide<?php endif;?>">已选：<span id="product_select">"蓝色","45"</span></div>
 			</div>
 		</div>
 		<div class="p_cart_bd">
@@ -66,7 +66,7 @@
 </div>
 
 <!-- 二维码 -->
-<div class="cart_wx">
+<div class="cart_wx no-bounce" id="cart_wx">
 	<div class="c_wx_tit">益多米</div>
 	<div class="c_wx_img"><img src="/themes/mobiles/img/ydm.png"></div>
 	<div class="c_wx_ewm">长按识别二维码，关注益多米</div>
@@ -74,7 +74,7 @@
 </div>
 
 <!-- 佣金分配  -->
-<div class="cart_yj_f" id="cart_yj_f">
+<div class="cart_yj_f no-bounce" id="cart_yj_f">
 	<div class="yi_artio_tit">佣金分配比例</div>
 	<div class="yi_artio_1">一级佣金：35%</div>
 	<div class="yi_artio_2">二级佣金：40%</div>
@@ -126,6 +126,20 @@ $(function(){
   });
   
   setTimeout(function(){t1.resize();},500);
+
+  //weixin img click
+  var currpic = '';
+  var picset = new Array();
+  $('#slider img').each(function(){
+	  picset.push($(this).attr('src'));
+	  if (''==currpic) currpic = $(this).attr('src');
+	})
+	.click(function(){
+    wx.previewImage({
+      current: currpic,
+      urls: picset
+    });
+  });
 });
 </script>
 
@@ -153,10 +167,6 @@ $(function(){
 	</ul>
 </div>
 
-<div class="p_detail_pull">
-	<!-- <h1><p>向上拖动查看图文详情</p></h1> -->
-</div>
-
 <div class="p_detail_info">
 	<div class="p_i_title"><span>图文详情</span></div>
 	<div class="product_detail" id="product_detail"><?=$item->item_desc?></div>
@@ -165,73 +175,68 @@ $(function(){
 <script>
 $(document).ready(function(){
 
+	//缓存对象
+	var $mask     = $("#bodymask");
+	var $cartmain = $('#p_cart_main');
+	var $cartwx   = $('#cart_wx');
+	
 	$('#Mgotop').on("click",function(){
 		F.set_scroller(true);
 	});
 	
 	$('#product_zyj').on("click",function(){
+		$mask.fadeIn(255);
 		$("#cart_yj_f").fadeIn(255);
-		$(".mask").fadeIn(255);
 	});
-
-	$(document.body).on('touchmove','.mask',function(e){
-		e.preventDefault();
-	});
-	$(document.body).on("click",".mask,.w_wx_colse",function(){
+	
+	$(document.body).on("click",".w_wx_colse",function(){
+		$mask.fadeOut(255);
 		$("#cart_yj_f").fadeOut(255);
-		$(".mask").fadeOut(255);
 	});
 	
 	//弹出二维码
 	$(document.body).on("click",".p_detail_follow",function(){
-		$(".cart_wx").fadeIn(300);
-		$(".mask").fadeIn(300);
+		$mask.fadeIn(300);
+		$cartwx.fadeIn(300);
 	});
-	$(document.body).on("click",".mask,.w_wx_colse",function(){
-		$(".cart_wx").addClass("is_confirmwx");
-		$(".mask").hide();
+	$cartwx.on("click",".w_wx_colse",function(){
+		$mask.hide();
+		$cartwx.addClass("is_confirmwx");
 		setTimeout(function(){
-			$(".cart_wx").hide().attr("class","cart_wx");
+			$cartwx.hide().removeClass("is_confirmwx");
 		},500);
 	});
 	
-	//加入购物车
-	var main_h = $(".p_cart_main").height() - 176;
-	$(".p_cart_bd").height(main_h);
-	
-	//拖动字样
-	var p_length = ($(".p_detail_pull p").text().length + 1) * 13;
-	$(".p_detail_pull p").css("width",p_length);
-	
 	//菜单开启
-	$(document.body).on("click", ".p_detail_more,.ph_btn", function(){
+	$(document.body).on("click", ".p_detail_more", function(){
 		$(".p_detail_menulist,.mask_menu").show();
 	});
-	
 	//菜单关闭
 	$(document.body).on("click", ".mask_menu", function(){
 		$(".p_detail_menulist,.mask_menu").hide();
 	});
 	
 	//加入购物车
-	$(document.body).on("click", ".p_d_t3", function(){
-		$(".mask").show();
-		$(".p_cart_main").show().addClass("is_show");
+	$('#Mnav-add-cart').on("click", function(){
+		$('#Mtop').hide();
+		$mask.show();
+		$cartmain.find('img').show();
+		$cartmain.show().addClass("is_show");
 		showSelect();
 	});
-	
-	//购物车关闭
-	var $cartwrap = $('#p_cart_content');
-	$cartwrap.on("click", ".p_cart_close,.mask", function(){
-		$(".mask").hide(255);
-		$(".p_cart_main").addClass("is_hide");
+	//关闭购物车
+	$cartmain.on("click", ".p_cart_close", function(){
+		$mask.hide();
+		$('#Mtop').show();
+		$cartmain.find('img').hide();
+		$cartmain.addClass("is_hide");
 		setTimeout(function(){
-			$(".p_cart_main").hide().attr("class","p_cart_main");
-		},500);
+			$cartmain.hide().removeClass("is_hide");
+		},300);
 	});
 	
 	//加入购物车选项
-	$cartwrap.on("click", ".p_cart_ul li", function(){
+	$cartmain.on("click", ".p_cart_ul li", function(){
 		var t = $(this);
 		var style = t.data("stype");
 		t.parent().find("li").removeClass("on");
@@ -241,33 +246,33 @@ $(document).ready(function(){
 	});
 	
 	//产品数量填写
-	$cartwrap.on("input propertychange", ".cart_inp", function(){
+	$cartmain.on("input propertychange", ".cart_inp", function(){
 		var t = $(this);
 		var num = t.val();
 		if(!isZZ(num)){
 			t.val('1');
-		    boxalert("请输入大于零的整数!");
-		    return false;
+			boxalert("请输入大于零的整数!");
+			return false;
 		}
 		showSelect();
 	});
 	
 	//产品数量减少
-	$cartwrap.on("click", ".btn_minus", function(){
+	$cartmain.on("click", ".btn_minus", function(){
 		var t = $(this);
 		var inp = t.parent().find(".cart_inp");
 		var num = inp.val()*1-1;
 		if(isZZ(num)){
 			inp.val(num);
 		}else{
-		    boxalert("产品数量不能再少啦!");
-		    return false;
+			boxalert("产品数量不能再少啦!");
+			return false;
 		}
 		showSelect();
 	});
 	
 	//产品数量增加
-	$cartwrap.on("click", ".btn_plus", function(){
+	$cartmain.on("click", ".btn_plus", function(){
 		var t = $(this);
 		var inp = t.parent().find(".cart_inp");
 		var num = inp.val()*1+1;
@@ -276,11 +281,11 @@ $(document).ready(function(){
 	});
 	
 	//确定加入
-	$cartwrap.on("click", ".p_cart_btn", function(){
-		$(".mask").hide();
-		$(".p_cart_main").addClass("is_confirm");
+	$cartmain.on("click", ".p_cart_btn", function(){
+		$mask.hide();
+		$cartmain.addClass("is_confirm");
 		setTimeout(function(){
-			$(".p_cart_main").hide().attr("class","p_cart_main");
+			$cartmain.hide().attr("class","p_cart_main");
 			var cart_number = $("#cart_number").text()*1;
 			var select_number = $(".cart_inp").val()*1;
 			$("#cart_number").text(cart_number + select_number).show();
@@ -295,14 +300,14 @@ function showSelect(){
 		showSelect.base_price = parseFloat($('#cart_shop_price').attr('data-base_price'));
 	}
 	var select = '', price = showSelect.base_price;
-	$("#p_cart_content .p_cart_ul").each(function(){
+	$("#p_cart_main .p_cart_ul").each(function(){
 		var li = $(this).find("li.on");
 		select += '"' + li.text() + '",';
 		price += parseFloat(li.attr('data-attr_price'));
 	});
 	var length = select.length;
 	select = select.substr(0,length-1);
-	$("#product_select").text(select);//cart_shop_price
+	$("#product_select").text(select);
 	$('#cart_shop_price').text(price.toFixed(2));
 }
 

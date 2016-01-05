@@ -4,6 +4,4 @@
   <div class="poptit"><span class="txt"></span><a class="bg x" href="javascript:void(0);" onclick="hide_popdlg(this);">X</a></div>
   <div class="popcont"></div>
 </div>
-<!-- 
 <div class="popdlg-bg no-bounce" id="popdlg-bg"></div>
--->

@@ -51,11 +51,12 @@ function append_to_body(html) {
   		<script>$(window).load(function(){F.set_scroller(false,100)})</script>
   	<?php endif;?>
   	</section>
-    <div class="pageBg"><em>“正品保证”</em>不仅仅是一句口号</div>
+    <div class="pageBg">品质生活从这里开始🔛</div>
   </div>
   <div id="loadingCover" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
 </div>
 <nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
+<?php include T('_popdlg');?>
 <!-- 微信操作提示 -->
 <div id="cover-wxtips" class="cover" style="display:none;"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
 <div style="display:none;"><img src="<?php echo ploadingimg()?>" alt=""/></div>

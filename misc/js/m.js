@@ -91,8 +91,8 @@
 		if (typeof F.activePage == 'undefined' || !F.activePage) {
 			F.activePage = $(F.doms.activepage);
 		}
-		var _bh=$(document).height()-F.pagenav_height;
 		if (F.scrollArea.size()>0) {
+			var _bh = $(document).height()-F.pagenav_height;
 			F.scrollArea.css({minHeight:_bh+'px'});
 		}
 	};
@@ -302,16 +302,14 @@
 		
 		// Bind window.resize event
 		setTimeout(function(){
-			//F.set_content_minheight();
+			F.set_content_minheight();
 			FastClick.attach(w.document.body);
 		},100);
 
 		// Prevent default scroll action
-		/*
-		w.document.addEventListener('touchmove', function (e) {
+		$(w.document.body).on('touchmove','.no-bounce',function(e){
 			e.preventDefault();
-		}, false);
-		*/
+		});
 		
 		// Bind window.onhashchange event
 		//$(w).hashchange(function(){w.go_hashreq();});

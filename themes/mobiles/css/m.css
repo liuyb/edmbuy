@@ -291,7 +291,7 @@ textarea.flexText,.flex-text-wrap pre {
 
 /* 遮罩层 */
 .mask,.mask_dj,.mask_ecard,.mask_nodata,.mask_ewm,.mask_pay{
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -1019,22 +1019,39 @@ a.h_btn{
 /* 加入购物车 */
 .p_cart_main{
   display: none;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #fff; 
-  height: 80%;
+  background: #fff;
   z-index: 20000;
 }
 .is_show{
-  display: block; 
+  /*display: block; 
   -webkit-animation: zoomIn .5s ease 0s 1 both;
-  animation: zoomIn .5s ease 0s 1 both;
+  animation: zoomIn .5s ease 0s 1 both;*/
+  -webkit-transform: translateY(0);
+  -webkit-animation-name: slideinfrombottom;
+  -webkit-animation-duration: 250ms;
+  -moz-transform: translateY(0);
+  -moz-animation-name: slideinfrombottom;
+  -moz-animation-duration: 250ms;
+  transform: translateY(0);
+  animation-name: slideinfrombottom;
+  animation-duration: 250ms;
 }
-.is_hide{
+.is_hide{/*
   -webkit-animation: zoomOut .5s ease 0s 1 both;
-  animation: zoomOut .5s ease 0s 1 both;
+  animation: zoomOut .5s ease 0s 1 both;*/
+  -webkit-transform: translateY(100%);
+  -webkit-animation-name: slideouttobottom;
+  -webkit-animation-duration: 200ms;
+  -moz-transform: translateY(100%);
+  -moz-animation-name: slideouttobottom;
+  -moz-animation-duration: 200ms;
+  transform: translateY(100%);
+  animation-name: slideouttobottom;
+  animation-duration: 200ms;
 }
 .p_cart_content{
   position: relative;
@@ -1043,11 +1060,11 @@ a.h_btn{
 }
 .p_cart_close{
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 5px;
+  top: 8px;
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background: url(../img/gbh.png) no-repeat center center;
   background-size: 20px;
 }
@@ -1085,12 +1102,12 @@ a.h_btn{
   font-size: 14px;
 }
 .p_cart_bd{
-  height: 55%;
-  overflow-y: scroll;
-  margin-left: 12px;  
+  /*height: 55%;
+  overflow-y: scroll;*/
+  margin-left: 12px;
 }
 .p_cart_item{
-  padding: 12px 0;  
+  padding: 10px 0;  
   border-bottom: 1px solid #ccc;  
 }
 .p_cart_btit{
@@ -1105,7 +1122,7 @@ a.h_btn{
   font-size: 12px;
   background: #f5f5f5;
   border-radius: 4px;
-  margin: 12px 12px 0 0;
+  margin: 5px 12px 0 0;
 }
 .p_cart_ul li.on{
   color: #fff;
