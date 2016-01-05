@@ -29,7 +29,7 @@
 <div class="mask no-bounce" id="bodymask" style="display:none;"></div>
 <div class="p_cart_main no-bounce" id="p_cart_main" style="display:none;">
 	<div class="p_cart_content">
-		<div class="p_cart_hd clearfix">
+		<div class="p_cart_hd no-bounce clearfix">
 			<div class="p_cart_hl fl">
 				<img src="<?=$item->item_thumb?>" alt="" class="img_item_thumb">
 			</div>
@@ -39,7 +39,7 @@
 				<div class="p_hr_select <?php if(empty($attr_grp)):?>hide<?php endif;?>">已选：<span id="product_select">"蓝色","45"</span></div>
 			</div>
 		</div>
-		<div class="p_cart_bd">
+		<div class="p_cart_bd no-bounce">
 <?php foreach ($attr_grp AS $attrgrp): ?>
 			<div class="p_cart_item">
 				<div class="p_cart_btit"><?=$attrgrp['attr_name']?></div>
@@ -61,7 +61,7 @@
 			</div>
 		</div>
 		<span class="cursor p_cart_close"></span>
-		<div class="cursor p_cart_btn">确定</div>
+		<div class="cursor no-bounce p_cart_btn">确定</div>
 	</div>
 </div>
 
@@ -229,7 +229,7 @@ $(document).ready(function(){
 		$mask.hide();
 		$('#Mtop').show();
 		$cartmain.find('img').hide();
-		$cartmain.addClass("is_hide");
+		$cartmain.removeClass("is_show").addClass("is_hide");
 		setTimeout(function(){
 			$cartmain.hide().removeClass("is_hide");
 		},300);

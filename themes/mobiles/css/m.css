@@ -1056,12 +1056,12 @@ a.h_btn{
 .p_cart_content{
   position: relative;
   height: 100%;
-  padding: 0 0 60px;
+  padding: 0 0 80px;
 }
 .p_cart_close{
   position: absolute;
   right: 5px;
-  top: 8px;
+  top: 5px;
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -1076,7 +1076,7 @@ a.h_btn{
   color: #fff;
   width: 100%;
   font-size: 17px;
-  background: #ff6d14;
+  background: #f4503e/*#ff6d14*/;
   text-align: center;
 }
 .p_cart_hd{
