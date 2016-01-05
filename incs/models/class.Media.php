@@ -29,7 +29,7 @@ class Media extends StorageNode {
 	 * Web server ID
 	 * @var integer
 	 */
-	private static $server_id;
+	protected static $server_id;
 	
 	/**
 	 * Parse input original path, return OSS path or original path
@@ -39,7 +39,7 @@ class Media extends StorageNode {
 	 */
 	static function path($ori_path) {
 		$ori_path = trim($ori_path);
-		if (empty($ori_path)) {
+		if (empty($ori_path) || preg_match('/^http(s?):\/\//i', $ori_path)) {
 			return $ori_path;
 		}
 		

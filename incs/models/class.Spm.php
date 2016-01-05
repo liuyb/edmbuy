@@ -6,6 +6,8 @@
  */
 class Spm extends StorageNode {
 
+	const FLAG_NUM = 5; //corresponding filed 'flag\d+' num
+	
 	protected static function meta() {
 		return array(
 				'table'   => '{spm}',
@@ -30,7 +32,7 @@ class Spm extends StorageNode {
 	 */
 	public function gen_spm() {
 		$spm  = '';
-		for($i=1; $i<=5; $i++) {
+		for($i=1; $i<=self::FLAG_NUM; $i++) {
 			$field = 'flag'.$i;
 			if ($this->$field) {
 				$spm .= '.' . $this->$field;
