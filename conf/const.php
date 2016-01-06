@@ -22,6 +22,9 @@ define('INTERNAL_ENC_KEY', 'w$zc8kH&cRJ&sVaG74A%DVQuetGpb$6CGYCWLeyz');
 // 用于会话token加密
 define('SESS_TOKEN', 'shwipgm5h1t8my2zoe7l8hma5sudlrv2');
 
+// 平台分佣比例
+define('PLATFORM_COMMISION', 0.2);
+
 /*----------以下为ECSHOP中的常量----------*/
 
 /* 原产地分类顶级id */

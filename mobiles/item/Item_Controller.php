@@ -83,6 +83,8 @@ class Item_Controller extends MobileController {
 				
 				// assign item
 				$item->item_thumb = $item->imgurl($item->item_thumb);
+				$item->commision_show = $item->commision > 0 ? $item->commision : $item->shop_price-$item->income_price;
+				$item->commision_show = number_format($item->commision_show*(1-PLATFORM_COMMISION),2);
 				$this->v->assign('item', $item);
 				
 				//商品规格、属性
