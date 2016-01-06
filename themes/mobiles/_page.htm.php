@@ -36,6 +36,12 @@ function show_topnav(html) {
 	}
 	show_topnav.dom.html(html).show();
 }
+function show_mnav(html) {
+	if (typeof(show_mnav.dom)=='undefined' || !show_mnav.dom) {
+		show_mnav.dom = $('#Mnav');
+	}
+	show_mnav.dom.html(html).show();
+}
 function append_to_body(html) {
 	$(document.body).append(html);
 }
@@ -43,6 +49,7 @@ function append_to_body(html) {
 </head>
 <body>
 <div id="Mtop"></div>
+<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <div id="Mbody">
   <nav id="topnav" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
   <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>">
@@ -55,7 +62,6 @@ function append_to_body(html) {
   </div>
   <div id="loadingCover" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
 </div>
-<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <?php include T('_popdlg');?>
 <!-- 微信操作提示 -->
 <div id="cover-wxtips" class="cover" style="display:none;"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>

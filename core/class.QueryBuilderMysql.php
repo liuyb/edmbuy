@@ -67,10 +67,10 @@ class QueryBuilderMysql extends QueryBuilder {
 	}
 
 	private function mysql_field($object_field) {
-		if (!isset($this->or_mapping[$object_field])) {
+		if (is_array($this->or_mapping) && !isset($this->or_mapping[$object_field])) {
 			throw new Exception("field `{$object_field}` is not a valid mysql column");
 		}
-		return "`{$this->or_mapping[$object_field]}`";
+		return is_array($this->or_mapping) ? "`{$this->or_mapping[$object_field]}`" : "`{$object_field}`";
 	}
 	
 	private function mysql_sql($sql, $args) {

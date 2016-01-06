@@ -43,7 +43,8 @@ class StorageDb extends Storage {
 	 */
 	public function find(BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
-		$sql = "SELECT `{$this->columns[$this->key]}` AS `id` " .
+		$field = $this->column($this->key);
+		$sql = "SELECT `{$field}` AS `id` " .
 		       "FROM {$this->table} {$where} {$order} {$limit}";
 		$ids = D()->query($sql)->fetch_column('id');
 		return $ids;
@@ -59,7 +60,7 @@ class StorageDb extends Storage {
 	 */
 	public function findUnique($field, BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
-		$field = $this->columns[$field];
+		$field = $this->column($field);
 		$sql = "SELECT DISTINCT `{$field}` AS `id` " .
 		       "FROM {$this->table} {$where} {$order} {$limit}";
 		$ids = D()->query($sql)->fetch_column('id');
@@ -161,7 +162,8 @@ class StorageDb extends Storage {
 		if (isset($opts['sort']) && $opts['sort']) {
 			$ords = [];
 			foreach ($opts['sort'] as $field => $order) {
-				$ords[] = "`{$this->columns[$field]}` {$order}";
+				$field = $this->column($field);
+				$ords[] = "`{$field}` {$order}";
 			}
 			$order = "ORDER BY " . join(', ', $ords);
 		}

@@ -24,7 +24,6 @@ class Common_Controller extends Controller {
    */
   public static function menu_init() {
     return [
-      '!^explore$!i'         => 'default/explore',
       '!^about$!i'           => 'default/about',
     ];
   }

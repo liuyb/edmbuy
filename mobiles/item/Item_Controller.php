@@ -44,11 +44,11 @@ class Item_Controller extends MobileController {
 			$item = Items::load($item_id);
 			if (!$item->is_exist()) {
 				$this->nav_no = 0;
-				throw new ViewException($this->v, "查询商品不存在或已下架(商品id: {$item_id})");
+				throw new ViewException($this->v, "查询商品不存在(商品id: {$item_id})");
 			}
 			elseif (!$item->is_on_sale) {
 				$this->nav_no = 0;
-				throw new ViewException($this->v, "查询商品已下架(商品id: {$item_id})");
+				throw new ViewException($this->v, "查询商品未上架(商品id: {$item_id})");
 			}
 			else {
 				// 更新访问数
@@ -83,7 +83,7 @@ class Item_Controller extends MobileController {
 				
 				// assign item
 				$item->item_thumb = $item->imgurl($item->item_thumb);
-				$item->commision_show = $item->commision > 0 ? $item->commision : $item->shop_price-$item->income_price;
+				$item->commision_show = $item->commision > 0 ? $item->commision : ($item->shop_price > $item->income_price ? $item->shop_price - $item->income_price : 0);
 				$item->commision_show = number_format($item->commision_show*(1-PLATFORM_COMMISION),2);
 				$this->v->assign('item', $item);
 				
@@ -116,6 +116,15 @@ class Item_Controller extends MobileController {
 					}
 				}
 				$this->v->assign('referee', $referee);
+				
+				//商家信息
+				$merchant = Merchant::find_one(new Query('admin_uid', $item->user_id));
+// 				Response::dump($merchant);
+				$kefu_link = 'javascript:;';
+				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
+					$kefu_link = $merchant->kefu;
+				}
+				$this->v->assign('kefu_link', $kefu_link);
 			}
 		}
 		else {

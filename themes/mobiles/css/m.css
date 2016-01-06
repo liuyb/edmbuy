@@ -972,7 +972,8 @@ a.h_btn{
   background-size: 36px;
   border-top: 1px solid #ccc; 
 }
-.p_d_t1 p{
+.p_d_t1 a{
+	display: block;
   height: 100%;
   border-right: 1px solid #ccc;
 }

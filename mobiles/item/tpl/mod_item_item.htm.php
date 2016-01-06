@@ -20,6 +20,16 @@
 	</ul>
 </div>
 </script>
+<script id="forMnav" type="text/html">
+<div class="p_detail_tool">
+	<div class="fl cursor p_d_t1"><a href="<?=$kefu_link?>" <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
+	<a href="javascript:;">
+		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display:none;">0</span></div>
+	</a>
+	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
+	<div class="fl cursor p_d_t4">立即购买</div>
+</div>
+</script>
 <script id="forBody" type="text/html">
 <div class="mask_menu cursor"></div>
 
@@ -84,6 +94,7 @@
 </div>
 </script>
 <script>show_mtop($('#forMtop').html());
+show_mnav($('#forMnav').html());
 append_to_body($('#forBody').html());
 </script>
 
