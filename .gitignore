@@ -4,6 +4,8 @@ var/
 conf-pro/
 t.php
 tapi.php
+t_*.php
+t_*.html
 
 # Eclipse
 .buildpath

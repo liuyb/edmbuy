@@ -38,7 +38,7 @@
   <div class="topbar"></div>
   <div class="bbsizing wrapper">
 	  <h1 id="tips_head"><img src="/themes/mobiles/img/tips_head.png" alt=""></h1>
-	  <p id="tips_word">请在微信客户端中打开"益多米" 或 <a href="//www.edmbuy.com">访问官网</a></p>
+	  <p id="tips_word">请在微信客户端中打开"益多米"</p>
 	  <div id="public_no"><img src="/themes/mobiles/img/tips_logo.png" alt=""><span>微信公众号：edmbuy</span></div>
 	  <p class="tip">手机微信扫以下二维码访问：</p>
 	  <p><img src="<?=$qrcode?>" alt="qrcode"/></p>

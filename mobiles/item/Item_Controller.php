@@ -43,9 +43,11 @@ class Item_Controller extends MobileController {
 			$item_id = $request->arg(1);
 			$item = Items::load($item_id);
 			if (!$item->is_exist()) {
+				$this->nav_no = 0;
 				throw new ViewException($this->v, "查询商品不存在或已下架(商品id: {$item_id})");
 			}
 			elseif (!$item->is_on_sale) {
+				$this->nav_no = 0;
 				throw new ViewException($this->v, "查询商品已下架(商品id: {$item_id})");
 			}
 			else {
