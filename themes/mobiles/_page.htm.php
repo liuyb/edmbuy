@@ -36,14 +36,25 @@ function show_topnav(html) {
 	}
 	show_topnav.dom.html(html).show();
 }
-function show_mnav(html) {
+function show_mnav(html, append) {
 	if (typeof(show_mnav.dom)=='undefined' || !show_mnav.dom) {
 		show_mnav.dom = $('#Mnav');
 	}
-	show_mnav.dom.html(html).show();
+	if (typeof(append)=='undefined') append = 0;
+	
+	if (append<0) { 
+		show_mnav.dom.prepend(html).show();
+	}else if(append>0) {
+		show_mnav.dom.append(html).show;
+	} else {
+		show_mnav.dom.html(html).show();
+	}
 }
 function append_to_body(html) {
 	$(document.body).append(html);
+}
+function required_uinfo_empty() {
+	return gUser.nickname==''||gUser.logo=='' ? true : false;
 }
 </script>
 </head>

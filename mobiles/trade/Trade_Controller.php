@@ -6,13 +6,7 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class Trade_Controller extends Controller {
-  
-  private $nav_no     = 2;       //主导航id
-  private $topnav_no  = 0;       //顶部导航id
-  private $nav_flag1  = 'cart';  //导航标识1
-  private $nav_flag2  = '';      //导航标识2
-  private $nav_flag3  = '';      //导航标识3
+class Trade_Controller extends MobileController {
   
   /**
    * hook init
@@ -23,17 +17,8 @@ class Trade_Controller extends Controller {
    */
   public function init($action, Request $request, Response $response)
   {
-    if (!$request->is_post()) {
-      $this->v = new PageView();
-      $this->v->add_render_filter(function(View $v){
-        $v->assign('nav_no',     $this->nav_no)
-          ->assign('topnav_no',  $this->topnav_no)
-          ->assign('nav_flag1',  $this->nav_flag1)
-          ->assign('nav_flag2',  $this->nav_flag2)
-          ->assign('nav_flag3',  $this->nav_flag3);
-      });
-      $this->v->assign('no_display_cart', true);
-    }
+    $this->nav_flag1 = 'cart';
+		parent::init($action, $request, $response);
   }
   
   /**
@@ -43,10 +28,10 @@ class Trade_Controller extends Controller {
   public function menu()
   {
     return [
-      'trade/cart/add'    => 'cart_add',
-      'trade/cart/list'   => 'cart_list',
-      'trade/cart/delete' => 'cart_delete',
-      'trade/cart/chgnum' => 'cart_chgnum',
+      'trade/cart/add'       => 'cart_add',
+      'trade/cart/list'      => 'cart_list',
+      'trade/cart/delete'    => 'cart_delete',
+      'trade/cart/chgnum'    => 'cart_chgnum',
       'trade/order/confirm'  => 'order_confirm',
       'trade/order/submit'   => 'order_submit',
       'trade/order/upaddress'=> 'order_upaddress',
@@ -55,17 +40,6 @@ class Trade_Controller extends Controller {
       'trade/order/record'   => 'order_record',
       'trade/order/topay'    => 'order_topay',
     ];
-  }
-  
-  /**
-   * default action 'index'
-   *
-   * @param Request $request
-   * @param Response $response
-   */
-  public function index(Request $request, Response $response)
-  {
-    
   }
   
   /**
@@ -177,20 +151,22 @@ class Trade_Controller extends Controller {
   public function cart_list(Request $request, Response $response)
   {
     $this->v->set_tplname('mod_trade_cart_list');
-    $this->nav_flag2 = 'cartlist';
-    $this->topnav_no = 1; // >0: 表示有topnav bar，具体值标识哪个topnav bar(有多个的情况下)
+    $this->nav_flag1 = 'cart';
+    $this->nav_no    = 1;
+    $this->topnav_no = 1;
+    
+    $mnav = $request->get('mnav', 0);
+    if ($mnav) {
+    	$this->nav_no    = 2;
+    	$this->nav_flag1 = 'cart_mnav';
+    }
+    $this->v->assign('mnav', $mnav);
+    
     if ($request->is_hashreq()) {
-      $user_id  = $GLOBALS['user']->ec_user_id;
-      if (!$user_id) $user_id = session_id(); 
-      $cartGoods = Goods::getUserCart($user_id);
-      $cartNum   = Goods::getUserCartNum($user_id);
-      $this->v->assign('cartGoods', $cartGoods);
-      $this->v->assign('cartNum', intval($cartNum));
-      $this->v->assign('cartRecNum', count($cartGoods));
+      
     }
     else {
-      $backurl = U('explore');
-      $this->v->assign('backurl', $backurl);
+    	
     }
     $response->send($this->v);
   }

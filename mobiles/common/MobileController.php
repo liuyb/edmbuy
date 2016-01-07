@@ -12,6 +12,7 @@ class MobileController extends Controller {
 	protected $topnav_no  = 0;       //顶部导航id，当为0时表示不存在
 	protected $nav_flag1  = '';      //导航标识1
 	protected $nav_flag2  = '';      //导航标识2
+	protected $backurl    = '';      //back url
 	protected $extra_css  = '';      //添加给section.scrollArea的额外css类
 	
 	/**
@@ -29,9 +30,15 @@ class MobileController extends Controller {
 			  ->assign('topnav_no',  $this->topnav_no)
 			  ->assign('nav_flag1',  $this->nav_flag1)
 			  ->assign('nav_flag2',  $this->nav_flag2)
+			  ->assign('backurl',    $this->backurl)
 			  ->assign('extra_css',  $this->extra_css)
 			  ;
 		});
+		$cart_num = 0;
+		if ($GLOBALS['user']->uid) {
+			$cart_num = $GLOBALS['user']->cart_num();
+		}
+		$this->v->assign('user_cart_num', $cart_num);
 	}
 	
 }

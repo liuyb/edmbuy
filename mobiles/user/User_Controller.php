@@ -37,14 +37,13 @@ class User_Controller extends MobileController {
   public function index(Request $request, Response $response)
   {
     $this->v->set_tplname('mod_user_index');
-    $userInfo = Member::getTinyInfoByUid($GLOBALS['user']->uid);
     
     if ($request->is_hashreq()) {
-      $this->v->assign('userInfo', $userInfo);
+    	//sleep(1);
     }
     else {
       //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
-      User_Model::checkUserInfoCompleteDegree($userInfo, '/user/');
+      Users::check_detail_info();
     }
     
     $response->send($this->v);
@@ -59,7 +58,7 @@ class User_Controller extends MobileController {
   public function login(Request $request, Response $response)
   {
     $refer = $request->url();
-    if(!Member::isLogined()) {
+    if(!Users::is_logined()) {
       $token = $request->get('token','');
       if(''!=$token) { //token登录优先，便于测试
         $this->tokenLogin($request, $response);
@@ -74,6 +73,17 @@ class User_Controller extends MobileController {
     else {
       $response->redirect($refer);
     }
+  }
+  
+  /**
+   * action 'go_detail_oauth', request detail oauth
+   * @param Request $request
+   * @param Response $response
+   */
+  public function go_detail_oauth(Request $request, Response $response)
+  {
+  	$refer = $request->get('refer','/');
+  	(new Weixin())->authorizing('http://'.Request::host().'/user/oauth/weixin?act=&refer='.rawurlencode($refer), 'detail');
   }
   
   /**
@@ -121,7 +131,8 @@ class User_Controller extends MobileController {
     $unionid= isset($code_ret['unionid']) ? $code_ret['unionid'] : '';
     
     //查询本地是否存在对应openid的用户
-    $loginedUser = $localUser = Users::load_by_unionid($unionid);
+    $localUser   = Users::load_by_unionid($unionid);
+    $loginedUser = $localUser;
     if ($localUser->is_exist()) { //用户已存在，对state='base'，则仅需设置登录状态；而对state='detail'，需保存或更新用户数据
     
     	if ('detail'==$state) { //detail认证模式，需更新用户数据
@@ -141,7 +152,7 @@ class User_Controller extends MobileController {
     			$upUser->subscribe = $uinfo_wx['subscribe'];
     			$upUser->subscribetime = $uinfo_wx['subscribe_time'];
     		}
-    		if ($localUser->logo) {
+    		if ($localUser->required_uinfo_empty()) {
     			$upUser->nickname  = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
     			$upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
     			$upUser->sex       = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
@@ -154,7 +165,6 @@ class User_Controller extends MobileController {
     		//尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
     		if (!$localUser->subscribe && !$upUser->subscribe) {
     			$uinfo_wx = $wx->userInfo($openid);
-    			//trace_debug('weixin_basic_userinfo', $uinfo_wx);
     			if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
     
     			}
@@ -182,6 +192,7 @@ class User_Controller extends MobileController {
 	    	$upUser->regip   = $request->ip();
 	    	$upUser->regtime = simphp_time();
 	    	$upUser->salt    = gen_salt();
+	    	$upUser->parentid= 0;
 	    	$upUser->state   = 0; //0:正常;1:禁止
 	    	$upUser->from    = $from;
 	    	$upUser->authmethod = $auth_method;

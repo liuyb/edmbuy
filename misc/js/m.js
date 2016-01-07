@@ -10,7 +10,7 @@
 	//gData.page_render_mode = 2; //1: general一般请求页面；2: hash请求页面 (不能在这个位置设置该值，放这里是提醒有这么一个全局变量)
 	
 	// Set dom constants
-	F.doms = {wrapper:"#Mbody",nav:"#Mnav",activepage:"#activePage",loading:"#loadingCover",scroller:".scrollArea"};
+	F.doms = {wrapper:"#Mbody",nav:"#Mnav",topnav:"#topnav",activepage:"#activePage",loading:"#loadingCover",scroller:".scrollArea"};
 	
 	// Cache doms
 	F.activePage = $(F.doms.activepage);
@@ -85,15 +85,15 @@
 	};
 	// set content minimal height
 	F.set_content_minheight = function(){
-		if (typeof F.pagenav_height == 'undefined' || !F.pagenav_height) {
-			F.pagenav_height = $(F.doms.nav).height();
-		}
-		if (typeof F.activePage == 'undefined' || !F.activePage) {
-			F.activePage = $(F.doms.activepage);
-		}
 		if (F.scrollArea.size()>0) {
-			var _bh = $(document).height()-F.pagenav_height;
-			F.scrollArea.css({minHeight:_bh+'px'});
+			var $topnav  = $(F.doms.topnav);
+			var $nav     = $(F.doms.nav);
+			var topnav_h = $topnav.css('display')=='none' ? 0 : $topnav.height();
+			var nav_h    = $nav.css('display')=='none' ? 0 : $nav.height();
+			if (topnav_h>0 || nav_h>0) {
+				var ch = $(document).height()-topnav_h-nav_h;
+				F.scrollArea.css({minHeight:ch+'px'});
+			}
 		}
 	};
 	// set iScroll object
@@ -300,11 +300,13 @@
 	// On document ready
 	$(function(){
 		
+		// Set content min height
+		F.set_content_minheight();
+		
 		// Bind window.resize event
 		setTimeout(function(){
-			F.set_content_minheight();
 			FastClick.attach(w.document.body);
-		},100);
+		},10);
 
 		// Prevent default scroll action
 		$(w.document.body).on('touchmove','.no-bounce',function(e){

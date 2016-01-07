@@ -49,7 +49,7 @@ class Common_Controller extends Controller {
     }
     
     // 检查登录状态
-    if(!$loginIgnore && !Member::isLogined()){
+    if(!$loginIgnore && !Users::is_logined()){
       import('user/*');
       $user_Controller = new User_Controller();
       $user_Controller->login($request, $response);

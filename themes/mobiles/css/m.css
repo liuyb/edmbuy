@@ -24,6 +24,7 @@ html,body {
 
 /*----- project relative css -----*/
 /*通用*/
+a { color: #333; }
 a:hover { text-decoration: none; }
 a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
 .cursor { cursor: pointer; }
@@ -116,7 +117,8 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 #Mbody { width: 100%;height: 100%;margin: 0 auto;position: relative;background: #f1f1f1;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
 #activePage,#loadingCover { position: absolute;top: 0;bottom: 0;width: 100%;-webkit-overflow-scrolling: touch;overflow: hidden; }
 #activePage.useTopNav-1,#loadingCover.useTopNav-1 { top: 45px; }
-#activePage.useNav-1,#loadingCover.useNav-1 { bottom: 51px; }
+#activePage.useNav-1,#loadingCover.useNav-1 { bottom: 50px; }
+#activePage.useNav-2,#loadingCover.useNav-2 { bottom: 100px; }
 #loadingCover { display:none;background:#fff;z-index:10000; }
 #activePage > .scrollArea {
 	background: #fff;
@@ -149,14 +151,18 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
   z-index:1;
 }
 #activePage > .pageBg em { font-weight: bold;margin: 0 3px; }
+#activePage.useTopNav-0.useNav-0 > .scrollArea { min-height:100%; }
 
 /*底部主导航*/
-.nav { background: #fff;height: 51px;width: 100%;position: absolute;bottom: 0;left: 0; }
+.nav { background: #f6f6f6;height: 50px;width: 100%;position: absolute;bottom: 0;left: 0;z-index: 100; }
 .nav-0 { display: none; }
-.nav-2 { height: 101px; }
+.nav-2 { height: 100px; }
+.nav ul { overflow: auto;zoom: 1; }
+.nav li { float: left;width: 25%;border-top: 1px solid #ccc; }
+.nav li a{ display: block;height: 49px;text-align: center;position: relative; }
 
 /*顶部导航*/
-.topnav { height: 44px;line-height: 44px;border-style: solid;border-color: #ccc;border-width: 0 0 1px;color: #5f646e;background: #fff;position: relative; }
+.topnav { height: 45px;color: #5f646e;background: #fff;position: relative; }
 .topnav-0 { display: none; }
 
 /*pic slider*/
@@ -239,7 +245,7 @@ textarea.flexText,.flex-text-wrap pre {
 /* 表单提交加载等待 */
 #zxloading{
   display: none;
-  position: fixed;
+  position: absolute;
   height: 100%;
   width: 100%;
   left: 0;
@@ -251,7 +257,7 @@ textarea.flexText,.flex-text-wrap pre {
   width: 214px;
   height: 94px;
   padding: 8px 0;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -110px;
@@ -274,7 +280,7 @@ textarea.flexText,.flex-text-wrap pre {
 /* 提示层 */
 .reg_error{
   display: none;
-  position: fixed;
+  position: absolute;
   top: 39%;
   left: 50%;
   width: 220px;
@@ -304,7 +310,7 @@ textarea.flexText,.flex-text-wrap pre {
 
 /* 带确定按钮弹层 */
 .boxTip{
-  position: fixed;
+  position: absolute;
   width: 300px;
   top: 50%;
   left: 50%;
@@ -346,7 +352,7 @@ textarea.flexText,.flex-text-wrap pre {
 }
 .boxCheck{
   display: none;
-  position: fixed;
+  position: absolute;
   width: 280px;
   top: 50%;
   left: 50%;
@@ -396,7 +402,7 @@ textarea.flexText,.flex-text-wrap pre {
   width: 100%;
   height: 100%;
   background: #fff;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   overflow-y: scroll;
@@ -485,19 +491,11 @@ a.h_btn{
 /* 尾部 */
 .footer{
   width: 100%;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   border-top: 1px solid #ccc;
   background: #f6f6f6;
-}
-.footer li{
-  cursor: pointer;
-  position: relative;   
-  float: left;
-  width: 25%;
-  height: 49px;
-  text-align: center;
 }
 #f_sy {
   background: url(../img/tab_sy_41.png) no-repeat center 4px;
@@ -547,6 +545,7 @@ a.h_btn{
   border-radius: 50%;
   overflow: hidden;
   font-size: 8px;
+  font-size: .8rem;
   display: inline-block;
   color: #fff;
   background: #ff0006;
@@ -638,7 +637,6 @@ a.h_btn{
 .cart_p_img img{
   width: 100%;
   height: 100%;
-  /* margin-bottom: -4px; */
 }
 .cart_p_main{
   margin-right: 10px;  
@@ -647,17 +645,17 @@ a.h_btn{
   font-size: 14px;
   font-weight: normal;
   overflow: hidden;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
-    -ms-line-clamp: 2;
-    -o-line-clamp: 2;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    box-orient: vertical;
-    -moz-box-orient: vertical;
-    -webkit-box-orient: vertical;
-    -ms-box-orient: vertical;
-    -o-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -ms-line-clamp: 2;
+  -o-line-clamp: 2;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -o-box-orient: vertical;
   line-height: 18px;
 }
 .cart_p_desc{
@@ -717,18 +715,14 @@ a.h_btn{
 }
 
 /* 编辑工具栏 */
+#nav_cart_tool { height:50px;background:#fff; }
 .cart_tool{
-  position: fixed;
-  bottom: 50px;
-  left: 0;
-  width: 100%;
   height: 49px;
-  background: #fff;
   border-top: 1px solid #ccc;
 }
 .cart_tool span{
   display: inline-block;
-  line-height: 50px;  
+  line-height: 49px;  
 }
 .cart_t_btn{
   cursor: pointer;
@@ -756,7 +750,6 @@ a.h_btn{
 
 /* 产品详情 */
 .p_detail_banner .swiper-container{
-  /* height: 240px; */
   position: relative;
 }
 .p_detail_banner .swiper-slide{
@@ -771,7 +764,7 @@ a.h_btn{
 }
 .mask_menu{
   display: none;  
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100%;
   top: 0; 
@@ -779,7 +772,7 @@ a.h_btn{
   z-index: 111; 
 }
 .p_detail_back{
-  position: fixed;  
+  position: absolute;  
   display: inline-block;  
   left: 10px;
   top: 7px;
@@ -790,7 +783,7 @@ a.h_btn{
   z-index: 111;
 }
 .p_detail_more{
-  position: fixed;  
+  position: absolute;  
   display: inline-block;  
   right: 10px;
   top: 7px;
@@ -801,7 +794,7 @@ a.h_btn{
   z-index: 111;
 }
 .p_detail_jian{
-  position: fixed;  
+  position: absolute;  
   right: 19px;
   top: 39px;
   width: 13px;
@@ -811,7 +804,7 @@ a.h_btn{
   z-index: 111; 
 }
 .p_detail_menu{
-  position: fixed;  
+  position: absolute;  
   right: 4px;
   top: 45px;
   width: 125px;
@@ -865,7 +858,7 @@ a.h_btn{
   font-size: 12px;
   font-weight: normal;
   color: #666;
-  margin-left: 20px;  
+  margin-left: 10px;  
   text-decoration: line-through;
 }
 .p_d_sale span,.p_d_sale b{
@@ -952,7 +945,7 @@ a.h_btn{
 
 /* 产品详情底部 */
 .p_detail_tool{
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;  
   width: 100%;
@@ -1000,7 +993,7 @@ a.h_btn{
   border-top: 1px solid #ff6d14;  
 }
 .p_detail_button{
-  position: fixed;
+  position: absolute;
   width: 40px;
   height: 40px;
   right: 12px;
@@ -1070,7 +1063,7 @@ a.h_btn{
   background-size: 20px;
 }
 .p_cart_btn{
-  position: fixed;
+  position: absolute;
   bottom: 0;    
   height: 50px;
   line-height: 50px;  
@@ -1103,8 +1096,6 @@ a.h_btn{
   font-size: 14px;
 }
 .p_cart_bd{
-  /*height: 55%;
-  overflow-y: scroll;*/
   margin-left: 12px;
 }
 .p_cart_item{
@@ -1146,7 +1137,7 @@ a.h_btn{
 }
 .p_header_bar{
   display: none;
-  position: fixed;
+  position: absolute;
   top: 0;
   width: 100%;
   padding: 0;
@@ -1157,15 +1148,15 @@ a.h_btn{
 .p_header_bar_main{
   position: relative;
   height: 44px;
-    line-height: 44px;
+  line-height: 44px;
   margin: 0 3px;
 }
 a.ph_btn{
   right: 0;
-    top: 0;
-    width: 20px;
-    background: url(../img/more_black.png) no-repeat center center;
-    background-size: 20px;
+  top: 0;
+  width: 20px;
+  background: url(../img/more_black.png) no-repeat center center;
+  background-size: 20px;
 }
 
 .is_confirm{
@@ -1217,12 +1208,12 @@ a.ph_btn{
   border-radius: 50%; 
   width:50px;
   height:50px;
-    border: 2px solid #fbb184;  
+  border: 2px solid #fbb184;  
 }
 .mem_c{
-    margin: 19px 0;
-    float: left;
-    width: 50%; 
+  margin: 19px 0;
+  float: left;
+  width: 50%; 
 }
 .c_name{
   background: url(../img/he.png) no-repeat 110px center;
@@ -1301,14 +1292,14 @@ a.ph_btn{
   color:#999; 
 }
 .order_bg1{
-    background: url(../img/01.png) no-repeat left;
-    background-size: 18px;
-    padding-left: 25px; 
+  background: url(../img/01.png) no-repeat left;
+  background-size: 18px;
+  padding-left: 25px; 
 }
 .order_bg2{
-    background: url(../img/02.png) no-repeat left;
-    background-size: 18px;
-    padding-left: 25px; 
+  background: url(../img/02.png) no-repeat left;
+  background-size: 18px;
+  padding-left: 25px; 
 }
 .order_bg3{
   
@@ -1318,9 +1309,9 @@ a.ph_btn{
   height:64px;
 }
 .my_order_state ul li{
-    text-align: center;
-    width: 25%;
-    margin: 10px 0; 
+  text-align: center;
+  width: 25%;
+  margin: 10px 0; 
   float:left;
 }
 .my_order_state ul li img{
@@ -1329,12 +1320,12 @@ a.ph_btn{
 }
 .mem_my_apply{
   background:#fff url(../img/03.png) no-repeat 4% center;
-    background-size: 18px;
-    padding-left: 40px; 
-    line-height: 45px;
-    height: 45px;
-    font-size: 16px;
-    color: #333;  
+  background-size: 18px;
+  padding-left: 40px; 
+  line-height: 45px;
+  height: 45px;
+  font-size: 16px;
+  color: #333;  
 }
 .mem_my_applylist{
   background:#fff;  
@@ -1348,44 +1339,44 @@ a.ph_btn{
   width:24.5%;  
   float:left;
   border-right:1px solid #eee;
-    height: 90px;
+  height: 90px;
 }
 .mem_my_applylist ul li img{
   height:59px;
   padding-top:15px;
 }
 .dia_file {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 .back_r{
-    right: 0;
-    top: 0;
-    width: 22px;
-    background: url(../img/huy.png) no-repeat 5px center;
-    background-size: 26px;
+  right: 0;
+  top: 0;
+  width: 22px;
+  background: url(../img/huy.png) no-repeat 5px center;
+  background-size: 26px;
 }
 .dsh{
-    position: relative;
+  position: relative;
 }
 .d_nums{
   position: absolute;
-    width: 16px;
-    height: 16px;
-    line-height: 14px;
-    border-radius: 50%;
-    overflow: hidden;
-    font-size: 8px;
-    display: inline-block;
-    color: #fff;
-    background: #ff0006;
-    top: 2px;
-    left: 50%;
-    margin-left: 1px; 
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
+  border-radius: 50%;
+  overflow: hidden;
+  font-size: 8px;
+  display: inline-block;
+  color: #fff;
+  background: #ff0006;
+  top: 2px;
+  left: 50%;
+  margin-left: 1px; 
 }
 
 .order_list{
@@ -1531,11 +1522,11 @@ a.ph_btn{
 }
 
 .order_number{
-    background:#fff url(../img/back.png) no-repeat 97% center;
-    background-size: 16px;
-    height: 44px;
+  background:#fff url(../img/back.png) no-repeat 97% center;
+  background-size: 16px;
+  height: 44px;
   line-height:44px;
-    border-top: 1px solid #eee;
+  border-top: 1px solid #eee;
 }
 .number_info{
   margin:0 12px;
@@ -1635,7 +1626,7 @@ a.ph_btn{
 }
 .tit_close{
   margin-right:12px;
-    float: right; 
+  float: right; 
   font-size:13px;
   color:#999;
 }
@@ -1683,110 +1674,112 @@ a.ph_btn{
 }
 .my_guest{
   background: -webkit-linear-gradient(top, #f57231 0%,#f26430 100%);
-    padding: 15px 0;
+  background: -moz-linear-gradient(top, #f57231 0%,#f26430 100%);
+  padding: 15px 0;
 }
 .guest_tit{
-    padding: 0 10px 0 20px;
-    color: #fff;
-    height: 20px;
-    line-height: 20px;
-    font-size: 14px;
+  padding: 0 10px 0 20px;
+  color: #fff;
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
 }
 .guest_main{
-    margin: 30px 0 20px;
-    overflow: hidden; 
+  margin: 30px 0 20px;
+  overflow: hidden; 
 }
 .guest_main li {
-    float: left;
-    width: 33.33%;
-    text-align: center;
+  float: left;
+  width: 33.33%;
+  text-align: center;
 }
 .guest_main li h1 {
-    color: #fff;
-    font-size: 28px;
-    font-weight: normal;
+  color: #fff;
+  font-size: 28px;
+  font-weight: normal;
 }
 .guest_main li p {
-    margin-top: 15px;
-    color: #fff;
-    font-size: 14px;
+  margin-top: 15px;
+  color: #fff;
+  font-size: 14px;
 }
 .guest_prompt{
-    color: #fff;
-    font-size: 14px;
-    text-align: right;
-    margin-right: 12px; 
+  color: #fff;
+  font-size: 14px;
+  text-align: right;
+  margin-right: 12px; 
 }
 .partner_money{
   background: #fff; 
 }
 .money_main{
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid #eee;  
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #eee;  
 }
 .money_main li {
-    float: left;
-    width: 50%;
-    text-align: left;
-    padding: 20px 0 27px;
+  float: left;
+  width: 50%;
+  text-align: left;
+  padding: 20px 0 27px;
 }
 .money_main li p {
-    font-size: 14px;
-    color: #666;
-    padding-left: 20px;
+  font-size: 14px;
+  color: #666;
+  padding-left: 20px;
 }
 .money_main li h1 {
-    font-size: 22px;
-    color: #f26430;
-    font-weight: normal;
-    margin-top: 15px;
-    padding-left: 20px;
+  font-size: 22px;
+  color: #f26430;
+  font-weight: normal;
+  margin-top: 15px;
+  padding-left: 20px;
 }
 .money_main_x{
-    position: absolute;
-    border-left: 1px solid #eee;
-    height: 50px;
-    left: 49.7%;
-    top: 35px;
+  position: absolute;
+  border-left: 1px solid #eee;
+  height: 50px;
+  left: 49.7%;
+  top: 35px;
 }
 .money_noforce{
   color:#1fa761 !important;
 }
 .guest_list{
-    background: #fff;
-    margin-top: 15px;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;  
-    margin-bottom: 64px;  
+  background: #fff;
+  margin-top: 15px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;  
+  margin-bottom: 64px;  
 }
 .guest_list li {
-    background: #fff url(../img/back.png) no-repeat 97% center;
-    background-size: auto 15px;
-    overflow: hidden;
+  background: #fff url(../img/back.png) no-repeat 97% center;
+  background-size: auto 15px;
+  overflow: hidden;
 }
+.guest_list li a { display: block;color: #333; }
 .guest_list li h1 {
-    float: left;
-    text-align: center;
+  float: left;
+  text-align: center;
 } 
 .guest_list li h1 img {
-    width: 23px;
-    height: 23px;
-    margin: 11px 17px 0 13px;
+  width: 23px;
+  height: 23px;
+  margin: 11px 17px 0 13px;
 }
 .guest_list li p {
-    height: 45px;
-    line-height: 45px;
-    border-bottom: 1px solid #ccc;
-    margin-left: 53px;
-    font-size: 17px;
+  height: 45px;
+  line-height: 45px;
+  border-bottom: 1px solid #ccc;
+  margin-left: 53px;
+  font-size: 17px;
 }
 .guest_list li p.noborder {
   border: 0;
 }
 .settle_address{
-    background: #fff url(../img/back.png) no-repeat 97% center;
-    background-size: auto 15px; 
+  background: #fff url(../img/back.png) no-repeat 97% center;
+  background-size: auto 15px; 
 }
 .settle_person_info{
   padding:15px 12px 10px;
@@ -1797,7 +1790,7 @@ a.ph_btn{
   padding-right:50px;
 }
 .set_address_info{
-    padding: 0 40px 15px 12px;  
+  padding: 0 40px 15px 12px;  
   font-size:12px;
   color:#555;
 }
@@ -1815,11 +1808,11 @@ a.ph_btn{
   padding: 10px 12px 0;
 }
 .settle_tell input{
-    width: 98%;
-    border: 1px solid #eee;
-    height: 35px;
-    border-radius: 4px;
-    padding-left: 5px;  
+  width: 98%;
+  border: 1px solid #eee;
+  height: 35px;
+  border-radius: 4px;
+  padding-left: 5px;  
 }
 .settle_price{
   height:45px; 
@@ -1846,10 +1839,10 @@ a.ph_btn{
   border-radius:4px;
   font-size:16px;
   color:#fff;
-    cursor: pointer;  
+  cursor: pointer;  
 }
 .settle_back{
-    cursor: pointer;  
+	cursor: pointer;  
   margin:0 12px;
   background:#fff;
   height:40px;
@@ -1861,8 +1854,8 @@ a.ph_btn{
   margin-bottom:40px;
 }
 .add_settle_address{
-    background: #fff url(../img/back.png) no-repeat 97% center;
-    background-size: auto 15px;
+  background: #fff url(../img/back.png) no-repeat 97% center;
+  background-size: auto 15px;
   height:44px;
   line-height:44px;
   cursor:pointer; 
@@ -1872,90 +1865,90 @@ a.ph_btn{
   text-align:center;
 }
 .order_ok_goods{
-    border-radius: 4px; 
+	border-radius: 4px; 
   height:118px;
   width:240px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -120px;
-    margin-top: -79px;
-    background: #fff;
-    z-index: 70000; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -79px;
+  background: #fff;
+  z-index: 70000; 
   display:none;
 }
 .order_comm{
-    float: right;
-    height: 44px;
-    width: 50%;
-    font-size: 17px;
-    border: 0;
-    color: #ff6d14;
-    cursor: pointer;
-    background: #fff;
-    border-left: 1px solid #ddd;
-    font-weight: 700; 
+  float: right;
+  height: 44px;
+  width: 50%;
+  font-size: 17px;
+  border: 0;
+  color: #ff6d14;
+  cursor: pointer;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  font-weight: 700; 
 }
 .goods_btn{
-    border-top: 1px solid #ddd;
-    text-align: center; 
+  border-top: 1px solid #ddd;
+  text-align: center; 
 }
 .goods_f{
-    text-align: center;
-    font-size: 18px;
+  text-align: center;
+  font-size: 18px;
   color:#111;
-    margin: 35px 20px;
-    line-height: 26px;
+  margin: 35px 20px;
+  line-height: 26px;
 }
 .orderNo,.ferNo,.delNo{ 
   color:#999 !important;
-    border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 4px;
   font-weight:normal;
 }
 .orderYes,.ferYes,.delYes{    
-    border-bottom-right-radius: 4px;  
+  border-bottom-right-radius: 4px;  
 }
 .update_p{
   border-bottom:1px solid #eee;
 }
 .phone_text{
-    font-size: 17px;
-    color: #999;
-    height: 44px;
+  font-size: 17px;
+  color: #999;
+  height: 44px;
   padding-left:12px;
   width:90%;
 }
 .wx_uploading {
-    width: 200px;
-    height: 200px;
-    position: relative;
-    margin: 20px auto 0;
-    text-align: center;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  margin: 20px auto 0;
+  text-align: center;
 }
 .wx_info{
   border-radius:4px;
   padding: 20px 10px;
-    margin: 12px;
+  margin: 12px;
   border: 1px solid #eee; 
 }
 .cart_wx{
   border-radius: 4px; 
   height:305px;
   width:240px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -120px;
-    margin-top: -152px;
-    background: #fff;
-    z-index: 70000; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -152px;
+  background: #fff;
+  z-index: 70000; 
   display:none;
 }
 .c_wx_tit{
-    font-size: 19px;
-    color: #111;
-    margin: 15px auto;
-    text-align: center; 
+  font-size: 19px;
+  color: #111;
+  margin: 15px auto;
+  text-align: center; 
 }
 .c_wx_img{
   text-align: center;
@@ -1972,8 +1965,8 @@ a.ph_btn{
 }
 .w_wx_colse{
   position: absolute;
-    right: -14px;
-    top: -14px;
+  right: -14px;
+  top: -14px;
   cursor:pointer;
 }
 .w_wx_colse img{
@@ -1982,10 +1975,10 @@ a.ph_btn{
 }
 .order_type_btn{
   width: 100%;
-    position: fixed;
-    height: 40px;
-    bottom: 0;
-    text-align: right;
+  position: absolute;
+  height: 40px;
+  bottom: 0;
+  text-align: right;
   background: #f6f6f6;
   border-top: 1px solid #ccc;
   line-height: 40px;
@@ -1998,29 +1991,29 @@ a.ph_btn{
   width:100%;
 }
 .list_img1{
-    border-radius: 5px; 
+  border-radius: 5px; 
   width:60px;
   height:60px;
   vertical-align: middle;
 }
 .list_h{
-    background: url(../img/he.png) no-repeat 100% center;
-    padding-right: 20%;
-    background-size: 19px;  
+  background: url(../img/he.png) no-repeat 100% center;
+  padding-right: 20%;
+  background-size: 19px;  
   font-size:17px;
   color:#333; 
 }
 .list_s{
-    background: url(../img/sha.png) no-repeat 100% center;
-    padding-right: 20%;
-    background-size: 19px;  
+  background: url(../img/sha.png) no-repeat 100% center;
+  padding-right: 20%;
+  background-size: 19px;  
   font-size:17px;
   color:#333; 
 }
 .list_k{
-    background: url(../img/ke.png) no-repeat 100% center;
-    padding-right: 20%;
-    background-size: 19px;  
+  background: url(../img/ke.png) no-repeat 100% center;
+  padding-right: 20%;
+  background-size: 19px;  
   font-size:17px;
   color:#333; 
 }
@@ -2029,7 +2022,7 @@ a.ph_btn{
   width:10%;
 }
 .list_td2{
-    vertical-align: middle; 
+  vertical-align: middle; 
   width:70%;
 }
 .list_td3{
@@ -2048,28 +2041,28 @@ a.ph_btn{
 }
 .td3_btn{
   position: absolute;
-    height: 27px;
-    width: 57px;
-    color: #fefefe;
-    background: #ff6d14;
-    border-radius: 4px;
-    vertical-align: top;
-    top: 17px;
-    right: 12px;
+  height: 27px;
+  width: 57px;
+  color: #fefefe;
+  background: #ff6d14;
+  border-radius: 4px;
+  vertical-align: top;
+  top: 17px;
+  right: 12px;
   cursor:pointer; 
 }
 .add_friend{
   border-radius: 4px;
-    height: 304px;
-    width: 240px;
-    position: fixed;
-    top: 50%;
+  height: 304px;
+  width: 240px;
+  position: absolute;
+  top: 50%;
   left: 50%;
-    margin-left: -120px;
-    margin-top: -152px;
-    background: #fff;
-    z-index: 70000;
-    display: none;  
+  margin-left: -120px;
+  margin-top: -152px;
+  background: #fff;
+  z-index: 70000;
+  display: none;  
 }
 .add_f_img{
   text-align:center;
@@ -2107,26 +2100,26 @@ a.ph_btn{
 .broke_line{
   border-right:1px solid #ccc;
   height:30px; 
-    right: 50%;
+  right: 50%;
   top:6px;
-    position: absolute; 
+  position: absolute; 
 }
 .broke_tab{
   width: 100%;
-    padding: 12px 0;
+  padding: 12px 0;
 }
 .broke_table{
-    border-radius: 4px; 
-    cursor: pointer;
-    margin: 0 auto;
-    text-align: center;
-    width: 94%;
-    border: 1px solid #ff6d14;
-    height: 30px;
+  border-radius: 4px; 
+  cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+  width: 94%;
+  border: 1px solid #ff6d14;
+  height: 30px;
 }
 .broke_table tr td{
-    border-right: 1px solid #ff6d14;
-    font-size: 14px;  
+  border-right: 1px solid #ff6d14;
+  font-size: 14px;  
   line-height:30px; 
   color:#ff6d14;
 }
@@ -2139,20 +2132,20 @@ a.ph_btn{
 }
 .broke_order{
   height: 44px;
-    line-height: 44px;
-    margin: 0 12px;
-    border-bottom: 1px solid #eee;
+  line-height: 44px;
+  margin: 0 12px;
+  border-bottom: 1px solid #eee;
 }
 .broke_hj{
   height: 44px;
-    line-height: 44px;
-    margin: 0 12px;
-    border-bottom: 1px solid #eee;
+  line-height: 44px;
+  margin: 0 12px;
+  border-bottom: 1px solid #eee;
 }
 .broke_order_num{
   height: 44px;
-    line-height: 44px;
-    margin: 0 12px;
+  line-height: 44px;
+  margin: 0 12px;
 }
 .broke_order_l{
   font-size:16px;
@@ -2200,17 +2193,17 @@ a.ph_btn{
   padding:0 12px 10px;
 }
 .broke_wsx_t{
-    border-radius: 4px;
-    height: 304px;
-    width: 280px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -140px;
-    margin-top: -152px;
-    background: #fff;
-    z-index: 70000;
-    display: none;  
+  border-radius: 4px;
+  height: 304px;
+  width: 280px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -140px;
+  margin-top: -152px;
+  background: #fff;
+  z-index: 70000;
+  display: none;  
 }
 .wxt_t_title{
   font-size:18px;
@@ -2219,14 +2212,14 @@ a.ph_btn{
   margin:20px 0;
 }
 .wxt_t_close{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    border-top: 1px solid #eee;
-    text-align: center;
-    font-size: 16px;  
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  font-size: 16px;  
   cursor:pointer;
 }
 .wxt_t_text{
@@ -2243,144 +2236,144 @@ a.ph_btn{
 }
 .back_add_btn{
   background: #ff6d14;
-    width: 228px;
-    height: 40px;
-    border-radius: 4px;
-    font-size: 16px;
-    color: #fff;
-    cursor: pointer;
+  width: 228px;
+  height: 40px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
 }
 .ydm_tx_item{
   background: #fff;
-    border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 30px;
-    padding-right: 5px; 
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 30px;
+  padding-right: 5px; 
 }
 .ydm_tx_ydtem{
   line-height: 50px;
-    margin-left: 11px;
-    padding-right: 22px;
-    position: relative;
-    overflow: hidden; 
-    background: url(../img/back.png) no-repeat 99% center;
-    background-size: 16px;
-    height: auto; 
+  margin-left: 11px;
+  padding-right: 22px;
+  position: relative;
+  overflow: hidden; 
+  background: url(../img/back.png) no-repeat 99% center;
+  background-size: 16px;
+  height: auto; 
 }
 .tx_money{
   padding: 25px 10px 10px;
 }
 .aq_phone{
-    padding: 10px;
+  padding: 10px;
 }
 .auth_code{
-    margin: 10px;
-    border: 1px solid #ccc;
-    line-height: 45px;  
+  margin: 10px;
+  border: 1px solid #ccc;
+  line-height: 45px;  
 }
 .getcode{
-    background: #fff;
-    height: 28px;
-    width: 100px;
-    border-radius: 3px;
-    color: #ff6d14;
+  background: #fff;
+  height: 28px;
+  width: 100px;
+  border-radius: 3px;
+  color: #ff6d14;
   border:1px solid #ff6d14;
-    font-size: 14px;
-    margin: 9px 7px;
-    color: #ff6d14;
-    float: right;
+  font-size: 14px;
+  margin: 9px 7px;
+  color: #ff6d14;
+  float: right;
 }
 .atonce_but {
-    font-size: 16px;
-    width: 95%;
-    margin:0 0 35px 0;
-    background: #1fa761;
-    font-size: 16px;
-    color: #fff;
-    line-height: 40px;
-    border-radius: 3px;
+  font-size: 16px;
+  width: 95%;
+  margin:0 0 35px 0;
+  background: #1fa761;
+  font-size: 16px;
+  color: #fff;
+  line-height: 40px;
+  border-radius: 3px;
 }
 .address_new select {
-    width: 100%;
-    font-size: 15px;
-    position: relative;
-    height: 45px;
+  width: 100%;
+  font-size: 15px;
+  position: relative;
+  height: 45px;
   line-height: 35px;
   -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border: 1px solid #ddd;
-    padding: 0 16px 0 5px;
-    background: #fff;
-    background: #fff url(../img/check_jl.png) no-repeat right center;
-    background-size: 15px 5px;
+  -webkit-border-radius: 0;
+  border: 1px solid #ddd;
+  padding: 0 16px 0 5px;
+  background: #fff;
+  background: #fff url(../img/check_jl.png) no-repeat right center;
+  background-size: 15px 5px;
 } 
 .back_id {
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 45px;
-    padding: 0 0 0 10px;
-    ont-size: 15px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  width: 100%;
+  height: 45px;
+  padding: 0 0 0 10px;
+  font-size: 15px;
 }
 .ydm_next{
-    height: 40px;
-    width: 92%;
-    background: #ff6d14;
-    border-radius: 3px;
-    font-size: 16px;
-    color: #fff;  
+  height: 40px;
+  width: 92%;
+  background: #ff6d14;
+  border-radius: 3px;
+  font-size: 16px;
+  color: #fff;  
 }
 .cashlist_item_ydm{
-    background: #fff;
-    margin-bottom: 10px;
+  background: #fff;
+  margin-bottom: 10px;
 }
 .cashlist_tit_ydm{
-    border-bottom: 1px solid #ccc;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 13px;
-    padding-right: 15px;
-    font-size: 16px;
-    overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 13px;
+  padding-right: 15px;
+  font-size: 16px;
+  overflow: hidden;
 }
 .cashlist_ing_ydm {
-    color: #ff0000;
+  color: #ff0000;
 }
 .cashlist_yes_ydm{
   color: #3aad47;
 }
 .cashlist_status_ydm {
-    float: right;
-    font-size: 16px;
+  float: right;
+  font-size: 16px;
 }
 .ydm_c_table {
-    width: 100%;
-    border: 0;
+  width: 100%;
+  border: 0;
 }
 .cashlist_main td {
-    text-align: center;
-    width: 33.33%;
-    vertical-align: top;
+  text-align: center;
+  width: 33.33%;
+  vertical-align: top;
 }
 td.cash_td1 img {
-    width: 36px;
-    height: 36px;
-    margin: 13px 0 15px;
+  width: 36px;
+  height: 36px;
+  margin: 13px 0 15px;
 }
 td.cash_td2 img {
-    width: 50px;
-    height: 15px;
-    margin-top: 24px;
+  width: 50px;
+  height: 15px;
+  margin-top: 24px;
 }
 .cashlist_main td h1 {
-    font-weight: normal;
-    font-size: 15px;
-    color: #999;
+  font-weight: normal;
+  font-size: 15px;
+  color: #999;
 }
 .cashlist_main td p {
-    color: #999;
-    font-size: 12px;
-    margin: 8px auto 12px;
-    line-height: 1.5;
+  color: #999;
+  font-size: 12px;
+  margin: 8px auto 12px;
+  line-height: 1.5;
 }
 .cashlist_fail_ydm{
   margin:0 12px;
@@ -2410,25 +2403,25 @@ td.cash_td2 img {
   position: relative; 
 }
 .deve_td2_tit{
-    position: absolute;
-    top: 12px;  
+  position: absolute;
+  top: 12px;  
   font-size: 14px;
-    color: #333;
+  color: #333;
   line-height:18px;
 }
 .deve_td2_price{
   position: absolute;
-    bottom: 10px; 
+  bottom: 10px; 
 }
 .price_x{
   font-size:14px;
   color:#ff0000;
 }
 .price_y{
-    font-size: 11px;
-    color: #999;
-    margin-left: 10px;
-    text-decoration: line-through;  
+  font-size: 11px;
+  color: #999;
+  margin-left: 10px;
+  text-decoration: line-through;  
 }
 .sales_num{
   font-size:14px;
@@ -2492,24 +2485,24 @@ td.cash_td2 img {
 }
 .pay_tier{
   display:none;
-    background:rgba(0,0,0,0.5); 
-  position:fixed;   
-    top: 0; 
-    width: 100%;
-    height: 100%;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+  background:rgba(0,0,0,0.5); 
+  position:absolute;   
+  top: 0; 
+  width: 100%;
+  height: 100%;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 }
 .tier_tit img{
   width:119px;
   height:119px;
 }
 .tier_tit{
-    position: absolute;
-    left: 54px;
-    top: -56px; 
+  position: absolute;
+  left: 54px;
+  top: -56px; 
 }
 .tier_c{
   border-radius: 4px;
-    position: relative; 
+  position: relative; 
   height:195px;
   width:228px;
   background:#fff;
@@ -2547,42 +2540,42 @@ td.cash_td2 img {
   cursor:pointer;
 }
 .add_friend1{
-    border-radius: 4px;
-    height: 127px;
-    width: 240px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -120px;
-    margin-top: -80px;
-    background: #fff;
-    z-index: 70000;
-    display: none;  
+  border-radius: 4px;
+  height: 127px;
+  width: 240px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -80px;
+  background: #fff;
+  z-index: 70000;
+  display: none;  
 }
 .friend_ts{
   text-align: center;
-    margin: 14px 0;
-    font-size: 18px;
-    color: #111;
+  margin: 14px 0;
+  font-size: 18px;
+  color: #111;
 }
 .friend_nr{
   font-size: 14px;
-    color: #3e3e3e;
+  color: #3e3e3e;
   text-align:center;
   margin-bottom:14px;
 }
 .add_friend2{
   border-radius: 4px;
-    height: 64px;
-    width: 240px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -120px;
-    margin-top: -80px;
-    background: #fff;
-    z-index: 70000;
-    display: none;  
+  height: 64px;
+  width: 240px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -80px;
+  background: #fff;
+  z-index: 70000;
+  display: none;  
 }
 
 .is_confirmwx{
@@ -2620,8 +2613,8 @@ td.cash_td2 img {
 .product_zyj{
   background: #fff url(../img/yjw.png) no-repeat 100% center;
   padding-right:20px;
-  margin-left:20px;
-    background-size: 16px;
+  margin-left:10px;
+  background-size: 16px;
   font-size:12px !important;
   color:#ff0000 !important;
   cursor:pointer;
@@ -2630,27 +2623,26 @@ td.cash_td2 img {
   border-radius: 4px; 
   height:188px;
   width:240px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -120px;
-    margin-top: -84px;
-    background: #fff;
-    z-index: 70000; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -84px;
+  background: #fff;
+  z-index: 70000; 
   display:none;
 }
 .yi_artio_tit{
-    font-size: 18px;
-    text-align: center;
-    color: #333;
-    margin: 20px; 
+  font-size: 18px;
+  text-align: center;
+  color: #333;
+  margin: 20px;
   line-height:18px;
-  
 }
 .yi_artio_1,.yi_artio_2,.yi_artio_3{
-    font-size: 18px;
-    text-align: center;
-    margin-bottom: 10px;  
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;  
   line-height:18px;
 }
 .yi_artio_ts{
@@ -2696,19 +2688,19 @@ td.cash_td2 img {
 }
 .product_info_pc{
   margin-left: 8px;
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 .product_info_xq{
   background:#fff;
-    padding-top: 10px;
-    margin-top: -7px; 
+  padding-top: 10px;
+  margin-top: -7px; 
   height:80px;
 }
 .info_xq_tit{
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical; 
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical; 
   padding: 0 5px;
   font-size:14px;
   color:#333;
@@ -2739,12 +2731,12 @@ td.cash_td2 img {
   height:198px;
 }
 .bg_title{
-    position: absolute;
-    font-size: 14px;
-    line-height: 19px;
-    color: #fff;
-    bottom: 15px;
-    margin: 0px 30px; 
+  position: absolute;
+  font-size: 14px;
+  line-height: 19px;
+  color: #fff;
+  bottom: 15px;
+  margin: 0px 30px; 
 }
 .oper_one{
   background: url(../img/back.png) no-repeat 97% center;
@@ -2779,24 +2771,24 @@ td.cash_td2 img {
   position:relative;
 }
 .apply_x{
-    left: 50%;
-    position: absolute;
-    border-right: 1px solid #ccc;
-    height: 66px;   
+  left: 50%;
+  position: absolute;
+  border-right: 1px solid #ccc;
+  height: 66px;   
 }
 .apply_price{
   font-size:24px;
   color:#ff0000;
 }
 .apply_btn{
-    height: 40px;
-    width: 70%;
-    background: #ff6d14;
-    margin: 60px auto 15px;
-    font-size: 16px;
-    line-height: 40px;
-    text-align: center;
-    border-radius: 4px;
-    color: #fff;  
+  height: 40px;
+  width: 70%;
+  background: #ff6d14;
+  margin: 60px auto 15px;
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 4px;
+  color: #fff;  
   cursor:pointer;
 }

@@ -207,7 +207,7 @@ function default_logo()
 function checkLogin_ajax()
 {
 	$res = ['flag'=>'FAIL','msg'=>'请先登录'];
-	if(!Member::isLogined()) {
+	if(!$GLOBALS['user']->uid) {
 		Response::sendJSON($res);
 	}
 }

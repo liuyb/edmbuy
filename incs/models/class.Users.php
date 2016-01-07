@@ -77,6 +77,40 @@ class Users extends StorageNode {
 	}
 	
 	/**
+	 * Set the current user to 'logined' status
+	 */
+	public function set_logined_status() {
+	
+		//设置登录session uid
+		$GLOBALS['user']->uid = $this->id;
+	
+		//新起一个对象来编辑，避免过多更新
+		$nUser = new self($this->id);
+		$nUser->lastlogin = simphp_time();
+		$nUser->lastip    = Request::ip();
+		$nUser->save();
+	}
+	
+	/**
+	 * Get user cart num
+	 * @return integer
+	 */
+	public function cart_num() {
+		if (!isset($this->cart_num)) {
+			$this->cart_num = Cart::getUserCartNum($this->uid);
+		}
+		return $this->cart_num;
+	}
+	
+	/**
+	 * 检查必要用户信息是否为空
+	 * @return boolean
+	 */
+	public function required_uinfo_empty() {
+		return empty($this->nickname) || empty($this->logo) ? true : false;
+	}
+	
+	/**
 	 * Load user by UnionID
 	 * 
 	 * @param string $unionid
@@ -120,19 +154,29 @@ class Users extends StorageNode {
 	}
 	
 	/**
-	 * Set the current user to 'logined' status
+	 * Check whether user logined
+	 * @return boolean
 	 */
-	public function set_logined_status() {
-		
-		//设置登录session uid
-		$GLOBALS['user']->uid = $this->id;
-		
-		//新起一个对象来编辑，避免过多更新
-		$nUser = new self($this->id);
-		$nUser->lastlogin = simphp_time();
-		$nUser->lastip    = Request::ip();
-		$nUser->save();
+	static function is_logined() {
+		return $GLOBALS['user']->uid ? true : false;
 	}
+	
+	/**
+	 * Check user info complete degreee, or else redirect to weixin detail oauth
+	 * @param string  $refer redirect url
+	 */
+	static function check_detail_info($refer='') {
+		if ($GLOBALS['user']->uid && $GLOBALS['user']->required_uinfo_empty()) { //必要信息为空，则请求OAuth2详细认证
+			if ( !isset($_SESSION['wxoauth_reqcnt']) ) $_SESSION['wxoauth_reqcnt'] = 0;
+			$_SESSION['wxoauth_reqcnt']++;
+			if ($_SESSION['wxoauth_reqcnt'] < 4) { //最多尝试3次，避免死循环
+				if (!$refer) $refer = Request::url();
+				(new Weixin())->authorizing('http://'.Request::host().'/user/oauth/weixin?act=&refer='.rawurlencode($refer), 'detail');
+			}
+		}
+		return true;
+	}
+	
 	
 }
  

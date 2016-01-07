@@ -1087,19 +1087,23 @@ class WeixinHelper {
     		$aUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
     		if ($aUser->is_exist()) { //已存在
     			$upUser = new Users($aUser->id);
+    			if (!$aUser->openid) {
+    				$upUser->openid  = $openid;
+    			}
     		}
     		else { //未存在
     			$upUser = new Users();
     			$upUser->unionid   = $wxuinfo['unionid'];
+    			$upUser->openid    = $openid;
+    			$upUser->parentid  = 0; //TODO 这里根据二维码而定
     			$upUser->state     = 0; //0:正常;1:禁止
     			$upUser->from      = $this->from;
     			$upUser->authmethod= 'base';
     		}
     		
-    		$upUser->openid      = $openid;
     		$upUser->subscribe   = $wxuinfo['subscribe'];
     		$upUser->subscribetime = $wxuinfo['subscribe_time'];
-    		if ($aUser->logo) { //未设过时才更新
+    		if ($aUser->required_uinfo_empty()) { //必要信息为空时更新
     			$upUser->nickname  = $wxuinfo['nickname'];
     			$upUser->logo      = $wxuinfo['headimgurl'];
     			$upUser->sex       = $wxuinfo['sex'];

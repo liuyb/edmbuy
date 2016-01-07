@@ -1,15 +1,16 @@
 <?php
 /**
- * 默认Model 
+ * Partner Model
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class Default_Model extends Model {
-  
+class Partner_Model extends Model {
+
 	
-  
+	
+	
 }
  
-/*----- END FILE: Default_Model.php -----*/
+/*----- END FILE: Partner_Model.php -----*/

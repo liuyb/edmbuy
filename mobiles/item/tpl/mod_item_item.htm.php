@@ -15,7 +15,7 @@
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu">
 		<li class="p_menu_sy"><a href="#">首页</a></li>
-		<li class="p_menu_hhr"><a href="#">合伙人</a></li>
+		<li class="p_menu_hhr"><a href="#">米商</a></li>
 		<li class="p_menu_hy"><a href="#">会员</a></li>
 	</ul>
 </div>
@@ -23,7 +23,7 @@
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><a href="<?=$kefu_link?>" <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
-	<a href="javascript:;">
+	<a href="<?php /*echo U('trade/cart/list')*/?>">
 		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display:none;">0</span></div>
 	</a>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
@@ -176,6 +176,10 @@ $(function(){
 		<li>担保交易</li>
 		<li>48小时内发货</li>
 	</ul>
+</div>
+
+<div class="p_detail_pull">
+	<!-- <h1><p>向上拖动查看图文详情</p></h1> -->
 </div>
 
 <div class="p_detail_info">

@@ -90,7 +90,7 @@
 
 /*----- from frontend engine --*/
 $(function(){
-	loadingFun();
+	//loadingFun();
 });
 
 function trim(str){ //删除左右两端的空格
