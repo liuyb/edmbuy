@@ -22,10 +22,11 @@ class Weixin {
 	public $siteUrl       = '';
 	
 	/**
-	 * Allow weixin public account
+	 * Allow weixin public accounts, and default account
 	 * @var array
 	 */
-	public static $allowAccount = array('edmbuy');
+	public static $defaultAccount = 'edmbuy';   //default weixin account
+	public static $allowAccounts  = ['edmbuy']; //allowed weixin accounts set
 
 	/**
 	 * Weixin constant name
@@ -33,7 +34,12 @@ class Weixin {
 	 */
 	const PLUGIN_JSSDK  = 'jssdk';
 	const PLUGIN_JSADDR = 'jsaddr';
+	const PLUGIN_QRCODE = 'qrcode';
 	
+	/**
+	 * Message type
+	 * @var constant
+	 */
 	const MSG_TYPE_TEXT  = 'text';
 	const MSG_TYPE_IMAGE = 'image';
 	const MSG_TYPE_VOICE = 'voice';
@@ -43,10 +49,24 @@ class Weixin {
 	const MSG_TYPE_NEWS_ITEM = 'news_item';
 	
 	/**
+	 * QR request constant
+	 * @var constant
+	 */
+	const QR_SCENE           = 1;
+	const QR_LIMIT_SCENE     = 2;
+	const QR_LIMIT_STR_SCENE = 3;
+	
+	/**
+	 * Max persistent QR code nums
+	 * @var constant
+	 */
+	const QR_MAX_PERSISTENT  = 100000;
+	
+	/**
 	 * All weixin plugins name
 	 * @var array
 	 */
-	public static $plugins = array(self::PLUGIN_JSSDK, self::PLUGIN_JSADDR);
+	public static $plugins = array(self::PLUGIN_JSSDK, self::PLUGIN_JSADDR, self::PLUGIN_QRCODE);
 	
 	/**
 	 * WeixinHelper instance
@@ -72,6 +92,12 @@ class Weixin {
 	 * @var WeixinJSAddr
 	 */
 	public $jsaddr;
+	
+	/**
+	 * WeixinQRCode instatnce
+	 * @var WeixinQRCode
+	 */
+	public $qrcode;
 	
 	/**
 	 * API address url prefix
@@ -164,11 +190,14 @@ class Weixin {
 	/**
 	 * 初始化配置
 	 * @param array $plugins, 额外的插件，如 'jssdk', 'wxpay' 等
-	 * @param string $target, 目标平台，可选值：'edmbuy' 等
+	 * @param string $target, 目标平台
 	 */
-	private function init(Array $plugins = array(), $target = 'edmbuy')
+	private function init(Array $plugins = array(), $target = '')
 	{
-	  if (!in_array($target, self::$allowAccount)) {
+		if (''===$target) {
+			$target = self::$defaultAccount;
+		}
+	  if (!in_array($target, self::$allowAccounts)) {
 	    throw new Exception("Weixin public account not allowed: {$target}");
 	  }
 	  
@@ -191,14 +220,17 @@ class Weixin {
 		if (in_array(self::PLUGIN_JSADDR, $plugins)) {
 		  $this->jsaddr  = new WeixinJSAddr($this->appId, $this);
 		}
+		if (in_array(self::PLUGIN_QRCODE, $plugins)) {
+		  $this->qrcode  = new WeixinQRCode($this->appId, $this);
+		}
 	}
 	
 	/**
 	 * 初始化构造函数
-	 * @param array $plugins, 额外的插件，如 'jssdk', 'wxpay' 等
-	 * @param string $target, 目标平台，可选值：'edmbuy' 等
+	 * @param array $plugins, 额外的插件，如 'jssdk', 'wxpay', 'qrcode' 等
+	 * @param string $target, 目标平台
 	 */
-	public function __construct(Array $plugins = array(), $target = 'edmbuy')
+	public function __construct(Array $plugins = array(), $target = '')
 	{
 		$this->init($plugins, $target); //该句必须出现在所有对外方法的最开始
 	}
@@ -731,6 +763,34 @@ class Weixin {
     return $ret;
   }
   
+  /**
+   * 获取二维码ticket
+   * 
+   * @param string $media_id
+   * @param string $outfile
+   * @return boolean|array
+   */
+  public function getQRTicket($media_id, &$outfile = '')
+  {
+    $ret    = array();
+    $params = array(
+      'media_id' => $media_id
+    );
+    $access_token = $this->fecthAccessToken();
+    if (!$outfile) {
+      $outfile = SIMPHP_ROOT . "/a/wx/".md5($media_id).".jpg";
+    }
+    $ret = $this->apiCall("qrcode/create?access_token={$access_token}", $params, 'post', 'api_cgi', $outfile);
+    $outfile = str_replace(SIMPHP_ROOT, '', $outfile); //去掉前缀
+    if (!empty($ret['errcode'])) {
+      $outfile = false;
+      return false;
+    }
+    if (!$ret) $outfile = false;
+    
+    return $ret;
+  }
+  
   //~ the following is some util functions
   
   /**
@@ -1044,6 +1104,102 @@ HEREDOC;
 }
 
 /**
+ * Weixin 二维码 类
+ *
+ * @author Gavin<laigw.vip@gmail.com>
+ */
+class WeixinQRCode {
+  
+	/**
+	 * 临时二维码最大有效时间秒数
+	 * @var constant
+	 */
+	const MAX_EXPIRE_SECONDS = 604800;//7天
+	
+	/**
+	 * 二维码图片下载链接前缀
+	 * @var constant
+	 */
+	const IMG_PREFIX = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=';
+	
+  /**
+   * App Id
+   * 
+   * @var string
+   */
+  private $appId;
+  
+  /**
+   * Weixin Object
+   * @var Weixin
+   */
+  private $wx;
+  
+  public function __construct($appId, Weixin $wx = NULL) {
+    $this->appId = $appId;
+    $this->wx    = $wx;
+  }
+  
+  /**
+   * 获取appId
+   * @return string
+   */
+  public function getAppId() {
+    return $this->appId;
+  }
+  
+  /**
+   * 获取QRCode
+   * @param integer|string $scene_id
+   * @param integer $action_name one value of QR_SCENE, QR_LIMIT_SCENE, QR_LIMIT_STR_SCENE
+   * @param integer $expire_seconds when $action_name==QR_SCENE, indicating expire seconds of the temp QRCode
+   * @return Ambigous <string, mixed>|boolean|mixed
+   */
+  public function getQRCode($scene_id, $action_name = Weixin::QR_SCENE, $expire_seconds = self::MAX_EXPIRE_SECONDS) {
+  
+  	if (!in_array($action_name, [Weixin::QR_SCENE, Weixin::QR_LIMIT_SCENE, Weixin::QR_LIMIT_STR_SCENE])) {
+  		throw new Exception('action name \''.$action_name.'\' invalid.');
+  	}
+  	if ($action_name==Weixin::QR_SCENE && $expire_seconds > self::MAX_EXPIRE_SECONDS) {
+  		$expire_seconds = self::MAX_EXPIRE_SECONDS;
+  	}
+  	
+  	$type   = 'qrcode';
+  	$ticket = $this->wx->helper->onFetchAccessTokenBefore($type, $this->appId, '', ['scene_id'=>$scene_id, 'scene_type'=>$action_name]);
+  	if (!empty($ticket)) {
+  		return $ticket;
+  	}
+  
+  	$accessToken = $this->wx->fecthAccessToken();
+  
+  	$action_name_txt = $action_name==Weixin::QR_LIMIT_SCENE ? 'QR_LIMIT_SCENE' : ($action_name==Weixin::QR_LIMIT_STR_SCENE ? 'QR_LIMIT_STR_SCENE' : 'QR_SCENE');
+  	$scene  = $action_name==Weixin::QR_LIMIT_STR_SCENE ? ['scene_str'=>strval($scene_id)] : ['scene_id'=>intval($scene_id)];
+  	$ret    = array();
+  	$params = array(
+  			'action_name'  => $action_name_txt,
+  			'action_info'  => array('scene' => $scene)
+  	);
+  	if ($action_name==Weixin::QR_SCENE) {
+  		$params['expire_seconds'] = intval($expire_seconds);
+  	}
+  	$ret = $this->wx->apiCall('/qrcode/create?access_token='.$accessToken, $params, 'post');
+  	if (!empty($ret['errcode'])) {
+  		return false;
+  	}
+  	$ticket = $ret['ticket'];
+  
+  	if (!empty($ticket)) {
+  		$ret['scene_id']   = $scene_id;
+  		$ret['scene_type'] = $action_name;
+  		$ret['img'] = self::IMG_PREFIX.$ticket;
+  		$this->wx->helper->onFetchAccessTokenSuccess($type, $this->appId, '', $ret);
+  	}
+  	return $ticket;
+  }
+  
+}
+
+/**
  * Weixin帮助类
  *
  * @author Gavin<laigw.vip@gmail.com>
@@ -1331,22 +1487,31 @@ class WeixinHelper {
   /**
    * 获取access token之前的检查事件
    *
-   * @param string $type, optional value: 'basic':基本型; 'oauth':OAuth2型; 'jsapi': jsapi ticket
+   * @param string $type, optional value: 'basic':基本型; 'oauth':OAuth2型; 'jsapi': jsapi ticket; 'qrcode': QRCode ticket
    * @param string $appId,
    * @param string $openId,
+   * @param array  $extra,
    * @return string
    */
-  public function onFetchAccessTokenBefore($type, $appId, $openId = '') {
+  public function onFetchAccessTokenBefore($type, $appId, $openId = '', Array $extra = []) {
     $token = '';
     $now   = time();
     if ('basic'==$type) {
-      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='basic' AND `appid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId);
+      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='{$type}' AND `appid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId);
     }
     elseif ('oauth'==$type) {
-      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='oauth' AND `appid`='%s' AND `openid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId, $openId);
+      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='{$type}' AND `appid`='%s' AND `openid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId, $openId);
     }
     elseif ('jsapi'==$type) {
-      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='jsapi' AND `appid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId);
+      $token = D()->result("SELECT `access_token` FROM `{access_token_weixin}` WHERE `type`='{$type}' AND `appid`='%s' AND `expires_at`>{$now} ORDER BY `rid` DESC LIMIT 1", $appId);
+    }
+    elseif ('qrcode'==$type) {
+    	$where_extra = '';
+    	if ($extra['scene_type']==Weixin::QR_SCENE) {
+    		$where_extra = "AND `created`>{$now}-`expire_seconds`";
+    	}
+      $token = D()->result("SELECT `ticket` FROM `{weixin_qrcode}` WHERE `scene_id`=%d {$where_extra}", $extra['scene_id']);
+      $token = $token ? : '';
     }
     return $token;
   }
@@ -1354,27 +1519,39 @@ class WeixinHelper {
   /**
    * 获取access token成功事件
    *
-   * @param string $access_token
-   * @param integer $expires_in
-   * @param string $type, optional value: 'basic':基本型; 'oauth':OAuth2型; 'jsapi': jsapi ticket
+   * @param string $type, optional value: 'basic':基本型; 'oauth':OAuth2型; 'jsapi': jsapi ticket; 'qrcode': QRCode ticket
    * @param string $appId,
    * @param string $openid,
    * @param array $retdata, 微信服务器返回的数据
+   * @return integer
    */
   public function onFetchAccessTokenSuccess($type, $appId, $openid = '', Array $retdata = array()) {
     $now  = time();
-    $data = array(
-      'type'         => $type,
-      'access_token' => 'jsapi'==$type ? $retdata['ticket'] : $retdata['access_token'],
-      'expires_at'   => $now + $retdata['expires_in'] - 10, //减10是为了避免网络误差时间
-      'appid'        => $appId,
-      'openid'       => isset($retdata['openid']) ? $retdata['openid'] : $openid,
-      'refresh_token'=> isset($retdata['refresh_token']) ? $retdata['refresh_token'] : '',
-      'scope'        => isset($retdata['scope']) ? $retdata['scope'] : '',
-      'timeline'     => $now,
-    );
-    $rid = D()->insert('access_token_weixin', $data);
-    return $rid;
+    if ('qrcode'==$type) {
+    	$wxqr = new Wxqrcode($retdata['scene_id']);
+    	$wxqr->scene_type = $retdata['scene_type'];
+    	$wxqr->url        = $retdata['url'];
+    	$wxqr->img        = isset($retdata['img']) ? $retdata['img'] : '';
+    	$wxqr->expire_seconds = isset($retdata['expire_seconds']) ? $retdata['expire_seconds'] : -1;
+    	$wxqr->ticket     = $retdata['ticket'];
+    	$wxqr->save(Storage::SAVE_UPDATE);
+    	return $wxqr->id;
+    }
+    else {
+    	$data = array(
+    			'type'         => $type,
+    			'access_token' => in_array($type, ['jsapi','qrcode']) ? $retdata['ticket'] : $retdata['access_token'],
+    			'expires_at'   => $now + $retdata['expires_in'] - 10, //减10是为了避免网络误差时间
+    			'appid'        => $appId,
+    			'openid'       => isset($retdata['openid']) ? $retdata['openid'] : $openid,
+    			'refresh_token'=> isset($retdata['refresh_token']) ? $retdata['refresh_token'] : '',
+    			'scope'        => isset($retdata['scope']) ? $retdata['scope'] : '',
+    			'data'         => isset($retdata['data']) ? $retdata['data'] : '',
+    			'timeline'     => $now,
+    	);
+    	$rid = D()->insert('access_token_weixin', $data);
+    	return $rid;
+    }
   }
 
 }

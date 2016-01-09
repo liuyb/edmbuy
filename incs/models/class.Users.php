@@ -31,6 +31,7 @@ class Users extends StorageNode {
 						'nickname'    => 'nick_name',
 						'password'    => 'password',
 						'logo'        => 'logo',
+						'wxqr'        => 'wxqr',
 						'question'    => 'question',
 						'answer'      => 'answer',
 						'sex'         => 'sex',
@@ -177,6 +178,65 @@ class Users extends StorageNode {
 		return true;
 	}
 	
+	/**
+	 * Object version of static method 'wx_qrcode'
+	 * @param integer $scene_type Weixin::QR_SCENE 或 Weixin::QR_LIMIT_SCENE
+	 * @param boolean $return_text 如果$return_text为真，则返回二维码内容，否则返回二维码图片地址
+	 * @return string
+	 *   返回二维码图片地址或二维码内容
+	 */
+	public function wx_qr($scene_type = Weixin::QR_SCENE, $return_text = false) {
+		return self::qrcode($this->uid,$scene_type,$return_text);
+	}
+	
+	/**
+	 * Get user qrcode
+	 * 算法：
+	 *  1、无论临时二维码还是永久二维码，一个用户仅对应一个“有效的” 
+	 *  2、如果永久二维码数已经达到50000(此参数可调)，则无论$scene_type输入什么，都只生产临时二维码(微信对永久二维码有10w个的限制)
+	 * @param integer $scene_type Weixin::QR_SCENE 或 Weixin::QR_LIMIT_SCENE
+	 * @param boolean $return_text 如果$return_text为真，则返回二维码内容，否则返回二维码图片地址
+	 * @return string
+	 *   返回二维码图片地址或二维码内容
+	 */
+	static function wx_qrcode($user_id, $scene_type = Weixin::QR_SCENE, $return_text = false) {
+		if (!in_array($scene_type, [Weixin::QR_SCENE, Weixin::QR_LIMIT_SCENE])) {
+			$scene_type = Weixin::QR_LIMIT_SCENE;//有可能输入了 Weixin::QR_LIMIT_STR_SCENE
+		}
+		if ($scene_type==Weixin::QR_LIMIT_SCENE) {
+			$persistent_nums = Wxqrcode::total_count(new Query('scene_type', Weixin::QR_SCENE, '<>'));
+			if ($persistent_nums > (Weixin::QR_MAX_PERSISTENT*3/4)) { //TODO 此值可根据情况适当调整，但不能超过 Weixin::QR_MAX_PERSISTENT
+				$scene_type = Weixin::QR_SCENE; //超过阀值，则只生成临时二维码
+			}
+		}
+		
+		$now = simphp_time();
+		$where_extra = '';
+		if ($scene_type==Weixin::QR_SCENE) {
+			$where_extra = "AND wq.created > {$now}-wq.expire_seconds";
+		}
+		$sql = "SELECT uq.user_id, wq.*
+		        FROM `shp_user_qrcode` AS uq INNER JOIN `{weixin_qrcode}` AS wq ON uq.scene_id=wq.scene_id
+				    WHERE uq.user_id=%d AND wq.scene_type=%d {$where_extra}";
+		$row = D()->query($sql, $user_id, $scene_type)->get_one();
+		if (empty($row)) { //不存在则要创建
+			$wxqr = new Wxqrcode();
+			$wxqr->scene_type = $scene_type;
+			$wxqr->created    = $now;
+			$wxqr->user_id    = $user_id; //用于 UserQrcode 对象保存
+			$wxqr->save(Storage::SAVE_INSERT);
+			if ($wxqr->id) {
+				$wx = new Weixin([Weixin::PLUGIN_QRCODE]);
+				$wx->qrcode->getQRCode($wxqr->id, $scene_type);
+				$wxqr = Wxqrcode::load($wxqr->id,true);
+				if ($wxqr->is_exist()) {
+					$row  = ['url'=>$wxqr->url,'img'=>$wxqr->img];
+				}
+			}
+		}
+		
+		return $return_text ? $row['url'] : $row['img'];
+	}
 	
 }
  

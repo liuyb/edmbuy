@@ -75,7 +75,7 @@ class StorageDb extends Storage {
 	 * @return string
 	 * @see Storage::save()
 	 */
-	public function save(Array $data, $flag = NULL) {
+	public function save(Array $data, &$flag = NULL) {
 		$id     = 0;
 		$params = [];
 		$primary_key = $this->column($this->key);
@@ -105,6 +105,7 @@ class StorageDb extends Storage {
 		}
 		
 		if ($is_insert) { //插入
+			$flag = self::SAVE_INSERT; //返回最终保存动作
 			if (D()->insert($this->table, $params, FALSE)) {
 				$id = D()->insert_id(DB::WRITABLE);
 				if (0===$id) { //表示不是AUTO_INCREMENT的主键
@@ -113,6 +114,7 @@ class StorageDb extends Storage {
 			}
 		}
 		else { //更新
+			$flag = self::SAVE_UPDATE; //返回最终保存动作
 			unset($params[$primary_key]); //id字段不更新
 			D()->update($this->table, $params, [$primary_key => $id]);
 		}
@@ -153,6 +155,19 @@ class StorageDb extends Storage {
 	 */
 	public static function escape($string) {
 		return D()->escape_string($string);
+	}
+	
+	/**
+	 * Query total record count
+	 * @param BaseQuery $query
+	 * @param boolean   $no_primary_key
+	 * @see Storage::totalCount()
+	 * @return integer
+	 */
+	public function totalCount(BaseQuery $query, $no_primary_key = FALSE) {
+		$where = "WHERE " . (new QueryBuilderMysql($query, $this->columns))->query();
+		$sql = 'SELECT COUNT('.(!$no_primary_key?'1':'*').') AS `cnt` FROM `' . $this->table . '` ' . $where;
+		return intval(D()->query($sql)->result());
 	}
 	
 	private function cause(BaseQuery $query, Array $opts = []) {

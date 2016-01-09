@@ -13,11 +13,13 @@ abstract class Storage implements ReadableStorage, WritableStorage {
 	
 	abstract public function find(BaseQuery $query, Array $opts = []);
 	
-	abstract public function save(Array $data);
+	abstract public function save(Array $data, &$flag = NULL);
 	
 	abstract public function remove(Array $ids);
 	
 	abstract public function id_exists($id);
+
+	abstract public function totalCount(BaseQuery $query, $no_primary_key = FALSE);
 	
 	public static function escape($string) {
 		return $string;

@@ -29,8 +29,10 @@ abstract class StorageNode extends Model {
 	}
 	
 	//~ hooks
-	protected function load_after()  {}
-	protected function save_before() {}
+	protected static function load_before()  {}
+	protected function load_after()          {}
+	protected function save_before(&$op_type){}
+	protected function save_after($op_type, $op_succ){}
 	
 	/**
 	 * Constructor
@@ -57,6 +59,7 @@ abstract class StorageNode extends Model {
 		$ids = is_array($id) ? array_filter($id) : [$id];
 		$ids = array_combine($ids, $ids);
 		
+		$clsname::load_before();
 		if ($refresh) {
 			self::removeStaticCache($ids);
 		}
@@ -127,18 +130,28 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
+	 * Query total record count
+	 * @param BaseQuery $query
+	 * @param boolean   $no_primary_key
+	 * @return integer
+	 */
+	final public static function total_count(BaseQuery $query = null, $no_primary_key = FALSE) {
+		return self::storage()->totalCount($query ? : new TrueQuery(), $no_primary_key);
+	}
+	
+	/**
 	 * Save(insert or update) a node
 	 * @param $flag
 	 */
 	final public function save($flag = NULL) {
-		$this->save_before();
+		$this->save_before($flag);
 		$id  = self::storage()->save($this->__DATA__, $flag);
 		$key = $this->meta()['key'];
 		if ($id) {
 			$this->$key = $id;
 			self::removeStaticCache($id);//for safe
 		}
-		$this->load_after();
+		$this->save_after($flag, $id?true:false);
 	}
 	
 	/**

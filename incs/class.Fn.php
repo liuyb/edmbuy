@@ -75,7 +75,7 @@ class Fn extends Func {
    */
   static function gen_qrcode_dir($id, $prefix = 'item', $is_absolute = FALSE) {
   	$dir = ($is_absolute ? SIMPHP_ROOT : '').'/a/qrcode/';
-  	$folder_limit = 30000; //Linux ext3 limit 32000
+  	$folder_limit = File::FOLDER_FILE_LIMIT; //Linux ext3 limit 32000
   	if (!empty($prefix)) {
   		$dir .= $prefix . '/';
   	}
