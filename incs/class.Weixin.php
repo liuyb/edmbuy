@@ -1239,6 +1239,7 @@ class WeixinHelper {
   public function onSubscribe($openid, $reqtime, $toUserName = '', $eventKey = NULL, $ticket = NULL) {
     $wxuinfo = $this->wx->userInfo($openid);
     $parent_id = 0;
+    $need_ret  = false;
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
     		
@@ -1251,6 +1252,7 @@ class WeixinHelper {
     			$parent_id = $aUser->parentid;
     		}
     		else { //未存在
+    			$need_ret = true;
     			$upUser = new Users();
     			$upUser->unionid   = $wxuinfo['unionid'];
     			$upUser->openid    = $openid;
@@ -1274,7 +1276,7 @@ class WeixinHelper {
     				}
     			}
     		}
-    		
+
     		$upUser->subscribe   = $wxuinfo['subscribe'];
     		$upUser->subscribetime = $wxuinfo['subscribe_time'];
     		if ($aUser->required_uinfo_empty()) { //必要信息为空时更新
@@ -1291,13 +1293,18 @@ class WeixinHelper {
     	}
     }
     
+    //if (!$need_ret) return '';
+    
     $msg = $this->about(1);
     if ($parent_id) {
     	$pUser = Users::load($parent_id);
     	if ($pUser->is_exist()) {
     		if ($pUser->nickname) $promoter = '推荐人:' . $pUser->nickname;
     		else $promoter = '推荐人多米号:' . $pUser->id;
-    		$msg .= "\n\n".$promoter;
+    		$msg .= "\n\n".$promoter;/**/
+    		if ($pUser->mobilephone) {
+    			$msg .= "\n\n推荐人手机:".$pUser->mobilephone;
+    		}
     	}
     }
     return $msg;
@@ -1466,7 +1473,7 @@ class WeixinHelper {
    */
   public function about($type = 0) {
     //$text = "上联: 一次购物两个身份三级佣金四季发财;\n下联:五天推广六千人脉七万营收八面威风;\n横批:购物赚钱。\n购物就上益多米，\n放心购物，轻松赚钱，\n品质生活从这里开始";
-    $text = "益多米是新型社交电商购物平台，为广大消费者提供玲琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
+    $text = "益多米是新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
     $text.= "\n\n上线时间: 2016-01-18";
     return $text;
   }

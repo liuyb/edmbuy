@@ -39,7 +39,15 @@ class SyncFilesToOssJob extends CronJob {
 				
 				if ($it->sid == $cur_server_id) { //表示当前web服务器下生成的文件
 					
-					$local_file = SIMPHP_ROOT . '/../' . SHOP_PLATFORM . '/' . ltrim($it->oripath,'/'); //TODO 这里要改成下载的方式
+					//$local_file = SIMPHP_ROOT . '/../' . SHOP_PLATFORM . '/' . ltrim($it->oripath,'/'); //TODO 这里要改成下载的方式
+					$local_file = SIMPHP_ROOT;
+					if (Media::is_app_file($it->oripath)) { //路径以 '/a/' 或 '/var/'开头，则表示文件在edmbuy下，否则在edmshop下
+						$local_file .= $it->oripath;
+					}
+					else {
+						$local_file .= '/../' . SHOP_PLATFORM . $it->oripath;
+					}
+					$local_file = realpath($local_file);
 					$remote_file= $it->oss_path();
 					if (!file_exists($local_file)) {
 						$this->log("[FAIL]rid: {$it->mid}, file: [{$it->sid}]{$it->oripath}, msg: file not found.");

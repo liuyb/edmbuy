@@ -19,7 +19,7 @@
 <div class="rice_info">
 	<p><img src="/themes/mobiles/img/rice_05.png" style="margin-top:15px;"></p>
 	<p><img src="/themes/mobiles/img/rice_03.png"></p>
-	<p><img src="/themes/mobiles/img/rice_06.png"></p>
+	<p><img src="/themes/mobiles/img/rice_06_2.png"></p>
 	<p><img src="/themes/mobiles/img/rice_04.png"></p>
 </div>
 <!-- 

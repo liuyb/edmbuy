@@ -24,48 +24,18 @@ $json =<<<HEREDOC
 	[
 		{
 			"type" : "view",
-			"name" : "小蜜商城",
-			"url"  : "http://m.fxmgou.com/"
+			"name" : "推广二维码",
+			"url"  : "http://edm.fxmapp.com/comeon"
 		},
 		{
-      "name" : "我的",
-      "sub_button" : [
-        {
-    			"type" : "click",
-    			"name" : "最新文章",
-    			"key"  : "200"
-        },
-        {
-    			"type" : "view",
-    			"name" : "我的订单",
-    			"url"  : "http://m.fxmgou.com/trade/order/record"
-        },
-        {
-    			"type" : "view",
-    			"name" : "我的收藏",
-    			"url"  : "http://m.fxmgou.com/user/collect"
-        },
-        {
-    			"type" : "view",
-    			"name" : "意见反馈",
-    			"url"  : "http://m.fxmgou.com/user/feedback"
-        }
-      ]
+			"type" : "view",
+			"name" : "米商计划",
+			"url"  : "http://edm.fxmapp.com/riceplan"
 		},
-    {
-      "name" : "使用帮助",
-      "sub_button" : [
-        {
-    			"type" : "click",
-    			"name" : "关于小蜜",
-    			"key"  : "300"
-        },
-        {
-    			"type" : "click",
-    			"name" : "联系小蜜",
-    			"key"  : "301"
-        }
-      ]
+		{
+			"type" : "view",
+			"name" : "常见问题",
+			"url"  : "http://edm.fxmapp.com/about"
 		}
 	]
 }
@@ -75,7 +45,7 @@ $menuConfig = json_decode($json, TRUE);
 config_set('wxmenu', $menuConfig, 'J');
 
 $msg = 'update menu fail'.BR;
-if((new Weixin([],'fxmgou'))->createMenu($menuConfig)){
+if((new Weixin([],'edmbuy'))->createMenu($menuConfig)){
   $msg = 'update menu success'.BR;
 }
 
