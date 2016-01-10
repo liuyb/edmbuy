@@ -88,6 +88,40 @@ class Spm extends StorageNode {
 		return $ret;
 	}
 
+	/**
+	 * 获取用户的推广spam
+	 * @return string
+	 */
+	static function user_spm($uid = NULL) {
+		
+		if (!isset($uid)) {
+			if ($GLOBALS['user']->uid) {
+				$tUser = $GLOBALS['user'];
+			}
+			else {
+				return '';
+			}
+		}
+		else {
+			$tUser = Users::load($uid);
+			if (!$tUser->is_exist()) {
+				return '';
+			}
+		}
+		
+		$spm_key = self::gen_key('user',$tUser->uid);
+		$spmNode = self::find_one(new Query('key', $spm_key));
+		if (!$spmNode->is_exist()) {
+			$spmNode = new self();
+			$spmNode->key = $spm_key;
+			$spmNode->flag1 = 'user';
+			$spmNode->flag2 = $tUser->uid;
+			$spmNode->data  = $spmNode->flag2;
+			$spmNode->dtime = simphp_dtime();
+			$spmNode->save(Storage::SAVE_INSERT);
+		}
+		return $spmNode->gen_spm();
+	}
 }
  
 /*----- END FILE: class.Spm.php -----*/

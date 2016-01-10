@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="keywords" content="<?php echo $seo['keyword']?>">
 <meta name="description" content="<?php echo $seo['desc']?>">
-<meta name="author" content="Donglong Technical Team">
+<meta name="author" content="Edmbuy Technical Team">
 <meta name="apple-mobile-web-app-title" content="<?php echo L('appname')?>">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black"> -->
@@ -72,8 +72,9 @@ function required_uinfo_empty() {
     <div class="pageBg">品质生活从这里开始🔛</div>
   </div>
   <div id="loadingCover" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
+  <?php include T('inc/popalert');?>
 </div>
-<?php include T('_popdlg');?>
+<?php include T('inc/popdlg');?>
 <!-- 微信操作提示 -->
 <div id="cover-wxtips" class="cover" style="display:none;"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
 <div style="display:none;"><img src="<?php echo ploadingimg()?>" alt=""/></div>

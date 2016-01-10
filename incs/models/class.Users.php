@@ -32,6 +32,8 @@ class Users extends StorageNode {
 						'password'    => 'password',
 						'logo'        => 'logo',
 						'wxqr'        => 'wxqr',
+						'wxqrimg'     => 'wxqr_img',
+						'wxqrpromote' => 'wxqr_promote',
 						'question'    => 'question',
 						'answer'      => 'answer',
 						'sex'         => 'sex',
@@ -179,27 +181,17 @@ class Users extends StorageNode {
 	}
 	
 	/**
-	 * Object version of static method 'wx_qrcode'
-	 * @param integer $scene_type Weixin::QR_SCENE 或 Weixin::QR_LIMIT_SCENE
-	 * @param boolean $return_text 如果$return_text为真，则返回二维码内容，否则返回二维码图片地址
-	 * @return string
-	 *   返回二维码图片地址或二维码内容
-	 */
-	public function wx_qr($scene_type = Weixin::QR_SCENE, $return_text = false) {
-		return self::qrcode($this->uid,$scene_type,$return_text);
-	}
-	
-	/**
 	 * Get user qrcode
 	 * 算法：
 	 *  1、无论临时二维码还是永久二维码，一个用户仅对应一个“有效的” 
-	 *  2、如果永久二维码数已经达到50000(此参数可调)，则无论$scene_type输入什么，都只生产临时二维码(微信对永久二维码有10w个的限制)
-	 * @param integer $scene_type Weixin::QR_SCENE 或 Weixin::QR_LIMIT_SCENE
+	 *  2、如果永久二维码数已经达到允许值的3/4(此参数可调)，则无论$scene_type输入什么，都只产生有最大时效的临时二维码(微信对永久二维码有10w个的限制)
+	 * @param integer $scene_type  Weixin::QR_SCENE 或 Weixin::QR_LIMIT_SCENE
 	 * @param boolean $return_text 如果$return_text为真，则返回二维码内容，否则返回二维码图片地址
+	 * @param integer $scene_id    用于返回记录id
 	 * @return string
 	 *   返回二维码图片地址或二维码内容
 	 */
-	static function wx_qrcode($user_id, $scene_type = Weixin::QR_SCENE, $return_text = false) {
+	static function wx_qrcode($user_id, $scene_type = Weixin::QR_SCENE, $return_text = false, &$scene_id = 0) {
 		if (!in_array($scene_type, [Weixin::QR_SCENE, Weixin::QR_LIMIT_SCENE])) {
 			$scene_type = Weixin::QR_LIMIT_SCENE;//有可能输入了 Weixin::QR_LIMIT_STR_SCENE
 		}
@@ -215,27 +207,102 @@ class Users extends StorageNode {
 		if ($scene_type==Weixin::QR_SCENE) {
 			$where_extra = "AND wq.created > {$now}-wq.expire_seconds";
 		}
-		$sql = "SELECT uq.user_id, wq.*
-		        FROM `shp_user_qrcode` AS uq INNER JOIN `{weixin_qrcode}` AS wq ON uq.scene_id=wq.scene_id
-				    WHERE uq.user_id=%d AND wq.scene_type=%d {$where_extra}";
+		$sql = "SELECT wq.*
+		        FROM `{weixin_qrcode}` AS wq
+				    WHERE wq.user_id=%d AND wq.scene_type=%d {$where_extra}";
 		$row = D()->query($sql, $user_id, $scene_type)->get_one();
 		if (empty($row)) { //不存在则要创建
 			$wxqr = new Wxqrcode();
+			$wxqr->user_id    = $user_id;
 			$wxqr->scene_type = $scene_type;
 			$wxqr->created    = $now;
-			$wxqr->user_id    = $user_id; //用于 UserQrcode 对象保存
 			$wxqr->save(Storage::SAVE_INSERT);
 			if ($wxqr->id) {
+				$scene_id = $wxqr->id;
 				$wx = new Weixin([Weixin::PLUGIN_QRCODE]);
 				$wx->qrcode->getQRCode($wxqr->id, $scene_type);
-				$wxqr = Wxqrcode::load($wxqr->id,true);
+				$wxqr = Wxqrcode::load($wxqr->id, true);
 				if ($wxqr->is_exist()) {
 					$row  = ['url'=>$wxqr->url,'img'=>$wxqr->img];
 				}
 			}
 		}
+		else {
+			$scene_id = $row['scene_id'];
+		}
 		
-		return $return_text ? $row['url'] : $row['img'];
+		return !empty($row) ? ($return_text ? $row['url'] : $row['img']) : '';
+	}
+	
+	/**
+	 * 将个人logo添加到个人二维码上去
+	 * @param string   $local_path
+	 * @return string
+	 */
+	public function add_logo_to_qrcode($local_path) {
+		return $local_path;
+	}
+	
+	/**
+	 * 返回用户的微信推广二维码
+	 * @return string
+	 */
+	public function wx_qrimg() {
+		$qr = self::wx_qrcode($this->uid, Weixin::QR_LIMIT_SCENE, false, $scene_id);
+		if (preg_match('/^'.preg_quote('https://mp.weixin.qq.com','/').'/', $qr))
+		{ //表示还是使用微信的二维码地址，则要保存到本地，并且将个人logo添加上去
+			
+			$dir = File::gen_unique_dir('id', $this->uid, '/a/wx/qrimg/');
+			$localpath = $dir . $this->uid . '.jpg'; //微信二维码返回的是jpg格式
+			$localpath = File::get_remote($qr, $localpath);
+			if ($localpath) { //成功创建到本地，则在此基础上添加个人logo
+				$localpath = $this->add_logo_to_qrcode($localpath);
+				if ($localpath) { //成功添加个人logo到二维码，则保存
+					//保存Wxqrcode表
+					$upWxqr = new Wxqrcode($scene_id);
+					$upWxqr->img = $localpath;
+					$upWxqr->save(Storage::SAVE_UPDATE);
+					//保存用户表
+					$upUser = new self($this->uid);
+					$upUser->wxqrimg = $localpath;
+					$upUser->save(Storage::SAVE_UPDATE);
+					return $localpath;
+				}
+			}
+			
+		}
+		return $qr;
+	}
+	
+	/**
+	 * 返回用户带微信二维码的推广图片地址
+	 * @return string
+	 */
+	public function wx_qrpromote() {
+		if ($this->wxqrpromote) { //存在就直接返回
+			return $this->wxqrpromote;
+		}
+		
+		$sourcefile     = SIMPHP_ROOT . '/misc/images/wx/promote_base.jpg';
+		$targetdir      = SIMPHP_ROOT . File::gen_unique_dir('id', $this->uid, '/a/wx/promote/');
+		$targetfile     = $targetdir . $this->uid . '.jpg';
+		$qrimg_default  = SIMPHP_ROOT . '/misc/images/wx/qrcode_430.jpg';
+		$qrimg          = SIMPHP_ROOT . $this->wx_qrimg();
+		if (!file_exists($qrimg)) {
+			$qrimg = $qrimg_default;
+		}
+		if (!is_dir($targetdir)) {
+			mkdirs($targetdir);
+		}
+		
+		$ret = File::add_watermark($sourcefile, $targetfile, $qrimg, ['x'=>95,'y'=>480,'w'=>301,'h'=>301], 85);
+		if ($ret) { //创建水印成功
+			$upUser = new Users($this->uid);
+			$upUser->wxqrpromote = $ret;
+			$upUser->save(Storage::SAVE_UPDATE);
+			return Media::path($ret, true);
+		}
+		return '';
 	}
 	
 }

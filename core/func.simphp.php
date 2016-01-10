@@ -541,16 +541,18 @@ function U($uri = '', $vars = '', $domain = FALSE) {
     $uri  = $ctx_path . '?q=' .$uri;
   }
   
+  // spm
+  if (!isset($vars['spm'])) {
+  	$spm = isset($_GET['spm']) ? $_GET['spm'] : '';
+  	if (!empty($spm)) {
+  		$vars['spm'] = $spm;
+  	}
+  }
+  
   // Append query string
   if (!empty($vars)) {
     $vars = http_build_query($vars);
     $uri .= (strpos($uri,'?')===false?'?':'&'). $vars;
-  }
-  
-  // spm
-  $spm = isset($_GET['spm']) ? $_GET['spm'] : '';
-  if (!empty($spm)) {
-  	$uri .= (strpos($uri,'?')===false?'?':'&'). 'spm='.$spm;
   }
   
   // Check domain

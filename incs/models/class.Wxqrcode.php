@@ -14,6 +14,7 @@ class Wxqrcode extends StorageNode {
 				'key'   => 'scene_id',
 				'columns' => array(
 						'scene_id'    => 'scene_id',
+						'user_id'     => 'user_id',
 						'scene_type'  => 'scene_type',
 						'url'         => 'url',
 						'img'         => 'img',
@@ -30,14 +31,7 @@ class Wxqrcode extends StorageNode {
 	 * @param boolean $op_succ true: op success, fail: op fail
 	 */
 	protected function save_after($op_type, $op_succ)  {
-		if ($op_succ) {
-			if ($op_type==Storage::SAVE_INSERT) {
-				$uqr = new UserQrcode();
-				$uqr->user_id    = $this->user_id;
-				$uqr->scene_id   = $this->scene_id;
-				$uqr->save(Storage::SAVE_INSERT);
-			}
-		}
+		
 	}
 	
 }

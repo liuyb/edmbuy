@@ -38,8 +38,22 @@ class File extends CStatic {
 	}
 	
 	/**
+	 * Get file mime type
+	 * @param string $file
+	 * @return string
+	 */
+	static function mime($file) {
+		if (!file_exists($file)) {
+			return '';
+		}
+		$fi = new finfo(FILEINFO_MIME_TYPE);
+		return $fi->file($file);
+	}
+	
+	/**
 	 * Get file extension by mime
-	 * @param string $filename
+	 * @param string  $filename
+	 * @return string the extension, with the prefix '.'
 	 */
 	static function ext($filename, $delimiter = '.') {
 		$arr = explode($delimiter, $filename);
@@ -72,7 +86,7 @@ class File extends CStatic {
 		if ('id'==$type) {
 			$dir = '/' . intval($id / self::FOLDER_FILE_LIMIT) . '/';
 		}
-		elseif ('random'==$type) {
+		elseif ('random'==$type) { //TODO random type
 			
 		}
 		return rtrim($prefix,'/').$dir;
@@ -96,7 +110,7 @@ class File extends CStatic {
 	/**
 	 * Get file from a remote url, and save to local path or temporary dir
 	 * @param string $url remote url
-	 * @param string $local_path save to local file path
+	 * @param string $local_path save to local file path, when null, then use temporary path
 	 * @return string|boolean, when a string, indicating the local file path; when false, indicating fail
 	 */
 	static function get_remote($url, $local_path = NULL) {
@@ -128,13 +142,13 @@ class File extends CStatic {
 			curl_close($ch);
 			$succ = empty($err) ? true : false;
 		}
-		else {
+		else { //TODO other method
 			
 		}
 		
 		// Get file mime to rename to currect extension
 		if ($succ) {
-			$ext  = self::ext(get_mime($local_path), '/');
+			$ext  = self::ext(self::mime($local_path), '/');
 			$local_path_final = preg_replace('/'.preg_quote(self::TEMP_FILE_EXT).'$/', $ext, $local_path);
 			@rename($local_path, $local_path_final);
 			return str_replace(SIMPHP_ROOT, '', $local_path_final);
@@ -148,11 +162,11 @@ class File extends CStatic {
 	 * @param       string      filename            原始图片文件名，包含完整路径
 	 * @param       string      target_file         需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
 	 * @param       string      $watermark          水印完整路径
-	 * @param       array       $watermark_place    水印位置代码，包括 x:原始图x位置;y:原始图y位置;w:水印在原始图的宽度;h:水印在原始图的高度
+	 * @param       array       $watermark_place    水印位置代码，包括 x:水印在原始图的x位置;y:水印在原始图的y位置;w:水印在原始图的宽度;h:水印在原始图的高度
 	 * @param       int         $watermark_alpha    水印透明度(0~100)
 	 * @return      mix         如果成功则返回文件路径，否则返回false
 	 */
-	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 65)
+	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 85)
 	{	
 		// 是否安装了GD
 		if (!self::gd_exists())
@@ -189,23 +203,35 @@ class File extends CStatic {
 			return false;
 		}
 		
-		$thumb_width  = $watermark_info[0];
-		$thumb_height = $watermark_info[1];
-		if (isset($watermark_place['w']) && $watermark_place['w']) {
+		// 决定是否要缩放水印
+		$thumb_width    = $watermark_info[0];
+		$thumb_height   = $watermark_info[1];
+		$thumb_scale    = $watermark_info[1] ? ($watermark_info[0]/$watermark_info[1]) : 1;
+		$need_resize    = false;
+		if (isset($watermark_place['w']) && $watermark_place['w'] && $watermark_place['w']!=$watermark_info[0])
+		{ //以宽为基准缩放
+			$need_resize  = true;
 			$thumb_width  = $watermark_place['w'];
-			if (isset($watermark_place['h']) && $watermark_place['h']) {
-				$thumb_height = $watermark_place['h'];
-			}
-			else {
-				$thumb_scale = $watermark_info[0] / ($watermark_info[1] ? : 1);
-				$thumb_height= intval($watermark_place['w'] / $thumb_scale);
-			}
+			$thumb_height = intval($thumb_width / $thumb_scale);
 		}
-		if (function_exists('imagecreatetruecolor')) {
+		elseif (isset($watermark_place['h']) && $watermark_place['h'] && $watermark_place['h']!=$watermark_info[1])
+		{ //以高为基准缩放
+			$need_resize  = true;
+			$thumb_height = $watermark_place['h'];
+			$thumb_width  = intval($thumb_height * $thumb_scale);
+		}
+		
+		if (function_exists('imagecreatetruecolor'))
+		{
 			$watermark_thumb  = imagecreatetruecolor($thumb_width, $thumb_height);
 		}
-		else {
+		else
+		{
 			$watermark_thumb  = imagecreate($thumb_width, $thumb_height);
+		}
+		if (!$watermark_thumb)
+		{
+			return false;
 		}
 		
 		/* 将水印图片进行缩放处理 */
@@ -228,37 +254,18 @@ class File extends CStatic {
 		{
 			imagecopymerge($source_handle, $watermark_thumb, $watermark_place['x'], $watermark_place['y'], 0, 0, $thumb_width, $thumb_height, $watermark_alpha);
 		}
+		
+		/* 写文件到目标目录 */
 		$target = empty($target_file) ? $filename : $target_file;
+		$wrsucc = self::img_write($source_handle, $target, $source_info[2]);
 		
-		switch ($source_info[2] )
-		{
-			case 'image/gif':
-			case 1:
-				imagegif($source_handle,  $target);
-				break;
-		
-			case 'image/pjpeg':
-			case 'image/jpeg':
-			case 2:
-				imagejpeg($source_handle, $target);
-				break;
-		
-			case 'image/x-png':
-			case 'image/png':
-			case 3:
-				imagepng($source_handle,  $target);
-				break;
-		
-			default:
-				
-		}
-		
+		/* 清除image资源对象 */
 		imagedestroy($watermark_handle);
 		imagedestroy($watermark_thumb);
 		imagedestroy($source_handle);
 		
 		$path = realpath($target);
-		if ($path)
+		if ($wrsucc && $path)
 		{
 			return str_replace(SIMPHP_ROOT, '', str_replace('\\', '/', $path));
 		}
@@ -274,6 +281,7 @@ class File extends CStatic {
 	 */
 	static function img_resource($img_file, $mime_type)
 	{
+		$res = false;
 		switch ($mime_type)
 		{
 			case 1:
@@ -294,10 +302,46 @@ class File extends CStatic {
 				break;
 	
 			default:
-				return false;
+				
 		}
 	
 		return $res;
+	}
+	
+	/**
+	 * 
+	 * @param resource              $img      图片资源对象
+	 * @param string                $target   目标文件目录
+	 * @param mixed(integer|string) $mime     图片mime
+	 * @return boolean
+	 */
+	static function img_write($img, $target, $mime)
+	{
+		$b = false;
+		switch ($mime)
+		{
+			case 'image/gif':
+			case 1:
+				$b = imagegif($img,  $target);
+				break;
+		
+			case 'image/pjpeg':
+			case 'image/jpeg':
+			case 2:
+				$b = imagejpeg($img, $target);
+				break;
+		
+			case 'image/x-png':
+			case 'image/png':
+			case 3:
+				$b = imagepng($img,  $target);
+				break;
+		
+			default:
+				
+		}
+		
+		return $b;
 	}
 	
 }

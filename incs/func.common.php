@@ -661,11 +661,13 @@ function headscript()
   
   $script  = '<script type="text/javascript">';
   $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
-  foreach ($user->column_data() AS $k => $v) {
-    if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
-      $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
-      $script .= 'gUser.'.$k."={$v};";
-    }
+  if ($user->uid) {
+  	foreach ($user->column_data() AS $k => $v) {
+  		if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
+  			$v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
+  			$script .= 'gUser.'.$k."={$v};";
+  		}
+  	}
   }
   $script .= '</script>';
   
@@ -722,19 +724,7 @@ HEREDOC_SHARE_JS0;
 			$item_id = $matches[1];
 			$item = Items::load($item_id);
 			if ($item->is_exist()) {
-				$spm_key = Spm::gen_key('user',$GLOBALS['user']->uid);
-				$spmNode = Spm::find_one(new Query('key', $spm_key));
-				if (!$spmNode->is_exist()) {
-					$spmNode = new Spm();
-					$spmNode->key = $spm_key;
-					$spmNode->flag1 = 'user';
-					$spmNode->flag2 = $GLOBALS['user']->uid;
-					$spmNode->data  = $spmNode->flag2;
-					$spmNode->dtime = simphp_dtime();
-					$spmNode->save(Storage::SAVE_INSERT);
-				}
-				
-				$item_url = $item->url($spmNode->gen_spm());
+				$item_url = $item->url(Spm::user_spm());
 				$item_pic = $item->imgurl($item->item_thumb);
 				$data_js .=<<<HEREDOC_SHARE_JS0
 wxData.shareinfo.title = '{$item->item_name}';

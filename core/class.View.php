@@ -350,7 +350,7 @@ class View extends CBase {
 class ViewException extends SimPHPException {
 	protected $view;
 	
-	public function __construct(View $view, $message = null, $code = null) {
+	public function __construct(View $view, $message, $code = null) {
 		parent::__construct($message, $code);
 		$this->view = $view;
 	}

@@ -27,8 +27,13 @@ class Common_Controller extends Controller {
    */
   public static function on_dispatch_before(Request $request, Response $response) {
   	
-    // 检查接口参数输入
-    Api::check($request, $response);
+  	$q = $request->q();
+  	if (!preg_match('/^(weixin|wxpay|alarm)/i', $q)) {
+
+  		// 检查接口参数输入
+  		Api::check($request, $response);
+  		
+  	}
     
   }
   

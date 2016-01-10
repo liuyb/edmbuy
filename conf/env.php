@@ -29,11 +29,14 @@ return [
   'tplcompile_check' => 1,
   'tplforce_compile' => 1,
   'tpldebug' => 1,
-	//当前服务器ID(用于多web服务器部署)
+	//当前服务器ID(用于多web服务器部署时的资源访问)
   'server_id'=> 1,
+	'resource_servers'  => [
+		1 => 'http://edmdev.fxmapp.com',	
+	],
   //站点信息
   'site' => [
-  	'mobile' => 'http://edm.fxmapp.com',
+  	'mobile' => 'http://edmdev.fxmapp.com',
   	'shop' => 'http://edmshop.fxmapp.com',
   ],
   //debug白名单uid
