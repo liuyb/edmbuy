@@ -26,6 +26,7 @@ class Common_Controller extends Controller {
     return [
       '!^about$!i'     => 'default/about',
       '!^comeon$!i'    => 'default/comeon',
+      '!^riceplan$!i'  => 'default/riceplan',
     ];
   }
   

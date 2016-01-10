@@ -30,8 +30,8 @@
     </div>
     <div class="info_comm">
       <p>益多米累计消费金额满98元（不包含运费），将自动升级为“米商”。</p>
-      <p style="background:#666;border-radius:4px; margin-top: 10px;"><img src="/themes/mobiles/img/rice_06.png" style="max-width:100%"></p>
-      <p style="background:#666;border-radius:4px;"><img src="/themes/mobiles/img/rice_04.png" style="max-width:100%"></p>
+      <p style="/*background:#666;*/border-radius:4px; margin-top: 10px;"><img src="/themes/mobiles/img/rice_06.png" style="max-width:100%"></p>
+     <!-- <p style="background:#666;border-radius:4px;"><img src="/themes/mobiles/img/rice_04.png" style="max-width:100%"></p>  -->
     </div>
   </div>
   
@@ -190,8 +190,8 @@
     </div>
     <div class="info_comm">
       <p>益多米累计消费金额满98元（不包含运费），将自动升级为“米商”。</p>
-      <p style="background:#666;border-radius:4px; margin-top: 10px;"><img src="/themes/mobiles/img/rice_06.png" style="max-width:100%"></p>
-      <p style="background:#666;border-radius:4px;"><img src="/themes/mobiles/img/rice_04.png" style="max-width:100%"></p>
+      <p style="/*background:#666;*/border-radius:4px; margin-top: 10px;"><img src="/themes/mobiles/img/rice_06.png" style="max-width:100%"></p>
+      <!-- <p style="background:#666;border-radius:4px;"><img src="/themes/mobiles/img/rice_04.png" style="max-width:100%"></p>  -->
     </div>
   </div>
 </div>

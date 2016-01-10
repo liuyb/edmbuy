@@ -324,17 +324,16 @@ class Weixin {
     $toUserName  = $postObj->ToUserName;
     $openid      = $fromUserName;
     $reqtime     = intval($postObj->CreateTime);
-    
+    trace_debug('weixin_event_msg', $postObj);
     $contentText = '';
     $responseText= '';
     switch ($postObj->Event) {
+    	case 'SCAN':
       case 'subscribe':
-        $contentText = $this->helper->onSubscribe($openid, $reqtime, $toUserName);
+        $contentText = $this->helper->onSubscribe($openid, $reqtime, $toUserName, isset($postObj->EventKey)?$postObj->EventKey:null, isset($postObj->Ticket)?$postObj->Ticket:null);
         break;
       case 'unsubscribe':
         $this->helper->onUnsubscribe($openid, $reqtime);
-        break;
-      case 'SCAN':
         break;
       case 'CLICK':
       	return '';//临时屏蔽
@@ -1230,13 +1229,16 @@ class WeixinHelper {
   /**
    * 关注事件
    *
-   * @param string $openid
+   * @param string  $openid
    * @param integer $reqtime
-   * @param string $toUserName
+   * @param string  $toUserName
+   * @param string  $eventKey
+   * @param string  $ticket
    * @return string
    */
-  public function onSubscribe($openid, $reqtime, $toUserName = '') {
+  public function onSubscribe($openid, $reqtime, $toUserName = '', $eventKey = NULL, $ticket = NULL) {
     $wxuinfo = $this->wx->userInfo($openid);
+    $parent_id = 0;
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
     		
@@ -1246,6 +1248,7 @@ class WeixinHelper {
     			if (!$aUser->openid) {
     				$upUser->openid  = $openid;
     			}
+    			$parent_id = $aUser->parentid;
     		}
     		else { //未存在
     			$upUser = new Users();
@@ -1255,6 +1258,21 @@ class WeixinHelper {
     			$upUser->state     = 0; //0:正常;1:禁止
     			$upUser->from      = $this->from;
     			$upUser->authmethod= 'base';
+    			if(isset($eventKey) && $eventKey) { //确定上级
+    				if (preg_match('/^qrscene_(\d+)/', $eventKey, $matches)) {
+    					$scene_id = $matches[1];
+    				}
+    				else {
+    					$scene_id = $eventKey;
+    				}
+    				if (is_numeric($scene_id)) {
+    					$wxqr = Wxqrcode::load($scene_id); //EventKey就是scene_id
+    					if ($wxqr->is_exist()) {
+    						$upUser->parentid = $wxqr->user_id;
+    						$parent_id = $wxqr->user_id;
+    					}
+    				}
+    			}
     		}
     		
     		$upUser->subscribe   = $wxuinfo['subscribe'];
@@ -1274,6 +1292,14 @@ class WeixinHelper {
     }
     
     $msg = $this->about(1);
+    if ($parent_id) {
+    	$pUser = Users::load($parent_id);
+    	if ($pUser->is_exist()) {
+    		if ($pUser->nickname) $promoter = '推荐人:' . $pUser->nickname;
+    		else $promoter = '推荐人多米号:' . $pUser->id;
+    		$msg .= "\n\n".$promoter;
+    	}
+    }
     return $msg;
     
   }
@@ -1439,7 +1465,9 @@ class WeixinHelper {
    * @return string
    */
   public function about($type = 0) {
-    $text = "你好，欢迎关注益多米/:rose";
+    //$text = "上联: 一次购物两个身份三级佣金四季发财;\n下联:五天推广六千人脉七万营收八面威风;\n横批:购物赚钱。\n购物就上益多米，\n放心购物，轻松赚钱，\n品质生活从这里开始";
+    $text = "益多米是新型社交电商购物平台，为广大消费者提供玲琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
+    $text.= "\n\n上线时间: 2016-01-18";
     return $text;
   }
   

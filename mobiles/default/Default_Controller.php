@@ -78,6 +78,33 @@ class Default_Controller extends MobileController {
     
     throw new ViewResponse($this->v);
   }
+
+  /**
+   * action 'riceplan'
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function riceplan(Request $request, Response $response)
+  {
+  	$this->v = new PageView('','_page_spa');
+    $this->v->set_tplname('mod_default_riceplan');
+    
+    if (!Users::is_logined()) {
+    	throw new ViewException($this->v, '未登录，需要在微信客户端中登录');
+    }
+     
+    //分享信息
+    $share_info = [
+    		'title' => '米商专属特权',
+    		'desc'  => '益多米是新型社交电商购物平台，为广大消费者提供玲琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。',
+    		'link'  => U('about', 'spm='.Spm::user_spm(), true),
+    		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+    ];
+    $this->v->assign('share_info', $share_info);
+    
+    throw new ViewResponse($this->v);
+  }
   
   /**
    * action 'comeon'
