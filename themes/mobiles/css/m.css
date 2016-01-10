@@ -1216,10 +1216,12 @@ a.ph_btn{
   width: 50%; 
 }
 .c_name{
-  background: url(../img/he.png) no-repeat 110px center;
-  background-size: 22px;
   font-size:17px;
   color:#fff;
+}
+.c_name_bg{
+  background: url(../img/he.png) no-repeat 110px center;
+  background-size: 22px;
 }
 .c_id{
   font-size:13px;
@@ -1254,11 +1256,13 @@ a.ph_btn{
   color:#333;
 }
 .refer_name{
-  background: url(../img/he.png) no-repeat 90% center;  
-  background-size: 22px;  
   font-size:14px;
   color:#666;
   padding:10px 40px 10px 0;
+}
+.refer_name_bg{
+  background: url(../img/he.png) no-repeat 90% center;  
+  background-size: 22px;  
 }
 .refer_but{
   width:57px;
@@ -1374,9 +1378,9 @@ a.ph_btn{
   display: inline-block;
   color: #fff;
   background: #ff0006;
-  top: 2px;
-  left: 50%;
-  margin-left: 1px; 
+  /* top: 2px;
+  left: 50%; */
+  margin-left: -20px; 
 }
 
 .order_list{
@@ -2792,3 +2796,68 @@ td.cash_td2 img {
   color: #fff;  
   cursor:pointer;
 }
+/*user setting css**/
+.person_head{
+	cursor: pointer;
+	background: url(./img/forward.png) no-repeat 97% center;	
+	background-size: 16px;	
+	height:69px;
+	position: relative;
+	margin-left: 12px;
+}
+.head_l{
+	float:left;
+	font-size:17px;
+	color:#333;
+	line-height:69px;
+}
+.head_r{
+	float:right;
+	margin: 10px 30px 0;
+}
+.head_r img{
+	width:50px;
+	heifht:50px;
+}
+.person_head_comm{
+	cursor: pointer;
+	background: url(./img/forward.png) no-repeat 97% center;	
+	background-size: 16px;	
+	height:46px;
+	border-top:1px solid #eee;
+	margin-left: 12px;
+}
+.person_head_comment{
+	cursor: pointer;
+	height:48px;
+	border-top:1px solid #eee;
+	margin-left: 12px;
+}
+.head_l_com{
+	float:left;
+	font-size:17px;
+	color:#333;
+	line-height:46px;
+}
+.head_r_com{
+	font-size:17px;
+	float:right;
+	line-height:46px;	
+	color:#666;
+	margin-right: 30px;	
+}
+.head_r_com img{
+	height:19px;
+  	margin-bottom: -3px;	
+}
+.personInfo_but{
+	background:#fff;
+	border:1px solid #ff6d14;
+	width:80px;
+	height:27px;
+	color:#ff6d14;
+  	cursor: pointer;
+  	border-radius:3px;	
+	padding: 0;
+}
+/*user setting css**/
