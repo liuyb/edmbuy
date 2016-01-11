@@ -41,6 +41,7 @@ class Weixin {
 	 * @var constant
 	 */
 	const MSG_TYPE_TEXT  = 'text';
+	const MSG_TYPE_CUSTOMER = 'customer';
 	const MSG_TYPE_IMAGE = 'image';
 	const MSG_TYPE_VOICE = 'voice';
 	const MSG_TYPE_VIDEO = 'video';
@@ -121,6 +122,14 @@ class Weixin {
 <FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
 <MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[%s]]></Content>
+</xml>",
+	  //文本消息(转发至多客服)
+	  'customer' => "<xml>
+<ToUserName><![CDATA[%s]]></ToUserName>
+<FromUserName><![CDATA[%s]]></FromUserName>
+<CreateTime>%s</CreateTime>
+<MsgType><![CDATA[transfer_customer_service]]></MsgType>
 <Content><![CDATA[%s]]></Content>
 </xml>",
 	  //图片消息
@@ -289,6 +298,7 @@ class Weixin {
           $respMsg = $this->dealEventMsg($postObj);
           break;
         case 'text':
+        case 'customer':
           $respMsg = $this->dealTextMsg($postObj);
           break;
         case 'image':
@@ -399,13 +409,14 @@ class Weixin {
     $responseText = '';
     $queryResult  = $this->helper->onTextQuery($keyword, $result_type);
     if (empty($queryResult)) {//没查找到任何可回复的信息
+    	return '';
       $baidu_sou  = $this->helper->sou($keyword);
-      $contentText  = "抱歉，没有找到你想要的东西！小蜜帮你<a href=\"{$baidu_sou}\">度娘一下</a>吧/::P";
+      $contentText  = "抱歉，没有找到你想要的东西！小二帮你<a href=\"{$baidu_sou}\">度娘一下</a>吧/::P";
       $responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $contentText));
     }
     else {
       if ('string'==$result_type) { //一般文本
-        $responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $queryResult));
+        $responseText = self::packMsg(self::MSG_TYPE_CUSTOMER/*要转到多客服系统*/, $fromUserName, $toUserName, array('content' => $queryResult));
       }
       elseif ('arr_article'==$result_type) { //最新文章
         $item  = '';
@@ -478,6 +489,7 @@ class Weixin {
    * @param string $createTime   消息响应时间
    * @param string $extra <br>
    *   $msgType = 'text' : $extra['content' => 'xx'] <br>
+   *   $msgType = 'customer' : $extra['content' => 'xx'] <br>
    *   $msgType = 'image': $extra['mediaId' => 'xx'] <br>
    *   $msgType = 'voice': $extra['mediaId' => 'xx'] <br>
    *   $msgType = 'video': $extra['mediaId' => 'xx', 'title' => 'xx', 'description' => 'xx'] <br>
@@ -488,13 +500,14 @@ class Weixin {
    */
   public static function packMsg($msgType, $toUserName, $fromUserName, $extra = array())
   {
-    if (!in_array($msgType, ['text','image','voice','video','music','news','news_item'])) {
+    if (!in_array($msgType, ['text','customer','image','voice','video','music','news','news_item'])) {
       return '';
     }
 
     $createTime = time();
     switch ($msgType) {
       case 'text':
+      case 'customer':
         if (empty($extra['content'])) {
           return '';
         }
@@ -1372,7 +1385,7 @@ class WeixinHelper {
     
     $result = '';
     $result_type = 'string';
-    if (in_array($keyword, array('小蜜','关于小蜜','关于','福小蜜'))) {
+    if (in_array($keyword, array('益多米','关于'))) {
       $result = $this->about();
     }
     elseif ( preg_match('/你|您/', $keyword) && preg_match('/是谁|干什么|做什么/', $keyword) ) {
@@ -1380,10 +1393,6 @@ class WeixinHelper {
     }
     elseif (preg_match('/我/', $keyword) && preg_match('/是谁|干什么|做什么/', $keyword)) {
       $result = '你懂的！';
-    }
-    elseif (in_array($keyword, array('最新文章','最新资讯','文章','资讯'))) {
-      $result = $this->latestArticles();
-      $result_type = 'arr_article';
     }
     elseif (preg_match('/百度|度娘/', $keyword)) {
       $result = '这是她的地址：<a href="http://www.baidu.com">www.baidu.com</a>';
@@ -1393,38 +1402,6 @@ class WeixinHelper {
     }
     elseif (preg_match('/喜欢|很好|感兴趣|大爱|太棒|真棒|棒极|哇塞|不错|太酷|忒酷|真酷/', $keyword)) {
       $result = '谢谢/::$';
-    }
-    elseif (preg_match('/无聊|干什么|什么干|做什么|什么做|什么好做|什么好干/', $keyword)) {
-      $poems = [
-        "终日昏昏醉梦间，\n忽闻春尽强登山。\n因过竹院逢僧话，\n偷得浮生半日闲。",
-        "黄梅时节家家雨，\n青草池塘处处蛙。\n有约不来过夜半，\n闲敲棋子落灯花。",
-        "无聊夜里无聊梦，\n心语无聊冷若冰。\n叹写无聊抒郁事，\n无聊目送月零丁。",
-        "一别之后，\n两地相悬，\n只说是三四月，\n又谁知五六年。\n七弦琴无心弹，\n八行书不可传，\n九连环从中折断，\n十里长亭望眼欲穿，\n百思想，千系念，万般无奈把郎怨。\n万语千言说不完，百无聊赖十倚栏，\n重九登高看孤雁，\n八月中秋月圆人不圆，\n七月半烧香秉烛问苍天，\n 六月伏天人人摇扇我心寒，\n 五月石榴如火，偏遇阵阵冷雨浇花端；\n四月枇杷未黄，我欲对镜心意乱。\n急匆匆，三月桃花随水转；\n飘零零，二月风筝线儿断。",
-        "智者乐山山如画，\n仁者乐水水无涯。\n从从容容一杯酒，\n平平淡淡一杯茶。\n\n细雨朦胧小石桥，\n春风荡漾小竹筏。\n夜无明月花独舞，\n腹有诗书气自华。",
-        "浮名浮利，虚苦劳神。\n叹隙中驹，石中火，梦中身。\n几时归去，作个闲人。\n\n网事已成空，还如一梦中。\n相见争如不见，有情还是无情。\n今朝有酒今朝醉，管他对错是与非。",
-      ];
-      $rand_idx = mt_rand(0, 100000);
-      $rand_idx = $rand_idx % count($poems);
-      $result = $poems[$rand_idx];
-      $baidu_sou = $this->sou($keyword);
-      $result.= "\n\n还不解聊？去调戏度娘吧：“度娘，<a href=\"{$baidu_sou}\">{$keyword}</a>”";
-    }
-    elseif (preg_match('/有什么/', $keyword)) {
-      $result = Goods::getGoodsList('','latest');
-      if (empty($result)) return '';
-      $result_type = 'arr_goods';
-    }
-    elseif (preg_match('/商城/', $keyword)) {
-      $result = "请访问: <a href=\"http://m.fxmgou.com/\">小蜜商城</a>";
-    }
-    elseif (preg_match('/订单/', $keyword)) {
-      $result = "请访问: <a href=\"http://m.fxmgou.com/trade/order/record\">我的订单</a>";
-    }
-    elseif (preg_match('/收藏/', $keyword)) {
-      $result = "请访问: <a href=\"http://m.fxmgou.com/user/collect\">我的收藏</a>";
-    }
-    elseif (preg_match('/反馈/', $keyword)) {
-      $result = "请访问: <a href=\"http://m.fxmgou.com/user/feedback\">我要反馈</a>";
     }
     elseif (preg_match('/^http(s)?:\/\//i', $keyword)) {
       $result = "请访问: <a href=\"{$keyword}\">{$keyword}</a>";
@@ -1437,9 +1414,7 @@ class WeixinHelper {
       $result = $this->defaultHello();
     }
     else { //查询数据库
-      $result = Goods::search($keyword,10);
-      if (empty($result)) return '';
-      $result_type = 'arr_goods';
+    	$result = "您好老师，现在可以通过二维码进行锁定上下级和预热。18号正式上线后，下级购买了产品你就可以获得佣金了。\n\n点击底部的“推广二维码”，把这个二维码发给陌生的朋友，让他关注益多米，看看他的推荐人是不是您。";
     }
     
     return $result;
