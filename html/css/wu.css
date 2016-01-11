@@ -290,35 +290,43 @@ a.h_btn{
 	text-align: center;
 }
 #f_sy {
-	background: url(../img/tab_sy_41.png) no-repeat center 4px;
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: 0 2px;
 	background-size: auto 44px;
 }
 #f_sy.on {
-	background: url(../img/tab_sy.png) no-repeat center 4px;
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: 0 2px;	
 	background-size: auto 44px;
 }
 #f_gwc {
-	background: url(../img/tab_gw_29.png) no-repeat center 4px;
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -84px 2px;
 	background-size: auto 44px;
 }
 #f_gwc.on {
-	background: url(../img/tab_gw.png) no-repeat center 4px;
-	background-size: auto 44px;
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -84px 2px;	
+	background-size: auto 44px;	
 }
 #f_hhr {
-	background: url(../img/tab_hh_28.png) no-repeat center 4px;
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -168px 2px;	
 	background-size: auto 44px;
 }
 #f_hhr.on {
-	background: url(../img/tab_hh.png) no-repeat center 4px;
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -168px 2px;	
 	background-size: auto 44px;
 }
 #f_hy {
-	background: url(../img/tab_hy_2.png) no-repeat center 4px;
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -252px 2px;	
 	background-size: auto 44px;
 }
 #f_hy.on {
-	background: url(../img/tab_hy.png) no-repeat center 4px;
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -252px 2px;	
 	background-size: auto 44px;
 }
 #f_ms {
@@ -566,7 +574,7 @@ a.h_btn{
 	height: 100%;
 	top: 0;	
 	left: 0;	
-	z-index: 111;	
+	z-index: 100;	
 }
 .p_detail_back{
 	position: fixed;	
@@ -624,15 +632,18 @@ a.h_btn{
 	border-bottom: 0;
 }
 .p_menu_sy{
-	background: url(../img/syb.png) no-repeat 12px center;
+	background: url(../img/bot_d.png) no-repeat;
+	background-position:13px 0;
 	background-size: 24px;	
 }
 .p_menu_hhr{
-	background: url(../img/heb.png) no-repeat 12px center;
+	background: url(../img/bot_d.png) no-repeat;
+	background-position:13px -46px;	
 	background-size: 24px;	
 }
 .p_menu_hy{
-	background: url(../img/hub.png) no-repeat 12px center;
+	background: url(../img/bot_d.png) no-repeat;
+	background-position:13px -92px;	
 	background-size: 24px;	
 }
 .p_detail_msg{

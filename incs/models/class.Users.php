@@ -110,7 +110,8 @@ class Users extends StorageNode {
 	 * @return boolean
 	 */
 	public function required_uinfo_empty() {
-		return empty($this->nickname) || empty($this->logo) ? true : false;
+		//return empty($this->nickname) || empty($this->logo) ? true : false;
+		return empty($this->nickname) ? true : false;
 	}
 	
 	/**

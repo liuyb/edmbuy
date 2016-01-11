@@ -1488,6 +1488,15 @@ td.cash_td2 img {
 	width:50%;
 	float:left;
 }
+.index_product_info li{
+	width:50% !important;
+	float:left !important;
+	margin-top:8px;
+	margin-bottom:-8px;
+}
+.index_product_info p{
+	background:#f9f9f9;
+}
 .list_product_info img{
 	max-width:100%;
 	background-size: cover;
@@ -1598,11 +1607,162 @@ td.cash_td2 img {
   	color: #fff;	
 	cursor:pointer;
 }
+.vendor_comm{
+  	padding:10px 0;
+  	margin: 0 0 0 12px;
+  	position: relative;
+  	border-bottom: 1px solid #eee;
+  	font-size: 18px;
+  	color: #111;
+}
 
-
-
-
-
+.index_title_ad{
+	background:#f6f6d2 url(../img/back.png) no-repeat 97% center;
+  	background-size: 16px;
+  	line-height: 44px;
+	height:44px;
+  	position: relative;
+	cursor:pointer;
+}
+.tit_ad_font{
+	font-size:16px;
+	color:#ff6d14;
+	margin-left:10px;	
+}
+.tit_ad_font1{
+	font-size:16px;
+	color:#999;
+	float:right;
+	margin-right:10%;
+}
+.index_center_adve{
+	margin:10px 0 5px;
+}
+.index_center_adve img{
+	width:158px;
+}
+.index_product_list{
+	
+}
+.por_list_title{
+	background:#fff;
+	font-size:17px;
+	color:#333;
+	border-bottom:1px solid #eee;
+	height:40px;
+	line-height:40px;
+	font-weight: bold;
+}
+.tit_left{
+	border-right:8px solid #ff1414;
+	margin: 0 10px 0 8px;
+}
+.list_tab{
+	width:100%;
+}
+.list_tab td{
+	width:49%;
+	background:#f9f9f9;
+	border-bottom:4px solid #eee;
+}
+.list_table_tit{
+  	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 5px 5px 0;
+  	font-size: 14px;
+  	color: #333;
+  	line-height: 17px;
+  	height: 36px;	
+}
+.list_table_price{
+	padding-left:2px;
+}
+.list_table_price span{
+	font-size:16px;
+	color:#FF0000;	
+}
+.list_table_price b{
+	font-size:11px;
+	color:#999;
+	text-decoration: line-through;
+	margin-left:15px;
+}
+.index_bottom{
+	margin-bottom:50px;
+	background:#fff;
+}
+.index_bottom li{
+	float:left;
+	width:25%;
+	text-align: center;
+	padding: 30px 0;
+}
+.index_bottom li img{
+	width:48px;
+	height:62px;
+}
+.list_jx_tab{
+	width:100%;	
+}
+.list_jx_tab img{
+	vertical-align: inherit;
+	width:110px;
+}
+.list_jx_tab td{
+	padding:8px;
+	background:#fff;	
+	height:110px;
+	vertical-align: top;
+	border-bottom: 4px solid #eee;
+}
+.jx_year_tit{
+	margin: 10px 0 10px -8px;
+	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0 5px;
+  	font-size: 14px;
+  	color: #333;
+  	line-height: 17px;
+  	height: 36px;	
+}
+.jx_table_price{
+	margin-left:-5px;
+}
+.jx_table_price span{
+	font-size:16px;
+	color:#FF0000;	
+}
+.jx_table_price b{
+	font-size:11px;
+	color:#999;
+	text-decoration: line-through;
+	margin-left:15px;
+}
+.jx_mail_type{
+	font-size:11px;
+	color:#999;
+	margin-left:-4px;
+}
+.index_promise{
+	text-align:center;
+	padding: 20px 0;
+}
+.index_promise img{
+	width:80%;
+}
+.tit_right{
+	float:right;
+	font-size:13px;
+	color:#999;
+	margin-right: 12px;
+}
+.list_tab_left_border{
+	border-left:4px solid #eee;
+}
 
 
 

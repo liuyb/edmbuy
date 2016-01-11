@@ -1,0 +1,166 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/swiper.min.css" />
+<link rel="stylesheet" href="./css/scrollbar.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/scrollbar.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+
+
+<body style="background:#eee;">
+
+<a href="rice_plan.html">
+	<div class="index_title_ad">
+		<span class="tit_ad_font">消费满98元，即可成为米商</span><span class="tit_ad_font1">了解详情</span>
+	</div>	
+</a>
+
+<div class="p_detail_banner">
+	<div class="swiper-container" id="product_banner">
+		<div class="swiper-wrapper" >
+			<div class="swiper-slide">
+				<img src="./img/banner_ydm.png">
+			</div>
+			<div class="swiper-slide">
+				<img src="./img/banner_ydm.png">
+			</div>
+		</div>
+		<div class="pagination" id="banner_pagination"></div>
+	</div>
+</div>
+
+<div class="index_center_adve">
+	<img src="./img/mi.png">
+	<img src="./img/tea.png" style="float:right;">
+</div>
+
+<div class="por_list_title">
+	<span class="tit_left"></span> 年货特价
+	<span class="tit_right">益多米年货特供</span>
+</div>
+
+<div class="rice_list_tjproduct">
+	<div class="list_product_info index_product_info">
+		<ul>
+			<li>
+				<div class="product_info_pc">
+					<img src="./img/mi.png" style="float:right">
+					<p class="list_table_tit">年货特价年货特价年货货特价年货特价年货特价</p>
+					<p class="list_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+				</div>
+			</li>
+			<li>
+				<div class="product_info_pc">
+					<img src="./img/mi.png" style="float:right">
+					<p class="list_table_tit">年货特价年货特价年货货特价年货特价年货特价</p>
+					<p class="list_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+				</div>
+			</li>
+			<li>
+				<div class="product_info_pc">
+					<img src="./img/mi.png" style="float:right">
+					<p class="list_table_tit">年货特价年货特价年货货特价年货特价年货特价</p>
+					<p class="list_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+				</div>
+			</li>
+			<li>
+				<div class="product_info_pc">
+					<img src="./img/369.jpg" style="float:right">
+					<p class="list_table_tit">年货特价年货特价年货货特价年货特价年货特价</p>
+					<p class="list_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+				</div>
+			</li>
+		</ul>
+	</div><div class="clear"></div>
+</div>
+
+<div style="margin-top:10px;">
+	<div class="por_list_title">
+		<span class="tit_left"></span> 年货精选
+	</div>
+	<div class="list_jx">
+		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
+			<tr>
+				<td><img src="./img/tea.png"></td>
+				<td>
+					<p class="jx_year_tit">年货特价年货特价年货特价年货特价年货货特价年货特价年货特价年货特价</p>
+					<p class="jx_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+					<p class="jx_mail_type">邮递 ：包邮</p>
+				</td>
+			</tr>
+			<tr>
+				<td><img src="./img/tea.png"></td>
+				<td>
+					<p class="jx_year_tit">年货特价年货特价年货特价年货特价年货货特价年货特价年货特价年货特价</p>
+					<p class="jx_table_price"><span>￥88.00</span><b>￥182.00</b></p>
+					<p class="jx_mail_type">邮递 ：包邮</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div class="index_promise">
+	<img src="./img/cn.png">
+</div>
+
+<div class="index_bottom">
+	<ul>
+		<li><img src="./img/1.png"></li>
+		<li><img src="./img/2.png"></li>
+		<li><img src="./img/3.png"></li>
+		<li><img src="./img/4.png"></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+
+<div class="footer">
+	<ul>
+		<a href="ydm_index.html">
+			<li id="f_sy" class="on"></li>
+		</a>
+		<a href="cart_list.html">
+			<li id="f_gwc"><span class="f_num">864</span></li>
+		</a>
+		<a href="ydm_partner.html">
+			<li id="f_ms"></li>
+		</a>
+		<a href="ydm_member.html">
+			<li id="f_hy"></li>
+		</a>
+	</ul>
+</div>
+
+
+<script>
+//图片大小
+$(function(){
+	var _width =( $(window).width() - 8 ) / 2;
+	$(".index_center_adve img,.list_tab img").width(_width);
+})
+
+//可视屏幕高度
+var clientHeight = document.documentElement.clientHeight;
+var swiper_banner = new Swiper('#product_banner', {
+	pagination : '#banner_pagination',
+	grabCursor : true,
+	autoplay : false,
+	calculateHeight : true,
+	paginationClickable : true,
+});
+</script>
