@@ -9,28 +9,6 @@ defined('IN_SIMPHP') or die('Access Denied');
 class User_Controller extends Controller {
 	
 	/**
-	 * hook menu
-	 * @see Controller::menu()
-	 */
-	public function menu() {
-		return [
-				
-		];
-	}
-	
-	/**
-	 * hook init
-	 *
-	 * @param string $action
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public function init($action, Request $request, Response $response)
-	{
-		
-	}
-	
-	/**
 	 * default action 'sync'
 	 *
 	 * @param Request $request
@@ -43,32 +21,43 @@ class User_Controller extends Controller {
 			'4001' => '\'parent_id\' invalid',
 			'4002' => '\'parent_id\' not exist',
 			'4003' => '\'mobile\' invalid',
+			'4004' => '\'logo\' invalid',
 			'5000' => 'db op fail',
 		]);
 		
 		$unionId    = $request->unionid;
 		$parentUnid = $request->parent_id ? : ''; //是一个 parent unionid
-		$mobile     = $request->mobile    ? : '';
 		$regtime    = $request->regtime   ? : simphp_time();
+		$mobile     = $request->mobile    ? : '';
+		$nickname   = $request->nickname  ? : '';
+		$logo       = $request->logo      ? : '';
 		
 		if (empty($unionId)) {
 			throw new ApiException(4000);
 		}
 		if (!empty($mobile) && !preg_match('/^\d{11,15}$/', $mobile)) {
-			throw new ApiException(4003);
+			//throw new ApiException(4003);
+			$mobile = ''; //避免干扰主任务，只是不同步该字段，而不抛出返回
+		}
+		if (!empty($logo) && !preg_match('/^http(s?):\/\//', $logo)) {
+			//throw new ApiException(4004);
+			$logo = ''; //避免干扰主任务，只是不同步该字段，而不抛出返回
 		}
 		
-		$aUser = Users::load_by_unionid($unionId);
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>0];
+		$aUser = Users::load_by_unionid($unionId);
 		if (!$aUser->is_exist()) { //未注册
 			$aUser = new Users();
 			$aUser->unionid  = $unionId;
 			$aUser->mobilephone = $mobile;
+			$aUser->nickname = $nickname;
+			$aUser->logo     = $logo;
 			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
 			$aUser->parentid = Users::get_userid($parentUnid);
+			$aUser->parentunionid  = $parentUnid;
 			$aUser->from     = $request->appid;
-			$aUser->save();
+			$aUser->save(Storage::SAVE_INSERT);
 			
 			$res['user_id']  = $aUser->id;
 			$res['act_type'] = 'insert';
@@ -76,16 +65,31 @@ class User_Controller extends Controller {
 		}
 		else { //已注册
 			$res['user_id']  = $aUser->id;
-			$res['parent_id']= Users::get_unionid($aUser->parentid);
-			if ($aUser->from==$request->appid) { //表示初始来自于某应用(如甜玉米)
-				if (empty($aUser->parentid)) {
-					$bUser = new Users($aUser->id);
-					$bUser->parentid = Users::get_userid($parentUnid);
-					$bUser->save();
-					$res['act_type'] = 'update';
-					$res['parent_id']= $parentUnid;
-				}
+			
+			$bUser = new Users($aUser->id);
+			$bUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
+			
+			//mobile, nickname 和 logo 本地如果为空就更新
+			if (empty($aUser->mobilephone)) {
+				$bUser->mobilephone = $mobile;
 			}
+			if (empty($aUser->nickname)) {
+				$bUser->nickname = $nickname;
+			}
+			if (empty($aUser->logo)) {
+				$bUser->logo     = $logo;
+			}
+			
+			if (empty($aUser->parentid)) { //只要是空，表示“未确定”状态，则给机会变更
+				$bUser->parentid = Users::get_userid($parentUnid);
+				$res['act_type'] = 'update';
+				$res['parent_id']= $bUser->parentid ? $parentUnid : '';
+			}
+			else {
+				$res['parent_id']= Users::get_unionid($aUser->parentid);
+			}
+			
+			$bUser->save(Storage::SAVE_UPDATE);
 		}
 		throw new ApiResponse($res);
 	}

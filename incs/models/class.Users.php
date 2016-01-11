@@ -61,6 +61,7 @@ class Users extends StorageNode {
 						'ecsalt'      => 'ec_salt',
 						'salt'        => 'salt',
 						'parentid'    => 'parent_id',
+						'parentunionid' => 'parent_unionid',
 						'flag'        => 'flag',
 						'alias'       => 'alias',
 						'msn'         => 'msn',
@@ -110,8 +111,8 @@ class Users extends StorageNode {
 	 * @return boolean
 	 */
 	public function required_uinfo_empty() {
-		//return empty($this->nickname) || empty($this->logo) ? true : false;
-		return empty($this->nickname) ? true : false;
+		return empty($this->nickname) && empty($this->logo) ? true : false;
+		//return !empty($this->nickname) || !empty($this->logo) ? false : true;
 	}
 	
 	/**

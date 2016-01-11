@@ -130,7 +130,6 @@ class Weixin {
 <FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
 <MsgType><![CDATA[transfer_customer_service]]></MsgType>
-<Content><![CDATA[%s]]></Content>
 </xml>",
 	  //图片消息
 	  'image'=> "<xml>
@@ -507,13 +506,15 @@ class Weixin {
     $createTime = time();
     switch ($msgType) {
       case 'text':
-      case 'customer':
         if (empty($extra['content'])) {
           return '';
         }
         return sprintf(self::$msgTpl[$msgType], $toUserName, $fromUserName, $createTime,
                        $extra['content']);
         break;
+      case 'customer':
+      	return sprintf(self::$msgTpl[$msgType], $toUserName, $fromUserName, $createTime);
+      	break;
       case 'image':
       case 'voice':
       case 'video':
