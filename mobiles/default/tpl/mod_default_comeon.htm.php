@@ -17,6 +17,16 @@ $(function(){
 
 <div class="comeon">
 <img src="<?=$qrimg?>" alt="QR Code"/>
+<div class="promoter">
+<?php if(!empty($promoter)):?>
+你的推荐人是：<em><?=$promoter['nickname']?>(<?=$promoter['uid']?>)</em><br/>
+当前链接属于：<em><?php if(!empty($curr_promoter)):?><?=$curr_promoter['nickname']?>(<?=$curr_promoter['uid']?>)
+<?php else:?>
+平台
+<?php endif;?>
+</em>
+<?php endif;?>
+</div>
 </div>
 
 <?php endif;?>

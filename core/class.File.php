@@ -159,14 +159,15 @@ class File extends CStatic {
 	/**
 	 * 为图片增加水印
 	 *
-	 * @param       string      filename            原始图片文件名，包含完整路径
-	 * @param       string      target_file         需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
+	 * @param       string      $filename           原始图片文件名，包含完整路径
+	 * @param       string      $target_file        需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
 	 * @param       string      $watermark          水印完整路径
-	 * @param       array       $watermark_place    水印位置代码，包括 x:水印在原始图的x位置;y:水印在原始图的y位置;w:水印在原始图的宽度;h:水印在原始图的高度
+	 * @param       array       $watermark_place    水印位置代码，包括 x:水印在原始图的x位置;y:水印在原始图的y位置;w:水印在原始图的宽度;h:水印在原始图的高度。可选参数pos值: 'lt'(左上),'rt'(右上),'lb'(左下),'rb'(右下),'ct'(居中)
 	 * @param       int         $watermark_alpha    水印透明度(0~100)
+	 * @param       string      $bgcolor            背景颜色
 	 * @return      mix         如果成功则返回文件路径，否则返回false
 	 */
-	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 85)
+	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 85, $bgcolor = '')
 	{	
 		// 是否安装了GD
 		if (!self::gd_exists())
@@ -221,27 +222,71 @@ class File extends CStatic {
 			$thumb_width  = intval($thumb_height * $thumb_scale);
 		}
 		
-		if (function_exists('imagecreatetruecolor'))
-		{
-			$watermark_thumb  = imagecreatetruecolor($thumb_width, $thumb_height);
+		if ($need_resize)
+		{ //需要缩放
+			if (function_exists('imagecreatetruecolor'))
+			{
+				$watermark_thumb  = imagecreatetruecolor($thumb_width, $thumb_height);
+			}
+			else
+			{
+				$watermark_thumb  = imagecreate($thumb_width, $thumb_height);
+			}
+			if (!$watermark_thumb)
+			{
+				return false;
+			}
+			
+			/* 背景颜色 */
+			if (!empty($bgcolor))
+			{
+				list($red, $green, $blue) = self::hexcolor2rgb($bgcolor);
+				$clr = imagecolorallocate($watermark_thumb, $red, $green, $blue);
+				imagefilledrectangle($watermark_thumb, 0, 0, $thumb_width, $thumb_height, $clr);
+			}
+			
+			/* 将水印图片进行缩放处理 */
+			if (function_exists('imagecopyresampled'))
+			{
+				imagecopyresampled($watermark_thumb, $watermark_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $watermark_info[0], $watermark_info[1]);
+			}
+			else
+			{
+				imagecopyresized($watermark_thumb, $watermark_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $watermark_info[0], $watermark_info[1]);
+			}
 		}
 		else
-		{
-			$watermark_thumb  = imagecreate($thumb_width, $thumb_height);
-		}
-		if (!$watermark_thumb)
-		{
-			return false;
+		{ //不需要缩放，直接用原水印图
+			$watermark_thumb = $watermark_handle;
 		}
 		
-		/* 将水印图片进行缩放处理 */
-		if (function_exists('imagecopyresampled'))
-		{
-			imagecopyresampled($watermark_thumb, $watermark_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $watermark_info[0], $watermark_info[1]);
-		}
-		else
-		{
-			imagecopyresized($watermark_thumb, $watermark_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $watermark_info[0], $watermark_info[1]);
+		/* 检测特殊位置 */
+		if (isset($watermark_place['pos'])) {
+			switch ($watermark_place['pos']) 
+			{
+				default:
+				case 'ct': //居中
+				case 'center': //居中
+					$watermark_place['x'] = round(($source_info[0] - $thumb_width)/2);
+					$watermark_place['y'] = round(($source_info[1] - $thumb_height)/2);
+					break;
+				case 'lt': //左上
+					$watermark_place['x'] = 0;
+					$watermark_place['y'] = 0;
+					break;
+				case 'rt': //右上
+					$watermark_place['x'] = $source_info[0] - $thumb_width;
+					$watermark_place['y'] = 0;
+					break;
+				case 'lb': //左下
+					$watermark_place['x'] = 0;
+					$watermark_place['y'] = $source_info[1] - $thumb_height;
+					break;
+				case 'rb': //右下
+					$watermark_place['x'] = $source_info[0] - $thumb_width;
+					$watermark_place['y'] = $source_info[1] - $thumb_height;
+					break;
+			}
 		}
 		
 		/* 将水印缩略图合并到原图 */
@@ -261,7 +306,7 @@ class File extends CStatic {
 		
 		/* 清除image资源对象 */
 		imagedestroy($watermark_handle);
-		imagedestroy($watermark_thumb);
+		if(is_resource($watermark_thumb)) imagedestroy($watermark_thumb);
 		imagedestroy($source_handle);
 		
 		$path = realpath($target);
@@ -269,6 +314,83 @@ class File extends CStatic {
 		{
 			return str_replace(SIMPHP_ROOT, '', str_replace('\\', '/', $path));
 		}
+		return false;
+	}
+	
+	/**
+	 * 为图片增加水印
+	 *
+	 * @param       string      $source_file        原始图片文件名，包含完整路径
+	 * @param       string      $target_file        需要加水印的图片文件名，包含完整路径。如果为空则覆盖源文件
+	 * @param       array       $text_info          一个二维数组，包含要写的一个或多个文本信息的内容(text)和位置(x,y)、字体大小(fontsize)、字体颜色(color)
+	 */
+	static function add_text($source_file, $target_file = '', Array $text_info = [])
+	{
+		// 检查输入
+		if (empty($text_info)) return false;
+		if (isset($text_info['text']))
+		{
+			$text_info = [$text_info];
+		}
+		
+		// 是否安装了GD
+		if (!self::gd_exists())
+		{
+			return false;
+		}
+		
+		// 文件是否存在
+		if ((!file_exists($source_file)) || (!is_file($source_file)))
+		{
+			return false;
+		}
+		
+		// 获得源文件的信息
+		$source_info     = @getimagesize($source_file);
+		$source_handle   = self::img_resource($source_file, $source_info[2]);
+		if (!$source_handle)
+		{
+			return false;
+		}
+		
+		// 循环写入
+		$font = SIMPHP_ROOT . '/misc/font/simsun.ttc';
+		foreach ($text_info AS $txt)
+		{
+			if (!isset($txt['text']) || empty($txt['text'])) continue;
+			
+			// 默认参数
+			$fontsize = 20;
+			$color    = '#000000';
+			$x        = 0;
+			$y        = 0;
+			if (isset($txt['fontsize'])) $fontsize = $txt['fontsize'];
+			if (isset($txt['color']))    $color    = $txt['color'];
+			if (isset($txt['x']))        $x        = $txt['x'];
+			if (isset($txt['y']))        $y        = $txt['y'];
+			
+			list($red, $green, $blue) = self::hexcolor2rgb($color);
+			$color = imagecolorallocate($source_handle, $red, $green, $blue);
+			
+			//将ttf文字写到图片中
+			if (function_exists('imagettftext'))
+			{
+				imagettftext($source_handle, $fontsize, 0, $x, $y, $color, $font, $txt['text']);
+			}
+		}
+		
+		/* 写文件到目标目录 */
+		$target = empty($target_file) ? $source_file : $target_file;
+		$wrsucc = self::img_write($source_handle, $target, $source_info[2]);
+		
+		imagedestroy($source_handle);
+		
+		$path = realpath($target);
+		if ($wrsucc && $path)
+		{
+			return str_replace(SIMPHP_ROOT, '', str_replace('\\', '/', $path));
+		}
+		
 		return false;
 	}
 	
@@ -342,6 +464,17 @@ class File extends CStatic {
 		}
 		
 		return $b;
+	}
+	
+	/**
+	 * 转换十六进制的颜色值成RGB值
+	 * @param string $color 如 #ff6600
+	 * @return array 包含[red, green, blue]
+	 */
+	static function hexcolor2rgb($color) {
+		$color = preg_replace ('/^#/','',$color);
+		sscanf($color, "%2x%2x%2x", $red, $green, $blue);
+		return [$red,$green,$blue];
 	}
 	
 }

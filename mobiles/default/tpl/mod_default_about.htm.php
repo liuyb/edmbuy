@@ -195,7 +195,7 @@
     </div>
   </div>
 </div>
-<div style="border-top: 1px solid #eee"><img src="/misc/images/wx/qrcode_430.jpg" alt="" style="width:100%;"></div>
+<?php include T('inc/followbox');?>
 <script>
 //切换
 function f(a){

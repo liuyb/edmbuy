@@ -92,7 +92,45 @@
 	</div>
 </div>
 
+<div style="margin:12px;border-radius:4px;background:#333;">
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<tr>
+			<td style="padding:10px;width:50px;">
+				<img src="./img/ydm_logo.png" style="width:50px; vertical-align: middle;"></div>
+			</td>
+			<td style="vertical-align:middle;">
+				<p style="font-size:16px;color:#fff;">益多米</p>
+				<p style="font-size:12px;color:#fff;">品质生活从这里开始...</p>
+			</td>
+			<td style="vertical-align: middle;text-align:right;">
+				<button class="quertion_btn" style="font-size:14px;margin-right:10px;border:1px solid #1fa761;background:#1fa761;color:#fff;border-radius:4px;padding:6px 15px;cursor:pointer;">关注</button>
+			</td>
+		</tr>
+	</table>
+</div>
 
+<!-- 遮罩层 -->
+<a href="javascript:;"><div class="mask"></div></a>
+
+<!-- 二维码 -->
+<div class="cart_wx" style="display: ;">
+	<div class="c_wx_tit">益多米</div>
+	<div class="c_wx_img"><img src="./img/ydm.png"></div>
+	<div class="c_wx_ewm">长按识别二维码，关注益多米</div>
+	<div class="w_wx_colse"><img src="./img/gub.png"></div>
+</div>
+
+
+<script>
+$(".quertion_btn").live("click",function(){
+	$(".mask").fadeIn(255);
+	$(".cart_wx").fadeIn(255);
+})
+$(".w_wx_colse,.mask").live("click",function(){
+	$(".mask").fadeOut(255);
+	$(".cart_wx").fadeOut(255);
+})
+</script>
 
 
 

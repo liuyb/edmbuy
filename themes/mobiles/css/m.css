@@ -24,6 +24,7 @@ html,body {
 html.SPA,body.SPA { overflow: auto; }
 html.SPA { background: #e7e8eb; }
 body.SPA { height: auto;min-height: 100%;background: #fff; }
+body.SPA.greybg { background: #eee; }
 
 /*----- project relative css -----*/
 /*通用*/
@@ -257,7 +258,17 @@ textarea.flexText,.flex-text-wrap pre {
 }
 
 /*comeon页*/
+.comeon { position: relative; }
 .comeon img { width: 100%; }
+.comeon .promoter { position: absolute;left: 58px;bottom: 10px;color: #999;font-size: 12px;font-size: 1.2rem; }
+
+.follow-box { margin: 12px;border-radius: 4px;background: #333;overflow: auto;zoom:1; }
+.follow-box .c { padding: 10px;vertical-align: middle;font-size: 12px;font-size:1.2rem;color: #fff;height:50px; }
+.follow-box .c1 { float: left;vertical-align: top; }
+.follow-box .c3 { float: right;line-height:50px; }
+.follow-box img { height: 100%; }
+.follow-box .emp { font-size: 16px;font-size:1.6rem;line-height: 25px;margin-bottom:2px; }
+.follow-box button { font-size:14px;font-size:1.4rem;border:1px solid #1fa761;background:#1fa761;color:#fff;border-radius:4px;padding:6px 20px;cursor:pointer; }
 
 /*----- from wu.css ------*/
 
@@ -299,7 +310,7 @@ textarea.flexText,.flex-text-wrap pre {
 /* 提示层 */
 .reg_error{
   display: none;
-  position: absolute;
+  position: fixed;
   top: 39%;
   left: 50%;
   width: 220px;
@@ -316,7 +327,7 @@ textarea.flexText,.flex-text-wrap pre {
 
 /* 遮罩层 */
 .mask,.mask_dj,.mask_ecard,.mask_nodata,.mask_ewm,.mask_pay{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -1954,7 +1965,7 @@ a.ph_btn{
   border-radius: 4px; 
   height:305px;
   width:240px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-left: -120px;

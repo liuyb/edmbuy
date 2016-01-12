@@ -62,6 +62,7 @@ class Default_Controller extends MobileController {
   {
   	$this->v = new PageView('','_page_spa');
     $this->v->set_tplname('mod_default_about');
+    $this->v->assign('extra_css', 'greybg');
     
     if (!Users::is_logined()) {
     	throw new ViewException($this->v, '未登录，需要在微信客户端中登录');
@@ -70,7 +71,9 @@ class Default_Controller extends MobileController {
     	//重定向请求OAuth2详细认证获取资料
     	Users::check_detail_info(U('about'));
     }
-     
+    
+    $type = $request->get('t','');
+    
     //分享信息
     $share_info = [
     		'title' => '益多米是什么？',
@@ -78,6 +81,13 @@ class Default_Controller extends MobileController {
     		'link'  => U('about', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
+    
+    if (''!==$type) {
+    	$share_info['title'] = '益多米';
+    	$share_info['link'] .= '&t='.$type;
+    	$this->v->set_tplname('mod_default_'.$type);
+    }
+    
     $this->v->assign('share_info', $share_info);
     
     throw new ViewResponse($this->v);
@@ -142,6 +152,27 @@ class Default_Controller extends MobileController {
   	
   	$qrimg = $GLOBALS['user']->wx_qrpromote();
   	$this->v->assign('qrimg', $qrimg);
+  	
+  	//推荐人
+  	$promoter    = [];
+  	$parent_user = Users::load($GLOBALS['user']->parentid);
+  	if ($parent_user->is_exist()) {
+  		$promoter['uid'] = $parent_user->uid;
+  		$promoter['nickname'] = $parent_user->nickname;
+  	}
+  	$this->v->assign('promoter', $promoter);
+  	
+  	//当前spm
+  	$curr_promoter = [];
+    $spm = Spm::check_spm();
+    if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+    	$curr_promote_user = Users::load($matchspm[1]);
+    	if ($curr_promote_user->is_exist()) {
+    		$curr_promoter['uid'] = $curr_promote_user->uid;
+    		$curr_promoter['nickname'] = $curr_promote_user->nickname;
+    	}
+    }
+    $this->v->assign('curr_promoter', $curr_promoter);
   	
   	//SEO信息
   	$seo = [

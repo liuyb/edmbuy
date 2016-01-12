@@ -12,10 +12,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black"> -->
 <meta name="format-detection" content="telephone=no">
-<link rel="dns-prefetch" href="merchant.fxmapp.com" />
+<link rel="dns-prefetch" href="merchant.edmbuy.com" />
 <link rel="dns-prefetch" href="res.wx.qq.com" />
 <?php if (C('env.usecdn')):?>
-<link rel="dns-prefetch" href="fdn.fxmapp.com" />
+<link rel="dns-prefetch" href="fdn.edmbuy.com" />
 <?php endif;?>
 <link rel="shortcut icon" href="<?=$contextpath;?>favicon.ico" type="image/x-icon" />
 <link rel="apple-touch-icon" sizes="114x114" href="<?=$contextpath;?>misc/images/napp/touch-icon-114.png" />
@@ -88,9 +88,9 @@ function required_uinfo_empty() {
 
 //: add css & js files
 if (C('env.usecdn')):
-add_css('http://fdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
-add_js('http://fdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
-add_js('http://fdn.fxmapp.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
+add_css('http://fdn.edmbuy.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
+add_js('http://fdn.edmbuy.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_js('http://fdn.edmbuy.com/js/fm.min.js',['pos'=>'foot','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);

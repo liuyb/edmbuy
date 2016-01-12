@@ -114,7 +114,6 @@ class Users extends StorageNode {
 	 */
 	public function required_uinfo_empty() {
 		return empty($this->nickname) && empty($this->logo) ? true : false;
-		//return !empty($this->nickname) || !empty($this->logo) ? false : true;
 	}
 	
 	/**
@@ -244,7 +243,25 @@ class Users extends StorageNode {
 	 * @return string
 	 */
 	public function add_logo_to_qrcode($local_path) {
-		return $local_path;
+		if (empty($this->logo)) {
+			return $local_path;
+		}
+		$source_file = SIMPHP_ROOT . $local_path;
+		$target_file = preg_replace('/\.jpg$/i', '', $source_file).'_wl'.File::ext($source_file);
+		
+		$ulogo = $this->logo;
+		if (preg_match('/^http(s?):\/\//i', $ulogo)) {
+			$ulogo = File::get_remote($ulogo);
+		}
+		if (Media::is_app_file($ulogo)) {
+			$ulogo = SIMPHP_ROOT . $ulogo;
+		}
+		if (empty($ulogo)) {
+			return $local_path;
+		}
+		$ulogo = realpath($ulogo);
+		$ret = File::add_watermark($source_file, $target_file, $ulogo, ['pos'=>'center','w'=>90,'h'=>90], 100,'#FFFFFF');
+		return $ret;
 	}
 	
 	/**
@@ -252,6 +269,9 @@ class Users extends StorageNode {
 	 * @return string
 	 */
 	public function wx_qrimg() {
+		if (!empty($this->wxqrimg)) { //存在就直接返回
+			return $this->wxqrimg;
+		}
 		$qr = self::wx_qrcode($this->uid, Weixin::QR_LIMIT_SCENE, false, $scene_id);
 		if (preg_match('/^'.preg_quote('https://mp.weixin.qq.com','/').'/', $qr))
 		{ //表示还是使用微信的二维码地址，则要保存到本地，并且将个人logo添加上去
@@ -262,10 +282,6 @@ class Users extends StorageNode {
 			if ($localpath) { //成功创建到本地，则在此基础上添加个人logo
 				$localpath = $this->add_logo_to_qrcode($localpath);
 				if ($localpath) { //成功添加个人logo到二维码，则保存
-					//保存Wxqrcode表
-					$upWxqr = new Wxqrcode($scene_id);
-					$upWxqr->img = $localpath;
-					$upWxqr->save(Storage::SAVE_UPDATE);
 					//保存用户表
 					$upUser = new self($this->uid);
 					$upUser->wxqrimg = $localpath;
@@ -283,8 +299,8 @@ class Users extends StorageNode {
 	 * @return string
 	 */
 	public function wx_qrpromote() {
-		if ($this->wxqrpromote) { //存在就直接返回
-			return $this->wxqrpromote;
+		if (!empty($this->wxqrpromote)) { //存在就直接返回
+			return Media::path($this->wxqrpromote, true);
 		}
 		
 		$sourcefile     = SIMPHP_ROOT . '/misc/images/wx/promote_base.jpg';
@@ -299,7 +315,28 @@ class Users extends StorageNode {
 			mkdirs($targetdir);
 		}
 		
-		$ret = File::add_watermark($sourcefile, $targetfile, $qrimg, ['x'=>95,'y'=>480,'w'=>301,'h'=>301], 85);
+		$ulogo   = $this->logo;
+		if (preg_match('/^http(s?):\/\//i', $ulogo)) {
+			$ulogo = File::get_remote($ulogo);
+		}
+		if (Media::is_app_file($ulogo)) {
+			$ulogo = SIMPHP_ROOT . $ulogo;
+		}
+		if (empty($ulogo)) {
+			$ulogo  = SIMPHP_ROOT . '/misc/images/wx/edm_logo_r.png';
+		}
+		$ulogo = realpath($ulogo);
+
+		$unick = ($this->nickname ? $this->nickname : '无名氏').'('.$this->uid.')';
+		$txtinfo = array(['text'=>$unick,'x'=>120,'y'=>43,'color'=>'#556993','fontsize'=>20],
+				             ['text'=>'长按图片识别二维码','x'=>115,'y'=>850,'color'=>'#000000','fontsize'=>14]);
+		
+		// 添加二维码
+		$ret = File::add_watermark($sourcefile, $targetfile, $qrimg, ['x'=>95,'y'=>480,'w'=>344,'h'=>344], 100);
+		// 添加个人头像
+		$ret = File::add_watermark($targetfile, '', $ulogo, ['x'=>20,'y'=>25,'w'=>75,'h'=>75], 100, '#FFFFFF');
+		// 添加文字
+		$ret = File::add_text($targetfile, '', $txtinfo);
 		if ($ret) { //创建水印成功
 			$upUser = new Users($this->uid);
 			$upUser->wxqrpromote = $ret;

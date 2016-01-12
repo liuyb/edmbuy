@@ -115,7 +115,7 @@ function config_set($key, $val = '', $encode = 'R')
  */
 function emptyimg()
 {
-  return C('env.usecdn') ? 'http://fdn.fxmapp.com/img/b.gif'
+  return C('env.usecdn') ? 'http://fdn.edmbuy.com/img/b.gif'
                          : C('env.contextpath').'misc/images/b.gif';
 }
 
@@ -125,7 +125,7 @@ function emptyimg()
  */
 function ploadingimg()
 {
-  return C('env.usecdn') ? 'http://fdn.fxmapp.com/img/bloading.gif' 
+  return C('env.usecdn') ? 'http://fdn.edmbuy.com/img/bloading.gif' 
                          : C('env.contextpath').'misc/images/bloading.gif';
 }
 

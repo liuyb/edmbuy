@@ -14,7 +14,7 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="dns-prefetch" href="res.wx.qq.com" />
 <?php if (C('env.usecdn')):?>
-<link rel="dns-prefetch" href="fdn.fxmapp.com" />
+<link rel="dns-prefetch" href="fdn.edmbuy.com" />
 <?php endif;?>
 <link rel="shortcut icon" href="<?=$contextpath;?>favicon.ico" type="image/x-icon" />
 <link rel="apple-touch-icon" sizes="114x114" href="<?=$contextpath;?>misc/images/napp/touch-icon-114.png" />
@@ -23,7 +23,7 @@
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
 </head>
-<body class="SPA">
+<body class="SPA<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>">
 <?php include T($tpl_content);?>
 <?php include T('inc/popalert');?>
 </body>
@@ -36,8 +36,8 @@
 
 //: add css & js files
 if (C('env.usecdn')):
-add_css('http://fdn.fxmapp.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
-add_js('http://fdn.fxmapp.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_css('http://fdn.edmbuy.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
+add_js('http://fdn.edmbuy.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);

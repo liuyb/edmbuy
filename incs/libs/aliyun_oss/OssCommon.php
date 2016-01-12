@@ -12,18 +12,22 @@ use OSS\Core\OssException;
  */
 class OssCommon
 {
-		//Develop environment
-		const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
+	  
+    //Develop environment
+    const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
+    const endpoint_domain = 'edmdev.oss-cn-hangzhou.aliyuncs.com';
     const endpoint        = 'oss-cn-hangzhou.aliyuncs.com';
     const bucket          = 'edmdev';
-    
+	  
     //Production environment
     /*
     const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
+    const endpoint_domain = 'oss.edmbuy.com';
     const endpoint        = 'vpc100-oss-cn-hangzhou.aliyuncs.com';
     //const endpoint        = 'oss-cn-hangzhou-internal.aliyuncs.com';
     const bucket          = 'edmbuy';
     */
+    
     //Access key
     const accessKeyId     = 'DezqmGVURg7snFsD';
     const accessKeySecret = 'HhifDR04j6W8We92Nz7mygAxEN90zV';
@@ -51,7 +55,7 @@ class OssCommon
     }
     
     public static function getOssPath($oss_file) {
-    	return "http://".self::bucket.".".self::endpoint_foreign."/{$oss_file}";;
+    	return "http://".self::endpoint_domain."/{$oss_file}";;
     }
 
     /**

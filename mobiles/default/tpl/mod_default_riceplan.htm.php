@@ -72,5 +72,4 @@
 	</div><div class="clear"></div>
 </div>
  -->
-<div style="border-top: 1px solid #eee"><img src="/misc/images/wx/qrcode_430.jpg" alt="" style="width:100%;"></div>
 <?php endif;?>
