@@ -44,7 +44,7 @@ class User_Controller extends Controller {
 			$logo = ''; //避免干扰主任务，只是不同步该字段，而不抛出返回
 		}
 		
-		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>0];
+		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
 		$aUser = Users::load_by_unionid($unionId);
 		if (!$aUser->is_exist()) { //未注册
 			$aUser = new Users();
@@ -88,6 +88,77 @@ class User_Controller extends Controller {
 			else {
 				$res['parent_id']= Users::get_unionid($aUser->parentid);
 			}
+			
+			$bUser->save(Storage::SAVE_UPDATE);
+		}
+		throw new ApiResponse($res);
+	}
+	
+	/**
+	 * default action 'update'
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function update(Request $request, Response $response)
+	{
+		Api::append_codes([
+			'4000' => '\'unionid\' invalid',
+			'4001' => '\'parent_id\' invalid',
+			'4002' => '\'parent_id\' not exist',
+			'4003' => '\'mobile\' invalid',
+			'4004' => '\'logo\' invalid',
+			'5000' => 'db op fail',
+		]);
+		
+		$unionId    = $request->unionid;
+		$parentUnid = $request->parent_id ? : ''; //是一个 parent unionid
+		$regtime    = $request->regtime   ? : simphp_time();
+		$mobile     = $request->mobile    ? : '';
+		$nickname   = $request->nickname  ? : '';
+		$logo       = $request->logo      ? : '';
+		
+		if (empty($unionId)) {
+			throw new ApiException(4000);
+		}
+		if (!empty($mobile) && !preg_match('/^\d{11,15}$/', $mobile)) {
+			$mobile = '';
+		}
+		if (!empty($logo) && !preg_match('/^http(s?):\/\//', $logo)) {
+			$logo = '';
+		}
+		
+		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
+		$aUser = Users::load_by_unionid($unionId);
+		if (!$aUser->is_exist()) { //未注册
+			$aUser = new Users();
+			$aUser->unionid  = $unionId;
+			$aUser->mobilephone = $mobile;
+			$aUser->nickname = $nickname;
+			$aUser->logo     = $logo;
+			$aUser->regip    = $request->ip();
+			$aUser->regtime  = $regtime;
+			$aUser->parentid = Users::get_userid($parentUnid);
+			$aUser->parentunionid  = $parentUnid;
+			$aUser->from     = $request->appid;
+			$aUser->save(Storage::SAVE_INSERT);
+			
+			$res['user_id']  = $aUser->id;
+			$res['act_type'] = 'insert';
+			$res['parent_id']= $parentUnid;
+		}
+		else { //已注册
+			$res['user_id']  = $aUser->id;
+			
+			$bUser = new Users($aUser->id);
+			$bUser->parentid       = Users::get_userid($parentUnid);
+			$bUser->parentunionid  = $parentUnid;
+			$bUser->mobilephone    = $mobile;
+			$bUser->nickname       = $nickname;
+			$bUser->logo           = $logo;
+			
+			$res['act_type'] = 'update';
+			$res['parent_id']= $bUser->parentid ? $parentUnid : '';
 			
 			$bUser->save(Storage::SAVE_UPDATE);
 		}
