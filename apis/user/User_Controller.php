@@ -31,6 +31,8 @@ class User_Controller extends Controller {
 		$mobile     = $request->mobile    ? : '';
 		$nickname   = $request->nickname  ? : '';
 		$logo       = $request->logo      ? : '';
+		$business_id  = $request->business_id  ? : '';
+		$business_time= $request->business_time? : '';
 		
 		if (empty($unionId)) {
 			throw new ApiException(4000);
@@ -42,6 +44,9 @@ class User_Controller extends Controller {
 		if (!empty($logo) && !preg_match('/^http(s?):\/\//', $logo)) {
 			//throw new ApiException(4004);
 			$logo = ''; //避免干扰主任务，只是不同步该字段，而不抛出返回
+		}
+		if (!$business_id) {
+			$business_time = '';
 		}
 		
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
@@ -55,7 +60,9 @@ class User_Controller extends Controller {
 			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
 			$aUser->parentid = Users::get_userid($parentUnid);
-			$aUser->parentunionid  = $parentUnid;
+			$aUser->parentunionid = $parentUnid;
+			$aUser->businessid    = $business_id;
+			$aUser->businesstime  = $business_time;
 			$aUser->from     = $request->appid;
 			$aUser->save(Storage::SAVE_INSERT);
 			
@@ -68,6 +75,8 @@ class User_Controller extends Controller {
 			
 			$bUser = new Users($aUser->id);
 			$bUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
+			$bUser->businessid     = $business_id;
+			$bUser->businesstime   = $business_time;
 			
 			//mobile, nickname 和 logo 本地如果为空就更新
 			if (empty($aUser->mobilephone)) {
@@ -117,6 +126,8 @@ class User_Controller extends Controller {
 		$mobile     = $request->mobile    ? : '';
 		$nickname   = $request->nickname  ? : '';
 		$logo       = $request->logo      ? : '';
+		$business_id  = $request->business_id  ? : '';
+		$business_time= $request->business_time? : '';
 		
 		if (empty($unionId)) {
 			throw new ApiException(4000);
@@ -126,6 +137,9 @@ class User_Controller extends Controller {
 		}
 		if (!empty($logo) && !preg_match('/^http(s?):\/\//', $logo)) {
 			$logo = '';
+		}
+		if (!$business_id) {
+			$business_time = '';
 		}
 		
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
@@ -139,7 +153,9 @@ class User_Controller extends Controller {
 			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
 			$aUser->parentid = Users::get_userid($parentUnid);
-			$aUser->parentunionid  = $parentUnid;
+			$aUser->parentunionid = $parentUnid;
+			$aUser->businessid    = $business_id;
+			$aUser->businesstime  = $business_time;
 			$aUser->from     = $request->appid;
 			$aUser->save(Storage::SAVE_INSERT);
 			
@@ -153,6 +169,8 @@ class User_Controller extends Controller {
 			$bUser = new Users($aUser->id);
 			$bUser->parentid       = Users::get_userid($parentUnid);
 			$bUser->parentunionid  = $parentUnid;
+			$bUser->businessid     = $business_id;
+			$bUser->businesstime   = $business_time;
 			$bUser->mobilephone    = $mobile;
 			$bUser->nickname       = $nickname;
 			$bUser->logo           = $logo;

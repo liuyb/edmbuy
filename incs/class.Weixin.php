@@ -333,6 +333,7 @@ class Weixin {
     $toUserName  = $postObj->ToUserName;
     $openid      = $fromUserName;
     $reqtime     = intval($postObj->CreateTime);
+    trace_debug('weixin_event_msg', $postObj);
     
     $contentText = '';
     $responseText= '';

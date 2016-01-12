@@ -62,6 +62,8 @@ class Users extends StorageNode {
 						'salt'        => 'salt',
 						'parentid'    => 'parent_id',
 						'parentunionid' => 'parent_unionid',
+						'businessid'  => 'business_id',
+						'businesstime'=> 'business_time',
 						'flag'        => 'flag',
 						'alias'       => 'alias',
 						'msn'         => 'msn',

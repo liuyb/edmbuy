@@ -25,17 +25,17 @@ $json =<<<HEREDOC
 		{
 			"type" : "view",
 			"name" : "推广二维码",
-			"url"  : "http://edm.fxmapp.com/comeon"
+			"url"  : "http://m.edmbuy.com/comeon"
 		},
 		{
 			"type" : "view",
 			"name" : "米商计划",
-			"url"  : "http://edm.fxmapp.com/riceplan"
+			"url"  : "http://m.edmbuy.com/riceplan"
 		},
 		{
 			"type" : "view",
 			"name" : "常见问题",
-			"url"  : "http://edm.fxmapp.com/about"
+			"url"  : "http://m.edmbuy.com/about"
 		}
 	]
 }
