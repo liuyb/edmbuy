@@ -116,6 +116,7 @@ class StorageDb extends Storage {
 		else { //更新
 			$flag = self::SAVE_UPDATE; //返回最终保存动作
 			unset($params[$primary_key]); //id字段不更新
+			if (empty($params)) return FALSE; //如果要更新的数据为空，返回false
 			D()->update($this->table, $params, [$primary_key => $id]);
 		}
 		

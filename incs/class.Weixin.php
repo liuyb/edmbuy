@@ -340,7 +340,7 @@ class Weixin {
     switch ($postObj->Event) {
     	case 'SCAN':
       case 'subscribe':
-        $contentText = $this->helper->onSubscribe($openid, $reqtime, $toUserName, isset($postObj->EventKey)?$postObj->EventKey:null, isset($postObj->Ticket)?$postObj->Ticket:null);
+        $contentText = $this->helper->onSubscribe($openid, $reqtime, $postObj->Event, !empty($postObj->EventKey)?$postObj->EventKey:null, !empty($postObj->Ticket)?$postObj->Ticket:null);
         break;
       case 'unsubscribe':
         $this->helper->onUnsubscribe($openid, $reqtime);
@@ -1246,38 +1246,39 @@ class WeixinHelper {
    *
    * @param string  $openid
    * @param integer $reqtime
-   * @param string  $toUserName
+   * @param string  $event
    * @param string  $eventKey
    * @param string  $ticket
    * @return string
    */
-  public function onSubscribe($openid, $reqtime, $toUserName = '', $eventKey = NULL, $ticket = NULL) {
-    $wxuinfo = $this->wx->userInfo($openid);
+  public function onSubscribe($openid, $reqtime, $event, $eventKey = NULL, $ticket = NULL) {
     $parent_id = 0;
     $my_uid    = 0;
+    $can_save  = true;
+    $wxuinfo   = $this->wx->userInfo($openid);
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
     		
     		$save_type = Storage::SAVE_INSERT;
-    		$aUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
-    		if ($aUser->is_exist()) { //已存在
-    			$upUser = new Users($aUser->id);
-    			$parent_id = $aUser->parentid;
-    			if (!$aUser->openid) {
+    		$exUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
+    		if ($exUser->is_exist()) { //已存在，已存在不会变更上级关系
+    			$upUser = new Users($exUser->id);
+    			$parent_id = $exUser->parentid;
+    			if (!$exUser->openid) {
     				$upUser->openid  = $openid;
     			}
     			$save_type = Storage::SAVE_UPDATE;
     		}
-    		else { //未存在
+    		else { //未存在，会"尝试"建立上下级关系
     			$upUser = new Users();
     			$upUser->unionid   = $wxuinfo['unionid'];
     			$upUser->openid    = $openid;
     			$upUser->parentid  = 0;
     			$upUser->state     = 0; //0:正常;1:禁止
     			$upUser->from      = $this->from;
-    			$upUser->authmethod= 'base';
+    			$upUser->authmethod= !empty($eventKey) ? 'scan' : 'base';
     			if(isset($eventKey) && $eventKey) { //确定上级
-    				if (preg_match('/^qrscene_(\d+)/', $eventKey, $matches)) {
+    				if (preg_match('/^qrscene_(\d+)$/', $eventKey, $matches)) {
     					$scene_id = $matches[1];
     				}
     				else {
@@ -1293,9 +1294,9 @@ class WeixinHelper {
     			}
     		}
     		
-    		$upUser->subscribe   = $wxuinfo['subscribe'];
-    		$upUser->subscribetime = $wxuinfo['subscribe_time'];
-    		if ($aUser->required_uinfo_empty()) { //必要信息为空时更新
+    		if ('subscribe'==$event || !$exUser->is_exist() || $exUser->required_uinfo_empty()) {
+    			$upUser->subscribe   = $wxuinfo['subscribe'];        //至少要保留
+    			$upUser->subscribetime = $wxuinfo['subscribe_time'];
     			$upUser->nickname  = $wxuinfo['nickname'];
     			$upUser->logo      = $wxuinfo['headimgurl'];
     			$upUser->sex       = $wxuinfo['sex'];
@@ -1304,6 +1305,7 @@ class WeixinHelper {
     			$upUser->province  = $wxuinfo['province'];
     			$upUser->city      = $wxuinfo['city'];
     		}
+    		
     		$upUser->save($save_type);
     		$my_uid = $upUser->id;
     		
@@ -1312,7 +1314,7 @@ class WeixinHelper {
     
     $msg = $this->about();
     if ($my_uid) {
-    	$msg .= "\n\n我的多米号: {$my_uid}";
+    	$msg .= "\n\n你的多米号: {$my_uid}";
     }
     if ($parent_id) {
     	$pUser = Users::load($parent_id);
@@ -1325,7 +1327,7 @@ class WeixinHelper {
     		}
     	}
     }
-    //$msg.= "\n\n上线时间: 2016-01-18";
+    
     return $msg;
     
   }
@@ -1338,9 +1340,9 @@ class WeixinHelper {
    * @return string
    */
   public function onUnsubscribe($openid, $reqtime) {
-    $aUser = Users::load_by_openid($openid, $this->from);
-    if ($aUser->is_exist()) {
-    	$upUser = new Users($aUser->id);
+    $exUser = Users::load_by_openid($openid, $this->from);
+    if ($exUser->is_exist()) {
+    	$upUser = new Users($exUser->id);
     	$upUser->subscribe     = 0;
     	$upUser->subscribetime = $reqtime;
     	$upUser->save(Storage::SAVE_UPDATE);
@@ -1359,9 +1361,9 @@ class WeixinHelper {
    * @return string
    */
   public function onLocation($openid, $reqtime, $longitude, $latitude, $precision) {
-    $aUser = Users::load_by_openid($openid, $this->from);
-    if ($aUser->is_exist()) {
-    	$upUser = new Users($aUser->id);
+    $exUser = Users::load_by_openid($openid, $this->from);
+    if ($exUser->is_exist()) {
+    	$upUser = new Users($exUser->id);
     	$upUser->longitude = $longitude;
     	$upUser->latitude  = $latitude;
     	$upUser->precision = $precision;

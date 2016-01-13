@@ -51,6 +51,7 @@ class Api extends Model {
 		}
 		
 		$request->__apilog->appId    = $params['appid'];
+		$request->__apilog->api      = $request->q();
 		$request->__apilog->args     = json_encode($params['args']);
 		$request->__apilog->resp     = '';
 		$request->__apilog->format   = $params['format'];

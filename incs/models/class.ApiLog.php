@@ -12,6 +12,7 @@ class ApiLog extends StorageNode {
 				'key'     => 'logId',
 				'columns' => array(
 						'appId'     => 'appid',
+						'api'       => 'api',
 						'args'      => 'args',
 						'resp'      => 'resp',
 						'format'    => 'format',

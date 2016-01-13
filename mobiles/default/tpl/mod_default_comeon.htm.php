@@ -15,18 +15,12 @@ $(function(){
 
 <?php else:?>
 
-<div class="comeon">
-<img src="<?=$qrimg?>" alt="QR Code"/>
-<div class="promoter">
+<div class="comeon"><img src="<?=$qrimg?>" alt="QR Code"/></div>
 <?php if(!empty($promoter)):?>
-你的推荐人是：<em><?=$promoter['nickname']?>(<?=$promoter['uid']?>)</em><br/>
-当前链接属于：<em><?php if(!empty($curr_promoter)):?><?=$curr_promoter['nickname']?>(<?=$curr_promoter['uid']?>)
-<?php else:?>
-平台
-<?php endif;?>
+<div class="bbsizing promoter">
+你的推荐人：<em><?=$promoter['nickname']?></em>　推荐人多米号：<em><?=$promoter['uid']?></em>
 </em>
+</div>
 <?php endif;?>
-</div>
-</div>
 
 <?php endif;?>

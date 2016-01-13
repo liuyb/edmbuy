@@ -7,10 +7,20 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 class User_Controller extends MobileController {
+ 
+  private $user_header_img_dir = '/a/user/logo/';
   
+  private $user_qrcode_img_dir = '/a/user/qrcode/';
+    
   public function menu() {
     return [
       'user' => 'index',
+      'user/setting' => 'user_setting',
+      'user/logo/upload' => 'upload_logo',
+      'user/wxqr/show' => 'show_wxqr',
+      'user/wxqr/update' => 'update_wxqr',
+      'user/mobile/show' => 'show_mobile',
+      'user/mobile/update' => 'update_mobile',
       'user/oauth/%s' => 'oauth',
     ];
   }
@@ -37,18 +47,106 @@ class User_Controller extends MobileController {
   public function index(Request $request, Response $response)
   {
     $this->v->set_tplname('mod_user_index');
-    
     if ($request->is_hashreq()) {
-    	//sleep(1);
+      $this->showUserInfo();
     }
     else {
       //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
       Users::check_detail_info();
     }
-    
-    $response->send($this->v);
+    throw new ViewResponse($this->v);
   }
 
+  /**
+   * 用户信息设置
+   * @param Request $request
+   * @param Response $response
+   * @throws ViewResponse
+   */
+  public function user_setting(Request $request, Response $response)
+  {
+      $this->v->set_tplname('mod_user_setting');
+      $this->topnav_no = 1;
+      if ($request->is_hashreq()) {
+          $user = $this->showUserBaseInfo();
+          $role = User_Model::displayUserRole($user->level);
+          $this->v->assign("role", $role);
+      }
+      throw new ViewResponse($this->v);
+  }
+  
+  public function upload_logo(Request $request, Response $response){
+      if($request->is_post()) {
+          $ret = $this->uploadImg($this->user_header_img_dir);
+          
+          if($ret['flag'] == 'SUC'){
+              User_Model::updateUserInfo(array('logo'=>$ret['result']));
+          }
+          
+          $response->sendJSON($ret);
+      }
+  }
+  
+  public function show_wxqr(Request $request, Response $response){
+      $this->v->set_tplname('mod_user_wxqr');
+      $this->topnav_no = 1;
+      if ($request->is_hashreq()) {
+          $user = $this->showUserBaseInfo();
+          $this->v->assign("wxqr", $user->wxqr);
+      }
+      throw new ViewResponse($this->v);
+  }
+  
+  public function update_wxqr(Request $request, Response $response){
+      if($request->is_post()) {
+          $ret = $this->uploadImg($this->user_qrcode_img_dir);
+          
+          if($ret['flag'] == 'SUC'){
+              User_Model::updateUserInfo(array('wxqr'=>$ret['result']));
+          }
+          
+          $response->sendJSON($ret);
+      }
+  }
+  
+  private function uploadImg($imgDIR){
+      $ret = ['flag'=>'FAIL', 'errMsg'=>'上传失败，请稍后重试！'];
+      $img = $_POST["img"];
+      if ($img) {
+          $result = User_Upload::saveImgData($img, $imgDIR);
+          if (is_numeric($result)){
+              if($result == -1){
+                  $ret['errMsg'] = '上传失败，图片格式不正确！';
+              }
+          }else{
+              $filePath = $result;
+              if($filePath){
+                  $ret = ['flag'=>'SUC', 'result'=>$filePath];
+              }
+          }
+      }
+      return $ret;
+  }
+  
+  public function show_mobile(Request $request, Response $response){
+      $this->v->set_tplname('mod_user_mobile');
+      $this->topnav_no = 1;
+      if ($request->is_hashreq()) {
+          $mobile = $_REQUEST['mobile'];
+          $mobile = $mobile ? $mobile :'';
+          $this->v->assign('mobile', $mobile);
+      }
+      throw new ViewResponse($this->v);
+  }
+  
+  public function update_mobile(Request $request, Response $response){
+      if($request->is_post()) {
+          $mobile = $_POST['mobile'];
+          User_Model::updateUserInfo(array('mobilephone'=>$mobile));
+          $response->sendJSON('');
+      }
+  }
+  
   /**
    * 登录
    * 
@@ -319,6 +417,35 @@ class User_Controller extends MobileController {
     }
     $this->v->assign('qrcode', $qrcode);
     $response->send($this->v);
+  }
+  
+  public function showUserInfo(){
+      $uid = $GLOBALS['user']->uid;
+      $this->showUserBaseInfo();
+      $status = array('pay_status'=>constant('PS_UNPAYED'),'shipping_status'=>array(constant('SS_UNSHIPPED'),constant('SS_SHIPPED')));
+      $orderStatusMap = User_Model::findOrderStatusCountByUser($uid, $status);
+      $this->v->assign("waitPayCount", $orderStatusMap['status1']);
+      $this->v->assign("unShipCount", $orderStatusMap['status2']);
+      $this->v->assign("shipedCount", $orderStatusMap['status3']);
+  }
+  
+  public function showUserBaseInfo(){
+      $uid = $GLOBALS['user']->uid;
+      $currentUser = User_Model::findUserInfoById($uid);
+      $this->v->assign("uid", $uid);
+      $this->v->assign("nickname", $currentUser->nickname);
+      $this->v->assign("level", $currentUser->level);
+      $this->v->assign("logo", $currentUser->logo);
+      $this->v->assign("mobile", $currentUser->mobilephone);
+      if($currentUser->parentid){
+          $parentUser = User_Model::findUserInfoById($currentUser->parentid);
+          $this->v->assign("parentUid", $parentUser->uid);
+          $this->v->assign("parentNickName", $parentUser->nickname);
+          $this->v->assign("ParentLevel", $parentUser->level);
+          $this->v->assign("ParentMobile", $parentUser->mobilephone);
+          $this->v->assign("ParentWxqr", $parentUser->wxqr);
+      }
+      return $currentUser;
   }
   
 }

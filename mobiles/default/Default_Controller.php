@@ -161,7 +161,7 @@ class Default_Controller extends MobileController {
   		$promoter['nickname'] = $parent_user->nickname;
   	}
   	$this->v->assign('promoter', $promoter);
-  	
+  	/*
   	//当前spm
   	$curr_promoter = [];
     $spm = Spm::check_spm();
@@ -173,10 +173,11 @@ class Default_Controller extends MobileController {
     	}
     }
     $this->v->assign('curr_promoter', $curr_promoter);
+    */
   	
   	//SEO信息
   	$seo = [
-  			'title'   => L('appname'),
+  			'title'   => '你的益多米推广图片',
   			'keyword' => L('appname').',购物,赚钱,电商,商城',
   			'desc'    => '上联: 一次购物两个身份三级佣金四季发财;下联:五天推广六千人脉七万营收八面威风;横批:购物赚钱。购物就上益多米，放心购物，轻松赚钱，品质生活从这里开始'
   	];

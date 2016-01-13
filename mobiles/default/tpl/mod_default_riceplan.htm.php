@@ -72,4 +72,5 @@
 	</div><div class="clear"></div>
 </div>
  -->
+<?php include T('inc/followbox');?>
 <?php endif;?>
