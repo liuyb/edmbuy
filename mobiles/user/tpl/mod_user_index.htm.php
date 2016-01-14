@@ -93,7 +93,7 @@
 
 //好友弹框
 $(".refer_but").on("click",function(){
-	getAddFriendInstance().showFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>");
+	getAddFriendInstance().showFriend("<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
 });
 
 $(function(){	

@@ -6,7 +6,7 @@
 
 <?php else:?>
 
-<?php if(0 == $userLevel):?>
+<?php if(0 == $user->level):?>
 <div class="partner_ad">
 	<span class="ad_l">你还未加入米商计划</span>
 	<a href='/riceplan'><span class="ad_r">了解详情</span></a>

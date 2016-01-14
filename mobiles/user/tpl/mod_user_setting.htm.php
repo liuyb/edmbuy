@@ -34,7 +34,12 @@
 	<a href="/user/wxqr/show"> 
 		<div class="person_head_comm">
 			<span class="head_l_com">微信二维码</span>
-			<span class="head_r_com"><img src="/themes/mobiles/img/e.png"></span>
+			<span class="head_r_com">
+			<?php if($wxqr):?>
+			<img src="/themes/mobiles/img/dgx.png">
+			<?php endif;?>
+			<img src="/themes/mobiles/img/e.png" style="margin-left: 5px">
+			</span>
 		</div>
 	</a>
 </div> 
@@ -59,7 +64,7 @@
 		<span class="head_l_com">我的角色</span>
 		<span class="head_r_com" style="margin-right:12px;">
 			<span><?=$role ?></span>
-			<?php if(1 != $level): ?>
+			<?php if(0 == $level): ?>
 			<button class="personInfo_but" id="be-partner" style="font-size:13px;">成为米商</button>
 			<?php endif;?>
 		</span>
@@ -88,7 +93,7 @@ $(function(){
 	});
 	//好友弹框
 	$("#add-friend").bind("click",function(){
-		getAddFriendInstance().showFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>");
+		getAddFriendInstance().showFriend("<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
 	});
 });
 

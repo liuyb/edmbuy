@@ -47,7 +47,6 @@ class Partner_Controller extends MobileController {
         $this->nav_no    = 1;
         
         if ($request->is_hashreq()) {
-          $this->buildIndexData();
         }
         
         throw new ViewResponse($this->v);
@@ -87,19 +86,6 @@ class Partner_Controller extends MobileController {
 	            "inactiveIncome" => $inactiveIncome
 	    ];
 	    $response->sendJSON($ret);
-	}
-	
-	private function buildIndexData() {
-	    $uid = $GLOBALS['user']->uid;
-	    $currentUser = Partner_Model::findUserInfoById($uid);
-	    
-	    $firstLevelCount = $currentUser->childnum1;
-	    $secondLevelCount = $currentUser->childnum2;
-	    $thirdLevelCount = $currentUser->childnum3;
-	    $this->v->assign("userLevel", $currentUser->level);
-	    $this->v->assign("firstLevelCount", $firstLevelCount);
-	    $this->v->assign("secondLevelCount", $secondLevelCount);
-	    $this->v->assign("thirdLevelCount", $thirdLevelCount);
 	}
 	
 }

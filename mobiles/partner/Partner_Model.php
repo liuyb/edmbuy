@@ -8,11 +8,6 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Partner_Model extends Model {
 
-    static function findUserInfoById($uid){
-        $user = Users::find_one(new Query('uid', $uid));
-        return  $user;
-    }
-    
     /**
      * 展现当前层级米商列表
      * @param unknown $level
