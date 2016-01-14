@@ -246,6 +246,8 @@ class User_Controller extends MobileController {
     		$upUser = new Users($localUser->uid);
     		//$upUser->unionid   = $unionid;
     		$upUser->openid    = $openid;
+    		$upUser->lasttime  = simphp_dtime();
+    		$upUser->lastip    = Request::ip();
     		if (isset($uinfo_wx['subscribe'])) {
     			$upUser->subscribe = $uinfo_wx['subscribe'];
     			$upUser->subscribetime = $uinfo_wx['subscribe_time'];

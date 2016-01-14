@@ -59,6 +59,7 @@ class User_Controller extends Controller {
 			$aUser->logo     = $logo;
 			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
+			$aUser->salt     = gen_salt();
 			$aUser->parentid = Users::get_userid($parentUnid);
 			$aUser->parentunionid = $parentUnid;
 			$aUser->businessid    = $business_id;
@@ -77,6 +78,8 @@ class User_Controller extends Controller {
 			$bUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
 			$bUser->businessid     = $business_id;
 			$bUser->businesstime   = $business_time;
+			$bUser->lasttime       = simphp_dtime();
+			$bUser->lastip         = Request::ip();
 			
 			//mobile, nickname 和 logo 本地如果为空就更新
 			if (empty($aUser->mobilephone)) {
@@ -152,11 +155,12 @@ class User_Controller extends Controller {
 			$aUser->logo     = $logo;
 			$aUser->regip    = $request->ip();
 			$aUser->regtime  = $regtime;
+			$aUser->salt     = gen_salt();
 			$aUser->parentid = Users::get_userid($parentUnid);
 			$aUser->parentunionid = $parentUnid;
 			$aUser->businessid    = $business_id;
 			$aUser->businesstime  = $business_time;
-			$aUser->from     = $request->appid;
+			$aUser->from          = $request->appid;
 			$aUser->save(Storage::SAVE_INSERT);
 			$aUser->update_synctimes('+1');
 			
@@ -175,6 +179,8 @@ class User_Controller extends Controller {
 			$bUser->mobilephone    = $mobile;
 			$bUser->nickname       = $nickname;
 			$bUser->logo           = $logo;
+			$bUser->lasttime       = simphp_dtime();
+			$bUser->lastip         = Request::ip();
 			
 			$res['act_type'] = 'update';
 			$res['parent_id']= $bUser->parentid ? $parentUnid : '';

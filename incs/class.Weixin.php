@@ -1267,6 +1267,8 @@ class WeixinHelper {
     			if (!$exUser->openid) {
     				$upUser->openid  = $openid;
     			}
+    			$upUser->lasttime  = simphp_dtime();
+    			$upUser->lastip    = Request::ip();
     			$save_type = Storage::SAVE_UPDATE;
     		}
     		else { //未存在，会"尝试"建立上下级关系
@@ -1274,6 +1276,9 @@ class WeixinHelper {
     			$upUser->unionid   = $wxuinfo['unionid'];
     			$upUser->openid    = $openid;
     			$upUser->parentid  = 0;
+    			$upUser->regip     = Request::ip();
+    			$upUser->regtime   = simphp_time();
+    			$upUser->salt      = gen_salt();
     			$upUser->state     = 0; //0:正常;1:禁止
     			$upUser->from      = $this->from;
     			$upUser->authmethod= !empty($eventKey) ? 'scan' : 'base';
