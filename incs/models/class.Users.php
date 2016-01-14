@@ -61,6 +61,7 @@ class Users extends StorageNode {
 						'ecsalt'      => 'ec_salt',
 						'salt'        => 'salt',
 						'parentid'    => 'parent_id',
+				        'parentnick'  => 'parent_nick',
 						'parentunionid' => 'parent_unionid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
@@ -79,6 +80,9 @@ class Users extends StorageNode {
 						'state'       => 'state',
 						'from'        => 'from',
 						'authmethod'  => 'auth_method',
+				        'childnum1'   => 'childnum_1',
+				        'childnum2'   => 'childnum_2',
+				        'childnum3'   => 'childnum_3'
 				));
 	}
 	

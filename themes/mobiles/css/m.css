@@ -2033,25 +2033,31 @@ a.ph_btn{
   vertical-align: middle;
 }
 .list_h{
-  background: url(../img/he.png) no-repeat 100% center;
   padding-right: 20%;
-  background-size: 19px;  
+  background-size: 19px !important;  
   font-size:17px;
   color:#333; 
 }
 .list_s{
-  background: url(../img/sha.png) no-repeat 100% center;
   padding-right: 20%;
-  background-size: 19px;  
+  background-size: 19px !important;  
   font-size:17px;
   color:#333; 
 }
 .list_k{
-  background: url(../img/ke.png) no-repeat 100% center;
   padding-right: 20%;
-  background-size: 19px;  
+  background-size: 19px !important;  
   font-size:17px;
   color:#333; 
+}
+.user_bg_he {
+  background: url(../img/he.png) no-repeat 100% center;
+}
+.user_bg_sha {
+  background: url(../img/sha.png) no-repeat 100% center;
+}
+.user_bg_ke {
+  background: url(../img/ke.png) no-repeat 100% center;
 }
 .list_td1{
   padding:15px 12px;

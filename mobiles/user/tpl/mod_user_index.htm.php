@@ -86,14 +86,14 @@
 	</ul>
 </div>
 
-<?php include T('mod_user_inc_add_as_friend');?>
+<?php include T('inc/add_as_friend');?>
 
 <script>
 
 
 //好友弹框
 $(".refer_but").on("click",function(){
-	new AddFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>").showFriend();
+	getAddFriendInstance().showFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>");
 });
 
 $(function(){	

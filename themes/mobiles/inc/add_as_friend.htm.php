@@ -29,25 +29,32 @@
 </div>
 
 <script>
-	function AddFriend(wxqr, phone){
-		this.wxqr = wxqr;
-		this.phone = phone;
+	var addFriend;
+
+	function getAddFriendInstance(){
+		if(!addFriend){
+			addFriend = new AddFriend();
+		}
+		return addFriend;
+	}
+
+	function AddFriend(){
 		this.friendDom = null;
 		this.initEvent();
 	}
-	
+
 	AddFriend.prototype.initEvent = function(){
 		var _THIS = this;
 		$(".close_f,.mask,.friend_no,.w_wx_colse").on("click",_THIS._onCloseEvent.bind(_THIS));
 	};
 	
-	AddFriend.prototype.showFriend = function(){
-		var _wxqr = this.wxqr;
-		var _phone = this.phone;
+	AddFriend.prototype.showFriend = function(wxqr, phone){
+		var _wxqr = wxqr;
+		var _phone = phone;
 		if(_wxqr && _wxqr.length){
 			this.friendDom = $(".wxqr_friend");
 				$(".wxqr_friend").find(".add_f_img").find("img").attr("src",_wxqr);
-			if(this.phone){
+			if(_phone){
 				$(".wxqr_friend").find(".add_f_phone").find("a").text(_phone).attr("href",'tel:'+_phone);
 			}else{
 				$(".wxqr_friend").find(".add_f_phone").hide();

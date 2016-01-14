@@ -78,7 +78,7 @@
 <div style="height:auto;background:#eee"></div>
 
 
-<?php include T('mod_user_inc_add_as_friend');?>
+<?php include T('inc/add_as_friend');?>
 
 <script>
 
@@ -88,7 +88,7 @@ $(function(){
 	});
 	//好友弹框
 	$("#add-friend").bind("click",function(){
-		new AddFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>").showFriend();
+		getAddFriendInstance().showFriend("<?=$ParentWxqr ?>","<?=$ParentMobile ?>");
 	});
 });
 
