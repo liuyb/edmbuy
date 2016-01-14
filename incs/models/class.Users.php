@@ -61,9 +61,13 @@ class Users extends StorageNode {
 						'ecsalt'      => 'ec_salt',
 						'salt'        => 'salt',
 						'parentid'    => 'parent_id',
+						'parentnick'  => 'parent_nick',
 						'parentunionid' => 'parent_unionid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
+						'childnum_1'  => 'childnum_1',
+						'childnum_2'  => 'childnum_2',
+						'childnum_3'  => 'childnum_3',
 						'flag'        => 'flag',
 						'alias'       => 'alias',
 						'msn'         => 'msn',
@@ -344,6 +348,14 @@ class Users extends StorageNode {
 			return Media::path($ret, true);
 		}
 		return '';
+	}
+	
+	/**
+	 * 获取购物用户id(支持session购物)
+	 * @return string
+	 */
+	static function get_shopping_uid() {
+		return $GLOBALS['user']->uid ? : session_id();
 	}
 	
 }
