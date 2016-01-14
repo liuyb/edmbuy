@@ -83,6 +83,7 @@ class Users extends StorageNode {
 						'state'       => 'state',
 						'from'        => 'from',
 						'authmethod'  => 'auth_method',
+						'synctimes'   => 'synctimes',
 				));
 	}
 	
@@ -351,11 +352,18 @@ class Users extends StorageNode {
 	}
 	
 	/**
-	 * 获取购物用户id(支持session购物)
-	 * @return string
+	 * 更新同步次数
+	 * 支持inc是整形、'+N','-N'的方式
 	 */
-	static function get_shopping_uid() {
-		return $GLOBALS['user']->uid ? : session_id();
+	public function update_synctimes($inc = 1) {
+		if (is_string($inc) && ($inc{0}=='+'||$inc{0}=='-')) {
+			$setpart = "synctimes".$inc;
+		}
+		else {
+			$setpart = intval($inc);
+		}
+		D()->query("UPDATE ".self::table(). " SET synctimes={$setpart} WHERE user_id=%d", $this->uid);
+		return true;
 	}
 	
 }

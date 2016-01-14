@@ -158,6 +158,7 @@ class User_Controller extends Controller {
 			$aUser->businesstime  = $business_time;
 			$aUser->from     = $request->appid;
 			$aUser->save(Storage::SAVE_INSERT);
+			$aUser->update_synctimes('+1');
 			
 			$res['user_id']  = $aUser->id;
 			$res['act_type'] = 'insert';
@@ -179,6 +180,7 @@ class User_Controller extends Controller {
 			$res['parent_id']= $bUser->parentid ? $parentUnid : '';
 			
 			$bUser->save(Storage::SAVE_UPDATE);
+			$bUser->update_synctimes('+1');
 		}
 		throw new ApiResponse($res);
 	}
