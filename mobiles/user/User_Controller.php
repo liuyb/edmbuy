@@ -92,7 +92,6 @@ class User_Controller extends MobileController {
       $this->topnav_no = 1;
       if ($request->is_hashreq()) {
           $user = $this->showUserBaseInfo();
-          $this->v->assign("wxqr", $user->wxqr);
       }
       throw new ViewResponse($this->v);
   }
@@ -433,12 +432,14 @@ class User_Controller extends MobileController {
   
   public function showUserBaseInfo(){
       $uid = $GLOBALS['user']->uid;
-      $currentUser = User_Model::findUserInfoById($uid);
+      global $user;
+      $currentUser = $user;
       $this->v->assign("uid", $uid);
       $this->v->assign("nickname", $currentUser->nickname);
       $this->v->assign("level", $currentUser->level);
       $this->v->assign("logo", $currentUser->logo);
       $this->v->assign("mobile", $currentUser->mobilephone);
+      $this->v->assign("wxqr", $user->wxqr);
       if($currentUser->parentid){
           $parentUser = User_Model::findUserInfoById($currentUser->parentid);
           $this->v->assign("parentUid", $parentUser->uid);

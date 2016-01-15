@@ -29,6 +29,8 @@ class Item_Controller extends MobileController {
 	{
 		return [
 				'item/%d' => 'item',
+		        'item/promote' => 'item_promote',
+		        'item/promote/product' => 'promote_product'
 		];
 	}
 	
@@ -132,6 +134,18 @@ class Item_Controller extends MobileController {
 		}
 		
 		throw new ViewResponse($this->v);
+	}
+	
+	public function item_promote(Request $request, Response $response){
+	    $this->v->set_tplname('mod_item_promote');
+	    $this->topnav_no    = 1;
+	    throw new ViewResponse($this->v);
+	}
+	
+	public function promote_product(Request $request, Response $response){
+	    $this->v->set_tplname('mod_item_promote_product');
+	    $this->topnav_no    = 1;
+	    throw new ViewResponse($this->v);
 	}
 	
 }

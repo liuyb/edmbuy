@@ -6,32 +6,33 @@
 
 <?php else:?>
 
+<?php if(0 == $user->level):?>
 <div class="partner_ad">
 	<span class="ad_l">你还未加入米商计划</span>
-	<span class="ad_r">了解详情</span>
+	<a href='/riceplan'><span class="ad_r">了解详情</span></a>
 </div>
-
+<?php endif;?>
 <div class="my_guest">
 	<div class="guest_tit">
 		我的米客（单位：人）
 	</div>
 	<div class="guest_main">
 		<ul>
-			<a href="copartner.html">
+			<a href="/partner/list/1">
 				<li>
-					<h1>6</h1>
+					<h1 id="firstLevelCount">...</h1>
 					<p>一层</p>
 				</li>
 			</a>
-			<a href="copartner.html">
+			<a href="/partner/list/2">
 				<li>
-					<h1>0</h1>
+					<h1 id="secondLevelCount">...</h1>
 					<p>二层</p>
 				</li>
 			</a>
-			<a href="copartner.html">
+			<a href="/partner/list/3">
 				<li>
-					<h1>0</h1>
+					<h1 id="thirdLevelCount">...</h1>
 					<p>三层</p>
 				</li>
 			</a>
@@ -48,13 +49,13 @@
 			<a href="add_backID.html">
 			<li>
 				<p>可提现金额（元）</p>
-				<h1>￥63,000.00</h1>
+				<h1>￥0.00</h1>
 			</li>
 			</a>
 			<a href="brokerage.html?broke=2">
 			<li>
 				<p>未生效收入</p>
-				<h1 class="money_noforce">￥63,000.00</h1>
+				<h1 class="money_noforce" id="inactiveIncome">￥0.00</h1>
 			</li>
 			</a>
 		</ul>
@@ -65,13 +66,13 @@
 			<a href="brokerage.html?broke=1">
 			<li>
 				<p>总收入（元）</p>
-				<h1>￥63,000.00</h1>
+				<h1>￥0.00</h1>
 			</li>
 			</a>
 			<a href="cash_list_info.html">
 			<li>
 				<p>已提现金额</p>
-				<h1>￥63,000.00</h1>
+				<h1>￥0.00</h1>
 			</li>
 			</a>
 		</ul>
@@ -82,7 +83,7 @@
 <div class="guest_list">
 	<ul>
 		<li>
-			<a href="develop_go.html">
+			<a href="/item/promote">
 				<h1><img src="/themes/mobiles/img/tui.png"></h1>
 				<p>我要推广</p>
 			</a>
@@ -108,4 +109,17 @@
 	</ul>
 </div>
 
-<?php endif;/*End if(''!==$errmsg) else*/?>
+<script>
+	$().ready(function(){
+		var url = '/partner/ajax';
+		F.get(url, {}, function(ret){
+			if(ret){
+				$("#firstLevelCount").text(ret.firstLevelCount);
+				$("#secondLevelCount").text(ret.secondLevelCount);
+				$("#thirdLevelCount").text(ret.thirdLevelCount);
+				$("#inactiveIncome").html("￥"+ret.inactiveIncome);
+			}
+		});
+	});
+</script>
+<?php endif;?>
