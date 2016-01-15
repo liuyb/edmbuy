@@ -343,6 +343,7 @@ function showSelect(){
 
 //立即购买
 function immediate_buy(item_id, item_num) {
+	if (gUser.uid != 104 && gUser.uid != 109) return;
 	if (typeof (immediate_buy.ajaxing)=='undefined') {
 		immediate_buy.ajaxing = 0;
 	}
@@ -350,7 +351,11 @@ function immediate_buy(item_id, item_num) {
 	immediate_buy.ajaxing = 1;
 	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num},function(ret){
 		immediate_buy.ajaxing = 0;
-		window.location.href = '<?php echo U('trade/order/confirm')?>?cart_rids='+ret.code+'&t='+ret.ts;
+		var gourl = '<?php echo U('trade/order/confirm')?>';
+		if (gourl.lastIndexOf('?') < 0) gourl += '?';
+		else gourl += '&';
+		gourl += 'cart_rids='+ret.code+'&t='+ret.ts;
+		window.location.href = gourl;
 	});
 }
 </script>

@@ -312,10 +312,10 @@ class Request {
 	
 	/**
 	 * check whether the current request is a post request
-	 * @param  boolean  $secure_check  whether secure checking(check token), default checking
+	 * @param  boolean  $secure_check  whether secure checking(check token), default not checking
 	 * @return boolean
 	 */
-	public static function is_post($secure_check = TRUE) {
+	public static function is_post($secure_check = FALSE) {
 		if (!$secure_check) return self::method()=='post';
 		return self::is_token_post();
 	}

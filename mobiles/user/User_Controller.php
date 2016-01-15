@@ -220,12 +220,16 @@ class User_Controller extends MobileController {
     //用code换取access token
     $code_ret = $wx->request_access_token($code);
     if (!empty($code_ret['errcode'])) {
-    	Fn::show_error_message('微信授权错误<br/>'.$code_ret['errcode'].'('.$code_ret['errmsg'].')');
+    	Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;font-size:1.6rem;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>');
     }
     
     //获取到openid
     $openid = $code_ret['openid'];
     $unionid= isset($code_ret['unionid']) ? $code_ret['unionid'] : '';
+    //trace_debug('weixin_oauth2_code_set', $code_ret);
+    if (empty($unionid)) {
+    	Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;font-size:1.6rem;">获取不到UnionID</span>');
+    }
     
     //查询本地是否存在对应openid的用户
     $localUser   = Users::load_by_unionid($unionid);

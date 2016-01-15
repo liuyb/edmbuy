@@ -36,7 +36,7 @@ class Api extends Model {
 	
 	static function check(Request $request, Response $response) {
 		$params = [];
-		if($request->is_post()) {
+		if($request->is_post(FALSE)) {
 			$params['args']  = $request->post('args',   []);
 			$params['appid'] = $request->post('appid',  '');
 			$params['format']= $request->post('format', '');
