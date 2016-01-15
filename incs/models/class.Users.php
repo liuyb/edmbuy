@@ -366,6 +366,50 @@ class Users extends StorageNode {
 		return true;
 	}
 	
+
+	/**
+	 * 获取用户收货地址列表
+	 *
+	 * @param integer $user_id
+	 * @return array
+	 */
+	static function getAddress($user_id) {
+		$ectb = UserAddress::table();
+		$sql  = "SELECT * FROM {$ectb} WHERE `user_id`=%d ORDER BY `address_id` DESC";
+		$ret  = D()->raw_query($sql,$user_id)->fetch_array_all();
+		if (!empty($ret)) {
+			foreach ($ret AS &$addr) {
+				$contact_phone = !empty($addr['tel']) ? $addr['tel'] : $addr['mobile']; //遵循ecshop习惯，优先选择tel作为联系电话
+	
+				//填充地区名称
+				if (empty($addr['country_name']) && !empty($addr['country'])) {
+					$addr['country_name'] = Region::getName($addr['country']);
+				}
+				if (empty($addr['province_name']) && !empty($addr['province'])) {
+					$addr['province_name'] = Region::getName($addr['province']);
+					$addr['province_name'].= '省';
+				}
+				if (empty($addr['city_name']) && !empty($addr['city'])) {
+					$addr['city_name'] = Region::getName($addr['city']);
+					if (!preg_match('/(市$)/u', $addr['city_name'])) {
+						$addr['city_name'].= '市';
+					}
+				}
+				if (empty($addr['district_name']) && !empty($addr['district'])) {
+					$addr['district_name'] = Region::getName($addr['district']);
+					if (!preg_match('/(区$)/u', $addr['district_name'])) {
+						$addr['district_name'].= '区';
+					}
+				}
+	
+				//添加额外属性，便于前端显示
+				$addr['contact_phone']  = $contact_phone;
+				$addr['show_consignee'] = $addr['consignee']."（{$contact_phone}）";
+				$addr['show_address']   = $addr['province_name'].$addr['city_name'].$addr['district_name'].$addr['address'];
+			}
+		}
+		return empty($ret) ? [] : $ret;
+	}
 }
  
 /*----- END FILE: class.Users.php -----*/

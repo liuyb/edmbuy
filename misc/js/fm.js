@@ -644,6 +644,9 @@ module.exports.FastClick=e):window.FastClick=e})();
 				callback = data;
 				data = {};
 			}
+			if (typeof data == 'object' && typeof w.gData != 'undefined' && typeof w.gData.token != 'undefined') {
+				data.token = w.gData.token;
+			}
 			var oThis = this;
 			this.ajaxStart('post',ajax_start_cb);
 			$.ajax({

@@ -312,16 +312,12 @@ class Request {
 	
 	/**
 	 * check whether the current request is a post request
+	 * @param  boolean  $secure_check  whether secure checking(check token), default checking
 	 * @return boolean
 	 */
-	public static function is_post() {
-	  if(!empty($GLOBALS['_POST']) && $_SERVER['REQUEST_METHOD'] == 'POST' && empty($_SERVER['HTTP_X_FLASH_VERSION']) &&
-	    (empty($_SERVER['HTTP_REFERER']) ||
-	      preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST'])))
-	  {
-	    return TRUE;
-	  }
-	  return FALSE;
+	public static function is_post($secure_check = TRUE) {
+		if (!$secure_check) return self::method()=='post';
+		return self::is_token_post();
 	}
 	
 	/**

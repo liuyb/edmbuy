@@ -68,7 +68,7 @@ class Items extends StorageNode {
 		);
 	}
 	
-	protected $siteurl = '';
+	protected static $siteurl;
 	
 	/**
 	 * Constructor
@@ -76,7 +76,7 @@ class Items extends StorageNode {
 	 */
 	public function __construct($id = NULL) {
 		parent::__construct($id);
-		$this->siteurl = C('env.site.mobile');
+		self::$siteurl = C('env.site.mobile');
 	}
 	
 	/**
@@ -88,12 +88,26 @@ class Items extends StorageNode {
 	}
 	
 	/**
-	 * return current item url
+	 * Return current item url, alias of self::itemurl
+	 * @param string $spm
+	 * @return string
+	 * @see Items::itemurl
+	 */
+	public function url($spm = '') {
+		return self::itemurl($this->id, $spm);
+	}
+	
+	/**
+	 * Return item url
+	 * @param integer $item_id
 	 * @param string $spm
 	 * @return string
 	 */
-	public function url($spm = '') {
-		return $this->siteurl . "/item/".$this->id.($spm ? "?spm={$spm}" : '');
+	static function itemurl($item_id, $spm = '') {
+		if (!isset(self::$siteurl)) {
+			self::$siteurl = C('env.site.mobile');
+		}
+		return self::$siteurl . "/item/".$item_id.($spm ? "?spm={$spm}" : '');
 	}
 	
 	/**

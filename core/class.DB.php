@@ -205,7 +205,10 @@ class DB {
    * @return string WRITABLE or READONLY
    */
   public function check_server_mode($qstring) {
-    return ($this->realtime_query || preg_match( '/^\s*(insert|delete|update|replace|create|alter|truncate|drop|lock|unlock)\s/i', $qstring ))
+    return ($this->realtime_query
+    		   || preg_match('/^\s*(insert|delete|update|replace|create|alter|truncate|drop|lock|unlock)\s+/i', $qstring)
+    		   || preg_match('/for\s+update/i', $qstring)
+    		   || preg_match('/lock\s+in\s+share\s+mode/i', $qstring))
            ? self::WRITABLE : self::READONLY;
   }
   

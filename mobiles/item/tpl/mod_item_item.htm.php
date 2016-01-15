@@ -27,7 +27,7 @@
 		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display:none;">0</span></div>
 	</a>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
-	<div class="fl cursor p_d_t4">立即购买</div>
+	<div class="fl cursor p_d_t4" id="Mnav-buy">立即购买</div>
 </div>
 </script>
 <script id="forBody" type="text/html">
@@ -38,6 +38,8 @@
 
 <div class="mask no-bounce" id="bodymask" style="display:none;"></div>
 <div class="p_cart_main no-bounce" id="p_cart_main" style="display:none;">
+	<input type="hidden" id="frm_buy_type" value="cart"/>
+	<input type="hidden" id="frm_item_id" value="<?=$item->item_id?>"/>
 	<div class="p_cart_content">
 		<div class="p_cart_hd no-bounce clearfix">
 			<div class="p_cart_hl fl">
@@ -65,7 +67,7 @@
 				<b>购买数量</b>
 				<p>
 					<span class="cart_btn btn_minus"></span>
-					<span><input type="text" class="cart_inp" value="1"></span>
+					<span><input type="text" class="cart_inp" value="1" id="frm_item_num"></span>
 					<span class="cart_btn btn_plus"></span>
 				</p>
 			</div>
@@ -87,8 +89,8 @@
 <div class="cart_yj_f no-bounce" id="cart_yj_f">
 	<div class="yi_artio_tit">佣金分配比例</div>
 	<div class="yi_artio_1">一级佣金：35%</div>
-	<div class="yi_artio_2">二级佣金：40%</div>
-	<div class="yi_artio_3">三级佣金：25%</div>
+	<div class="yi_artio_2">二级佣金：35%</div>
+	<div class="yi_artio_3">三级佣金：30%</div>
 	<div class="yi_artio_ts">提示：此佣金只有米商可见</div>
 	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
 </div>
@@ -157,7 +159,7 @@ $(function(){
 <div class="p_detail_msg">
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if($user->uid /*&& $user->level>0*/):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
+	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if($user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
 	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_order_count?>笔</span><span class="fl">快递：免运费</span></div>
 </div>
 
@@ -232,7 +234,12 @@ $(document).ready(function(){
 	});
 	
 	//加入购物车
-	$('#Mnav-add-cart').on("click", function(){
+	$('#Mnav-add-cart,#Mnav-buy').bind("click", function(){
+		if ($(this).attr('id')=='Mnav-buy') {
+			$('#frm_buy_type').val('buy');
+		}else{
+			$('#frm_buy_type').val('cart');
+		}
 		$('#Mtop').hide();
 		$mask.show();
 		$cartmain.find('img').show();
@@ -297,14 +304,22 @@ $(document).ready(function(){
 	
 	//确定加入
 	$cartmain.on("click", ".p_cart_btn", function(){
-		$mask.hide();
-		$cartmain.addClass("is_confirm");
-		setTimeout(function(){
-			$cartmain.hide().attr("class","p_cart_main");
-			var cart_number = $("#cart_number").text()*1;
-			var select_number = $(".cart_inp").val()*1;
-			$("#cart_number").text(cart_number + select_number).show();
-		},500);
+		var buy_type = $('#frm_buy_type').val();
+		var item_id  = $('#frm_item_id').val();
+		var item_num = $('#frm_item_num').val();
+		if ('buy'==buy_type) {
+			immediate_buy(item_id, item_num);
+		}
+		else {
+			$mask.hide();
+			$cartmain.addClass("is_confirm");
+			setTimeout(function(){
+				$cartmain.hide().attr("class","p_cart_main");
+				var cart_number = $("#cart_number").text()*1;
+				var select_number = $(".cart_inp").val()*1;
+				$("#cart_number").text(cart_number + select_number).show();
+			},500);
+		}
 	});
 
 });
@@ -326,6 +341,18 @@ function showSelect(){
 	$('#cart_shop_price').text(price.toFixed(2));
 }
 
+//立即购买
+function immediate_buy(item_id, item_num) {
+	if (typeof (immediate_buy.ajaxing)=='undefined') {
+		immediate_buy.ajaxing = 0;
+	}
+	if (immediate_buy.ajaxing) return;
+	immediate_buy.ajaxing = 1;
+	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num},function(ret){
+		immediate_buy.ajaxing = 0;
+		window.location.href = '<?php echo U('trade/order/confirm')?>?cart_rids='+ret.code+'&t='+ret.ts;
+	});
+}
 </script>
 
 <?php endif;?>

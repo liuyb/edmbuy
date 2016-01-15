@@ -28,6 +28,7 @@ class Trade_Controller extends MobileController {
   public function menu()
   {
     return [
+      'trade/buy'            => 'buy',
       'trade/cart/add'       => 'cart_add',
       'trade/cart/list'      => 'cart_list',
       'trade/cart/delete'    => 'cart_delete',
@@ -55,17 +56,39 @@ class Trade_Controller extends MobileController {
       $goods_id = $request->post('goods_id',0);
       $goods_num= $request->post('goods_num',1);
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
-        $ec_user_id = session_id();
+      $user_id = $GLOBALS['user']->ec_user_id;
+      if (!$user_id) {
+        $user_id = session_id();
       }
       
-      $ret = Goods::addToCart($goods_id, $goods_num, $ec_user_id);
+      $ret = Goods::addToCart($goods_id, $goods_num, $user_id);
       if ($ret['code']>0) {
-        $ret['cart_num'] = Goods::getUserCartNum($ec_user_id);
+        $ret['cart_num'] = Cart::getUserCartNum($shopping_uid);
       }
       $response->sendJSON($ret);
     }
+  }
+  
+  /**
+   * 直接购买
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function buy(Request $request, Response $response)
+  {
+  	if ($request->is_post()) {
+  
+  		$item_id  = $request->post('item_id',0);
+  		$item_num = $request->post('item_num',1);
+  
+  		$shopping_uid = Cart::shopping_uid();
+  		$ret = Cart::addItem($item_id, $item_num, true, $shopping_uid);
+  		if ($ret['code']>0) {
+  			$ret['ts'] = simphp_time();
+  		}
+  		$response->sendJSON($ret);
+  	}
   }
   
   /**
@@ -163,7 +186,11 @@ class Trade_Controller extends MobileController {
     $this->v->assign('mnav', $mnav);
     
     if ($request->is_hashreq()) {
-      
+      $shop_uid = Cart::shopping_uid();
+      $cartGoods= Cart::getUserCart($shop_uid);
+      $cartNum  = Cart::getUserCartNum($shop_uid);
+      $this->v->assign('cartGoods', $cartGoods);
+      $this->v->assign('cartNum', intval($cartNum));
     }
     else {
     	
@@ -192,13 +219,13 @@ class Trade_Controller extends MobileController {
           ->assign('orders_num', $orders_num);
       });
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
+      $user_id = $GLOBALS['user']->ec_user_id;
+      if (!$user_id) {
         $errmsg = "无效请求";
         $response->send($this->v);
       }
       
-      $orders = Goods::getOrderList($ec_user_id);
+      $orders = Goods::getOrderList($user_id);
       $orders_num = count($orders);
       $this->v->assign('orders', $orders);
       
@@ -231,39 +258,31 @@ class Trade_Controller extends MobileController {
       $timestamp = $request->get('t',0);
       $cart_rids = trim($cart_rids);
       
-      $errmsg = '';
-      $this->v->add_render_filter(function(View $v) use(&$errmsg){
-        $v->assign('errmsg', $errmsg);
-      });
-      
-      $now = simphp_time();
-      $diff= abs($now-$timestamp);
-      $this->v->assign('diff', $diff);
-      if ( $diff > 60*150000) { //误差不能超过15分钟，否则判无效请求
-        $errmsg = "无效请求";
-        $response->send($this->v);
+      //检查输入
+      $now  = simphp_time();
+      $diff = abs($now-$timestamp);
+      if ( $diff > 60*60*15) { //误差不能超过15分钟，否则判无效请求
+        throw new ViewException($this->v, "无效请求");
       }
-      
       if (''==$cart_rids || !preg_match('/^(\d)+[,\d ]*$/', $cart_rids)) {
-        $errmsg = "结账商品为空";
-        $response->send($this->v);
+        throw new ViewException($this->v, "结账商品为空");
       }
       
+      //标准化商品id
       $cart_rids = explode(',', $cart_rids);
       foreach ($cart_rids AS &$rid) {
         $rid = trim($rid);
       }
       
       //订单商品信息
-      $order_goods = Goods::getCartsGoods($cart_rids, null, $total_price);
+      $order_goods = Cart::getGoods($cart_rids, null, $total_price);
       $this->v->assign('order_goods', $order_goods);
       $this->v->assign('order_goods_num', count($order_goods));
       $this->v->assign('total_price', $total_price);
       $this->v->assign('cart_rids_str', implode(',',$cart_rids));
       
       //搜索地址
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      $user_addrs = Goods::getUserAddress($ec_user_id);
+      $user_addrs = Users::getAddress($GLOBALS['user']->uid);
       $this->v->assign('user_addrs', $user_addrs);
       $this->v->assign('user_addrs_num', count($user_addrs));
       
@@ -300,7 +319,8 @@ class Trade_Controller extends MobileController {
         }
       }
     }
-    $response->send($this->v);
+    
+    throw new ViewResponse($this->v);
   }
   
   /**
@@ -315,8 +335,8 @@ class Trade_Controller extends MobileController {
       
       $ret = ['flag'=>'FAIL','msg'=>'订单提交失败'];
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
+      $user_id = $GLOBALS['user']->ec_user_id;
+      if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
@@ -363,7 +383,7 @@ class Trade_Controller extends MobileController {
       // 购物车商品列表
       $cart_rids_arr = explode(',', $cart_rids_str);
       $total_price = 0;
-      $order_goods = Goods::getCartsGoods($cart_rids_arr, $ec_user_id, $total_price);
+      $order_goods = Goods::getCartsGoods($cart_rids_arr, $user_id, $total_price);
       if (count($order_goods)!=count($cart_rids_arr)) {
         $ret['msg'] = '该订单商品无效，请返回购物车重新添加';
         $response->sendJSON($ret);
@@ -374,7 +394,7 @@ class Trade_Controller extends MobileController {
       $ectb_order = ectable('order_info');
       $order = [
         'order_sn'         => $order_sn,
-        'user_id'          => $ec_user_id,
+        'user_id'          => $user_id,
         'order_status'     => OS_UNCONFIRMED,
         'shipping_status'  => SS_UNSHIPPED,
         'pay_status'       => PS_UNPAYED,
@@ -475,7 +495,7 @@ class Trade_Controller extends MobileController {
         }
         
         // 清除购物车
-        Goods::deleteCartGoods($cart_rids_arr, $ec_user_id);
+        Goods::deleteCartGoods($cart_rids_arr, $user_id);
         
         $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$true_amount];
         $response->sendJSON($ret);
@@ -512,8 +532,8 @@ class Trade_Controller extends MobileController {
     if ($request->is_post()) {
       $ret = ['flag'=>'FAIL','msg'=>'更新失败'];
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
+      $user_id = $GLOBALS['user']->uid;
+      if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
@@ -533,32 +553,23 @@ class Trade_Controller extends MobileController {
       $zipcode       = $request->post('zipcode', '');
       
       $address_id = intval($address_id);
-      $data = [
-        'user_id'       => $ec_user_id,
-        'consignee'     => $consignee,
-        'country'       => $country,
-        'country_name'  => $country_name,
-        'province'      => $province,
-        'province_name' => $province_name,
-        'city'          => $city,
-        'city_name'     => $city_name,
-        'district'      => $district,
-        'district_name' => $district_name,
-        'address'       => $address,
-        'zipcode'       => $zipcode,
-      ];
-      /*
-      if (preg_match('/^1\d{10}$/', $contact_phone)) { //是手机号
-        $data['mobile'] = $contact_phone;
-      }
-      else {
-        $data['tel'] = $contact_phone;
-      }
-      */
-      $data['tel'] = $contact_phone; //遵循ecshop习惯，优先使用tel(因为后台都是优先选择tel,mobile作为第二电话)
+      $upAddr = new UserAddress($address_id);
+      $upAddr->user_id       = $user_id;
+      $upAddr->consignee     = $consignee;
+      $upAddr->country       = $country;
+      $upAddr->country_name  = $country_name;
+      $upAddr->province      = $province;
+      $upAddr->province_name = $province_name;
+      $upAddr->city          = $city;
+      $upAddr->city_name     = $city_name;
+      $upAddr->district      = $district;
+      $upAddr->district_name = $district_name;
+      $upAddr->address       = $address;
+      $upAddr->zipcode       = $zipcode;
+      $upAddr->tel           = $contact_phone; //遵循ecshop习惯，优先使用tel(因为后台都是优先选择tel,mobile作为第二电话)
+      $upAddr->save();
       
-      $address_id = Goods::saveUserAddress($data, $address_id);
-      $ret = ['flag'=>'SUC','msg'=>'更新成功','address_id'=>$address_id];
+      $ret = ['flag'=>'SUC','msg'=>'更新成功','address_id'=>$upAddr->id];
       
       $response->sendJSON($ret);
     }
@@ -575,8 +586,8 @@ class Trade_Controller extends MobileController {
     if ($request->is_post()) {
       $ret = ['flag'=>'FAIL','msg'=>'取消失败'];
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
+      $user_id = $GLOBALS['user']->ec_user_id;
+      if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
@@ -607,8 +618,8 @@ class Trade_Controller extends MobileController {
     if ($request->is_post()) {
       $ret = ['flag'=>'FAIL','msg'=>'取消失败'];
       
-      $ec_user_id = $GLOBALS['user']->ec_user_id;
-      if (!$ec_user_id) {
+      $user_id = $GLOBALS['user']->ec_user_id;
+      if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
