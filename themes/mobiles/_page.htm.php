@@ -54,7 +54,7 @@ function append_to_body(html) {
 	$(document.body).append(html);
 }
 function required_uinfo_empty() {
-	return gUser.nickname==''||gUser.logo=='' ? true : false;
+	return gUser.nickname==''&&gUser.logo=='' ? true : false;
 }
 </script>
 </head>

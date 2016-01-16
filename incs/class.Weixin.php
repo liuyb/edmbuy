@@ -27,6 +27,19 @@ class Weixin {
 	 */
 	public static $defaultAccount = 'edmbuy';   //default weixin account
 	public static $allowAccounts  = ['edmbuy']; //allowed weixin accounts set
+	
+	/**
+	 * Weixin OAuth2 scope
+	 * @var constant
+	 */
+	const OAUTH_BASE    = 'base';
+	const OAUTH_DETAIL  = 'detail';
+	
+	/**
+	 * Allow weixin OAuth2 scopes
+	 * @var array
+	 */
+	public static $allowOAuthScopes = [self::OAUTH_BASE, self::OAUTH_DETAIL];
 
 	/**
 	 * Weixin constant name
@@ -333,7 +346,7 @@ class Weixin {
     $toUserName  = $postObj->ToUserName;
     $openid      = $fromUserName;
     $reqtime     = intval($postObj->CreateTime);
-    trace_debug('weixin_event_msg', $postObj);
+    //trace_debug('weixin_event_msg', $postObj);
     
     $contentText = '';
     $responseText= '';
@@ -689,6 +702,32 @@ class Weixin {
     $scope = 'detail'==$state ? 'snsapi_userinfo' : 'snsapi_base';
     $url = $this->oauth->setConfig(array('redirect_uri'=>$redirect_uri,'scope'=>$scope,'state'=>$state))->authorize_url();
     Response::redirect($url);
+  }
+  
+  /**
+   * 微信OAuth2基本授权(snsapi_base)
+   * 
+   * @param string $act
+   * @param string $refer
+   * @param string $host
+   */
+  public function authorizing_base($act = '', $refer = '', $host = '') {
+  	if (empty($host))  $host  = Request::host();
+  	if (empty($refer)) $refer = Request::url();
+  	(new Weixin())->authorizing("http://{$host}/user/oauth/weixin?act={$act}&refer=".rawurlencode($refer), 'base');
+  }
+  
+  /**
+   * 微信OAuth2详细授权(snsapi_userinfo)
+   * 
+   * @param string $act
+   * @param string $refer
+   * @param string $host
+   */
+  public function authorizing_detail($act = '', $refer = '', $host = '') {
+  	if (empty($host))  $host  = Request::host();
+  	if (empty($refer)) $refer = Request::url();
+  	(new Weixin())->authorizing("http://{$host}/user/oauth/weixin?act={$act}&refer=".rawurlencode($refer), 'detail');
   }
   
   /**
@@ -1256,6 +1295,8 @@ class WeixinHelper {
     $my_uid    = 0;
     $can_save  = true;
     $wxuinfo   = $this->wx->userInfo($openid);
+    //trace_debug('weixin_onSubscribe_wxuinfo', $wxuinfo);
+    
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
     		
