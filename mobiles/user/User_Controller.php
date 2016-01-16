@@ -448,7 +448,7 @@ class User_Controller extends MobileController {
           $parentUser = User_Model::findUserInfoById($currentUser->parentid);
           $this->v->assign("parentUid", $parentUser->uid);
           $this->v->assign("parentNickName", $parentUser->nickname);
-          $this->v->assign("ParentLevel", $parentUser->level);
+          $this->v->assign("parentLevel", $parentUser->level);
           $this->v->assign("ParentMobile", $parentUser->mobilephone);
           $this->v->assign("ParentWxqr", $parentUser->wxqr);
       }

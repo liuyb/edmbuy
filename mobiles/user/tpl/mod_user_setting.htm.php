@@ -23,7 +23,7 @@
 				<img src="/themes/mobiles/img/mt.png">
 			<?php endif;?>
 		</span>
-    	<input type="file" name="file" onchange="fileupload(event)" class="dia_file">	
+    	<!-- <input type="file" name="file" onchange="fileupload(event)" class="dia_file">	 -->
 	</div>
 	<a href="/user/mobile/show?mobile=<?=$mobile ?>"> 
 		<div class="person_head_comm">
@@ -63,7 +63,7 @@
 	<div class="person_head_comment">
 		<span class="head_l_com">我的角色</span>
 		<span class="head_r_com" style="margin-right:12px;">
-			<span><?=$role ?></span>
+			<span style="margin-right: 5px;font-size:16px;"><?=$role ?></span>
 			<?php if(0 == $level): ?>
 			<button class="personInfo_but" id="be-partner" style="font-size:13px;">成为米商</button>
 			<?php endif;?>
@@ -73,7 +73,7 @@
 	<div class="person_head_comment">
 		<span class="head_l_com">推荐人</span>
 		<span class="head_r_com" style="margin-right:12px;">
-			<span class="fre"><?=$parentNickName?>&nbsp;</span>
+			<span class="fre" style="margin-right: 5px;font-size:16px;"><?=$parentNickName?></span>
 			<button class="personInfo_but per_add_friend" id="add-friend" style="font-size:14px;">加好友</button>
 		</span>
 	</div>
@@ -86,6 +86,15 @@
 <?php include T('inc/add_as_friend');?>
 
 <script>
+
+$(function(){	
+	var length = $(".fre").text().length;
+	if(length > 5){
+		 var str = $(".fre").text();
+		 var name = str.substr(1,5);
+		 $(".fre").text(name + '...');
+	}
+});
 
 $(function(){
 	$('#be-partner').bind('click',function(){

@@ -58,9 +58,6 @@ class User_Model extends Model {
 	}
 	
 	static function displayUserRole($level){
-	    if(!$level){
-	        return "";
-	    }
 	    switch ($level){
 	        case Users::USER_LEVEL_0 == $level : 
 	           return "米客";

@@ -1521,11 +1521,9 @@ a.ph_btn{
   width: 50%; 
 }
 .c_name{
+  background: no-repeat 110px center;
   font-size:17px;
   color:#fff;
-}
-.c_name_bg{
-  background: url(../img/he.png) no-repeat 110px center;
   background-size: 22px;
 }
 .c_id{
@@ -1561,12 +1559,10 @@ a.ph_btn{
   color:#333;
 }
 .refer_name{
+  background: no-repeat 90% center;
   font-size:14px;
   color:#666;
   padding:10px 40px 10px 0;
-}
-.refer_name_bg{
-  background: url(../img/he.png) no-repeat 90% center;  
   background-size: 22px;  
 }
 .refer_but{
@@ -2306,32 +2302,21 @@ a.ph_btn{
   height:60px;
   vertical-align: middle;
 }
-.list_h{
-  padding-right: 20%;
-  background-size: 19px !important;  
-  font-size:17px;
-  color:#333; 
-}
-.list_s{
-  padding-right: 20%;
-  background-size: 19px !important;  
-  font-size:17px;
-  color:#333; 
-}
-.list_k{
+.list_nickname{
+  background: no-repeat 100% center;
   padding-right: 20%;
   background-size: 19px !important;  
   font-size:17px;
   color:#333; 
 }
 .user_bg_he {
-  background: url(../img/he.png) no-repeat 100% center;
+  background-image: url(../img/he.png);
 }
 .user_bg_sha {
-  background: url(../img/sha.png) no-repeat 100% center;
+  background-image: url(../img/sha.png);
 }
 .user_bg_ke {
-  background: url(../img/ke.png) no-repeat 100% center;
+  background-image: url(../img/ke.png);
 }
 .list_td1{
   padding:15px 12px;
@@ -3278,7 +3263,7 @@ td.cash_td2 img {
 /*user setting css**/
 .person_head{
 	cursor: pointer;
-	background: url(./img/forward.png) no-repeat 97% center;	
+	background: url(../img/back.png) no-repeat 98% center;	
 	background-size: 16px;	
 	height:69px;
 	position: relative;
@@ -3300,7 +3285,7 @@ td.cash_td2 img {
 }
 .person_head_comm{
 	cursor: pointer;
-	background: url(./img/forward.png) no-repeat 97% center;	
+	background: url(../img/back.png) no-repeat 98% center;	
 	background-size: 16px;	
 	height:46px;
 	border-top:1px solid #eee;

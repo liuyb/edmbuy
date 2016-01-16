@@ -5,7 +5,12 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
-
+<?php 
+function displayNickBg($level){
+    $bg = ($level == 1) ? "user_bg_sha" : (($level == 2) ? "user_bg_he" : "user_bg_ke");
+    return $bg;
+}
+?>
 <a href="/user/setting">
 <div class="mem_bg">
 	<div class="mem_l">
@@ -17,7 +22,7 @@
 	</div>
 	
 	<div class="mem_c">
-		<div class="c_name <?php if(2 == $level): ?>c_name_bg <?php endif;?>"><?=$nickname ?></div>
+		<div class="c_name <?=displayNickBg($level) ?>"><?=$nickname ?></div>
 		<div class="c_id">多米号：<?=$uid ?></div>
 	</div>
 	
@@ -31,7 +36,7 @@
 <div class="mem_refer">
 	<div class="refer_tit order_bg1">我的推荐人</div>
 	<div class="refer_info">
-		<span class="refer_name <?php if(2 == $parentLevel): ?> refer_name_bg <?php endif;?>"><?=$parentNickName ?></span>
+		<span class="refer_name <?=displayNickBg($parentLevel) ?>"><?=$parentNickName ?></span>
 		<button class="refer_but">加好友</button>
 	</div>
 </div>

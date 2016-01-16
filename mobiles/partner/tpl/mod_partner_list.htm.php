@@ -28,7 +28,7 @@
 				<?php 
 				    $bg = ($item['level'] == 1) ? "user_bg_sha" : (($item['level'] == 2) ? "user_bg_he" : "user_bg_ke");
 				?>
-				<span class="list_h <?=$bg ?>" ><?=$item['nickname'] ?></span>
+				<span class="list_nickname <?=$bg ?>" ><?=$item['nickname'] ?></span>
 				<span class="list_address"><?=$item['province'] ?> <?=$item['city'] ?></span>
 				<span class="list_number">
 					推荐人数：<span style="color:#ff6d14;margin-right:5px;"><?=$item['childnum1'] ?></span>
