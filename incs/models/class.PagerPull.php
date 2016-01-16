@@ -23,13 +23,13 @@ class PagerPull extends Pager{
      */
     public $needtotal;
     
-    public function __construct($curpage = 1, $pagesize) {
-        $this->curpage = $curpage;
-        if(isset($pagesize)){
-            $this->pagesize = $pagesize;
+    public function __construct($cp = 1, $pz) {
+        $this->curpage = $cp;
+        if(isset($pz)){
+            $this->pagesize = $pz;
         }
         $this->realpagesize = $this->pagesize + 1;
-        $this->start = ($this->curpage-1) * $this->realpagesize;
+        $this->start = ($this->curpage-1) * $this->pagesize;
     }
     
     public function setResult($result){
