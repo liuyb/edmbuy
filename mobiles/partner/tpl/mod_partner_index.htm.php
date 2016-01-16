@@ -18,21 +18,21 @@
 	</div>
 	<div class="guest_main">
 		<ul>
-			<a href="/partner/list/1">
+			<a href="javascript:showLevelList('/partner/list',1);">
 				<li>
-					<h1 id="firstLevelCount">...</h1>
+					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
 				</li>
 			</a>
-			<a href="/partner/list/2">
+			<a href="javascript:showLevelList('/partner/list',2);">
 				<li>
-					<h1 id="secondLevelCount">...</h1>
+					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
 				</li>
 			</a>
-			<a href="/partner/list/3">
+			<a href="javascript:showLevelList('/partner/list',3);">
 				<li>
-					<h1 id="thirdLevelCount">...</h1>
+					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
 				</li>
 			</a>
@@ -52,7 +52,7 @@
 				<h1>￥0.00</h1>
 			</li>
 			</a>
-			<a href="brokerage.html?broke=2">
+			<a href="/partner/commission?status=-1">
 			<li>
 				<p>未生效收入</p>
 				<h1 class="money_noforce" id="inactiveIncome">￥0.00</h1>
@@ -114,12 +114,19 @@
 		var url = '/partner/ajax';
 		F.get(url, {}, function(ret){
 			if(ret){
-				$("#firstLevelCount").text(ret.firstLevelCount);
-				$("#secondLevelCount").text(ret.secondLevelCount);
-				$("#thirdLevelCount").text(ret.thirdLevelCount);
+				$("#LevelCount1").text(ret.firstLevelCount);
+				$("#LevelCount2").text(ret.secondLevelCount);
+				$("#LevelCount3").text(ret.thirdLevelCount);
 				$("#inactiveIncome").html("￥"+ret.inactiveIncome);
 			}
 		});
 	});
+	function showLevelList(url, level){
+		var count = $("#LevelCount"+level).text();
+		if(!count || isNaN(count)){
+			count = 0;
+		}
+		window.location = url+"?level="+level+"&count="+count;
+	}
 </script>
 <?php endif;?>

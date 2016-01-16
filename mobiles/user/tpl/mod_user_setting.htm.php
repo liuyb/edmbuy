@@ -14,7 +14,7 @@
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
 <div style="background: #fff;">
-	<div class="person_head">
+	<!-- <div class="person_head">
 		<span class="head_l">我的头像</span>
 		<span class="head_r" id="userHeaderImg">
 			<?php if($logo): ?>
@@ -23,8 +23,8 @@
 				<img src="/themes/mobiles/img/mt.png">
 			<?php endif;?>
 		</span>
-    	<!-- <input type="file" name="file" onchange="fileupload(event)" class="dia_file">	 -->
-	</div>
+    	<input type="file" name="file" onchange="fileupload(event)" class="dia_file">
+	</div>	 -->
 	<a href="/user/mobile/show?mobile=<?=$mobile ?>"> 
 		<div class="person_head_comm">
 			<span class="head_l_com">手机号</span>
@@ -35,9 +35,6 @@
 		<div class="person_head_comm">
 			<span class="head_l_com">微信二维码</span>
 			<span class="head_r_com">
-			<?php if($wxqr):?>
-			<img src="/themes/mobiles/img/dgx.png">
-			<?php endif;?>
 			<img src="/themes/mobiles/img/e.png" style="margin-left: 5px">
 			</span>
 		</div>

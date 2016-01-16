@@ -5,19 +5,42 @@
  * @author Jean
  *
  */
-class Pager{
+class Pager extends CBase {
     
-    private $curpage;
+    /**
+     * 当前页
+     */
+    public  $curpage;
     
-    private $pagesize= 15;
+    /**
+     * 当前每页数量
+     */
+    public $pagesize= 15;
     
-    private $start;
+    /**
+     * 根据curpage跟pagesize计算出start
+     */
+    public $start;
     
-    private $maxpage;
+    /**
+     * 当前最大页
+     */
+    public $maxpage;
     
-    private $totalnum;
+    /**
+     * 当前数据总数
+     */
+    public $totalnum;
     
-    private $result;
+    /**
+     * 当前明细列表
+     */
+    public $result;
+    
+    /**
+     * 其他数据集合 
+     */
+    public $otherMap;
     
     public function __construct($curpage = 1, $pagesize) {
         $this->curpage = $curpage;
@@ -40,28 +63,13 @@ class Pager{
         $view->assign("pagesize", $this->pagesize);
     }
     
-    /**
-	 * magic method '__get'
-	 *
-	 * @param string $name
-	 */
-	public function __get($name) {
-	    if(isset($this->$name)){
-	        return($this->$name);
-	    }else{
-	        return(NULL);
-	    }
-	}
-	
-	/**
-	 * magic method '__set'
-	 *
-	 * @param string $name
-	 * @param string $value
-	 */
-	public function __set($name, $value) {
-		$this->$name = $value;
-	}
+    public function outputPageJson(){
+        return ["curpage" => $this->curpage,
+                "maxpage" => $this->maxpage,
+                "totalnum" => $this->totalnum,
+                "pagesize" => $this->pagesize
+        ];
+    }
 }
 
 ?>

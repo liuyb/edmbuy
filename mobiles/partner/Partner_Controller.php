@@ -29,8 +29,11 @@ class Partner_Controller extends MobileController {
 	{
 		return [
 		      'item/%d' => 'item',
-		      'partner/list/%d' => 'partner_list',
-		      'partner/ajax' => 'partner_ajaxdata'
+		      'partner/list' => 'partner_list',
+		      'partner/list/ajax' => 'partner_list_ajax',
+		      'partner/ajax' => 'partner_ajaxdata',
+		      'partner/commission' => 'partner_commission',
+		      'partner/commission/ajax' =>'partner_commission_ajax'
 		];
 	}
 	
@@ -57,20 +60,25 @@ class Partner_Controller extends MobileController {
 	    $this->v->set_tplname('mod_partner_list');
 	    $this->topnav_no = 1;
 	    if ($request->is_hashreq()) {
-	        $level = $request->arg(2);
-	        $levelnum = $level;
-	        $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
-	        $pager = new Pager($curpage, NULL);
-	        Partner_Model::showCurrentLevelList($level, $pager);
-	        $total = $pager->__get("totalnum");
-	        $list= $pager->__get("result");
-	        $pager->outputPageVar($this->v);
-            $this->v->assign("title", $level."(".$total.")");
-            $this->v->assign("list", $list);
-            $this->v->assign("level", $levelnum);
+	        $level = $_REQUEST['level'];
+	        $levelCN = Partner_Model::TransLevelCN($level);
+	        $total = isset($_REQUEST['count']) ? $_REQUEST['count'] : 1;;
+            $this->v->assign("title", $levelCN."(".$total.")");
+            $this->v->assign("level", $level);
 	    }
 	
 	    throw new ViewResponse($this->v);
+	}
+	
+	public function partner_list_ajax(Request $request, Response $response){
+	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+	    $level = $_REQUEST['level'];
+        $pager = new PagerPull($curpage, NULL);
+        Partner_Model::showCurrentLevelList($level, $pager);
+        $pageJson = $pager->outputPageJson();
+        $ret = ["result" => $pager->result];
+        $ret = array_merge($ret, $pageJson);
+	    $response->sendJSON($ret);
 	}
 	
 	public function partner_ajaxdata(Request $request, Response $response)
@@ -79,7 +87,7 @@ class Partner_Controller extends MobileController {
 	    $firstLevelCount = Partner::findFirstLevelCount($uid);
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);
 	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
-	    $inactiveIncome = Partner_Model::getInactiveIncome($uid);
+	    $inactiveIncome = Partner_Model::getCommisionIncome($uid, Partner::COMMISSION_INVALID);
 	    $ret = ["firstLevelCount" => $firstLevelCount, 
 	            "secondLevelCount" => $secondLevelCount,
 	            "thirdLevelCount" => $thirdLevelCount,
@@ -88,6 +96,45 @@ class Partner_Controller extends MobileController {
 	    $response->sendJSON($ret);
 	}
 	
+	/**
+	 * 佣金明细页面
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws ViewResponse
+	 */
+	public function partner_commission(Request $request, Response $response){
+	    $this->v->set_tplname('mod_partner_commission');
+	    
+	    if ($request->is_hashreq()) {
+	        $status = $_REQUEST['status'];
+	        $this->v->assign("status", $status);
+	    }
+	    
+	    throw new ViewResponse($this->v);
+	}
+	
+	/**
+	 * 通过ajax输出佣金明细
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function partner_commission_ajax(Request $request, Response $response){
+	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+	    $level = isset($_REQUEST['level']) ? $_REQUEST['level'] : Partner::Partner_LEVEL_1;
+	    $status = $_REQUEST['status'];
+	    $needtotal = isset($_REQUEST['needtotal']) ? $_REQUEST['needtotal'] : 0;
+        $pager = new PagerPull($curpage, NULL);
+        $pager->needtotal= $needtotal;
+        if(Partner::COMMISSION_INVALID == $status){
+            Partner_Model::showCurLevelCommistionList($level, $status, $pager);
+        }
+        $pageJson = $pager->outputPageJson();
+        $ret = ["result" => $pager->result,
+                "otherMap" => $pager->otherMap
+        ];
+        $ret = array_merge($ret, $pageJson);
+	    $response->sendJSON($ret);
+	}
 }
 
  
