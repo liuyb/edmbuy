@@ -25,12 +25,12 @@ class User_Controller extends Controller {
 			'5000' => 'db op fail',
 		]);
 		
-		$unionId    = $request->unionid;
-		$parentUnid = $request->parent_id ? : ''; //是一个 parent unionid
-		$regtime    = $request->regtime   ? : simphp_time();
-		$mobile     = $request->mobile    ? : '';
-		$nickname   = $request->nickname  ? : '';
-		$logo       = $request->logo      ? : '';
+		$unionId      = $request->unionid;
+		$parentUnid   = $request->parent_id    ? : ''; //是一个 parent unionid
+		$regtime      = $request->regtime      ? : simphp_time();
+		$mobile       = $request->mobile       ? : '';
+		$nickname     = $request->nickname     ? : '';
+		$logo         = $request->logo         ? : '';
 		$business_id  = $request->business_id  ? : '';
 		$business_time= $request->business_time? : '';
 		
@@ -50,59 +50,60 @@ class User_Controller extends Controller {
 		}
 		
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
-		$aUser = Users::load_by_unionid($unionId);
-		if (!$aUser->is_exist()) { //未注册
-			$aUser = new Users();
-			$aUser->unionid  = $unionId;
-			$aUser->mobilephone = $mobile;
-			$aUser->nickname = $nickname;
-			$aUser->logo     = $logo;
-			$aUser->regip    = $request->ip();
-			$aUser->regtime  = $regtime;
-			$aUser->salt     = gen_salt();
-			$aUser->parentid = Users::get_userid($parentUnid);
-			$aUser->parentunionid = $parentUnid;
-			$aUser->businessid    = $business_id;
-			$aUser->businesstime  = $business_time;
-			$aUser->from     = $request->appid;
-			$aUser->save(Storage::SAVE_INSERT);
+		$exUser = Users::load_by_unionid($unionId);
+		if (!$exUser->is_exist()) { //未注册
+			$upUser = new Users();
+			$upUser->unionid  = $unionId;
+			$upUser->mobilephone = $mobile;
+			$upUser->nickname = $nickname;
+			$upUser->logo     = $logo;
+			$upUser->regip    = $request->ip();
+			$upUser->regtime  = $regtime;
+			$upUser->salt     = gen_salt();
+			$upUser->parentid = Users::get_userid($parentUnid);
+			$upUser->parentunionid = $parentUnid;
+			$upUser->businessid    = $business_id;
+			$upUser->businesstime  = $business_time;
+			$upUser->from     = $request->appid;
+			$upUser->save(Storage::SAVE_INSERT);
 			
-			$res['user_id']  = $aUser->id;
+			$res['user_id']  = $upUser->id;
 			$res['act_type'] = 'insert';
 			$res['parent_id']= $parentUnid;
 		}
 		else { //已注册
-			$res['user_id']  = $aUser->id;
+			$res['user_id']  = $exUser->id;
 			
-			$bUser = new Users($aUser->id);
-			$bUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
-			$bUser->businessid     = $business_id;
-			$bUser->businesstime   = $business_time;
-			$bUser->lasttime       = simphp_dtime();
-			$bUser->lastip         = Request::ip();
+			$upUser = new Users($exUser->id);
+			$upUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
+			$upUser->businessid     = $business_id;
+			$upUser->businesstime   = $business_time;
+			$upUser->lasttime       = simphp_dtime();
+			$upUser->lastip         = Request::ip();
 			
 			//mobile, nickname 和 logo 本地如果为空就更新
-			if (empty($aUser->mobilephone)) {
-				$bUser->mobilephone = $mobile;
+			if (empty($exUser->mobilephone)) {
+				$upUser->mobilephone = $mobile;
 			}
-			if (empty($aUser->nickname)) {
-				$bUser->nickname = $nickname;
+			if (empty($exUser->nickname)) {
+				$upUser->nickname = $nickname;
 			}
-			if (empty($aUser->logo)) {
-				$bUser->logo     = $logo;
+			if (empty($exUser->logo)) {
+				$upUser->logo     = $logo;
 			}
 			
-			if (empty($aUser->parentid)) { //只要是空，表示“未确定”状态，则给机会变更
-				$bUser->parentid = Users::get_userid($parentUnid);
+			if (empty($exUser->parentid)) { //只要是空，表示“未确定”状态，则给机会变更
+				$upUser->parentid = Users::get_userid($parentUnid);
 				$res['act_type'] = 'update';
-				$res['parent_id']= $bUser->parentid ? $parentUnid : '';
+				$res['parent_id']= $upUser->parentid ? $parentUnid : '';
 			}
 			else {
-				$res['parent_id']= Users::get_unionid($aUser->parentid);
+				$res['parent_id']= Users::get_unionid($exUser->parentid);
 			}
 			
-			$bUser->save(Storage::SAVE_UPDATE);
+			$upUser->save(Storage::SAVE_UPDATE);
 		}
+		
 		throw new ApiResponse($res);
 	}
 	
@@ -123,12 +124,12 @@ class User_Controller extends Controller {
 			'5000' => 'db op fail',
 		]);
 		
-		$unionId    = $request->unionid;
-		$parentUnid = $request->parent_id ? : ''; //是一个 parent unionid
-		$regtime    = $request->regtime   ? : simphp_time();
-		$mobile     = $request->mobile    ? : '';
-		$nickname   = $request->nickname  ? : '';
-		$logo       = $request->logo      ? : '';
+		$unionId      = $request->unionid;
+		$parentUnid   = $request->parent_id    ? : ''; //是一个 parent unionid
+		$regtime      = $request->regtime      ? : simphp_time();
+		$mobile       = $request->mobile       ? : '';
+		$nickname     = $request->nickname     ? : '';
+		$logo         = $request->logo         ? : '';
 		$business_id  = $request->business_id  ? : '';
 		$business_time= $request->business_time? : '';
 		
@@ -146,48 +147,49 @@ class User_Controller extends Controller {
 		}
 		
 		$res = ['user_id'=>0, 'act_type'=>'none', 'req_mobile'=>$mobile ,'parent_id'=>''];
-		$aUser = Users::load_by_unionid($unionId);
-		if (!$aUser->is_exist()) { //未注册
-			$aUser = new Users();
-			$aUser->unionid  = $unionId;
-			$aUser->mobilephone = $mobile;
-			$aUser->nickname = $nickname;
-			$aUser->logo     = $logo;
-			$aUser->regip    = $request->ip();
-			$aUser->regtime  = $regtime;
-			$aUser->salt     = gen_salt();
-			$aUser->parentid = Users::get_userid($parentUnid);
-			$aUser->parentunionid = $parentUnid;
-			$aUser->businessid    = $business_id;
-			$aUser->businesstime  = $business_time;
-			$aUser->from          = $request->appid;
-			$aUser->save(Storage::SAVE_INSERT);
-			$aUser->update_synctimes('+1');
+		$exUser = Users::load_by_unionid($unionId);
+		if (!$exUser->is_exist()) { //未注册
+			$upUser = new Users();
+			$upUser->unionid  = $unionId;
+			$upUser->mobilephone = $mobile;
+			$upUser->nickname = $nickname;
+			$upUser->logo     = $logo;
+			$upUser->regip    = $request->ip();
+			$upUser->regtime  = $regtime;
+			$upUser->salt     = gen_salt();
+			$upUser->parentid = Users::get_userid($parentUnid);
+			$upUser->parentunionid = $parentUnid;
+			$upUser->businessid    = $business_id;
+			$upUser->businesstime  = $business_time;
+			$upUser->from          = $request->appid;
+			$upUser->save(Storage::SAVE_INSERT);
+			$upUser->update_synctimes('+1');
 			
-			$res['user_id']  = $aUser->id;
+			$res['user_id']  = $upUser->id;
 			$res['act_type'] = 'insert';
 			$res['parent_id']= $parentUnid;
 		}
 		else { //已注册
-			$res['user_id']  = $aUser->id;
+			$res['user_id']  = $exUser->id;
 			
-			$bUser = new Users($aUser->id);
-			$bUser->parentid       = Users::get_userid($parentUnid);
-			$bUser->parentunionid  = $parentUnid;
-			$bUser->businessid     = $business_id;
-			$bUser->businesstime   = $business_time;
-			$bUser->mobilephone    = $mobile;
-			$bUser->nickname       = $nickname;
-			$bUser->logo           = $logo;
-			$bUser->lasttime       = simphp_dtime();
-			$bUser->lastip         = Request::ip();
+			$upUser = new Users($exUser->id);
+			$upUser->parentid       = Users::get_userid($parentUnid);
+			$upUser->parentunionid  = $parentUnid;
+			$upUser->businessid     = $business_id;
+			$upUser->businesstime   = $business_time;
+			$upUser->mobilephone    = $mobile;
+			$upUser->nickname       = $nickname;
+			$upUser->logo           = $logo;
+			$upUser->lasttime       = simphp_dtime();
+			$upUser->lastip         = Request::ip();
 			
 			$res['act_type'] = 'update';
-			$res['parent_id']= $bUser->parentid ? $parentUnid : '';
+			$res['parent_id']= $upUser->parentid ? $parentUnid : '';
 			
-			$bUser->save(Storage::SAVE_UPDATE);
-			$bUser->update_synctimes('+1');
+			$upUser->save(Storage::SAVE_UPDATE);
+			$upUser->update_synctimes('+1');
 		}
+		
 		throw new ApiResponse($res);
 	}
 	
