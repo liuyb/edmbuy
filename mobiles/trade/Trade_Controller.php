@@ -294,7 +294,7 @@ class Trade_Controller extends MobileController {
         $state = $request->get('state', '');
         
         //授权出错
-        if (!in_array($state, array('base','detail'))) {
+        if (!in_array($state, Weixin::$allowOAuthScopes)) {
           Fn::show_error_message('授权出错，提交订单失败！', true);
         }
         
@@ -303,7 +303,7 @@ class Trade_Controller extends MobileController {
         //用code换取access token
         $code_ret = $wx->request_access_token($code);
         if (!empty($code_ret['errcode'])) {
-          Fn::show_error_message('微信授权错误<br/>'.$code_ret['errcode'].'('.$code_ret['errmsg'].')', true);
+          Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>', true);
         }
         
         $accessToken = $code_ret['access_token'];
@@ -315,7 +315,7 @@ class Trade_Controller extends MobileController {
       }
       else { //正常访问
         if (Weixin::isWeixinBrowser()) {
-          (new Weixin())->authorizing($request->url(), 'base'); //base授权获取access token以便于操作收货地址
+        	(new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
         }
       }
     }
@@ -335,7 +335,7 @@ class Trade_Controller extends MobileController {
       
       $ret = ['flag'=>'FAIL','msg'=>'订单提交失败'];
       
-      $user_id = $GLOBALS['user']->ec_user_id;
+      $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
@@ -345,7 +345,7 @@ class Trade_Controller extends MobileController {
       $cart_rids_str = $request->post('cart_rids', '');
       $order_msg     = $request->post('order_msg', '');
       $pay_id        = $request->post('pay_id', 2); //2是微信支付，见ec payment表
-      $pay_id = intval($pay_id);
+      $pay_id        = intval($pay_id);
       
       // 检查数据
       $address_id = intval($address_id);
@@ -359,23 +359,23 @@ class Trade_Controller extends MobileController {
       }
       
       // 收货地址
-      $addr_info = Goods::getAddressInfo($address_id);
-      if (empty($addr_info)) {
+      $exAddr = UserAddress::load($address_id);
+      if (!$exAddr->is_exist()) {
         $ret['msg'] = '收货地址无效，请重新填写';
         $response->sendJSON($ret);
       }
       
       // 支付信息
-      $pay_info = Goods::getPaymentInfo($pay_id);
-      if (empty($pay_info)) {
+      $exPay = Payment::load($pay_id);
+      if (!$exPay->is_exist()) {
         $ret['msg'] = '该支付方式暂不可用，请重新选择';
         $response->sendJSON($ret);
       }
       
       // 配送信息
       $shipping_id = 1; //TODO 先不管配送方式，默认1先
-      $shipping_info = Goods::getShippingInfo($shipping_id);
-      if (empty($shipping_info)) {
+      $exShip = Shipping::load($shipping_id);
+      if (!$exShip->is_exist()) {
         $ret['msg'] = '该配送方式暂不可用，请重新选择';
         $response->sendJSON($ret);
       }
@@ -383,53 +383,50 @@ class Trade_Controller extends MobileController {
       // 购物车商品列表
       $cart_rids_arr = explode(',', $cart_rids_str);
       $total_price = 0;
-      $order_goods = Goods::getCartsGoods($cart_rids_arr, $user_id, $total_price);
+      $order_goods = Cart::getGoods($cart_rids_arr, $user_id, $total_price);
       if (count($order_goods)!=count($cart_rids_arr)) {
         $ret['msg'] = '该订单商品无效，请返回购物车重新添加';
         $response->sendJSON($ret);
       }
       
       $order_sn = Fn::gen_order_no();
+      $upOrder  = new Order();
+      $upOrder->ordersn      = $order_sn;
+      $upOrder->pay_trade_no = '';
+      $upOrder->userid       = $user_id;
+      $upOrder->order_status = OS_UNCONFIRMED;
+      $upOrder->shipping_status = SS_UNSHIPPED;
+      $upOrder->pay_status   = PS_UNPAYED;
+      $upOrder->consignee    = $exAddr->consignee;
+      $upOrder->country      = $exAddr->country;
+      $upOrder->province     = $exAddr->province;
+      $upOrder->city         = $exAddr->city;
+      $upOrder->district     = $exAddr->district;
+      $upOrder->address      = $exAddr->address;
+      $upOrder->zipcode      = $exAddr->zipcode;
+      $upOrder->tel          = $exAddr->tel;
+      $upOrder->mobile       = $exAddr->mobile;
+      $upOrder->email        = $exAddr->email;
+      $upOrder->besttime     = $exAddr->best_time;
+      $upOrder->sign_building= $exAddr->sign_building;
+      $upOrder->postscript   = $order_msg;
+      $upOrder->shippingid   = $exShip->shipping_id;
+      $upOrder->shippingname = $exShip->shipping_name;
+      $upOrder->payid        = $exPay->pay_id;
+      $upOrder->payname      = $exPay->pay_name;
+      $upOrder->howoos       = Fn::oos_status(OOS_WAIT);
+      $upOrder->howsurplus   = '';
+      //...
+      $upOrder->goods_amount = $total_price;
+      $upOrder->shipping_fee = 0;
+      $upOrder->order_amount = $upOrder->goods_amount + $upOrder->shipping_fee;
+      //...
+      $upOrder->referer      = '本站';
+      $upOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
+      //...
       
-      $ectb_order = ectable('order_info');
-      $order = [
-        'order_sn'         => $order_sn,
-        'user_id'          => $user_id,
-        'order_status'     => OS_UNCONFIRMED,
-        'shipping_status'  => SS_UNSHIPPED,
-        'pay_status'       => PS_UNPAYED,
-        'consignee'        => $addr_info['consignee'],
-        'country'          => $addr_info['country'],
-        'province'         => $addr_info['province'],
-        'city'             => $addr_info['city'],
-        'district'         => $addr_info['district'],
-        'address'          => $addr_info['address'],
-        'zipcode'          => $addr_info['zipcode'],
-        'tel'              => $addr_info['tel'],
-        'mobile'           => $addr_info['mobile'],
-        'email'            => $addr_info['email'],
-        'best_time'        => $addr_info['best_time'],
-        'sign_building'    => $addr_info['sign_building'],
-        'postscript'       => $order_msg,
-        'shipping_id'      => $shipping_info['shipping_id'],
-        'shipping_name'    => $shipping_info['shipping_name'],
-        'pay_id'           => $pay_info['pay_id'],
-        'pay_name'         => $pay_info['pay_name'],
-        'how_oos'          => Fn::oos_status(OOS_WAIT),
-        'how_surplus'      => '',
-        //...
-        'goods_amount'     => $total_price,
-        'shipping_fee'     => 0,
-        'order_amount'     => $total_price,
-        //...
-        'referer'          => '本站',
-        'add_time'         => simphp_gmtime(), //跟从ecshop习惯，使用格林威治时间
-        //...
-      ];
-      $order['order_amount'] = $order['goods_amount'] + $order['shipping_fee'];
-      
-      $order_id = D()->insert($ectb_order, $order, true, true);
-      if ($order_id) { //订单表生成成功
+      $upOrder->save(Storage::SAVE_INSERT);
+      if ($upOrder->id) { //订单表生成成功
         
         // 处理表 order_goods
         $order_update = []; //存储一些可能需要更新的字段数据
@@ -437,8 +434,10 @@ class Trade_Controller extends MobileController {
         $true_amount  = 0;  //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
         foreach ($order_goods AS $cg) {
           $curr_goods_id = $cg['goods_id'];
-          $ginfo = Goods::getGoodsInfo($curr_goods_id, ['is_on_sale'=>1]);
-          if (empty($ginfo) || $ginfo['goods_number']==0) { //商品下架或者库存为0，都不能购买
+          $ginfo = Items::load($curr_goods_id);
+          
+          //$ginfo = Goods::getGoodsInfo($curr_goods_id, ['is_on_sale'=>1]);
+          if (!$ginfo->is_exist() || !$ginfo->is_on_sale || $ginfo->goods_number==0) { //商品下架或者库存为0，都不能购买
             continue;
           }
           
@@ -537,7 +536,7 @@ class Trade_Controller extends MobileController {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
-      trace_debug('trade_order_upaddress', $_POST);
+      
       $address_id    = $request->post('address_id', 0);
       $consignee     = $request->post('consignee', '');
       $contact_phone = $request->post('contact_phone', '');
@@ -553,7 +552,7 @@ class Trade_Controller extends MobileController {
       $zipcode       = $request->post('zipcode', '');
       
       $address_id = intval($address_id);
-      $upAddr = new UserAddress($address_id ? : NULL);
+      $upAddr = new UserAddress($address_id);
       $upAddr->user_id       = $user_id;
       $upAddr->consignee     = $consignee;
       $upAddr->country       = $country;
@@ -567,10 +566,10 @@ class Trade_Controller extends MobileController {
       $upAddr->address       = $address;
       $upAddr->zipcode       = $zipcode;
       $upAddr->tel           = $contact_phone; //遵循ecshop习惯，优先使用tel(因为后台都是优先选择tel,mobile作为第二电话)
+      $upAddr->mobile        = $contact_phone;
       $upAddr->save();
-      trace_debug('trade_order_address_obj', $upAddr);
+      
       $ret = ['flag'=>'SUC','msg'=>'更新成功','address_id'=>$upAddr->id];
-      trace_debug('trade_order_address_ret', $ret);
       $response->sendJSON($ret);
     }
   }

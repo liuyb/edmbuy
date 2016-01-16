@@ -10,7 +10,7 @@ class Region extends StorageNode {
 
 	protected static function meta() {
 		return array(
-				'table' => '`shp_user_address`',
+				'table' => '`shp_region`',
 				'key'   => 'region_id',
 				'columns' => array(
 						'region_id'   => 'region_id',
