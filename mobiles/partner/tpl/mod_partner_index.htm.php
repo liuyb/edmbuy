@@ -46,7 +46,7 @@
 <div class="partner_money">
 	<div class="money_main">
 		<ul>
-			<a href="add_backID.html">
+			<a href="javascript:;" onclick="cash_available(this)">
 			<li>
 				<p>可提现金额（元）</p>
 				<h1>￥0.00</h1>
@@ -63,15 +63,15 @@
 	</div>
 	<div class="money_main">
 		<ul>
-			<a href="brokerage.html?broke=1">
+			<a href="javascript:;" onclick="cash_already(this)">
 			<li>
-				<p>总收入（元）</p>
+				<p>已提现金额</p>
 				<h1>￥0.00</h1>
 			</li>
 			</a>
-			<a href="cash_list_info.html">
+			<a href="javascript:;" onclick="cash_total(this)">
 			<li>
-				<p>已提现金额</p>
+				<p>总收入（元）</p>
 				<h1>￥0.00</h1>
 			</li>
 			</a>
@@ -89,19 +89,19 @@
 			</a>
 		</li>
 		<li>
-			<a href="add_backID.html">
+			<a href="javascript:;" onclick="cash_apply(this)">
 				<h1><img src="/themes/mobiles/img/shen.png"></h1>
 				<p>申请提现</p>
 			</a>
 		</li>
 		<li>
-			<a href="cash_list_info.html">
+			<a href="javascript:;" onclick="cash_detail(this)">
 				<h1><img src="/themes/mobiles/img/ming.png"></h1>
 				<p>提现明细</p>
 			</a>
 		</li>
 		<li>
-			<a href="brokerage.html?broke=1">
+			<a href="<?php echo U('partner/commission','status=1')?>">
 				<h1><img src="/themes/mobiles/img/icon_jjm.png"></h1>
 				<p class="noborder">佣金明细</p>
 			</a>
@@ -127,6 +127,21 @@
 			count = 0;
 		}
 		window.location = url+"?level="+level+"&count="+count;
+	}
+	function cash_available(obj) {
+		myAlert('还没有可提现的金额');
+	}
+	function cash_already(obj) {
+		myAlert('还没提现过');
+	}
+	function cash_total(obj) {
+		myAlert('尚未有有效收入');
+	}
+	function cash_apply(obj) {
+		myAlert('未到提现时间');
+	}
+	function cash_detail(obj) {
+		myAlert('未到提现时间');
 	}
 </script>
 <?php endif;?>
