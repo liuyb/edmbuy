@@ -164,7 +164,7 @@ class User_Controller extends MobileController {
         $this->tips($request, $response);
       }
       else { //先用base方式获取微信OAuth2授权，以便于取得openid
-        (new Weixin())->authorizing('http://'.$request->host().'/user/oauth/weixin?act=login&refer='.rawurlencode($refer));
+      	(new Weixin())->authorizing_base('login', $refer);
       }
     }
     else {
@@ -180,7 +180,7 @@ class User_Controller extends MobileController {
   public function go_detail_oauth(Request $request, Response $response)
   {
   	$refer = $request->get('refer','/');
-  	(new Weixin())->authorizing('http://'.Request::host().'/user/oauth/weixin?act=&refer='.rawurlencode($refer), 'detail');
+  	(new Weixin())->authorizing_detail('',$refer);
   }
   
   /**
@@ -211,7 +211,7 @@ class User_Controller extends MobileController {
     }
     
     //授权出错
-    if (!in_array($state, array('base','detail'))) {
+    if (!in_array($state, Weixin::$allowOAuthScopes)) {
     	Fn::show_error_message('授权出错，不能访问应用！');
     }
     
@@ -220,34 +220,35 @@ class User_Controller extends MobileController {
     //用code换取access token
     $code_ret = $wx->request_access_token($code);
     if (!empty($code_ret['errcode'])) {
-    	Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;font-size:1.6rem;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>');
+    	Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>');
     }
     
     //获取到openid
     $openid = $code_ret['openid'];
     $unionid= isset($code_ret['unionid']) ? $code_ret['unionid'] : '';
     //trace_debug('weixin_oauth2_code_set', $code_ret);
-    if (empty($unionid)) {
-    	Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;font-size:1.6rem;">获取不到UnionID</span>');
+    
+    if (!empty($unionid)) {
+    	$localUser   = Users::load_by_unionid($unionid);
+    }
+    else {
+    	$localUser   = Users::load_by_openid($openid);
     }
     
     //查询本地是否存在对应openid的用户
-    $localUser   = Users::load_by_unionid($unionid);
+    $auth_method = "oauth2_{$state}"; //OAuth2认证方式
     $loginedUser = $localUser;
-    if ($localUser->is_exist()) { //用户已存在，对state='base'，则仅需设置登录状态；而对state='detail'，需保存或更新用户数据
+    if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息
     
-    	if ('detail'==$state) { //detail认证模式，需更新用户数据
-    
-    		$auth_method = 'oauth2_detail';//OAuth2详细认证方式
-    
+    	if (Weixin::OAUTH_DETAIL==$state) { //detail认证模式，需更新用户数据
+    		
     		$uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
     		if (!empty($uinfo_wx['errcode'])) { //失败！则报错
-    			Fn::show_error_message('微信获取用户信息出错！<br/>'.$uinfo_wx['errcode'].'('.$uinfo_wx['errmsg'].')');
+    			Fn::show_error_message('微信获取用户信息出错！<br/><span style="font-size:16px;">'.$uinfo_wx['errcode'].'('.$uinfo_wx['errmsg'].')</span>');
     		}
     
     		//保存微信用户信息到本地库
     		$upUser = new Users($localUser->uid);
-    		//$upUser->unionid   = $unionid;
     		$upUser->openid    = $openid;
     		$upUser->lasttime  = simphp_dtime();
     		$upUser->lastip    = Request::ip();
@@ -273,47 +274,81 @@ class User_Controller extends MobileController {
     			}
     			else { //成功！说明之前已经关注，得更新关注标记
     				$upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
-    				$upUser->subscribetime = isset($uinfo_wx['subscribe_time']) ? $uinfo_wx['subscribe_time'] : 0;
+    				if ($upUser->subscribe) {
+    					$upUser->subscribetime = $uinfo_wx['subscribe_time'];
+    				}
     			}
     		}
     		
     		$upUser->save(Storage::SAVE_UPDATE);
     		$loginedUser = $upUser;
     
-    	} //End: if ('detail'===$state)
+    	} //End: if (Weixin::OAUTH_DETAIL===$state)
     
     }
     else { //用户不存在，则要尝试建立
     	
-    	if ('base'==$state) { //基本授权方式
+    	//用base授权获取不到unionid(从2016-01-16日开始，snsapi_base不返回unionid，微信你大爷！)，则要接着用detail授权
+    	if (empty($unionid)) {
+    		$wx->authorizing_detail($auth_action, $refer);
+    	}
+    	
+    	$upUser = new Users();
+    	$upUser->unionid = $unionid;
+    	$upUser->openid  = $openid;
+    	$upUser->regip   = $request->ip();
+    	$upUser->regtime = simphp_time();
+    	$upUser->lasttime= simphp_dtime();
+    	$upUser->lastip  = $request->ip();
+    	$upUser->salt    = gen_salt();
+    	$upUser->parentid= 0;
+    	$upUser->state   = 0; //0:正常;1:禁止
+    	$upUser->from    = $from;
+    	$upUser->authmethod = $auth_method;
+    	
+    	//检查spm
+    	$parent_id = 0;
+    	$spm = Spm::check_spm($refer);
+    	if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+    		if (Users::id_exists($matchspm[1])) {
+    			$parent_id = $matchspm[1];
+    		}
+    	}
+    	$upUser->parentid = $parent_id;
+    	
+    	if (Weixin::OAUTH_DETAIL==$state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
+	    	
+    		$uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
+    		if (!empty($uinfo_wx['errcode'])) { //失败！则报错
+    			Fn::show_error_message('微信获取用户信息出错！<br/><span style="font-size:16px;">'.$uinfo_wx['errcode'].'('.$uinfo_wx['errmsg'].')</span>');
+    		}
+    		
+    		$upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
+    		$upUser->subscribetime = isset($uinfo_wx['subscribetime']) ? $uinfo_wx['subscribetime'] : 0;
+    		$upUser->nickname  = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+    		$upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+    		$upUser->sex       = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+    		$upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+    		$upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+    		$upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+    		$upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
+    		
+    		//尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
+    		if (!$upUser->subscribe) {
+    			$uinfo_wx = $wx->userInfo($openid);
+    			if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
+    		
+    			}
+    			else { //成功！说明之前已经关注，得更新关注标记
+    				$upUser->subscribe     = $uinfo_wx['subscribe'];
+    				$upUser->subscribetime = $upUser->subscribe ? $uinfo_wx['subscribe_time'] : 0;
+    			}
+    		}
     
-	    	$auth_method = 'oauth2_base';//基本认证方式
-	    	
-	    	$upUser = new Users();
-	    	$upUser->unionid = $unionid;
-	    	$upUser->openid  = $openid;
-	    	$upUser->regip   = $request->ip();
-	    	$upUser->regtime = simphp_time();
-	    	$upUser->salt    = gen_salt();
-	    	$upUser->parentid= 0;
-	    	$upUser->state   = 0; //0:正常;1:禁止
-	    	$upUser->from    = $from;
-	    	$upUser->authmethod = $auth_method;
-	    	
-	    	//检查spm
-	    	$parent_id = 0;
-	    	$spm = Spm::check_spm($refer);
-	    	if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
-	    		if (Users::id_exists($matchspm[1])) {
-	    			$parent_id = $matchspm[1];
-	    		}
-	    	}
-	    	$upUser->parentid = $parent_id;
-	    	
-	    	$upUser->save(Storage::SAVE_INSERT);
-	    	$loginedUser = $upUser;
-    
-    	} //END: if ('base'==$state)
+    	}
+    		
+    	$upUser->save(Storage::SAVE_INSERT);
+    	$loginedUser = $upUser;
     
     } //END: if ($localUser->is_exist()) else
     

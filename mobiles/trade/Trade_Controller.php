@@ -529,7 +529,7 @@ class Trade_Controller extends MobileController {
    */
   public function order_upaddress(Request $request, Response $response)
   {
-    if ($request->is_post()) {
+    if ($request->is_post(true)) {
       $ret = ['flag'=>'FAIL','msg'=>'更新失败'];
       
       $user_id = $GLOBALS['user']->uid;
@@ -537,7 +537,7 @@ class Trade_Controller extends MobileController {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
       }
-      
+      trace_debug('trade_order_upaddress', $_POST);
       $address_id    = $request->post('address_id', 0);
       $consignee     = $request->post('consignee', '');
       $contact_phone = $request->post('contact_phone', '');
@@ -553,7 +553,7 @@ class Trade_Controller extends MobileController {
       $zipcode       = $request->post('zipcode', '');
       
       $address_id = intval($address_id);
-      $upAddr = new UserAddress($address_id);
+      $upAddr = new UserAddress($address_id ? : NULL);
       $upAddr->user_id       = $user_id;
       $upAddr->consignee     = $consignee;
       $upAddr->country       = $country;
@@ -568,9 +568,9 @@ class Trade_Controller extends MobileController {
       $upAddr->zipcode       = $zipcode;
       $upAddr->tel           = $contact_phone; //遵循ecshop习惯，优先使用tel(因为后台都是优先选择tel,mobile作为第二电话)
       $upAddr->save();
-      
+      trace_debug('trade_order_address_obj', $upAddr);
       $ret = ['flag'=>'SUC','msg'=>'更新成功','address_id'=>$upAddr->id];
-      
+      trace_debug('trade_order_address_ret', $ret);
       $response->sendJSON($ret);
     }
   }
