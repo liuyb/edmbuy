@@ -15,6 +15,7 @@ class User_Controller extends MobileController {
   public function menu() {
     return [
       'user' => 'index',
+      'user/index/ajax' => 'index_ajax', 
       'user/setting' => 'user_setting',
       'user/logo/upload' => 'upload_logo',
       'user/wxqr/show' => 'show_wxqr',
@@ -48,7 +49,7 @@ class User_Controller extends MobileController {
   {
     $this->v->set_tplname('mod_user_index');
     if ($request->is_hashreq()) {
-      $this->showUserInfo();
+      $this->showUserBaseInfo();
     }
     else {
       //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
@@ -57,6 +58,14 @@ class User_Controller extends MobileController {
     throw new ViewResponse($this->v);
   }
 
+  public function index_ajax(Request $request, Response $response){
+      $uid = $GLOBALS['user']->uid;
+      $status = array('pay_status'=>constant('PS_UNPAYED'),'shipping_status'=>array(constant('SS_UNSHIPPED'),constant('SS_SHIPPED')));
+      $orderStatusMap = User_Model::findOrderStatusCountByUser($uid, $status);
+      
+      $response->sendJSON($orderStatusMap);
+  }
+  
   /**
    * 用户信息设置
    * @param Request $request
@@ -457,16 +466,6 @@ class User_Controller extends MobileController {
     }
     $this->v->assign('qrcode', $qrcode);
     $response->send($this->v);
-  }
-  
-  public function showUserInfo(){
-      $uid = $GLOBALS['user']->uid;
-      $this->showUserBaseInfo();
-      $status = array('pay_status'=>constant('PS_UNPAYED'),'shipping_status'=>array(constant('SS_UNSHIPPED'),constant('SS_SHIPPED')));
-      $orderStatusMap = User_Model::findOrderStatusCountByUser($uid, $status);
-      $this->v->assign("waitPayCount", $orderStatusMap['status1']);
-      $this->v->assign("unShipCount", $orderStatusMap['status2']);
-      $this->v->assign("shipedCount", $orderStatusMap['status3']);
   }
   
   public function showUserBaseInfo(){

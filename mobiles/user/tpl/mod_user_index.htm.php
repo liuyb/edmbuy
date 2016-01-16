@@ -52,25 +52,19 @@ function displayNickBg($level){
 		<a href="/order">
     		<li>
     			<img src="/themes/mobiles/img/fk1.png">
-    			<?php if($waitPayCount && $waitPayCount > 0): ?>
-    			<span class="d_nums"><?=$waitPayCount ?></span>
-    			<?php endif;?>
+    			<span class="d_nums waitPayCount">0</span>
     		</li>
 		</a>
 		<a href="/order">
 			<li>
 				<img src="/themes/mobiles/img/fh2.png">
-				<?php if($unShipCount && $unShipCount > 0): ?>
-    			<span class="d_nums"><?=$unShipCount ?></span>
-    			<?php endif;?>
+    			<span class="d_nums unShipCount">0</span>
 			</li>
 		</a>
 		<a href="/order">
 			<li class="dsh">
 				<img src="/themes/mobiles/img/sh3.png">
-				<?php if($shipedCount && $shipedCount > 0): ?>
-    			<span class="d_nums"><?=$shipedCount ?></span>
-    			<?php endif;?>
+    			<span class="d_nums shipedCount">0</span>
 			</li>
 		</a>
 		<a href="/order"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
@@ -94,7 +88,21 @@ function displayNickBg($level){
 <?php include T('inc/add_as_friend');?>
 
 <script>
-
+$().ready(function(){
+	loadAjaxData();
+});
+function loadAjaxData(){
+	var url = "/user/index/ajax";
+	F.get(url, null, function(data){
+		console.log(data);
+		if(data){
+			var stateDOM = $(".my_order_state");
+			stateDOM.find(".waitPayCount").text(data.status1);
+			stateDOM.find(".unShipCount").text(data.status2);
+			stateDOM.find(".shipedCount").text(data.status3);
+		}
+	});
+}
 
 //好友弹框
 $(".refer_but").on("click",function(){
