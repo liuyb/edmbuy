@@ -390,102 +390,111 @@ class Trade_Controller extends MobileController {
       }
       
       $order_sn = Fn::gen_order_no();
-      $upOrder  = new Order();
-      $upOrder->ordersn      = $order_sn;
-      $upOrder->pay_trade_no = '';
-      $upOrder->userid       = $user_id;
-      $upOrder->order_status = OS_UNCONFIRMED;
-      $upOrder->shipping_status = SS_UNSHIPPED;
-      $upOrder->pay_status   = PS_UNPAYED;
-      $upOrder->consignee    = $exAddr->consignee;
-      $upOrder->country      = $exAddr->country;
-      $upOrder->province     = $exAddr->province;
-      $upOrder->city         = $exAddr->city;
-      $upOrder->district     = $exAddr->district;
-      $upOrder->address      = $exAddr->address;
-      $upOrder->zipcode      = $exAddr->zipcode;
-      $upOrder->tel          = $exAddr->tel;
-      $upOrder->mobile       = $exAddr->mobile;
-      $upOrder->email        = $exAddr->email;
-      $upOrder->besttime     = $exAddr->best_time;
-      $upOrder->sign_building= $exAddr->sign_building;
-      $upOrder->postscript   = $order_msg;
-      $upOrder->shippingid   = $exShip->shipping_id;
-      $upOrder->shippingname = $exShip->shipping_name;
-      $upOrder->payid        = $exPay->pay_id;
-      $upOrder->payname      = $exPay->pay_name;
-      $upOrder->howoos       = Fn::oos_status(OOS_WAIT);
-      $upOrder->howsurplus   = '';
+      $newOrder  = new Order();
+      $newOrder->order_sn     = $order_sn;
+      $newOrder->pay_trade_no = '';
+      $newOrder->user_id      = $user_id;
+      $newOrder->order_status = OS_UNCONFIRMED;
+      $newOrder->shipping_status = SS_UNSHIPPED;
+      $newOrder->pay_status   = PS_UNPAYED;
+      $newOrder->consignee    = $exAddr->consignee;
+      $newOrder->country      = $exAddr->country;
+      $newOrder->province     = $exAddr->province;
+      $newOrder->city         = $exAddr->city;
+      $newOrder->district     = $exAddr->district;
+      $newOrder->address      = $exAddr->address;
+      $newOrder->zipcode      = $exAddr->zipcode;
+      $newOrder->tel          = $exAddr->tel;
+      $newOrder->mobile       = $exAddr->mobile;
+      $newOrder->email        = $exAddr->email;
+      $newOrder->best_time    = $exAddr->best_time;
+      $newOrder->sign_building= $exAddr->sign_building;
+      $newOrder->postscript   = $order_msg;
+      $newOrder->shipping_id  = $exShip->shipping_id;
+      $newOrder->shipping_name = $exShip->shipping_name;
+      $newOrder->pay_id       = $exPay->pay_id;
+      $newOrder->pay_name     = $exPay->pay_name;
+      $newOrder->how_oos      = Fn::oos_status(OOS_WAIT);
+      $newOrder->how_surplus  = '';
       //...
-      $upOrder->goods_amount = $total_price;
-      $upOrder->shipping_fee = 0;
-      $upOrder->order_amount = $upOrder->goods_amount + $upOrder->shipping_fee;
+      $newOrder->goods_amount = $total_price;
+      $newOrder->shipping_fee = 0;
+      $newOrder->order_amount = $newOrder->goods_amount + $newOrder->shipping_fee;
+      $newOrder->commision    = 0;
       //...
-      $upOrder->referer      = '本站';
-      $upOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
+      $newOrder->referer      = '本站';
+      $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
       //...
       
-      $upOrder->save(Storage::SAVE_INSERT);
-      if ($upOrder->id) { //订单表生成成功
+      $newOrder->save(Storage::SAVE_INSERT);
+      $order_id = 0;
+      if ($newOrder->id) { //订单表生成成功
+      	
+        $order_id = $newOrder->id;
         
         // 处理表 order_goods
-        $order_update = []; //存储一些可能需要更新的字段数据
-        $succ_goods   = []; //存储成功购买了的商品
-        $true_amount  = 0;  //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
+        $order_update = [];   //存储一些可能需要更新的字段数据
+        $succ_goods   = [];   //存储成功购买了的商品
+        $true_amount  = 0;    //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
+        $total_commision = 0; //总佣金
         foreach ($order_goods AS $cg) {
           $curr_goods_id = $cg['goods_id'];
-          $ginfo = Items::load($curr_goods_id);
+          $cItem = Items::load($curr_goods_id);
           
-          //$ginfo = Goods::getGoodsInfo($curr_goods_id, ['is_on_sale'=>1]);
-          if (!$ginfo->is_exist() || !$ginfo->is_on_sale || $ginfo->goods_number==0) { //商品下架或者库存为0，都不能购买
+          if (!$cItem->is_exist() || !$cItem->is_on_sale || !$cItem->item_number) { //商品下架或者库存为0，都不能购买
             continue;
           }
           
           //TODO 并发？
-          $true_goods_number = $cg['goods_number']>$ginfo['goods_number'] ? $ginfo['goods_number']: $cg['goods_number'];
-          Goods::changeGoodsStock($curr_goods_id, -$true_goods_number); //立即冻结商品对应数量的库存
+          $true_goods_number = $cg['goods_number']>$cItem->item_number ? $cItem->item_number: $cg['goods_number'];
+          Items::changeStock($curr_goods_id, -$true_goods_number); //立即冻结商品对应数量的库存
           
-          $rel_goods = [
-            'order_id'     => $order_id,
-            'goods_id'     => $curr_goods_id,
-            'goods_name'   => $cg['goods_name'],
-            'goods_sn'     => $cg['goods_sn'],
-            'product_id'   => $cg['product_id'],
-            'goods_number' => $true_goods_number,
-            'market_price' => $cg['market_price'],
-            'goods_price'  => $cg['goods_price'],
-            'goods_attr'   => $cg['goods_attr'],
-            'send_number'  => 0,
-            'is_real'      => $cg['is_real'],
-            'extension_code' => $cg['extension_code'],
-            'parent_id'    => $cg['parent_id'],
-            'is_gift'      => $cg['is_gift'],
-            'goods_attr_id'=> $cg['goods_attr_id']
-          ];
-          $rec_id = D()->insert(ectable('order_goods'), $rel_goods, true, true);
-          if ($rec_id) {
+          $newOI = new OrderItems();
+          $newOI->order_id    = $order_id;
+          $newOI->goods_id    = $curr_goods_id;
+          $newOI->goods_name  = $cg['goods_name'];
+          $newOI->goods_sn    = $cg['goods_sn'];
+          $newOI->product_id  = $cg['product_id'];
+          $newOI->goods_number= $true_goods_number;
+          $newOI->market_price= $cg['market_price'];
+          $newOI->goods_price = $cg['goods_price'];
+          $newOI->goods_attr  = $cg['goods_attr'];
+          $newOI->send_number = 0;
+          $newOI->is_real     = $cg['is_real'];
+          $newOI->extension_code = $cg['extension_code'];
+          $newOI->parent_id   = $cg['parent_id'];
+          $newOI->is_gift     = $cg['is_gift'];
+          $newOI->goods_attr_id = $cg['goods_attr_id'];
+          $newOI->save(Storage::SAVE_INSERT);
+          
+          if ($newOI->id) {
             $succ_goods[] = $cg;
             $true_amount += $cg['goods_price']*$true_goods_number;
+            $total_commision += $cItem->commision*$true_goods_number;
           }
           else {
-            Goods::changeGoodsStock($curr_goods_id, $true_goods_number); //立即恢复刚才冻结的商品库存
+            Items::changeStock($curr_goods_id, $true_goods_number); //立即恢复刚才冻结的商品库存
           }
-        }
+        }//END foreach loop
+        
+        //总佣金
+        $order_update['commision'] = $total_commision;
         
         //检测订单变化
-        if ($true_amount!=$order['goods_amount']) {
+        if ($true_amount!=$newOrder->goods_amount) {
           $order_update['goods_amount'] = $true_amount;
-          $order_update['order_amount'] = $order_update['goods_amount'] + $order['shipping_fee'];
+          $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
         }
         if (empty($succ_goods)) { //如果一个商品都没有购买成功，则需要更改此订单状态为"无效"OS_INVALID
           $order_update['order_status'] = OS_INVALID;
+          $order_update['commision']    = 0;
         }
         if (!empty($order_update)) {
-          D()->update($ectb_order, $order_update, ['order_id'=>$order_id], true);
+          D()->update(Order::table(), $order_update, ['order_id'=>$order_id]);
         }
         
         // 处理表 pay_log
-        Trade_Model::insertPayLog($order_id, $order_sn, $true_amount, PAY_ORDER);
+        PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
         
         // 没有成功购买的商品，则返回错误告诉用户重新添加
         if (empty($succ_goods)) {
@@ -494,7 +503,7 @@ class Trade_Controller extends MobileController {
         }
         
         // 清除购物车
-        Goods::deleteCartGoods($cart_rids_arr, $user_id);
+        Cart::deleteItems($cart_rids_arr, $user_id);
         
         $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$true_amount];
         $response->sendJSON($ret);
@@ -507,6 +516,7 @@ class Trade_Controller extends MobileController {
     }
     else {
       $this->v->set_tplname('mod_trade_order_submit');
+      $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
       $this->nav_flag1 = 'order';
       $this->nav_flag2 = 'order_submit';
       $this->nav_no    = 0;
@@ -645,7 +655,6 @@ class Trade_Controller extends MobileController {
    */
   public function order_topay(Request $request, Response $response){
     
-    
     if ($request->is_post()) {
       
       global $user;
@@ -671,16 +680,17 @@ class Trade_Controller extends MobileController {
         Fn::show_error_message('订单为空');
       }
       
-      $order_info = Order::info($order_id);
-      if (empty($order_info)) {
+      $exOrder = Order::load($order_id);
+      if (!$exOrder->is_exist()) {
         Fn::show_error_message('订单不存在');
       }
       else {
-        $order_info['order_goods'] = Goods::getOrderGoods($order_info['order_id']);
-        if (empty($order_info['order_goods'])) {
+        $exOrder->order_goods = Order::getItems($exOrder->id);
+        if (empty($exOrder->order_goods)) {
           Fn::show_error_message('订单下没有对应商品');
         }
       }
+      $order_info = $exOrder->to_array(true);
       
       if ('wxpay'==$pay_mode) {
         $jsApiParams = Wxpay::unifiedOrder($order_info, $user->openid);

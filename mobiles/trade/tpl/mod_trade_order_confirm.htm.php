@@ -80,7 +80,7 @@
   <div class="row row-last">支付完成后，如需退换货请及时联系商家</div>
 </div>
 
-<?php form_topay_script(U('trade/order/record'));?>
+<?php form_topay_script(U('order'));?>
 
 <script>
 function wxEditAddressCallback(res) {
@@ -155,7 +155,7 @@ $(function(){
 		var order_msg= $('#order-message').val();
 		var cart_rids= $('#cart-list-body').attr('data-cart_rids');
 		if (!addr_id) {
-			alert('请填写收货地址');
+			myAlert('请填写收货地址');
 			return false;
 		}
 
@@ -168,7 +168,7 @@ $(function(){
   			}
   			else{
   				$(_this).text('微信安全支付').removeAttr('disabled');
-  				alert(ret.msg);
+  				myAlert(ret.msg);
   			}
 	  });
 		

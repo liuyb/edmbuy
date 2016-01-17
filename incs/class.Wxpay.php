@@ -22,7 +22,7 @@ class Wxpay {
    * 
    * @var constant
    */
-  const NOFIFY_URL = 'http://api.fxmgou.com/wxpay/notify';
+  const NOFIFY_URL = 'http://api.edmbuy.com/wxpay/notify';
   
   /**
    * 交易类型常量，共4个可选值
@@ -68,12 +68,12 @@ class Wxpay {
     
     //统一下单
     if (1||empty($order['pay_data1'])) { //订单状态可能会被后台更改，所以同一订单每次支付都要重新生成提交信息
-      if (''==$wx_order_body) $wx_order_body = '福小蜜商品';
+      if (''==$wx_order_body) $wx_order_body = '益多米商品';
       $now   = time();
       $input = new WxPayUnifiedOrder();
       $input->SetBody($wx_order_body);
       $input->SetDetail($order_detail);
-      $input->SetAttach('fxmgou'); //商家自定义数据，原样返回
+      $input->SetAttach('edmbuy'); //商家自定义数据，原样返回
       $input->SetOut_trade_no($order['order_sn']);
       $input->SetTotal_fee(intval($order['order_amount']*100)); //'分'为单位
       $input->SetTime_start(date('YmdHis', $now));
@@ -95,7 +95,7 @@ class Wxpay {
         if (isset($order_wx['code_url'])) {
           $wxpay_data['code_url'] = $order_wx['code_url'];
         }
-        Goods::orderUpdate(['pay_data1'=>json_encode($wxpay_data)], $order['order_id']);
+        D()->update(Order::table(), ['pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]);
       }
     }
     else {

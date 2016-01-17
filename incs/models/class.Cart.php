@@ -178,7 +178,7 @@ class Cart extends StorageNode {
 			}
 			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
-				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, false)) {
+				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, $is_immediate ? true : false)) {
 					$ret['code'] = $cart_rec_id;
 					$ret['added_num'] = $num;
 				}
@@ -255,6 +255,45 @@ class Cart extends StorageNode {
 			}
 		}
 		return empty($ret) ? [] : $ret;
+	}
+	
+	/**
+	 * 删除购物车中的商品
+	 *
+	 * @param $rec_ids mixed(array or integer)
+	 * @param $user_id
+	 * @return array
+	 *   ['code'=>  0,'msg'=>'没有要删除的记录']
+	 *   ['code'=> >0,'msg'=>'删除成功']
+	 *   ['code'=> -1,'msg'=>'删除失败']
+	 */
+	static function deleteItems($rec_ids, $user_id) {
+		$ret = ['code'=>0,'msg'=>'没有要删除的记录'];
+		if (empty($rec_ids)) {
+			return $ret;
+		}
+		if (!is_array($rec_ids) && $rec_ids!=='all') {//单条记录方式
+			$rec_ids = [$rec_ids];
+		}
+	
+		$ectb = self::table();
+		$where_user = self::getOwnerSql($user_id);
+		if (is_string($rec_ids) && $rec_ids=='all') {
+			$where_ids = "1";
+		}
+		else {
+			$where_ids  = "`rec_id` IN(".implode(",", $rec_ids).")";
+		}
+		$sql  = "DELETE FROM {$ectb} WHERE {$where_ids} AND {$where_user}";
+		D()->raw_query($sql,$user_id);
+		$effrows = D()->affected_rows();
+		if ($effrows) {
+			$ret = ['code'=>$effrows,'msg'=>'删除成功'];
+		}
+		else {
+			$ret = ['code'=>-1,'msg'=>'删除失败'];
+		}
+		return $ret;
 	}
 	
 }

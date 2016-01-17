@@ -826,12 +826,14 @@ HEREDOC_SHARE_JS3;
  */
 function form_topay_script($back_url) {
   $frm_action = U('trade/order/topay');
+  $sesstoken  = sess_token();
   $html =<<<HEREDOC
 <div class="hide">
   <form id="frm-topay" action="{$frm_action}" method="post">
     <input type="hidden" name="pay_mode" value="wxpay" id="frm-paymode" />
     <input type="hidden" name="order_id" value="0"  id="frm-orderid"/>
     <input type="hidden" name="back_url" value="{$back_url}" />
+    <input type="hidden" name="token" value="{$sesstoken}" />
   </form>
 </div>
 <script type="text/javascript">

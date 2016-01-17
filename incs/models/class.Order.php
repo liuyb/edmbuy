@@ -1,82 +1,86 @@
 <?php
-
+/**
+ * Storage Node Model
+ *
+ * @author Jean
+ */
 defined('IN_SIMPHP') or die('Access Denied');
 
-/**
- * 
- * @author Jean
- *
- */
 class Order extends StorageNode{
     
     protected static function meta() {
         return array(
             'table' => '`shp_order_info`',
-            'key'   => 'uid',   //该key是应用逻辑的列，当columns为array时，为columns的key，否则，则要设成实际存储字段
-            'columns' => array( //columns同时支持'*','实际存储字段列表串',映射数组 三种方式
-                'orderid'           => 'order_id',
-                'ordersn'           => 'order_sn',
-                'pay_trade_no'      => 'pay_trade_no',
-                'userid'            => 'user_id',
-                'order_status'      => 'order_status',
-                'shipping_status'   => 'shipping_status',
-                'pay_status'        => 'pay_status',
-                'consignee'         => 'consignee',
-                'country'           => 'country',
-                'province'          => 'province',
-                'city'              => 'city',
-                'address'           => 'address',
-                'zipcode'           => 'zipcode',
-                'tel'               => 'tel',
-                'mobile'            => 'mobile',
-                'email'             => 'email',
-                'besttime'          => 'best_time',
-                'sign_building'     => 'sign_building',
-                'postscript'        => 'postscript',
-                'shippingid'        => 'shipping_id',
-                'shippingname'      => 'shipping_name',
-                'payid'             => 'pay_id',
-                'payname'           => 'pay_name',
-                'howoos'            => 'how_oos',
-                'howsurplus'        => 'how_surplus',
-                'packname'          => 'pack_name',
-                'inv_payee'         => 'inv_payee',
-                'inv_content'       => 'inv_content',
-                'goods_amount'      => 'goods_amount',
-                'shipping_fee'      => 'shipping_fee',
-                'insure_fee'        => 'insure_fee',
-                'pay_fee'           => 'pay_fee',
-                'pack_fee'          => 'pack_fee',
-                'card_fee'          => 'card_fee',
-                'money_paid'        => 'money_paid',
-                'surplus'           => 'surplus',
-                'integral'          => 'integral',
-                'integral_money'    => 'integral_money',
-                'bonus'             => 'bonus',
-                'order_amount'      => 'order_amount',
-                'from_ad'           => 'from_ad',
-                'referer'           => 'referer',
-                'add_time'          => 'add_time',
-                'confirm_time'      => 'confirm_time',
-                'paytime'           => 'pay_time',
-                'shipping_time'     => 'shipping_time',
-                'shipping_confirm_time'     => 'shipping_confirm_time',
-                'packid'            => 'pack_id',
-                'cardid'            => 'card_id',
-                'bonusid'           => 'bonus_id',
-                'invoiceno'         => 'invoice_no',
-                'extension_code'    => 'extension_code',
-                'extension_id'      => 'extension_id',
-                'tobuyer'           => 'to_buyer',
-                'paynote'           => 'pay_note',
-                'agencyid'          => 'agency_id',
-                'invtype'           => 'inv_type',
-                'tax'               => 'tax',
-                'isseparate'        => 'is_separate',
-                'parentid'          => 'parent_id',
-                'discount'          => 'discount',
-                'paydata1'          => 'pay_data1',
-                'paydata2'          => 'pay_data2'
+            'key'   => 'order_id',
+            'columns' => array(
+                'order_id'           => 'order_id',
+                'order_sn'           => 'order_sn',
+                'pay_trade_no'       => 'pay_trade_no',
+                'user_id'            => 'user_id',
+                'order_status'       => 'order_status',
+                'shipping_status'    => 'shipping_status',
+                'pay_status'         => 'pay_status',
+                'consignee'          => 'consignee',
+                'country'            => 'country',
+                'province'           => 'province',
+                'city'               => 'city',
+                'district'           => 'district',
+                'address'            => 'address',
+                'zipcode'            => 'zipcode',
+                'tel'                => 'tel',
+                'mobile'             => 'mobile',
+                'email'              => 'email',
+                'best_time'          => 'best_time',
+                'sign_building'      => 'sign_building',
+                'postscript'         => 'postscript',
+                'shipping_id'        => 'shipping_id',
+                'shipping_name'      => 'shipping_name',
+                'pay_id'             => 'pay_id',
+                'pay_name'           => 'pay_name',
+                'how_oos'            => 'how_oos',
+                'how_surplus'        => 'how_surplus',
+                'pack_name'          => 'pack_name',
+                'card_name'          => 'card_name',
+                'card_message'       => 'card_message',
+                'inv_payee'          => 'inv_payee',
+                'inv_content'        => 'inv_content',
+                'goods_amount'       => 'goods_amount',
+                'shipping_fee'       => 'shipping_fee',
+                'insure_fee'         => 'insure_fee',
+                'pay_fee'            => 'pay_fee',
+                'pack_fee'           => 'pack_fee',
+                'card_fee'           => 'card_fee',
+                'money_paid'         => 'money_paid',
+                'surplus'            => 'surplus',
+                'integral'           => 'integral',
+                'integral_money'     => 'integral_money',
+                'bonus'              => 'bonus',
+                'order_amount'       => 'order_amount',
+                'commision'          => 'commision',
+                'from_ad'            => 'from_ad',
+                'referer'            => 'referer',
+                'add_time'           => 'add_time',
+                'confirm_time'       => 'confirm_time',
+                'pay_time'           => 'pay_time',
+                'shipping_time'      => 'shipping_time',
+                'shipping_confirm_time' => 'shipping_confirm_time',
+                'pack_id'            => 'pack_id',
+                'card_id'            => 'card_id',
+                'bonus_id'           => 'bonus_id',
+                'invoice_no'         => 'invoice_no',
+                'extension_code'     => 'extension_code',
+                'extension_id'       => 'extension_id',
+                'to_buyer'           => 'to_buyer',
+                'pay_note'           => 'pay_note',
+                'agency_id'          => 'agency_id',
+                'inv_type'           => 'inv_type',
+                'tax'                => 'tax',
+                'is_separate'        => 'is_separate',
+                'parent_id'          => 'parent_id',
+                'discount'           => 'discount',
+                'merchant_ids'       => 'merchant_ids',
+                'pay_data1'          => 'pay_data1',
+                'pay_data2'          => 'pay_data2'
             ));
     }
     
@@ -88,7 +92,7 @@ class Order extends StorageNode{
      */
     static function check_paid_money($order_sn, $money) {
     
-    	$ectb = ectable('order_info');
+    	$ectb = self::table();
     	$order_amount = D()->raw_query("SELECT `order_amount` FROM {$ectb} WHERE `order_sn`='%s'", $order_sn)->result();
     	if (empty($order_amount)) {
     		return false;
@@ -103,18 +107,18 @@ class Order extends StorageNode{
      * @param string $order_sn
      */
     static function get_order_paid_info($order_sn) {
-    	$ectb = ectable('order_info');
+    	$ectb = self::table();
     	$row  = D()->raw_query("SELECT `order_id`,`order_sn`,`user_id`,`order_status`,`shipping_status`,`pay_status`,`pay_id`,`order_amount` FROM {$ectb} WHERE `order_sn`='%s'", $order_sn)
-    	->get_one();
+    	           ->get_one();
     	return !empty($row) ? $row : [];
     }
     
     /**
      * 插入订单动作日志
      */
-    static function order_action_log($order_id, Array $insert_data) {
+    static function action_log($order_id, Array $insert_data) {
     	if (empty($order_id)) return false;
-    	$oinfo = D()->get_one("SELECT `order_id`,`order_status`,`shipping_status`,`pay_status` FROM ".ectable('order_info')." WHERE `order_id`=%d", $order_id);
+    	$oinfo = D()->get_one("SELECT `order_id`,`order_status`,`shipping_status`,`pay_status` FROM ".self::table()." WHERE `order_id`=%d", $order_id);
     	$init_data = [
     			'order_id'       => $order_id,
     			'action_user'    => 'buyer',
@@ -127,7 +131,7 @@ class Order extends StorageNode{
     	];
     	$insert_data = array_merge($init_data, $insert_data);
     	 
-    	$rid = D()->insert(ectable('order_action'), $insert_data, true, true);
+    	$rid = D()->insert(OrderAction::table(), $insert_data);
     	return $rid;
     }
     
@@ -140,20 +144,20 @@ class Order extends StorageNode{
     static function cancel($order_id) {
     	if (!$order_id) return false;
     
-    	D()->update(ectable('order_info'), ['order_status'=>OS_CANCELED], ['order_id'=>$order_id], true);
+    	D()->update(self::table(), ['order_status'=>OS_CANCELED], ['order_id'=>$order_id]);
     
     	if (D()->affected_rows()==1) {
     
     		//还要将对应的库存加回去
-    		$order_goods = Goods::getOrderGoods($order_id);
+    		$order_goods = Order::getItems($order_id);
     		if (!empty($order_goods)) {
     			foreach ($order_goods AS $g) {
-    				Goods::changeGoodsStock($g['goods_id'],$g['goods_number']);
+    				Items::changeStock($g['goods_id'],$g['goods_number']);
     			}
     		}
     
     		//写order_action的日志
-    		self::order_action_log($order_id, ['action_note'=>'用户取消']);
+    		self::action_log($order_id, ['action_note'=>'用户取消']);
     
     		return true;
     	}
@@ -169,20 +173,46 @@ class Order extends StorageNode{
     static function confirm_shipping($order_id) {
     	if (!$order_id) return false;
     
-    	D()->update(ectable('order_info'),
-    	['shipping_status'=>SS_RECEIVED,'shipping_confirm_time'=>simphp_gmtime()],
-    	['order_id'=>$order_id], true);
+    	D()->update(self::table(),
+    	            ['shipping_status'=>SS_RECEIVED,'shipping_confirm_time'=>simphp_gmtime()],
+    	            ['order_id'=>$order_id]);
     
     	if (D()->affected_rows()==1) {
     
     		//写order_action的日志
-    		self::order_action_log($order_id, ['action_note'=>'用户确认收货']);
+    		self::action_log($order_id, ['action_note'=>'用户确认收货']);
     
     		return true;
     	}
     	return false;
     }
     
+    /**
+     * 获取一个订单下的商品列表
+     *
+     * @param integer $order_id
+     * @return array
+     */
+    static function getItems($order_id) {
+    	if (empty($order_id)) return [];
+    
+    	$ectb_goods = Items::table();
+    	$ectb_order_goods = OrderItems::table();
+    
+    	$sql = "SELECT og.*,g.`goods_thumb` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
+    	$order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
+    	if (!empty($order_goods)) {
+    		foreach ($order_goods AS &$g) {
+    			$g['goods_url']   = Items::itemurl($g['goods_id']);
+    			$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+    		}
+    	}
+    	else {
+    		$order_goods = [];
+    	}
+    
+    	return $order_goods;
+    }
 }
 
 ?>

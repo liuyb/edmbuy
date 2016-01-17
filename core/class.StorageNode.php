@@ -303,6 +303,30 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
+	 * 转换成值数组，如果$is_storage_field为真，则键值为storage的field，否则，为应用的field
+	 * @param bool $is_storage_field
+	 * @return array
+	 */
+	public function to_array($is_storage_field = FALSE) {
+		if ($is_storage_field) {
+			$ret  = [];
+			$meta = $this->meta();
+			foreach ($this->__DATA__ AS $k => $v) {
+				if (isset($meta['columns'][$k])) {
+					$ret[$meta['columns'][$k]] = $v;
+				}
+				else { //可能保存了一些非存储层字段
+					$ret[$k] = $v;
+				}
+			}
+			return $ret;
+		}
+		else {
+			return $this->__DATA__;
+		}
+	}
+	
+	/**
 	 * magic method '__get'
 	 *
 	 * @param string $name

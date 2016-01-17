@@ -20,8 +20,8 @@ class Wxpay_Controller extends Controller {
      
     Wxpay::nofify(function($data, &$msg){
       
-      //trace_debug('api_wxpay_notify_data', $data);
-      //trace_debug('api_wxpay_notify_msg', $msg);
+      trace_debug('api_wxpay_notify_data', $data);
+      trace_debug('api_wxpay_notify_msg', $msg);
       
       if ('OK'==$msg) { // 成功合法的订单
         
@@ -37,7 +37,7 @@ class Wxpay_Controller extends Controller {
         $time_end       = Fn::to_timestamp($time_end);
         
         //对日志表"写锁定"，避免其他线程进入干扰(这时其他线程对表pay_log的读写都要等待)
-        $ec_paylog = ectable('pay_log');
+        $ec_paylog = PayLog::table();
         D()->lock_tables($ec_paylog, DB::LOCK_WRITE, '', TRUE);
         
         //检查支付日志表，以确定订单是否存在(之所以用日志表而不是主表order_info，是为了在锁表期间不阻塞到前台访问频繁的主表)
@@ -63,7 +63,7 @@ class Wxpay_Controller extends Controller {
         if (!$pay_log['is_paid']) { //未付款
           
           //更新pay_log
-          D()->update($ec_paylog, ['is_paid'=>1], ['order_id'=>$order_id], true);
+          D()->update($ec_paylog, ['is_paid'=>1], ['order_id'=>$order_id]);
           
           // 更新完立马解锁
           D()->unlock_tables();
@@ -76,16 +76,19 @@ class Wxpay_Controller extends Controller {
             'pay_status'     => PS_PAYED,
             'pay_time'       => simphp_gmtime($time_end),
             'money_paid'     => $pay_log['order_amount'],
-            'order_amount'   => 0,
+            'order_amount'   => 0, //将order_amount设为0
             'pay_data2'      => json_encode($data) //保存微信支付接口的返回
           ];
-          D()->update(ectable('order_info'), $updata, ['order_id'=>$order_id], true);
+          D()->update(Order::table(), $updata, ['order_id'=>$order_id]);
+          
+          //设置佣金计算
+          UserCommision::generate($order_id);
         
           //记录订单操作记录
-          Order::order_action_log($order_id, ['action_note'=>'用户支付']);
+          Order::action_log($order_id, ['action_note'=>'用户支付']);
           
           //更新订单下所有商品的"订单数"
-          Goods::updateGoodsOrderCntByOrderid($order_id);
+          Items::updateOrderCntByOrderid($order_id);
         }
         else {
           D()->unlock_tables();// 解锁

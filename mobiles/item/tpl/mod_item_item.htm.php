@@ -343,7 +343,7 @@ function showSelect(){
 
 //立即购买
 function immediate_buy(item_id, item_num) {
-	if (gUser.uid != 104 && gUser.uid != 109) return;
+	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667) return;
 	if (typeof (immediate_buy.ajaxing)=='undefined') {
 		immediate_buy.ajaxing = 0;
 	}

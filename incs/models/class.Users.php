@@ -16,6 +16,8 @@ class Users extends StorageNode {
 	const USER_LEVEL_1 = 1; //米商
 	const USER_LEVEL_2 = 2; //合伙人
 	
+	static $allowed_leader_level = [1,2,3]; //运行的上级级别
+	
 	protected static function meta() {
 		return array(
 				'table' => '`shp_users`',
@@ -410,6 +412,27 @@ class Users extends StorageNode {
 		}
 		return empty($ret) ? [] : $ret;
 	}
+	
+	/**
+	 * 获取上级User ID
+	 * @param integer $user_id
+	 * @return integer
+	 */
+	static function getParentId($user_id) {
+		$parent_uid = D()->from(self::table())->where("user_id=%d",$user_id)->select("parent_id")->result();
+		return $parent_uid;
+	}
+	
+	/**
+	 * 获取用户nickname
+	 * @param integer $user_id
+	 * @return mixed
+	 */
+	static function getNick($user_id) {
+		$nick = D()->from(self::table())->where("user_id=%d",$user_id)->select("nick_name")->result();
+		return $nick;
+	}
+	
 }
  
 /*----- END FILE: class.Users.php -----*/
