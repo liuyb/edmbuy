@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title><?php echo $supported_paymode[$pay_mode]?> - 福小蜜</title>
+  <title><?php echo $supported_paymode[$pay_mode]?> - 益多米</title>
   <style type="text/css">html, body, div, p, span, em, strong, h1, h2, h3, h4, h5, h6, a, center, form, table { margin: 0;padding: 0;border: 0;font-size: 100%;font: inherit;vertical-align: baseline; } html {font-size: 62.5%;} #pay-msg{ padding: 10px;text-align: center;font-size: 16px;font-size: 1.6rem;color: #333; }</style>
   <script type="text/javascript">var back_url = '<?=$back_url?>';
   
