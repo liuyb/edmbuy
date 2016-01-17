@@ -22,6 +22,71 @@
 	<p><img src="/themes/mobiles/img/rice_06_2.png"></p>
 	<p><img src="/themes/mobiles/img/rice_04.png"></p>
 </div>
+
+<div class="list_tit_img"><img src="/themes/mobiles/img/rice_07.png"></div>
+
+<div class="rice_list_tjproduct" style="background:#fff;">
+	<div class="list_product_info index_product_info">
+		<ul>
+			<a href="http://m.edmbuy.com/item/1041">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1041_P_1452726608050.jpg" style="float:right">
+						<p class="list_table_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+						<p class="list_table_price"><span>￥118.00</span><b>￥135.00</b></p>
+					</div>
+				</li>
+			</a>
+			<a href="http://m.edmbuy.com/item/1010">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1008_P_1452643503621.jpg" style="float:right">
+					
+						<p class="list_table_tit">浓桂园香金骏眉  高山种植纯绿色  四代工艺传承 （100g）</p>
+						<p class="list_table_price"><span>￥268.00</span><b>￥500.00</b></p>
+					</div>
+				</li>
+			</a>
+			<a href="http://m.edmbuy.com/item/1014">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1014_P_1452906851188.jpg" style="float:right">
+						<p class="list_table_tit">2016过年好礼健康养生天然硒米褚米</p>
+						<p class="list_table_price"><span>￥98.00</span><b>￥128.00</b></p>
+					</div>
+				</li>
+			</a>
+			<a href="http://m.edmbuy.com/item/1012">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1012_P_1452796547251.jpg" style="float:right">
+						<p class="list_table_tit">【抗癌之王】冷泥牌东北稻花香富硒绿色有机大米礼盒装</p>
+						<p class="list_table_price"><span>￥288.00</span><b>￥328.00</b></p>
+					</div>
+				</li>
+			</a>
+			<a href="http://m.edmbuy.com/item/1042">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+						<p class="list_table_tit">宁夏五谷合一粗粮杂粮米4斤装</p>
+						<p class="list_table_price"><span>￥98.00</span><b>￥112.00</b></p>
+					</div>
+				</li>
+			</a>
+			<a href="http://m.edmbuy.com/item/1045">
+				<li>
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1045_P_1452712649986.jpg" style="float:right">
+						<p class="list_table_tit">【钟橙 绿色放心品牌】橙赣南脐橙 家庭实惠装10斤装</p>
+						<p class="list_table_price"><span>￥88.00</span><b>￥108.00</b></p>
+					</div>
+				</li>
+			</a>
+		</ul>
+	</div><div class="clear"></div>
+</div>
+
 <!-- 
 <div class="list_tit_img"><img src="/themes/mobiles/img/rice_07.png"></div>
 <div class="rice_list_tjproduct">

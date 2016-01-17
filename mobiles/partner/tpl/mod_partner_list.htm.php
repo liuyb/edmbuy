@@ -14,7 +14,7 @@
 <script>show_topnav($('#forTopnav').html())</script>
 
 <div class="copartner_list">
-	<table cellspacing="0" cellpadding="0" class="copartner_list_table">
+	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
 </div>
 <div id="pageContainer"><a href="#" onclick="pulldata(this);">下拉显示...</a></div>

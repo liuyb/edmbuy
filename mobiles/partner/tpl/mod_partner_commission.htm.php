@@ -15,11 +15,10 @@
 </div>
 
 <div class="broke_list" id="list1">
-	<?php if ($status == -1):?>
-	<div class="wsx_broke_ts">
+	<div class="wsx_broke_ts" style="display:none;">
 		<p class="wsx_ts_tit">怎样才能生效?</p>
 	</div>
-	<?php endif;?>
+	
 	<div class="broke_tab">
 		<table cellspacing="0" cellpadding="0" class="broke_table" style="border-collapse:inherit">
 			<tr>
@@ -77,12 +76,20 @@
 var variable = {};
 variable.status = "<?=$status ?>";
 //切换
+if(variable.status == -1){
+	$(".wsx_broke_ts").show();
+}
 function showByStatus(obj, status){
 	if($(obj).hasClass("broke_on")){
 		return;
 	}
 	$(".broke li").removeClass("broke_on");
 	$(obj).addClass("broke_on");
+	if(status == -1){
+		$(".wsx_broke_ts").show();
+	}else{
+		$(".wsx_broke_ts").hide();
+	}
 	variable.status = status; 
 	getPageData(1, 1, false);
 }

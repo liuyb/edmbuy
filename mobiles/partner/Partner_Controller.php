@@ -58,6 +58,7 @@ class Partner_Controller extends MobileController {
 	public function partner_list(Request $request, Response $response)
 	{
 	    $this->v->set_tplname('mod_partner_list');
+	    $this->nav_no = 0;
 	    $this->topnav_no = 1;
 	    if ($request->is_hashreq()) {
 	        $level = $_REQUEST['level'];

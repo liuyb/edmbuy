@@ -2285,8 +2285,11 @@ a.ph_btn{
   line-height: 40px;
 }
 .copartner_list{
-  background:#fff;
   margin-bottom:10px;
+}
+.copartner_list_table td{
+	border-bottom:10px solid #eee;
+	background:#fff;
 }
 .copartner_list_table{
   width:100%;
@@ -2322,7 +2325,6 @@ a.ph_btn{
   width:70%;
 }
 .list_td3{
-  position: relative;
   width:20%;
 }
 .list_address{
@@ -2336,16 +2338,16 @@ a.ph_btn{
   display: block;
 }
 .td3_btn{
-  position: absolute;
   height: 27px;
   width: 57px;
   color: #fefefe;
   background: #ff6d14;
   border-radius: 4px;
   vertical-align: top;
-  top: 17px;
-  right: 12px;
+  margin-top: -12px;
+  margin-right: 12px;
   cursor:pointer; 
+  border:0;
 }
 .add_friend{
   border-radius: 4px;
@@ -2967,7 +2969,7 @@ td.cash_td2 img {
   margin-right:8px; 
 }
 .list_tit_img{
-  margin:20px 12px;
+  margin:20px 12px 5px;
   text-align:center;
 }
 .list_tit_img img{
@@ -3331,3 +3333,8 @@ td.cash_td2 img {
 	width: 22px;	
 	margin:0 5px;
 }
+#pageContainer{
+	text-align:center;
+}
+
+
