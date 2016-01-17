@@ -691,11 +691,9 @@ class Trade_Controller extends MobileController {
         }
       }
       $order_info = $exOrder->to_array(true);
-      trace_debug('order_topay_order_info', $order_info);
       
       if ('wxpay'==$pay_mode) {
         $jsApiParams = Wxpay::unifiedOrder($order_info, $user->openid);
-        $jsApiParams = '';
         $this->v->assign('jsApiParams', $jsApiParams);
       }
       

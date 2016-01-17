@@ -116,7 +116,7 @@ class Order extends StorageNode{
     /**
      * 插入订单动作日志
      */
-    static function order_action_log($order_id, Array $insert_data) {
+    static function action_log($order_id, Array $insert_data) {
     	if (empty($order_id)) return false;
     	$oinfo = D()->get_one("SELECT `order_id`,`order_status`,`shipping_status`,`pay_status` FROM ".self::table()." WHERE `order_id`=%d", $order_id);
     	$init_data = [
@@ -131,7 +131,7 @@ class Order extends StorageNode{
     	];
     	$insert_data = array_merge($init_data, $insert_data);
     	 
-    	$rid = D()->insert(OrderItems::table(), $insert_data, true);
+    	$rid = D()->insert(OrderAction::table(), $insert_data);
     	return $rid;
     }
     
@@ -157,7 +157,7 @@ class Order extends StorageNode{
     		}
     
     		//写order_action的日志
-    		self::order_action_log($order_id, ['action_note'=>'用户取消']);
+    		self::action_log($order_id, ['action_note'=>'用户取消']);
     
     		return true;
     	}
@@ -180,7 +180,7 @@ class Order extends StorageNode{
     	if (D()->affected_rows()==1) {
     
     		//写order_action的日志
-    		self::order_action_log($order_id, ['action_note'=>'用户确认收货']);
+    		self::action_log($order_id, ['action_note'=>'用户确认收货']);
     
     		return true;
     	}

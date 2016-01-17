@@ -178,7 +178,7 @@ class Cart extends StorageNode {
 			}
 			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
-				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, false)) {
+				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, $is_immediate ? true : false)) {
 					$ret['code'] = $cart_rec_id;
 					$ret['added_num'] = $num;
 				}

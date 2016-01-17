@@ -28,7 +28,7 @@ class UserCommision extends StorageNode {
 						'order_unick'  => 'order_unick',
 						'order_id'     => 'order_id',
 						'order_sn'     => 'order_sn',
-						'order_amount	'=> 'order_amount',
+						'order_amount' => 'order_amount',
 						'commision'    => 'commision',
 						'use_ratio'    => 'use_ratio',
 						'paid_time'    => 'paid_time',
@@ -85,25 +85,32 @@ class UserCommision extends StorageNode {
 				$upUC->use_ratio    = self::$share_ratio[$parent_level];
 				$upUC->paid_time    = $exOrder->pay_time;
 				$upUC->save(Storage::SAVE_INSERT);
+				//trace_debug('UserCommisionUC', $upUC);
 				
 				//2级
 				$parent_level = 2;
-				$upUC->id = NULL;
-				$upUC->user_id      = Users::getParentId($upUC->user_id);
-				$upUC->parent_level = $parent_level;
-				$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
-				$upUC->use_ratio    = self::$share_ratio[$parent_level];
-				$upUC->save(Storage::SAVE_INSERT);
-				
-				//3级
-				$parent_level = 3;
-				$upUC->id = NULL;
-				$upUC->user_id      = Users::getParentId($upUC->user_id);
-				$upUC->parent_level = $parent_level;
-				$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
-				$upUC->use_ratio    = self::$share_ratio[$parent_level];
-				$upUC->save(Storage::SAVE_INSERT);
-				
+				$parent_id    = Users::getParentId($upUC->user_id);
+				if ($parent_id) {
+					$upUC->id = NULL;
+					$upUC->user_id      = $parent_id;
+					$upUC->parent_level = $parent_level;
+					$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
+					$upUC->use_ratio    = self::$share_ratio[$parent_level];
+					$upUC->save(Storage::SAVE_INSERT);
+					
+					//3级
+					$parent_level = 3;
+					$parent_id    = Users::getParentId($upUC->user_id);
+					if ($parent_id) {
+						$upUC->id = NULL;
+						$upUC->user_id      = $parent_id;
+						$upUC->parent_level = $parent_level;
+						$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
+						$upUC->use_ratio    = self::$share_ratio[$parent_level];
+						$upUC->save(Storage::SAVE_INSERT);
+					}
+				}
+								
 			}
 			
 			

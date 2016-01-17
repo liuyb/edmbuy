@@ -76,7 +76,7 @@ class Wxpay_Controller extends Controller {
             'pay_status'     => PS_PAYED,
             'pay_time'       => simphp_gmtime($time_end),
             'money_paid'     => $pay_log['order_amount'],
-            'order_amount'   => 0,
+            'order_amount'   => 0, //将order_amount设为0
             'pay_data2'      => json_encode($data) //保存微信支付接口的返回
           ];
           D()->update(Order::table(), $updata, ['order_id'=>$order_id]);
@@ -85,7 +85,7 @@ class Wxpay_Controller extends Controller {
           UserCommision::generate($order_id);
         
           //记录订单操作记录
-          Order::order_action_log($order_id, ['action_note'=>'用户支付']);
+          Order::action_log($order_id, ['action_note'=>'用户支付']);
           
           //更新订单下所有商品的"订单数"
           Items::updateOrderCntByOrderid($order_id);
