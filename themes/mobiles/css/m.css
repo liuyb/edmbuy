@@ -114,6 +114,7 @@ a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
 .themore { -webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;margin:20px 0; }
 .themore a { display:block;height:45px;line-height:45px;color:#000;text-align:center;font-size:16px;font-size:1.6rem; }
 .clickbg { background: #e9e9e9; }
+button { border: none; }
 button.clicked,button.isclick,button.isclicked { background: #999; }
 
 /*主体页面dom*/
@@ -176,7 +177,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 .slider li img{width:100%;vertical-align:top;}
 .slider li span{ display:inline-block; height:25px; line-height:25px; font-size:13px;font-size:1.3rem; position:absolute; bottom:4px; left:0; width:100%; background:url(../img/bg.png) repeat; color:#fff; padding-left:5px;}
 .slinav{position:absolute;left:0;right:0;bottom:10px;width:100%;text-align:center;}
-.slinav a{width:8px;height:8px; margin:0 4px; line-height:99em;background:none; background:#fff;border:1px solid #fff;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;overflow:hidden;cursor:pointer;display:inline-block;*display:inline;*zoom:1;}
+.slinav a{width:5px;height:5px; margin:0 4px; line-height:99em;background:none; background:#fff;border:1px solid #fff;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;overflow:hidden;cursor:pointer;display:inline-block;*display:inline;*zoom:1;}
 .slinav a.active{background:#ea471e;border:1px solid #ea471e;}
 
 /*pop dialog*/
@@ -253,7 +254,6 @@ textarea.flexText,.flex-text-wrap pre {
 @media only screen and (min-width: 1025px){
 
 	body.SPA,#Mbody {width: 480px;margin: 0 auto;}
-  .swipe{min-height:300px;}
 
 }
 
@@ -2992,6 +2992,7 @@ td.cash_td2 img {
   background-size: cover;
 }
 .product_info_pc{
+	display: block;
   margin-left: 8px;
   margin-bottom: 8px;
 }
@@ -3207,6 +3208,7 @@ td.cash_td2 img {
   height:110px;
   vertical-align: top;
   border-bottom: 4px solid #eee;
+  position: relative;
 }
 .jx_year_tit{
   margin: 10px 0 10px -8px;
@@ -3253,6 +3255,24 @@ td.cash_td2 img {
 }
 .list_tab_left_border{
   border-left:4px solid #eee;
+}
+.jx_btn_new{
+  background: #ff6d14;
+  position: absolute;
+  right: 12px;
+  bottom: 20px;
+  width: 73px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  color:#fff;
+  font-size:14px;
+}
+.tit_list_img{
+  width:38px;
+  hegiht:29px;
+  margin:5px 12px;
+  float:right;
 }
 
 /*user setting css**/
