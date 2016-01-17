@@ -58,7 +58,7 @@ function required_uinfo_empty() {
 }
 </script>
 </head>
-<body>
+<body style="background: #eee;">
 <div id="Mtop"></div>
 <nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <div id="Mbody">

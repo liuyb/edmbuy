@@ -125,7 +125,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 #activePage.useNav-2,#loadingCover.useNav-2 { bottom: 100px; }
 #loadingCover { display:none;background:#fff;z-index:10000; }
 #activePage > .scrollArea {
-	background: #fff;
+	background: #eee;
 	position: absolute;
 	width: 100%;
 	overflow: auto;
@@ -1259,8 +1259,8 @@ a.h_btn{
 }
 .p_detail_tool div{
   display: inline-block;
-  height: 50px; 
-  line-height: 50px;  
+  height: 49px; 
+  line-height: 49px;  
   text-align: center; 
   position: relative;
 }
@@ -1521,10 +1521,8 @@ a.ph_btn{
   width: 50%; 
 }
 .c_name{
-  background: no-repeat 110px center;
   font-size:17px;
   color:#fff;
-  background-size: 22px;
 }
 .c_id{
   font-size:13px;
@@ -1559,11 +1557,8 @@ a.ph_btn{
   color:#333;
 }
 .refer_name{
-  background: no-repeat 90% center;
-  font-size:14px;
   color:#666;
-  padding:10px 40px 10px 0;
-  background-size: 22px;  
+  font-size:14px;
 }
 .refer_but{
   width:57px;
@@ -2221,7 +2216,7 @@ a.ph_btn{
   color: #999;
   height: 44px;
   padding-left:12px;
-  width:90%;
+  width:100%;
   border: none;
 }
 .wx_uploading {
@@ -3325,3 +3320,14 @@ td.cash_td2 img {
 	padding: 0;
 }
 /*user setting css**/
+
+.refer_img_ad{
+	vertical-align: text-top;
+	width: 22px;	
+	margin-left:15px;
+}
+.refer_img_ad1{
+	vertical-align: middle;
+	width: 22px;	
+	margin:0 5px;
+}

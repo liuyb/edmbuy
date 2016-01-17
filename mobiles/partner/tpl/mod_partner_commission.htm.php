@@ -83,7 +83,7 @@ function showByStatus(obj, status){
 	}
 	$(".broke li").removeClass("broke_on");
 	$(obj).addClass("broke_on");
-	variable.status = status;
+	variable.status = status; 
 	getPageData(1, 1, false);
 }
 

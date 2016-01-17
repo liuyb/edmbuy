@@ -7,8 +7,12 @@
 <?php else:?>
 <?php 
 function displayNickBg($level){
-    $bg = ($level == 1) ? "user_bg_sha" : (($level == 2) ? "user_bg_he" : "user_bg_ke");
+    $bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
     return $bg;
+}
+function displayNickImg($level){
+	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
+	return '/themes/mobiles/img/'.$bg;
 }
 ?>
 <a href="/user/setting">
@@ -22,7 +26,10 @@ function displayNickBg($level){
 	</div>
 	
 	<div class="mem_c">
-		<div class="c_name <?=displayNickBg($level) ?>"><?=$nickname ?></div>
+		<div class="c_name">
+			<span class="c_n_tit"><?=$nickname ?></span>
+			<img class="refer_img_ad" src="<?=displayNickImg($level)?>"/>
+		</div>
 		<div class="c_id">多米号：<?=$uid ?></div>
 	</div>
 	
@@ -32,15 +39,18 @@ function displayNickBg($level){
 	<div class="clear"></div>
 </div>
 </a>
+
 <?php if(isset($parentUid)):?>
 <div class="mem_refer">
 	<div class="refer_tit order_bg1">我的推荐人</div>
 	<div class="refer_info">
-		<span class="refer_name <?=displayNickBg($parentLevel) ?>"><?=$parentNickName ?></span>
+		<span class="refer_name"><?=$parentNickName ?></span>
+		<img class="refer_img_ad1" src=" <?=displayNickImg($level)?>"/>
 		<button class="refer_but">加好友</button>
 	</div>
 </div>
 <?php endif;?>
+
 <div style="height:10px;background:#eee"></div>
 
 <div class="mem_my_order">
@@ -110,13 +120,13 @@ $(".refer_but").on("click",function(){
 });
 
 $(function(){	
-	var length = $(".c_name").text().length;
+	var length = $(".c_n_tit").text().length;
 	var _length = $(".refer_name").text().length;
 	if(length >4){
-		 var str = $(".c_name").text();
+		 var str = $(".c_n_tit").text();
 		 var name = str.substr(1,4);
-		 $(".c_name").attr('title',str);
-		 $(".c_name").text(name + '...');
+		 $(".c_n_tit").attr('title',str);
+		 $(".c_n_tit").text(name + '...');
 	}
 	if(_length >3){
 		 var str = $(".refer_name").text();

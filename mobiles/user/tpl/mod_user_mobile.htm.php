@@ -10,9 +10,7 @@
 <div class="header">
 	个人信息
 <a href="javascript:history.back();" class="back"></a>
-<span style='float:right;'>
-    <input type='button' value='保存' onclick='saveUserMobile();'/>
-</span>
+<a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserMobile();'>保存</a>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>

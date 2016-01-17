@@ -13,6 +13,7 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
+
 <div style="background: #fff;">
 	<!-- <div class="person_head">
 		<span class="head_l">我的头像</span>

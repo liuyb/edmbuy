@@ -64,5 +64,8 @@ function fileupload(e){
     };
   	fr.readAsDataURL(file);
 }
+$(function(){
+	$("#activePage > .scrollArea").css('background','#fff')
+})
 </script>
 <?php endif;?>

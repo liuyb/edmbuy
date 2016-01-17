@@ -358,6 +358,10 @@ function immediate_buy(item_id, item_num) {
 		window.location.href = gourl;
 	});
 }
+
+$(function(){
+	$("#activePage > .scrollArea").css('background','#fff')
+})
 </script>
 
 <?php endif;?>
