@@ -17,39 +17,48 @@
 	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
 </div>
-<div id="pageContainer"><a href="#" onclick="pulldata(this);">下拉显示...</a></div>
+<div id="pageContainer" style="display: none;"><a href="#" onclick="pulldata(this);">下拉显示...</a></div>
 
 <?php include T('inc/add_as_friend');?>
 
 <script>
 	$().ready(function(){
-		getPageData(1);
+		getPageData(1, true);
 	});
 	
-	function getPageData(curpage){
+	function getPageData(curpage, isinit){
 		var level = "<?=$level ?>";
 		var url = "/partner/list/ajax?level="+level+"&curpage="+curpage;
 		F.get(url, null, function(data){
-			buildListHtml(data);
+			buildListHtml(data, isinit);
 			handleWhenHasNextPage(data, level);
 		});
 	}
 	
-	function buildListHtml(data){
-		if(!data){
+	function buildListHtml(data, isinit){
+		var table = $("table.copartner_list_table");
+		if(!data || !data.result){
+			var EMPTY_TR = $("<tr><td class=\"list_td1\" style='font-size:16px;text-align:center;'>暂无数据...</td></tr>");
+			table.append(EMPTY_TR);
 			return;
 		}
-		var table = $("table.copartner_list_table");
+		if(isinit){
+			if(table.html().length){
+				table.empty();
+			}
+		}
 		var html = "";
 		var result = data.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var item = result[i];
 			var logo = item.logo ? item.logo : "/themes/mobiles/img/mt.png";
+			var address = item.province+" "+item.city;
+			address = (item.province || item.city) ? address : "&nbsp;";
 			var bg = (item.level == 1) ? "user_bg_sha" : ((item.level == 2) ? "user_bg_he" : "user_bg_ke");
     		html += "<tr><td class=\"list_td1\"><img src=\""+logo+"\" class=\"list_img1\"></td>";
     		html += "<td class=\"list_td2\">";
     		html += "<span class=\"list_nickname "+bg+"\" >"+item.nickname+"</span>";
-    		html += "<span class=\"list_address\">"+item.province+" "+item.city+"</span>";
+    		html += "<span class=\"list_address\">"+address+"</span>";
     		html += "<span class=\"list_number\">";
     		html += "推荐人数：<span style=\"color:#ff6d14;margin-right:5px;\">"+item.childnum1+"</span>";
     		html += "上级：<span style=\"color:#ff6d14;\">"+item.parentnick+"</span>";
@@ -77,7 +86,7 @@
 	}
 	
 	function pulldata(obj){
-		getPageData($(obj).attr("curpage"), $(obj).attr("level"), true);
+		getPageData($(obj).attr("curpage"), false);
 	}
 </script>
 

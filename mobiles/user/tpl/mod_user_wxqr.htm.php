@@ -52,17 +52,24 @@ function fileupload(e){
     }
     var fr = new FileReader();
     fr.onload = function(ev) {
-    	var img = ev.target.result;
-    	F.post('/user/wxqr/update', {img:img}, function(ret){
-    		if(ret.flag=='SUC'){
-    			$("#wx_uploading").find("img").attr("src",ret.result+'?r='+Math.random());//强制清缓存
-    			window.location.href = '/user/setting';
-    		}else{
-    			alert(ret.errMsg);
-    		}
-    	});
+    	setTimeout(function(){
+    		postImage(ev);
+        }, 500);
     };
   	fr.readAsDataURL(file);
+}
+function postImage(ev){
+	var img = ev.target.result;
+	F.post('/user/wxqr/update', {img:img}, function(ret){
+		if(ret.flag=='SUC'){
+			$("#wx_uploading").find("img").attr("src",ret.result+'?r='+Math.random());//强制清缓存
+			setTimeout(function(){
+				window.location.href = '/user/setting';
+			}, 1000);
+		}else{
+			alert(ret.errMsg);
+		}
+	});
 }
 $(function(){
 	$("#activePage > .scrollArea").css('background','#fff')

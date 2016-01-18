@@ -64,7 +64,7 @@ class Partner_Controller extends MobileController {
 	        $level = $_REQUEST['level'];
 	        $levelCN = Partner_Model::TransLevelCN($level);
 	        $total = isset($_REQUEST['count']) ? $_REQUEST['count'] : 1;;
-            $this->v->assign("title", $levelCN."(".$total.")");
+            $this->v->assign("title", $levelCN."(".$total."人)");
             $this->v->assign("level", $level);
 	    }
 	
@@ -126,9 +126,7 @@ class Partner_Controller extends MobileController {
 	    $needtotal = isset($_REQUEST['needtotal']) ? $_REQUEST['needtotal'] : 0;
         $pager = new PagerPull($curpage, NULL);
         $pager->needtotal= $needtotal;
-        if(Partner::COMMISSION_INVALID == $status){
-            Partner_Model::showCurLevelCommistionList($level, $status, $pager);
-        }
+        Partner_Model::showCurLevelCommistionList($level, $status, $pager);
         $pageJson = $pager->outputPageJson();
         $ret = ["result" => $pager->result,
                 "otherMap" => $pager->otherMap
