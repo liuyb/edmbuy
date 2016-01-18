@@ -52,7 +52,7 @@
 				<h1>￥0.00</h1>
 			</li>
 			</a>
-			<a href="/partner/commission?status=-1">
+			<a href="<?php echo U('partner/commission','status=0')?>">
 			<li>
 				<p>未生效收入</p>
 				<h1 class="money_noforce" id="inactiveIncome">￥0.00</h1>

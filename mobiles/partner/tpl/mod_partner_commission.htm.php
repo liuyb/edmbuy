@@ -8,7 +8,7 @@
 <div class="header broke">
 	<ul>
 		<li class="<?php if ($status == 1):?>broke_on<?php endif;?>" id="broke1" onclick="showByStatus(this, 1)">已生效</li>
-		<li class="<?php if ($status == -1):?>broke_on<?php endif;?>" style="margin-left:20%;" id="broke2" onclick="showByStatus(this, -1)">未生效</li>
+		<li class="<?php if ($status == 0):?>broke_on<?php endif;?>" style="margin-left:20%;" id="broke2" onclick="showByStatus(this, 0)">未生效</li>
 		<a href="javascript:history.back();" class="back"></a>
 		<span class="broke_line"></span>
 	</ul>
@@ -22,13 +22,13 @@
 	<div class="broke_tab">
 		<table cellspacing="0" cellpadding="0" class="broke_table" style="border-collapse:inherit">
 			<tr>
-				<td class="broke_tab_on" id="tab1" onclick="showByLevel(this, 1)">
+				<td class="broke_tab_on" data-level="1" id="tab1" onclick="showByLevel(this, 1)">
 					一层用户
 				</td>
-				<td class="" id="tab2" onclick="showByLevel(this, 2)">
+				<td class="" id="tab2" data-level="2" onclick="showByLevel(this, 2)">
 					二层用户
 				</td>
-				<td class="" id="tab3" onclick="showByLevel(this, 3)" style="border-right:0;">
+				<td class="" id="tab3" data-level="3" onclick="showByLevel(this, 3)" style="border-right:0;">
 					三层用户
 				</td>
 			</tr>
@@ -76,7 +76,7 @@
 var variable = {};
 variable.status = "<?=$status ?>";
 //切换
-if(variable.status == -1){
+if(variable.status == 0){
 	$(".wsx_broke_ts").show();
 }
 function showByStatus(obj, status){
@@ -85,13 +85,18 @@ function showByStatus(obj, status){
 	}
 	$(".broke li").removeClass("broke_on");
 	$(obj).addClass("broke_on");
-	if(status == -1){
+	if(status == 0){
 		$(".wsx_broke_ts").show();
 	}else{
 		$(".wsx_broke_ts").hide();
 	}
-	variable.status = status; 
-	getPageData(1, 1, false);
+	variable.status = status;
+	var level = 1;
+	var levelObj = $(".broke_table").find(".broke_tab_on");
+	if(levelObj && levelObj.length){
+		level = levelObj.attr("data-level");
+	}
+	getPageData(1, level, false);
 }
 
 function showByLevel(obj, level){
@@ -154,10 +159,12 @@ function renderDataRegion(data, isPullData){
     	countContainer.find(".totalNum").text(otherMap ? otherMap['totalNum'] : "0");
 	}
 	var result = data.result;
+	var tableContainer = $(".sx_table_list");
 	if(!result ||!result.length){
+		tableContainer.find("tr:eq(0)").hide();
 		return;
 	}
-	var tableContainer = $(".sx_table_list");
+	tableContainer.find("tr:eq(0)").show();
 	var TR = "";
 	for(var i = 0,len=result.length; i < len; i++){
 		var row = result[i];

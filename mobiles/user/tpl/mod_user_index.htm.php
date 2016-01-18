@@ -27,7 +27,7 @@ function displayNickImg($level){
 	
 	<div class="mem_c">
 		<div class="c_name">
-			<span class="c_n_tit"><?=$nickname ?></span>
+			<span class="c_n_tit" style="color:#fff;"><?=$nickname ?></span>
 			<img class="refer_img_ad" src="<?=displayNickImg($level)?>"/>
 		</div>
 		<div class="c_id">多米号：<?=$uid ?></div>
@@ -45,7 +45,7 @@ function displayNickImg($level){
 	<div class="refer_tit order_bg1">我的推荐人</div>
 	<div class="refer_info">
 		<span class="refer_name"><?=$parentNickName ?></span>
-		<img class="refer_img_ad1" src=" <?=displayNickImg($level)?>"/>
+		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($level)?>"/>
 		<button class="refer_but">加好友</button>
 	</div>
 </div>
