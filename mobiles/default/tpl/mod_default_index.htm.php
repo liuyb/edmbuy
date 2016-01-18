@@ -122,7 +122,7 @@ $(function(){
 <a href="http://m.edmbuy.com/item/1047"><img src="/themes/mobiles/img/y_jiu.png" style="max-width:100%;"></a>
 </div>
 
-<div style="margin:10px 0 60px 0;">
+<div style="margin:10px 0 0px 0;">
 	<div class="por_list_title">
 		<span class="tit_left"></span> 年货精选
 	</div>
