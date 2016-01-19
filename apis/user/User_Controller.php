@@ -193,6 +193,66 @@ class User_Controller extends Controller {
 		throw new ApiResponse($res);
 	}
 	
+	/**
+	 * default action 'activate_sync'
+	 *
+	 * @param Request  $request
+	 * @param Response $response
+	 */
+	public function raw_sync(Request $request, Response $response)
+	{
+		Api::append_codes([
+			'4000' => '\'app_userid\' empty',
+			'4003' => '\'mobile\' invalid',
+			'4004' => '\'logo\' invalid',
+			'5000' => 'db op fail',
+		]);
+	
+		$app_userid           = intval($request->app_userid);
+		$app_mobile           = $request->app_mobile;
+		$app_regtime          = $request->app_regtime;
+		$app_nick             = $request->app_nick             ? : '';
+		$app_logo             = $request->app_logo             ? : '';
+		$app_business_id      = $request->app_business_id      ? : '';
+		$app_business_time    = $request->app_business_time    ? : '';
+		$app_openid           = $request->app_openid           ? : '';
+		$parent_userid        = $request->parent_userid        ? intval($request->parent_userid) : 0;
+		$parent_mobile        = $request->parent_mobile        ? : '';
+		$parent_regtime       = $request->parent_regtime       ? : '';
+		$parent_nick          = $request->parent_nick          ? : '';
+		$parent_logo          = $request->parent_logo          ? : '';
+		$parent_business_id   = $request->parent_business_id   ? : '';
+		$parent_business_time = $request->parent_business_time ? : '';
+		$parent_openid        = $request->parent_openid        ? : '';
+		
+		if (empty($app_userid)) {
+			throw new ApiException(4000);
+		}
+		
+		$ret = User_Model::saveAppUser($this->genAppData($app_userid, $app_mobile, $app_openid, $app_regtime, $app_nick, $app_logo, $app_business_id, $app_business_time, $parent_userid));
+		if ($ret && $parent_userid) {
+			User_Model::saveAppUser($this->genAppData($parent_userid, $parent_mobile, $parent_openid, $parent_regtime, $parent_nick, $parent_logo, $parent_business_id, $parent_business_time));
+		}
+		
+		$res = ['app_userid'=>$app_userid, 'app_mobile'=>$app_mobile];
+		throw new ApiResponse($res);
+	}
+	
+	private function genAppData($userid, $mobile, $openid, $regtime, $nick, $logo, $business_id, $business_time, $parent_userid = 0)
+	{
+		return [
+				'userid'      => $userid,
+				'mobile'      => $mobile,
+				'openid'      => $openid,
+				'regtime'     => $regtime,
+				'nick'        => $nick,
+				'logo'        => $logo,
+				'business_id' => $business_id,
+				'business_time' => $business_time,
+				'parent_userid' => $parent_userid,
+		];
+	}
+	
 }
 
 /*----- END FILE: User_Controller.php -----*/

@@ -23,7 +23,7 @@
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><a href="<?=$kefu_link?>" <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
-	<a href="<?php /*echo U('trade/cart/list')*/?>">
+	<a href="<?php echo U('trade/cart/list')?>">
 		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display:none;">0</span></div>
 	</a>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
@@ -47,7 +47,7 @@
 			</div>
 			<div class="p_cart_hr fl">
 				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?=$item->shop_price?>"><?=$item->shop_price?></span></div>
-				<div class="p_hr_stock">库存<?=$item->item_number?>件</div>
+				<div class="p_hr_stock">库存<span id="stock-num"><?=$item->item_number?></span>件</div>
 				<div class="p_hr_select <?php if(empty($attr_grp)):?>hide<?php endif;?>">已选：<span id="product_select">"蓝色","45"</span></div>
 			</div>
 		</div>
@@ -356,6 +356,27 @@ function immediate_buy(item_id, item_num) {
 		else gourl += '&';
 		gourl += 'cart_rids='+ret.code+'&t='+ret.ts;
 		window.location.href = gourl;
+	});
+}
+//加入购物车
+function add_to_cart(item_id, item_num) {
+	var _self = add_to_cart;
+	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667) return;
+	if (typeof (_self.ajaxing)=='undefined') {
+		_self.ajaxing = 0;
+	}
+	if (_self.ajaxing) return;
+	_self.ajaxing = 1;
+	F.post('<?php echo U('trade/cart/add')?>',{item_id:item_id,item_num:item_num},function(ret){
+		_self.ajaxing = 0;
+		if (ret.code > 0) {
+			var old_stock = parseInt($('#stock-num').text());
+			old_stock -= ret.added_num;
+			$('#stock-num').text(old_stock);
+			myAlert(ret.msg);
+		}else{
+			myAlert(ret.msg);
+		}
 	});
 }
 

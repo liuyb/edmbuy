@@ -65,6 +65,7 @@ class Users extends StorageNode {
 						'parentid'    => 'parent_id',
 						'parentnick'  => 'parent_nick',
 						'parentunionid' => 'parent_unionid',
+						'appuserid'   => 'app_userid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
 						'childnum1'   => 'childnum_1',
