@@ -25,6 +25,8 @@ class User_Controller extends Controller {
 			'5000' => 'db op fail',
 		]);
 		
+		throw new ApiException(1401); //屏蔽该接口
+		
 		$unionId      = $request->unionid;
 		$parentUnid   = $request->parent_id    ? : ''; //是一个 parent unionid
 		$regtime      = $request->regtime      ? : simphp_time();
@@ -123,6 +125,8 @@ class User_Controller extends Controller {
 			'4004' => '\'logo\' invalid',
 			'5000' => 'db op fail',
 		]);
+		
+		throw new ApiException(1401); //屏蔽该接口
 		
 		$unionId      = $request->unionid;
 		$parentUnid   = $request->parent_id    ? : ''; //是一个 parent unionid
