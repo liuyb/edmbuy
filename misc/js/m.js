@@ -227,6 +227,13 @@
 		$('img',wrap).attr('data-loaded',0).load(function(){ $(this).attr('data-loaded',1); });
 		F.set_scroller(false,100);
 	};
+	//weixin on ready
+	F.onWxReady = function(fn) {
+		F.event.on('wxReady',fn);
+	};
+	F._onWxReady= function() {
+		F.event.execEvent('wxReady',this);
+	};
 	
 	//获取内容包裹元素
 	F.getContainerEle = function() {

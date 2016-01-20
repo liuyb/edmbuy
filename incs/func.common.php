@@ -697,7 +697,7 @@ function weixin_js() {
 
 	$wxapi_list= ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','previewImage'];
 
-	return $wx->jssdk->js($wxapi_list, "wxData.shareinfo.refresh();");
+	return $wx->jssdk->js($wxapi_list, "wxData.shareinfo.refresh();F._onWxReady();");
 }
 
 /**
