@@ -216,6 +216,7 @@ class User_Controller extends Controller {
 		$app_business_id      = $request->app_business_id      ? : '';
 		$app_business_time    = $request->app_business_time    ? : '';
 		$app_openid           = $request->app_openid           ? : '';
+		$app_qrcode           = $request->app_qrcode           ? : '';
 		$parent_userid        = $request->parent_userid        ? intval($request->parent_userid) : 0;
 		$parent_mobile        = $request->parent_mobile        ? : '';
 		$parent_regtime       = $request->parent_regtime       ? : '';
@@ -224,21 +225,23 @@ class User_Controller extends Controller {
 		$parent_business_id   = $request->parent_business_id   ? : '';
 		$parent_business_time = $request->parent_business_time ? : '';
 		$parent_openid        = $request->parent_openid        ? : '';
+		$parent_qrcode        = $request->parent_qrcode        ? : '';
 		
 		if (empty($app_userid)) {
 			throw new ApiException(4000);
 		}
 		
-		$ret = User_Model::saveAppUser($this->genAppData($app_userid, $app_mobile, $app_openid, $app_regtime, $app_nick, $app_logo, $app_business_id, $app_business_time, $parent_userid));
+		$synctimes = 0;
+		$ret = User_Model::saveAppUser($this->genAppData($app_userid, $app_mobile, $app_openid, $app_regtime, $app_nick, $app_logo, $app_qrcode, $app_business_id, $app_business_time, $parent_userid), $synctimes);
 		if ($ret && $parent_userid) {
-			User_Model::saveAppUser($this->genAppData($parent_userid, $parent_mobile, $parent_openid, $parent_regtime, $parent_nick, $parent_logo, $parent_business_id, $parent_business_time));
+			User_Model::saveAppUser($this->genAppData($parent_userid, $parent_mobile, $parent_openid, $parent_regtime, $parent_nick, $parent_logo, $parent_qrcode, $parent_business_id, $parent_business_time));
 		}
 		
-		$res = ['app_userid'=>$app_userid, 'app_mobile'=>$app_mobile];
+		$res = ['app_userid'=>$app_userid, 'app_mobile'=>$app_mobile, 'synctimes'=>$synctimes];
 		throw new ApiResponse($res);
 	}
 	
-	private function genAppData($userid, $mobile, $openid, $regtime, $nick, $logo, $business_id, $business_time, $parent_userid = 0)
+	private function genAppData($userid, $mobile, $openid, $regtime, $nick, $logo, $qrcode, $business_id, $business_time, $parent_userid = 0)
 	{
 		return [
 				'userid'      => $userid,
@@ -247,6 +250,7 @@ class User_Controller extends Controller {
 				'regtime'     => $regtime,
 				'nick'        => $nick,
 				'logo'        => $logo,
+				'qrcode'      => $qrcode,
 				'business_id' => $business_id,
 				'business_time' => $business_time,
 				'parent_userid' => $parent_userid,
