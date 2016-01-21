@@ -105,10 +105,8 @@ class UpdateUserBaseDataJob extends CronJob {
      */
     private function get_notsynced_tymuser_total() {
         $sql = "select count(*) from tb_tym_user 
-                where exists (
-                	select 1 from (
-                		select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
-                    ) t where t.mobile_phone = mobile
+                where mobile in (
+					select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
                 )";
         return D()->query($sql)->result();
     }
@@ -119,10 +117,8 @@ class UpdateUserBaseDataJob extends CronJob {
      */
     private function get_notsynced_tymuser_list($start, $limit) {
         $sql = "select userid,nick,logo,qrcode,business_id,business_time,mobile from tb_tym_user 
-                where exists (
-                	select 1 from (
-                		select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
-                    ) t where t.mobile_phone = mobile
+                where mobile in (
+					select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
                 ) limit %d,%d";
         return D()->query($sql, $start, $limit)->fetch_array_all();
     }

@@ -60,21 +60,18 @@ class UpdateUserChildNumJob extends CronJob {
         childnum_2 = (
             select t.c from
             (
-                SELECT count(1) as c FROM edmbuy.shp_users u where
-                exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = $uid and u.`parent_id` = `user_id`)
+                SELECT count(1) as c FROM edmbuy.shp_users u where 
+                u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = $uid)
             ) t
         ),
         childnum_3 = (
             select t.c from
             (
-                SELECT count(1) as c FROM edmbuy.shp_users tu where
-                exists (
-                select 1 from
-                (
-                SELECT user_id FROM edmbuy.shp_users su where
-                exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = $uid and su.`parent_id` = `user_id`)
-                )  tp where tu.`parent_id` = tp.`user_id`
-                )
+                SELECT count(1) as c FROM edmbuy.shp_users tu where 
+                 tu.parent_id in (
+                		SELECT user_id FROM edmbuy.shp_users su where
+                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = $uid)
+                    ) 
             ) t
         )
         where user_id = $uid";
