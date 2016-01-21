@@ -268,6 +268,7 @@ textarea.flexText,.flex-text-wrap pre {
 .follow-box .c1 { float: left;vertical-align: top; }
 .follow-box .c3 { float: right;line-height:50px; }
 .follow-box img { height: 100%; }
+.follow-box p { color: #fff; }
 .follow-box .emp { font-size: 16px;font-size:1.6rem;line-height: 25px;margin-bottom:2px; }
 .follow-box button { font-size:14px;font-size:1.4rem;border:1px solid #1fa761;background:#1fa761;color:#fff;border-radius:4px;padding:6px 20px;cursor:pointer; }
 

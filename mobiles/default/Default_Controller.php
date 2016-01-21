@@ -212,6 +212,19 @@ class Default_Controller extends MobileController {
   	$this->v->assign('refer', $refer);
   	
   	$appUser = TymUser::load($cid);
+  	if (!$appUser->is_exist()) { //本地库不存在，需要查甜玉米的接口
+  		//TODO 查询甜玉米的接口
+  		$ret = TymUser::query($cid);
+  		if (!empty($ret)) { //有可能调用失败
+  			$parent_userid = isset($ret['reguser']) && isset($ret['reguser']['userid']) ? $ret['reguser']['userid'] : 0;
+  			$state = TymUser::saveUser(TymUser::composeData($ret['userid'], $ret['mobile'], $ret['openid'], $ret['regtime'], $ret['nick'], $ret['picUrl'], $ret['qrcode'], $ret['business_id'], $ret['business_time'], $parent_userid));
+  			if ($state && $parent_userid) {
+  				$regu = $ret['reguser'];
+  				TymUser::saveUser(TymUser::composeData($regu['userid'], $regu['mobile'], $regu['openid'], $regu['regtime'], $regu['nick'], $regu['picUrl'], $regu['qrcode'], $regu['business_id'], $regu['business_time']));
+  			}
+  			$appUser->refresh(); //刷新一次数据
+  		}
+  	}
   	$this->v->assign_by_ref('appUser', $appUser);
   	
   	if ($appUser->synctimes>0) {
