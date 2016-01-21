@@ -105,11 +105,11 @@
 		</tr>
 		<tr>	
 			<td class="state_comment_info">益多米推荐人：</td>
-			<td class="three_weight"><?=$appParent->nick?></td>
+			<td class="three_weight"><?=$usrParent->nickname?></td>
 		</tr>
 		<tr>	
 			<td class="state_comment_info">推荐人手机号：</td>
-			<td class="three_weight"><?=$appParent->mobile?></td>
+			<td class="three_weight"><?=$usrParent->mobilephone?></td>
 		</tr>
 	</table>
 	<p class="state_comment_ts" style="margin:34px 0 30px;text-align:center;">恭喜你，你的益多米账号已激活。</p>

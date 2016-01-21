@@ -103,8 +103,8 @@ append_to_body($('#forBody').html());
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <?php foreach ($galleries AS $g):?>
-    <li><a href="javascript:;"><img src="<?=$g->img_url?>" alt="" /></a></li>
+    <?php $i=0; foreach ($galleries AS $g):?>
+    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?=$g->img_url?>" alt="" /></a></li>
     <?php endforeach;?>
     </ul>
     <div id="slinav" class="slinav clearfix">

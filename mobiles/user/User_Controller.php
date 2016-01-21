@@ -328,14 +328,18 @@ class User_Controller extends MobileController {
     	$upUser->authmethod = $auth_method;
     	
     	//检查spm
-    	$parent_id = 0;
+    	$parent_id   = 0;
+    	$parent_nick = '';
     	$spm = Spm::check_spm($refer);
     	if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
-    		if (Users::id_exists($matchspm[1])) {
-    			$parent_id = $matchspm[1];
+    		$pUser = Users::load($matchspm[1]);
+    		if ($pUser->is_exist()) {
+    			$parent_id   = $pUser->id;
+    			$parent_nick = $pUser->nickname;
     		}
     	}
-    	$upUser->parentid = $parent_id;
+    	$upUser->parentid   = $parent_id;
+    	$upUser->parentnick = $parent_nick;
     	
     	$upUser->save(Storage::SAVE_INSERT); //先快速保存insert
     	$upUser = new Users($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
