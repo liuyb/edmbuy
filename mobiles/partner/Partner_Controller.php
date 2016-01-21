@@ -50,6 +50,10 @@ class Partner_Controller extends MobileController {
         $this->nav_no    = 1;
         
         if ($request->is_hashreq()) {
+            global $user;
+            $this->v->assign("childnum1", $user->childnum1);
+            $this->v->assign("childnum2", $user->childnum2);
+            $this->v->assign("childnum3", $user->childnum3);
         }
         
         throw new ViewResponse($this->v);
