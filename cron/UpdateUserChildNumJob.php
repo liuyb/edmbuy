@@ -16,7 +16,7 @@ class UpdateUserChildNumJob extends CronJob {
      */
     private function update_user_childnum(){
         $start = 0;
-        $limit = 10;
+        $limit = 10000;
         $total_record = $this->get_user_count();
         $this->log('total user record: '.$total_record);
         $user_list = $this->get_userid_list($start, $limit);
