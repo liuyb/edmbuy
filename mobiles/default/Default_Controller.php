@@ -214,6 +214,10 @@ class Default_Controller extends MobileController {
   	$appUser = TymUser::load($cid);
   	$this->v->assign_by_ref('appUser', $appUser);
   	
+  	if ($appUser->synctimes>0) {
+  		$response->redirect(U('app_doactivate',['cid'=>$cid, 'refer'=>$refer]));
+  	}
+  	
   	throw new ViewResponse($this->v);
   }
   
@@ -237,22 +241,29 @@ class Default_Controller extends MobileController {
   	}
   	else {
   		global $user;
-  		$situation = 1; //1: 本人和上级都已激活益多米; 2: 本人激活到益多米，但上级未激活; 3: 本身是益多米的用户
-  		if ($user->from != TymUser::APP_ID) {
-  			$situation = 3;
-  		}
+  		$situation = 1; //1: 本人和上级都已激活益多米; 2: 本人激活到益多米，但上级未激活; 3: 已经是益多米的用户
   		
   		$appUser = TymUser::load($cid);
   		$appParent = new TymUser();  //主要便于对象操作
   		if (!$appUser->is_exist()) { //本地库不存在，需要查甜玉米的接口
   			//TODO 查询甜玉米的接口
-  			$tym_url = sprintf(TymUser::QUERY_URL, $cid);
+  			$ret = TymUser::query($cid);
+  			if (!empty($ret)) { //有可能调用失败
+  				$parent_userid = isset($ret['reguser']) && isset($ret['reguser']['userid']) ? $ret['reguser']['userid'] : 0;
+  				$state = TymUser::saveUser(TymUser::composeData($ret['userid'], $ret['mobile'], $ret['openid'], $ret['regtime'], $ret['nick'], $ret['picUrl'], $ret['qrcode'], $ret['business_id'], $ret['business_time'], $parent_userid));
+  				if ($state && $parent_userid) {
+  					$regu = $ret['reguser'];
+  					TymUser::saveUser(TymUser::composeData($regu['userid'], $regu['mobile'], $regu['openid'], $regu['regtime'], $regu['nick'], $regu['picUrl'], $regu['qrcode'], $regu['business_id'], $regu['business_time']));
+  				}
+  				$appUser->refresh(); //刷新一次数据
+  			}
   		}
   		if (!$appUser->is_exist()) { //可能查询接口后仍然不存在，则提示错误
-  			throw new ViewException($this->v, '当前用户不是甜玉米用户，不能平移');
+  			throw new ViewException($this->v, '当前用户不是甜玉米用户，不能平移，请重新登录甜玉米再试');
   		}
   		
-  		if ($appUser->synctimes > 0) { //自己已同步过，则查询上级是否已同步
+  		if ($appUser->synctimes > 0 && $user->mobilephone!='' && $user->appuserid!='') { //自己已同步过，则查询上级是否已同步
+  			$situation = 3;
   			$appParent = TymUser::load($appUser->parent_userid);
   			if (0==$appParent->synctimes) { //上级没同步过，则提醒上级
   				$situation = 2;
@@ -285,6 +296,7 @@ class Default_Controller extends MobileController {
   			$usrParent = Users::load_by_mobile($appParent->mobile); //这时只能通过手机号来确认上级
   			$now = simphp_time();
   			$situation = 3;
+  			$can_update_child = true;
   			if ($now < strtotime(TymUser::MIGRATE_DEADLINE)) { //在封闭期内，则完全同步上下级
   				if ($usrParent->is_exist()) { //上级存在，说明上级已经激活同步
   					$upUser->parentid = $usrParent->uid;
@@ -304,21 +316,25 @@ class Default_Controller extends MobileController {
   						//TODO 提醒上级逻辑
   					}
   				}
+  				else {
+  					$can_update_child = false;
+  				}
   			}
   			
   			//保存平移信息
   			$upUser->save(Storage::SAVE_UPDATE);
   			
   			//更新自身下级的上级为自己
-  			$sql = "UPDATE ".Users::table()." SET `parent_id`=%d WHERE `app_userid` IN (SELECT `userid` FROM ".TymUser::table()." WHERE `parent_userid`=%d)";
-  			D()->query($sql, $user->uid, $appUser->userid);
+  			if ($can_update_child) {
+  				$sql = "UPDATE ".Users::table()." SET `parent_id`=%d WHERE `app_userid` IN (SELECT `userid` FROM ".TymUser::table()." WHERE `parent_userid`=%d)";
+  				D()->query($sql, $user->uid, $appUser->userid);
+  			}
   			
   			//更新自身同步状态
   			D()->query("UPDATE ".TymUser::table()." SET synctimes=synctimes+1 WHERE `userid`=%d", $appUser->userid);
   			
   			$user->refresh();
   		}
-  		$this->v->assign_by_ref('appUser', $appUser);
   		$this->v->assign_by_ref('appParent', $appParent);
   		$this->v->assign('situation', $situation);
   		$this->v->assign('refer', $refer);

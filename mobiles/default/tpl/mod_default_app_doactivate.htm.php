@@ -23,24 +23,24 @@
 }
 .stat_bottom_wx{
 	text-align:center;
-  	text-align: center;
+  text-align: center;
 	margin-bottom:20px;
 }
 .stat_bottom_wx img{
-	width:128px;
-	height:128px;
+	width:172px;
+	height:172px;
 }
 .state_one{
 	margin-top:9px;
 	text-align:center;
 }
 .state_two{
-	display:none;	
+	/*display:none;*/
 	margin-top:9px;
 	text-align:center;
 }
 .state_three{	
-	display:none;	
+	/*display:none;*/
 	margin-top:30px;
 	width:100%;
 }
@@ -93,7 +93,7 @@
 <?php if(3==$situation):?>
 <div class="state_two">
 	<p class="satate_comment_phone">多米号：<?=$user->uid?></p>
-	<p class="state_comment_ts" style="margin:30px 0 104px;">你已经是益多米的会员，无需激活。</p>
+	<p class="state_comment_ts" style="margin:30px 0 104px;">你已经是益多米的会员，无需再激活。</p>
 </div>
 <?php endif;?>
 <?php if(1==$situation):?>
