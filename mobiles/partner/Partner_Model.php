@@ -81,11 +81,12 @@ class Partner_Model extends Model {
     
     /**
      * 查询不同状态佣金收入
+     * 佣金收入 => 状态
      */
-    static function getCommisionIncome($uid, $status){
-        $sql = "select ifnull(sum(commision),0) from shp_user_commision where user_id = %d";
-        $amount = D()->query($sql, $uid)->result();
-        return $amount;
+    static function getCommisionIncome($uid){
+        $sql = "select ifnull(sum(commision),0) as commision, state from shp_user_commision where user_id = %d group by state";
+        $row = D()->query($sql, $uid)->fetch_array_all();
+        return $row;
     }
     
     static function showCurLevelCommistionList($level, $status, Pager $pager){

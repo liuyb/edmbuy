@@ -69,10 +69,10 @@
 				<h1>￥0.00</h1>
 			</li>
 			</a>
-			<a href="javascript:;" onclick="cash_total(this)">
+			<a href="<?php echo U('partner/commission','status=1')?>">
 			<li>
 				<p>总收入（元）</p>
-				<h1>￥0.00</h1>
+				<h1 id="totalIncome">￥0.00</h1>
 			</li>
 			</a>
 		</ul>
@@ -118,6 +118,7 @@
 				$("#LevelCount2").text(ret.secondLevelCount);
 				$("#LevelCount3").text(ret.thirdLevelCount);
 				$("#inactiveIncome").html("￥"+ret.inactiveIncome);
+				$("#totalIncome").html("￥"+ret.totalIncome);
 			}
 		});
 	});
@@ -129,19 +130,19 @@
 		window.location = url+"?level="+level+"&count="+count;
 	}
 	function cash_available(obj) {
-		myAlert('还没有可提现的金额');
+		myAlert('暂无可提现金额');
 	}
 	function cash_already(obj) {
-		myAlert('还没提现过');
+		myAlert('暂无提现明细');
 	}
 	function cash_total(obj) {
 		myAlert('尚未有有效收入');
 	}
 	function cash_apply(obj) {
-		myAlert('未到提现时间');
+		myAlert('暂无可提现金额');
 	}
 	function cash_detail(obj) {
-		myAlert('未到提现时间');
+		myAlert('暂无提现明细');
 	}
 </script>
 <?php endif;?>

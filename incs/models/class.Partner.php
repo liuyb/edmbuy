@@ -72,7 +72,7 @@ class Partner extends StorageNode {
      */
     static function findFirstLevelList($uid, PagerPull $pager){
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = %d limit %d,%d";
+        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = %d order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -86,7 +86,7 @@ class Partner extends StorageNode {
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users u where
                     exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and u.`parent_id` = `user_id`)
-                    limit %d,%d";
+                    order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -105,7 +105,7 @@ class Partner extends StorageNode {
                 		SELECT user_id FROM edmbuy.shp_users su where
                 		exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and su.`parent_id` = `user_id`)
                     )  tp where tu.`parent_id` = tp.`user_id`
-                 ) limit %d,%d";
+                 ) order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -144,7 +144,7 @@ class Partner extends StorageNode {
             	   SELECT 1 FROM edmbuy.shp_users where parent_id = %d and c.user_id = user_id 
                 ) and state = %d ";
         if($limit == true){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }
@@ -176,7 +176,7 @@ class Partner extends StorageNode {
                     and c.user_id = u.user_id
                 ) and state = %d";
         if($limit){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }
@@ -213,7 +213,7 @@ class Partner extends StorageNode {
                     ) and c.user_id = tu.user_id 
                 ) and state = %d";
         if($limit){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }

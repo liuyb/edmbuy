@@ -113,6 +113,7 @@ function resetPageData(isPullData){
 	countContainer.find(".totalAmount").text("0.00");
 	countContainer.find(".totalCommision").text("0.00");
 	countContainer.find(".totalNum").text("0");
+	$("#pageContainer").hide();
 		
 }
 $().ready(function(){
@@ -142,7 +143,6 @@ function getPageData(curpage, level, isPullData){
 	}
 	var url = "/partner/commission/ajax?status="+variable.status+"&level="+level+"&curpage="+curpage+"&needtotal="+needtotal;
 	F.get(url, null, function(data){
-		console.log(data);
 		renderDataRegion(data, isPullData);
     	handleWhenHasNextPage(data, level);
 	});

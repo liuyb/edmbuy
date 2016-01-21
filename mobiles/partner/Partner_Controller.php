@@ -88,11 +88,21 @@ class Partner_Controller extends MobileController {
 	    $firstLevelCount = Partner::findFirstLevelCount($uid);
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);
 	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
-	    $inactiveIncome = Partner_Model::getCommisionIncome($uid, Partner::COMMISSION_INVALID);
+	    $Incomes = Partner_Model::getCommisionIncome($uid);
+	    $inactiveIncome = 0.00;
+	    $totalIncome = 0.00;
+	    foreach ($Incomes as $item){
+	        if(Partner::COMMISSION_VALID == $item['state']){
+	            $totalIncome = $item['commision'];
+	        }else if(Partner::COMMISSION_INVALID == $item['state']){
+	            $inactiveIncome = $item['commision'];
+	        }
+	    }
 	    $ret = ["firstLevelCount" => $firstLevelCount, 
 	            "secondLevelCount" => $secondLevelCount,
 	            "thirdLevelCount" => $thirdLevelCount,
-	            "inactiveIncome" => $inactiveIncome
+	            "inactiveIncome" => $inactiveIncome,
+	            "totalIncome" => $totalIncome
 	    ];
 	    $response->sendJSON($ret);
 	}

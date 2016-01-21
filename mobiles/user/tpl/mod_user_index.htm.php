@@ -104,7 +104,6 @@ $().ready(function(){
 function loadAjaxData(){
 	var url = "/user/index/ajax";
 	F.get(url, null, function(data){
-		console.log(data);
 		if(data){
 			var stateDOM = $(".my_order_state");
 			stateDOM.find(".waitPayCount").text(data.status1);
