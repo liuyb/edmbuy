@@ -150,8 +150,18 @@ class User_Controller extends MobileController {
   public function update_mobile(Request $request, Response $response){
       if($request->is_post()) {
           $mobile = $_POST['mobile'];
+          global $user;
+          if($user->mobilephone == $mobile){
+              return;
+          }
+          $nuser = Users::load_by_mobile($mobile);
+          if($nuser && !empty($nuser->uid)){
+              $ret = ['result' => 'FAIL', 'msg' => '手机号已经在系统存在！'];
+              $response->sendJSON($ret);
+          }
           User_Model::updateUserInfo(array('mobilephone'=>$mobile));
-          $response->sendJSON('');
+          $ret = ['result' => 'SUC', 'msg' => '修改成功'];
+          $response->sendJSON($ret);
       }
   }
   
