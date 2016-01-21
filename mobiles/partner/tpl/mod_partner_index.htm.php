@@ -14,7 +14,7 @@
 <?php endif;?>
 <div class="my_guest">
 	<div class="guest_tit">
-		我的米客（单位：人）
+		我的人脉（单位：人）
 	</div>
 	<div class="guest_main">
 		<ul>

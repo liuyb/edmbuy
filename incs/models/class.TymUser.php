@@ -9,7 +9,7 @@ include_once (SIMPHP_INCS . '/libs/ApiRequest/class.ApiRequest.php');
 class TymUser extends StorageNode {
 	
 	const APP_ID = 'app567528488ae7e'; //甜玉米APPID
-	const MIGRATE_DEADLINE = '2016-01-22 20:00:00'; //关闭封闭平移时间点
+	const MIGRATE_DEADLINE = '2016-01-25 00:00:00'; //关闭封闭平移时间点
 	const QUERY_URL = 'http://98tym.com/z/m/ydmm!gettymusersById.jsp?userid=%d'; //甜玉米查询
 	
 	protected static function meta() {

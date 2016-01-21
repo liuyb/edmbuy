@@ -121,9 +121,9 @@ $(".refer_but").on("click",function(){
 $(function(){	
 	var length = $(".c_n_tit").text().length;
 	var _length = $(".refer_name").text().length;
-	if(length >4){
+	if(length >6){
 		 var str = $(".c_n_tit").text();
-		 var name = str.substr(1,4);
+		 var name = str.substr(1,6);
 		 $(".c_n_tit").attr('title',str);
 		 $(".c_n_tit").text(name + '...');
 	}

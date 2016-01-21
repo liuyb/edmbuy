@@ -227,6 +227,17 @@ class Default_Controller extends MobileController {
   	}
   	$this->v->assign_by_ref('appUser', $appUser);
   	
+  	if ($appUser->is_exist()) {
+  		$exUser = Users::load_by_mobile($appUser->mobile);
+  		if ($exUser->is_exist()) {
+  			$exUser->set_logined_status();
+  			$response->redirect(U('app_doactivate',['cid'=>$cid, 'refer'=>$refer, 'is_sync'=>1]));
+  		}
+  	}
+  	else {
+  		Fn::show_error_message('同步出错，请重新登录甜玉米再试', true);
+  	}
+  	
   	if ($appUser->synctimes>0) {
   		$response->redirect(U('app_doactivate',['cid'=>$cid, 'refer'=>$refer]));
   	}
@@ -247,10 +258,15 @@ class Default_Controller extends MobileController {
   	
   	$cid   = $request->get('cid',0);
   	$refer = $request->get('refer','');
+  	$is_sync = $request->get('is_sync',0);
+  	
+  	if ($is_sync) {
+  		trace_debug('app_doactivate', $GLOBALS['user']);
+  	}
   	
   	$local_refer = U('/app_doactivate',['cid'=>$cid, 'refer'=>$refer]);
   	if (!Users::is_logined()) { //未登录，先用基本授权(user/oauth会在基本授权获取不到unionid的情况下自动使用详细授权)
-  		(new Weixin())->authorizing_base('login_tym', $local_refer);
+  		(new Weixin())->authorizing_detail('login_tym', $local_refer);
   	}
   	else {
   		global $user;
@@ -276,10 +292,10 @@ class Default_Controller extends MobileController {
   			throw new ViewException($this->v, '当前用户不是甜玉米用户，不能平移，请重新登录甜玉米再试');
   		}
   		
-  		if ($appUser->synctimes > 0 && $user->appuserid!='') { //自己已同步过，则查询上级是否已同步
+  		if ($is_sync || $appUser->synctimes > 0 && $user->appuserid!='') { //自己已同步过，则查询上级是否已同步
   			$situation = 3;
   			$appParent = TymUser::load($appUser->parent_userid);
-  			if ( $appParent->is_exist()&&0==$appParent->synctimes) { //上级没同步过，则提醒上级
+  			if ( $appParent->is_exist()&&0==$appParent->synctimes ) { //上级没同步过，则提醒上级
   				$situation = 2;
   				//TODO 提醒上级逻辑
   			}
@@ -309,10 +325,13 @@ class Default_Controller extends MobileController {
   			
   			//确认上级
   			$appParent = TymUser::load($appUser->parent_userid);
-  			$usrParent = Users::load_by_appuid($appParent->id); //先通过app_userid来查
-  			if (!$usrParent->is_exist()) { //不存在继续用手机号来查
-  				$usrParent = Users::load_by_mobile($appParent->mobile); //这时只能通过手机号来确认上级
+  			if ($appParent->is_exist()) { //上级可能不存在
+  				$usrParent = Users::load_by_appuid($appParent->id); //先通过app_userid来查
+  				if (!$usrParent->is_exist()) { //不存在继续用手机号来查
+  					$usrParent = Users::load_by_mobile($appParent->mobile); //这时只能通过手机号来确认上级
+  				}
   			}
+  			
   			$now = simphp_time();
   			$can_update_childs = true;
   			if ($now < strtotime(TymUser::MIGRATE_DEADLINE)) { //在封闭期内，则完全同步上下级
@@ -357,6 +376,11 @@ class Default_Controller extends MobileController {
   			
   			$user->refresh();
   		}
+  		
+  		if ($is_sync) {
+  			$situation = 4;
+  		}
+  		
   		$this->v->assign_by_ref('appParent', $appParent);
   		$this->v->assign_by_ref('usrParent', $usrParent);
   		$this->v->assign('situation', $situation);

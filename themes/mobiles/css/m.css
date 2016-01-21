@@ -173,11 +173,11 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 /*pic slider*/
 .swipe{width:100%;min-height:133px;overflow:hidden;position:relative;}
 .swipe ul{transition:left 800ms ease-in 0;-webkit-transition:left 800ms ease-in 0;-moz-transition:left 800ms ease-in 0;-o-transition:left 800ms ease-in 0;-ms-transition:left 800ms ease-in 0;}
-.slider li{position:relative;height:auto;font-size:0;display:none;}
+.slider li{position:relative;height:auto;font-size:0;}
 .slider li img{width:100%;vertical-align:top;}
 .slider li span{ display:inline-block; height:25px; line-height:25px; font-size:13px;font-size:1.3rem; position:absolute; bottom:4px; left:0; width:100%; background:url(../img/bg.png) repeat; color:#fff; padding-left:5px;}
-.slinav{position:absolute;left:0;right:0;bottom:5px;width:100%;text-align:center;}
-.slinav a{width:5px;height:5px;margin:0 2px;line-height:99em;background:none; background:#fff;border:1px solid #fff;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;overflow:hidden;cursor:pointer;display:inline-block;*display:inline;*zoom:1;}
+.slinav{position:absolute;left:0;right:0;bottom:10px;width:100%;text-align:center;}
+.slinav a{width:5px;height:5px; margin:-13px; 4px; line-height:99em;background:none; background:#fff;border:1px solid #fff;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;overflow:hidden;cursor:pointer;display:inline-block;*display:inline;*zoom:1;}
 .slinav a.active{background:#ea471e;border:1px solid #ea471e;}
 
 /*pop dialog*/
@@ -268,7 +268,6 @@ textarea.flexText,.flex-text-wrap pre {
 .follow-box .c1 { float: left;vertical-align: top; }
 .follow-box .c3 { float: right;line-height:50px; }
 .follow-box img { height: 100%; }
-.follow-box p { color: #fff; }
 .follow-box .emp { font-size: 16px;font-size:1.6rem;line-height: 25px;margin-bottom:2px; }
 .follow-box button { font-size:14px;font-size:1.4rem;border:1px solid #1fa761;background:#1fa761;color:#fff;border-radius:4px;padding:6px 20px;cursor:pointer; }
 
@@ -1519,7 +1518,7 @@ a.ph_btn{
 .mem_c{
   margin: 19px 0;
   float: left;
-  width: 50%; 
+  width: 60%; 
 }
 .c_name{
   font-size:17px;
@@ -2355,7 +2354,7 @@ a.ph_btn{
   border-radius: 4px;
   height: 304px;
   width: 240px;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -2843,7 +2842,7 @@ td.cash_td2 img {
   border-radius: 4px;
   height: 127px;
   width: 240px;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -2868,7 +2867,7 @@ td.cash_td2 img {
   border-radius: 4px;
   height: 64px;
   width: 240px;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -3358,13 +3357,23 @@ td.cash_td2 img {
 #pageContainer{
 	text-align:center;
 }
-.pull_more_data{
+.wtxje{
+	border-radius: 4px;
+	height: 100px;
+	width: 240px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -120px;
+	margin-top: -80px;
+	background: #FFF none repeat scroll 0% 0%;
+	z-index: 70000;
 	text-align:center;
-	display: none;
-	cursor:pointer;
-	line-height:20px;
-	margin-bottom:10px;
-	font-size:16px;
+	font-size:15px;
 }
-
-
+.wtx_ok{
+	border-top:1px solid #eee;
+	height:40px;
+	line-height:40px;
+	cursor:pointer;
+}

@@ -78,7 +78,6 @@ class Order extends StorageNode{
                 'is_separate'        => 'is_separate',
                 'parent_id'          => 'parent_id',
                 'discount'           => 'discount',
-                'merchant_ids'       => 'merchant_ids',
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2'
             ));
@@ -212,6 +211,17 @@ class Order extends StorageNode{
     	}
     
     	return $order_goods;
+    }
+    
+    /**
+     * 关联订单和商家
+     * @param integer $order_id
+     * @param integer $merchant_id
+     * @return number
+     */
+    static function relateMerchant($order_id, $merchant_uid) {
+    	D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
+    	return D()->affected_rows();
     }
 }
 
