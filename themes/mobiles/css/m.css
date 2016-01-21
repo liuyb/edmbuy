@@ -1518,7 +1518,7 @@ a.ph_btn{
 .mem_c{
   margin: 19px 0;
   float: left;
-  width: 50%; 
+  width: 60%; 
 }
 .c_name{
   font-size:17px;
@@ -3357,5 +3357,24 @@ td.cash_td2 img {
 #pageContainer{
 	text-align:center;
 }
-
+.wtxje{
+	border-radius: 4px;
+	height: 100px;
+	width: 240px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -120px;
+	margin-top: -80px;
+	background: #FFF none repeat scroll 0% 0%;
+	z-index: 70000;
+	text-align:center;
+	font-size:15px;
+}
+.wtx_ok{
+	border-top:1px solid #eee;
+	height:40px;
+	line-height:40px;
+	cursor:pointer;
+}
 

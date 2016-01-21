@@ -14,7 +14,7 @@
 <?php endif;?>
 <div class="my_guest">
 	<div class="guest_tit">
-		我的米客（单位：人）
+		我的人脉（单位：人）
 	</div>
 	<div class="guest_main">
 		<ul>
@@ -109,7 +109,13 @@
 	</ul>
 </div>
 
+
+
+
+
 <script>
+	var html='<div class="wtxje"><p style="padding:20px 0;">暂无可提现金额</p><div class="wtx_ok">确认</div></div>';
+	
 	$().ready(function(){
 		var url = '/partner/ajax';
 		F.get(url, {}, function(ret){
@@ -121,6 +127,7 @@
 			}
 		});
 	});
+	
 	function showLevelList(url, level){
 		var count = $("#LevelCount"+level).text();
 		if(!count || isNaN(count)){
@@ -128,7 +135,17 @@
 		}
 		window.location = url+"?level="+level+"&count="+count;
 	}
-	function cash_available(obj) {
+
+	$(function(){
+		$("body").append(html);
+		$("body").append('<a href="javascript:;"><div class="mask"></div></a>');
+		
+		$(".mask").show();
+	})
+
+	$(".mask").live("click",function(){
+		});
+	<!--function cash_available(obj) {
 		myAlert('还没有可提现的金额');
 	}
 	function cash_already(obj) {
@@ -143,5 +160,7 @@
 	function cash_detail(obj) {
 		myAlert('未到提现时间');
 	}
+	-->
+	
 </script>
 <?php endif;?>
