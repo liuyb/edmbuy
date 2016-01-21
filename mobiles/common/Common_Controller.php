@@ -15,6 +15,8 @@ class Common_Controller extends Controller {
   public static $loginWhiteList = [
     'user/oauth',
     'user/oauth/%s',
+    'default/app_activate',
+    'default/app_doactivate',
   ];
   
   /**
@@ -27,6 +29,8 @@ class Common_Controller extends Controller {
       '!^about$!i'     => 'default/about',
       '!^comeon$!i'    => 'default/comeon',
       '!^riceplan$!i'  => 'default/riceplan',
+      '!^app_activate$!i'    => 'default/app_activate',
+      '!^app_doactivate$!i'  => 'default/app_doactivate',
     ];
   }
   

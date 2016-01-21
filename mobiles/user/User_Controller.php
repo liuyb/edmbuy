@@ -247,7 +247,7 @@ class User_Controller extends MobileController {
     //查询本地是否存在对应openid的用户
     $auth_method = "oauth2_{$state}"; //OAuth2认证方式
     $loginedUser = $localUser;
-    if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息
+    if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息，但不会变更上下级关系
     
     	if (Weixin::OAUTH_DETAIL==$state) { //detail认证模式，需更新用户数据
     		
@@ -265,16 +265,28 @@ class User_Controller extends MobileController {
     			$upUser->subscribe = $uinfo_wx['subscribe'];
     			$upUser->subscribetime = $uinfo_wx['subscribe_time'];
     		}
-    		if ($localUser->required_uinfo_empty()) {
+    		if (empty($localUser->nickname)) {
     			$upUser->nickname  = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+    		}
+    		if (empty($localUser->logo)) {
     			$upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+    		}
+    		if (empty($localUser->sex)) {
     			$upUser->sex       = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+    		}
+    		if (empty($localUser->lang)) {
     			$upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+    		}
+    		if (empty($localUser->country)) {
     			$upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+    		}
+    		if (empty($localUser->province)) {
     			$upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+    		}
+    		if (empty($localUser->city)) {
     			$upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
     		}
-    
+    		
     		//尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
     		if (!$localUser->subscribe && !$upUser->subscribe) {
     			$uinfo_wx = $wx->userInfo($openid);
@@ -312,7 +324,7 @@ class User_Controller extends MobileController {
     	$upUser->salt    = gen_salt();
     	$upUser->parentid= 0;
     	$upUser->state   = 0; //0:正常;1:禁止
-    	$upUser->from    = $from;
+    	$upUser->from    = $auth_action=='login_tym' ? TymUser::APP_ID : $from;
     	$upUser->authmethod = $auth_method;
     	
     	//检查spm
@@ -324,6 +336,9 @@ class User_Controller extends MobileController {
     		}
     	}
     	$upUser->parentid = $parent_id;
+    	
+    	$upUser->save(Storage::SAVE_INSERT); //先快速保存insert
+    	$upUser = new Users($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
     	
     	if (Weixin::OAUTH_DETAIL==$state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
 	    	
@@ -356,13 +371,13 @@ class User_Controller extends MobileController {
     
     	}
     		
-    	$upUser->save(Storage::SAVE_INSERT);
+    	$upUser->save(Storage::SAVE_UPDATE);
     	$loginedUser = $upUser;
     
     } //END: if ($localUser->is_exist()) else
     
 		//设置本地登录状态
-		if ('login'==$auth_action) {
+		if (preg_match('/^login/i', $auth_action)) {
     
     		if (!$loginedUser->is_exist()) {
     			Fn::show_error_message('微信授权登录失败！');

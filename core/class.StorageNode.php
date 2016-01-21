@@ -140,6 +140,14 @@ abstract class StorageNode extends Model {
 	}
 	
 	/**
+	 * 刷新当前对象信息
+	 * @return StorageNode
+	 */
+	final public function refresh() {
+		return self::load($this->id, TRUE);
+	}
+	
+	/**
 	 * Save(insert or update) a node
 	 * @param $flag
 	 */
