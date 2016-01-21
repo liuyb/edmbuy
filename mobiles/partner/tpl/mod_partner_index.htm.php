@@ -20,19 +20,19 @@
 		<ul>
 			<a href="javascript:showLevelList('/partner/list',1);">
 				<li>
-					<h1 id="LevelCount1">0</h1>
+					<h1 id="LevelCount1"><?=$childnum1 ?></h1>
 					<p>一层</p>
 				</li>
 			</a>
 			<a href="javascript:showLevelList('/partner/list',2);">
 				<li>
-					<h1 id="LevelCount2">0</h1>
+					<h1 id="LevelCount2"><?=$childnum2 ?></h1>
 					<p>二层</p>
 				</li>
 			</a>
 			<a href="javascript:showLevelList('/partner/list',3);">
 				<li>
-					<h1 id="LevelCount3">0</h1>
+					<h1 id="LevelCount3"><?=$childnum3 ?></h1>
 					<p>三层</p>
 				</li>
 			</a>
@@ -69,10 +69,10 @@
 				<h1>￥0.00</h1>
 			</li>
 			</a>
-			<a href="javascript:;" onclick="cash_total(this)">
+			<a href="<?php echo U('partner/commission','status=1')?>">
 			<li>
 				<p>总收入（元）</p>
-				<h1>￥0.00</h1>
+				<h1 id="totalIncome">￥0.00</h1>
 			</li>
 			</a>
 		</ul>
@@ -109,13 +109,7 @@
 	</ul>
 </div>
 
-
-
-
-
 <script>
-	var html='<div class="wtxje"><p style="padding:20px 0;">暂无可提现金额</p><div class="wtx_ok">确认</div></div>';
-	
 	$().ready(function(){
 		var url = '/partner/ajax';
 		F.get(url, {}, function(ret){
@@ -124,10 +118,10 @@
 				$("#LevelCount2").text(ret.secondLevelCount);
 				$("#LevelCount3").text(ret.thirdLevelCount);
 				$("#inactiveIncome").html("￥"+ret.inactiveIncome);
+				$("#totalIncome").html("￥"+ret.totalIncome);
 			}
 		});
 	});
-	
 	function showLevelList(url, level){
 		var count = $("#LevelCount"+level).text();
 		if(!count || isNaN(count)){
@@ -135,32 +129,20 @@
 		}
 		window.location = url+"?level="+level+"&count="+count;
 	}
-
-	$(function(){
-		$("body").append(html);
-		$("body").append('<a href="javascript:;"><div class="mask"></div></a>');
-		
-		$(".mask").show();
-	})
-
-	$(".mask").live("click",function(){
-		});
-	<!--function cash_available(obj) {
-		myAlert('还没有可提现的金额');
+	function cash_available(obj) {
+		myAlert('暂无可提现金额');
 	}
 	function cash_already(obj) {
-		myAlert('还没提现过');
+		myAlert('暂无提现明细');
 	}
 	function cash_total(obj) {
 		myAlert('尚未有有效收入');
 	}
 	function cash_apply(obj) {
-		myAlert('未到提现时间');
+		myAlert('暂无可提现金额');
 	}
 	function cash_detail(obj) {
-		myAlert('未到提现时间');
+		myAlert('暂无提现明细');
 	}
-	-->
-	
 </script>
 <?php endif;?>

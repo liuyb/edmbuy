@@ -65,6 +65,7 @@ class Users extends StorageNode {
 						'parentid'    => 'parent_id',
 						'parentnick'  => 'parent_nick',
 						'parentunionid' => 'parent_unionid',
+						'appuserid'   => 'app_userid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
 						'childnum1'   => 'childnum_1',
@@ -142,6 +143,25 @@ class Users extends StorageNode {
 	 */
 	static function load_by_openid($openid, $from = 'weixin') {
 		return self::find_one(new Query('openid', $openid));
+	}
+	
+	/**
+	 * Load user by mobile
+	 * @param string $mobile
+	 * @param string $from
+	 * @return Users
+	 */
+	static function load_by_mobile($mobile) {
+		return self::find_one(new Query('mobilephone', $mobile));
+	}
+	
+	/**
+	 * Load user by app_userid
+	 * @param string $appuid
+	 * @return Users
+	 */
+	static function load_by_appuid($appuid) {
+		return self::find_one(new Query('appuserid', $appuid));
 	}
 	
 	/**

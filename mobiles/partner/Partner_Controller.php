@@ -50,6 +50,10 @@ class Partner_Controller extends MobileController {
         $this->nav_no    = 1;
         
         if ($request->is_hashreq()) {
+            global $user;
+            $this->v->assign("childnum1", $user->childnum1);
+            $this->v->assign("childnum2", $user->childnum2);
+            $this->v->assign("childnum3", $user->childnum3);
         }
         
         throw new ViewResponse($this->v);
@@ -88,11 +92,21 @@ class Partner_Controller extends MobileController {
 	    $firstLevelCount = Partner::findFirstLevelCount($uid);
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);
 	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
-	    $inactiveIncome = Partner_Model::getCommisionIncome($uid, Partner::COMMISSION_INVALID);
+	    $Incomes = Partner_Model::getCommisionIncome($uid);
+	    $inactiveIncome = 0.00;
+	    $totalIncome = 0.00;
+	    foreach ($Incomes as $item){
+	        if(Partner::COMMISSION_VALID == $item['state']){
+	            $totalIncome = $item['commision'];
+	        }else if(Partner::COMMISSION_INVALID == $item['state']){
+	            $inactiveIncome = $item['commision'];
+	        }
+	    }
 	    $ret = ["firstLevelCount" => $firstLevelCount, 
 	            "secondLevelCount" => $secondLevelCount,
 	            "thirdLevelCount" => $thirdLevelCount,
-	            "inactiveIncome" => $inactiveIncome
+	            "inactiveIncome" => $inactiveIncome,
+	            "totalIncome" => $totalIncome
 	    ];
 	    $response->sendJSON($ret);
 	}
@@ -105,7 +119,8 @@ class Partner_Controller extends MobileController {
 	 */
 	public function partner_commission(Request $request, Response $response){
 	    $this->v->set_tplname('mod_partner_commission');
-	    
+	    $this->nav_no = 0;
+	    $this->topnav_no = 1;
 	    if ($request->is_hashreq()) {
 	        $status = $_REQUEST['status'];
 	        $this->v->assign("status", $status);

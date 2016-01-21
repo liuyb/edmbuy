@@ -22,10 +22,10 @@
 	<p><img src="/themes/mobiles/img/rice_06_2.png"></p>
 	<p><img src="/themes/mobiles/img/rice_04.png"></p>
 </div>
-
+<!-- 
 <div class="list_tit_img"><img src="/themes/mobiles/img/rice_07.png"></div>
-
-<div class="rice_list_tjproduct" style="background:#fff;">
+ -->
+<div class="rice_list_tjproduct" style="background:#fff;display:none;">
 	<div class="list_product_info index_product_info">
 		<ul>
 			<a href="http://m.edmbuy.com/item/1041">

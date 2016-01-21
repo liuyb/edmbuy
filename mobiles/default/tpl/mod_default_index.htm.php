@@ -2,7 +2,7 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li><a href="http://m.edmbuy.com/item/1041"><img src="/themes/mobiles/img/banner.png"></a></li>
+    <li style="display:block"><a href="http://m.edmbuy.com/item/1041"><img src="/themes/mobiles/img/banner.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
     <li><a href="http://m.edmbuy.com/item/1045"><img src="/themes/mobiles/img/banner02.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>

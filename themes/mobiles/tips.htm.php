@@ -21,7 +21,7 @@
     html,body { width: 100%; height: 100%; }
     html {font-size: 62.5%;}
     body {font-size: 14px;font-size: 1.4rem;line-height: 1.6;font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;text-rendering: optimizeLegibility;color: #333;background: #e7e8eb;word-wrap: break-word; word-break: break-all; }
-    .topbar {border-top: 4px solid #44b549;height: 0;line-height: 0;}
+    .topbar {border-top: 3px solid #44b549;height: 0;line-height: 0;}
     .wrapper {width: 100%;min-height: 100%; margin: 0 auto; background: #fff; border: 1px solid #d9dadc; padding: 2.5%; text-align: center; }
     .wrapper {border-top-width: 0;font-size: 20px;font-size: 2rem;}
     h1 {font-size: 24px;font-size: 2.4rem;font-weight: bold;margin: 20px 0;margin: 2rem 0;}

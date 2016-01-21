@@ -47,14 +47,14 @@ function fileupload(e){
     	valid = reg.test(file.type);
     }
     if(!valid){
-        alert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
+    	myAlert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
 		return;
     }
     var fr = new FileReader();
     fr.onload = function(ev) {
     	setTimeout(function(){
     		postImage(ev);
-        }, 500);
+        }, 100);
     };
   	fr.readAsDataURL(file);
 }
@@ -67,7 +67,7 @@ function postImage(ev){
 				window.location.href = '/user/setting';
 			}, 1000);
 		}else{
-			alert(ret.errMsg);
+			myAlert(ret.errMsg);
 		}
 	});
 }

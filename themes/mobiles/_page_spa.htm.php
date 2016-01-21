@@ -22,6 +22,7 @@
 <?php tplholder('HEAD_CSS');?>
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
+<script type="text/javascript">gData.page_render_mode=1;</script>
 </head>
 <body class="SPA<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>">
 <?php include T($tpl_content);?>
@@ -38,10 +39,13 @@
 if (C('env.usecdn')):
 add_css('http://fdn.edmbuy.com/css/c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('http://fdn.edmbuy.com/js/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_js('http://fdn.edmbuy.com/js/fm.min.js',['pos'=>'head','ver'=>'none']);
 else:
 add_css('c.min.css',['scope'=>'global','ver'=>'none']);
 add_js('ext/jquery-2.1.3.min.js',['pos'=>'head','ver'=>'none']);
+add_js('fm.min.js',['pos'=>'head','ver'=>'none']);
 endif;
 add_css('m.css',['scope'=>'global']);
+add_js('m.js',['pos'=>'head']);
 
 ?>

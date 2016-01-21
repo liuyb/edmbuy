@@ -42,7 +42,7 @@ class Partner extends StorageNode {
      */
     static function findSecondLevelCount($uid){
         $sql = "SELECT count(1) FROM edmbuy.shp_users u where
-                    exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and u.`parent_id` = `user_id`)";
+                    u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -54,13 +54,10 @@ class Partner extends StorageNode {
      */
     static function findThirdLevelCount($uid){
         $sql = "SELECT count(1) FROM edmbuy.shp_users tu where
-                 exists (
-                	select 1 from
-                	(
+                 tu.parent_id in (
                 		SELECT user_id FROM edmbuy.shp_users su where
-                		exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and su.`parent_id` = `user_id`)
-                    )  tp where tu.`parent_id` = tp.`user_id`
-                 )";
+                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
+                    )";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -72,7 +69,7 @@ class Partner extends StorageNode {
      */
     static function findFirstLevelList($uid, PagerPull $pager){
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = %d limit %d,%d";
+        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = %d order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -85,8 +82,8 @@ class Partner extends StorageNode {
     static function findSecondLevelList($uid, PagerPull $pager){
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users u where
-                    exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and u.`parent_id` = `user_id`)
-                    limit %d,%d";
+                u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
+                order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -99,13 +96,10 @@ class Partner extends StorageNode {
     static function findThirdLevelList($uid, PagerPull $pager){
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users tu where
-                 exists (
-                	select 1 from
-                	(
+                 tu.parent_id in (
                 		SELECT user_id FROM edmbuy.shp_users su where
-                		exists (SELECT 1 FROM edmbuy.shp_users where `parent_id` = %d and su.`parent_id` = `user_id`)
-                    )  tp where tu.`parent_id` = tp.`user_id`
-                 ) limit %d,%d";
+                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
+                    ) order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         return $result;
     }
@@ -140,11 +134,11 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel1CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where exists (
-            	   SELECT 1 FROM edmbuy.shp_users where parent_id = %d and c.user_id = user_id 
+        $sql = "select $column from shp_user_commision c where c.user_id in (
+            	   SELECT user_id FROM edmbuy.shp_users where parent_id = %d 
                 ) and state = %d ";
         if($limit == true){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }
@@ -170,13 +164,12 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel2CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where exists (
-                    SELECT 1 FROM edmbuy.shp_users u where 
-                	exists (SELECT 1 FROM edmbuy.shp_users where parent_id = %d and u.parent_id = user_id) 
-                    and c.user_id = u.user_id
+        $sql = "select $column from shp_user_commision c where c.user_id in (
+                    SELECT u.user_id FROM edmbuy.shp_users u where
+                    u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
                 ) and state = %d";
         if($limit){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }
@@ -202,18 +195,15 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel3CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where exists (
-                    SELECT * FROM edmbuy.shp_users tu where
-                    exists (
-                        select 1 from
-                        (
-                            SELECT user_id FROM edmbuy.shp_users su where
-                            exists (SELECT 1 FROM edmbuy.shp_users where parent_id = %d and su.parent_id = user_id)
-                        )  tp where tu.parent_id = tp.user_id
-                    ) and c.user_id = tu.user_id 
+        $sql = "select $column from shp_user_commision c where c.user_id in (
+                    SELECT tu.user_id FROM edmbuy.shp_users tu where
+                    tu.parent_id in (
+                		SELECT user_id FROM edmbuy.shp_users su where
+                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
+                    )  
                 ) and state = %d";
         if($limit){
-            $sql .= " limit %d,%d";
+            $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
     }

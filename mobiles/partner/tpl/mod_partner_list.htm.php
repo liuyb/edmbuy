@@ -17,7 +17,7 @@
 	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
 </div>
-<div id="pageContainer" style="display: none;"><a href="#" onclick="pulldata(this);">下拉显示...</a></div>
+<div id="pageContainer" onclick="pulldata(this);" class="pull_more_data">更多...</div>
 
 <?php include T('inc/add_as_friend');?>
 
@@ -37,7 +37,7 @@
 	
 	function buildListHtml(data, isinit){
 		var table = $("table.copartner_list_table");
-		if(!data || !data.result){
+		if(!data || !data.result || !data.result.length){
 			var EMPTY_TR = $("<tr><td class=\"list_td1\" style='font-size:16px;text-align:center;'>暂无数据...</td></tr>");
 			table.append(EMPTY_TR);
 			return;
@@ -70,8 +70,9 @@
 		if(!html.length){
 			html += "<tr><td></td></tr>";
 		}
-		html += "$(function(){ F.set_scroller(false, 100); })";
+		//html += "$(function(){ F.set_scroller(false, 100);} )";
 		table.append($(html));
+		F.set_scroller(false, 100);
 	}
 
 	//当还有下一页时处理下拉
@@ -79,7 +80,7 @@
 		var hasnex = data.hasnexpage;
 		if(hasnex){
 			$("#pageContainer").show();
-			$("#pageContainer").find("a").attr('curpage',data.curpage).attr('level',level);
+			$("#pageContainer").attr('curpage',data.curpage).attr('level',level);
 		}else{
 			$("#pageContainer").hide();
 		}
