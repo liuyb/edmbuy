@@ -54,7 +54,7 @@ function fileupload(e){
     fr.onload = function(ev) {
     	setTimeout(function(){
     		postImage(ev);
-        }, 500);
+        }, 100);
     };
   	fr.readAsDataURL(file);
 }
