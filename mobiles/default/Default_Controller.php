@@ -245,6 +245,7 @@ class Default_Controller extends MobileController {
   		
   		$appUser = TymUser::load($cid);
   		$appParent = new TymUser();  //主要便于对象操作
+  		$usrParent = new Users();    //主要便于对象操作
   		if (!$appUser->is_exist()) { //本地库不存在，需要查甜玉米的接口
   			//TODO 查询甜玉米的接口
   			$ret = TymUser::query($cid);
@@ -262,15 +263,17 @@ class Default_Controller extends MobileController {
   			throw new ViewException($this->v, '当前用户不是甜玉米用户，不能平移，请重新登录甜玉米再试');
   		}
   		
-  		if ($appUser->synctimes > 0 && $user->mobilephone!='' && $user->appuserid!='') { //自己已同步过，则查询上级是否已同步
+  		if ($appUser->synctimes > 0 && $user->appuserid!='') { //自己已同步过，则查询上级是否已同步
   			$situation = 3;
   			$appParent = TymUser::load($appUser->parent_userid);
-  			if (0==$appParent->synctimes) { //上级没同步过，则提醒上级
+  			if ( $appParent->is_exist()&&0==$appParent->synctimes) { //上级没同步过，则提醒上级
   				$situation = 2;
   				//TODO 提醒上级逻辑
   			}
   		}
   		else { //说明自身没同步过数据，则将tb_tym_user中的数据同步到益多米
+  			
+  			$situation = 1;
   			
   			//保存当前甜玉米信息到益多米
   			$upUser = new Users($user->uid);
@@ -293,13 +296,16 @@ class Default_Controller extends MobileController {
   			
   			//确认上级
   			$appParent = TymUser::load($appUser->parent_userid);
-  			$usrParent = Users::load_by_mobile($appParent->mobile); //这时只能通过手机号来确认上级
+  			$usrParent = Users::load_by_appuid($appParent->id); //先通过app_userid来查
+  			if (!$usrParent->is_exist()) { //不存在继续用手机号来查
+  				$usrParent = Users::load_by_mobile($appParent->mobile); //这时只能通过手机号来确认上级
+  			}
   			$now = simphp_time();
-  			$situation = 3;
-  			$can_update_child = true;
+  			$can_update_childs = true;
   			if ($now < strtotime(TymUser::MIGRATE_DEADLINE)) { //在封闭期内，则完全同步上下级
   				if ($usrParent->is_exist()) { //上级存在，说明上级已经激活同步
-  					$upUser->parentid = $usrParent->uid;
+  					$upUser->parentid   = $usrParent->uid;
+  					$upUser->parentnick = $usrParent->nickname;
   				}
   				else { //上级没找到，则先不变更已有上级，仅提醒上级激活
   					$situation = 2;
@@ -307,17 +313,20 @@ class Default_Controller extends MobileController {
   				}
   			}
   			else { //已经出了封闭期，则有上级的不可再变更，没上级的判断是否是来自甜玉米的用户，是的话查找甜玉米的上级来设定
-  				if( !$user->parentid && $user->from==TymUser::APP_ID) { //还不存在上级，且当前用户来自于甜玉米，则设定为甜玉米的上级
-  					if ($usrParent->is_exist()) { //上级存在，说明上级已经激活同步
-  						$upUser->parentid = $usrParent->uid;
-  					}
-  					else { //上级不存在，说明上级还没激活同步，暂时设上级为平台，同时提醒上级激活
-  						$situation = 2;
-  						//TODO 提醒上级逻辑
+  				if ($user->from==TymUser::APP_ID) { //来自甜玉米的用户
+  					if( !$user->parentid ) { //还不存在上级，则设定为甜玉米的上级
+  						if ($usrParent->is_exist()) { //上级存在，说明上级已经激活同步
+  							$upUser->parentid   = $usrParent->uid;
+  							$upUser->parentnick = $usrParent->nickname;
+  						}
+  						else { //上级不存在，说明上级还没激活同步，暂时留其上级为平台，同时提醒上级激活
+  							$situation = 2;
+  							//TODO 提醒上级逻辑
+  						}
   					}
   				}
   				else {
-  					$can_update_child = false;
+  					$can_update_childs = false; //非甜玉米的用户不能批量更新下级关系
   				}
   			}
   			
@@ -325,7 +334,7 @@ class Default_Controller extends MobileController {
   			$upUser->save(Storage::SAVE_UPDATE);
   			
   			//更新自身下级的上级为自己
-  			if ($can_update_child) {
+  			if ($can_update_childs) {
   				$sql = "UPDATE ".Users::table()." SET `parent_id`=%d WHERE `app_userid` IN (SELECT `userid` FROM ".TymUser::table()." WHERE `parent_userid`=%d)";
   				D()->query($sql, $user->uid, $appUser->userid);
   			}
@@ -336,6 +345,7 @@ class Default_Controller extends MobileController {
   			$user->refresh();
   		}
   		$this->v->assign_by_ref('appParent', $appParent);
+  		$this->v->assign_by_ref('usrParent', $usrParent);
   		$this->v->assign('situation', $situation);
   		$this->v->assign('refer', $refer);
   		
