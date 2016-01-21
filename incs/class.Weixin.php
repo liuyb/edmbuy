@@ -1295,7 +1295,7 @@ class WeixinHelper {
     $my_uid    = 0;
     $can_save  = true;
     $wxuinfo   = $this->wx->userInfo($openid);
-    //trace_debug('weixin_onSubscribe_wxuinfo', $wxuinfo);
+    trace_debug('weixin_onsubscribe', $event.','.$eventKey.','.print_r($wxuinfo, TRUE));
     
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
@@ -1308,6 +1308,9 @@ class WeixinHelper {
     			if (!$exUser->openid) {
     				$upUser->openid  = $openid;
     			}
+    			if (empty($exUser->parentnick)) {
+    				$upUser->parentnick = Users::getNick($parent_id);
+    			}
     			$upUser->lasttime  = simphp_dtime();
     			$upUser->lastip    = Request::ip();
     			$save_type = Storage::SAVE_UPDATE;
@@ -1317,6 +1320,7 @@ class WeixinHelper {
     			$upUser->unionid   = $wxuinfo['unionid'];
     			$upUser->openid    = $openid;
     			$upUser->parentid  = 0;
+    			$upUser->parentnick= '';
     			$upUser->regip     = Request::ip();
     			$upUser->regtime   = simphp_time();
     			$upUser->salt      = gen_salt();
@@ -1333,15 +1337,16 @@ class WeixinHelper {
     				if (is_numeric($scene_id)) {
     					$wxqr = Wxqrcode::load($scene_id); //EventKey就是scene_id
     					if ($wxqr->is_exist()) {
-    						$upUser->parentid = $wxqr->user_id;
     						$parent_id = $wxqr->user_id;
+    						$upUser->parentid  = $parent_id;
+    						$upUser->parentnick= Users::getNick($parent_id);
     					}
     				}
     			}
     		}
     		
     		if ('subscribe'==$event || !$exUser->is_exist() || $exUser->required_uinfo_empty()) {
-    			$upUser->subscribe   = $wxuinfo['subscribe'];        //至少要保留
+    			$upUser->subscribe   = $wxuinfo['subscribe'];
     			$upUser->subscribetime = $wxuinfo['subscribe_time'];
     			$upUser->nickname  = $wxuinfo['nickname'];
     			$upUser->logo      = $wxuinfo['headimgurl'];
