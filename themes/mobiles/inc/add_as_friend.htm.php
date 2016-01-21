@@ -40,15 +40,20 @@
 
 	function AddFriend(){
 		this.friendDom = null;
-		this.initEvent();
+		this.friendDialogId = "friendDialogId";
+		//this.initEvent();
 	}
 
 	AddFriend.prototype.initEvent = function(){
-		var _THIS = this;
-		$(".close_f,.mask,.friend_no,.w_wx_colse").on("click",_THIS._onCloseEvent.bind(_THIS));
+		//var _THIS = this;
+		//$(".close_f,.mask,.friend_no,.w_wx_colse").on("click",_THIS._onCloseEvent.bind(_THIS));
 	};
 	
 	AddFriend.prototype.showFriend = function(wxqr, phone){
+		var _THIS = this;
+		if($("#"+this.friendDialogId)){
+			this.removeFriendDialog();
+		}
 		var _wxqr = wxqr;
 		var _phone = phone;
 		if(_wxqr && _wxqr.length){
@@ -65,15 +70,23 @@
 		}else{
 			this.friendDom = $(".empty_friend");
 		}
-		this.friendDom.fadeIn(300);
+		this.friendDom = $(this.friendDom.prop('outerHTML'));
+		this.friendDom.attr("id", this.friendDialogId);
+		append_to_body(this.friendDom.prop('outerHTML'));
+		$("#"+this.friendDialogId).fadeIn(300);
 		$(".mask").fadeIn(300);
+		$("#"+this.friendDialogId).on("click",_THIS._onCloseEvent.bind(_THIS));
 	};
 	
 	AddFriend.prototype._onCloseEvent = function(){
-		if(this.friendDom){
-			this.friendDom.fadeOut(300);
-			$(".mask").fadeOut(300);
-		}
+		$("#"+this.friendDialogId).fadeOut(300);
+		$(".mask").fadeOut(300);
+		this.removeFriendDialog();
+	};
+
+	AddFriend.prototype.removeFriendDialog = function(){
+		$("#"+this.friendDialogId).remove();
+		$("#"+this.friendDialogId).off("click");
 	};
 	
 </script>

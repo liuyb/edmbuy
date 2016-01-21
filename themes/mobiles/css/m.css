@@ -2355,7 +2355,7 @@ a.ph_btn{
   border-radius: 4px;
   height: 304px;
   width: 240px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -2843,7 +2843,7 @@ td.cash_td2 img {
   border-radius: 4px;
   height: 127px;
   width: 240px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -2868,7 +2868,7 @@ td.cash_td2 img {
   border-radius: 4px;
   height: 64px;
   width: 240px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-left: -120px;
@@ -3357,6 +3357,14 @@ td.cash_td2 img {
 }
 #pageContainer{
 	text-align:center;
+}
+.pull_more_data{
+	text-align:center;
+	display: none;
+	cursor:pointer;
+	line-height:20px;
+	margin-bottom:10px;
+	font-size:16px;
 }
 
 

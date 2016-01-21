@@ -5,6 +5,7 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
+<script id="forTopnav" type="text/html">
 <div class="header broke">
 	<ul>
 		<li class="<?php if ($status == 1):?>broke_on<?php endif;?>" id="broke1" onclick="showByStatus(this, 1)">已生效</li>
@@ -13,7 +14,8 @@
 		<span class="broke_line"></span>
 	</ul>
 </div>
-
+</script>
+<script>show_topnav($('#forTopnav').html())</script>
 <div class="broke_list" id="list1">
 	<div class="wsx_broke_ts" style="display:none;">
 		<p class="wsx_ts_tit">怎样才能生效?</p>
@@ -58,7 +60,7 @@
 			</tr>
 		</table>
 	</div>
-	<div id="pageContainer"><a href="#" onclick="pulldata(this);">下拉显示...</a></div>
+	<div onclick="pulldata(this);" style="margin-top:10px;" id="pageContainer" class="pull_more_data">更多...</div>
 </div>
 
 <!-- 遮罩层 -->
@@ -170,15 +172,16 @@ function renderDataRegion(data, isPullData){
 		var row = result[i];
 		TR += "<tr><td>"+row.nickname+"</td><td class=\"sx_table_list_time\">"+row.paytime+"</td><td>"+row.amount+"元</td><td>"+row.commision+"元</td></tr>";
 	}
-	TR += "$(function(){ F.set_scroller(false, 100); })";
+	//TR += "$(function(){ F.set_scroller(false, 100); })";
 	tableContainer.append($(TR));
+	F.set_scroller(false, 100);
 };
 //当还有下一页时处理下拉
 function handleWhenHasNextPage(data, level){
 	var hasnex = data.hasnexpage;
 	if(hasnex){
 		$("#pageContainer").show();
-		$("#pageContainer").find("a").attr('curpage',data.curpage).attr('level',level);
+		$("#pageContainer").attr('curpage',data.curpage).attr('level',level);
 	}else{
 		$("#pageContainer").hide();
 	}

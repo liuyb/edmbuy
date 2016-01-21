@@ -56,25 +56,26 @@ class UpdateUserChildNumJob extends CronJob {
             (
                 SELECT count(1) as c FROM edmbuy.shp_users where `parent_id` = $uid
             ) t
-        ),
-        childnum_2 = (
+        )
+        where user_id = $uid";
+        //暂时不需要同步更新二层三层人脉数量
+        /* childnum_2 = (
             select t.c from
             (
-                SELECT count(1) as c FROM edmbuy.shp_users u where 
+                SELECT count(1) as c FROM edmbuy.shp_users u where
                 u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = $uid)
-            ) t
-        ),
+                ) t
+            ),
         childnum_3 = (
             select t.c from
             (
-                SELECT count(1) as c FROM edmbuy.shp_users tu where 
-                 tu.parent_id in (
-                		SELECT user_id FROM edmbuy.shp_users su where
-                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = $uid)
-                    ) 
-            ) t
-        )
-        where user_id = $uid";
+                SELECT count(1) as c FROM edmbuy.shp_users tu where
+                tu.parent_id in (
+                    SELECT user_id FROM edmbuy.shp_users su where
+                    su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = $uid)
+                    )
+                ) t
+            ) */
         D()->query($sql);
     }
 }

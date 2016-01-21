@@ -16,13 +16,13 @@ class Partner_Model extends Model {
         $ret = "";
         switch ($level){
             case Partner::Partner_LEVEL_1 :
-                $ret = '一级米客';
+                $ret = '一级人脉';
                 break;
             case Partner::Partner_LEVEL_2 :
-                $ret = '二级米客';
+                $ret = '二级人脉';
                 break;
             case Partner::Partner_LEVEL_3 :
-                $ret = '三级米客';
+                $ret = '三级人脉';
                 break;
         }
         return $ret;

@@ -119,7 +119,8 @@ class Partner_Controller extends MobileController {
 	 */
 	public function partner_commission(Request $request, Response $response){
 	    $this->v->set_tplname('mod_partner_commission');
-	    
+	    $this->nav_no = 0;
+	    $this->topnav_no = 1;
 	    if ($request->is_hashreq()) {
 	        $status = $_REQUEST['status'];
 	        $this->v->assign("status", $status);
