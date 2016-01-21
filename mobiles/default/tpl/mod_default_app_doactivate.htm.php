@@ -58,14 +58,21 @@
 	color:#333;
 	margin-bottom:5px
 }
+td.state_comment_info {
+  text-align: right;
+}
 .state_comment_info1{
 	margin:10px 0 30px;
 	font-size:12px;
 	color:#333;
 }
 .three_tab{
-	margin:0 15% ;	
-	width:70%;
+	margin:0 5% ;	
+	width:90%;
+}
+.three_tab1 {
+  margin: 0;
+  width: 100%;
 }
 .three_tab td{
 	padding-bottom:10px;
@@ -75,44 +82,96 @@
 	font-size: 15px;
 	color:#333;
 }
+td.three_weight {text-align: left;padding-left: 5px;}
 </style>
 
 <div class="state_tit_imt"><img src="<?=$user->logo?>" alt=""></div>
-
 <div class="state_tit_neme"><?=$user->nickname?></div>
 
 <?php if(2==$situation):?>
 <div class="state_one">
-	<p class="satate_comment_phone">关联手机号：<?=$user->mobilephone?></p>
-	<p class="state_comment_ts" style="margin:23px 0 21px;">恭喜你，你的益多米账号已激活。</p>
-	<p class="state_comment_info">你的甜玉米推荐人：<?=$appParent->nick?></p>
-	<p  class="state_comment_info">推荐人手机号：<?=$appParent->mobile?></p>
-	<p  class="state_comment_info1">TA还未激活益多米账号，请邀请TA激活</p>
+	<table cellspacing="0" cellpadding="0" class="three_tab three_tab1">	
+		<tr>	
+			<td class="state_comment_info">多米号：</td>
+			<td class="three_weight"><?=$user->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">关联手机号：</td>
+			<td class="three_weight"><?=$user->mobilephone?></td>
+		</tr>
+		<tr>	
+			<td style="margin:20px 0;" colspan="2" class="state_comment_ts">恭喜你，你的益多米账号已激活。</td>
+		</tr>
+		<?php if($appParent->is_exist()):?>
+		<tr>	
+			<td class="state_comment_info">你的甜玉米推荐人：</td>
+			<td class="three_weight"><?=$appParent->nick?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">推荐人手机号：</td>
+			<td class="three_weight"><?=$appParent->mobile?></td>
+		</tr>
+		<tr><td colspan="2" style="font-weight: bold">TA还未激活益多米账号，请邀请TA激活</td></tr>
+		<?php endif;?>
+	</table>
 </div>
 <?php endif;?>
-<?php if(3==$situation):?>
+<?php if(3==$situation || 4==$situation):?>
 <div class="state_two">
-	<p class="satate_comment_phone">多米号：<?=$user->uid?></p>
-	<p class="state_comment_ts" style="margin:30px 0 104px;">你已经是益多米的会员，无需再激活。</p>
+	<p class="state_comment_ts" style="margin:30px 0;">你已经是益多米的会员，无需再激活。</p>
+	<table cellspacing="0" cellpadding="0" class="three_tab">	
+		<tr>	
+			<td class="state_comment_info">多米号：</td>
+			<td class="three_weight"><?=$user->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">关联手机号：</td>
+			<td class="three_weight"><?=$user->mobilephone?></td>
+		</tr>
+		<?php if($usrParent->is_exist()):?>
+		<tr>	
+			<td class="state_comment_info">益多米推荐人：</td>
+			<td class="three_weight"><?=$usrParent->nickname?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">推荐人多米号：</td>
+			<td class="three_weight"><?=$usrParent->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">推荐人手机号：</td>
+			<td class="three_weight"><?=$usrParent->mobilephone?></td>
+		</tr>
+		<?php endif;?>
+	</table>
 </div>
 <?php endif;?>
 <?php if(1==$situation):?>
 <div class="state_three">
 	<table cellspacing="0" cellpadding="0" class="three_tab">	
 		<tr>	
-			<td class="state_comment_info">关 联 手 机&nbsp;号：</td>
+			<td class="state_comment_info">多米号：</td>
+			<td class="three_weight"><?=$user->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">关联手机号：</td>
 			<td class="three_weight"><?=$user->mobilephone?></td>
 		</tr>
+		<?php if($usrParent->is_exist()):?>
 		<tr>	
 			<td class="state_comment_info">益多米推荐人：</td>
 			<td class="three_weight"><?=$usrParent->nickname?></td>
 		</tr>
 		<tr>	
+			<td class="state_comment_info">推荐人多米号：</td>
+			<td class="three_weight"><?=$usrParent->uid?></td>
+		</tr>
+		<tr>	
 			<td class="state_comment_info">推荐人手机号：</td>
 			<td class="three_weight"><?=$usrParent->mobilephone?></td>
 		</tr>
+		<?php endif;?>
 	</table>
-	<p class="state_comment_ts" style="margin:34px 0 30px;text-align:center;">恭喜你，你的益多米账号已激活。</p>
+	<p class="state_comment_ts" style="margin:30px 0;text-align:center;">恭喜你，你的益多米账号已激活。</p>
 </div>
 <?php endif;?>
 <div class="stat_bottom_wx">
@@ -125,8 +184,8 @@ F.onWxReady(function(){
 	wx.hideOptionMenu();
 });
 setTimeout(function(){
-	//window.location.href='<?=$refer?>';
-},2000);
+	window.location.href='<?=$refer?>';
+},30000);
 </script>
 
 <?php endif;?>

@@ -79,8 +79,8 @@ class Trade_Controller extends MobileController {
   {
   	if ($request->is_post()) {
   
-  		$item_id  = $request->post('item_id',0);
-  		$item_num = $request->post('item_num',1);
+  		$item_id  = $request->post('item_id' , 0);
+  		$item_num = $request->post('item_num', 1);
   
   		$shopping_uid = Cart::shopping_uid();
   		$ret = Cart::addItem($item_id, $item_num, true, $shopping_uid);
@@ -438,8 +438,8 @@ class Trade_Controller extends MobileController {
         $true_amount  = 0;    //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
         $total_commision = 0; //总佣金
         foreach ($order_goods AS $cg) {
-          $curr_goods_id = $cg['goods_id'];
-          $cItem = Items::load($curr_goods_id);
+          $currItemId = $cg['goods_id'];
+          $cItem = Items::load($currItemId);
           
           if (!$cItem->is_exist() || !$cItem->is_on_sale || !$cItem->item_number) { //商品下架或者库存为0，都不能购买
             continue;
@@ -447,11 +447,11 @@ class Trade_Controller extends MobileController {
           
           //TODO 并发？
           $true_goods_number = $cg['goods_number']>$cItem->item_number ? $cItem->item_number: $cg['goods_number'];
-          Items::changeStock($curr_goods_id, -$true_goods_number); //立即冻结商品对应数量的库存
+          Items::changeStock($currItemId, -$true_goods_number); //立即冻结商品对应数量的库存
           
           $newOI = new OrderItems();
           $newOI->order_id    = $order_id;
-          $newOI->goods_id    = $curr_goods_id;
+          $newOI->goods_id    = $currItemId;
           $newOI->goods_name  = $cg['goods_name'];
           $newOI->goods_sn    = $cg['goods_sn'];
           $newOI->product_id  = $cg['product_id'];
@@ -473,8 +473,12 @@ class Trade_Controller extends MobileController {
             $total_commision += $cItem->commision*$true_goods_number;
           }
           else {
-            Items::changeStock($curr_goods_id, $true_goods_number); //立即恢复刚才冻结的商品库存
+            Items::changeStock($currItemId, $true_goods_number); //立即恢复刚才冻结的商品库存
           }
+          
+          //关联订单与商家
+          Order::relateMerchant($newOrder->id, $cItem->user_id);
+          
         }//END foreach loop
         
         //总佣金
