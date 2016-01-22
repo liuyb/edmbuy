@@ -343,7 +343,7 @@ function showSelect(){
 
 //立即购买
 function immediate_buy(item_id, item_num) {
-	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667) return;
+	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667 && gUser.uid != 7217 && gUser.uid != 75497) return;
 	if (typeof (immediate_buy.ajaxing)=='undefined') {
 		immediate_buy.ajaxing = 0;
 	}
@@ -361,7 +361,7 @@ function immediate_buy(item_id, item_num) {
 //加入购物车
 function add_to_cart(item_id, item_num) {
 	var _self = add_to_cart;
-	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667) return;
+	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667 && gUser.uid != 7217 && gUser.uid != 75497) return;
 	if (typeof (_self.ajaxing)=='undefined') {
 		_self.ajaxing = 0;
 	}
