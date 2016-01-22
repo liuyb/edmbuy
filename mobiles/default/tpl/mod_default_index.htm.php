@@ -2,7 +2,7 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li style="display:block"><a href="http://m.edmbuy.com/item/1041"><img src="/themes/mobiles/img/banner.png"></a></li>
+    <li style="display:block"><a href='/activity'><img src="/themes/mobiles/img/banner.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
     <li><a href="http://m.edmbuy.com/item/1045"><img src="/themes/mobiles/img/banner02.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>
@@ -55,12 +55,12 @@ window.location.reload();
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
 			<tr>
-				<td style="width:110px;"><img src="/themes/mobiles/img/01_ba.png"></td>
+				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="/themes/mobiles/img/01_ba.png"></a></td>
 				<td>
-					<p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p>
+					<a href="http://m.edmbuy.com/item/1049" ><p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p></a>
 					<p class="jx_table_price"><span>￥38.00</span><span style="font-size:12px;color:#999;margin-left:5px;">(10斤/箱)</span></p>
 					<p class="jx_mail_type">快递：包邮</p>
-					<button class="jx_btn_new">立即订购</button>
+					<a href="http://m.edmbuy.com/item/1049" ><button class="jx_btn_new">立即订购</button></a>
 				</td>
 			</tr>
 		</table>

@@ -29,7 +29,7 @@
 			<a href="http://m.edmbuy.com/item/1041">
 				<li>
 					<div class="product_info_pc">
-						<img src="http://oss.edmbuy.com/1/img/424de5c13c935311b6605579b75ae11a.jpg" style="float:right">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1041_P_1453009153869.jpg" style="float:right">
 						<p class="list_table_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
 						<p class="list_table_price"><span>￥118.00</span><b>￥135.00</b></p>
 					</div>
@@ -63,12 +63,12 @@
 					</div>
 				</li>
 			</a>
-			<a href="http://m.edmbuy.com/item/1042">
+			<a href="http://m.edmbuy.com/item/1019">
 				<li>
 					<div class="product_info_pc">
-						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
-						<p class="list_table_tit">宁夏五谷合一粗粮杂粮米4斤装</p>
-						<p class="list_table_price"><span>￥98.00</span><b>￥112.00</b></p>
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1019_P_1452107600918.jpg" style="float:right">
+						<p class="list_table_tit">佐佐果冻萌卡通包装水果味奶优果冻休闲食品690g粉猪棕熊</p>
+						<p class="list_table_price"><span>￥42.00</span><b>￥53.00</b></p>
 					</div>
 				</li>
 			</a>
