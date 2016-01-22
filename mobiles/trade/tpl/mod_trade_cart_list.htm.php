@@ -4,7 +4,7 @@
 <div class="header">
 	购物车
 <?php if($backurl):?><a href="<?=$backurl?>" class="back"></a><?php endif;?>
-	<a href="javascript:;" class="h_btn" id="cart_edit">编辑</a>
+<?php if($cartNum):?><a href="javascript:;" class="h_btn" id="cart_edit">编辑</a><?php endif;?>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>

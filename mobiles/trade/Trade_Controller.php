@@ -182,10 +182,15 @@ class Trade_Controller extends MobileController {
     }
     $this->v->assign('mnav', $mnav);
     
+    $shop_uid = Cart::shopping_uid();
+    $cartNum  = Cart::getUserCartNum($shop_uid);
+    if (!$cartNum) {
+    	$this->nav_no    = 0;
+    }
+    
     if ($request->is_hashreq()) {
       $shop_uid = Cart::shopping_uid();
       $cartGoods= Cart::getUserCart($shop_uid);
-      $cartNum  = Cart::getUserCartNum($shop_uid);
       
       //将数据库列表转化成根据商家聚合列表
       $cartMerchantGoods = [];

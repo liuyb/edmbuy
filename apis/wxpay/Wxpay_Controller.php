@@ -89,6 +89,12 @@ class Wxpay_Controller extends Controller {
           
           //更新订单下所有商品的"订单数"
           Items::updateOrderCntByOrderid($order_id);
+          
+          //检查用户资格
+          $cUser = Users::load_by_openid($openid);
+          if ($cUser->is_exist()) {
+          	$cUser->check_level();
+          }
         }
         else {
           D()->unlock_tables();// 解锁

@@ -16,6 +16,12 @@ class Users extends StorageNode {
 	const USER_LEVEL_1 = 1; //米商
 	const USER_LEVEL_2 = 2; //合伙人
 	
+	static $level_amount = [
+			0 => 0,             //米客消费金额
+			1 => 98,            //米商消费金额
+			2 => 100000000,     //合伙人消费金额
+	];
+	
 	static $allowed_leader_level = [1,2,3]; //运行的上级级别
 	
 	protected static function meta() {
@@ -387,7 +393,6 @@ class Users extends StorageNode {
 		D()->query("UPDATE ".self::table(). " SET synctimes={$setpart} WHERE user_id=%d", $this->uid);
 		return true;
 	}
-	
 
 	/**
 	 * 获取用户收货地址列表
@@ -451,6 +456,30 @@ class Users extends StorageNode {
 	static function getNick($user_id) {
 		$nick = D()->from(self::table())->where("user_id=%d",$user_id)->select("nick_name")->result();
 		return $nick;
+	}
+	
+	/**
+	 * 查询当前用户总购买金额
+	 * @return double
+	 */
+	public function total_paid() {
+		$total = D()->query("SELECT SUM( money_paid ) AS totalpaid FROM ".Order::table()." WHERE user_id =%d AND `pay_status`=%d", $this->id, PS_PAYED)->result();
+		return $total;
+	}
+	
+	/**
+	 * 检查米商、米客
+	 * @return number
+	 */
+	public function check_level() {
+		if ($this->level > 0) return $this->level;
+		$total_paid = $this->total_paid();
+		if ($total_paid >= self::$level_amount[self::USER_LEVEL_1]) { //成为米商
+			$upUser = new self($this->id);
+			$upUser->level = self::USER_LEVEL_1;
+			$upUser->save(Storage::SAVE_UPDATE);
+		}
+		return 0;
 	}
 	
 }
