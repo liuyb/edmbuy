@@ -24,7 +24,7 @@
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><a href="<?=$kefu_link?>" <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
 	<a href="<?php echo U('trade/cart/list')?>">
-		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" style="display:none;">0</span></div>
+		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span></div>
 	</a>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
 	<div class="fl cursor p_d_t4" id="Mnav-buy">立即购买</div>
@@ -73,7 +73,7 @@
 			</div>
 		</div>
 		<span class="cursor p_cart_close"></span>
-		<div class="cursor no-bounce p_cart_btn">确定</div>
+		<div class="no-bounce p_cart_btn"><a href="javascript:;">确定</a></div>
 	</div>
 </div>
 
@@ -303,7 +303,7 @@ $(document).ready(function(){
 	});
 	
 	//确定加入
-	$cartmain.on("click", ".p_cart_btn", function(){
+	$cartmain.on("click", ".p_cart_btn a", function(){
 		var buy_type = $('#frm_buy_type').val();
 		var item_id  = $('#frm_item_id').val();
 		var item_num = $('#frm_item_num').val();
@@ -311,14 +311,16 @@ $(document).ready(function(){
 			immediate_buy(item_id, item_num);
 		}
 		else {
-			$mask.hide();
-			$cartmain.addClass("is_confirm");
-			setTimeout(function(){
-				$cartmain.hide().attr("class","p_cart_main");
-				var cart_number = $("#cart_number").text()*1;
-				var select_number = $(".cart_inp").val()*1;
-				$("#cart_number").text(cart_number + select_number).show();
-			},500);
+			add_to_cart(item_id, item_num, function(){
+				$mask.hide();
+				$cartmain.addClass("is_confirm");
+				setTimeout(function(){
+					$cartmain.hide().attr("class","p_cart_main");
+					var cart_number = $("#cart_number").text()*1;
+					var select_number = $(".cart_inp").val()*1;
+					$("#cart_number").text(cart_number + select_number).show();
+				},500);
+			});
 		}
 	});
 
@@ -340,17 +342,26 @@ function showSelect(){
 	$("#product_select").text(select);
 	$('#cart_shop_price').text(price.toFixed(2));
 }
-
+//购买白名单
+function can_buy() {
+	if (!gUser.uid) return false;
+	var white_uids = [104,112,2667,7217,75497];
+	for (var i=0; i<white_uids.length; i++) {
+		if (gUser.uid==white_uids[i]) return true;
+	}
+	return false;
+}
 //立即购买
 function immediate_buy(item_id, item_num) {
-	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667 && gUser.uid != 7217 && gUser.uid != 75497) return;
-	if (typeof (immediate_buy.ajaxing)=='undefined') {
-		immediate_buy.ajaxing = 0;
+	if (!can_buy()) return;
+	var _self = immediate_buy;
+	if (typeof (_self.ajaxing)=='undefined') {
+		_self.ajaxing = 0;
 	}
-	if (immediate_buy.ajaxing) return;
-	immediate_buy.ajaxing = 1;
+	if (_self.ajaxing) return;
+	_self.ajaxing = 1;
 	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num},function(ret){
-		immediate_buy.ajaxing = 0;
+		_self.ajaxing = 0;
 		var gourl = '<?php echo U('trade/order/confirm')?>';
 		if (gourl.lastIndexOf('?') < 0) gourl += '?';
 		else gourl += '&';
@@ -359,9 +370,9 @@ function immediate_buy(item_id, item_num) {
 	});
 }
 //加入购物车
-function add_to_cart(item_id, item_num) {
+function add_to_cart(item_id, item_num, callback) {
+	if (!can_buy()) return;
 	var _self = add_to_cart;
-	if (gUser.uid != 104 && gUser.uid != 112 && gUser.uid != 2667 && gUser.uid != 7217 && gUser.uid != 75497) return;
 	if (typeof (_self.ajaxing)=='undefined') {
 		_self.ajaxing = 0;
 	}
@@ -373,7 +384,9 @@ function add_to_cart(item_id, item_num) {
 			var old_stock = parseInt($('#stock-num').text());
 			old_stock -= ret.added_num;
 			$('#stock-num').text(old_stock);
-			myAlert(ret.msg);
+			if (typeof(callback)=='function') {
+				callback();
+			}
 		}else{
 			myAlert(ret.msg);
 		}

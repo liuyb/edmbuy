@@ -42,33 +42,7 @@ class Trade_Controller extends MobileController {
       'trade/order/topay'    => 'order_topay',
     ];
   }
-  
-  /**
-   * 添加购物车
-   *
-   * @param Request $request
-   * @param Response $response
-   */
-  public function cart_add(Request $request, Response $response)
-  {
-    if ($request->is_post()) {
-      
-      $goods_id = $request->post('goods_id',0);
-      $goods_num= $request->post('goods_num',1);
-      
-      $user_id = $GLOBALS['user']->ec_user_id;
-      if (!$user_id) {
-        $user_id = session_id();
-      }
-      
-      $ret = Goods::addToCart($goods_id, $goods_num, $user_id);
-      if ($ret['code']>0) {
-        $ret['cart_num'] = Cart::getUserCartNum($shopping_uid);
-      }
-      $response->sendJSON($ret);
-    }
-  }
-  
+
   /**
    * 直接购买
    *
@@ -92,6 +66,29 @@ class Trade_Controller extends MobileController {
   }
   
   /**
+   * 添加购物车
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function cart_add(Request $request, Response $response)
+  {
+    if ($request->is_post()) {
+      
+      $item_id  = $request->post('item_id' , 0);
+      $item_num = $request->post('item_num', 1);
+      
+      $shopping_uid = Cart::shopping_uid();
+      
+      $ret = Cart::addItem($item_id, $item_num, false, $shopping_uid);
+      if ($ret['code']>0) {
+        $ret['cart_num'] = Cart::getUserCartNum($shopping_uid);
+      }
+      $response->sendJSON($ret);
+    }
+  }
+  
+  /**
    * 删除购物车中的商品
    *
    * @param Request $request
@@ -108,13 +105,13 @@ class Trade_Controller extends MobileController {
         $response->sendJSON($ret);
       }
       
-      $user_id = $GLOBALS['user']->ec_user_id;
+      $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
         $ret['msg'] = '请先登录';
         $response->sendJSON($ret);
       }
       
-      $ret = Goods::deleteCartGoods($rec_ids, $user_id);
+      $ret = Cart::deleteGoods($rec_ids, $user_id);
       if ($ret['code']>0) {
         $ret['flag'] = 'SUC';
         $ret['rec_ids'] = $rec_ids;
@@ -150,7 +147,7 @@ class Trade_Controller extends MobileController {
       $i = 0;
       $succ_rids = [];
       foreach ($rec_ids AS $rid) {
-        if (Goods::changeCartGoodsNum($user_id, $rid, $gnums[$i], true, true)) {
+        if (Cart::changeCartGoodsNum($user_id, $rid, $gnums[$i], true, true)) {
           $succ_rids[] = $rid;
         }
         ++$i;
@@ -189,7 +186,16 @@ class Trade_Controller extends MobileController {
       $shop_uid = Cart::shopping_uid();
       $cartGoods= Cart::getUserCart($shop_uid);
       $cartNum  = Cart::getUserCartNum($shop_uid);
-      $this->v->assign('cartGoods', $cartGoods);
+      
+      //将数据库列表转化成根据商家聚合列表
+      $cartMerchantGoods = [];
+      foreach ($cartGoods AS $cg) {
+      	if (!isset($cartMerchantGoods[$cg->merchant_uid])) {
+      		$cartMerchantGoods[$cg->merchant_uid] = ['merchant_uid'=>$cg->merchant_uid,'merchant_name'=>$cg->merchant_name,'glist'=>[]];
+      	}
+      	array_push($cartMerchantGoods[$cg->merchant_uid]['glist'], $cg);
+      }
+      $this->v->assign('cartGoods', $cartMerchantGoods);
       $this->v->assign('cartNum', intval($cartNum));
     }
     else {
@@ -255,6 +261,7 @@ class Trade_Controller extends MobileController {
     $this->nav_no    = 0;
     if ($request->is_hashreq()) {
       $cart_rids = $request->get('cart_rids','');
+      $cart_nums = $request->get('cart_nums','');
       $timestamp = $request->get('t',0);
       $cart_rids = trim($cart_rids);
       
@@ -268,10 +275,17 @@ class Trade_Controller extends MobileController {
         throw new ViewException($this->v, "结账商品为空");
       }
       
-      //标准化商品id
+      //标准化商品id，同时如果$cart_nums不为空，则更新相应的cartnum
       $cart_rids = explode(',', $cart_rids);
+      $cart_nums = explode(',', $cart_nums);
+      $i = 0;
+      $shopping_uid = Cart::shopping_uid();
       foreach ($cart_rids AS &$rid) {
         $rid = trim($rid);
+        if (isset($cart_nums[$i]) && !empty($cart_nums[$i])) {
+        	Cart::changeCartGoodsNum($shopping_uid, $rid, $cart_nums[$i], true, true);
+        }
+        $i++;
       }
       
       //订单商品信息

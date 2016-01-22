@@ -1376,9 +1376,10 @@ a.h_btn{
   color: #fff;
   width: 100%;
   font-size: 17px;
-  background: #f4503e/*#ff6d14*/;
+  background: #f4503e;
   text-align: center;
 }
+.p_cart_btn a { display: block;height: 100%;color: #fff; }
 .p_cart_hd{
   margin-left: 12px;  
   padding: 0 0 10px;

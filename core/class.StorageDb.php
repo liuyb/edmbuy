@@ -187,6 +187,9 @@ class StorageDb extends Storage {
 		if (!isset($opts['size'])) $opts['size'] = 10;
 		if (!isset($opts['from'])) $opts['from'] = 0;
 		$limit = "LIMIT {$opts['from']},{$opts['size']}";
+		if ($opts['size'] < 0) {
+			$limit = "";
+		}
 	
 		return [$where, $order, $limit];
 	}
