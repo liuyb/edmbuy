@@ -29,6 +29,7 @@ class Common_Controller extends Controller {
       '!^about$!i'     => 'default/about',
       '!^comeon$!i'    => 'default/comeon',
       '!^riceplan$!i'  => 'default/riceplan',
+      '!^activity$!i'  => 'default/activity',
       '!^app_activate$!i'    => 'default/app_activate',
       '!^app_doactivate$!i'  => 'default/app_doactivate',
     ];

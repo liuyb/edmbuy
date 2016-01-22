@@ -123,6 +123,28 @@ class Default_Controller extends MobileController {
     
     throw new ViewResponse($this->v);
   }
+
+  /**
+   * action 'activity'
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function activity(Request $request, Response $response)
+  {
+  	$this->v = new PageView('','_page_spa');
+    $this->v->set_tplname('mod_default_activity');
+     
+    //SEO信息
+    $seo = [
+    		'title'   => '益多米年货嘉年华',
+    		'keyword' => L('appname').',购物,赚钱,电商,商城',
+    		'desc'    => '益多米是新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。'
+    ];
+    $this->v->assign('seo', $seo);
+    
+    throw new ViewResponse($this->v);
+  }
   
   /**
    * action 'comeon'
