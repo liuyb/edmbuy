@@ -17,7 +17,7 @@
 	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
 </div>
-<div id="pageContainer" onclick="pulldata(this);" class="pull_more_data">更多...</div>
+<div id="pageContainer" onclick="pulldata(this);" class="pull_more_data">点击加载更多...</div>
 
 <?php include T('inc/add_as_friend');?>
 
