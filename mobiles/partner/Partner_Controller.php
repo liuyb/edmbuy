@@ -93,8 +93,8 @@ class Partner_Controller extends MobileController {
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);
 	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
 	    $Incomes = Partner_Model::getCommisionIncome($uid);
-	    $inactiveIncome = 0.00;
-	    $totalIncome = 0.00;
+	    $inactiveIncome = '0.00';
+	    $totalIncome = '0.00';
 	    foreach ($Incomes as $item){
 	        if(Partner::COMMISSION_VALID == $item['state']){
 	            $totalIncome = $item['commision'];

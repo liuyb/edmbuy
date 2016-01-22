@@ -15,24 +15,24 @@
 
 <div class="guest_list" style="border-bottom:0;background:#eee;">
 	<ul>
-		<a href="javascript:;">
+		<a href="/riceplan">
 			<li>
 				<h1><img src="/themes/mobiles/img/tui.png"></h1>
-				<p>推广专题</p>
+				<p>米商计划</p>
 			</li>
 		</a>
-		<a href="javascript:;">
+		<a href="/comeon">
 			<li>
 				<h1><img src="/themes/mobiles/img/tewm.png"></h1>
 				<p class="noborder">推广二维码</p>
 			</li>
 		</a>
-		<a href="/item/promote/product">
+		<!-- <a href="/item/promote/product">
 			<li style="margin-top:20px;">
 				<h1><img src="/themes/mobiles/img/tcp.png"></h1>
 				<p class="noborder">推荐产品</p>
 			</li>
-		</a>
+		</a> -->
 	</ul>
 </div>
 <?php endif;?>

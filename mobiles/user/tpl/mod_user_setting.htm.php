@@ -62,7 +62,12 @@
 	<div class="person_head_comment">
 		<span class="head_l_com">我的角色</span>
 		<span class="head_r_com" style="margin-right:12px;">
-			<span style="margin-right: 5px;font-size:16px;"><?=$role ?></span>
+			<span style="margin-right: 5px;font-size:16px;">
+			<?php 
+			$role = ($level == 1) ? "米商" : (($level == 2) ? "合伙人" : "米客");
+			?>
+			<?=$role ?>
+			</span>
 			<?php if(0 == $level): ?>
 			<button class="personInfo_but" id="be-partner" style="font-size:13px;">成为米商</button>
 			<?php endif;?>

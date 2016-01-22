@@ -78,8 +78,6 @@ class User_Controller extends MobileController {
       $this->topnav_no = 1;
       if ($request->is_hashreq()) {
           $user = $this->showUserBaseInfo();
-          $role = User_Model::displayUserRole($user->level);
-          $this->v->assign("role", $role);
       }
       throw new ViewResponse($this->v);
   }
