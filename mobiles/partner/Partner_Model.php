@@ -90,7 +90,14 @@ class Partner_Model extends Model {
     }
     
     static function showCurLevelCommistionList($level, $status, Pager $pager){
-        switch ($level){
+        $uid = $GLOBALS['user']->uid;
+        if(isset($pager->needtotal) && $pager->needtotal == 1){
+            $countArray = Partner::findCommisionByLevelCount($uid, $level, $status);
+            $pager->otherMap = $countArray;
+        }
+        $result = Partner::findCommisionByLevelList($uid, $level, $status, $pager);
+        $pager->setResult($result);
+        /* switch ($level){
             case Partner::Partner_LEVEL_1 :
                 self::findFirstLevelCommisionList($status, $pager);
                 break;
@@ -100,7 +107,7 @@ class Partner_Model extends Model {
             case Partner::Partner_LEVEL_3 :
                 self::findThirdLevelCommisionList($status, $pager);
                 break;
-        }
+        } */
     }
     
     /**
@@ -108,46 +115,46 @@ class Partner_Model extends Model {
      * @param unknown $status
      * @param Pager $pager
      */
-    static function findFirstLevelCommisionList($status, PagerPull $pager){
-        $uid = $GLOBALS['user']->uid;
-        if(isset($pager->needtotal) && $pager->needtotal == 1){
-            $countArray = Partner::findFirstLevelCommisionCount($uid, $status);
-            $pager->otherMap = $countArray;
-        }
-        $result = Partner::findFirstLevelCommisionList($uid, $status, $pager);
-        $pager->setResult($result);
-    }
+//     static function findFirstLevelCommisionList($status, PagerPull $pager){
+//         $uid = $GLOBALS['user']->uid;
+//         if(isset($pager->needtotal) && $pager->needtotal == 1){
+//             $countArray = Partner::findFirstLevelCommisionCount($uid, $status);
+//             $pager->otherMap = $countArray;
+//         }
+//         $result = Partner::findFirstLevelCommisionList($uid, $status, $pager);
+//         $pager->setResult($result);
+//     }
     
-    /**
-     * 第二层佣金明细
-     * @param unknown $status
-     * @param Pager $pager
-     */
-    static function findSecondLevelCommisionList($status, PagerPull $pager){
-        $uid = $GLOBALS['user']->uid;
-        if(isset($pager->needtotal) && $pager->needtotal == 1){
-            $countArray = Partner::findSecondLevelCommisionCount($uid, $status);
-            $pager->otherMap = $countArray;
+//     /**
+//      * 第二层佣金明细
+//      * @param unknown $status
+//      * @param Pager $pager
+//      */
+//     static function findSecondLevelCommisionList($status, PagerPull $pager){
+//         $uid = $GLOBALS['user']->uid;
+//         if(isset($pager->needtotal) && $pager->needtotal == 1){
+//             $countArray = Partner::findSecondLevelCommisionCount($uid, $status);
+//             $pager->otherMap = $countArray;
             
-        }
-        $result = Partner::findSecondLevelCommisionList($uid, $status, $pager);
-        $pager->setResult($result);
-    }
+//         }
+//         $result = Partner::findSecondLevelCommisionList($uid, $status, $pager);
+//         $pager->setResult($result);
+//     }
     
-    /**
-     * 第三层佣金明细
-     * @param unknown $status
-     * @param Pager $pager
-     */
-    static function findThirdLevelCommisionList($status, PagerPull $pager){
-        $uid = $GLOBALS['user']->uid;
-        if(isset($pager->needtotal) && $pager->needtotal == 1){
-            $countArray = Partner::findThirdLevelCommisionCount($uid, $status);
-            $pager->otherMap = $countArray;
-        }
-        $result = Partner::findThirdLevelCommisionList($uid, $status, $pager);
-        $pager->setResult($result);
-    }
+//     /**
+//      * 第三层佣金明细
+//      * @param unknown $status
+//      * @param Pager $pager
+//      */
+//     static function findThirdLevelCommisionList($status, PagerPull $pager){
+//         $uid = $GLOBALS['user']->uid;
+//         if(isset($pager->needtotal) && $pager->needtotal == 1){
+//             $countArray = Partner::findThirdLevelCommisionCount($uid, $status);
+//             $pager->otherMap = $countArray;
+//         }
+//         $result = Partner::findThirdLevelCommisionList($uid, $status, $pager);
+//         $pager->setResult($result);
+//     }
     
 }
  
