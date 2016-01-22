@@ -43,12 +43,12 @@ class Default_Controller extends MobileController {
     $this->v->set_tplname('mod_default_index');
     $this->nav_no    = 1;
     $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-    
+    /*
     $debug = $request->get('debug',0);
     if (!$debug) {
     	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
     }
-    
+    */
     throw new ViewResponse($this->v);
   }
 

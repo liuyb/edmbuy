@@ -8,8 +8,8 @@
 
 
 <div class="header">
-	米商专属特权<!-- 
-	<a href="javascript:history.back();" class="back"></a> -->
+	米商专属特权
+	<a href="javascript:history.back();" class="back"></a>
 </div>
 
 <div class="rice_bg">
@@ -22,16 +22,14 @@
 	<p><img src="/themes/mobiles/img/rice_06_2.png"></p>
 	<p><img src="/themes/mobiles/img/rice_04.png"></p>
 </div>
-<!-- 
 <div class="list_tit_img"><img src="/themes/mobiles/img/rice_07.png"></div>
- -->
-<div class="rice_list_tjproduct" style="background:#fff;display:none;">
+<div class="rice_list_tjproduct" style="background:#fff;">
 	<div class="list_product_info index_product_info">
 		<ul>
 			<a href="http://m.edmbuy.com/item/1041">
 				<li>
 					<div class="product_info_pc">
-						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1041_P_1452726608050.jpg" style="float:right">
+						<img src="http://oss.edmbuy.com/1/img/424de5c13c935311b6605579b75ae11a.jpg" style="float:right">
 						<p class="list_table_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
 						<p class="list_table_price"><span>￥118.00</span><b>￥135.00</b></p>
 					</div>

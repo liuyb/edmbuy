@@ -10,7 +10,7 @@ class UpdateUserBaseDataJob extends CronJob {
     
     public function main($argc, $argv) {
         $this->sync_user_from_tym();
-        $this->updateUserParentNick();
+        //$this->updateUserParentNick();
     }
     
     /**
@@ -106,7 +106,7 @@ class UpdateUserBaseDataJob extends CronJob {
     private function get_notsynced_tymuser_total() {
         $sql = "select count(*) from tb_tym_user 
                 where mobile in (
-					select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
+					select mobile_phone from shp_users where app_userid = 0 and mobile_phone<>''
                 )";
         return D()->query($sql)->result();
     }
@@ -118,7 +118,7 @@ class UpdateUserBaseDataJob extends CronJob {
     private function get_notsynced_tymuser_list($start, $limit) {
         $sql = "select userid,nick,logo,qrcode,business_id,business_time,mobile from tb_tym_user 
                 where mobile in (
-					select mobile_phone from shp_users where app_userid = 0 and mobile_phone is not null
+					select mobile_phone from shp_users where app_userid = 0 and mobile_phone<>''
                 ) limit %d,%d";
         return D()->query($sql, $start, $limit)->fetch_array_all();
     }

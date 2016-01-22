@@ -40,8 +40,10 @@ class Item_Controller extends MobileController {
 		$this->nav_no    = 1;
 		$this->nav_flag1 = 'item';
 		$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+		$this->backurl = '/';
 		
 		if (1||$request->is_hashreq()) {
+			
 			$item_id = $request->arg(1);
 			$item = Items::load($item_id);
 			if (!$item->is_exist()) {

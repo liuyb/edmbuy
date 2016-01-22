@@ -123,7 +123,7 @@ class Cart extends StorageNode {
 		if ($item_id) {
 			$where .= " AND `goods_id`=%d";
 		}
-		$where .= " AND `is_immediate`={$is_immediate}";
+		//$where .= " AND `is_immediate`={$is_immediate}";
 		$rec_id = D()->from(self::table())->where($where, $shopping_uid, $item_id)->select("rec_id")->result();
 		return $rec_id;
 	}

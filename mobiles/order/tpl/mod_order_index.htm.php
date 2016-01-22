@@ -6,7 +6,7 @@
 		<li>待发货</li>
 		<li>待收货</li>
 		<li>售后</li>
-		<a href="javascript:history.back();" class="back"></a>
+		<a href="<?php echo U('user')?>" class="back"></a>
 	</ul>
 </div>
 

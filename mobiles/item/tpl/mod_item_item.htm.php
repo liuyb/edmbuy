@@ -8,15 +8,15 @@
 
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
-	<span class="p_detail_back cursor"></span>
+	<span class="p_detail_back cursor" onclick="location.href='<?=$backurl?>'"></span>
 	<span class="p_detail_more cursor"></span>
 </div>
 <div class="p_detail_menulist cursor">
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu">
-		<li class="p_menu_sy"><a href="#">首页</a></li>
-		<li class="p_menu_hhr"><a href="#">米商</a></li>
-		<li class="p_menu_hy"><a href="#">会员</a></li>
+		<li class="p_menu_sy"><a href="/">首页</a></li>
+		<li class="p_menu_hhr"><a href="/partner">米商</a></li>
+		<li class="p_menu_hy"><a href="/user">会员</a></li>
 	</ul>
 </div>
 </script>
@@ -226,11 +226,11 @@ $(document).ready(function(){
 	
 	//菜单开启
 	$(document.body).on("click", ".p_detail_more", function(){
-		$(".p_detail_menulist,.mask_menu").show();
+		$(".p_detail_menulist").show();
 	});
 	//菜单关闭
 	$(document.body).on("click", ".mask_menu", function(){
-		$(".p_detail_menulist,.mask_menu").hide();
+		//$(".p_detail_menulist,.mask_menu").hide();
 	});
 	
 	//加入购物车
