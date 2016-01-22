@@ -95,7 +95,7 @@ $(function(){
 	var length = $(".fre").text().length;
 	if(length > 5){
 		 var str = $(".fre").text();
-		 var name = str.substr(1,5);
+		 var name = str.substr(0,5);
 		 $(".fre").text(name + '...');
 	}
 });

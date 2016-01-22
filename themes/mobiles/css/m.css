@@ -1713,9 +1713,6 @@ a.ph_btn{
   height:44px;
   line-height:44px;
   border-bottom:1px solid #eee;
-  background: url(../img/back.png) no-repeat 97% center;  
-  padding-right:120px;
-  background-size: 16px;  
 }
 .tit_name{
   font-size:16px;
@@ -2306,7 +2303,7 @@ a.ph_btn{
 }
 .list_nickname{
   background: no-repeat 100% center;
-  padding-right: 20%;
+  padding-right: 15%;
   background-size: 19px !important;  
   font-size:17px;
   color:#333; 
@@ -3175,7 +3172,7 @@ td.cash_td2 img {
   font-size: 14px;
   color: #333;
   line-height: 17px;
-  height: 36px; 
+  height: 33px; 
 }
 .list_table_price{
   padding-left:2px;
@@ -3210,6 +3207,7 @@ td.cash_td2 img {
 .list_jx_tab img{
   vertical-align: inherit;
   width:110px;
+  border-radius:4px;
 }
 .list_jx_tab td{
   padding:8px;
