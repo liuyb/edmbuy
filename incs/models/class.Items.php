@@ -185,12 +185,12 @@ HERESQL;
 	}
 	
 	/**
-	 * 获取商品列表
+	 * 获取在售的商品列表
 	 * @param PagerPull $pager
 	 */
 	static function findGoodsList(PagerPull $pager){
 	    $sql = "select goods_id,goods_name,shop_price,market_price,
-	               goods_thumb from shp_goods limit %d,%d";
+	               goods_thumb from shp_goods where is_on_sale = 1 limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    if (!empty($goods)) {
 	        foreach ($goods AS &$g) {
