@@ -8,7 +8,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	订单详情
-<a href="javascript:history.back();" class="back"></a>
+<a href="/trade/order/record" class="back"></a>
 <a href="/user" class="back_r"></a>
 </div>
 </script>
@@ -96,8 +96,38 @@
 </div>
 
 <div class="order_type_btn">
-	<button class="order_but_l del_success_order">删除订单</button>
-	<button class="order_but_l return_order">退货</button>
-	<button class="order_but_r again_buy">再次购买</button>
+<?php if ($order->order_status==OS_CANCELED):?>
+<button class="order_but_l del_success_order" data-order_id="<?=$order_id?>">已取消</button>
+<?php else:?>
+<button class="order_but_l del_success_order" data-order_id="<?=$order_id?>" onclick="cancel_order(this)">取消订单</button>
+<?php endif;?>
+	
+	<button class="order_but_l return_order" onclick="return_product(this)">退货</button>
+<!--
+	<button class="order_but_r again_buy" onclick="location.href='/item/'">再次购买</button>
+-->
 </div>
+<script type="text/javascript">
+function cancel_order(obj) {
+	var _self = cancel_order;
+	if (typeof (_self.ajaxing) != 'undefined') {
+		_self.ajaxing = 0;
+	} 
+	var order_id = $(obj).attr('data-order_id');
+	order_id = parseInt(order_id);
+	_self.ajaxing = 1;
+	if (confirm('确定取消该订单么？')) {
+  		var pdata = {"order_id": order_id};
+  		F.post('<?php echo U('trade/order/cancel')?>',pdata,function(ret){
+  			_self.ajaxing = 0;
+  			if (ret.flag=='SUC') {
+  				window.location.reload();
+  			}
+  		});
+		}
+}
+function return_product(obj) {
+	myAlert('请联系在线客服');
+}
+</script>
 <?php endif;?>

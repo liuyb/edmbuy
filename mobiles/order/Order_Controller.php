@@ -28,8 +28,8 @@ class Order_Controller extends MobileController {
 	public function menu()
 	{
 		return [
-			'order' => 'item',
-		    'order/detail/%d' => 'order_detail'
+			'order' => 'index',
+		  'order/%d/detail' => 'order_detail'
 		];
 	}
 	
@@ -39,20 +39,19 @@ class Order_Controller extends MobileController {
 	 * @param Request $request
 	 * @param Response $response
 	 */
-	public function item(Request $request, Response $response)
+	public function index(Request $request, Response $response)
 	{
 		$this->v->set_tplname('mod_order_index');
-        $this->topnav_no = 0;
-        $this->nav_no    = 1;
+		$this->topnav_no = 1;
+		$this->nav_no    = 0;
         
-        if ($request->is_hashreq()) {
-          
-        }
-        else {
-        	
-        }
-    
-        throw new ViewResponse($this->v);
+		if ($request->is_hashreq()) {
+			
+		}
+		else {
+			
+		}
+		throw new ViewResponse($this->v);
 	}
 	
 	public function order_detail(Request $request, Response $response)
@@ -62,10 +61,13 @@ class Order_Controller extends MobileController {
 	    $this->topnav_no = 1;
 	
 	    if ($request->is_hashreq()) {
-	       $order_id  = $request->arg(2);
+	       $order_id  = $request->arg(1);
+	       $order = Order::load($order_id);
 	       $order_detail = Order::getOrderDetail($order_id);
 	       $merchant_goods = Order_Model::getOrderItems($order_id);
 	       $this->v->assign("item", $order_detail);
+	       $this->v->assign("order", $order);
+	       $this->v->assign("order_id", $order_id);
 	       $this->v->assign("merchant_goods", $merchant_goods);
 	    }
 	

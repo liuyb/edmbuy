@@ -8,7 +8,6 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Order_Model extends Model {
 
-	
     /**
      * 根据从Order里面获取的商品列表及商家信息
      * 组装成  商家->商品列表 集合

@@ -237,13 +237,13 @@ class Trade_Controller extends MobileController {
           ->assign('orders_num', $orders_num);
       });
       
-      $user_id = $GLOBALS['user']->ec_user_id;
+      $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
         $errmsg = "无效请求";
         $response->send($this->v);
       }
       
-      $orders = Goods::getOrderList($user_id);
+      $orders = Order::getList($user_id);
       $orders_num = count($orders);
       $this->v->assign('orders', $orders);
       
@@ -625,7 +625,7 @@ class Trade_Controller extends MobileController {
     if ($request->is_post()) {
       $ret = ['flag'=>'FAIL','msg'=>'取消失败'];
       
-      $user_id = $GLOBALS['user']->ec_user_id;
+      $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
@@ -647,7 +647,7 @@ class Trade_Controller extends MobileController {
   }
 
   /**
-   * 取消订单
+   * 确认收货
    *
    * @param Request $request
    * @param Response $response

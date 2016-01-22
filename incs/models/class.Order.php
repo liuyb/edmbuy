@@ -291,6 +291,89 @@ class Order extends StorageNode{
        $rows = D()->query($sql, $order_id)->fetch_array();
        return $rows;
     }
+    
+    /**
+     * 获取订单列表
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    static function getList($user_id) {
+    	if (empty($user_id)) return [];
+    
+    	$start = 0;
+    	$limit = 50;
+    
+    	$ectb_order = self::table();
+    	$ectb_goods = Items::table();
+    	$ectb_order_goods = OrderItems::table();
+    
+    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d ORDER BY `order_id` DESC LIMIT %d,%d";
+    	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
+    	if (!empty($orders)) {
+    		foreach ($orders AS &$ord) {
+    			$ord['show_status_html'] = self::genStatusHtml($ord);
+    			$ord['order_goods'] = [];
+    			$sql = "SELECT og.*,g.`goods_thumb` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
+    			$order_goods = D()->raw_query($sql, $ord['order_id'])->fetch_array_all();
+    			if (!empty($order_goods)) {
+    				foreach ($order_goods AS &$g) {
+    					$g['goods_url']   = Items::itemurl($g['goods_id']);
+    					$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+    				}
+    				$ord['order_goods'] = $order_goods;
+    			}
+    		}
+    	}
+    	else {
+    		$orders = [];
+    	}
+    	return $orders;
+    }
+    
+    /**
+     * 生成订单各种状态显示html
+     *
+     * @param array $order
+     * @return string
+     */
+    static function genStatusHtml(Array &$order) {
+    
+    	$html = '';
+    
+    	$order['active_order'] = 0; //便于区分订单显示样式
+    	$br = '<br/>';
+    	if (!in_array($order['order_status'], [OS_CANCELED,OS_INVALID,OS_RETURNED])) { //订单“活动中”
+    		$order['active_order'] = 1;
+    		if ($order['pay_status'] == PS_UNPAYED) { //未支付
+    			$html .= '<p class="order-status-txt">'.Fn::pay_status($order['pay_status']).'</p>';
+    			$html .= '<p class="order-status-op"><a href="javascript:;" class="btn btn-orange btn-order-topay" data-order_id="'.$order['order_id'].'">立即付款</a></p>';
+    			$html .= '<p class="order-status-op last"><a href="javascript:;" class="btn-order-cancel" data-order_id="'.$order['order_id'].'">取消订单</a></p>';
+    		}
+    		elseif ($order['pay_status']==PS_PAYED) { //已支付
+    			$html .= '<p class="order-status-txt">'.Fn::pay_status($order['pay_status']).$br.Fn::shipping_status($order['shipping_status']);
+    			if ($order['shipping_status']==SS_RECEIVED) {
+    				$html.= $br.'<span style="color:green">'.Fn::zonghe_status(CS_FINISHED).'</span>'; //订单完成
+    				$html.= '</p>';
+    				$order['active_order'] = 0;
+    			}
+    			elseif ($order['shipping_status']==SS_SHIPPED) {
+    				$html .= '</p><p class="order-status-op"><a href="javascript:;" class="btn btn-orange btn-ship-confirm" data-order_id="'.$order['order_id'].'">确认收货</a></p>';
+    			}
+    			else {
+    				$html.= '</p>';
+    			}
+    		}
+    		else { //支付中
+    			$html .= '<p class="order-status-txt">'.Fn::order_status(OS_CONFIRMED).$br.Fn::pay_status($order['pay_status']).'</p>';
+    		}
+    	}
+    	else {
+    		$html .= '<p>'.Fn::order_status($order['order_status']).'</p>';
+    	}
+    
+    	return $html;
+    }
 }
 
 ?>

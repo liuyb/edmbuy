@@ -51,29 +51,29 @@ function displayNickImg($level){
 
 <div class="mem_my_order">
 	<div class="my_order_l  order_bg2">我的订单</div>
-	<a href="/order"><div class="my_order_r">全部订单</div></a>
+	<a href="/trade/order/record"><div class="my_order_r">全部订单</div></a>
 </div>
 <div class="my_order_state">
 	<ul>
-		<a href="/order">
+		<a href="/trade/order/record">
     		<li>
     			<img src="/themes/mobiles/img/fk1.png">
     			<span class="d_nums waitPayCount">0</span>
     		</li>
 		</a>
-		<a href="/order">
+		<a href="/trade/order/record">
 			<li>
 				<img src="/themes/mobiles/img/fh2.png">
     			<span class="d_nums unShipCount">0</span>
 			</li>
 		</a>
-		<a href="/order">
+		<a href="/trade/order/record">
 			<li class="dsh">
 				<img src="/themes/mobiles/img/sh3.png">
     			<span class="d_nums shipedCount">0</span>
 			</li>
 		</a>
-		<a href="/order"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
+		<a href="/trade/order/record"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
 	</ul>
 </div>
 
