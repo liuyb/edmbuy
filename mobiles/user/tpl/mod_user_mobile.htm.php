@@ -22,10 +22,11 @@
 	请输入正确的手机号码，方便客户与您联系
 </div>
 <script>
+	var mobile = '<?=$mobile ?>';
 	function saveUserMobile(){
 		var phone = $('.phone_text').val();
 		if(!phone){
-			alert('请输入手机号码！');
+			myAlert('请输入手机号码！');
 			return;
 		}
 		var reg = /^1\d{10}$/;  //11数字
@@ -33,8 +34,18 @@
 			alert('你输入的手机号码格式有误，请重新输入！');
 			return;
 	    }
+	    if(mobile == phone){
+			return;
+	    }
 	    F.post('/user/mobile/update', {mobile : phone}, function(ret){
-    		window.location.href = '/user/setting';
+		    if(ret['result'] == 'FAIL'){
+		    	myAlert(ret['msg']);
+		    	return;
+		    }
+		    debugger;
+    		setTimeout(function(){
+    			window.location.href = '/user/setting';
+        	}, 1000);
     	});
 	}
 </script>

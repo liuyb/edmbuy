@@ -4,7 +4,7 @@
 <div class="header">
 	购物车
 <?php if($backurl):?><a href="<?=$backurl?>" class="back"></a><?php endif;?>
-	<a href="javascript:;" class="h_btn" id="cart_edit">编辑</a>
+<?php if($cartNum):?><a href="javascript:;" class="h_btn" id="cart_edit">编辑</a><?php endif;?>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
@@ -22,105 +22,43 @@
 <div class="cart_body">
 
 	<!-- 空购物 -->
-	<div class="cart_empty hide">
-		<img src="/themes/mobiles/img/kgu.png" class="cart_empty_img">
+	<div class="cart_empty<?php if($cartNum):?> hide<?php endif;?>">
+		<img src="/themes/mobiles/img/kgu.png" class="cart_empty_img" alt=""/>
 		<p><button type="button" class="cart_empty_back">返回</button><p>
 	</div>
-	
+
 	<!-- 购物车列表 -->
 	<div class="cart_list">
-	
+	<?php foreach ($cartGoods AS $mcg):?>
 		<div class="cart_shop">
 			<div class="cart_shop_name">
 				<b class="cart_select"></b>
-				<a href="#" class="cart_shop_link">美骆世界旗舰店</a>
+				<a href="javascript:;" class="cart_shop_link"><?=$mcg['merchant_name']?></a>
 			</div>
 			<div class="cart_product">
-				<div class="cart_product_item">
+			<?php foreach ($mcg['glist'] AS $g):?>
+				<div class="cart_product_item" data-rec_id="<?=$g->rec_id?>">
 					<b class="cart_select"></b>
-					<a href="<?php echo U('item/1004')?>"><div class="cart_p_img"><img src="/themes/mobiles/img/pro.jpg"></div></a>
+					<a href="<?=$g->goods_url?>"><div class="cart_p_img"><img src="<?=$g->goods_thumb?>" alt=""></div></a>
 					<div class="cart_p_main">
 						<div class="cart_p_desc">
-							<a href="<?php echo U('item/1004')?>"><h1>美骆世界皮鞋美骆世界皮鞋</h1></a>
-							<div class="cart_p_info">颜色:蓝色;尺码:45</div>
+							<a href="<?=$g->goods_url?>"><h1><?=$g->goods_name?></h1></a>
+							<div class="cart_p_info hide"></div>
 						</div>
 						<div class="cart_p_price">
-							<i>￥<small>1.1</small></i>
+							<i>￥<small><?=$g->goods_price?></small></i>
 							<p>
 								<span class="cart_btn btn_minus"></span>
-								<span><input type="text" class="cart_inp" value="1"></span>
+								<span><input type="text" class="cart_inp" value="<?=$g->goods_number?>"></span>
 								<span class="cart_btn btn_plus"></span>
 							</p>
 						</div>
 					</div>
 				</div>
-				
-				<div class="cart_product_item">
-					<b class="cart_select"></b>
-					<a href="<?php echo U('item/1004')?>"><div class="cart_p_img"><img src="/themes/mobiles/img/pro.jpg"></div></a>
-					<div class="cart_p_main">
-						<div class="cart_p_desc">
-							<a href="<?php echo U('item/1004')?>"><h1>美骆世界皮鞋</h1></a>
-							<div class="cart_p_info">颜色:蓝色;尺码:45</div>
-						</div>
-						<div class="cart_p_price">
-							<i>￥<small>1.1</small></i>
-							<p>
-								<span class="cart_btn btn_minus"></span>
-								<span><input type="text" class="cart_inp" value="1"></span>
-								<span class="cart_btn btn_plus"></span>
-							</p>
-						</div>
-					</div>
-				</div>
+			<?php endforeach;?>	
 			</div>
 		</div>
-	
-		<div class="cart_shop">
-			<div class="cart_shop_name">
-				<b class="cart_select"></b>
-				<a href="#" class="cart_shop_link">美骆世界旗舰店美骆世界旗舰店美骆世界旗舰店</a>
-			</div>
-			<div class="cart_product">
-				<div class="cart_product_item">
-					<b class="cart_select"></b>
-					<a href="<?php echo U('item/1004')?>"><div class="cart_p_img"><img src="/themes/mobiles/img/pro.jpg"></div></a>
-					<div class="cart_p_main">
-						<div class="cart_p_desc">
-							<a href="<?php echo U('item/1004')?>"><h1>美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋美骆世界皮鞋</h1></a>
-							<div class="cart_p_info">颜色:蓝色;尺码:45</div>
-						</div>
-						<div class="cart_p_price">
-							<i>￥<small>1</small></i>
-							<p>
-								<span class="cart_btn btn_minus"></span>
-								<span><input type="text" class="cart_inp" value="1"></span>
-								<span class="cart_btn btn_plus"></span>
-							</p>
-						</div>
-					</div>
-				</div>
-				
-				<div class="cart_product_item">
-					<b class="cart_select"></b>
-					<a href="<?php echo U('item/1004')?>"><div class="cart_p_img"><img src="/themes/mobiles/img/pro.jpg"></div></a>
-					<div class="cart_p_main">
-						<div class="cart_p_desc">
-							<a href="<?php echo U('item/1004')?>"><h1>美骆世界皮鞋</h1></a>
-							<div class="cart_p_info">颜色:蓝色;尺码:45</div>
-						</div>
-						<div class="cart_p_price">
-							<i>￥<small>1</small></i>
-							<p>
-								<span class="cart_btn btn_minus"></span>
-								<span><input type="text" class="cart_inp" value="1"></span>
-								<span class="cart_btn btn_plus"></span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	<?php endforeach;?>
 		
 	</div>
 	
@@ -256,34 +194,57 @@ $(function(){
 		var t = $(this);
 		var delete_number = 0;
 		if(t.hasClass("is_edit")){  //删除
-			$(".cart_product_item").each(function(){
-				var t = $(this);
-				if(t.find(".cart_select").hasClass("on")){
-					++delete_number;
-					t.remove();
+
+			if (confirm('确定要删除么？')) {
+				var deleting_rids = new Array(); 
+				$(".cart_product_item").each(function(){
+					var t = $(this);
+					if(t.find(".cart_select").hasClass("on")){
+						++delete_number;
+						deleting_rids.push(t.attr('data-rec_id'));
+						t.remove();
+					}
+				});
+				$(".cart_shop").each(function(){
+					var t = $(this);
+					if(t.find(".cart_product_item").length == 0){
+						t.remove();
+					}
+				});
+				if($(".cart_list").find(".cart_product_item").length == 0){
+					$(".cart_tool .cart_select").removeClass("on");
+					$("#cart_edit,.cart_tool").remove();
+					$(".cart_empty").show();
 				}
-			});
-			$(".cart_shop").each(function(){
-				var t = $(this);
-				if(t.find(".cart_product_item").length == 0){
-					t.remove();
+				var cart_number = $("#cart_number").text()*1;
+				var new_cart_number = cart_number - delete_number*1;
+				$("#cart_number").text(new_cart_number);
+				if(new_cart_number == 0){
+					$("#cart_number").hide();
 				}
-			});
-			if($(".cart_list").find(".cart_product_item").length == 0){
-				$(".cart_tool .cart_select").removeClass("on");
-				$("#cart_edit,.cart_tool").remove();
-				$(".cart_empty").show();
+				//请求删除
+				F.log('delete length: '+deleting_rids.length);
+				if(deleting_rids.length>0) {
+					F.post('/trade/cart/delete',{'rec_id[]':deleting_rids},function(ret){
+					});
+				}
 			}
-			var cart_number = $("#cart_number").text()*1;
-			var new_cart_number = cart_number - delete_number*1;
-			$("#cart_number").text(new_cart_number);
-			if(new_cart_number == 0){
-				$("#cart_number").hide();
-			}
+			
 		}else{  //去结算
-			if($(".cart_product_item .cart_select.on").length > 0){
-				location.href="settle_accounts.html";
-			}else{
+			var $on_items = $('.cart_product_item .cart_select.on');
+			if($on_items.length > 0){
+				var rec_ids = [];
+				var rec_nums= [];
+				$on_items.each(function(){
+					rec_ids.push(parseInt($(this).parent().attr('data-rec_id')));
+					rec_nums.push(parseInt($(this).parent().find('.cart_inp').val()));
+				});
+				var ids_str = rec_ids.join(',');
+				var num_str = rec_nums.join(',');
+				window.location.href = gData.contextpath+"trade/order/confirm?cart_rids="+ids_str+"&cart_nums="+num_str+"&t="+F.time()+(wxData.isReady ? "&showwxpaytitle=1" : "");
+				return false;
+			}
+			else{
 				boxalert("你还没选择要结算的产品哦");
 			}
 		}

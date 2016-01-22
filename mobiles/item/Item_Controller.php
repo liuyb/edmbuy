@@ -29,8 +29,8 @@ class Item_Controller extends MobileController {
 	{
 		return [
 				'item/%d' => 'item',
-		        'item/promote' => 'item_promote',
-		        'item/promote/product' => 'promote_product'
+		    'item/promote' => 'item_promote',
+		    'item/promote/product' => 'promote_product'
 		];
 	}
 	
@@ -119,9 +119,12 @@ class Item_Controller extends MobileController {
 				}
 				$this->v->assign('referee', $referee);
 				
+				//购物车数
+				$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
+				$this->v->assign('cartnum', $cartnum);
+				
 				//商家信息
-				$merchant = Merchant::find_one(new Query('admin_uid', $item->user_id));
-// 				Response::dump($merchant);
+				$merchant = Merchant::find_one(new Query('admin_uid', $item->merchant_uid));
 				$kefu_link = 'javascript:;';
 				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
 					$kefu_link = $merchant->kefu;

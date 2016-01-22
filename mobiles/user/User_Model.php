@@ -57,20 +57,6 @@ class User_Model extends Model {
 	    $user->save();
 	}
 	
-	static function displayUserRole($level){
-	    switch ($level){
-	        case Users::USER_LEVEL_0 == $level : 
-	           return "米客";
-	           break;
-	        case Users::USER_LEVEL_1 == $level :
-	            return "米商";
-	            break;
-	        case Users::USER_LEVEL_2 == $level :
-                return "合伙人";
-                break;
-	    }
-	}
-	
 	/**
 	 * 根据传入的订单状态列，统计该状态列数量
 	    $sql = "select t1.c as status1,t2.c status2,t3.c status3 from

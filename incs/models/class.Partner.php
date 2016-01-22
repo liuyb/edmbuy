@@ -134,9 +134,9 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel1CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where c.user_id in (
+        $sql = "select $column from shp_user_commision c where c.order_uid in (
             	   SELECT user_id FROM edmbuy.shp_users where parent_id = %d 
-                ) and state = %d ";
+                ) and state = %d and parent_level = 1 ";
         if($limit == true){
             $sql .= " order by paid_time desc limit %d,%d";
         }
@@ -164,10 +164,10 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel2CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where c.user_id in (
+        $sql = "select $column from shp_user_commision c where c.order_uid in (
                     SELECT u.user_id FROM edmbuy.shp_users u where
                     u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
-                ) and state = %d";
+                ) and state = %d and parent_level = 2 ";
         if($limit){
             $sql .= " order by paid_time desc limit %d,%d";
         }
@@ -195,13 +195,13 @@ class Partner extends StorageNode {
     }
     
     static function constructLevel3CommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where c.user_id in (
+        $sql = "select $column from shp_user_commision c where c.order_uid in (
                     SELECT tu.user_id FROM edmbuy.shp_users tu where
                     tu.parent_id in (
                 		SELECT user_id FROM edmbuy.shp_users su where
                 		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
                     )  
-                ) and state = %d";
+                ) and state = %d and parent_level = 3 ";
         if($limit){
             $sql .= " order by paid_time desc limit %d,%d";
         }
@@ -220,7 +220,7 @@ class Partner extends StorageNode {
      * 输出佣金明细明细字段
      */
     static function outputCommisionListQueryColumn(){
-        $queryCols = " order_unick as nickname, paid_time as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
+        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time) as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
         return $queryCols;
     }
     

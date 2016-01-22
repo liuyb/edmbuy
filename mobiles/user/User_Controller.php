@@ -78,8 +78,6 @@ class User_Controller extends MobileController {
       $this->topnav_no = 1;
       if ($request->is_hashreq()) {
           $user = $this->showUserBaseInfo();
-          $role = User_Model::displayUserRole($user->level);
-          $this->v->assign("role", $role);
       }
       throw new ViewResponse($this->v);
   }
@@ -150,8 +148,18 @@ class User_Controller extends MobileController {
   public function update_mobile(Request $request, Response $response){
       if($request->is_post()) {
           $mobile = $_POST['mobile'];
+          global $user;
+          if($user->mobilephone == $mobile){
+              return;
+          }
+          $nuser = Users::load_by_mobile($mobile);
+          if($nuser && !empty($nuser->uid)){
+              $ret = ['result' => 'FAIL', 'msg' => '手机号已经在系统存在！'];
+              $response->sendJSON($ret);
+          }
           User_Model::updateUserInfo(array('mobilephone'=>$mobile));
-          $response->sendJSON('');
+          $ret = ['result' => 'SUC', 'msg' => '修改成功'];
+          $response->sendJSON($ret);
       }
   }
   
@@ -508,6 +516,26 @@ class User_Controller extends MobileController {
       return $currentUser;
   }
   
+  public function chmobile(Request $request, Response $response){
+  	if($request->is_post()) {
+  		$mobile = $request->post('mobile','');
+  		$ret = ['flag'=>'FAIL', 'msg'=>''];
+  		if (!$mobile || !preg_match('/^\d{11,15}$/', $mobile)) {
+  			$ret['msg'] = '手机号非法';
+  			$response->sendJSON($ret);
+  		}
+  		
+  		global $user;
+  		if (!$user->mobilephone) { //有手机号不给覆盖
+  			$upUser = new Users($user->uid);
+  			$upUser->mobilephone = $mobile;
+  			$upUser->save(Storage::SAVE_UPDATE);
+  		}
+  		$ret = ['flag'=>'SUCC', 'msg'=>'更新成功'];
+  		
+  		$response->sendJSON($ret);
+  	}
+  }
 }
 
 /*----- END FILE: User_Controller.php -----*/

@@ -6,12 +6,8 @@
 
 <?php else:?>
 <?php 
-function displayNickBg($level){
-    $bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
-    return $bg;
-}
 function displayNickImg($level){
-	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
+	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "he.png" : "ke.png");
 	return '/themes/mobiles/img/'.$bg;
 }
 ?>
@@ -45,7 +41,7 @@ function displayNickImg($level){
 	<div class="refer_tit order_bg1">我的推荐人</div>
 	<div class="refer_info">
 		<span class="refer_name"><?=$parentNickName ?></span>
-		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($level)?>"/>
+		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($parentLevel)?>"/>
 		<button class="refer_but">加好友</button>
 	</div>
 </div>
@@ -83,19 +79,18 @@ function displayNickImg($level){
 
 <div style="height:10px;background:#eee"></div>
 
-<div style="display: none;">
-	<div class="mem_my_apply order_bg3">
-		我的应用
-	</div>
-	<div class="mem_my_applylist">
-		<ul>
-			<li><img src="/themes/mobiles/img/tym.png"></li>
-			<li><img src="/themes/mobiles/img/sxy.png"></li>
-			<li> </li>
-			<li style="border-right:0;"> </li>
-		</ul>
-	</div>
+<div class="mem_my_apply order_bg3">
+	我的应用
 </div>
+<div class="mem_my_applylist">
+	<ul>
+		<li><img src="/themes/mobiles/img/tym.png"></li>
+		<li><img src="/themes/mobiles/img/sxy.png"></li>
+		<li> </li>
+		<li style="border-right:0;"> </li>
+	</ul>
+</div>
+
 <?php include T('inc/add_as_friend');?>
 
 <script>
@@ -125,7 +120,7 @@ $(function(){
 	if(length >6){
 		 var str = $(".c_n_tit").text();
 		 var name = str.substr(1,6);
-		 $(".c_n_tit").attr('title',str); 
+		 $(".c_n_tit").attr('title',str);
 		 $(".c_n_tit").text(name + '...');
 	}
 	if(_length >3){

@@ -40,6 +40,10 @@ $(function(){
   });
   
   setTimeout(function(){t1.resize();},500);
+
+  F.onScrollDownPull(function(){
+window.location.reload();
+	});
 });
 </script>
 

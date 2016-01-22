@@ -16,6 +16,8 @@ class Cart extends StorageNode {
 						'rec_id'        => 'rec_id',
 						'user_id'       => 'user_id',
 						'session_id'    => 'session_id',
+						'merchant_uid'  => 'merchant_uid',
+						'merchant_name' => 'merchant_name',
 						'goods_id'      => 'goods_id',
 						'goods_sn'      => 'goods_sn',
 						'product_id'    => 'product_id',
@@ -25,11 +27,11 @@ class Cart extends StorageNode {
 						'goods_number'  => 'goods_number',
 						'goods_thumb'   => 'goods_thumb',
 						'goods_img'     => 'goods_img',
-						'goods_attr'    => '	goods_attr',
-						'is_real'       => '	is_real',
-						'extension_code'=> '	extension_code',
-						'parent_id'     => '	parent_id',
-						'rec_type'      => '	rec_type',
+						'goods_attr'    => 'goods_attr',
+						'is_real'       => 'is_real',
+						'extension_code'=> 'extension_code',
+						'parent_id'     => 'parent_id',
+						'rec_type'      => 'rec_type',
 						'is_gift'       => 'is_gift',
 						'is_shipping'   => 'is_shipping',
 						'is_immediate'  => 'is_immediate',
@@ -75,13 +77,17 @@ class Cart extends StorageNode {
 	 * Get user cart num
 	 * @param integer|string $shop_uid          user_id or session_id
 	 * @param integer        $target_item_id    
+	 * @param boolean        $include_immediate    
 	 * @return mixed(integer or boolean)
 	 */
-	static function getUserCartNum($shop_uid, $target_item_id = NULL) {
+	static function getUserCartNum($shop_uid, $target_item_id = NULL, $include_immediate = TRUE) {
 		if (!$shop_uid) return NULL;
     $where= self::getOwnerSql($shop_uid);
     if ($target_item_id) {
     	$where .= " AND `goods_id`=%d";
+    }
+    if (!$include_immediate) {
+    	$where .= " AND `is_immediate`=0";
     }
 		$num = D()->from(self::table())->where($where, $shop_uid, $target_item_id)->select("SUM(`goods_number`) AS num")->result();
 		return $num;
@@ -94,12 +100,12 @@ class Cart extends StorageNode {
 	 */
 	static function getUserCart($shop_uid = NULL) {
 		if (is_null($shop_uid)) $shop_uid = $GLOBALS['user']->uid;
-		$list = self::find(new Query(self::getOwnerField($shop_uid), $shop_uid));
+		$list = self::find(new Query(self::getOwnerField($shop_uid), $shop_uid), ['size'=>-1, 'sort'=>['rec_id'=>'DESC']]);
 		if (!empty($list)) {
 			foreach ($list AS &$g) {
 				$g->goods_url   = Items::itemurl($g->goods_id);
-				$g->goods_thumb = Items::imgurl($g->goods_thumb); //self::goods_picurl($g['goods_thumb']);
-				$g->goods_img   = Items::imgurl($g->goods_img);   //self::goods_picurl($g['goods_img']);
+				$g->goods_thumb = Items::imgurl($g->goods_thumb);
+				$g->goods_img   = Items::imgurl($g->goods_img);
 			}
 		}
 		return $list;
@@ -111,11 +117,13 @@ class Cart extends StorageNode {
 	 * @param string $item_id
 	 * @return mixed
 	 */
-	static function checkCartGoodsExist($shopping_uid, $item_id) {
+	static function checkCartGoodsExist($shopping_uid, $item_id, $is_immediate) {
 		$where  = self::getOwnerSql($shopping_uid);
+		$is_immediate = $is_immediate ? 1 : 0;
 		if ($item_id) {
 			$where .= " AND `goods_id`=%d";
 		}
+		$where .= " AND `is_immediate`={$is_immediate}";
 		$rec_id = D()->from(self::table())->where($where, $shopping_uid, $item_id)->select("rec_id")->result();
 		return $rec_id;
 	}
@@ -176,9 +184,9 @@ class Cart extends StorageNode {
 				$ret = ['code' => -2, 'msg' => '商品库存不足'];
 				return $ret;
 			}
-			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id);
+			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id, $is_immediate);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
-				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, $is_immediate ? true : false)) {
+				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, false)) {
 					$ret['code'] = $cart_rec_id;
 					$ret['added_num'] = $num;
 				}
@@ -188,9 +196,20 @@ class Cart extends StorageNode {
 				return $ret;
 			}
 			else { //商品没在购物车中，需新加入
+				$merchant_uid  = $exItem->merchant_uid;
+				$merchant_name = '';
+				if ($merchant_uid) {
+					$merchant_name = Merchant::getNameByAdminUid($merchant_uid);
+					if (!$merchant_name) {
+						$merchant_name = AdminUser::getNameByAdminUid($merchant_uid);
+					}
+				}
+				
 				$cart = new Cart();
 				$cart->user_id     = $user_id;
 				$cart->session_id  = $sess_id;
+				$cart->merchant_uid  = $merchant_uid;
+				$cart->merchant_name = $merchant_name;
 				$cart->goods_id    = $item_id;
 				$cart->goods_sn    = $exItem->item_sn;
 				$cart->product_id  = 0;
@@ -296,6 +315,44 @@ class Cart extends StorageNode {
 		return $ret;
 	}
 	
+	/**
+	 * 删除购物车中的商品
+	 *
+	 * @param $rec_ids mixed(array or integer)
+	 * @param $user_id
+	 * @return array
+	 *   ['code'=>  0,'msg'=>'没有要删除的记录']
+	 *   ['code'=> >0,'msg'=>'删除成功']
+	 *   ['code'=> -1,'msg'=>'删除失败']
+	 */
+	static function deleteGoods($rec_ids, $user_id) {
+		$ret = ['code'=>0,'msg'=>'没有要删除的记录'];
+		if (empty($rec_ids)) {
+			return $ret;
+		}
+		if (!is_array($rec_ids) && $rec_ids!=='all') {//单条记录方式
+			$rec_ids = [$rec_ids];
+		}
+	
+		$ectb = self::table();
+		$where_user = self::getOwnerSql($user_id);
+		if (is_string($rec_ids) && $rec_ids=='all') {
+			$where_ids = "1";
+		}
+		else {
+			$where_ids  = "`rec_id` IN(".implode(",", $rec_ids).")";
+		}
+		$sql  = "DELETE FROM {$ectb} WHERE {$where_ids} AND {$where_user}";
+		D()->raw_query($sql,$user_id);
+		$effrows = D()->affected_rows();
+		if ($effrows) {
+			$ret = ['code'=>$effrows,'msg'=>'删除成功'];
+		}
+		else {
+			$ret = ['code'=>-1,'msg'=>'删除失败'];
+		}
+		return $ret;
+	}
 }
 
 /*----- END FILE: class.Cart.php -----*/

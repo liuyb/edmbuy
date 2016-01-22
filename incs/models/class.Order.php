@@ -78,6 +78,7 @@ class Order extends StorageNode{
                 'is_separate'        => 'is_separate',
                 'parent_id'          => 'parent_id',
                 'discount'           => 'discount',
+                'merchant_ids'       => 'merchant_ids',
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2'
             ));
@@ -216,12 +217,31 @@ class Order extends StorageNode{
     /**
      * 关联订单和商家
      * @param integer $order_id
-     * @param integer $merchant_id
+     * @param integer $merchant_uid
      * @return number
      */
     static function relateMerchant($order_id, $merchant_uid) {
-    	D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
-    	return D()->affected_rows();
+    	$order  = Order::load($order_id);
+    	$admUsr = AdminUser::load($merchant_uid);
+    	if ( $order->is_exist() && $admUsr->is_exist() ) {
+    		D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
+    		if (D()->affected_rows()) {
+    			$old_merchant_ids = $order->merchant_ids;//$merchant_uid
+    			$new_merchant_ids = $old_merchant_ids;
+    			if (empty($old_merchant_ids)) {
+    				$new_merchant_ids = $admUsr->merchant_id;
+    			}
+    			else {
+    				$new_merchant_ids = $old_merchant_ids.','.$admUsr->merchant_id;
+    			}
+    			if ($new_merchant_ids != $old_merchant_ids) {
+    				$upOrder = new self($order_id);
+    				$upOrder->merchant_ids = $new_merchant_ids;
+    				$upOrder->save(Storage::SAVE_UPDATE);
+    			}
+    		}
+    	}
+    	return false;
     }
 }
 
