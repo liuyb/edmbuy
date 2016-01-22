@@ -60,7 +60,7 @@
 			?>
 			<tr>
 				<td class="info_td1" >
-					<img src="./img/pro.jpg">
+					<img src="<?=$gd['goods_thumb'] ?>">
 				</td>
 				<td class="info_td2">
 					<p class="info_name"><?=$gd['goods_name'] ?></p>
