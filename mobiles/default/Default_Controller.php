@@ -28,7 +28,8 @@ class Default_Controller extends MobileController {
   public function menu()
   {
     return [
-      'default/about'  => 'about'
+      'default/about'  => 'about',
+      'default/goods' => 'goods_list'
     ];
   }
   
@@ -412,6 +413,19 @@ class Default_Controller extends MobileController {
   	
   	throw new ViewResponse($this->v);
   }
+  
+  /**
+   * 首页面 商品列表展示
+   * @param Request $request
+   * @param Response $response
+   */
+  public function goods_list(Request $request, Response $response){
+      $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+      $pager = new PagerPull($curpage, 10);
+      Default_Model::findGoodsList($pager);
+      $pageJson = $pager->outputPageJson();
+      $ret = ["result" => $pager->result];
+      $ret = array_merge($ret, $pageJson);
+      $response->sendJSON($ret);
+  }
 }
- 
-/*----- END FILE: Default_Controller.php -----*/
