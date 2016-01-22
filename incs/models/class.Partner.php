@@ -220,7 +220,7 @@ class Partner extends StorageNode {
      * 输出佣金明细明细字段
      */
     static function outputCommisionListQueryColumn(){
-        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time) as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
+        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time, '%%Y-%%m-%%d<br>%%h:%%i:%%s') as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
         return $queryCols;
     }
     
