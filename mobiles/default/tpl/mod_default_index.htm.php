@@ -131,23 +131,58 @@ window.location.reload();
 		<span class="tit_left"></span> 年货精选
 	</div>
 	<div class="list_jx">
-		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
-			<tr>
-				<td><img src="/themes/mobiles/img/tea.png"></td>
-				<td>
-					<p class="jx_year_tit">年货特价年货特价年货特价年货特价年货货特价年货特价年货特价年货特价</p>
-					<p class="jx_table_price"><span>￥88.00</span><b>￥182.00</b></p>
-					<p class="jx_mail_type">邮递 ：包邮</p>
-				</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/tea.png"></td>
-				<td>
-					<p class="jx_year_tit">年货特价年货特价年货特价年货特价年货货特价年货特价年货特价年货特价</p>
-					<p class="jx_table_price"><span>￥88.00</span><b>￥182.00</b></p>
-					<p class="jx_mail_type">邮递 ：包邮</p>
-				</td>
-			</tr>
+		<table cellspacing="0" cellpadding="0" class="list_jx_tab" id="goods_list">	
 		</table>
 	</div>
+	<div id="pageContainer" onclick="pulldata(this);" class="pull_more_data">点击加载更多...</div>
 </div>
+
+<script>
+	$().ready(function(){
+		getGoodsList(1, true);
+	});
+
+	function getGoodsList(curpage, isinit){
+		F.get('/default/goods', {curpage : curpage}, function(ret){
+			contructGoodsHTML(ret, isinit);
+			handleWhenHasNextPage(ret);
+		});
+	}
+
+	function contructGoodsHTML(ret, isinit){
+		if(!ret || !ret.result || !ret.result.length){
+			return;
+		}
+		var TR = "";
+		var result = ret.result;
+		for(var i = 0,len=result.length; i < len; i++){
+			var good = result[i];
+			var mark_price = good.market_price ? good.market_price : "";
+			TR += "<tr onclick=\"gotoItem('"+good.goods_id+"');\" style='cursor:pointer;'><td><img src=\""+good.goods_thumb+"\"></td><td>";
+			TR += "<p class=\"jx_year_tit\">"+good.goods_name+"</p><p class=\"jx_table_price\">";
+			TR += "<span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p>";
+			TR += "<p class=\"jx_mail_type\">邮递 ：包邮</p></td></tr>";
+		}
+		$("#goods_list").append($(TR));
+		F.set_scroller(false, 100);
+	}
+
+	//当还有下一页时处理下拉
+	function handleWhenHasNextPage(data){
+		var hasnex = data.hasnexpage;
+		if(hasnex){
+			$("#pageContainer").show();
+			$("#pageContainer").attr('curpage',data.curpage);
+		}else{
+			$("#pageContainer").hide();
+		}
+	}
+	
+	function pulldata(obj){
+		getGoodsList($(obj).attr("curpage"), false);
+	}
+
+	function gotoItem(goodId){
+		window.location = '/item/'+goodId;
+	}
+</script>
