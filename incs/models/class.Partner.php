@@ -114,19 +114,48 @@ class Partner extends StorageNode {
     }
     
     /**
-     * 一层用户佣金明细汇总
+     * 显示用户下不同层级佣金明细 总数
      */
-    static function findFirstLevelCommisionCount($uid, $status){
+    static function findCommisionByLevelCount($uid, $level, $status){
         $column = self::outputCommisionCountQueryColumn();
-        $sql = self::constructLevel1CommissionSql($column, FALSE);
-        $count = D()->query($sql, $uid, $status)->fetch_array();
+        $sql = self::constructCommissionSql($column, FALSE);
+        $count = D()->query($sql, $uid, $level, $status)->fetch_array();
         return $count;
     }
     
     /**
+     * 显示用户下不同层级佣金明细 列表
+     */
+    static function findCommisionByLevelList($uid, $level, $status, PagerPull $pager){
+        $column = self::outputCommisionListQueryColumn();
+        $sql = self::constructCommissionSql($column, TRUE);
+        $rows = D()->query($sql, $uid, $level, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
+        return $rows;
+    }
+    
+    static function constructCommissionSql($column, $limit){
+        $sql = "select $column from shp_user_commision c where c.user_id = %d and parent_level = %d and state = %d ";
+        if($limit == true){
+            $sql .= " order by paid_time desc limit %d,%d";
+        }
+        return $sql;
+    }
+    
+    
+    /**
+     * 一层用户佣金明细汇总
+     */
+    /* static function findFirstLevelCommisionCount($uid, $status){
+        $column = self::outputCommisionCountQueryColumn();
+        $sql = self::constructLevel1CommissionSql($column, FALSE);
+        $count = D()->query($sql, $uid, $status)->fetch_array();
+        return $count;
+    } */
+    
+    /**
      * 一层用户佣金明细列表
      */
-    static function findFirstLevelCommisionList($uid, $status, PagerPull $pager){
+   /*  static function findFirstLevelCommisionList($uid, $status, PagerPull $pager){
         $column = self::outputCommisionListQueryColumn();
         $sql = self::constructLevel1CommissionSql($column, TRUE);
         $rows = D()->query($sql, $uid, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -141,22 +170,22 @@ class Partner extends StorageNode {
             $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
-    }
+    } */
     
     /**
      * 二层用户佣金明细汇总
      */
-    static function findSecondLevelCommisionCount($uid, $status){
+   /*  static function findSecondLevelCommisionCount($uid, $status){
         $column = self::outputCommisionCountQueryColumn();
         $sql = self::constructLevel2CommissionSql($column, false);
         $count = D()->query($sql, $uid, $status)->fetch_array();
         return $count;
-    }
+    } */
     
     /**
      * 二层用户佣金明细列表
      */
-    static function findSecondLevelCommisionList($uid, $status, PagerPull $pager){
+    /* static function findSecondLevelCommisionList($uid, $status, PagerPull $pager){
         $column = self::outputCommisionListQueryColumn();
         $sql = self::constructLevel2CommissionSql($column, true);
         $rows = D()->query($sql, $uid, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -172,22 +201,22 @@ class Partner extends StorageNode {
             $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
-    }
+    } */
     
     /**
      * 三层用户佣金明细汇总
      */
-    static function findThirdLevelCommisionCount($uid, $status){
+   /*  static function findThirdLevelCommisionCount($uid, $status){
         $column = self::outputCommisionCountQueryColumn();
         $sql = self::constructLevel3CommissionSql($column, false);
         $count = D()->query($sql, $uid, $status)->fetch_array();
         return $count;
-    }
+    } */
     
     /**
      * 三层用户佣金明细列表
      */
-    static function findThirdLevelCommisionList($uid, $status, PagerPull $pager){
+   /*  static function findThirdLevelCommisionList($uid, $status, PagerPull $pager){
         $column = self::outputCommisionListQueryColumn();
         $sql = self::constructLevel3CommissionSql($column, true);
         $rows = D()->query($sql, $uid, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -206,7 +235,7 @@ class Partner extends StorageNode {
             $sql .= " order by paid_time desc limit %d,%d";
         }
         return $sql;
-    }
+    } */
     
     /**
      * 输出佣金明细汇总字段
@@ -220,7 +249,7 @@ class Partner extends StorageNode {
      * 输出佣金明细明细字段
      */
     static function outputCommisionListQueryColumn(){
-        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time) as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
+        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time, '%%Y-%%m-%%d<br>%%h:%%i:%%s') as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
         return $queryCols;
     }
     

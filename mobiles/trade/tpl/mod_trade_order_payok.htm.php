@@ -24,7 +24,7 @@
 		<p class="c_input"><input class="input_val" type="text" maxlength="15" placeholder="请输入你的手机号" value="" ></p>
 		<div class="tier_tit"><img src="/themes/mobiles/img/zwl.png"></div>
 	</div>
-	<div class="tier_but"><a href="javascript:;" class="btna">确认手机号</a></div>
+	<div class="tier_but"><a href="javascript:;" class="btna" style="color: #fff">确认手机号</a></div>
 </div>
 <script>
 	$(function(){

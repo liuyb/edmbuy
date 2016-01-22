@@ -243,6 +243,54 @@ class Order extends StorageNode{
     	}
     	return false;
     }
+    
+    /**
+     * 获取一个订单下的商品列表 并附加商家信息
+     * @param unknown $order_id
+     */
+    static function getOrderItems($order_id) {
+        if (empty($order_id)) return [];
+    
+        $ectb_goods = Items::table();
+        $ectb_order_goods = OrderItems::table();
+        $ectb_merchant = Merchant::table();
+    
+        $sql = "SELECT og.*,g.`goods_thumb`,m.facename,m.merchant_id FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
+                left join $ectb_merchant m on g.merchant_uid = m.admin_uid 
+                WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
+        $order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
+        if (!empty($order_goods)) {
+            foreach ($order_goods AS &$g) {
+                $g['goods_url']   = Items::itemurl($g['goods_id']);
+                $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+            }
+        }
+        else {
+            $order_goods = [];
+        }
+    
+        return $order_goods;
+    }
+    
+    /**
+     * 获取订单详情
+     * @param unknown $order_id
+     */
+    static function getOrderDetail($order_id) {
+       $sql = "select consignee,mobile,(
+                	select region_name from shp_region where region_id = o.province
+                ) as province,
+                (
+                	select region_name from shp_region where region_id = o.city
+                )  as city,
+                (
+                	select region_name from shp_region where region_id = o.district
+                )  as district,
+               address,how_oos,pay_trade_no,
+               add_time,pay_time from shp_order_info o where order_id = %d";
+       $rows = D()->query($sql, $order_id)->fetch_array();
+       return $rows;
+    }
 }
 
 ?>

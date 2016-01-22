@@ -62,7 +62,7 @@
 			</tr>
 		</table>
 	</div>
-	<div onclick="pulldata(this);" style="margin-top:10px;" id="pageContainer" class="pull_more_data">更多...</div>
+	<div onclick="pulldata(this);" style="margin-top:10px;" id="pageContainer" class="pull_more_data">点击加载更多...</div>
 </div>
 
 <!-- 遮罩层 -->

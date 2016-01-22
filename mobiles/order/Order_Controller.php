@@ -29,6 +29,7 @@ class Order_Controller extends MobileController {
 	{
 		return [
 			'order' => 'item',
+		    'order/detail/%d' => 'order_detail'
 		];
 	}
 	
@@ -52,6 +53,23 @@ class Order_Controller extends MobileController {
         }
     
         throw new ViewResponse($this->v);
+	}
+	
+	public function order_detail(Request $request, Response $response)
+	{
+	    $this->v->set_tplname('mod_order_detail');
+	    $this->nav_no    = 0;
+	    $this->topnav_no = 1;
+	
+	    if ($request->is_hashreq()) {
+	       $order_id  = $request->arg(2);
+	       $order_detail = Order::getOrderDetail($order_id);
+	       $merchant_goods = Order_Model::getOrderItems($order_id);
+	       $this->v->assign("item", $order_detail);
+	       $this->v->assign("merchant_goods", $merchant_goods);
+	    }
+	
+	    throw new ViewResponse($this->v);
 	}
 	
 }
