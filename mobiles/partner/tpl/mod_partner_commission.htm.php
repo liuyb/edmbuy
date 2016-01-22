@@ -50,9 +50,11 @@
 			<span class="broke_order_r totalNum">0</span>
 		</div>
 	</div>
+</div>
+<div class="broke_list" id="list2">
 	<div class="sx_broke_list">
 		<table cellspacing="0" cellpadding="0" class="sx_table_list">
-			<tr>
+			<tr style="display: none;">
 				<th>昵称</th>
 				<th>付款时间</th>
 				<th>订单金额</th>
@@ -160,13 +162,17 @@ function renderDataRegion(data, isPullData){
     	countContainer.find(".totalCommision").text(otherMap ? otherMap['totalCommision'] : "0.00");
     	countContainer.find(".totalNum").text(otherMap ? otherMap['totalNum'] : "0");
 	}
-	var result = data.result;
 	var tableContainer = $(".sx_table_list");
-	if(!result ||!result.length){
-		tableContainer.find("tr:eq(0)").hide();
+	var result = data.result;
+	if(!result || !result.length){
+		if(!isPullData){
+	    	tableContainer.find("tr:eq(0)").hide();
+		}
 		return;
 	}
-	tableContainer.find("tr:eq(0)").show();
+	if(!isPullData){
+    	tableContainer.find("tr:eq(0)").show();
+	}
 	var TR = "";
 	for(var i = 0,len=result.length; i < len; i++){
 		var row = result[i];

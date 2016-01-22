@@ -6,12 +6,8 @@
 
 <?php else:?>
 <?php 
-function displayNickBg($level){
-    $bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
-    return $bg;
-}
 function displayNickImg($level){
-	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "ke.png" : "he.png");
+	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "he.png" : "ke.png");
 	return '/themes/mobiles/img/'.$bg;
 }
 ?>
@@ -45,7 +41,7 @@ function displayNickImg($level){
 	<div class="refer_tit order_bg1">我的推荐人</div>
 	<div class="refer_info">
 		<span class="refer_name"><?=$parentNickName ?></span>
-		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($level)?>"/>
+		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($parentLevel)?>"/>
 		<button class="refer_but">加好友</button>
 	</div>
 </div>

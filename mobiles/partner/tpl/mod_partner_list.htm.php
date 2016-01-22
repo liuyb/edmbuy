@@ -37,7 +37,7 @@
 	
 	function buildListHtml(data, isinit){
 		var table = $("table.copartner_list_table");
-		if(!data || !data.result || !data.result.length){
+		if(isinit && (!data || !data.result || !data.result.length)){
 			var EMPTY_TR = $("<tr><td class=\"list_td1\" style='font-size:16px;text-align:center;'>暂无数据...</td></tr>");
 			table.append(EMPTY_TR);
 			return;

@@ -3359,6 +3359,14 @@ td.cash_td2 img {
 #pageContainer{
 	text-align:center;
 }
+.pull_more_data{
+	text-align:center;
+	display: none;
+	cursor:pointer;
+	line-height:20px;
+	margin-bottom:10px;
+	font-size:16px;
+}
 .wtxje{
 	border-radius: 4px;
 	height: 100px;
