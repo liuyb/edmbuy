@@ -51,29 +51,29 @@ function displayNickImg($level){
 
 <div class="mem_my_order">
 	<div class="my_order_l  order_bg2">我的订单</div>
-	<a href="/order"><div class="my_order_r">全部订单</div></a>
+	<a href="/trade/order/record"><div class="my_order_r">全部订单</div></a>
 </div>
 <div class="my_order_state">
 	<ul>
-		<a href="/order">
+		<a href="/trade/order/record">
     		<li>
     			<img src="/themes/mobiles/img/fk1.png">
     			<span class="d_nums waitPayCount">0</span>
     		</li>
 		</a>
-		<a href="/order">
+		<a href="/trade/order/record">
 			<li>
 				<img src="/themes/mobiles/img/fh2.png">
     			<span class="d_nums unShipCount">0</span>
 			</li>
 		</a>
-		<a href="/order">
+		<a href="/trade/order/record">
 			<li class="dsh">
 				<img src="/themes/mobiles/img/sh3.png">
     			<span class="d_nums shipedCount">0</span>
 			</li>
 		</a>
-		<a href="/order"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
+		<a href="/trade/order/record"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
 	</ul>
 </div>
 
@@ -119,13 +119,13 @@ $(function(){
 	var _length = $(".refer_name").text().length;
 	if(length >6){
 		 var str = $(".c_n_tit").text();
-		 var name = str.substr(1,6);
+		 var name = str.substr(0,6);
 		 $(".c_n_tit").attr('title',str);
 		 $(".c_n_tit").text(name + '...');
 	}
-	if(_length >3){
+	if(_length >5){
 		 var str = $(".refer_name").text();
-		 var name = str.substr(1,3);
+		 var name = str.substr(0,5);
 		 $(".refer_name").attr('title',str);
 		 $(".refer_name").text(name + '...');
 	}

@@ -177,7 +177,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 .slider li{position:relative;height:auto;font-size:0;display:none;}
 .slider li img{width:100%;vertical-align:top;}
 .slider li span{ display:inline-block; height:25px; line-height:25px; font-size:13px;font-size:1.3rem; position:absolute; bottom:4px; left:0; width:100%; background:url(../img/bg.png) repeat; color:#fff; padding-left:5px;}
-.slinav{position:absolute;left:0;right:0;bottom:10px;width:100%;text-align:center;}
+.slinav{position:absolute;left:0;right:0;bottom:-2px;width:100%;text-align:center;}
 .slinav a{width:5px;height:5px; margin:0 2px; line-height:99em;background:none; background:#fff;border:1px solid #fff;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;overflow:hidden;cursor:pointer;display:inline-block;*display:inline;*zoom:1;}
 .slinav a.active{background:#ea471e;border:1px solid #ea471e;}
 
@@ -3269,9 +3269,9 @@ td.cash_td2 img {
   background: #ff6d14;
   position: absolute;
   right: 12px;
-  bottom: 20px;
-  width: 73px;
-  height: 30px;
+  bottom: 7px;
+  width: 70px;
+  height: 28px;
   border-radius: 4px;
   cursor: pointer;
   color:#fff;
@@ -3373,12 +3373,12 @@ td.cash_td2 img {
 }
 .wtxje{
 	border-radius: 4px;
-	height: 100px;
-	width: 240px;
+	height: 30px;
+	width: 80px;
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	margin-left: -120px;
+	margin-left: -40px;
 	margin-top: -80px;
 	background: #FFF none repeat scroll 0% 0%;
 	z-index: 70000;

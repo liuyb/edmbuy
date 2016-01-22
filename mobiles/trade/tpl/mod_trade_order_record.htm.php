@@ -1,11 +1,25 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
+<script id="forTopnav" type="text/html">
+<div class="header h_order" style="padding:0 0 0 20px;">
+	<ul class="header_order">
+		<li class="header_order_on">全部</li>
+		<li>待付款</li>
+		<li>待发货</li>
+		<li>待收货</li>
+		<a href="<?php echo U('user')?>" class="back">&nbsp;</a>
+	</ul>
+</div>
+</script>
+<script>show_topnav($('#forTopnav').html())</script>
+
+
 <?php if (!$orders_num):?>
 
 <div class="list-empty">
   <?php if(''==$errmsg):?>
   <h1 class="list-empty-header">居然还没买过东西╮(╯﹏╰）╭</h1>
-  <div class="list-empty-content"><a href="<?php echo U('explore')?>">去逛逛</a></div>
+  <div class="list-empty-content"><a href="<?php echo U('/')?>">去逛逛</a></div>
   <?php else:?>
   <h1 class="list-empty-header"><?=$errmsg?></h1>
   <?php endif;?>
@@ -51,7 +65,8 @@ $(function(){
 	var thisctx = {};
 	
 	$('.withclickurl',$lbod).click(function(){
-		window.location.href = $(this).parent().attr('data-url');
+		//window.location.href = $(this).parent().attr('data-url')+'?ref=/trade/order/record';
+		window.location.href = '/order/'+$(this).parent().attr('data-rid')+'/detail';
 		return false;
 	});
 	$('.btn-order-cancel',$lbod).click(function(){

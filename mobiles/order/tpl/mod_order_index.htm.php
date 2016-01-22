@@ -1,14 +1,17 @@
+<?php defined('IN_SIMPHP') or die('Access Denied');?>
 
+<script id="forTopnav" type="text/html">
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
 		<li class="header_order_on">全部</li>
 		<li>待付款</li>
 		<li>待发货</li>
 		<li>待收货</li>
-		<li>售后</li>
-		<a href="<?php echo U('user')?>" class="back"></a>
+		<a href="<?php echo U('user')?>" class="back">&nbsp;</a>
 	</ul>
 </div>
+</script>
+<script>show_topnav($('#forTopnav').html())</script>
 
 <div class="order_list">
 	<div class="order_title">
