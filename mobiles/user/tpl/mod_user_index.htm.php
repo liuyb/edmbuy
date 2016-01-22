@@ -83,18 +83,19 @@ function displayNickImg($level){
 
 <div style="height:10px;background:#eee"></div>
 
-<div class="mem_my_apply order_bg3">
-	我的应用
+<div style="display: none;">
+	<div class="mem_my_apply order_bg3">
+		我的应用
+	</div>
+	<div class="mem_my_applylist">
+		<ul>
+			<li><img src="/themes/mobiles/img/tym.png"></li>
+			<li><img src="/themes/mobiles/img/sxy.png"></li>
+			<li> </li>
+			<li style="border-right:0;"> </li>
+		</ul>
+	</div>
 </div>
-<div class="mem_my_applylist">
-	<ul>
-		<li><img src="/themes/mobiles/img/tym.png"></li>
-		<li><img src="/themes/mobiles/img/sxy.png"></li>
-		<li> </li>
-		<li style="border-right:0;"> </li>
-	</ul>
-</div>
-
 <?php include T('inc/add_as_friend');?>
 
 <script>
@@ -124,7 +125,7 @@ $(function(){
 	if(length >6){
 		 var str = $(".c_n_tit").text();
 		 var name = str.substr(1,6);
-		 $(".c_n_tit").attr('title',str);
+		 $(".c_n_tit").attr('title',str); 
 		 $(".c_n_tit").text(name + '...');
 	}
 	if(_length >3){
