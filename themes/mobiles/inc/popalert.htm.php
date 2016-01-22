@@ -3,12 +3,12 @@
 <div class="no-bounce" id="popalert-bg"></div>
 <div class="no-bounce" id="popalert">
 	<div class="top">
-		<!--  <h1 class="alert-tit">提示</h1> -->
+		<h1 class="alert-tit">提示</h1>
 		<div class="alert-cont" id="alertcont"></div>
 	</div>
 	<div class="line"></div>
 	<div class="btm">
-		<button id="alertok">确认</button>
+		<button id="alertok">好的</button>
 	</div>
 </div>
 <script>
@@ -34,7 +34,7 @@ function myAlert(msg, okcall, title, oktext, contentcss) {
 		}
 	}
 	var _ok = $('#alertok');
-	_ok.text('确认 ');
+	_ok.text('好的');
 	if (typeof(oktext)!='undefined' && oktext!='') {
 		_ok.text(oktext);
 	}
@@ -53,7 +53,7 @@ function _hideAlert() {
 	myAlert._popdlg.hide();
 	myAlert._popbg.hide();
 }
-$(function(){    
+$(function(){
 	$('#popalert-bg,#popalert').bind('touchmove',function(e){
 		e.preventDefault();
 	});
