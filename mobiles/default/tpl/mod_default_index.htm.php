@@ -58,7 +58,7 @@ window.location.reload();
 				<td style="width:110px;"><img src="/themes/mobiles/img/01_ba.png"></td>
 				<td>
 					<p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p>
-					<p class="jx_table_price"><span>￥38.00</span></p>
+					<p class="jx_table_price"><span>￥38.00</span><span style="font-size:12px;color:#999;margin-left:5px;">(10斤/箱)</span></p>
 					<p class="jx_mail_type">快递：包邮</p>
 					<button class="jx_btn_new">立即订购</button>
 				</td>
@@ -77,13 +77,13 @@ window.location.reload();
 		<ul>
 			<li>
 				<a href="http://m.edmbuy.com/item/1041" class="product_info_pc">
-					<img src="http://oss.edmbuy.com/1/img/424de5c13c935311b6605579b75ae11a.jpg" style="float:right">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1041_P_1453009153869.jpg" style="float:right">
 					<p class="list_table_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
 					<p class="list_table_price"><span>￥118.00</span><b>￥135.00</b></p>
 				</a>
 			</li>
 			<li>
-				<a href="http://m.edmbuy.com/item/1010" class="product_info_pc">
+				<a href="http://m.edmbuy.com/item/1008" class="product_info_pc">
 					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1008_P_1452643503621.jpg" style="float:right">
 				
 					<p class="list_table_tit">浓桂园香金骏眉  高山种植纯绿色  四代工艺传承 （100g）</p>
@@ -105,10 +105,12 @@ window.location.reload();
 				</a>
 			</li>
 			<li>
-				<a href="http://m.edmbuy.com/item/1042" class="product_info_pc">
-					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
-					<p class="list_table_tit">宁夏五谷合一粗粮杂粮米4斤装</p>
-					<p class="list_table_price"><span>￥98.00</span><b>￥112.00</b></p>
+				<a href="http://m.edmbuy.com/item/1019">
+					<div class="product_info_pc">
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1019_P_1452107600918.jpg" style="float:right">
+						<p class="list_table_tit">佐佐果冻萌卡通包装水果味奶优果冻休闲食品690g粉猪棕熊</p>
+						<p class="list_table_price"><span>￥42.00</span><b>￥53.00</b></p>
+					</div>
 				</a>
 			</li>
 			<li>

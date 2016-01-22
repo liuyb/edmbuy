@@ -119,13 +119,13 @@ $(function(){
 	var _length = $(".refer_name").text().length;
 	if(length >6){
 		 var str = $(".c_n_tit").text();
-		 var name = str.substr(1,6);
+		 var name = str.substr(0,6);
 		 $(".c_n_tit").attr('title',str);
 		 $(".c_n_tit").text(name + '...');
 	}
-	if(_length >3){
+	if(_length >5){
 		 var str = $(".refer_name").text();
-		 var name = str.substr(1,3);
+		 var name = str.substr(0,5);
 		 $(".refer_name").attr('title',str);
 		 $(".refer_name").text(name + '...');
 	}

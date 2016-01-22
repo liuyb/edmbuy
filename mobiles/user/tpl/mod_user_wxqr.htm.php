@@ -37,7 +37,10 @@
 	</p>
 </div>
 
+
 <script>
+
+
 function fileupload(e){
     var files = e.target.files;
     var file = files[0];
@@ -58,14 +61,19 @@ function fileupload(e){
     };
   	fr.readAsDataURL(file);
 }
+
 function postImage(ev){
 	var img = ev.target.result;
 	F.post('/user/wxqr/update', {img:img}, function(ret){
+		$("body").append('<div class="mask"></div><div class="wtxje">加载中...</div>');
+		$(".mask").show();
 		if(ret.flag=='SUC'){
 			$("#wx_uploading").find("img").attr("src",ret.result+'?r='+Math.random());//强制清缓存
-			setTimeout(function(){
+			$(".mask,.wtxje").hide();
+			myAlert('上传成功！');
+		/* 	setTimeout(function(){
 				window.location.href = '/user/setting';
-			}, 1000);
+			}, 1000); */
 		}else{
 			myAlert(ret.errMsg);
 		}
