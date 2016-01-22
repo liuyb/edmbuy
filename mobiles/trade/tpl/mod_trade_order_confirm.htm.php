@@ -80,7 +80,7 @@
   <div class="row row-last">支付完成后，如需退换货请及时联系商家</div>
 </div>
 
-<?php form_topay_script(U('order'));?>
+<?php form_topay_script(U('trade/order/payok'));?>
 
 <script>
 function wxEditAddressCallback(res) {

@@ -516,6 +516,26 @@ class User_Controller extends MobileController {
       return $currentUser;
   }
   
+  public function chmobile(Request $request, Response $response){
+  	if($request->is_post()) {
+  		$mobile = $request->post('mobile','');
+  		$ret = ['flag'=>'FAIL', 'msg'=>''];
+  		if (!$mobile || !preg_match('/^\d{11,15}$/', $mobile)) {
+  			$ret['msg'] = '手机号非法';
+  			$response->sendJSON($ret);
+  		}
+  		
+  		global $user;
+  		if (!$user->mobilephone) { //有手机号不给覆盖
+  			$upUser = new Users($user->uid);
+  			$upUser->mobilephone = $mobile;
+  			$upUser->save(Storage::SAVE_UPDATE);
+  		}
+  		$ret = ['flag'=>'SUCC', 'msg'=>'更新成功'];
+  		
+  		$response->sendJSON($ret);
+  	}
+  }
 }
 
 /*----- END FILE: User_Controller.php -----*/

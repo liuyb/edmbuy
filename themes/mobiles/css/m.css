@@ -31,6 +31,7 @@ body.SPA.greybg { background: #eee; }
 a { color: #333; }
 a:hover { text-decoration: none; }
 a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
+a.btna { display: block;height: 100%; }
 .cursor { cursor: pointer; }
 .hwspeed {
 	transform: translate3d(0, 0, 0);
@@ -2759,9 +2760,12 @@ td.cash_td2 img {
 }
 .becmoe_rice{
   text-align:center;
-  margin:40px 0 20px;
+  margin:30px 0 0;
   font-size:16px;
-  color:#333; 
+  color:#333;
+}
+.pay_okgo {
+	margin:30px 0 0;
 }
 .pay_check_order_but{
   background:#fff;

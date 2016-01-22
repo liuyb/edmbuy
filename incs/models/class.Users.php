@@ -482,6 +482,16 @@ class Users extends StorageNode {
 		return 0;
 	}
 	
+	/**
+	 * 获取用户最新一个订单
+	 * @return Order
+	 */
+	public function latest_order() {
+		$order = Order::find_one(new AndQuery(new Query('user_id', $this->id),new Query('pay_status', PS_PAYED)),
+				                    ['from'=>0,'size'=>1,'sort'=>['order_id'=>'DESC']]);
+		return $order;
+	}
+	
 }
  
 /*----- END FILE: class.Users.php -----*/

@@ -40,6 +40,7 @@ class Trade_Controller extends MobileController {
       'trade/order/confirm_shipping'   => 'order_confirm_shipping',
       'trade/order/record'   => 'order_record',
       'trade/order/topay'    => 'order_topay',
+      'trade/order/payok'    => 'order_payok',
     ];
   }
 
@@ -676,7 +677,8 @@ class Trade_Controller extends MobileController {
    * @param Request $request
    * @param Response $response
    */
-  public function order_topay(Request $request, Response $response){
+  public function order_topay(Request $request, Response $response)
+  {
     
     if ($request->is_post()) {
       
@@ -690,6 +692,7 @@ class Trade_Controller extends MobileController {
       $pay_mode = $request->post('pay_mode', 'wxpay'); //默认微信支付
       $order_id = $request->post('order_id', 0);
       $back_url = $request->post('back_url', '');
+      $back_url = $back_url . (strrpos($back_url, '?')===false ? '?' : '&') . 'order_id='.$order_id;
       
       $supported_paymode = [
         'wxpay'  => '微信安全支付',
@@ -734,6 +737,36 @@ class Trade_Controller extends MobileController {
     
   }
   
+  /**
+   * 支付成功
+   * @param Request $request
+   * @param Response $response
+   */
+  public function order_payok(Request $request, Response $response)
+  {
+  	$this->v->set_tplname('mod_trade_order_payok');
+  	$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+  	$this->nav_no = 0;
+  	
+  	$order_id = $request->get('order_id',0);
+  	$order = Order::load($order_id);
+  	$order_amount = 0;
+  	if ($order->is_exist()) {
+  		$order_amount = $order->money_paid;
+  	}
+  	$this->v->assign('order_amount', $order_amount);
+  	
+  	global $user;
+  	$total_paid = $user->total_paid();
+  	$user_level = 0;
+  	$level_amount = Users::$level_amount[Users::USER_LEVEL_1];
+  	if ($total_paid >= $level_amount || $total_paid+$order_amount >= $level_amount) {
+  		$user_level = 1;
+  	}
+  	$this->v->assign('user_level', $user_level);
+  	
+  	$response->send($this->v);
+  }
 }
  
 /*----- END FILE: Trade_Controller.php -----*/
