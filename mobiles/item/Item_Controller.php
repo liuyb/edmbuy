@@ -120,8 +120,7 @@ class Item_Controller extends MobileController {
 				$this->v->assign('referee', $referee);
 				
 				//商家信息
-				$merchant = Merchant::find_one(new Query('admin_uid', $item->user_id));
-// 				Response::dump($merchant);
+				$merchant = Merchant::find_one(new Query('admin_uid', $item->merchant_uid));
 				$kefu_link = 'javascript:;';
 				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
 					$kefu_link = $merchant->kefu;

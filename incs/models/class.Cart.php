@@ -98,8 +98,8 @@ class Cart extends StorageNode {
 		if (!empty($list)) {
 			foreach ($list AS &$g) {
 				$g->goods_url   = Items::itemurl($g->goods_id);
-				$g->goods_thumb = Items::imgurl($g->goods_thumb); //self::goods_picurl($g['goods_thumb']);
-				$g->goods_img   = Items::imgurl($g->goods_img);   //self::goods_picurl($g['goods_img']);
+				$g->goods_thumb = Items::imgurl($g->goods_thumb);
+				$g->goods_img   = Items::imgurl($g->goods_img);
 			}
 		}
 		return $list;

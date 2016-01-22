@@ -477,7 +477,7 @@ class Trade_Controller extends MobileController {
           }
           
           //关联订单与商家
-          Order::relateMerchant($newOrder->id, $cItem->user_id);
+          Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
           
         }//END foreach loop
         

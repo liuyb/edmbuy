@@ -23,7 +23,7 @@
 
 	<!-- 空购物 -->
 	<div class="cart_empty hide">
-		<img src="/themes/mobiles/img/kgu.png" class="cart_empty_img">
+		<img src="/themes/mobiles/img/kgu.png" class="cart_empty_img" alt=""/>
 		<p><button type="button" class="cart_empty_back">返回</button><p>
 	</div>
 	
