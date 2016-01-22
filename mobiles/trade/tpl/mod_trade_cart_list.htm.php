@@ -8,6 +8,7 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
+<?php if($cartNum):?>
 <script id="for_nav_cart_tool" type="text/html">
 <!-- 编辑工具栏 -->
 <div class="cart_tool">
@@ -18,6 +19,9 @@
 </div>
 </script>
 <script>$('#nav_cart_tool').html($('#for_nav_cart_tool').html())</script>
+<?php else:?>
+<style>#nav_cart_tool{background:#eee;}</style>
+<?php endif;?>
 
 <div class="cart_body">
 

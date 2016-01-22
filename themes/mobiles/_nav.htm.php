@@ -7,7 +7,7 @@
 <?php endif;?>
 <?php if('cart'!=$nav_flag1):?>
 <ul>
-	<li><a href="/?debug=1" id="f_sy" rel="home" <?php if('home'==$nav_flag1):?>class="on"<?php endif;?>></a></li>
+	<li><a href="/" id="f_sy" rel="home" <?php if('home'==$nav_flag1):?>class="on"<?php endif;?>></a></li>
 	<li><a href="<?php echo U('trade/cart/list','mnav=1')?>" id="f_gwc" rel="cart" <?php if('cart_mnav'==$nav_flag1):?>class="on"<?php endif;?>><?php if($user_cart_num):?><span class="f_num"><?=$user_cart_num?></span><?php endif;?></a></li>
 	<li><a href="<?php echo U('partner')?>" id="f_ms" rel="partner" <?php if('partner'==$nav_flag1):?>class="on"<?php endif;?>>&nbsp;</a></li>
 	<li><a href="<?php echo U('user')?>" id="f_hy" rel="user" <?php if('user'==$nav_flag1):?>class="on"<?php endif;?>>&nbsp;</a></li>

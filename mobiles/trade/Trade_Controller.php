@@ -175,13 +175,7 @@ class Trade_Controller extends MobileController {
     $this->nav_flag1 = 'cart';
     $this->nav_no    = 1;
     $this->topnav_no = 1;
-    
-    $mnav = $request->get('mnav', 0);
-    if ($mnav) {
-    	$this->nav_no    = 2;
-    	$this->nav_flag1 = 'cart_mnav';
-    }
-    $this->v->assign('mnav', $mnav);
+    $this->backurl = '/';
     
     $shop_uid = Cart::shopping_uid();
     $cartNum  = Cart::getUserCartNum($shop_uid);
@@ -189,8 +183,20 @@ class Trade_Controller extends MobileController {
     	$this->nav_no    = 0;
     }
     
+    $mnav = $request->get('mnav', 0);
+    if ($mnav) {
+    	$this->nav_no    = 2;
+    	$this->nav_flag1 = 'cart_mnav';
+    	if (!$cartNum) {
+    		$this->nav_no  = 2;
+    	}
+    }
+    else {
+    	$this->backurl = 'javascript:history.back();';
+    }
+    $this->v->assign('mnav', $mnav);
+    
     if ($request->is_hashreq()) {
-      $shop_uid = Cart::shopping_uid();
       $cartGoods= Cart::getUserCart($shop_uid);
       
       //将数据库列表转化成根据商家聚合列表
