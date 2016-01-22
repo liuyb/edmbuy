@@ -31,6 +31,7 @@ body.SPA.greybg { background: #eee; }
 a { color: #333; }
 a:hover { text-decoration: none; }
 a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
+a.btna { display: block;height: 100%; }
 .cursor { cursor: pointer; }
 .hwspeed {
 	transform: translate3d(0, 0, 0);
@@ -200,14 +201,14 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 /*pop alert dialog*/
 #popalert-bg,#popalert { display: none;position: absolute; }
 #popalert-bg { left: 0;top: 0;width: 100%;height: 100%;z-index: 50000;background: #000;opacity:.3; }
-#popalert { width: 90%;left: 5%;top: 30%;text-align: center;z-index: 50005; }
+#popalert { width: 70%;left: 15%;top: 30%;text-align: center;z-index: 50005; }
 #popalert .top,#popalert .btm { background: #fff;opacity:.9; }
-#popalert .top { border-radius: 10px 10px 0 0; }
-#popalert .btm { border-radius: 0 0 10px 10px;height: 40px;line-height: 40px; }
+#popalert .top { border-radius: 4px 4px 0 0; }
+#popalert .btm { border-radius: 0 0 4px 4px;height: 40px;line-height: 40px; }
 #popalert .btm button { color: #007cf7;border: none;padding: 0;margin: 0;background: none;font-size: 16px;font-size: 1.6rem;width: 80%;height: 100%; }
 #popalert .line { border: none;padding: 0;margin: 0;height: .5px;line-height: .5px;font-size: 0; }
 #popalert .alert-tit { font-size: 16px;font-size: 1.6rem;font-weigth: bold;color: #000;padding: 5px 0 0; }
-#popalert .alert-cont { padding: 13px 10px 18px;font-size: 14px;font-size: 1.4rem;min-height: 20px; }
+#popalert .alert-cont { padding: 13px 10px 18px;font-size: 14px;font-size: 1.7rem;min-height: 20px; }
 #popalert .alert-cont em { font-weight: bold; }
 
 /* 微信操作提示 */
@@ -216,7 +217,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; 
   background: rgba(0, 0, 0, 0.7);
   display: none;
   z-index: 10000;
@@ -2759,9 +2760,12 @@ td.cash_td2 img {
 }
 .becmoe_rice{
   text-align:center;
-  margin:40px 0 20px;
+  margin:30px 0 0;
   font-size:16px;
-  color:#333; 
+  color:#333;
+}
+.pay_okgo {
+	margin:30px 0 0;
 }
 .pay_check_order_but{
   background:#fff;

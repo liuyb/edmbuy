@@ -119,7 +119,7 @@
 				$("#LevelCount3").text(ret.thirdLevelCount);
 				$("#inactiveIncome").html("￥"+ret.inactiveIncome);
 				$("#totalIncome").html("￥"+ret.totalIncome);
-			}
+			}  
 		});
 	});
 	function showLevelList(url, level){

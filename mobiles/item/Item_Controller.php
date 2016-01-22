@@ -120,7 +120,7 @@ class Item_Controller extends MobileController {
 				$this->v->assign('referee', $referee);
 				
 				//购物车数
-				$cartnum = Cart::getUserCartNum(Cart::shopping_uid(),$item->id);
+				$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
 				$this->v->assign('cartnum', $cartnum);
 				
 				//商家信息
