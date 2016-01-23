@@ -805,44 +805,54 @@ a.h_btn{
   background: #f6f6f6;
 }
 #f_sy {
-  background: url(../img/tab_sy_41.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -200px;
+	background-size:50px auto ;
 }
 #f_sy.on {
-  background: url(../img/tab_sy.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px 0;
+	background-size:50px auto ;
 }
 #f_gwc {
-  background: url(../img/tab_gw_29.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -250px;	
+	background-size: 50px auto ;
 }
 #f_gwc.on {
-  background: url(../img/tab_gw.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -50px;	
+	background-size: 50px auto ;
 }
 #f_hhr {
-  background: url(../img/tab_hh_28.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -300px;	
+	background-size: 50px auto ;
 }
 #f_hhr.on {
-  background: url(../img/tab_hh.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -100px;	
+	background-size: 50px auto ;
 }
 #f_hy {
-  background: url(../img/tab_hy_2.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -350px;	
+	background-size: 50px auto ;
 }
 #f_hy.on {
-  background: url(../img/tab_hy.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat;
+	background-position: 20px -150px;	
+	background-size: 50px auto ;
 }
 #f_ms {
-  background: url(../img/tab_hms.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat center 4px;
+	background-position: 20px -300px;	
+	background-size: 50px auto ;
 }
 #f_ms.on {
-  background: url(../img/tab_ms.png) no-repeat center 4px;
-  background-size: auto 44px;
+	background: url(../img/tab_01.png) no-repeat center 4px;
+	background-position: 20px -100px;	
+	background-size: 50px auto ;
 }
 .f_num{
   position: absolute;
