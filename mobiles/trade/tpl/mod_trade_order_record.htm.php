@@ -46,7 +46,7 @@ function showOrder(obj, type, status){
   <div class="list-body list-body-order">
   
   <?php foreach($ord['order_goods'] AS $g):?>
-    <div class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['rec_id']?>">
+    <div class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['order_id']?>">
       <div class="c-24-6 col-2 withclickurl"><img src="<?=$g['goods_thumb']?>" alt="" class="goods_pic" /></div>
       <div class="c-24-11 col-3 withclickurl">
         <p><?=$g['goods_name']?></p>
