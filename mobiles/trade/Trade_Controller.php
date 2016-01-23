@@ -242,10 +242,18 @@ class Trade_Controller extends MobileController {
         $errmsg = "无效请求";
         $response->send($this->v);
       }
-      
-      $orders = Order::getList($user_id);
+      $paystatus = isset($_REQUEST['paystatus']) ? $_REQUEST['paystatus'] : null;
+      $shipstatus = isset($_REQUEST['shipstatus']) ? $_REQUEST['shipstatus'] : null;
+      $orders = Order::getList($user_id, $paystatus, $shipstatus);
       $orders_num = count($orders);
       $this->v->assign('orders', $orders);
+      $status = "all";
+      if(isset($paystatus) && $paystatus != null){
+          $status = "p_".$paystatus;
+      }else if(isset($shipstatus) && $shipstatus != null){
+          $status = "s_".$shipstatus;
+      }
+      $this->v->assign("status", $status);
       
     }
     else {

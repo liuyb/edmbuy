@@ -55,19 +55,19 @@ function displayNickImg($level){
 </div>
 <div class="my_order_state">
 	<ul>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?paystatus=0">
     		<li>
     			<img src="/themes/mobiles/img/fk1.png">
     			<span class="d_nums waitPayCount">0</span>
     		</li>
 		</a>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?shipstatus=0">
 			<li>
 				<img src="/themes/mobiles/img/fh2.png">
     			<span class="d_nums unShipCount">0</span>
 			</li>
 		</a>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?shipstatus=1">
 			<li class="dsh">
 				<img src="/themes/mobiles/img/sh3.png">
     			<span class="d_nums shipedCount">0</span>

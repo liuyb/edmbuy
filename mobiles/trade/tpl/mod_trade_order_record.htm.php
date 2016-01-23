@@ -3,16 +3,24 @@
 <script id="forTopnav" type="text/html">
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
-		<li class="header_order_on">全部</li>
-		<li>待付款</li>
-		<li>待发货</li>
-		<li>待收货</li>
+		<li <?php if($status == 'all'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this);">全部</li>
+		<li <?php if($status == 'p_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'paystatus', 0);">待付款</li>
+		<li <?php if($status == 's_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 0);">待发货</li>
+		<li <?php if($status == 's_1'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 1);">待收货</li>
 		<a href="<?php echo U('user')?>" class="back">&nbsp;</a>
 	</ul>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
-
+<script>
+function showOrder(obj, type, status){
+	var url = "/trade/order/record";
+	if(type){
+		url += "?"+type+"="+status;
+	}
+	window.location = url;
+}
+</script>
 
 <?php if (!$orders_num):?>
 
@@ -115,6 +123,7 @@ $(function(){
 		return false;
 	});
 });
+
 </script>
 
 <?php endif;?>

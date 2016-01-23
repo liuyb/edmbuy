@@ -256,7 +256,7 @@ class Order extends StorageNode{
         $ectb_merchant = Merchant::table();
     
         $sql = "SELECT og.*,g.`goods_thumb`,m.facename,m.merchant_id,m.telphone,m.kefu FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
-                left join $ectb_merchant m on g.merchant_uid = m.admin_uid 
+                inner join $ectb_merchant m on g.merchant_uid = m.admin_uid 
                 WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
         $order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
         if (!empty($order_goods)) {
@@ -298,17 +298,23 @@ class Order extends StorageNode{
      * @param integer $user_id
      * @return array
      */
-    static function getList($user_id) {
+    static function getList($user_id, $paystatus, $shipstatus) {
     	if (empty($user_id)) return [];
     
     	$start = 0;
-    	$limit = 50;
+    	$limit = 100;
     
     	$ectb_order = self::table();
     	$ectb_goods = Items::table();
     	$ectb_order_goods = OrderItems::table();
-    
-    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d ORDER BY `order_id` DESC LIMIT %d,%d";
+        $where = "";
+        if(isset($paystatus) && $paystatus != null){
+            $where .= " and pay_status = $paystatus ";
+        }
+        if(isset($shipstatus) && $shipstatus != null){
+            $where .= " and shipping_status = $shipstatus ";
+        }
+    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d and is_separate = 0 $where ORDER BY `order_id` DESC LIMIT %d,%d";
     	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
     	if (!empty($orders)) {
     		foreach ($orders AS &$ord) {
