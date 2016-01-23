@@ -35,7 +35,7 @@
 					</div>
 				</li>
 			</a>
-			<a href="http://m.edmbuy.com/item/1010">
+			<a href="http://m.edmbuy.com/item/1008">
 				<li>
 					<div class="product_info_pc">
 						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1008_P_1452643503621.jpg" style="float:right">

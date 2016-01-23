@@ -3208,6 +3208,11 @@ td.cash_td2 img {
   vertical-align: inherit;
   width:110px;
   border-radius:4px;
+  transform: translate3d(0, 0, 0);
+	-webkit-transform: translate3d(0, 0, 0);
+	-moz-transform: translate3d(0, 0, 0);
+	-ms-transform: translate3d(0, 0, 0);
+	-o-transform: translate3d(0, 0, 0);
 }
 .list_jx_tab td{
   padding:8px;
@@ -3227,7 +3232,7 @@ td.cash_td2 img {
   font-size: 14px;
   color: #333;
   line-height: 17px;
-  height: 36px; 
+  height: 33px; 
 }
 .jx_table_price{
   margin-left:-5px;
