@@ -134,6 +134,10 @@ class Default_Controller extends MobileController {
     		'link'  => U('about', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
+    $pager = new PagerPull(1, 6);
+    //首页推荐商品列表
+    Default_Model::findGoodsList($pager, true);
+    $this->v->assign("result", $pager->result);
     $this->v->assign('share_info', $share_info);
     
     throw new ViewResponse($this->v);
