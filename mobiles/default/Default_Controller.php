@@ -421,7 +421,7 @@ class Default_Controller extends MobileController {
    */
   public function goods_list(Request $request, Response $response){
       $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
-      $pager = new PagerPull($curpage, 10);
+      $pager = new PagerPull($curpage, 50);
       Default_Model::findGoodsList($pager);
       $pageJson = $pager->outputPageJson();
       $ret = ["result" => $pager->result];
