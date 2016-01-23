@@ -50,14 +50,10 @@ class Default_Controller extends MobileController {
     	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
     }
     */
-    //分享信息
-    $share_info = [
-    		'title' => '难得的好商城，值得关注！',
-    		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
-    		'link'  => U('/', 'spm='.Spm::user_spm(), true),
-    		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
-    ];
-    $this->v->assign('share_info', $share_info);
+    $pager = new PagerPull(1, 6);
+    //首页推荐商品列表
+    Default_Model::findGoodsList($pager, true);
+    $this->v->assign("result", $pager->result);
     
     throw new ViewResponse($this->v);
   }
@@ -431,10 +427,11 @@ class Default_Controller extends MobileController {
   public function goods_list(Request $request, Response $response){
       $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
       $pager = new PagerPull($curpage, 50);
-      Default_Model::findGoodsList($pager);
+      Default_Model::findGoodsList($pager, false);
       $pageJson = $pager->outputPageJson();
       $ret = ["result" => $pager->result];
       $ret = array_merge($ret, $pageJson);
       $response->sendJSON($ret);
   }
+  
 }

@@ -11,9 +11,10 @@ class Default_Model extends Model {
     /**
      * 获取商品列表
      * @param PagerPull $pager
+     * @param $ispromote 是否推荐
      */
-	static function findGoodsList(PagerPull $pager){
-	    $result = Items::findGoodsList($pager);
+	static function findGoodsList(PagerPull $pager, $ispromote){
+	    $result = Items::findGoodsList($pager, $ispromote);
 	    $pager->setResult($result);
 	}
   
