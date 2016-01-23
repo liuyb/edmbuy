@@ -7,7 +7,8 @@
 <?php else:?>
 
 <div class="header">
-	益多米
+	益多米年货嘉年华
+	<a href="javascript:history.back();" class="back"></a>
 </div>
 
 <div class="act_bg" style="background:#ffdd81;">
