@@ -344,6 +344,7 @@ function showSelect(){
 }
 //购买白名单
 function can_buy() {
+	return true;
 	if (!gUser.uid) return false;
 	var white_uids = [104,112,2667,7217,75497,79554,1737];
 	for (var i=0; i<white_uids.length; i++) {

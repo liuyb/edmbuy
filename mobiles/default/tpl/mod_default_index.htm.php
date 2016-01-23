@@ -55,7 +55,7 @@ window.location.reload();
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
 			<tr>
-				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="/themes/mobiles/img/01_ba.png"></a></td>
+				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="http://oss.edmbuy.com/1/img/8734a568868981364edb6d3761df5bd4.jpg"></a></td>
 				<td>
 					<a href="http://m.edmbuy.com/item/1049" ><p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p></a>
 					<p class="jx_table_price"><span>￥38.00</span><span style="font-size:12px;color:#999;margin-left:5px;">(10斤/箱)</span></p>
