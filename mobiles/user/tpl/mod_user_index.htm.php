@@ -55,22 +55,22 @@ function displayNickImg($level){
 </div>
 <div class="my_order_state">
 	<ul>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?paystatus=0">
     		<li>
     			<img src="/themes/mobiles/img/fk1.png">
-    			<span class="d_nums waitPayCount">0</span>
+    			<span class="waitPayCount"></span>
     		</li>
 		</a>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?shipstatus=0">
 			<li>
 				<img src="/themes/mobiles/img/fh2.png">
-    			<span class="d_nums unShipCount">0</span>
+    			<span class="unShipCount"></span>
 			</li>
 		</a>
-		<a href="/trade/order/record">
+		<a href="/trade/order/record?shipstatus=1">
 			<li class="dsh">
 				<img src="/themes/mobiles/img/sh3.png">
-    			<span class="d_nums shipedCount">0</span>
+    			<span class="shipedCount"></span>
 			</li>
 		</a>
 		<a href="/trade/order/record"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
@@ -103,9 +103,15 @@ function loadAjaxData(){
 	F.get(url, null, function(data){
 		if(data){
 			var stateDOM = $(".my_order_state");
-			stateDOM.find(".waitPayCount").text(data.status1);
-			stateDOM.find(".unShipCount").text(data.status2);
-			stateDOM.find(".shipedCount").text(data.status3);
+			if(data.status1 && data.status1 > 0){
+				stateDOM.find(".waitPayCount").addClass("d_nums").text(data.status1);
+			}
+			if(data.status2 && data.status2 > 0){
+				stateDOM.find(".unShipCount").addClass("d_nums").text(data.status2);
+			}
+			if(data.status3 && data.status3 > 0){
+				stateDOM.find(".shipedCount").addClass("d_nums").text(data.status3);
+			}
 		}
 	});
 }

@@ -55,7 +55,7 @@ window.location.reload();
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
 			<tr>
-				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="/themes/mobiles/img/01_ba.png"></a></td>
+				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="http://oss.edmbuy.com/1/img/8734a568868981364edb6d3761df5bd4.jpg"></a></td>
 				<td>
 					<a href="http://m.edmbuy.com/item/1049" ><p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p></a>
 					<p class="jx_table_price"><span>￥38.00</span><span style="font-size:12px;color:#999;margin-left:5px;">(10斤/箱)</span></p>
@@ -76,10 +76,10 @@ window.location.reload();
 	<div class="list_product_info index_product_info">
 		<ul>
 			<li>
-				<a href="http://m.edmbuy.com/item/1041" class="product_info_pc">
-					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1041_P_1453009153869.jpg" style="float:right">
+				<a href="http://m.edmbuy.com/item/1060" class="product_info_pc">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1060_P_1453486572368.jpg" style="float:right">
 					<p class="list_table_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
-					<p class="list_table_price"><span>￥118.00</span><b>￥135.00</b></p>
+					<p class="list_table_price"><span>￥72.00</span><b>￥90.00</b></p>
 				</a>
 			</li>
 			<li>
@@ -105,11 +105,11 @@ window.location.reload();
 				</a>
 			</li>
 			<li>
-				<a href="http://m.edmbuy.com/item/1019">
+				<a href="http://m.edmbuy.com/item/1005">
 					<div class="product_info_pc">
-						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1019_P_1452107600918.jpg" style="float:right">
-						<p class="list_table_tit">佐佐果冻萌卡通包装水果味奶优果冻休闲食品690g粉猪棕熊</p>
-						<p class="list_table_price"><span>￥42.00</span><b>￥53.00</b></p>
+						<img src="http://merchant.edmbuy.com/images/201601/goods_img/1005_P_1452036372702.jpg" style="float:right">
+						<p class="list_table_tit">佐佐甜品恋上奶优多口味布丁12杯礼盒装休闲食品零食年货礼包1.5kg送手提袋</p>
+						<p class="list_table_price"><span>￥88.00</span><b>￥110.00</b></p>
 					</div>
 				</a>
 			</li>
@@ -132,9 +132,8 @@ window.location.reload();
 	<div class="por_list_title">
 		<span class="tit_left"></span> 年货精选
 	</div>
-	<div class="list_jx">
-		<table cellspacing="0" cellpadding="0" class="list_jx_tab" id="goods_list">	
-		</table>
+	<div class="list_product_info index_product_info" style="margin-right:4px;">
+		<ul id="goods_list"></ul>
 	</div>
 	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 40px;" class="pull_more_data">点击加载更多...</div>
 </div>
@@ -156,17 +155,20 @@ window.location.reload();
 			scrollToHistoryPosition();
 			return;
 		}
-		var TR = "";
+		var LI = "";
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var good = result[i];
 			var mark_price = good.market_price ? good.market_price : "";
-			TR += "<tr onclick=\"gotoItem('"+good.goods_id+"');\" style='cursor:pointer;'><td><img src=\""+good.goods_thumb+"\"></td><td>";
+			var thumb = good.goods_thumb;
+			/* TR += "<tr onclick=\"gotoItem('"+good.goods_id+"');\" style='cursor:pointer;'><td><img src=\""+good.goods_thumb+"\"></td><td>";
 			TR += "<p class=\"jx_year_tit\">"+good.goods_name+"</p><p class=\"jx_table_price\">";
 			TR += "<span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p>";
-			TR += "<p class=\"jx_mail_type\">邮递 ：包邮</p></td></tr>";
+			TR += "<p class=\"jx_mail_type\">邮递 ：包邮</p></td></tr>"; */
+			LI += "<li onclick=\"gotoItem('"+good.goods_id+"');\"><div class=\"product_info_pc\"><img src=\""+thumb+"\" style=\"float:right\"><p class=\"list_table_tit\">"+good.goods_name+"</p><p class=\"list_table_price\"><span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p></div></li>";
 		}
-		$("#goods_list").append($(TR));
+		$("#goods_list").append($(LI));
+
 		F.set_scroller(false, 100);
 		scrollToHistoryPosition();
 	}

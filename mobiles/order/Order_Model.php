@@ -21,7 +21,7 @@ class Order_Model extends Model {
                 array_push($merchant['goods'], $item);
             }else{
                 $merchant = $item;
-                $merchant['goods'] = array();
+                $merchant['goods'] = array($item);
             }
         }
         return $merchant;

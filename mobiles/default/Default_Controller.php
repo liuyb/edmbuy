@@ -50,6 +50,15 @@ class Default_Controller extends MobileController {
     	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
     }
     */
+    //分享信息
+    $share_info = [
+    		'title' => '难得的好商城，值得关注！',
+    		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
+    		'link'  => U('/', 'spm='.Spm::user_spm(), true),
+    		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+    ];
+    $this->v->assign('share_info', $share_info);
+    
     throw new ViewResponse($this->v);
   }
 

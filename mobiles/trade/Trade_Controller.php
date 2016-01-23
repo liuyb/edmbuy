@@ -242,10 +242,18 @@ class Trade_Controller extends MobileController {
         $errmsg = "无效请求";
         $response->send($this->v);
       }
-      
-      $orders = Order::getList($user_id);
+      $paystatus = isset($_REQUEST['paystatus']) ? $_REQUEST['paystatus'] : null;
+      $shipstatus = isset($_REQUEST['shipstatus']) ? $_REQUEST['shipstatus'] : null;
+      $orders = Order::getList($user_id, $paystatus, $shipstatus);
       $orders_num = count($orders);
       $this->v->assign('orders', $orders);
+      $status = "all";
+      if(isset($paystatus) && $paystatus != null){
+          $status = "p_".$paystatus;
+      }else if(isset($shipstatus) && $shipstatus != null){
+          $status = "s_".$shipstatus;
+      }
+      $this->v->assign("status", $status);
       
     }
     else {
@@ -461,6 +469,7 @@ class Trade_Controller extends MobileController {
         // 处理表 order_goods
         $order_update = [];   //存储一些可能需要更新的字段数据
         $succ_goods   = [];   //存储成功购买了的商品
+        $rel_merchants= [];   //关联商家
         $true_amount  = 0;    //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
         $total_commision = 0; //总佣金
         foreach ($order_goods AS $cg) {
@@ -504,6 +513,9 @@ class Trade_Controller extends MobileController {
           
           //关联订单与商家
           Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
+          if (!in_array($cItem->merchant_uid, $rel_merchants)) {
+          	array_push($rel_merchants, $cItem->merchant_uid);
+          }
           
         }//END foreach loop
         
@@ -522,6 +534,9 @@ class Trade_Controller extends MobileController {
         if (!empty($order_update)) {
           D()->update(Order::table(), $order_update, ['order_id'=>$order_id]);
         }
+        
+        // 生成子订单(如果有多个商家)
+        Order::genSubOrder($order_id, $rel_merchants);
         
         // 处理表 pay_log
         PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);

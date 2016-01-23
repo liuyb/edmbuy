@@ -3,16 +3,24 @@
 <script id="forTopnav" type="text/html">
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
-		<li class="header_order_on">全部</li>
-		<li>待付款</li>
-		<li>待发货</li>
-		<li>待收货</li>
+		<li <?php if($status == 'all'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this);">全部</li>
+		<li <?php if($status == 'p_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'paystatus', 0);">待付款</li>
+		<li <?php if($status == 's_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 0);">待发货</li>
+		<li <?php if($status == 's_1'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 1);">待收货</li>
 		<a href="<?php echo U('user')?>" class="back">&nbsp;</a>
 	</ul>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
-
+<script>
+function showOrder(obj, type, status){
+	var url = "/trade/order/record";
+	if(type){
+		url += "?"+type+"="+status;
+	}
+	window.location = url;
+}
+</script>
 
 <?php if (!$orders_num):?>
 
@@ -38,7 +46,7 @@
   <div class="list-body list-body-order">
   
   <?php foreach($ord['order_goods'] AS $g):?>
-    <div class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['rec_id']?>">
+    <div class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['order_id']?>">
       <div class="c-24-6 col-2 withclickurl"><img src="<?=$g['goods_thumb']?>" alt="" class="goods_pic" /></div>
       <div class="c-24-11 col-3 withclickurl">
         <p><?=$g['goods_name']?></p>
@@ -115,6 +123,7 @@ $(function(){
 		return false;
 	});
 });
+
 </script>
 
 <?php endif;?>

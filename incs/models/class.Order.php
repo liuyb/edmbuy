@@ -193,14 +193,18 @@ class Order extends StorageNode{
      * @param integer $order_id
      * @return array
      */
-    static function getItems($order_id) {
+    static function getItems($order_id, $merchant_uid = 0) {
     	if (empty($order_id)) return [];
     
     	$ectb_goods = Items::table();
     	$ectb_order_goods = OrderItems::table();
     
-    	$sql = "SELECT og.*,g.`goods_thumb` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
-    	$order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
+    	$where = '';
+    	if ($merchant_uid) {
+    		$where = " AND g.merchant_uid=%d";
+    	}
+    	$sql = "SELECT og.*,g.`goods_thumb`,g.`commision` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d {$where} ORDER BY og.`rec_id` DESC";
+    	$order_goods = D()->raw_query($sql, $order_id, $merchant_uid)->fetch_array_all();
     	if (!empty($order_goods)) {
     		foreach ($order_goods AS &$g) {
     			$g['goods_url']   = Items::itemurl($g['goods_id']);
@@ -225,19 +229,82 @@ class Order extends StorageNode{
     	$admUsr = AdminUser::load($merchant_uid);
     	if ( $order->is_exist() && $admUsr->is_exist() ) {
     		D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
-    		if (D()->affected_rows()) {
+    		//if (D()->affected_rows()) {
     			$old_merchant_ids = $order->merchant_ids;//$merchant_uid
     			$new_merchant_ids = $old_merchant_ids;
     			if (empty($old_merchant_ids)) {
     				$new_merchant_ids = $admUsr->merchant_id;
     			}
-    			else {
+    			elseif(strpos($old_merchant_ids, $admUsr->merchant_id)===false) {
     				$new_merchant_ids = $old_merchant_ids.','.$admUsr->merchant_id;
     			}
     			if ($new_merchant_ids != $old_merchant_ids) {
     				$upOrder = new self($order_id);
     				$upOrder->merchant_ids = $new_merchant_ids;
     				$upOrder->save(Storage::SAVE_UPDATE);
+    			}
+    		//}
+    	}
+    	return false;
+    }
+    
+    /**
+     * 根据主订单生成多个子订单，如果关联多个商家的话
+     * @param integer $master_order_id
+     * @param array $merchant_uids
+     */
+    static function genSubOrder($master_order_id, Array $merchant_uids) {
+    	if (count($merchant_uids) < 2) {
+    		return false;
+    	}
+    	$master_order = self::load($master_order_id);
+    	if ($master_order->is_exist()) {
+    		foreach ($merchant_uids AS $m_uid) {
+    			$subOrder = $master_order->clone_one();
+    			$subOrder->order_sn = Fn::gen_order_no();
+    			$subOrder->goods_amount = 0;
+    			$subOrder->money_paid   = 0;
+    			$subOrder->order_amount = 0;
+    			$subOrder->commision    = 0;
+    			$subOrder->is_separate  = 0;
+    			$subOrder->parent_id    = $master_order->id;
+    			$subOrder->merchant_ids = Merchant::getMidByAdminUid($m_uid);
+    			$subOrder->save(Storage::SAVE_INSERT);
+    			
+    			if ($subOrder->id) {
+    				$orderIts = self::getItems($master_order_id, $m_uid);
+    				$goods_amount = 0;
+    				$order_amount = 0;
+    				$commision    = 0;
+    				foreach ($orderIts AS $oit) {
+    					
+    					$OI = OrderItems::find_one(new AndQuery(new Query('order_id', $master_order_id),new Query('goods_id', $oit['goods_id'])));
+    					if (!$OI->is_exist()) continue;
+    					
+    					$newOI = $OI->clone_one();
+    					$newOI->order_id    = $subOrder->id;
+    					$newOI->parent_id   = $master_order_id;
+    					$newOI->save(Storage::SAVE_INSERT);
+    					
+    					$goods_amount += $oit['goods_price'] * $oit['goods_number'];
+    					$commision    += $oit['commision'] * $oit['goods_number'];
+    				}
+    				
+
+    				$order_amount = $goods_amount + $master_order->shipping_fee;
+    				$order_update = [];
+    				$order_update['goods_amount'] = $goods_amount;
+    				$order_update['order_amount'] = $order_amount;
+    				$order_update['commision']    = $commision;
+    				if (!empty($order_update)) {
+    					D()->update(self::table(), $order_update, ['order_id'=>$subOrder->id]);
+    				}
+    				 
+    				//将上级is_separate设为1(已分)
+    				D()->update(self::table(), ['is_separate'=>1], ['order_id'=>$master_order_id]);
+    				
+    				//关联订单和商家ID
+    				self::relateMerchant($subOrder->id, $m_uid);
     			}
     		}
     	}
@@ -248,17 +315,23 @@ class Order extends StorageNode{
      * 获取一个订单下的商品列表 并附加商家信息
      * @param unknown $order_id
      */
-    static function getOrderItems($order_id) {
+    static function getOrderItems($order_id, $merchant_uid = 0) {
         if (empty($order_id)) return [];
     
         $ectb_goods = Items::table();
         $ectb_order_goods = OrderItems::table();
         $ectb_merchant = Merchant::table();
-    
-        $sql = "SELECT og.*,g.`goods_thumb`,m.facename,m.merchant_id,m.telphone,m.kefu FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
-                left join $ectb_merchant m on g.merchant_uid = m.admin_uid 
-                WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
-        $order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
+        $where = '';
+        if ($merchant_uid) {
+        	$where = " AND g.merchant_uid=%d";
+        }
+
+        $sql = "SELECT og.*,g.`goods_thumb`,g.`commision`,m.facename,m.merchant_id,m.telphone,m.kefu
+                FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
+                INNER JOIN {$ectb_merchant} m on g.merchant_uid = m.admin_uid 
+                WHERE og.`order_id`=%d {$where}
+                ORDER BY og.`rec_id` DESC";
+        $order_goods = D()->raw_query($sql, $order_id, $merchant_uid)->fetch_array_all();
         if (!empty($order_goods)) {
             foreach ($order_goods AS &$g) {
                 $g['goods_url']   = Items::itemurl($g['goods_id']);
@@ -298,17 +371,23 @@ class Order extends StorageNode{
      * @param integer $user_id
      * @return array
      */
-    static function getList($user_id) {
+    static function getList($user_id, $paystatus, $shipstatus) {
     	if (empty($user_id)) return [];
     
     	$start = 0;
-    	$limit = 50;
+    	$limit = 100;
     
     	$ectb_order = self::table();
     	$ectb_goods = Items::table();
     	$ectb_order_goods = OrderItems::table();
-    
-    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d ORDER BY `order_id` DESC LIMIT %d,%d";
+        $where = "";
+        if(isset($paystatus) && $paystatus != null){
+            $where .= " and pay_status = $paystatus ";
+        }
+        if(isset($shipstatus) && $shipstatus != null){
+            $where .= " and shipping_status = $shipstatus ";
+        }
+    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d and is_separate = 0 $where ORDER BY `order_id` DESC LIMIT %d,%d";
     	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
     	if (!empty($orders)) {
     		foreach ($orders AS &$ord) {

@@ -20,22 +20,57 @@ if (!IS_CLI) {
 
 $json =<<<HEREDOC
 {
-	"button" : 
+	"button" :
 	[
 		{
 			"type" : "view",
-			"name" : "推广二维码",
-			"url"  : "http://m.edmbuy.com/comeon"
+			"name" : "多米年货",
+			"url"  : "http://m.edmbuy.com/"
 		},
 		{
-			"type" : "view",
-			"name" : "米商计划",
-			"url"  : "http://m.edmbuy.com/riceplan"
+      "name" : "米商",
+      "sub_button" : [
+      	{
+    			"type" : "view",
+    			"name" : "米商计划",
+    			"url"  : "http://m.edmbuy.com/riceplan"
+        },
+      	{
+    			"type" : "view",
+    			"name" : "推广二维码",
+    			"url"  : "http://m.edmbuy.com/comeon"
+        },
+      	{
+    			"type" : "view",
+    			"name" : "米商中心",
+    			"url"  : "http://m.edmbuy.com/partner"
+        }
+      ]
 		},
-		{
-			"type" : "view",
-			"name" : "常见问题",
-			"url"  : "http://m.edmbuy.com/about"
+    {
+      "name" : "我的",
+      "sub_button" : [
+        {
+    			"type" : "view",
+    			"name" : "会员中心",
+    			"url"  : "http://m.edmbuy.com/user"
+        },
+        {
+    			"type" : "view",
+    			"name" : "个人信息",
+    			"url"  : "http://m.edmbuy.com/user/setting"
+        },
+        {
+    			"type" : "view",
+    			"name" : "我的订单",
+    			"url"  : "http://m.edmbuy.com/trade/order/record"
+        },
+        {
+    			"type" : "view",
+    			"name" : "常见问题",
+    			"url"  : "http://m.edmbuy.com/about"
+        }
+      ]
 		}
 	]
 }
