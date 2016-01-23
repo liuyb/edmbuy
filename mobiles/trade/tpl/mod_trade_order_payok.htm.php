@@ -12,7 +12,7 @@
 <div class="becmoe_rice">恭喜您，已成为米商!</div>
 <?php endif;?>
 <div class="pay_okgo">
-	<button class="pay_check_order_but" onclick="location.href='<?php echo U('order')?>'">查看订单</button>
+	<button class="pay_check_order_but" onclick="location.href='<?php echo U('trade/order/record')?>'">查看订单</button>
 	<button class="pay_m_plan_but" onclick="location.href='<?php echo U('riceplan')?>'">米商计划</button>
 </div>
 
