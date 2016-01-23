@@ -55,6 +55,15 @@ class Default_Controller extends MobileController {
     Default_Model::findGoodsList($pager, true);
     $this->v->assign("result", $pager->result);
     
+    //分享信息
+    $share_info = [
+    		'title' => '难得的好商城，值得关注！',
+    		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
+    		'link'  => U('/', 'spm='.Spm::user_spm(), true),
+    		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+    ];
+    $this->v->assign('share_info', $share_info);
+    
     throw new ViewResponse($this->v);
   }
 
@@ -148,6 +157,15 @@ class Default_Controller extends MobileController {
     		'desc'    => '益多米是新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。'
     ];
     $this->v->assign('seo', $seo);
+    
+    //分享信息
+    $share_info = [
+    		'title' => '益多米年货嘉年华',
+    		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
+    		'link'  => U('/activity', 'spm='.Spm::user_spm(), true),
+    		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+    ];
+    $this->v->assign('share_info', $share_info);
     
     throw new ViewResponse($this->v);
   }
