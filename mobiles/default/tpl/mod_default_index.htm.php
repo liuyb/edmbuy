@@ -16,7 +16,7 @@
   </div>
 </div>
 <script type="text/javascript">
-var t1;
+var t1; 
 $(function(){
 	var _active = 0, $_ap = $('#slinav a');
   
@@ -136,7 +136,7 @@ window.location.reload();
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab" id="goods_list">	
 		</table>
 	</div>
-	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 30px;" class="pull_more_data">点击加载更多...</div>
+	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 40px;" class="pull_more_data">点击加载更多...</div>
 </div>
 <script>
 	$().ready(function(){
