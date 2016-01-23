@@ -40,21 +40,18 @@
 		</tr>
 	</table>
 </div>
-<?php $total_amount = 0;$total_goods = 0; ?>
 <div class="order_list">
-	<?php foreach ($merchant_goods as $merchant => $goods):?>
+	<?php if (!empty($merchant_goods)):
+	      $total_amount = 0;$total_goods = 0;
+	?>
 	<div class="order_tit">
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
 		<span class="tit_name">
-		<?php $name = explode('|',$merchant); 
-		      if(count($name > 1)){
-		          echo $name[1];
-		      }
-		?></span>
+		<?=$merchant_goods['facename'] ?></span>
 	</div>
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
-			<?php foreach ($goods as $gd):
+			<?php foreach ($merchant_goods['goods'] as $gd):
 			 $total_amount = doubleval($total_amount) + doubleval($gd['goods_price']);
 			 ++$total_goods; 
 			?>
@@ -74,7 +71,6 @@
 			<?php endforeach;?>
 		</table>
 	</div>
-	<?php endforeach;?>
 	<div class="order_price">
 		<p>
 			<span style="padding-right:12px;">共<span><?=$total_goods ?></span>件商品 </span>
@@ -83,10 +79,11 @@
 	</div>
 	<div class="order_serve">
 		<ul>
-			<li class="online_serve">在线客服</li>
-			<li class="after_serve">售后服务</li>
+			<li class="online_serve"><a href="tel:<?=$merchant_goods['telphone'] ?>">在线客服</a></li>
+			<li class="after_serve"><a href="<?=$merchant_goods['kefu'] ?>">售后服务</a></li>
 		</ul>
 	</div>
+	<?php endif;?>
 </div>
 
 <div class="order_info_time">

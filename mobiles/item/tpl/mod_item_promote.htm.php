@@ -8,7 +8,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	去推广
-<a href="javascript:history.back();" class="back"></a>
+<a href="/partner" class="back"></a>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>

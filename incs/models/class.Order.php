@@ -255,7 +255,7 @@ class Order extends StorageNode{
         $ectb_order_goods = OrderItems::table();
         $ectb_merchant = Merchant::table();
     
-        $sql = "SELECT og.*,g.`goods_thumb`,m.facename,m.merchant_id FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
+        $sql = "SELECT og.*,g.`goods_thumb`,m.facename,m.merchant_id,m.telphone,m.kefu FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
                 left join $ectb_merchant m on g.merchant_uid = m.admin_uid 
                 WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
         $order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
