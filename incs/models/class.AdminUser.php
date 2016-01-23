@@ -32,7 +32,7 @@ class AdminUser extends StorageNode {
 	}
 
 	static function getNameByAdminUid($admin_uid) {
-		$ret = D()->from(Merchant::table())->where("user_id=%d", $admin_uid)->select("user_name")->result();
+		$ret = D()->from(self::table())->where("user_id=%d", $admin_uid)->select("user_name")->result();
 		return $ret;
 	}
 	

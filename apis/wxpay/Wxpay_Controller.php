@@ -20,8 +20,8 @@ class Wxpay_Controller extends Controller {
      
     Wxpay::nofify(function($data, &$msg){
       
-      trace_debug('api_wxpay_notify_data', $data);
-      trace_debug('api_wxpay_notify_msg', $msg);
+      //trace_debug('api_wxpay_notify_data', $data);
+      //trace_debug('api_wxpay_notify_msg', $msg);
       
       if ('OK'==$msg) { // 成功合法的订单
         
@@ -80,6 +80,18 @@ class Wxpay_Controller extends Controller {
             'pay_data2'      => json_encode($data) //保存微信支付接口的返回
           ];
           D()->update(Order::table(), $updata, ['order_id'=>$order_id]);
+          
+          //更改可能子订单的状态
+          /*
+          $child_ids = D()->query("SELECT order_id FROM ".Order::table()." WHERE `parent_id`=%d", $order_id)->fetch_column('order_id');
+          if(!empty($child_ids)) {
+          	foreach ($child_ids AS $chid) {
+          		D()->query("UPDATE ".Order::table() ." SET money_paid=order_amount,order_amount=0 WHERE `order_id`=%d", $chid);
+          	}
+          }*/
+          D()->query("UPDATE ".Order::table() ." SET money_paid=order_amount,order_amount=0 WHERE `parent_id`=%d", $order_id);
+          unset($updata['money_paid'],$updata['order_amount'],$updata['pay_data2']);
+          D()->update(Order::table(), $updata, ['parent_id'=>$order_id]);
           
           //设置佣金计算
           UserCommision::generate($order_id);
