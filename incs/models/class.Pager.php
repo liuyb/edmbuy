@@ -15,7 +15,7 @@ class Pager extends CBase {
     /**
      * 当前每页数量
      */
-    public $pagesize= 20;
+    public $pagesize= 25;
     
     /**
      * 根据curpage跟pagesize计算出start
