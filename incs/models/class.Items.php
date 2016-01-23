@@ -190,7 +190,7 @@ HERESQL;
 	 */
 	static function findGoodsList(PagerPull $pager){
 	    $sql = "select goods_id,goods_name,shop_price,market_price,
-	               goods_thumb from shp_goods where is_on_sale = 1 and is_delete = 0 order by shop_price limit %d,%d";
+	               goods_thumb from shp_goods where is_on_sale = 1 and is_delete = 0 order by sort_order limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    if (!empty($goods)) {
 	        foreach ($goods AS &$g) {

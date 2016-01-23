@@ -138,6 +138,7 @@ window.location.reload();
 	</div>
 	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 40px;" class="pull_more_data">点击加载更多...</div>
 </div>
+<?php require_scroll2old();?>
 <script>
 	$().ready(function(){
 		getGoodsList(1, true);
@@ -152,6 +153,7 @@ window.location.reload();
 
 	function contructGoodsHTML(ret, isinit){
 		if(!ret || !ret.result || !ret.result.length){
+			scrollToHistoryPosition();
 			return;
 		}
 		var TR = "";
@@ -166,6 +168,7 @@ window.location.reload();
 		}
 		$("#goods_list").append($(TR));
 		F.set_scroller(false, 100);
+		scrollToHistoryPosition();
 	}
 
 	//当还有下一页时处理下拉
@@ -185,5 +188,14 @@ window.location.reload();
 
 	function gotoItem(goodId){
 		window.location = '/item/'+goodId;
+	}
+
+	function scrollToHistoryPosition(){
+		var historyPos = Cookies.get(F.scroll_cookie_key());
+		var c= F.scrollArea.height();
+		if(Math.abs(historyPos) > c){
+			historyPos = -c;
+		}
+		F.set_scroller(!F.scroll2old?false:historyPos,100);
 	}
 </script>
