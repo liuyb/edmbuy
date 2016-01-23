@@ -76,12 +76,12 @@ class User_Model extends Model {
 	        if (is_array($val)){
 	            foreach ($val as $item){
 	                $field.="t$i.c as status$i,";
-	                $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where user_id=$uid and $statu = $item) t$i ,";
+	                $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid and $statu = $item) t$i ,";
 	                ++$i;
 	            }
 	        }else{
     	        $field.="t$i.c as status$i ,";
-    	        $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where user_id=$uid and $statu = $val) t$i ,";
+    	        $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid and $statu = $val) t$i ,";
 	        }
 	    }
 	    $field = rtrim($field, ',');
