@@ -120,7 +120,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 
 /*主体页面dom*/
 #Mtop { position: absolute;left: 0;top: 0;width: 100%;display: none; }
-#Mbody { width: 100%;height: 100%;min-height: 100%;position: relative;background: #e7e8eb;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
+#Mbody { width: 100%;height: 100%;min-height: 100%;position: relative;background: #eee;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
 #activePage,#loadingCover { position: absolute;top: 0;bottom: 0;width: 100%;-webkit-overflow-scrolling: touch;overflow: hidden; }
 #activePage.useTopNav-1,#loadingCover.useTopNav-1 { top: 45px; }
 #activePage.useNav-1,#loadingCover.useNav-1 { bottom: 50px; }
@@ -128,7 +128,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 #loadingCover { display:none;background:#fff;z-index:10000; }
 #activePage > .scrollArea {
 	background: #eee;
-	position: absolute;
+	position: absolute; 
 	width: 100%;
 	overflow: auto;
 	zoom: 1;
@@ -137,7 +137,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
-  transform: translateZ(0);
+  transform: translateZ(0); 
 }
 #activePage > .scrollArea img {
   -webkit-transform: translate3d(0, 0, 0);
