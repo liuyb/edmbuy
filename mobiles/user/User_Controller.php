@@ -257,7 +257,12 @@ class User_Controller extends MobileController {
     $loginedUser = $localUser;
     if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息，但不会变更上下级关系
     
-    	if (Weixin::OAUTH_DETAIL==$state) { //detail认证模式，需更新用户数据
+    	if (Weixin::OAUTH_BASE==$state) {
+    		if (empty($localUser->nickname) || empty($localUser->logo)) { //基本登录后，如果昵称或头像没有设置，则重定向到详细授权获取信息
+    			$wx->authorizing_detail($auth_action, $refer);
+    		}
+    	}
+    	elseif (Weixin::OAUTH_DETAIL==$state) { //detail认证模式，需更新用户数据
     		
     		$uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
     		if (!empty($uinfo_wx['errcode'])) { //失败！则报错

@@ -88,7 +88,7 @@
 </style>
 
 <div class="relation_tit">
-	<p><span style="color:#ff6d14;font-weight: bold;">益多米</span>是最有温度的社交电商</p><p>平台， 正在免费激活益多米的账号。</p>
+	<p><span style="color:#ff6d14;font-weight: bold;">益多米</span>是最有温度的社交电商</p><p>平台， 正在免费激活益多米的帐号。</p>
 </div>
 
 <div class="relation_cen">
@@ -105,7 +105,7 @@
 <a class="relation_btn" href="javascript:;">我要激活</a>
 <div style="text-align:center;">
 	<p style="font-size:12px;color:#616161;"><span style="color:#ff6d14;">提示：</span>如果帮助伙伴激活，请使用伙伴的</p>
-	<p style="font-size:12px;color:#616161;">微信，登录甜玉米后激活。</p>
+	<p style="font-size:12px;color:#616161;">微信登录甜玉米后再激活。</p>
 </div>
 
 
@@ -128,7 +128,7 @@ var curmobile = '<?=$appUser->mobile?>';
 $(function(){
 	$(".relation_btn").bind("click",function(){
 		if (!curmobile) {
-			myAlert('请从甜玉米登录过来激活');
+			myAlert('请重新登录甜玉米再过来激活');
 			return false;
 		}
 		$(".mask").show();

@@ -130,6 +130,9 @@ class Partner extends StorageNode {
         $column = self::outputCommisionListQueryColumn();
         $sql = self::constructCommissionSql($column, TRUE);
         $rows = D()->query($sql, $uid, $level, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
+        foreach ($rows AS &$r) {
+        	$r['paytime'] = date("Y-m-d\n H:i:s",simphp_gmtime2std($r['paytime']));
+        }
         return $rows;
     }
     
@@ -249,7 +252,7 @@ class Partner extends StorageNode {
      * 输出佣金明细明细字段
      */
     static function outputCommisionListQueryColumn(){
-        $queryCols = " order_unick as nickname, FROM_UNIXTIME(paid_time, '%%Y-%%m-%%d<br>%%h:%%i:%%s') as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
+        $queryCols = " order_unick as nickname, paid_time as paytime,ifnull(order_amount,0) amount,ifnull(commision,0) commision ";
         return $queryCols;
     }
     

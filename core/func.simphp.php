@@ -226,6 +226,15 @@ function simphp_gmtime($time = NULL) {
 }
 
 /**
+ * Translate GTM timestamp to current timezone timestamp
+ * @param integer $gmtime
+ * @return number
+ */
+function simphp_gmtime2std($gmtime) {
+	return ($gmtime + date('Z'));
+}
+
+/**
  * Return system require timestamp
  *
  * @param $strict, when $strict is TRUE, then use microtime(TRUE) for current strict time

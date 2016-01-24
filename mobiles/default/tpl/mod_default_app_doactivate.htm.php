@@ -35,12 +35,10 @@
 	text-align:center;
 }
 .state_two{
-	/*display:none;*/
 	margin-top:9px;
 	text-align:center;
 }
 .state_three{	
-	/*display:none;*/
 	margin-top:30px;
 	width:100%;
 }
@@ -88,6 +86,36 @@ td.three_weight {text-align: left;padding-left: 5px;}
 <div class="state_tit_imt"><img src="<?=$user->logo?>" alt=""></div>
 <div class="state_tit_neme"><?=$user->nickname?></div>
 
+<?php if(1==$situation):?>
+<div class="state_three">
+	<table cellspacing="0" cellpadding="0" class="three_tab">	
+		<tr>	
+			<td class="state_comment_info">多米号：</td>
+			<td class="three_weight"><?=$user->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">关联手机号：</td>
+			<td class="three_weight"><?=$user->mobilephone?></td>
+		</tr>
+		<?php if($usrParent->is_exist()):?>
+		<tr>	
+			<td class="state_comment_info">益多米推荐人：</td>
+			<td class="three_weight"><?=$usrParent->nickname?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">推荐人多米号：</td>
+			<td class="three_weight"><?=$usrParent->uid?></td>
+		</tr>
+		<tr>	
+			<td class="state_comment_info">推荐人手机号：</td>
+			<td class="three_weight"><?=$usrParent->mobilephone?></td>
+		</tr>
+		<?php endif;?>
+	</table>
+	<p class="state_comment_ts" style="margin:30px 0;text-align:center;">恭喜你，你的益多米帐号已激活。</p>
+</div>
+<?php endif;?>
+
 <?php if(2==$situation):?>
 <div class="state_one">
 	<table cellspacing="0" cellpadding="0" class="three_tab three_tab1">	
@@ -100,7 +128,7 @@ td.three_weight {text-align: left;padding-left: 5px;}
 			<td class="three_weight"><?=$user->mobilephone?></td>
 		</tr>
 		<tr>	
-			<td style="margin:20px 0;" colspan="2" class="state_comment_ts">恭喜你，你的益多米账号已激活。</td>
+			<td style="margin:20px 0;" colspan="2" class="state_comment_ts">恭喜你，你的益多米帐号已激活。</td>
 		</tr>
 		<?php if($appParent->is_exist()):?>
 		<tr>	
@@ -111,12 +139,13 @@ td.three_weight {text-align: left;padding-left: 5px;}
 			<td class="state_comment_info">推荐人手机号：</td>
 			<td class="three_weight"><?=$appParent->mobile?></td>
 		</tr>
-		<tr><td colspan="2" style="font-weight: bold">TA还未激活益多米账号，请邀请TA激活</td></tr>
+		<tr><td colspan="2" style="font-weight: bold">TA还未激活益多米帐号，请邀请TA激活</td></tr>
 		<?php endif;?>
 	</table>
 </div>
 <?php endif;?>
-<?php if(3==$situation || 4==$situation):?>
+
+<?php if(3==$situation):?>
 <div class="state_two">
 	<p class="state_comment_ts" style="margin:30px 0;">你已经是益多米的会员，无需再激活。</p>
 	<table cellspacing="0" cellpadding="0" class="three_tab">	
@@ -145,39 +174,13 @@ td.three_weight {text-align: left;padding-left: 5px;}
 	</table>
 </div>
 <?php endif;?>
-<?php if(1==$situation):?>
-<div class="state_three">
-	<table cellspacing="0" cellpadding="0" class="three_tab">	
-		<tr>	
-			<td class="state_comment_info">多米号：</td>
-			<td class="three_weight"><?=$user->uid?></td>
-		</tr>
-		<tr>	
-			<td class="state_comment_info">关联手机号：</td>
-			<td class="three_weight"><?=$user->mobilephone?></td>
-		</tr>
-		<?php if($usrParent->is_exist()):?>
-		<tr>	
-			<td class="state_comment_info">益多米推荐人：</td>
-			<td class="three_weight"><?=$usrParent->nickname?></td>
-		</tr>
-		<tr>	
-			<td class="state_comment_info">推荐人多米号：</td>
-			<td class="three_weight"><?=$usrParent->uid?></td>
-		</tr>
-		<tr>	
-			<td class="state_comment_info">推荐人手机号：</td>
-			<td class="three_weight"><?=$usrParent->mobilephone?></td>
-		</tr>
-		<?php endif;?>
-	</table>
-	<p class="state_comment_ts" style="margin:30px 0;text-align:center;">恭喜你，你的益多米账号已激活。</p>
-</div>
-<?php endif;?>
+
 <div class="stat_bottom_wx">
 	<img src="/misc/images/qrcode/edmbuy_258.jpg">
 	<p style="font-size:11px;color:#333;">长按二维码，关注益多米</p>
 </div>
+
+<?php endif;?>
 
 <script>
 F.onWxReady(function(){
@@ -185,7 +188,5 @@ F.onWxReady(function(){
 });
 setTimeout(function(){
 	window.location.href='<?=$refer?>';
-},30000);
+},10000);
 </script>
-
-<?php endif;?>

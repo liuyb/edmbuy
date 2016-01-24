@@ -19,6 +19,7 @@ class TymUser extends StorageNode {
 				'columns' => array(
 						'userid'       => 'userid',
 						'mobile'       => 'mobile',
+						'unionid'      => 'unionid',
 						'openid'       => 'openid',
 						'regtime'      => 'regtime',
 						'nick'         => 'nick',
@@ -53,9 +54,32 @@ class TymUser extends StorageNode {
 	}
 	
 	/**
+	 * 请求甜玉米接口查询用户数据，并且保存到本地库
+	 * @param integer $cid
+	 * @return TymUser
+	 */
+	static function queryAndSave($cid) {
+		$ret = self::query($cid);
+		if (!empty($ret)) { //有可能调用失败
+			$parent_userid = isset($ret['reguser']) && isset($ret['reguser']['userid']) ? $ret['reguser']['userid'] : 0;
+			$state = self::saveUser(self::composeData($ret['userid'], $ret['mobile'], $ret['unionid'], $ret['openid'], $ret['regtime'], $ret['nick'], $ret['picUrl'], $ret['qrcode'], $ret['business_id'], $ret['business_time'], $parent_userid));
+			if ($state && $parent_userid) {
+				$regu = $ret['reguser'];
+				$state = self::saveUser(self::composeData($parent_userid, $regu['mobile'], $ret['unionid'], $regu['openid'], $regu['regtime'], $regu['nick'], $regu['picUrl'], $regu['qrcode'], $regu['business_id'], $regu['business_time']));
+			}
+			$appUser = self::load($cid,TRUE); //刷新读取
+		}
+		else {
+			$appUser = new self(); //返回一个空对象
+		}
+		return $appUser;
+	}
+	
+	/**
 	 * 
 	 * @param integer $userid
 	 * @param string $mobile
+	 * @param string $unionid
 	 * @param string $openid
 	 * @param string $regtime
 	 * @param string $nick
@@ -66,11 +90,12 @@ class TymUser extends StorageNode {
 	 * @param number $parent_userid
 	 * @return array
 	 */
-	static function composeData($userid, $mobile, $openid, $regtime, $nick, $logo, $qrcode, $business_id, $business_time, $parent_userid = 0)
+	static function composeData($userid, $mobile, $unionid, $openid, $regtime, $nick, $logo, $qrcode, $business_id, $business_time, $parent_userid = 0)
 	{
 		return [
 				'userid'      => $userid,
 				'mobile'      => $mobile,
+				'unionid'     => $unionid,
 				'openid'      => $openid,
 				'regtime'     => $regtime,
 				'nick'        => $nick,
@@ -86,7 +111,7 @@ class TymUser extends StorageNode {
 	 * 保存甜玉米用户数据
 	 * @param array $data
 	 * @param number $synctimes
-	 * @return number|Ambigous <boolean, number, unknown>
+	 * @return number|boolean
 	 */
 	static function saveUser(Array $data, &$synctimes = 0) {
 		$userid = isset($data['userid']) ? $data['userid'] : 0;
@@ -108,6 +133,14 @@ class TymUser extends StorageNode {
 			$synctimes = $row['synctimes'];
 		}
 		return $effrows ? $userid : false;
+	}
+	
+	public function updateSynctimes($value = 1) {
+		D()->query("UPDATE ".self::table()." SET synctimes=%d WHERE userid=%d", $value, $this->id);
+	}
+	
+	public function incSynctimes($inc = 1) {
+		D()->query("UPDATE ".self::table()." SET synctimes=synctimes+%d WHERE userid=%d", $inc, $this->id);
 	}
 	
 }
