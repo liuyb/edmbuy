@@ -57,10 +57,10 @@
 			?>
 			<tr>
 				<td class="info_td1" >
-					<img src="<?=$gd['goods_thumb'] ?>">
+					<a href="<?php echo U('item/'.$gd['goods_id'])?>"><img src="<?=$gd['goods_thumb'] ?>"></a>
 				</td>
 				<td class="info_td2">
-					<p class="info_name"><?=$gd['goods_name'] ?></p>
+					<p class="info_name"><a href="<?php echo U('item/'.$gd['goods_id'])?>"><?=$gd['goods_name'] ?></a></p>
 					<!-- <p class="ifno_etalon">颜色：蓝色；尺码：45</p> -->
 				</td>
 				<td class="info_td3">
@@ -95,11 +95,17 @@
 <div class="order_type_btn">
 <?php if ($order->order_status==OS_CANCELED):?>
 <button class="order_but_l del_success_order" data-order_id="<?=$order_id?>">已取消</button>
-<?php else:?>
+<?php elseif($order->pay_status!=PS_PAYED):?>
 <button class="order_but_l del_success_order" data-order_id="<?=$order_id?>" onclick="cancel_order(this)">取消订单</button>
 <?php endif;?>
 	
-	<button class="order_but_l return_order" onclick="return_product(this)">退货</button>
+	<button class="order_but_l return_order" onclick="return_product(this)">
+	<?php if ($order->shipping_status==SS_UNSHIPPED):?>
+	退款
+	<?php else:?>
+	退货
+	<?php endif;?>
+	</button>
 <!--
 	<button class="order_but_r again_buy" onclick="location.href='/item/'">再次购买</button>
 -->
