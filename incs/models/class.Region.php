@@ -46,21 +46,22 @@ class Region extends StorageNode {
 	static function getId($region_name, $region_type = 1, $parent_id = 0) {
 		$ectb = self::table();
 		$sql  = "SELECT `region_id` FROM {$ectb} WHERE `region_type`=%d AND ";
-		if (0===$region_type) { //国家需精确匹配
-			$sql .= "`region_name`='%s'";
+		$sql .= "'%s' REGEXP CONCAT('^',`region_name`)";
+		$row = D()->raw_query($sql,$region_type,$region_name)->fetch_array_all(); //先根据名字查找，如果结果多于1个，则再根据parent id来判定
+		if (empty($row)) {
+			return 0;
 		}
-		elseif (1===$region_type) { //身份也是精确匹配,但是需要将末尾可能存在的"省"字去掉
-			$region_name = preg_replace('/(省$)/u', '', $region_name); //先把可能存在末尾的"省"字去掉
-			$sql .= "`region_name`='%s'";
+		elseif (count($row)>1) { //多于一个，则再看parent_id
+			$sql .= " AND `parent_id`=%d";
+			$row = D()->raw_query($sql,$region_type,$region_name,$parent_id)->get_one();
+			if (empty($row)) {
+				return 0;
+			}
 		}
-		else { //市级和区级，名称可能带"市"或"区"，也可能不带
-			$w = 2==$region_type ? '市' : '区';
-			$region_name = preg_replace('/('.$w.'$)/u', '', $region_name); //先把可能存在末尾的"市"或"区"字去掉
-			$sql .= "`region_name` like '%s%' AND `parent_id`=%d"; //市和区在全国范围内都可能有重名的，需要parent_id来区分
+		else {
+			$row = $row[0];
 		}
-		$row = D()->raw_query($sql,$region_type,$region_name,$parent_id)->get_one();
-		if (!empty($row)) return $row['region_id'];
-		return 0;
+		return $row['region_id'];
 	}
 
 }

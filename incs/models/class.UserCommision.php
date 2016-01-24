@@ -11,9 +11,9 @@ class UserCommision extends StorageNode {
 	//分成比例设定
 	static $share_ratio = [
 			'0' => PLATFORM_COMMISION,  //平台分成比例
-			'1' => 0.30,                //一级上级分成比例
+			'1' => 0.35,                //一级上级分成比例
 			'2' => 0.35,                //二级上级分成比例
-			'3' => 0.35,                //三级上级分成比例
+			'3' => 0.30,                //三级上级分成比例
 	];
 	
 	protected static function meta() {
