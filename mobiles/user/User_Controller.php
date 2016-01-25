@@ -323,7 +323,7 @@ class User_Controller extends MobileController {
     else { //用户不存在，则要尝试建立
     	
     	//用base授权获取不到unionid(从2016-01-16日开始，snsapi_base不返回unionid，微信你大爷！)，则要接着用detail授权
-    	if (empty($unionid)) {
+    	if (empty($unionid) || Weixin::OAUTH_BASE==$state) {
     		$wx->authorizing_detail($auth_action, $refer);
     	}
     	
