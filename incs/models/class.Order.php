@@ -168,19 +168,24 @@ class Order extends StorageNode{
      * 确认订单收货
      *
      * @param integer $order_id
+     * @param integer $user_id
      * @return boolean
      */
-    static function confirm_shipping($order_id) {
+    static function confirm_shipping($order_id, $user_id = NULL) {
     	if (!$order_id) return false;
     
+    	$where = ['order_id'=>$order_id];
+    	if (!empty($user_id)) {
+    		$where['user_id'] = $user_id;
+    	}
     	D()->update(self::table(),
     	            ['shipping_status'=>SS_RECEIVED,'shipping_confirm_time'=>simphp_gmtime()],
-    	            ['order_id'=>$order_id]);
+    	            $where);
     
     	if (D()->affected_rows()==1) {
     
     		//写order_action的日志
-    		self::action_log($order_id, ['action_note'=>'用户确认收货']);
+    		self::action_log($order_id, ['action_note'=>"用户确认收货(UID={$user_id})"]);
     
     		return true;
     	}
@@ -369,9 +374,10 @@ class Order extends StorageNode{
      * 获取订单列表
      *
      * @param integer $user_id
+     * @param string  $status
      * @return array
      */
-    static function getList($user_id, $paystatus, $shipstatus) {
+    static function getList($user_id, $status='') {
     	if (empty($user_id)) return [];
     
     	$start = 0;
@@ -380,13 +386,20 @@ class Order extends StorageNode{
     	$ectb_order = self::table();
     	$ectb_goods = Items::table();
     	$ectb_order_goods = OrderItems::table();
-        $where = "";
-        if(isset($paystatus) && $paystatus != null){
-            $where .= " and pay_status = $paystatus ";
-        }
-        if(isset($shipstatus) && $shipstatus != null){
-            $where .= " and shipping_status = $shipstatus ";
-        }
+    	$where = "";
+    	if ('wait_pay'==$status) {
+    		$where .= " AND pay_status=".PS_UNPAYED;
+    	}
+    	elseif ('wait_ship'==$status) {
+    		$where .= " AND shipping_status IN(".SS_UNSHIPPED.",".SS_PREPARING.",".SS_SHIPPED_ING.")";
+    	}
+    	elseif ('wait_recv'==$status) {
+    		$where .= " AND shipping_status IN(".SS_SHIPPED.",".SS_SHIPPED_PART.",".OS_SHIPPED_PART.")";
+    	}
+    	elseif ('finished'==$status) {
+    		$where .= " AND shipping_status=".SS_RECEIVED;
+    	}
+    	
     	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d and is_separate = 0 $where ORDER BY `order_id` DESC LIMIT %d,%d";
     	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
     	if (!empty($orders)) {

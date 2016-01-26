@@ -3,31 +3,39 @@
 <script id="forTopnav" type="text/html">
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
-		<li <?php if($status == 'all'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this);">全部</li>
-		<li <?php if($status == 'p_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'paystatus', 0);">待付款</li>
-		<li <?php if($status == 's_0'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 0);">待发货</li>
-		<li <?php if($status == 's_1'): ?> class="header_order_on" <?php endif;?> onclick="showOrder(this, 'shipstatus', 1);">待收货</li>
-		<a href="<?php echo U('user')?>" class="back">&nbsp;</a>
+    <li class="noon"><a href="<?php echo U('user')?>" class="btna back">&nbsp;</a></li>
+		<li <?php if($status == '' || $status == 'all'): ?> class="header_order_on" <?php endif;?> data_status="all">全部</li>
+		<li <?php if($status == 'wait_pay'): ?> class="header_order_on" <?php endif;?> data_status="wait_pay">待付款</li>
+		<li <?php if($status == 'wait_ship'): ?> class="header_order_on" <?php endif;?> data_status="wait_ship">待发货</li>
+		<li <?php if($status == 'wait_recv'): ?> class="header_order_on" <?php endif;?> data_status="wait_recv">待收货</li>
+		<li <?php if($status == 'finished'): ?> class="header_order_on" <?php endif;?> data_status="finished">已完成</li>
 	</ul>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
 <script>
-function showOrder(obj, type, status){
-	var url = "/trade/order/record";
-	if(type){
-		url += "?"+type+"="+status;
-	}
-	window.location = url;
-}
+$(function(){
+	$('.header_order li').bind('click',function(){
+		if(!$(this).hasClass('noon')) {
+			$(this).parent().find('li').removeClass('header_order_on');
+			$(this).addClass('header_order_on');
+			var url = "<?php echo U('trade/order/record')?>?status="+$(this).attr('data_status');
+			window.location = url;
+		}
+	});
+});
 </script>
 
 <?php if (!$orders_num):?>
 
 <div class="list-empty">
   <?php if(''==$errmsg):?>
+  <?php if('all'==$status):?>
   <h1 class="list-empty-header">居然还没买过东西╮(╯﹏╰）╭</h1>
   <div class="list-empty-content"><a href="<?php echo U('/')?>">去逛逛</a></div>
+  <?php else:?>
+  <h1 class="list-empty-header">当前列表没有记录</h1>
+  <?php endif;?>
   <?php else:?>
   <h1 class="list-empty-header"><?=$errmsg?></h1>
   <?php endif;?>
@@ -113,7 +121,11 @@ $(function(){
   		F.post('<?php echo U('trade/order/confirm_shipping')?>',pdata,function(ret){
   			thisctx.ajaxing_confirm = undefined;
   			if (ret.flag=='SUC') {
-  				window.location.reload();
+  				//window.location.reload();
+  				window.location.href = "<?php echo U('trade/order/record',['status'=>'finished'])?>";
+  			}
+  			else {
+  	  		myAlert(ret.msg);
   			}
   		});
 		}

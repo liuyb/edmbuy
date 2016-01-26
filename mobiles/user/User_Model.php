@@ -75,8 +75,9 @@ class User_Model extends Model {
 	        ++$i;
 	        if (is_array($val)){
 	            foreach ($val as $item){
+	            	$item_set = $item===SS_UNSHIPPED ? join(',',[SS_UNSHIPPED,SS_PREPARING,SS_SHIPPED_ING]) : join(',', [SS_SHIPPED,SS_SHIPPED_PART,OS_SHIPPED_PART]);
 	                $field.="t$i.c as status$i,";
-	                $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid and $statu = $item) t$i ,";
+	                $condition.="(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid and $statu IN ($item_set)) t$i ,";
 	                ++$i;
 	            }
 	        }else{

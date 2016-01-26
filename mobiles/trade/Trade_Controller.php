@@ -242,18 +242,13 @@ class Trade_Controller extends MobileController {
         $errmsg = "无效请求";
         $response->send($this->v);
       }
-      $paystatus = isset($_REQUEST['paystatus']) ? $_REQUEST['paystatus'] : null;
-      $shipstatus = isset($_REQUEST['shipstatus']) ? $_REQUEST['shipstatus'] : null;
-      $orders = Order::getList($user_id, $paystatus, $shipstatus);
+      
+      $status = $request->get('status','');
+      $this->v->assign("status", $status);
+      
+      $orders = Order::getList($user_id, $status);
       $orders_num = count($orders);
       $this->v->assign('orders', $orders);
-      $status = "all";
-      if(isset($paystatus) && $paystatus != null){
-          $status = "p_".$paystatus;
-      }else if(isset($shipstatus) && $shipstatus != null){
-          $status = "s_".$shipstatus;
-      }
-      $this->v->assign("status", $status);
       
     }
     else {
@@ -672,7 +667,7 @@ class Trade_Controller extends MobileController {
     if ($request->is_post()) {
       $ret = ['flag'=>'FAIL','msg'=>'取消失败'];
       
-      $user_id = $GLOBALS['user']->ec_user_id;
+      $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
         $ret['msg'] = '未登录, 请登录';
         $response->sendJSON($ret);
@@ -684,7 +679,7 @@ class Trade_Controller extends MobileController {
         $response->sendJSON($ret);
       }
       
-      $b = Order::confirm_shipping($order_id);
+      $b = Order::confirm_shipping($order_id, $user_id);
       if ($b) {
         $ret = ['flag'=>'SUC','msg'=>'确认成功', 'order_id'=>$order_id];
       }
