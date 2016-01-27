@@ -70,6 +70,7 @@ define('OS_RETURNED',               4); // 退货
 define('OS_SPLITED',                5); // 已分单
 define('OS_SPLITING_PART',          6); // 部分分单
 define('OS_REFUND',                 7); // 退款
+define('OS_REFUND_PART',            8); // 部分退款
 
 /* 支付类型 */
 define('PAY_ORDER',                 0); // 订单支付

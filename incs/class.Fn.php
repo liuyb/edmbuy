@@ -117,7 +117,8 @@ class Fn extends Func {
       OS_RETURNED      => '退货',
       OS_SPLITED       => '已分单',
       OS_SPLITING_PART => '部分分单',
-      OS_REFUND        => '已退款'
+      OS_REFUND        => '已退款',
+      OS_REFUND_PART   => '部分退款',
     );
     return self::status($status_set, $status);
   }
