@@ -88,8 +88,8 @@
 
 <div class="order_info_time">
 	<p>微信交易号:<span class="time_color_comm"><?=$item['pay_trade_no'] ?></span></p>
-	<p>创建时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', $item['add_time']) ?></span></p>
-	<p>付款时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', $item['pay_time']) ?></span></p>
+	<p>创建时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($item['add_time'])) ?></span></p>
+	<p>付款时间:<span class="time_color_comm"><?php if($item['pay_time']):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($item['pay_time'])) ?><?php endif?></span></p>
 </div>
 
 <div class="order_type_btn">
