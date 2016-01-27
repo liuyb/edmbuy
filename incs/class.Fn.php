@@ -116,7 +116,8 @@ class Fn extends Func {
       OS_INVALID       => '无效',
       OS_RETURNED      => '退货',
       OS_SPLITED       => '已分单',
-      OS_SPLITING_PART => '部分分单'
+      OS_SPLITING_PART => '部分分单',
+      OS_REFUND        => '已退款'
     );
     return self::status($status_set, $status);
   }
@@ -150,7 +151,8 @@ class Fn extends Func {
     static $status_set = array(
       PS_UNPAYED => '未付款',
       PS_PAYING  => '付款中',
-      PS_PAYED   => '已付款'
+      PS_PAYED   => '已付款',
+      PS_REFUND  => '已退款'
     );
     return self::status($status_set, $status);
   }

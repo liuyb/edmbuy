@@ -391,9 +391,11 @@ class Order extends StorageNode{
     		$where .= " AND pay_status=".PS_UNPAYED;
     	}
     	elseif ('wait_ship'==$status) {
+    		$where .= " AND pay_status=".PS_PAYED;
     		$where .= " AND shipping_status IN(".SS_UNSHIPPED.",".SS_PREPARING.",".SS_SHIPPED_ING.")";
     	}
     	elseif ('wait_recv'==$status) {
+    		$where .= " AND pay_status=".PS_PAYED;
     		$where .= " AND shipping_status IN(".SS_SHIPPED.",".SS_SHIPPED_PART.",".OS_SHIPPED_PART.")";
     	}
     	elseif ('finished'==$status) {
