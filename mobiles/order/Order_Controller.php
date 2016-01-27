@@ -29,7 +29,8 @@ class Order_Controller extends MobileController {
 	{
 		return [
 			'order' => 'index',
-		  'order/%d/detail' => 'order_detail'
+		    'order/%d/detail' => 'order_detail',
+		    'order/%d/express' => 'order_express'
 		];
 	}
 	
@@ -54,6 +55,12 @@ class Order_Controller extends MobileController {
 		throw new ViewResponse($this->v);
 	}
 	
+	/**
+	 * 订单详情
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws ViewResponse
+	 */
 	public function order_detail(Request $request, Response $response)
 	{
 	    $this->v->set_tplname('mod_order_detail');
@@ -63,12 +70,36 @@ class Order_Controller extends MobileController {
 	    if ($request->is_hashreq()) {
 	       $order_id  = $request->arg(1);
 	       $order = Order::load($order_id);
-	       $order_detail = Order::getOrderDetail($order_id);
+	       //$order_detail = Order::getOrderDetail($order_id);
+	       $regionIds = [$order->province, $order->city, $order->district];
+	       $order_region = Order_Model::getOrderRegion($regionIds);
+	       $order->__set("order_region", $order_region);
 	       $merchant_goods = Order_Model::getOrderItems($order_id);
-	       $this->v->assign("item", $order_detail);
+	       //$this->v->assign("item", $order_detail);
 	       $this->v->assign("order", $order);
 	       $this->v->assign("order_id", $order_id);
 	       $this->v->assign("merchant_goods", $merchant_goods);
+	    }
+	
+	    throw new ViewResponse($this->v);
+	}
+	
+	/**
+	 * 订单的物流信息
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws ViewResponse
+	 */
+	public function order_express(Request $request, Response $response)
+	{
+	    $this->v->set_tplname('mod_order_express');
+	    $this->nav_no    = 0;
+	    $this->topnav_no = 1;
+	
+	    if ($request->is_hashreq()) {
+	        $order_id  = $request->arg(1);
+	        $express = Order::getOrderExpress($order_id);
+	        $this->v->assign("express", $express);
 	    }
 	
 	    throw new ViewResponse($this->v);

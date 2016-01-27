@@ -354,7 +354,7 @@ class Order extends StorageNode{
      * 获取订单详情
      * @param unknown $order_id
      */
-    static function getOrderDetail($order_id) {
+    /* static function getOrderDetail($order_id) {
        $sql = "select consignee,mobile,(
                 	select region_name from shp_region where region_id = o.province
                 ) as province,
@@ -365,9 +365,19 @@ class Order extends StorageNode{
                 	select region_name from shp_region where region_id = o.district
                 )  as district,
                address,how_oos,pay_trade_no,
-               add_time,pay_time from shp_order_info o where order_id = %d";
+               add_time,pay_time,shipping_name,invoice_no from shp_order_info o where order_id = %d";
        $rows = D()->query($sql, $order_id)->fetch_array();
        return $rows;
+    } */
+    
+    static function getOrderExpress($order_id) {
+        $sql = "select od.shipping_name as shipping_name,od.invoice_no as invoice_no,
+                express.express_trace as express_trace from edmbuy.shp_order_info od 
+                left join edmbuy.shp_order_express express  
+                on od.order_id = express.order_id 
+                where od.order_id = %d";
+        $rows = D()->query($sql, $order_id)->fetch_array();
+        return $rows;
     }
     
     /**

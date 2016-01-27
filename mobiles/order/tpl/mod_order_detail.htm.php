@@ -12,23 +12,25 @@
 <a href="/user" class="back_r"></a>
 </div>
 </script>
-<script>show_topnav($('#forTopnav').html())</script>
-<!-- 
+<script>show_topnav($('#forTopnav').html())</script> 
+<?php if($order->shipping_name && $order->invoice_no):?>
+<a href="<?php echo U("order/$order_id/express") ?>">
 <div class="order_number">
 	<p class="number_info">
 		<span class="number_name">物流编号：</span>
-		<span class="number_id">123456789554</span>
-		<span class="number_exp">（韵达快递）</span>
+		<span class="number_id"><?=$order->invoice_no ?></span>
+		<span class="number_exp">（<?=$order->shipping_name ?>）</span>
 	</p>
 </div>
- -->
+</a>
+<?php endif;?>
 <div class="order_adderss">
 	<div class="address_name">
-		<span class="name_c"><?=$item['consignee'] ?></span>
-		<span class="phone_c"><?=$item['mobile'] ?></span>
+		<span class="name_c"><?=$order->consignee ?></span>
+		<span class="phone_c"><?=$order->mobile ?></span>
 	</div>
 	<div class="addresss_info">
-		<span class="address_pro"><?=$item['province'].$item['city'].$item['district'] ?></span><span class="address_country"><?=$item['address'] ?></span>
+		<span class="address_pro"><?=$order->order_region ?></span><span class="address_country"><?=$order->address ?></span>
 	</div>
 </div>
 
@@ -36,7 +38,7 @@
 	<table class="remark_tab">
 		<tr>
 			<td class="remark_tit">买家备注:</td>
-			<td class="remark_info"><?=$item['how_oos'] ?></td>
+			<td class="remark_info"><?=$order->how_oos ?></td>
 		</tr>
 	</table>
 </div>
@@ -79,17 +81,17 @@
 	</div>
 	<div class="order_serve">
 		<ul>
-			<li class="online_serve"><a href="tel:<?=$merchant_goods['telphone'] ?>">在线客服</a></li>
-			<li class="after_serve"><a href="<?=$merchant_goods['kefu'] ?>">售后服务</a></li>
+			<li class="online_serve"><a href="<?=$merchant_goods['kefu'] ?>">在线客服</a></li>
+			<li class="after_serve"><a href="tel:<?=$merchant_goods['telphone'] ?>">售后服务</a></li>
 		</ul>
 	</div>
 	<?php endif;?>
 </div>
 
 <div class="order_info_time">
-	<p>微信交易号:<span class="time_color_comm"><?=$item['pay_trade_no'] ?></span></p>
-	<p>创建时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($item['add_time'])) ?></span></p>
-	<p>付款时间:<span class="time_color_comm"><?php if($item['pay_time']):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($item['pay_time'])) ?><?php endif?></span></p>
+	<p>微信交易号:<span class="time_color_comm"><?=$order->pay_trade_no ?></span></p>
+	<p>创建时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->add_time)) ?></span></p>
+	<p>付款时间:<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
 </div>
 
 <div class="order_type_btn">
