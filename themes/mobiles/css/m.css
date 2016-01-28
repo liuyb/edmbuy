@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
-
+/*
 *{margin:0;padding:0;color:#333;border:none;list-style:none;outline:none;font-family: "Microsoft Yahei" !important;-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
-
+*/
 /* Disable certain interactions on touch devices */
 html,body {
   /*
@@ -1856,7 +1856,7 @@ a.ph_btn{
   vertical-align: top;
 }
 .number_name{
-  vertical-align: super;
+  /*vertical-align: super;*/
 }
 .order_adderss{
   margin:15px 0;
@@ -2982,7 +2982,6 @@ td.cash_td2 img {
 }
 .rice_list_tjproduct{
   background:#eee;
-  margin-right:8px; 
 }
 .list_tit_img{
   margin:20px 12px 5px;
@@ -2992,16 +2991,19 @@ td.cash_td2 img {
   max-width:100%;
   height:13px;
 }
+.list_product_info { overflow:auto;zoom:1;margin: 10px 4px 0; }
 .list_product_info li{
   width:50%;
   float:left;
-}
+  margin-bottom:8px;
+}/*
 .index_product_info li{
   width:50% !important;
   float:left !important;
   margin-top:8px;
   margin-bottom:-8px;
 }
+*/
 .index_product_info p{
   background:#f9f9f9;
 }
@@ -3011,8 +3013,8 @@ td.cash_td2 img {
 }
 .product_info_pc{
 	display: block;
-  margin-left: 8px;
-  margin-bottom: 8px;
+	background: #fff;
+	margin:0 4px;
 }
 .product_info_xq{
   background:#fff;
@@ -3154,6 +3156,7 @@ td.cash_td2 img {
 .index_product_list{
   
 }
+.index_promote { margin: 10px 0; }
 .por_list_title{
   background:#fff;
   font-size:17px;
@@ -3231,7 +3234,7 @@ td.cash_td2 img {
   background:#fff;  
   height:110px;
   vertical-align: top;
-  border-bottom: 4px solid #eee;
+  /*border-bottom: 4px solid #eee;*/
   position: relative;
 }
 .jx_year_tit{

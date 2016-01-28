@@ -40,17 +40,17 @@ $(function(){
   });
   
   setTimeout(function(){t1.resize();},500);
-
+/*
   F.onScrollDownPull(function(){
 window.location.reload();
-	});
+	});*/
 });
 </script>
 
-<div style="margin-top:10px;margin-bottom:10px;">
+<div class="index_promote">
 	<div class="por_list_title">
 		<span class="tit_left"></span>极品脐橙，多米推荐
-		<img src="/themes/mobiles/img/xin.png" class="tit_list_img">
+		<img src="/themes/mobiles/img/xin.png" class="tit_list_img" alt=""/>
 	</div>
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
@@ -73,21 +73,18 @@ window.location.reload();
 </div>
 
 <div class="rice_list_tjproduct">
-	<div class="list_product_info index_product_info">
-		<ul>
-		<?php foreach ($result as $good): 
-		      $mp = $good['market_price'] ? ('￥'.$good['market_price']) : "";
-		  ?>
-			<li>
-				<a href="/item/<?=$good['goods_id'] ?>" class="product_info_pc">
-					<img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$good['goods_img']?>')" style="float:right"/>
-					<p class="list_table_tit"><?=$good['goods_name'] ?></p>
-					<p class="list_table_price"><span>￥<?=$good['shop_price'] ?></span><b><?=$mp ?></b></p>
-				</a>
-			</li>
-		<?php endforeach;?>	
-		</ul>
-	</div><div class="clear"></div>
+	<ul class="list_product_info index_product_info">
+	<?php foreach ($result as $good): 
+	      $mp = $good['market_price'] ? ('￥'.$good['market_price']) : "";?>
+		<li>
+			<a href="/item/<?=$good['goods_id'] ?>" class="product_info_pc">
+				<img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$good['goods_img']?>')"/>
+				<p class="list_table_tit"><?=$good['goods_name'] ?></p>
+				<p class="list_table_price"><span>￥<?=$good['shop_price'] ?></span><b><?=$mp ?></b></p>
+			</a>
+		</li>
+	<?php endforeach;?>	
+	</ul>
 </div>
 
 <div style="margin:10px 0">
@@ -100,9 +97,7 @@ window.location.reload();
 	<div class="por_list_title">
 		<span class="tit_left"></span> 年货精选
 	</div>
-	<div class="list_product_info index_product_info" style="margin-right:4px;">
-		<ul id="goods_list"></ul>
-	</div>
+	<ul id="goods_list" class="list_product_info index_product_info"></ul>
 	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 40px;" class="pull_more_data">点击加载更多...</div>
 </div>
 <?php require_scroll2old();?>
