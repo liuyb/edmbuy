@@ -335,6 +335,25 @@
 		
 	});
 	
+	/**
+	 * 覆写F.get 方法，增加loading方法 默认1秒才显示滚动条
+	 */
+	F.get = function(url, data, callback){
+		var effect = "overlay";
+		F.loadingStart(effect);
+		F.loading_canvas.hide();
+		setTimeout(function(){
+			var isLoadingExist = $("#loadingCover").find(".spinner").length;
+			if(isLoadingExist){
+				F.loading_canvas.show();
+			}
+		}, 1000);
+		var promise = $.get(url, data, callback);
+		promise.always = function(){
+			F.loadingStop(effect);
+		}
+	}
+	
 })(jQuery, FUI, this);
 
 //显示和隐藏弹出框
