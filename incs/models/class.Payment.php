@@ -1,6 +1,6 @@
 <?php
 /**
- * Shipping公用Model
+ * Payment公用Model
  *
  * @author Gavin<laigw.vip@gmail.com>
  */

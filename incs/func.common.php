@@ -900,7 +900,67 @@ function get_booking_days_list( $day = NULL )
   return isset($day) ? $booking_day_list[$day] :  $booking_day_list;
 }
 
+/**
+ * 检查权限
+ *
+ * @param string $perms, 权限标识串，可多个，','隔开
+ * @param integer $uid, 用户ID
+ * @param string $site，权限站点，比如后台'admin'
+ * @param array $user_perms, 用户权限集，便于递归时重复检查数据库
+ * @return boolean 是否通过权限检查
+ */
+function check_perms($perms, $uid, $site = 'admin', Array $user_perms = []) {
 
+	//~ 检查用户ID
+	if (empty($uid)) $uid = !empty($GLOBALS['user']->uid) ? $GLOBALS['user']->uid : (isset($_SESSION['logined_uid']) ? $_SESSION['logined_uid'] : 0);
+	if (empty($uid)) return false;
+
+	//~ 检查输入权限，并确保转成数组形式
+	if (empty($perms)) return false;
+	if (!is_array($perms)) {
+		$perms = explode(',', $perms);
+		foreach ($perms AS &$it) { //循环去掉可能的前后空格
+			$it = trim($it);
+		}
+	}
+
+	//~ 所有权限
+	$perm_all = 'perm_all';
+
+	//~ 检查权限
+	if ($site == 'admin') {
+
+		//~ 检查用户设置权限
+		if (empty($user_perms)) {
+			$admin_perms = D()->from("admin_user")->where("`admin_uid`=%d AND `admin_state`=1", $uid)->select("`admin_perms`")->result();
+			if (empty($admin_perms)) return true;
+			$user_perms = explode(',', $admin_perms);
+			foreach ($user_perms AS &$it) {
+				$it = trim($it);
+			}
+		}
+
+		//~ 检查输入权限
+		if (in_array($perm_all, $user_perms)) {
+			return true;
+		}
+		foreach ($perms AS $per) {
+			if (in_array($per, $user_perms)) { //直接出现在权限列表中
+				return true;
+			}
+		}
+		/*
+		 //~ 检查用户设定权限集
+		 foreach ($user_perms AS $per) {
+			$parent_per = D()->from("{admin_perms} pc INNER JOIN {admin_perms} pp ON pc.parent_id=pp.perm_id")->where("pc.perm_name='%s'",$per)->select("pp.perm_name")->result();
+			if (check_perms($parent_per, $uid, $site, $user_perms)) {
+			return true;
+			}
+			}*/
+	}
+
+	return false;
+}
 
 
 

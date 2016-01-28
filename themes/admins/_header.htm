@@ -1,5 +1,5 @@
 <div class="headerMain">
-  <div class="headLogo"><a href="/">福小秘管理后台</a></div>
+  <div class="headLogo"><a href="/">益多米管理后台</a></div>
   <div class="headLink">
     <span>当前登录用户：</span><span style="font-weight:bold;"><!--{$admin.admin_uname}--></span>
     <span class="wsep">|</span><a href="javascript:;" onclick="return clear_cache();">清除缓存</a>
@@ -11,21 +11,21 @@
     <li class="htabs-list sy htabs-list-on" id="hMainTab">
       <a href="#/home" class="link hashreq"><span class="htabs-item-text">首页</span></a>
     </li>
-    <li class="htabs-list sc">
-      <a href="#/node" class="link hashreq"><span>素材管理</span></a>
+    <!--{checkperms perms="mod_refund"}-->
+    <li class="htabs-list refund">
+      <a href="#/refund" class="link hashreq"><span class="htabs-item-text">退款管理</span></a>
     </li>
-    <li class="htabs-list hd">
-      <a href="#/activity" class="link hashreq"><span>活动管理</span></a>
+    <!--{/checkperms}-->
+    <!--{checkperms perms="mod_cash"}-->
+    <li class="htabs-list cash">
+      <a href="#/cash" class="link hashreq"><span class="htabs-item-text">提现管理</span></a>
     </li>
-    <li class="htabs-list xw">
-      <a href="#/news" class="link hashreq"><span>新闻管理</span></a>
-    </li>
-    <li class="htabs-list yh">
-      <a href="#/member" class="link hashreq"><span>用户管理</span></a>
-    </li>
+    <!--{/checkperms}-->
+    <!--{checkperms perms="mod_other"}-->
     <li class="htabs-list other">
       <a href="#/other" class="link hashreq"><span>其它</span></a>
     </li>
+    <!--{/checkperms}-->
   </ul>
   <div class="bgx hline"></div>
 </nav>
