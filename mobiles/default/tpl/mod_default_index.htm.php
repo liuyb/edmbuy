@@ -80,7 +80,7 @@ window.location.reload();
 		  ?>
 			<li>
 				<a href="/item/<?=$good['goods_id'] ?>" class="product_info_pc">
-					<img src="<?=$good['goods_img'] ?>" style="float:right">
+					<img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$good['goods_img']?>')" style="float:right"/>
 					<p class="list_table_tit"><?=$good['goods_name'] ?></p>
 					<p class="list_table_price"><span>￥<?=$good['shop_price'] ?></span><b><?=$mp ?></b></p>
 				</a>
@@ -91,7 +91,9 @@ window.location.reload();
 </div>
 
 <div style="margin:10px 0">
-<a href="http://m.edmbuy.com/item/1047"><img src="/themes/mobiles/img/y_jiu.png" style="max-width:100%;"></a>
+<a href="http://m.edmbuy.com/item/1047">
+<img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'/themes/mobiles/img/y_jiu.png')" style="max-width:100%;"/>
+</a>
 </div>
 
 <div style="margin:10px 0 0px 0;">
@@ -106,13 +108,16 @@ window.location.reload();
 <?php require_scroll2old();?>
 <script>
 	$().ready(function(){
+		//$(".scrollArea").css("overflow","hidden");
 		getGoodsList(1, true);
 	});
 
 	function getGoodsList(curpage, isinit){
-		F.get('/default/goods', {curpage : curpage}, function(ret){
+		F.loadingStart();
+		$.get('/default/goods', {curpage : curpage}, function(ret){
 			contructGoodsHTML(ret, isinit);
 			handleWhenHasNextPage(ret);
+			F.loadingStop();
 		});
 	}
 
@@ -131,7 +136,8 @@ window.location.reload();
 			TR += "<p class=\"jx_year_tit\">"+good.goods_name+"</p><p class=\"jx_table_price\">";
 			TR += "<span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p>";
 			TR += "<p class=\"jx_mail_type\">邮递 ：包邮</p></td></tr>"; */
-			LI += "<li onclick=\"gotoItem('"+good.goods_id+"');\"><div class=\"product_info_pc\"><img src=\""+thumb+"\" style=\"float:right\"><p class=\"list_table_tit\">"+good.goods_name+"</p><p class=\"list_table_price\"><span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p></div></li>";
+			var img = "<img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+thumb+"')\" style=\"float:right\"/>"
+			LI += "<li onclick=\"gotoItem('"+good.goods_id+"');\"><div class=\"product_info_pc\">"+img+"<p class=\"list_table_tit\">"+good.goods_name+"</p><p class=\"list_table_price\"><span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p></div></li>";
 		}
 		$("#goods_list").append($(LI));
 
@@ -159,11 +165,16 @@ window.location.reload();
 	}
 
 	function scrollToHistoryPosition(){
+		var refer=document.referrer;
+		var reg = /item\/\d+/;
+		if(!reg.test(refer)){
+			return;
+		}
 		var historyPos = Cookies.get(F.scroll_cookie_key());
-		var c= F.scrollArea.height();
+		/* var c= F.scrollArea.height();
 		if(Math.abs(historyPos) > c){
 			historyPos = -c;
-		}
+		} */
 		F.set_scroller(!F.scroll2old?false:historyPos,100);
 	}
 </script>
