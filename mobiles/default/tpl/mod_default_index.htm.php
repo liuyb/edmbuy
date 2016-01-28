@@ -110,6 +110,10 @@ window.location.reload();
 	$().ready(function(){
 		//$(".scrollArea").css("overflow","hidden");
 		getGoodsList(1, true);
+		$("#goods_list").on('click','li', function(){
+			var goodid = $(this).attr("data-goodid");
+			gotoItem(goodid);
+		});
 	});
 
 	function getGoodsList(curpage, isinit){
@@ -131,13 +135,13 @@ window.location.reload();
 		for(var i = 0,len=result.length; i < len; i++){
 			var good = result[i];
 			var mark_price = good.market_price ? ("￥"+good.market_price) : "";
-			var thumb = good.goods_thumb;
+			var thumb = good.goods_img;
 			/* TR += "<tr onclick=\"gotoItem('"+good.goods_id+"');\" style='cursor:pointer;'><td><img src=\""+good.goods_thumb+"\"></td><td>";
 			TR += "<p class=\"jx_year_tit\">"+good.goods_name+"</p><p class=\"jx_table_price\">";
 			TR += "<span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p>";
 			TR += "<p class=\"jx_mail_type\">邮递 ：包邮</p></td></tr>"; */
 			var img = "<img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+thumb+"')\" style=\"float:right\"/>"
-			LI += "<li onclick=\"gotoItem('"+good.goods_id+"');\"><div class=\"product_info_pc\">"+img+"<p class=\"list_table_tit\">"+good.goods_name+"</p><p class=\"list_table_price\"><span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p></div></li>";
+			LI += "<li data-goodid='"+good.goods_id+"'><div class=\"product_info_pc\">"+img+"<p class=\"list_table_tit\">"+good.goods_name+"</p><p class=\"list_table_price\"><span>￥"+good.shop_price+"</span><b>"+mark_price+"</b></p></div></li>";
 		}
 		$("#goods_list").append($(LI));
 
