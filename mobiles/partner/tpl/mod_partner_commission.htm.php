@@ -124,14 +124,30 @@ $().ready(function(){
 	getPageData(1, 1, false);
     //未生效弹出框
     $(".wsx_broke_ts").bind("click",function(){
-    	$(".mask").fadeIn(200);
-    	$(".broke_wsx_t").fadeIn(200);
+    	/* $(".mask").fadeIn(200);
+    	$(".broke_wsx_t").fadeIn(200); */
+    	showCommissionTips();
     });
-    $(".mask,.broke_wsx_t").bind("click",function(){
+    /* $(".mask,.broke_wsx_t").bind("click",function(){
     	$(".mask").fadeOut(200);
     	$(".broke_wsx_t").fadeOut(200);
-    });
+    }); */
 });
+
+var commissionTipsId = "commissionTipsId";
+function showCommissionTips(){
+	var tipsDiv = $($(".broke_wsx_t").prop('outerHTML'));
+	tipsDiv.attr("id", commissionTipsId);
+	append_to_body(tipsDiv.prop('outerHTML'));
+	$("#"+commissionTipsId).fadeIn(300);
+	$(".mask").fadeIn(300);
+	$("#"+commissionTipsId).on("click",function(){
+		$("#"+commissionTipsId).fadeOut(300);
+		$(".mask").fadeOut(300);
+		$("#"+commissionTipsId).remove();
+		$("#"+commissionTipsId).off("click");
+	});
+}
 
 /**
  * curpage 当前页
