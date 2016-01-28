@@ -20,7 +20,10 @@ class SyncOrderExpressInfoJob extends CronJob {
     private function sync_express_info(){
         $this->log("begin sync order express info...");
         $orders = $this->get_shipped_not_received_order();
-        $this->log("get wait sync express count ".count($orders));
+        $count = count($orders);
+        $this->log("get wait sync express count ".$count);
+        $i = 0;
+        $already_sync = 0;
         foreach ($orders as $od){
             $order_id = $od['order_id'];
             $expressJson = $this->get_express_from_web($od['shipping_type'], $od['invoice_no']);
@@ -34,6 +37,13 @@ class SyncOrderExpressInfoJob extends CronJob {
             $this->insert_or_update_order_express($order_id, $expressJson);
             if($expressObj->result->issign == "1"){
                 $this->update_order_received($order_id);
+            }
+            $i++;
+            if($i == 100){
+                $already_sync = $already_sync + $i;
+                $this->log("already sync express count ".$already_sync." wait sync count : ".($count - $already_sync));
+                $i = 0;
+                sleep(1);
             }
         }
     }
