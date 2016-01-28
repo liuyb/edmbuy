@@ -23,12 +23,12 @@ class SyncOrderExpressInfoJob extends CronJob {
         $this->log("get wait sync express count ".count($orders));
         foreach ($orders as $od){
             $order_id = $od['order_id'];
-            $expressJson = $this->get_express_from_web($od['shipping_code'], $od['invoice_no']);
+            $expressJson = $this->get_express_from_web($od['shipping_type'], $od['invoice_no']);
             if(!$expressJson){
                 continue;
             }
             $expressObj = json_decode($expressJson);
-            if(!$expressJson || $expressObj->status != '0'){
+            if(!$expressObj || $expressObj->status != '0'){
                 continue;
             }
             $this->insert_or_update_order_express($order_id, $expressJson);
@@ -45,21 +45,21 @@ class SyncOrderExpressInfoJob extends CronJob {
     private function get_shipped_not_received_order() {
         $where  = " AND pay_status=".PS_PAYED;
         $where .= " AND shipping_status IN(".SS_SHIPPED.",".SS_SHIPPED_PART.",".OS_SHIPPED_PART.")";
-        $sql = "select o.order_id as order_id, o.invoice_no as invoice_no, s.shipping_code as shipping_code from edmbuy.shp_order_info o 
+        $sql = "select o.order_id as order_id, o.invoice_no as invoice_no, s.shipping_type as shipping_type from edmbuy.shp_order_info o 
                 inner join shp_shipping s on o.shipping_id =  s.shipping_id 
-                where o.is_separate=0 and o.invoice_no <> '' and s.shipping_code <> '' $where";
+                where o.is_separate=0 and o.invoice_no <> '' and s.shipping_type <> '' $where";
         $orders = D()->query($sql)->fetch_array_all();
         return $orders;
     }
     
     /**
      * 通过物流API 查询物流状态信息
-     * @param unknown $shipping_code
+     * @param unknown $shipping_type
      * @param unknown $invoice_no
      */
-    private function get_express_from_web($shipping_code, $invoice_no) {
+    private function get_express_from_web($shipping_type, $invoice_no) {
         $url = self::$EXPRESS_QUERY_API;
-        $url .= "&type=$shipping_code&number=$invoice_no";
+        $url .= "&type=$shipping_type&number=$invoice_no";
         $json = file_get_contents($url);
         if(!$json){
             return null;
