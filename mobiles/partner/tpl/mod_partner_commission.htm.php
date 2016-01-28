@@ -16,6 +16,11 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
+<style>
+.animation_tr{
+	display : none;
+}
+</style>
 <div class="broke_list" id="list1">
 	<div class="wsx_broke_ts" style="display:none;">
 		<p class="wsx_ts_tit">怎样才能生效?</p>
@@ -192,10 +197,13 @@ function renderDataRegion(data, isPullData){
 	var TR = "";
 	for(var i = 0,len=result.length; i < len; i++){
 		var row = result[i];
-		TR += "<tr><td>"+row.nickname+"</td><td class=\"sx_table_list_time\">"+row.paytime+"</td><td>"+row.amount+"元</td><td>"+row.commision+"元</td></tr>";
+		TR += "<tr class=\"animation_tr\"><td>"+row.nickname+"</td><td class=\"sx_table_list_time\">"+row.paytime+"</td><td>"+row.amount+"元</td><td>"+row.commision+"元</td></tr>";
 	}
-	//TR += "$(function(){ F.set_scroller(false, 100); })";
 	tableContainer.append($(TR));
+	tableContainer.find("tr.animation_tr").each(function(){
+		$(this).show('slow');
+		$(this).removeClass("animation_tr");
+	});
 	F.set_scroller(false, 100);
 };
 //当还有下一页时处理下拉

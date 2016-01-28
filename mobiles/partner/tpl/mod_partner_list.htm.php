@@ -13,6 +13,11 @@
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
 
+<style>
+.animation_tr{
+	display : none;
+}
+</style>
 <div class="copartner_list">
 	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
@@ -55,7 +60,7 @@
 			var address = item.province+" "+item.city;
 			address = (item.province || item.city) ? address : "&nbsp;";
 			var bg = (item.level == 1) ? "user_bg_sha" : ((item.level == 2) ? "user_bg_he" : "user_bg_ke");
-    		html += "<tr><td class=\"list_td1\"><img src=\""+logo+"\" class=\"list_img1\"></td>";
+    		html += "<tr class=\"animation_tr\"><td class=\"list_td1\"><img src=\""+logo+"\" class=\"list_img1\"></td>";
     		html += "<td class=\"list_td2\">";
     		html += "<span class=\"list_nickname "+bg+"\" >"+item.nickname+"</span>";
     		html += "<span class=\"list_address\">"+address+"</span>";
@@ -72,6 +77,10 @@
 		}
 		//html += "$(function(){ F.set_scroller(false, 100);} )";
 		table.append($(html));
+		table.find("tr.animation_tr").each(function(){
+			$(this).show('slow');
+			$(this).removeClass("animation_tr");
+		});
 		F.set_scroller(false, 100);
 	}
 

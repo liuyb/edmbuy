@@ -20,19 +20,19 @@
 		<ul>
 			<a href="javascript:showLevelList('/partner/list',1);">
 				<li>
-					<h1 id="LevelCount1"><?=$childnum1 ?></h1>
+					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
 				</li>
 			</a>
 			<a href="javascript:showLevelList('/partner/list',2);">
 				<li>
-					<h1 id="LevelCount2"><?=$childnum2 ?></h1>
+					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
 				</li>
 			</a>
 			<a href="javascript:showLevelList('/partner/list',3);">
 				<li>
-					<h1 id="LevelCount3"><?=$childnum3 ?></h1>
+					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
 				</li>
 			</a>
