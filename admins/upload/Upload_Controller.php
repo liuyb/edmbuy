@@ -36,7 +36,7 @@ class Upload_Controller extends Controller {
 				'ref_id'=>$ref_id,
 				'path'=>$attachment
 			];
-			//Upload_Model::saveUpload($data);
+			
 			echo "{'err':'','msg':'".$attachment."'}";
 			exit();
 		}

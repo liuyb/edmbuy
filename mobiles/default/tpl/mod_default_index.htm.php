@@ -49,18 +49,18 @@ window.location.reload();
 
 <div style="margin-top:10px;margin-bottom:10px;">
 	<div class="por_list_title">
-		<span class="tit_left"></span>传递爱心，帮果农
+		<span class="tit_left"></span>极品脐橙，多米推荐
 		<img src="/themes/mobiles/img/xin.png" class="tit_list_img">
 	</div>
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
 			<tr>
-				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1049" ><img src="http://oss.edmbuy.com/1/img/8734a568868981364edb6d3761df5bd4.jpg"></a></td>
+				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1045" ><img src="http://oss.edmbuy.com/1/img/b1658f5d702eb8807a0b9d483eede957.jpg" alt=""></a></td>
 				<td>
-					<a href="http://m.edmbuy.com/item/1049" ><p class="jx_year_tit">万吨红富士“滞销”  帮果农寻出路   脆甜多汁38元10斤</p></a>
-					<p class="jx_table_price"><span>￥38.00</span><span style="font-size:12px;color:#999;margin-left:5px;">(10斤/箱)</span></p>
+					<a href="http://m.edmbuy.com/item/1045" ><p class="jx_year_tit">【过年正常发货 顺丰 六省包邮】 钟橙 绿色放心品牌橙 赣南脐橙 家庭实惠装10斤装</p></a>
+					<p class="jx_table_price"><span>￥88.00</span><span style="font-size:12px;color:#999;margin-left:5px;">出售140万斤，成就经典</span></p>
 					<p class="jx_mail_type">快递：包邮</p>
-					<a href="http://m.edmbuy.com/item/1049" ><button class="jx_btn_new">立即订购</button></a>
+					<a href="http://m.edmbuy.com/item/1045" ><button class="jx_btn_new">立即订购</button></a>
 				</td>
 			</tr>
 		</table>

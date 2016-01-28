@@ -15,6 +15,7 @@ class Shipping extends StorageNode {
 				'columns' => array(
 						'shipping_id'    => 'shipping_id',
 						'shipping_code'  => 'shipping_code',
+						'shipping_type'  => 'shipping_type',
 						'shipping_name'  => 'shipping_name',
 						'shipping_desc'  => 'shipping_desc',
 						'insure'         => 'insure',
