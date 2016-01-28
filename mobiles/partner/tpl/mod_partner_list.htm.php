@@ -52,6 +52,10 @@
 				table.empty();
 			}
 		}
+		var trclass = "";
+		if(!isinit){
+			trclass = "animation_tr";
+		}
 		var html = "";
 		var result = data.result;
 		for(var i = 0,len=result.length; i < len; i++){
@@ -60,7 +64,7 @@
 			var address = item.province+" "+item.city;
 			address = (item.province || item.city) ? address : "&nbsp;";
 			var bg = (item.level == 1) ? "user_bg_sha" : ((item.level == 2) ? "user_bg_he" : "user_bg_ke");
-    		html += "<tr class=\"animation_tr\"><td class=\"list_td1\"><img src=\""+logo+"\" class=\"list_img1\"></td>";
+    		html += "<tr class=\""+trclass+"\"><td class=\"list_td1\"><img src=\""+logo+"\" class=\"list_img1\"></td>";
     		html += "<td class=\"list_td2\">";
     		html += "<span class=\"list_nickname "+bg+"\" >"+item.nickname+"</span>";
     		html += "<span class=\"list_address\">"+address+"</span>";
