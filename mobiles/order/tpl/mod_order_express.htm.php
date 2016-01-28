@@ -34,7 +34,6 @@
 .package-status .status-list {
     margin: 0;
     padding: 0;
-    margin-left: 12px;
     margin-top: -9px;
     padding-left: 10px;
     list-style: none;
@@ -66,7 +65,7 @@
 }
 
 .package-status .status-list .time {
-    margin-right: 28px;
+    margin-right: 18px;
     margin-left: 5px
 }
 
