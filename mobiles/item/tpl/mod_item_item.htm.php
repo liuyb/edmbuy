@@ -26,8 +26,12 @@
 	<a href="<?php echo U('trade/cart/list')?>">
 		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span></div>
 	</a>
+<?php if (!$item->is_on_sale):?>
+<div style="background: #c0c0c0;width: 60%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
+<?php else:?>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
 	<div class="fl cursor p_d_t4" id="Mnav-buy">立即购买</div>
+<?php endif;?>
 </div>
 </script>
 <script id="forBody" type="text/html">

@@ -50,7 +50,7 @@ class Default_Controller extends MobileController {
     	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
     }
     */
-    $pager = new PagerPull(1, 6);
+    $pager = new PagerPull(1, 10);
     //首页推荐商品列表
     Default_Model::findGoodsList($pager, true);
     $this->v->assign("result", $pager->result);
