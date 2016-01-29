@@ -22,7 +22,7 @@
 </script>
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
-	<div class="fl cursor p_d_t1"><a href="<?=$kefu_link?>" <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
+	<div class="fl cursor p_d_t1"><a href='<?=$kefu_link?>' <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
 	<a href="<?php echo U('trade/cart/list')?>">
 		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span></div>
 	</a>

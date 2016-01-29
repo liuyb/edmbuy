@@ -130,6 +130,22 @@ class Item_Controller extends MobileController {
 				$kefu_link = 'javascript:;';
 				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
 					$kefu_link = $merchant->kefu;
+					//$kefu_link = 'https://eco-api.meiqia.com/dist/standalone.html?eid=4119';
+					
+					global $user;
+					$kefu_meta = [
+							'name'   => Item_Model::escape_kefu_link($user->nickname),
+							'gender' => $user->sex ? ($user->sex==1?'男':'女') : '未知',
+							'tel'    => $user->mobilephone,
+							'comment'=> '多米号'.$user->uid,
+					];
+					$kefu_link .= '&metadata={';
+					foreach ($kefu_meta AS $k => $v) {
+						$kefu_link .= '"'.$k.'":"'.$v.'",';
+					}
+					$kefu_link = substr($kefu_link, 0, -1);
+					$kefu_link .= '}';
+					
 				}
 				$this->v->assign('kefu_link', $kefu_link);
 			}
