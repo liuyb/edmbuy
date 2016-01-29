@@ -58,7 +58,7 @@ window.location.reload();
 				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1045" ><img src="http://oss.edmbuy.com/1/img/b1658f5d702eb8807a0b9d483eede957.jpg" alt=""></a></td>
 				<td>
 					<a href="http://m.edmbuy.com/item/1045" ><p class="jx_year_tit">【过年正常发货 顺丰 六省包邮】 钟橙 绿色放心品牌橙 赣南脐橙 家庭实惠装10斤装</p></a>
-					<p class="jx_table_price"><span>￥88.00</span><span style="font-size:12px;color:#999;margin-left:5px;">出售140万斤，成就经典</span></p>
+					<p class="jx_table_price"><span>￥88.00</span><span style="font-size:12px;color:#999;margin-left:5px;">出售140万斤</span></p>
 					<p class="jx_mail_type">快递：包邮</p>
 					<a href="http://m.edmbuy.com/item/1045" ><button class="jx_btn_new">立即订购</button></a>
 				</td>

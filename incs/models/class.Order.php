@@ -476,7 +476,7 @@ class Order extends StorageNode{
     	$br = '<br/>';
     	if (!in_array($order['order_status'], [OS_CANCELED,OS_INVALID,OS_RETURNED])) { //订单“活动中”
     		$order['active_order'] = 1;
-    		if ($order['pay_status'] == PS_UNPAYED) { //未支付
+    		if (in_array($order['pay_status'], [PS_UNPAYED, PS_PAYING, PS_CANCEL, PS_FAIL])) { //未支付和支付中
     			$html .= '<p class="order-status-txt">'.Fn::pay_status($order['pay_status']).'</p>';
     			$html .= '<p class="order-status-op"><a href="javascript:;" class="btn btn-orange btn-order-topay" data-order_id="'.$order['order_id'].'">立即付款</a></p>';
     			$html .= '<p class="order-status-op last"><a href="javascript:;" class="btn-order-cancel" data-order_id="'.$order['order_id'].'">取消订单</a></p>';

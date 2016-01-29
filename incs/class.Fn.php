@@ -153,7 +153,9 @@ class Fn extends Func {
       PS_UNPAYED => '未付款',
       PS_PAYING  => '付款中',
       PS_PAYED   => '已付款',
-      PS_REFUND  => '已退款'
+      PS_REFUND  => '已退款',
+      PS_CANCEL  => '取消支付',
+      PS_FAIL    => '支付失败',
     );
     return self::status($status_set, $status);
   }

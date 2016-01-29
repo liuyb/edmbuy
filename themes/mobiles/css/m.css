@@ -1944,10 +1944,10 @@ a.ph_btn{
 }
 .order_but_l{
   cursor: pointer;
-  width:72px;
+  width:80px;
   height:27px;
   background:#fff;
-  font-size:14px;
+  font-size:13px;
   color:#333;
   border:1px solid #333;
   border-radius:4px;
@@ -3288,12 +3288,12 @@ td.cash_td2 img {
   position: absolute;
   right: 12px;
   bottom: 7px;
-  width: 70px;
+  width: 78px;
   height: 28px;
   border-radius: 4px;
   cursor: pointer;
   color:#fff;
-  font-size:14px;
+  font-size:13px;
 }
 .tit_list_img{
   width:38px;
