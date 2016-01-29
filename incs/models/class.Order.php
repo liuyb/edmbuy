@@ -165,6 +165,33 @@ class Order extends StorageNode{
     }
     
     /**
+     * 变更订单状态
+     *
+     * @param integer $order_id
+     * @param integer $status_to
+     * @param integer $user_id
+     * @return boolean
+     */
+    static function change_paystatus($order_id, $status_to, $user_id = NULL) {
+    	if (!$order_id) return false;
+    
+    	$updata = ['pay_status'=>$status_to];
+    	$where  = ['order_id'=>$order_id];
+    	if ($status_to==PS_PAYED) {
+    		$updata['pay_time'] = simphp_gmtime();
+    	}
+    	if (!empty($user_id)) {
+    		$where['user_id'] = $user_id;
+    	}
+    	D()->update(self::table(), $updata, $where);
+    
+    	if (D()->affected_rows()==1) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
      * 确认订单收货
      *
      * @param integer $order_id

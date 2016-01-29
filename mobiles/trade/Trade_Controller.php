@@ -37,6 +37,7 @@ class Trade_Controller extends MobileController {
       'trade/order/submit'   => 'order_submit',
       'trade/order/upaddress'=> 'order_upaddress',
       'trade/order/cancel'   => 'order_cancel',
+      'trade/order/chpaystatus'=> 'order_chpaystatus',
       'trade/order/confirm_shipping'   => 'order_confirm_shipping',
       'trade/order/record'   => 'order_record',
       'trade/order/topay'    => 'order_topay',
@@ -743,6 +744,7 @@ class Trade_Controller extends MobileController {
       $this->v->assign('supported_paymode', $supported_paymode);
       
       $this->v->assign('back_url', $back_url);
+      $this->v->assign('order_id', $order_id);
       
       $response->send($this->v);
       
@@ -782,6 +784,44 @@ class Trade_Controller extends MobileController {
   	$this->v->assign('user_level', $user_level);
   	
   	$response->send($this->v);
+  }
+  
+
+  /**
+   * 改变订单支付状态
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function order_chpaystatus(Request $request, Response $response)
+  {
+  	if ($request->is_post()) {
+  		$ret = ['flag'=>'FAIL','msg'=>'操作失败'];
+  
+  		$user_id = $GLOBALS['user']->uid;
+  		if (!$user_id) {
+  			$ret['msg'] = '未登录, 请登录';
+  			$response->sendJSON($ret);
+  		}
+  
+  		$order_id  = $request->post('order_id', 0);
+  		$status_to = $request->post('status_to', 0);
+  		if (!$order_id) {
+  			$ret['msg'] = '订单id为空';
+  			$response->sendJSON($ret);
+  		}
+  		if (!is_numeric($status_to)) {
+  			$ret['msg'] = '状态码不正确';
+  			$response->sendJSON($ret);
+  		}
+  
+  		$b = Order::change_paystatus($order_id, $status_to, $user_id);
+  		if ($b) {
+  			$ret = ['flag'=>'SUC','msg'=>'操作成功', 'order_id'=>$order_id];
+  		}
+  
+  		$response->sendJSON($ret);
+  	}
   }
 }
  

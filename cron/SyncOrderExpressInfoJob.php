@@ -102,6 +102,7 @@ class SyncOrderExpressInfoJob extends CronJob {
         $order = new Order();
         $order->order_id = $order_id;
         $order->shipping_status = SS_RECEIVED;
+        $order->shipping_confirm_time = simphp_gmtime();
         $order->save();
     }
     

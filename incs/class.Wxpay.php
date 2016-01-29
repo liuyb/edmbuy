@@ -95,7 +95,7 @@ class Wxpay {
         if (isset($order_wx['code_url'])) {
           $wxpay_data['code_url'] = $order_wx['code_url'];
         }
-        D()->update(Order::table(), ['pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]);
+        D()->update(Order::table(), ['pay_status'=>PS_PAYING,'pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]);
       }
     }
     else {

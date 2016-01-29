@@ -38,7 +38,7 @@
 	<table class="remark_tab">
 		<tr>
 			<td class="remark_tit">买家备注:</td>
-			<td class="remark_info"><?=$order->how_oos ?></td>
+			<td class="remark_info"><?php echo ($order->postscript ? : '无');?></td>
 		</tr>
 	</table>
 </div>
