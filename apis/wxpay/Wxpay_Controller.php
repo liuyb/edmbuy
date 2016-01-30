@@ -38,6 +38,7 @@ class Wxpay_Controller extends Controller {
         
         //对日志表"写锁定"，避免其他线程进入干扰(这时其他线程对表pay_log的读写都要等待)
         $ec_paylog = PayLog::table();
+        $ec_order  = Order::table();
         D()->lock_tables($ec_paylog, DB::LOCK_WRITE, '', TRUE);
         
         //检查支付日志表，以确定订单是否存在(之所以用日志表而不是主表order_info，是为了在锁表期间不阻塞到前台访问频繁的主表)
@@ -79,19 +80,14 @@ class Wxpay_Controller extends Controller {
             'order_amount'   => 0, //将order_amount设为0
             'pay_data2'      => json_encode($data) //保存微信支付接口的返回
           ];
-          D()->update(Order::table(), $updata, ['order_id'=>$order_id]);
+          D()->update($ec_order, $updata, ['order_id'=>$order_id]);
           
           //更改可能子订单的状态
-          /*
-          $child_ids = D()->query("SELECT order_id FROM ".Order::table()." WHERE `parent_id`=%d", $order_id)->fetch_column('order_id');
-          if(!empty($child_ids)) {
-          	foreach ($child_ids AS $chid) {
-          		D()->query("UPDATE ".Order::table() ." SET money_paid=order_amount,order_amount=0 WHERE `order_id`=%d", $chid);
-          	}
-          }*/
-          D()->query("UPDATE ".Order::table() ." SET money_paid=order_amount,order_amount=0 WHERE `parent_id`=%d", $order_id);
-          unset($updata['money_paid'],$updata['order_amount'],$updata['pay_data2']);
-          D()->update(Order::table(), $updata, ['parent_id'=>$order_id]);
+          if ($order_id) { //出于严格判断
+          	D()->query("UPDATE {$ec_order} SET money_paid=order_amount,order_amount=0 WHERE `parent_id`=%d", $order_id);
+          	unset($updata['money_paid'],$updata['order_amount'],$updata['pay_data2']);
+          	D()->update($ec_order, $updata, ['parent_id'=>$order_id]);
+          }
           
           //设置佣金计算
           UserCommision::generate($order_id);
