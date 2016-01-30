@@ -17,8 +17,16 @@ abstract class CronJob {
    * save cron job log
    * @param string $string
    */
-  public function log($string) {
+  final public function log($string) {
     SystemLog::local_log('CronJob_' . get_class($this), $string);
+  }
+  
+  /**
+   * Usage
+   */
+  final public function usage($string = '') {
+  	echo "Usage: php cron.php ".get_class($this).(''==$string ? '' : ' '.$string)."\n";
+  	exit;
   }
   
 }
