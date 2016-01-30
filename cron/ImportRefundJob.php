@@ -15,6 +15,10 @@ class ImportRefundJob extends CronJob {
 		//$data_file = SIMPHP_ROOT . '/misc/wxdata/11030966REFUND2016-01-30.txt';
 		$file = ltrim($argv[1],'/');
 		$data_file = SIMPHP_ROOT . '/'.$file;
+		if (!file_exists($data_file)) {
+			$this->log('file not exists: '.$data_file);
+			return;
+		}
 		
 		$affect_rows = 0;
 		$insert_rows = 0;
