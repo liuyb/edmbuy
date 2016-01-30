@@ -22,6 +22,7 @@ class OrderItems extends StorageNode {
 						'goods_number'   => 'goods_number',
 						'market_price'   => 'market_price',
 						'goods_price'    => 'goods_price',
+						'income_price'   => 'income_price',
 						'goods_attr'     => 'goods_attr',
 						'send_number'    => 'send_number',
 						'is_real'        => 'is_real',

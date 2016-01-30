@@ -489,6 +489,7 @@ class Trade_Controller extends MobileController {
           $newOI->goods_number= $true_goods_number;
           $newOI->market_price= $cg['market_price'];
           $newOI->goods_price = $cg['goods_price'];
+          $newOI->income_price= $cItem->income_price;
           $newOI->goods_attr  = $cg['goods_attr'];
           $newOI->send_number = 0;
           $newOI->is_real     = $cg['is_real'];
