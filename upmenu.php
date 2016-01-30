@@ -69,6 +69,11 @@ $json =<<<HEREDOC
     			"type" : "view",
     			"name" : "常见问题",
     			"url"  : "http://m.edmbuy.com/about"
+        },
+        {
+    			"type" : "click",
+    			"name" : "官方客服",
+    			"key"  : "300"
         }
       ]
 		}

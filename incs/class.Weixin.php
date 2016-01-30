@@ -359,7 +359,8 @@ class Weixin {
         $this->helper->onUnsubscribe($openid, $reqtime);
         break;
       case 'CLICK':
-      	return '';//临时屏蔽
+      	//return '';//临时屏蔽
+      	$contentText = '';
         switch ($postObj->EventKey) {
           case '200': //最新文章
             $latest_news = $this->helper->latestArticles();
@@ -375,8 +376,8 @@ class Weixin {
             $responseText = self::packMsg(self::MSG_TYPE_NEWS, $fromUserName, $toUserName, array('articleCount'=>count($latest_news), 'articles'=>$item));
             return $responseText;
             break;
-          case '300': //关于小蜜
-            $contentText = $this->helper->about();
+          case '300': //官方客服
+            $contentText = '点击左下角键盘图标，切换到交互模式可联系官方客服。';
             break;
           case '301': //联系小蜜
             $contentText = $this->helper->contact();
