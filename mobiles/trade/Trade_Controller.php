@@ -420,7 +420,7 @@ class Trade_Controller extends MobileController {
       }
       
       $order_sn = Fn::gen_order_no();
-      $newOrder  = new Order();
+      $newOrder = new Order();
       $newOrder->order_sn     = $order_sn;
       $newOrder->pay_trade_no = '';
       $newOrder->user_id      = $user_id;
@@ -469,8 +469,8 @@ class Trade_Controller extends MobileController {
         $true_amount  = 0;    //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
         $total_commision = 0; //总佣金
         foreach ($order_goods AS $cg) {
-          $currItemId = $cg['goods_id'];
-          $cItem = Items::load($currItemId);
+          $cItemId = $cg['goods_id'];
+          $cItem = Items::load($cItemId);
           
           if (!$cItem->is_exist() || !$cItem->is_on_sale || !$cItem->item_number) { //商品下架或者库存为0，都不能购买
             continue;
@@ -478,17 +478,17 @@ class Trade_Controller extends MobileController {
           
           //TODO 并发？
           $true_goods_number = $cg['goods_number']>$cItem->item_number ? $cItem->item_number: $cg['goods_number'];
-          Items::changeStock($currItemId, -$true_goods_number); //立即冻结商品对应数量的库存
+          Items::changeStock($cItemId, -$true_goods_number); //立即冻结商品对应数量的库存
           
           $newOI = new OrderItems();
           $newOI->order_id    = $order_id;
-          $newOI->goods_id    = $currItemId;
-          $newOI->goods_name  = $cg['goods_name'];
-          $newOI->goods_sn    = $cg['goods_sn'];
+          $newOI->goods_id    = $cItemId;
+          $newOI->goods_name  = $cItem->item_name;
+          $newOI->goods_sn    = $cItem->item_sn;
           $newOI->product_id  = $cg['product_id'];
           $newOI->goods_number= $true_goods_number;
-          $newOI->market_price= $cg['market_price'];
-          $newOI->goods_price = $cg['goods_price'];
+          $newOI->market_price= $cItem->market_price; //market_price,shop_price,income_price这三个字段使用最新的信息
+          $newOI->goods_price = $cItem->shop_price;
           $newOI->income_price= $cItem->income_price;
           $newOI->goods_attr  = $cg['goods_attr'];
           $newOI->send_number = 0;
@@ -500,26 +500,24 @@ class Trade_Controller extends MobileController {
           $newOI->save(Storage::SAVE_INSERT);
           
           if ($newOI->id) {
-            $succ_goods[] = $cg;
-            $true_amount += $cg['goods_price']*$true_goods_number;
-            $total_commision += $cItem->commision*$true_goods_number;
+            $succ_goods[]     = $cg;
+            $true_amount     += $cItem->shop_price*$true_goods_number;
+            $total_commision += $cItem->commision *$true_goods_number;
+            
+            //关联订单与商家
+            Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
+            if (!in_array($cItem->merchant_uid, $rel_merchants)) {
+            	array_push($rel_merchants, $cItem->merchant_uid);
+            }
           }
           else {
-            Items::changeStock($currItemId, $true_goods_number); //立即恢复刚才冻结的商品库存
-          }
-          
-          //关联订单与商家
-          Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
-          if (!in_array($cItem->merchant_uid, $rel_merchants)) {
-          	array_push($rel_merchants, $cItem->merchant_uid);
+            Items::changeStock($cItemId, $true_goods_number); //立即恢复刚才冻结的商品库存
           }
           
         }//END foreach loop
         
-        //总佣金
-        $order_update['commision'] = $total_commision;
-        
         //检测订单变化
+        $order_update['commision'] = $total_commision; //订单总佣金
         if ($true_amount!=$newOrder->goods_amount) {
           $order_update['goods_amount'] = $true_amount;
           $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
@@ -531,18 +529,18 @@ class Trade_Controller extends MobileController {
         if (!empty($order_update)) {
           D()->update(Order::table(), $order_update, ['order_id'=>$order_id]);
         }
+
+        // 没有成功购买的商品，则返回错误告诉用户重新添加
+        if (empty($succ_goods)) {
+        	$ret['msg'] = '订单生成失败，请返回购物车更改数量后重新添加';
+        	$response->sendJSON($ret);
+        }
+        
+        // 生成表 pay_log 记录
+        PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
         
         // 生成子订单(如果有多个商家)
         Order::genSubOrder($order_id, $rel_merchants);
-        
-        // 处理表 pay_log
-        PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
-        
-        // 没有成功购买的商品，则返回错误告诉用户重新添加
-        if (empty($succ_goods)) {
-          $ret['msg'] = '订单生成失败，请返回购物车更改数量后重新添加';
-          $response->sendJSON($ret);
-        }
         
         // 清除购物车
         Cart::deleteItems($cart_rids_arr, $user_id);
@@ -551,7 +549,7 @@ class Trade_Controller extends MobileController {
         $response->sendJSON($ret);
       }
       else {
-        $ret['msg'] = '订单生成失败，请返回购物车重新添加';
+        $ret['msg'] = '订单生成失败，请返回购物车重新提交';
         $response->sendJSON($ret);
       }
       
@@ -562,12 +560,6 @@ class Trade_Controller extends MobileController {
       $this->nav_flag1 = 'order';
       $this->nav_flag2 = 'order_submit';
       $this->nav_no    = 0;
-      if ($request->is_hashreq()) {
-      
-      }
-      else {
-      
-      }
       $response->send($this->v);
     }
   }

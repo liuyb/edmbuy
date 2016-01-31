@@ -261,21 +261,20 @@ class Order extends StorageNode{
     	$admUsr = AdminUser::load($merchant_uid);
     	if ( $order->is_exist() && $admUsr->is_exist() ) {
     		D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
-    		//if (D()->affected_rows()) {
-    			$old_merchant_ids = $order->merchant_ids;//$merchant_uid
-    			$new_merchant_ids = $old_merchant_ids;
-    			if (empty($old_merchant_ids)) {
-    				$new_merchant_ids = $admUsr->merchant_id;
-    			}
-    			elseif(strpos($old_merchant_ids, $admUsr->merchant_id)===false) {
-    				$new_merchant_ids = $old_merchant_ids.','.$admUsr->merchant_id;
-    			}
-    			if ($new_merchant_ids != $old_merchant_ids) {
-    				$upOrder = new self($order_id);
-    				$upOrder->merchant_ids = $new_merchant_ids;
-    				$upOrder->save(Storage::SAVE_UPDATE);
-    			}
-    		//}
+    		
+    		$old_merchant_ids = $order->merchant_ids;//$merchant_uid
+    		$new_merchant_ids = $old_merchant_ids;
+    		if (empty($old_merchant_ids)) {
+    			$new_merchant_ids = $admUsr->merchant_id;
+    		}
+    		elseif(strpos($old_merchant_ids, $admUsr->merchant_id)===false) {
+    			$new_merchant_ids = $old_merchant_ids.','.$admUsr->merchant_id;
+    		}
+    		if ($new_merchant_ids != $old_merchant_ids) {
+    			$upOrder = new self($order_id);
+    			$upOrder->merchant_ids = $new_merchant_ids;
+    			$upOrder->save(Storage::SAVE_UPDATE);
+    		}
     	}
     	return false;
     }
@@ -286,7 +285,7 @@ class Order extends StorageNode{
      * @param array $merchant_uids
      */
     static function genSubOrder($master_order_id, Array $merchant_uids) {
-    	if (count($merchant_uids) < 2) {
+    	if (count($merchant_uids) < 2) { //一个订单只有一个商家uid不需要分单
     		return false;
     	}
     	$master_order = self::load($master_order_id);
@@ -299,9 +298,9 @@ class Order extends StorageNode{
     			$subOrder->order_amount = 0;
     			$subOrder->commision    = 0;
     			$subOrder->is_separate  = 0;
-    			$subOrder->parent_id    = $master_order->id;
+    			$subOrder->parent_id    = $master_order_id;
     			$subOrder->merchant_ids = Merchant::getMidByAdminUid($m_uid);
-    			$subOrder->save(Storage::SAVE_INSERT);
+    			$subOrder->save(Storage::SAVE_INSERT); //先生成一个克隆子订单
     			
     			if ($subOrder->id) {
     				$orderIts = self::getItems($master_order_id, $m_uid);
@@ -316,14 +315,13 @@ class Order extends StorageNode{
     					$newOI = $OI->clone_one();
     					$newOI->order_id    = $subOrder->id;
     					$newOI->parent_id   = $master_order_id;
-    					$newOI->save(Storage::SAVE_INSERT);
+    					$newOI->save(Storage::SAVE_INSERT); //循环生成“订单-商品”关联记录
     					
     					$goods_amount += $oit['goods_price'] * $oit['goods_number'];
     					$commision    += $oit['commision'] * $oit['goods_number'];
     				}
-    				
 
-    				$order_amount = $goods_amount + $master_order->shipping_fee;
+    				$order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
     				$order_update = [];
     				$order_update['goods_amount'] = $goods_amount;
     				$order_update['order_amount'] = $order_amount;
@@ -331,15 +329,19 @@ class Order extends StorageNode{
     				if (!empty($order_update)) {
     					D()->update(self::table(), $order_update, ['order_id'=>$subOrder->id]);
     				}
-    				 
-    				//将上级is_separate设为1(已分)
+    				
+    				//paylog也要生成(因为客户可能后期单独去付款)
+    				PayLog::insert($subOrder->id, $subOrder->order_sn, $order_amount, PAY_ORDER);
+    				
+    				//将上级is_separate设为1(已分单)
     				D()->update(self::table(), ['is_separate'=>1], ['order_id'=>$master_order_id]);
     				
     				//关联订单和商家ID
     				self::relateMerchant($subOrder->id, $m_uid);
-    			}
-    		}
-    	}
+    				
+    			} //END if ($subOrder->id)
+    		} //END foreach ($merchant_uids AS $m_uid)
+    	} //END if ($master_order->is_exist())
     	return false;
     }
     

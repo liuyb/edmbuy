@@ -43,7 +43,7 @@ class PayLog extends StorageNode {
 				'order_type'  => $type,
 				'is_paid'     => $is_paid,
 		];
-		$log_id = D()->insert(self::table(), $insert);
+		$log_id = D()->insert(self::table(), $insert, true, 'IGNORE');
 		return $log_id;
 	}
 	

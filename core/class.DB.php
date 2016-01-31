@@ -427,10 +427,13 @@ class DB {
    * @param boolean $returnid
    *  whether return insert id
    *
+   * @param string $flag
+   *  insert flag, option values: '','IGNORE','LOW_PRIORITY','DELAYED','HIGH_PRIORITY'
+   *
    * @return int
    *  insert id if set $returnid=1, else affected rows
    */
-  public function insert($tablename, Array $insertarr, $returnid = TRUE) {
+  public function insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '') {
     $server_mode  = self::WRITABLE; //Because of 'INSERT', so use self::WRITABLE
     $insertkeysql = $insertvaluesql = $comma = '';
     foreach ($insertarr as $insert_key => $insert_value) {
@@ -441,7 +444,7 @@ class DB {
     
     $tablename = $this->true_table_name($tablename);
     $this->realtime_query = TRUE;  //make sure use writable mode
-    $rs = $this->raw_query("INSERT INTO {$tablename} ({$insertkeysql}) VALUES ({$insertvaluesql})");
+    $rs = $this->raw_query("INSERT {$flag} INTO {$tablename} ({$insertkeysql}) VALUES ({$insertvaluesql})");
     $this->realtime_query = FALSE; //restore
     return $returnid ? $rs->insert_id() : $rs->affected_rows();
   }
@@ -457,11 +460,14 @@ class DB {
    *
    * @param array $wherearr
    *  where condition
+   *  
+   * @param string $flag
+   *  insert flag, option values: '','IGNORE','LOW_PRIORITY'
    *
    * @return int
    *  affected rows
    */
-  public function update($tablename, Array $setarr, Array $wherearr) {
+  public function update($tablename, Array $setarr, Array $wherearr, $flag = '') {
     $server_mode = self::WRITABLE; //Because of 'UPDATE', so use self::WRITABLE
     $setsql = $comma = '';
     foreach ($setarr as $set_key => $set_value) {
@@ -484,7 +490,7 @@ class DB {
     
     $tablename = $this->true_table_name($tablename);
     $this->realtime_query = TRUE;  //make sure use writable mode
-    $rs = $this->raw_query("UPDATE {$tablename} SET {$setsql} WHERE {$where}");
+    $rs = $this->raw_query("UPDATE {$flag} {$tablename} SET {$setsql} WHERE {$where}");
     $this->realtime_query = FALSE; //restore
     return $rs->affected_rows();
   }
