@@ -8,6 +8,8 @@ abstract class Storage implements ReadableStorage, WritableStorage {
 	
 	const SAVE_INSERT = 1;
 	const SAVE_UPDATE = 2;
+	const SAVE_INSERT_IGNORE = 3;
+	const SAVE_UPDATE_IGNORE = 4;
 	
 	abstract public function load(Array $ids);
 	

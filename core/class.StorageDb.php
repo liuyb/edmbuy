@@ -92,8 +92,10 @@ class StorageDb extends Storage {
 		if (empty($params)) return FALSE;
 		
 		$is_insert = FALSE;
+		$is_ignore = FALSE;
 		if (isset($flag)) {
-			$is_insert = $flag===self::SAVE_INSERT ? TRUE : FALSE;
+			$is_insert = $flag===self::SAVE_INSERT || $flag===self::SAVE_INSERT_IGNORE ? TRUE : FALSE;
+			$is_ignore = $flag===self::SAVE_INSERT_IGNORE || $flag===self::SAVE_UPDATE_IGNORE ? TRUE : FALSE; 
 		}
 		else {
 			if ($id && $this->id_exists($id)) {
@@ -105,8 +107,8 @@ class StorageDb extends Storage {
 		}
 		
 		if ($is_insert) { //插入
-			$flag = self::SAVE_INSERT; //返回最终保存动作
-			if (D()->insert($this->table, $params, FALSE)) {
+			$flag = $is_ignore ? self::SAVE_INSERT_IGNORE : self::SAVE_INSERT; //返回最终保存动作
+			if (D()->insert($this->table, $params, FALSE, ($is_ignore ? 'IGNORE' : ''))) {
 				$id = D()->insert_id(DB::WRITABLE);
 				if (0===$id) { //表示不是AUTO_INCREMENT的主键
 					$id = $params[$primary_key];
@@ -114,10 +116,10 @@ class StorageDb extends Storage {
 			}
 		}
 		else { //更新
-			$flag = self::SAVE_UPDATE; //返回最终保存动作
+			$flag = $is_ignore ? self::SAVE_UPDATE_IGNORE : self::SAVE_UPDATE; //返回最终保存动作
 			unset($params[$primary_key]); //id字段不更新
 			if (empty($params)) return FALSE; //如果要更新的数据为空，返回false
-			D()->update($this->table, $params, [$primary_key => $id]);
+			D()->update($this->table, $params, [$primary_key => $id], ($is_ignore ? 'IGNORE' : ''));
 		}
 		
 		return strval($id);

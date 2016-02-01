@@ -84,8 +84,7 @@ class UserCommision extends StorageNode {
 				$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
 				$upUC->use_ratio    = self::$share_ratio[$parent_level];
 				$upUC->paid_time    = $exOrder->pay_time;
-				$upUC->save(Storage::SAVE_INSERT);
-				//trace_debug('UserCommisionUC', $upUC);
+				$upUC->save(Storage::SAVE_INSERT_IGNORE);
 				
 				//2级
 				$parent_level = 2;
@@ -96,7 +95,7 @@ class UserCommision extends StorageNode {
 					$upUC->parent_level = $parent_level;
 					$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
 					$upUC->use_ratio    = self::$share_ratio[$parent_level];
-					$upUC->save(Storage::SAVE_INSERT);
+					$upUC->save(Storage::SAVE_INSERT_IGNORE);
 					
 					//3级
 					$parent_level = 3;
@@ -107,7 +106,7 @@ class UserCommision extends StorageNode {
 						$upUC->parent_level = $parent_level;
 						$upUC->commision    = self::user_share($exOrder->commision, $parent_level);
 						$upUC->use_ratio    = self::$share_ratio[$parent_level];
-						$upUC->save(Storage::SAVE_INSERT);
+						$upUC->save(Storage::SAVE_INSERT_IGNORE);
 					}
 				}
 								
