@@ -101,6 +101,7 @@ class SyncOrderExpressInfoJob extends CronJob {
     private function update_order_received($order_id){
         $order = new Order();
         $order->order_id = $order_id;
+        $order->order_status = OS_CONFIRMED;
         $order->shipping_status = SS_RECEIVED;
         $order->shipping_confirm_time = simphp_gmtime();
         $order->save();

@@ -206,7 +206,7 @@ class Order extends StorageNode{
     		$where['user_id'] = $user_id;
     	}
     	D()->update(self::table(),
-    	            ['shipping_status'=>SS_RECEIVED,'shipping_confirm_time'=>simphp_gmtime()],
+    	            ['order_status'=>OS_CONFIRMED,'shipping_status'=>SS_RECEIVED,'shipping_confirm_time'=>simphp_gmtime()],
     	            $where);
     
     	if (D()->affected_rows()==1) {
