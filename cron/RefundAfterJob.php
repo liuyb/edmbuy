@@ -33,6 +33,7 @@ class RefundAfterJob extends CronJob {
 		$limit = 100;
 		
 		$done_records = []; //记录已经处理完成的记录ID
+		$total_order_refund = []; //用于记录某个订单号总退款金额(因为list记录中有可能一个订单号分成多次退款)
 		$total= $this->getTotal();
 		$list = $this->getList($start, $limit);
 		while (!empty($list)) {
@@ -54,9 +55,13 @@ class RefundAfterJob extends CronJob {
 				if ('退款成功'==$row['refund_status']) {
 					$paid_paystatus = PS_REFUND;
 				}
+				if (!isset($total_order_refund[$row['order_sn']])) {
+					$total_order_refund[$row['order_sn']] = 0;
+				}
+				$total_order_refund[$row['order_sn']] += $row['refund_money'];
 				
 				//~ 分别针对"全额退款"和"部分退款"逻辑处理
-				if ($row['refund_money'] < $row['trade_money']) { //部分退款(浮点数不能用=来判断)
+				if ($total_order_refund[$row['order_sn']] < $row['trade_money']) { //部分退款(浮点数不能用=来判断)
 					
 					//订单状态
 					$this->updateOrderStatus($paid_order_id, OS_REFUND_PART, PS_PAYED);
