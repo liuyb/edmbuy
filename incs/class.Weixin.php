@@ -48,6 +48,7 @@ class Weixin {
 	const PLUGIN_JSSDK  = 'jssdk';
 	const PLUGIN_JSADDR = 'jsaddr';
 	const PLUGIN_QRCODE = 'qrcode';
+	const PLUGIN_MSGSEND= 'msgsend';
 	
 	/**
 	 * Message type
@@ -61,6 +62,9 @@ class Weixin {
 	const MSG_TYPE_MUSIC = 'music';
 	const MSG_TYPE_NEWS  = 'news';
 	const MSG_TYPE_NEWS_ITEM = 'news_item';
+	const MSG_TYPE_CARD  = 'wxcard';
+	const MSG_TYPE_MPNEWS= 'mpnews';
+	const MSG_TYPE_MPVIDEO = 'mpvideo';
 	
 	/**
 	 * QR request constant
@@ -80,7 +84,7 @@ class Weixin {
 	 * All weixin plugins name
 	 * @var array
 	 */
-	public static $plugins = array(self::PLUGIN_JSSDK, self::PLUGIN_JSADDR, self::PLUGIN_QRCODE);
+	public static $plugins = array(self::PLUGIN_JSSDK, self::PLUGIN_JSADDR, self::PLUGIN_QRCODE, self::PLUGIN_MSGSEND);
 	
 	/**
 	 * WeixinHelper instance
@@ -101,17 +105,23 @@ class Weixin {
 	public $jssdk;
 	
 	/**
-	 * WeixinJSAddr instatnce
+	 * WeixinJSAddr instance
 	 * 
 	 * @var WeixinJSAddr
 	 */
 	public $jsaddr;
 	
 	/**
-	 * WeixinQRCode instatnce
+	 * WeixinQRCode instance
 	 * @var WeixinQRCode
 	 */
 	public $qrcode;
+	
+	/**
+	 * WeixinMsgSend instance
+	 * @var WeixinMsgSend
+	 */
+	public $msgsend;
 	
 	/**
 	 * API address url prefix
@@ -243,6 +253,9 @@ class Weixin {
 		}
 		if (in_array(self::PLUGIN_QRCODE, $plugins)) {
 		  $this->qrcode  = new WeixinQRCode($this->appId, $this);
+		}
+		if (in_array(self::PLUGIN_MSGSEND, $plugins)) {
+		  $this->msgsend = new WeixinMsgSend($this->appId, $this);
 		}
 	}
 	
@@ -817,34 +830,6 @@ class Weixin {
     return $ret;
   }
   
-  /**
-   * 获取二维码ticket
-   * 
-   * @param string $media_id
-   * @param string $outfile
-   * @return boolean|array
-   */
-  public function getQRTicket($media_id, &$outfile = '')
-  {
-    $ret    = array();
-    $params = array(
-      'media_id' => $media_id
-    );
-    $access_token = $this->fecthAccessToken();
-    if (!$outfile) {
-      $outfile = SIMPHP_ROOT . "/a/wx/".md5($media_id).".jpg";
-    }
-    $ret = $this->apiCall("qrcode/create?access_token={$access_token}", $params, 'post', 'api_cgi', $outfile);
-    $outfile = str_replace(SIMPHP_ROOT, '', $outfile); //去掉前缀
-    if (!empty($ret['errcode'])) {
-      $outfile = false;
-      return false;
-    }
-    if (!$ret) $outfile = false;
-    
-    return $ret;
-  }
-  
   //~ the following is some util functions
   
   /**
@@ -1251,6 +1236,149 @@ class WeixinQRCode {
   	return $ticket;
   }
   
+}
+
+
+/**
+ * Weixin 消息群发 类
+ *
+ * @author Gavin<laigw.vip@gmail.com>
+ */
+class WeixinMsgSend {
+
+	/**
+	 * App Id
+	 *
+	 * @var string
+	 */
+	private $appId;
+
+	/**
+	 * Weixin Object
+	 * @var Weixin
+	 */
+	private $wx;
+
+	public function __construct($appId, Weixin $wx = NULL) {
+		$this->appId = $appId;
+		$this->wx    = $wx;
+	}
+
+	/**
+	 * 获取appId
+	 * @return string
+	 */
+	public function getAppId() {
+		return $this->appId;
+	}
+	
+	/**
+	 * 预览群发消息
+	 *
+	 * @param string $openid      用户OpenID 或者 微信号(仅预览时可用)
+	 * @param array  $msgcontent  消息内容数组，如['content'=>'CONTENT'], ['media_id'=>'MEDIA_ID'], ['card_id'=>'CARD_ID','card_ext'=>'CARD_EXT ARRAY']
+	 * @param string $msgtype     
+	 * @return boolean|array
+	 */
+	public function preview($openid, Array $msgcontent, $msgtype = Weixin::MSG_TYPE_TEXT)
+	{
+		$ret    = array();
+		$params = array();
+		if (strlen($openid) > 20) { //OpenID
+			$params['touser'] = $openid;
+		}
+		else { //微信号
+			$params['towxname'] = $openid;
+		}
+		$params[$msgtype]  = $msgcontent;
+		$params['msgtype'] = $msgtype;
+		$access_token = $this->wx->fecthAccessToken();
+		$ret = $this->wx->apiCall("/message/mass/preview?access_token={$access_token}", $params, 'post', 'api_cgi');
+		if (!empty($ret['errcode'])) {
+			return false;
+		}
+	
+		return $ret;
+	}
+	
+	/**
+	 * 通过OpenID群发消息
+	 *
+	 * @param array  $openid      用户OpenID集合，其中 2 =< count($openid) <= 10000
+	 * @param array  $msgcontent  消息内容数组，如['content'=>'CONTENT'], ['media_id'=>'MEDIA_ID'], ['card_id'=>'CARD_ID','card_ext'=>'CARD_EXT ARRAY']
+	 * @param string $msgtype     包括：'mpnews','text','voice','music','image','video','wxcard'
+	 * @return boolean|array
+	 */
+	public function sendByOpenid(Array $openid, Array $msgcontent, $msgtype = Weixin::MSG_TYPE_TEXT)
+	{
+		$num = count($openid);
+		if ($num < 2 || $num > 10000) return false;
+		
+		$ret    = array();
+		$params = array(
+			'touser' => $openid,
+			$msgtype => $msgcontent,
+			'msgtype'=> $msgtype
+		);
+		$access_token = $this->wx->fecthAccessToken();
+		$ret = $this->wx->apiCall("/message/mass/send?access_token={$access_token}", $params, 'post', 'api_cgi');
+		if (!empty($ret['errcode'])) {
+			return false;
+		}
+	
+		return $ret;
+	}
+	
+	/**
+	 * 向全部用户或者根据分组进行群发
+	 *
+	 * @param array  $msgcontent  消息内容数组，如['content'=>'CONTENT'], ['media_id'=>'MEDIA_ID'], ['card_id'=>'CARD_ID','card_ext'=>'CARD_EXT ARRAY']
+	 * @param string $msgtype     包括：'mpnews','text','voice','music','image','video','wxcard'
+	 * @return boolean|array
+	 */
+	public function send(Array $msgcontent, $msgtype = Weixin::MSG_TYPE_TEXT, $is_to_all = true, $group_id = 0)
+	{
+		$ret    = array();
+		$params = array(
+				'filter' => ['is_to_all' => $is_to_all, 'group_id' => $group_id],
+				$msgtype => $msgcontent,
+				'msgtype'=> $msgtype
+		);
+		$access_token = $this->wx->fecthAccessToken();
+		//$ret = $this->wx->apiCall("/message/mass/sendall?access_token={$access_token}", $params, 'post', 'api_cgi');
+		if (!empty($ret['errcode'])) {
+			return false;
+		}
+	
+		return $ret;
+	}
+	
+	/**
+	 * 发送模板消息
+	 * @param string $openid       接收用户OpenID
+	 * @param string $template_id  消息模板ID
+	 * @param string $url          点击查看链接
+	 * @param array  $data         消息模板内容
+	 * @return boolean|mixed
+	 */
+	public function sendTplMsg($openid, $template_id, $url, Array $data)
+	{
+		$ret    = array();
+		$params = array(
+				'touser'      => $openid,
+				'template_id' => $template_id,
+				'url'         => $url,
+				'data'        => $data
+		);
+		$access_token = $this->wx->fecthAccessToken();
+		$ret = $this->wx->apiCall("/message/template/send?access_token={$access_token}", $params, 'post', 'api_cgi');
+		if (!empty($ret['errcode'])) {
+			return false;
+		}
+	
+		return $ret;
+	}
+	
 }
 
 /**
