@@ -258,6 +258,9 @@ class User_Controller extends MobileController {
     if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息，但不会变更上下级关系
     
     	if (Weixin::OAUTH_BASE==$state) {
+    		if (empty($localUser->openid)) { //openid为空，就更新
+    			D()->update(Users::table(), ['openid'=>$openid], ['user_id'=>$localUser->uid]);
+    		}
     		if (empty($localUser->nickname) || empty($localUser->logo)) { //基本登录后，如果昵称或头像没有设置，则重定向到详细授权获取信息
     			$wx->authorizing_detail($auth_action, $refer);
     		}
