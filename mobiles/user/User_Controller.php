@@ -357,7 +357,7 @@ class User_Controller extends MobileController {
     	$upUser->parentid   = $parent_id;
     	$upUser->parentnick = $parent_nick;
     	
-    	$upUser->save(Storage::SAVE_INSERT); //先快速保存insert
+    	$upUser->save(Storage::SAVE_INSERT_IGNORE); //先快速保存insert
     	$upUser = new Users($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
     	
     	if (Weixin::OAUTH_DETAIL==$state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
@@ -393,6 +393,12 @@ class User_Controller extends MobileController {
     		
     	$upUser->save(Storage::SAVE_UPDATE);
     	$loginedUser = $upUser;
+    	
+    	//微信模板消息通知
+    	if ($parent_id) {
+    		$loginedUser = Users::load($upUser->id, true);
+    		$loginedUser->notify_reg_succ();
+    	}
     
     } //END: if ($localUser->is_exist()) else
     
@@ -540,6 +546,39 @@ class User_Controller extends MobileController {
   			$upUser->save(Storage::SAVE_UPDATE);
   		}
   		$ret = ['flag'=>'SUCC', 'msg'=>'更新成功'];
+  		
+  		$response->sendJSON($ret);
+  	}
+  }
+  
+
+  /**
+   * 通知完善资料
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function notify_profile(Request $request, Response $response)
+  {
+  	if ($request->is_post()) {
+  		$target_uid = $request->post('user_id',0);
+  		
+  		global $user;
+  		$ret = ['flag'=>'SUCC', 'msg'=>'通知成功'];
+  		if (!$user->uid) {
+  			$ret = ['flag'=>'FAIL', 'msg'=>'请先登录'];
+  			$response->sendJSON($ret);
+  		}
+  		if (!$target_uid) {
+  			$ret = ['flag'=>'FAIL', 'msg'=>'target uid无效'];
+  			$response->sendJSON($ret);
+  		}
+  		
+  		$targetUser = Users::load($target_uid);
+  		if ($targetUser->is_exist() && !empty($targetUser->openid)) {
+  			$extra = ['org_name'=>'益多米','info_required'=>'个人信息','info_remark'=>'手机号和微信二维码'];
+  			WxTplMsg::required_info($targetUser->openid, "你的米友({$user->nickname})希望你尽快完善资料", '完善个人信息，方便米友跟你一起学习成长！', U('user/setting','',true), $extra);
+  		}
   		
   		$response->sendJSON($ret);
   	}

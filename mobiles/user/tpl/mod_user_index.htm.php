@@ -118,7 +118,7 @@ function loadAjaxData(){
 
 //好友弹框
 $(".refer_but").on("click",function(){
-	getAddFriendInstance().showFriend("<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
+	getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
 });
 
 $(function(){	

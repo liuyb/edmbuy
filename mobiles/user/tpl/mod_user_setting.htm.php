@@ -106,7 +106,7 @@ $(function(){
 	});
 	//好友弹框
 	$("#add-friend").bind("click",function(){
-		getAddFriendInstance().showFriend("<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
+		getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
 	});
 });
 

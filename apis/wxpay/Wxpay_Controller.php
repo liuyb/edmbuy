@@ -103,6 +103,9 @@ class Wxpay_Controller extends Controller {
           if ($cUser->is_exist()) {
           	$cUser->check_level();
           }
+                    
+          //微信通知
+          $cUser->notify_pay_succ($order_id);
         }
         else {
           D()->unlock_tables();// 解锁

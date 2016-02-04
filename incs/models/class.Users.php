@@ -459,6 +459,13 @@ class Users extends StorageNode {
 	}
 	
 	/**
+	 * 根据性别值获取中文性别"TA"
+	 */
+	static function TA($sex = 0) {
+		return 1==$sex ? '他' : (2==$sex ? '她' : 'TA');
+	}
+	
+	/**
 	 * 查询当前用户总购买金额
 	 * @return double
 	 */
@@ -490,6 +497,127 @@ class Users extends StorageNode {
 		$order = Order::find_one(new AndQuery(new Query('user_id', $this->id),new Query('pay_status', PS_PAYED)),
 				                    ['from'=>0,'size'=>1,'sort'=>['order_id'=>'DESC']]);
 		return $order;
+	}
+
+	/**
+	 * 微信通知上级注册成功
+	 */
+	public function notify_reg_succ() {
+		if (empty($this->parentid)) return false;
+	
+		$uParent = self::load($this->parentid);
+		if ($uParent->is_exist()) {
+			$extra = ['friendname'=>$this->nickname,'regtime'=>WxTplMsg::human_dtime($this->regtime)];
+			$ta    = self::TA($this->sex);
+			$url   = U('partner','',true); //TODO url 还需要精细化
+				
+			//通知一级上级
+			if (!empty($uParent->openid)) {
+				WxTplMsg::invite_reg($uParent->openid, "你邀请的好友已注册成为米客了", "{$this->nickname}({$this->uid})是你的一级米客，{$ta}需要你的指导", $url, $extra);
+			}
+				
+			//通知二级上级
+			if ($uParent->parentid) {
+				$uParent2 = self::load($uParent->parentid);
+				if ($uParent2->is_exist()) {
+					if (!empty($uParent2->openid)) {
+						WxTplMsg::invite_reg($uParent2->openid, "你的下级邀请的好友已注册成为米客了", "{$this->nickname}是你的二级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
+					}
+					
+					//通知三级上级
+					$uParent3 = self::load($uParent2->parentid);
+					if ($uParent3->is_exist()) {
+						if (!empty($uParent3->openid)) {
+							WxTplMsg::invite_reg($uParent3->openid, "你的下级邀请的好友已注册成为米客了", "{$this->nickname}是你的三级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
+						}
+					}
+				}
+			}
+			
+		}
+	
+		return true;
+	}
+	
+	/**
+	 * 微信通知支付成功
+	 */
+	public function notify_pay_succ($order_id) {
+		$order = Order::load($order_id);
+		if ($order->is_exist() && $order->pay_status==PS_PAYED)
+		{
+			//数据准备
+			$orderItems = Order::getTinyItems($order_id);
+			$itemDesc = '';
+			if (!empty($orderItems)) {
+				foreach ($orderItems AS $it) {
+					$itemDesc .= $it['goods_name'].',';
+				}
+				$itemDesc = substr($itemDesc, 0, -1);
+			}
+			
+			//通知提醒自己
+			$cUser = Users::load($order->user_id);
+			$extra = [
+				'paid_money' => $order->money_paid.'元',
+				'item_desc'  => $itemDesc,
+				'pay_way'    => $order->pay_name,
+				'order_sn'   => $order->order_sn,
+				'pay_time'   => WxTplMsg::human_dtime(simphp_gmtime2std($order->pay_time))
+			];
+			if (!empty($cUser->openid)) {
+				WxTplMsg::pay_succ($cUser->openid, '你好，你的商品已支付成功!', '你可以到交易记录查看更多信息', U("order/{$order_id}/detail",'',true), $extra);
+			}
+			
+			//提醒上三级获得未生效的佣金
+			if ($cUser->parentid) {
+				$uParent1 = Users::load($cUser->parentid);
+				if ($uParent1->is_exist()) {
+					$extra = [
+						'order_sn'     => $order->order_sn,
+						'order_amount' => $order->money_paid.'元',
+						'order_state'  => '支付成功，你可以获得的%.2f元佣金'
+					];
+					$first  = '你的%s级米客购买商品支付成功!';
+					$remark = '如分销商确认收货，你将可申请提现，点击查询详情';
+					$url    = U('partner/commission',['status'=>0],true);
+					
+					//一级上级
+					if (!empty($uParent1->openid)) {
+						$commision = UserCommision::user_share($order->commision, 1);
+						$extra['order_state'] = sprintf($extra['order_state'], $commision);
+						WxTplMsg::sharepay_succ($uParent1->openid, sprintf($first, '一'), $remark, $url, $extra);
+					}
+					
+					//二级上级
+					if ($uParent1->parentid) {
+						$uParent2 = Users::load($uParent1->parentid);
+						if ($uParent2->is_exist()) {
+							if (!empty($uParent2->openid)) {
+								$commision = UserCommision::user_share($order->commision, 2);
+								$extra['order_state'] = sprintf($extra['order_state'], $commision);
+								WxTplMsg::sharepay_succ($uParent2->openid, sprintf($first, '二'), $remark, $url, $extra);
+							}
+							
+							//三级上级
+							if ($uParent2->parentid) {
+								$uParent3 = Users::load($uParent2->parentid);
+								if ($uParent3->is_exist()) {
+									if (!empty($uParent3->openid)) {
+										$commision = UserCommision::user_share($order->commision, 3);
+										$extra['order_state'] = sprintf($extra['order_state'], $commision);
+										WxTplMsg::sharepay_succ($uParent3->openid, sprintf($first, '三'), $remark, $url, $extra);
+									}
+								}
+							}
+							
+						}
+					}
+					
+				}
+			}
+			
+		}
 	}
 	
 }

@@ -1424,12 +1424,12 @@ class WeixinHelper {
     $my_uid    = 0;
     $can_save  = true;
     $wxuinfo   = $this->wx->userInfo($openid);
-    trace_debug('weixin_onsubscribe', $event.','.$eventKey.','.print_r($wxuinfo, TRUE));
+    //trace_debug('weixin_onsubscribe', $event.','.$eventKey.','.print_r($wxuinfo, TRUE));
     
     if (empty($wxuinfo['errcode'])) {
     	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
     		
-    		$save_type = Storage::SAVE_INSERT;
+    		$save_type = Storage::SAVE_INSERT_IGNORE;
     		$exUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
     		if ($exUser->is_exist()) { //已存在，已存在不会变更上级关系
     			$upUser = new Users($exUser->id);
@@ -1489,6 +1489,9 @@ class WeixinHelper {
     		$upUser->save($save_type);
     		$my_uid = $upUser->id;
     		
+    		if (in_array($save_type, [Storage::SAVE_INSERT_IGNORE, Storage::SAVE_INSERT])) {
+    			$upUser->notify_reg_succ();
+    		}
     	}
     }
     

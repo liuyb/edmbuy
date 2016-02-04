@@ -130,19 +130,19 @@
 		window.location = url+"?level="+level+"&count="+count;
 	}
 	function cash_available(obj) {
-		myAlert('暂无可提现金额');
+		myAlert('暂无可提现金额<br><span style="font-size:12px">（年后初十开放提现功能）</span>');
 	}
 	function cash_already(obj) {
-		myAlert('暂无提现明细');
+		myAlert('暂无提现明细<br><span style="font-size:12px">（年后初十开放提现功能）</span>');
 	}
 	function cash_total(obj) {
-		myAlert('尚未有有效收入');
+		myAlert('尚未有有效收入<br><span style="font-size:12px">（年后初十开放提现功能）</span>');
 	}
 	function cash_apply(obj) {
-		myAlert('暂无可提现金额');
+		myAlert('暂无可提现金额<br><span style="font-size:12px">（年后初十开放提现功能）</span>');
 	}
 	function cash_detail(obj) {
-		myAlert('暂无提现明细');
+		myAlert('暂无提现明细<br><span style="font-size:12px">（年后初十开放提现功能）</span>');
 	}
 </script>
 <?php endif;?>

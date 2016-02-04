@@ -7,7 +7,7 @@
 <?php else:?>
 <script id="forTopnav" type="text/html">
 <div class="header">
-	<?=$title ?>
+	<?=$title?>
 <a href="/partner" class="back"></a>
 </div>
 </script>
@@ -73,7 +73,7 @@
     		html += "上级：<span style=\"color:#ff6d14;\">"+item.parentnick+"</span>";
     		html += "</span></td>";
     		html += "<td class=\"list_td3\">";
-    		html += "<button class=\"td3_btn\" onclick=\"getAddFriendInstance().showFriend('"+item.wxqr+"','"+item.mobilephone+"');\">加好友</button>";
+    		html += "<button class=\"td3_btn\" onclick=\"getAddFriendInstance().showFriend('"+item.uid+"','"+item.wxqr+"','"+item.mobilephone+"');\">加好友</button>";
     		html += "</td></tr>";
 		}
 		if(!html.length){

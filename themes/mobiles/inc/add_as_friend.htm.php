@@ -17,7 +17,7 @@
 		提醒TA完善信息
 	</div>
 	<div class="goods_btn">
-		<button type="button" class="order_comm feiend_yes">马上提醒</button>
+		<button type="button" class="order_comm friend_yes">马上提醒</button>
 		<button type="button" class="order_comm friend_no" style="color:#999;font-weight:normal;">暂不提醒</button>
 	</div>
 </div>
@@ -49,7 +49,7 @@
 		//$(".close_f,.mask,.friend_no,.w_wx_colse").on("click",_THIS._onCloseEvent.bind(_THIS));
 	};
 	
-	AddFriend.prototype.showFriend = function(wxqr, phone){
+	AddFriend.prototype.showFriend = function(uid, wxqr, phone){
 		var _THIS = this;
 		if($("#"+this.friendDialogId)){
 			this.removeFriendDialog();
@@ -73,15 +73,31 @@
 		this.friendDom = $(this.friendDom.prop('outerHTML'));
 		this.friendDom.attr("id", this.friendDialogId);
 		append_to_body(this.friendDom.prop('outerHTML'));
+		if (uid) {
+			$("#"+this.friendDialogId+" .friend_yes").attr('data-uid',uid);
+		}
 		$("#"+this.friendDialogId).fadeIn(300);
 		$(".mask").fadeIn(300);
-		$("#"+this.friendDialogId).on("click",_THIS._onCloseEvent.bind(_THIS));
+		$("#"+this.friendDialogId).on("click",".friend_yes,.friend_no,.w_wx_colse",_THIS._onCloseEvent.bind(_THIS));
 	};
 	
-	AddFriend.prototype._onCloseEvent = function(){
-		$("#"+this.friendDialogId).fadeOut(300);
-		$(".mask").fadeOut(300);
-		this.removeFriendDialog();
+	AddFriend.prototype._onCloseEvent = function(e){
+		_target = $(e.target);
+		if (_target.hasClass('friend_yes')) {
+			var uid = _target.attr('data-uid');
+			var _THIS = this;
+			F.post("<?php echo U('user/notify_profile')?>",{"user_id": uid},function(){
+				$("#"+_THIS.friendDialogId).hide();
+				$(".mask").hide();
+				_THIS.removeFriendDialog();
+				myAlert('已成功通知!');
+			});
+		}
+		else {
+			$("#"+this.friendDialogId).fadeOut(300);
+			$(".mask").fadeOut(300);
+			this.removeFriendDialog();
+		}
 	};
 
 	AddFriend.prototype.removeFriendDialog = function(){

@@ -223,6 +223,7 @@ class Order extends StorageNode{
      * 获取一个订单下的商品列表
      *
      * @param integer $order_id
+     * @param integer $merchant_uid
      * @return array
      */
     static function getItems($order_id, $merchant_uid = 0) {
@@ -241,6 +242,30 @@ class Order extends StorageNode{
     		foreach ($order_goods AS &$g) {
     			$g['goods_url']   = Items::itemurl($g['goods_id']);
     			$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+    		}
+    	}
+    	else {
+    		$order_goods = [];
+    	}
+    
+    	return $order_goods;
+    }
+    
+    /**
+     * 获取一个订单下的商品列表(仅获取shp_order_goods表中的数据)
+     *
+     * @param integer $order_id
+     * @return array
+     */
+    static function getTinyItems($order_id) {
+    	if (empty($order_id)) return [];
+    
+    	$ectb_order_goods = OrderItems::table();
+    	$sql = "SELECT og.* FROM {$ectb_order_goods} og WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
+    	$order_goods = D()->raw_query($sql, $order_id)->fetch_array_all();
+    	if (!empty($order_goods)) {
+    		foreach ($order_goods AS &$g) {
+    			$g['goods_url']   = Items::itemurl($g['goods_id']);
     		}
     	}
     	else {
