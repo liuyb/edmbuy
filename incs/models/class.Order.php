@@ -144,7 +144,7 @@ class Order extends StorageNode{
     static function cancel($order_id) {
     	if (!$order_id) return false;
     
-    	D()->update(self::table(), ['order_status'=>OS_CANCELED], ['order_id'=>$order_id]);
+    	D()->update(self::table(), ['order_status'=>OS_CANCELED,'pay_status'=>PS_CANCEL], ['order_id'=>$order_id]);
     
     	if (D()->affected_rows()==1) {
     
