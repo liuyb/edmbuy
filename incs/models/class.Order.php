@@ -212,7 +212,7 @@ class Order extends StorageNode{
     	if (D()->affected_rows()==1) {
     
     		//写order_action的日志
-    		self::action_log($order_id, ['action_note'=>"用户确认收货(UID={$user_id})"]);
+    		self::action_log($order_id, ['action_note'=>$user_id ? "用户确认收货(UID={$user_id})" : "系统确认收货"]);
     
     		return true;
     	}

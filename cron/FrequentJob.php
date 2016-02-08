@@ -15,6 +15,8 @@ class FrequentJob extends CronJob {
 		// 批量更新用户的一级下级数
 		$this->upChildNum1();
 		
+		// 批量更新收货时间
+		$this->upShippingConfirmTime();
 	}
 	
 	/**
@@ -37,6 +39,19 @@ WHERE a.parent_id<>0 AND a.parent_id=b.user_id";
 		$sql = "UPDATE `shp_users` AS a, (SELECT ib.parent_id,COUNT(DISTINCT ib.user_id) AS chnum FROM `shp_users` AS ia INNER JOIN `shp_users` AS ib ON ib.parent_id=ia.user_id WHERE 1 GROUP BY ib.parent_id) AS b
 SET a.childnum_1=b.chnum
 WHERE a.user_id=b.parent_id";
+		D()->query($sql);
+		$this->log("OK. affected rows: ".D()->affected_rows());
+	}
+	
+	/**
+	 * 批量更新收货时间
+	 */
+	private function upShippingConfirmTime() {
+		$this->log("update shipping confirm time(14 days after pay_time)...");
+		$the_time = simphp_gmtime() - 86400*14;
+		$sql = "UPDATE `shp_order_info` "
+				 . "SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=`pay_time`+1209600 "
+		     . "WHERE `pay_status`=".PS_PAYED." AND `shipping_status`<>".SS_RECEIVED." AND `pay_time`<={$the_time}";
 		D()->query($sql);
 		$this->log("OK. affected rows: ".D()->affected_rows());
 	}
