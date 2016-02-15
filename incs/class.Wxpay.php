@@ -34,6 +34,12 @@ class Wxpay {
   const TRADE_TYPE_WAP    = 'WAP';
   
   /**
+   * 微信提现费率
+   * @var constant
+   */
+  const CASH_FEE_RATE = 0.01;
+  
+  /**
    * 统一下单接口
    * 
    * @param array $order 站内订单数组

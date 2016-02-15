@@ -203,8 +203,19 @@ class Fn extends Func {
       return isset($_SESSION[$ck]) ? $_SESSION[$ck] : null;
     }
   }
-  
-  
+    
+  /**
+   * 解析"钱"数字，单位：元
+   * @param float $val
+   * @return string
+   */
+  static function money_yuan($val) {
+  	$val = number_format($val,2,'.','');
+  	if (preg_match('/\.0+$/', strval($val))) {
+  		$val = intval($val);
+  	}
+  	return $val;
+  }
   
 }
  
