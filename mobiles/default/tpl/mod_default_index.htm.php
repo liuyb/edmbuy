@@ -2,16 +2,16 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li style="display:block"><a href='/activity'><img src="/themes/mobiles/img/banner.png"></a></li>
-    <li><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
+    <!-- <li><a href='/activity'><img src="/themes/mobiles/img/banner.png"></a></li> -->
+    <li style="display:block"><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
     <li><a href="http://m.edmbuy.com/item/1045"><img src="/themes/mobiles/img/banner02.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>
     </ul>
     <div id="slinav" class="slinav clearfix">
+    <!-- <a href="javascript:void(0);" class="hwspeed">1</a>  -->
     <a href="javascript:void(0);" class="hwspeed active">1</a>
     <a href="javascript:void(0);" class="hwspeed">2</a>
     <a href="javascript:void(0);" class="hwspeed">3</a>
-    <a href="javascript:void(0);" class="hwspeed">4</a>
      </div>
   </div>
 </div>
@@ -55,7 +55,7 @@ window.location.reload();
 	<div class="list_jx">
 		<table cellspacing="0" cellpadding="0" class="list_jx_tab">	
 			<tr>
-				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1045" ><img src="http://oss.edmbuy.com/1/img/b1658f5d702eb8807a0b9d483eede957.jpg" alt=""></a></td>
+				<td style="width:110px;"><a href="http://m.edmbuy.com/item/1045" ><img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'http://oss.edmbuy.com/1/img/b1658f5d702eb8807a0b9d483eede957.jpg')" alt=""></a></td>
 				<td>
 					<a href="http://m.edmbuy.com/item/1045" ><p class="jx_year_tit">【过年正常发货 顺丰 六省包邮】 钟橙 绿色放心品牌橙 赣南脐橙 家庭实惠装10斤装</p></a>
 					<p class="jx_table_price"><span>￥88.00</span><span style="font-size:12px;color:#999;margin-left:5px;">出售140万斤</span></p>
