@@ -385,7 +385,7 @@ class Order extends StorageNode{
         	$where = " AND g.merchant_uid=%d";
         }
 
-        $sql = "SELECT og.*,g.`goods_thumb`,g.`commision`,m.facename,m.merchant_id,m.telphone,m.kefu
+        $sql = "SELECT og.*,g.`goods_thumb`,g.`commision`,m.facename,m.merchant_id,m.mobile,m.telphone,m.kefu
                 FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
                 INNER JOIN {$ectb_merchant} m on g.merchant_uid = m.admin_uid 
                 WHERE og.`order_id`=%d {$where}

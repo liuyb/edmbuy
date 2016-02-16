@@ -82,7 +82,7 @@
 	<div class="order_serve">
 		<ul>
 			<li class="online_serve"><a href="<?=$merchant_goods['kefu'] ?>">在线客服</a></li>
-			<li class="after_serve"><a href="tel:<?=$merchant_goods['telphone'] ?>">售后服务</a></li>
+			<li class="after_serve"><a href="tel:<?php echo $merchant_goods['mobile']?:$merchant_goods['telphone'] ?>">售后服务</a></li>
 		</ul>
 	</div>
 	<?php endif;?>
