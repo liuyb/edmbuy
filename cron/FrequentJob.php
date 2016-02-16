@@ -51,7 +51,7 @@ WHERE a.user_id=b.parent_id";
 		$the_time = simphp_gmtime() - 86400*14;
 		$sql = "UPDATE `shp_order_info` "
 				 . "SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=`pay_time`+1209600 "
-		     . "WHERE `pay_status`=".PS_PAYED." AND `shipping_status`<>".SS_RECEIVED." AND `pay_time`<={$the_time}";
+		     . "WHERE `pay_status`=".PS_PAYED." AND `shipping_status`=".SS_SHIPPED." AND `pay_time`<={$the_time}";
 		D()->query($sql);
 		$this->log("OK. affected rows: ".D()->affected_rows());
 	}
