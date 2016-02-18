@@ -25,6 +25,10 @@ class SyncOrderExpressInfoJob extends CronJob {
         $i = 0;
         $already_sync = 0;
         foreach ($orders as $od){
+        	if(!is_numeric($od['invoice_no'])) {
+        		continue;
+        	}
+        	
             $order_id = $od['order_id'];
             $expressJson = $this->get_express_from_web($od['shipping_type'], $od['invoice_no']);
             if(!$expressJson){

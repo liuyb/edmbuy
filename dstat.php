@@ -69,7 +69,7 @@ if (1==$type) { //有效产品销售统计
 	$html .= '<th>总分配佣金</th>';
 	$html .= '</tr>';
 	
-	$list = DStatFn::goods_sell_list();
+	$list = ThisFn::goods_sell_list();
 	foreach ($list AS $it) {
 		$html.= '<tr>';
 		$html.= '<td>'.$it['goods_id'].'</td>';
@@ -98,7 +98,7 @@ elseif (2==$type) { //退款订单统计
 	$html .= '<th>销售价</th>';
 	$html .= '</tr>';
 	
-	$list = DStatFn::refund_list();
+	$list = ThisFn::refund_list();
 	foreach ($list AS $it) {
 		$html.= '<tr>';
 		$html.= '<td>'.$it['order_sn'].'</td>';
@@ -146,10 +146,10 @@ elseif (3==$type) { //用户统计
 	for ($tbegin = $from>$begin_daytime ? $from : $begin_daytime;$tbegin < ($to && $to<$now_daytime ? $to : $now_daytime); $tbegin += ONE_DAY_TIME) {
 		$begin_t = $tbegin == $begin_daytime ? '' : $tbegin;
 		$end_t   = $tbegin + ONE_DAY_TIME - 1;
-		$total_user_cnt = DStatFn::calcTotalUserCnt($begin_t, $end_t);
-		$tym_user_cnt   = DStatFn::regFromTymUserCnt($begin_t, $end_t);
-		$mscnt_by_tym   = DStatFn::mishangCnt($begin_t, $end_t, true);
-		$mscnt_platform = DStatFn::mishangCnt($begin_t, $end_t, false);
+		$total_user_cnt = ThisFn::calcTotalUserCnt($begin_t, $end_t);
+		$tym_user_cnt   = ThisFn::regFromTymUserCnt($begin_t, $end_t);
+		$mscnt_by_tym   = ThisFn::mishangCnt($begin_t, $end_t, true);
+		$mscnt_platform = ThisFn::mishangCnt($begin_t, $end_t, false);
 		
 		$html.= '<tr>';
 		$html.= '<td>'.date('Y-m-d',$tbegin).'</td>';
@@ -166,7 +166,7 @@ elseif (3==$type) { //用户统计
 $html .= "</table>\n</body>\n</html>";
 echo $html;
 
-class DStatFn {
+class ThisFn {
 	
 	/**
 	 * 统计总用户数
