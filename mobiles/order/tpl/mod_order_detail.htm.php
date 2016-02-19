@@ -90,10 +90,10 @@
 </div>
 
 <div class="order_info_time">
-	<p>订单号　 :<span class="time_color_comm"><?=$order->order_sn?></span></p>
-	<p>交易号　 :<span class="time_color_comm"><?=$order->pay_trade_no ?></span></p>
-	<p>创建时间 :<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->add_time)) ?></span></p>
-	<p>付款时间 :<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
+	<p><span class="order_info_ph">订单号　</span>:<span class="time_color_comm"><?=$order->order_sn?></span></p>
+	<p><span class="order_info_ph">交易号　</span>:<span class="time_color_comm"><?=$order->pay_trade_no ?></span></p>
+	<p><span class="order_info_ph">创建时间</span>:<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->add_time)) ?></span></p>
+	<p><span class="order_info_ph">付款时间</span>:<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
 </div>
 
 <div class="order_type_btn">

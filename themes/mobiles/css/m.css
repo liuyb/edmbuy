@@ -1900,10 +1900,11 @@ a.ph_btn{
 .order_info_time p{
   margin-bottom:10px;
 }
+.order_info_ph { margin-right: 2px; }
 .time_color_comm{
   font-size:14px;
   color:#666;
-  padding:0 0 0 5px;
+  padding:0 0 0 10px;
 }
 
 .tit_type{
