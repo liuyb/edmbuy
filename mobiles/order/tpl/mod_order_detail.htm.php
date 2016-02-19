@@ -53,9 +53,10 @@
 	</div>
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
-			<?php foreach ($merchant_goods['goods'] as $gd):
+			<?php $first_goods_id=0; foreach ($merchant_goods['goods'] as $gd):
 			 $total_amount = doubleval($total_amount) + doubleval($gd['goods_price']);
-			 ++$total_goods; 
+			 ++$total_goods;
+			 if(!$first_goods_id) $first_goods_id = $gd['goods_id'];
 			?>
 			<tr>
 				<td class="info_td1" >
@@ -89,9 +90,10 @@
 </div>
 
 <div class="order_info_time">
-	<p>微信交易号:<span class="time_color_comm"><?=$order->pay_trade_no ?></span></p>
-	<p>创建时间:<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->add_time)) ?></span></p>
-	<p>付款时间:<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
+	<p>订单号　 :<span class="time_color_comm"><?=$order->order_sn?></span></p>
+	<p>交易号　 :<span class="time_color_comm"><?=$order->pay_trade_no ?></span></p>
+	<p>创建时间 :<span class="time_color_comm"><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->add_time)) ?></span></p>
+	<p>付款时间 :<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
 </div>
 
 <div class="order_type_btn">
@@ -108,9 +110,10 @@
 	退货
 	<?php endif;?>
 	</button>
-<!--
-	<button class="order_but_r again_buy" onclick="location.href='/item/'">再次购买</button>
--->
+
+<?php if($order->pay_status==PS_PAYED && $order->shipping_status==SS_RECEIVED):?>
+<button class="order_but_r again_buy" onclick="location.href='<?php echo U('/item/'.$first_goods_id)?>'">再次购买</button>
+<?php endif;?>
 </div>
 <script type="text/javascript">
 function cancel_order(obj) {

@@ -564,5 +564,85 @@ class WxPayApi
 		$time = $time2[0];
 		return $time;
 	}
+	
+	//==================== 以下部分为额外添加(by Gavin) ====================
+	
+	/**
+	 * 企业付款
+	 * @param WxPayEnterprisePay $inputObj
+	 * @param int                $timeOut
+	 * @throws WxPayException
+	 * @return 成功时返回，其他抛异常
+	 */
+	public static function enterprisePay($inputObj, $timeOut = 6)
+	{
+		$url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+		
+		//检测必填参数
+		if(!$inputObj->IsOut_trade_noSet()) {
+			throw new WxPayException("企业付款接口中，缺少必填参数partner_trade_no！");
+		}
+		elseif (!$inputObj->IsOpenidSet()) {
+			throw new WxPayException("企业付款接口中，缺少必填参数openid！");
+		}
+		elseif (!$inputObj->IsCheck_nameSet()) {
+			throw new WxPayException("企业付款接口中，缺少必填参数check_name！");
+		}
+		elseif (!$inputObj->IsAmountSet()) {
+			throw new WxPayException("企业付款接口中，缺少必填参数amount！");
+		}
+		elseif (!$inputObj->IsDescSet()) {
+			throw new WxPayException("企业付款接口中，缺少必填参数desc！");
+		}
+		else {
+			$_check_name = $inputObj->GetCheck_name();
+			if (($_check_name=='FORCE_CHECK' || $_check_name=='OPTION_CHECK') && !$inputObj->IsUser_nameSet()) {
+				throw new WxPayException("企业付款接口中，由于check_name='{$_check_name}'，缺少必填参数re_user_name！");
+			}
+		}
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+		$inputObj->SetIp(WxPayConfig::SERVER_IP); //调用接口的机器Ip地址
+	
+		$inputObj->SetSign();//签名
+		$xml = $inputObj->ToXml();
+		$startTimeStamp = self::getMillisecond();//请求开始时间
+		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		$result = WxPayResults::Init($response);
+		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+	
+		return $result;
+	}
+	
+	/**
+	 * 企业付款查询
+	 * @param WxPayEnterpriseQuery $inputObj
+	 * @param int                $timeOut
+	 * @throws WxPayException
+	 * @return 成功时返回，其他抛异常
+	 */
+	public static function enterpriseQuery($inputObj, $timeOut = 6)
+	{
+		$url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
+		
+		//检测必填参数
+		if(!$inputObj->IsOut_trade_noSet()) {
+			throw new WxPayException("企业付款查询接口中，缺少必填参数partner_trade_no！");
+		}
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+	
+		$inputObj->SetSign();//签名
+		$xml = $inputObj->ToXml();
+		$startTimeStamp = self::getMillisecond();//请求开始时间
+		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		$result = WxPayResults::Init($response);
+		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+	
+		return $result;
+	}
+	
 }
 

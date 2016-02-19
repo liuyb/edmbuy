@@ -34,6 +34,12 @@ class Wxpay {
   const TRADE_TYPE_WAP    = 'WAP';
   
   /**
+   * 微信支付所对应的银行标识
+   * @var constant
+   */
+  const BANK_CODE = 'WXPAY';
+  
+  /**
    * 微信提现费率
    * @var constant
    */
@@ -123,6 +129,55 @@ class Wxpay {
     Log::DEBUG("begin notify");
     $notify = new PayNotifyCallBack($callback);
     $notify->Handle(false);
+  }
+  
+  /**
+   * 企业付款接口
+   * @param string $cashing_no
+   * @param string $desc
+   * @return array ['code'=>'SUCC/FAIL','msg'=>'']
+   */
+  public static function enterprisePay($cashing_no, $desc = '') {
+  	$ret = ['code'=>'FAIL','msg'=>''];
+  	$exUCash = UserCashing::find_one(new AndQuery(new Query('cashing_no', $cashing_no), new Query('bank_code', self::BANK_CODE)));
+  	if ($exUCash->is_exist()) {
+  		$input = new WxPayEnterprisePay();
+  		$input->SetOut_trade_no($exUCash->cashing_no);
+  		$input->SetOpenid($exUCash->bank_no);
+  		$input->SetCheck_name(WxPayEnterprisePay::CHECK_NAME_OPTION);
+  		$input->SetUser_name($exUCash->bank_uname);
+  		$input->SetAmount($exUCash->actual_amount);
+  		$input->SetDesc($desc.'('.$exUCash->user_id.','.$exUCash->user_nick.','.$exUCash->user_mobile.')');
+  		
+  		$wxpay_ret = WxPayApi::enterprisePay($input);
+  		if ('SUCCESS'==$wxpay_ret['return_code']) {
+  			if ('SUCCESS'==$wxpay_ret['result_code']) {
+  				if ($wxpay_ret['partner_trade_no'] != $cashing_no) {
+  					$ret['msg'] = '返回订单号跟提供订单号不一致';
+  				}
+  				else {
+  					$payment_no     = $wxpay_ret['payment_no'];
+  					$payment_time   = $wxpay_ret['payment_time'];
+  					
+  					$saveUCash = new UserCashing($exUCash->cashing_id);
+  					$saveUCash->payment_no   = $payment_no;
+  					$saveUCash->payment_time = strtotime($payment_time);
+  					$saveUCash->save(Storage::SAVE_UPDATE);
+  					$ret = ['code'=>'SUCC','msg'=>'付款成功'];
+  				}
+  			}
+  			else {
+  				$ret['msg'] = $wxpay_ret['err_code'].': '.$wxpay_ret['err_code_des'];
+  			}
+  		}
+  		else {
+  			$ret['msg'] = $wxpay_ret['return_msg'];
+  		}
+  	}
+  	else {
+  		$ret['msg'] = '提现记录不存在';
+  	}
+  	return $ret;
   }
   
 }

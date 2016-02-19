@@ -6,6 +6,8 @@ t.php
 tapi.php
 t_*.php
 t_*.html
+incs/libs/wxpay/cert/apiclient_cert.pem
+incs/libs/wxpay/cert/apiclient_key.pem
 
 # Eclipse
 .buildpath

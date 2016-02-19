@@ -6,7 +6,6 @@
 class WxPayConfig
 {
 	//=======【基本信息设置】=====================================
-	//
 	/**
 	 * 
 	 * 微信公众号信息配置
@@ -37,10 +36,13 @@ class WxPayConfig
 	 * 默认0.0.0.0和0，此时不开启代理（如有需要才设置）
 	 * @var unknown_type
 	 */
-// 	const CURL_PROXY_HOST = "10.152.18.220";
-// 	const CURL_PROXY_PORT = 8080;
+	//const CURL_PROXY_HOST = "10.152.18.220";
+	//const CURL_PROXY_PORT = 8080;
 	const CURL_PROXY_HOST = "0.0.0.0";
 	const CURL_PROXY_PORT = 0;
+	
+	//=======【服务器IP设置】===================================
+	const SERVER_IP = "0.0.0.0";
 	
 	//=======【上报信息配置】===================================
 	/**

@@ -808,53 +808,35 @@ a.h_btn{
 }
 #f_sy {
 	background: url(../img/tab_01.png) no-repeat;
+	background-size:50px auto;
 	background-position: 20px -200px;
-	background-size:50px auto ;
 }
 #f_sy.on {
-	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px 0;
-	background-size:50px auto ;
+	background-position: 20px 0px;
 }
 #f_gwc {
 	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px -250px;	
-	background-size: 50px auto ;
+	background-size: 50px auto;
+	background-position: 20px -252px;	
 }
 #f_gwc.on {
-	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px -50px;	
-	background-size: 50px auto ;
+	background-position: 20px -52px;	
 }
-#f_hhr {
-	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px -300px;	
-	background-size: 50px auto ;
+#f_ms {
+  background: url(../img/tab_01.png) no-repeat;
+  background-size: 50px auto;
+  background-position: 20px -300px; 
 }
-#f_hhr.on {
-	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px -100px;	
-	background-size: 50px auto ;
+#f_ms.on {
+  background-position: 20px -100px; 
 }
 #f_hy {
 	background: url(../img/tab_01.png) no-repeat;
-	background-position: 20px -350px;	
-	background-size: 50px auto ;
+	background-size: 50px auto;
+	background-position: 20px -350px;
 }
 #f_hy.on {
-	background: url(../img/tab_01.png) no-repeat;
 	background-position: 20px -150px;	
-	background-size: 50px auto ;
-}
-#f_ms {
-	background: url(../img/tab_01.png) no-repeat center 4px;
-	background-position: 20px -300px;	
-	background-size: 50px auto ;
-}
-#f_ms.on {
-	background: url(../img/tab_01.png) no-repeat center 4px;
-	background-position: 20px -100px;	
-	background-size: 50px auto ;
 }
 .f_num{
   position: absolute;
@@ -1911,7 +1893,7 @@ a.ph_btn{
 .order_info_time{
   background:#fff;
   margin:15px 0 60px;
-  padding:20px 12px 10px;
+  padding:20px 10px 10px;
   font-size:14px;
   color:#999;
 }
@@ -1921,7 +1903,7 @@ a.ph_btn{
 .time_color_comm{
   font-size:14px;
   color:#666;
-  padding:0 10px;
+  padding:0 0 0 5px;
 }
 
 .tit_type{
@@ -1951,7 +1933,7 @@ a.ph_btn{
   color:#333;
   border:1px solid #333;
   border-radius:4px;
-  margin-right:5px;
+  margin:-1px 5px 0 0;
 }
 .order_but_r{
   cursor: pointer;  
@@ -3409,3 +3391,109 @@ td.cash_td2 img {
 	line-height:40px;
 	cursor:pointer;
 }
+
+/* BEGIN 提现申请 */
+.apply_cash_money{
+  background: #fff;
+  padding: 25px 0;
+  overflow: hidden;
+  margin: 10px 0 35px;
+}
+.apply_cash_money .c-3-1{
+  text-align: center;
+}
+.apply_cash_money .c-3-1 h1{
+  font-size: 24px;
+  color: #e54040;
+  font-weight: normal;
+}
+.apply_cash_money .c-3-1 p{
+  font-size: 14px;
+  color: #999;
+}
+.apply_cash_money .c-3-1 img{
+  height: 15px;
+}
+.apply_cash_wx{
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+.apply_cash_btn{
+  width: 92%;
+  margin: 7px 4%;
+  color: #fff;
+  background: #ff6d14;
+  height: 40px;
+  line-height: 37px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.apply_cash_tips{
+  width: 92%;
+  margin: 0 4%;
+  font-size: 12px;
+  color: #666;
+}
+.apply_cash_tips span{
+  color: #e54040;
+}
+.apply_cash_waiting{
+  position: fixed;
+  width: 240px;
+  height: 240px;
+  top: 50%;
+  left: 50%;
+  margin-top: -120px;
+  margin-left: -120px;
+  background: #fff;
+  text-align: center;
+  border-radius: 5px;
+  z-index: 50000;
+}
+.apply_cash_waiting img{
+  width: 75px;
+  height: 75px;
+  margin: 45px 0 40px;
+}
+.apply_cash_waiting h2{
+  font-weight: normal;
+  color: #227bcb;
+  font-size: 18px;
+}
+.apply_cash_waiting p{
+  font-size: 14px;
+}
+.alert_main{
+  position: fixed;
+  width: 240px;
+  top: 50%;
+  left: 50%;
+  margin-top: -80px;
+  margin-left: -120px;
+  background: #fff;
+  text-align: center;
+  border-radius: 5px;
+  z-index: 50000;
+}
+.alert_main_title{
+  font-size: 18px;
+  color: #111;
+  margin: 15px 0;
+}
+.alert_main_info{
+  font-size: 14px;
+  color: #111;
+  margin-bottom: 15px;
+}
+.alert_main_btn{
+  font-size: 17px;
+  height: 44px;
+  line-height: 44px;
+  color: #ff6d14;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+}
+/* END 提现申请 */
+

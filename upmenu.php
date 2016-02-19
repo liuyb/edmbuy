@@ -24,7 +24,7 @@ $json =<<<HEREDOC
 	[
 		{
 			"type" : "view",
-			"name" : "多米年货",
+			"name" : "多米商城",
 			"url"  : "http://m.edmbuy.com/"
 		},
 		{
