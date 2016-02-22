@@ -96,26 +96,62 @@
 	<p><span class="order_info_ph">付款时间</span>:<span class="time_color_comm"><?php if($order->pay_time):?><?=date('Y-m-d H:i:s', simphp_gmtime2std($order->pay_time)) ?><?php endif?></span></p>
 </div>
 
-<div class="order_type_btn">
-<?php if ($order->order_status==OS_CANCELED):?>
-<button class="order_but_l del_success_order" data-order_id="<?=$order_id?>">已取消</button>
-<?php elseif($order->pay_status!=PS_PAYED):?>
-<button class="order_but_l del_success_order" data-order_id="<?=$order_id?>" onclick="cancel_order(this)">取消订单</button>
-<?php endif;?>
-	
-	<button class="order_but_l return_order" onclick="return_product(this)">
-	<?php if ($order->shipping_status==SS_UNSHIPPED):?>
-	退款
-	<?php else:?>
-	退货
-	<?php endif;?>
-	</button>
 
-<?php if($order->pay_status==PS_PAYED && $order->shipping_status==SS_RECEIVED):?>
-<button class="order_but_r again_buy" onclick="location.href='<?php echo U('/item/'.$first_goods_id)?>'">再次购买</button>
+<?php 
+    $cftime = $order->shipping_confirm_time;
+    $cf_over_7ds = false;
+    if($cftime){
+        $diff = (time() - simphp_gmtime2std($cftime)) / 86400;
+        if($diff >= 7){
+            $cf_over_7ds = true;
+        }
+    }
+?>
+<div class="order_type_btn">
+<!-- 未支付 （立即付款、取消订单）-->
+<?php if ($order->pay_status == PS_UNPAYED):?>
+<button class="order_but_l btn_cancel_order" data-order_id="<?=$order_id?>">取消订单</button>
+<button class="order_but_l btn_pay_order" data-order_id="<?=$order_id?>">立即付款</button>
+<!-- 已支付未发货（退款、继续购买） -->
+<?php elseif ($order->pay_status == PS_PAYED && in_array($order->shipping_status, [SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING]) ): ?>
+<button class="order_but_l btn_refund_money" data-order_id="<?=$order_id?>">退款</button>
+<button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
+<!-- 已支付已发货 （确认收货、继续购买）-->
+<?php elseif ($order->pay_status == PS_PAYED && in_array($order->shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART]) ): ?>
+<button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
+<button class="order_but_l btn_confirm_shipped" data-order_id="<?=$order_id?>">确认收货</button>
+<!-- 已支付已发货已确认收货（退货、继续购买） -->
+<?php elseif ($order->shipping_status == SS_RECEIVED && !$cf_over_7ds):?>
+<button class="order_but_l btn_refund_order" data-order_id="<?=$order_id?>">退货</button>
+<button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
+<!-- 签收7天后 GMT 时间判断 -->
+<?php elseif ($order->shipping_status == SS_RECEIVED && $cf_over_7ds):?>
+<button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
 <?php endif;?>
 </div>
+<?php form_topay_script(U('trade/order/record'));?>
 <script type="text/javascript">
+$().ready(function(){
+	$(".btn_cancel_order").bind('click', function(){
+		cancel_order(this);
+	});
+	$(".btn_pay_order").bind('click', function(){
+		form_topay_submit($(this).attr('data-order_id'));
+	});
+	$(".btn_refund_money").bind('click', function(){
+		return_product(this);
+	});
+	$(".btn_refund_order").bind('click', function(){
+		return_product(this);
+	});
+	$(".btn_rebuy_good").bind('click', function(){
+		window.location.href='<?php echo U('/item/'.$first_goods_id)?>';
+	});
+	$(".btn_confirm_shipped").bind('click', function(){
+		confirm_ship(this);
+	});
+});
+
 function cancel_order(obj) {
 	var _self = cancel_order;
 	if (typeof (_self.ajaxing) != 'undefined') {
@@ -133,6 +169,19 @@ function cancel_order(obj) {
   			}
   		});
 		}
+}
+
+function confirm_ship(obj){
+	if (confirm('确定收货么？')) {
+    	var pdata = {"order_id": parseInt($(obj).attr('data-order_id'))};
+    	F.post('<?php echo U('trade/order/confirm_shipping')?>',pdata,function(ret){
+    		if (ret.flag=='SUC') {
+    			window.location.reload();
+    		}else {
+      			myAlert(ret.msg);
+    		}
+    	});
+	}
 }
 function return_product(obj) {
 	myAlert('请联系在线客服');
