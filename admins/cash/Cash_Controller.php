@@ -102,8 +102,25 @@ class Cash_Controller extends AdminController {
 		$this->v->set_tplname('mod_cash_detail');
 		$this->nav_second = 'cash';
 		
+		$cash_id = $request->arg(1);
 		$backurl = $request->get('backurl','');
 		$this->v->assign('backurl', $backurl);
+		
+		$order_list = [];
+		$total_commision = 0.00;
+		$exUC =  UserCashing::load($cash_id);
+		if ($exUC->is_exist()) {
+			$exUC->state_txt = Cash_Model::stateTxt($exUC->state);
+			$exUC->is_pass_auto = in_array($exUC->state, [UserCashing::STATE_NOPASS_AUTOCHECK,UserCashing::STATE_SUBMIT_MANUALCHECK,UserCashing::STATE_NOPASS_MANUALCHECK,UserCashing::STATE_PASS_MANUALCHECK]) ? false : true;
+			
+			$order_list = Cash_Model::getCashingOrderList($exUC->commision_ids);
+			foreach ($order_list AS $it) {
+				$total_commision += $it['commision'];
+			}
+		}
+		$this->v->assign('userCash', $exUC);
+		$this->v->assign('order_list', $order_list);
+		$this->v->assign('total_commision', $total_commision);
 		
 		$response->send($this->v);
 	}

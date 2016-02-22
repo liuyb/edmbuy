@@ -1,9 +1,64 @@
 <!--{include_file name="_smenu_cash.htm"}-->
+<style>
+.frmTable { font-size: 13px; }
+.frmTable .ht { color: #666; }
+.frmTable .c1,.frmTable .c2 { text-align: left;width: 30%; }
+.oListTb th { background-color: #eee;padding: 4px 0;text-align: center;border:1px solid #ccc; }
+.oListTb td { border:1px solid #ccc;text-align: center; }
+</style>
 
 <section id="ifr-main" class="ifr-main">
 
 <!-- 页面导航 -->
 <div class="breadcrumb">当前位置：<span>提现管理</span>&nbsp;&gt;&nbsp;<a href="#<!--{$backurl}-->" class="oplink hashreq">提现列表</a>&nbsp;&gt;&nbsp;<span>提现详情</span></div>
 
+<div class="dtnav"></div>
+<div class="dtContent">
+  <form name="cash_detail"  action="" method="post" id="cash_detail" onsubmit="return false;">
+    <table class="frmTable">
+      <tbody>
+        <tr>
+          <td class="c1"><em class="ht">提现订单编号：</em><!--{$userCash->cashing_no}--></td>
+          <td class="c2"><em class="ht">订单提交时间：</em><!--{trans_time time=$userCash->apply_time is_real=1}--></td>
+          <td class="c3"><em class="ht">提现状态：</em><!--{$userCash->state_txt}--></td>
+        </tr>
+        <tr>
+          <td class="c1"><em class="ht">提现用户：</em><!--{$userCash->user_nick}--></td>
+          <td class="c2" colspan="2"><em class="ht">手机号：</em><!--{$userCash->user_mobile}--></td>
+        </tr>
+        <tr>
+          <td class="c1" colspan="3"><em class="ht">提现账户信息：</em><!--{$userCash->bank_name}-->&nbsp;&nbsp;<!--{$userCash->bank_branch}-->&nbsp;&nbsp;<!--{$userCash->bank_no}-->&nbsp;&nbsp;<!--{$userCash->bank_uname}--></td>
+        </tr>
+        <tr>
+          <td class="c1"><em class="ht">提现金额：</em><!--{$userCash->cashing_amount}--></td>
+          <td class="c2" colspan="2"><em class="ht">系统自动审核状态：</em><!--{if $userCash->is_pass_auto}--><span style="color:green">通过</span><!--{else}--><span style="color:red">未通过</span><!--{/if}--></td>
+        </tr>
+        <tr>
+          <td class="c1" colspan="3"><em class="ht">实际到账：</em><!--{$userCash->actual_amount}-->（实际到账金额 = 申请提现金额  -  个人所得税  -  手续费）</td>
+        </tr>
+        <tr>
+          <td class="c1" colspan="3"><em class="ht">提现失败原因：</em><!--{$userCash->remark}--></td>
+        </tr>
+        <tr>
+          <td class="c1" colspan="3"><em class="ht">佣金总额：</em><!--{$total_commision}--></td>
+        </tr>
+        <tr>
+          <td class="c1" colspan="3">
+            <table class="frmTable oListTb">
+              <tr><th>订单编号</th><th>订单金额</th><th>佣金</th><th>支付交易号</th><th>支付方式</th><th>订单检测状态</th></tr>
+            <!--{foreach from=$order_list item=it}-->
+              <tr><td><!--{$it.order_sn}--></td><td><!--{$it.order_amount}--></td><td><!--{$it.commision}--></td><td><!--{$it.pay_trade_no}--></td><td><!--{$it.pay_name}--></td>
+              <td><!--{if $it.pay_trade_no}--><em style="color:green">有效订单</em><!--{else}--><em style="color:red">无效订单</em><!--{/if}--></td>
+              </tr>
+            <!--{foreachelse}-->
+              <tr><td colspan="6" class="empty">没有订单记录</td></tr>  
+            <!--{/foreach}-->
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
 
 </section>
