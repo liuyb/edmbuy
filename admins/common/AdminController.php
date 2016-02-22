@@ -6,6 +6,10 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
+define('DAY_SEP', ' ');
+define('DAY_BEGIN', DAY_SEP.'00:00:00');
+define('DAY_END',   DAY_SEP.'23:59:59');
+
 class AdminController extends Controller {
 	
 	protected $nav        = 'sy';

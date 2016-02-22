@@ -84,7 +84,7 @@ class Partner_Model extends Model {
      * 佣金收入 => 状态
      */
     static function getCommisionIncome($uid){
-        $sql = "select ifnull(sum(commision),0) as commision, state from shp_user_commision where user_id = %d group by state";
+        $sql = "SELECT SUM(`commision`) as commision,`state` FROM `shp_user_commision` WHERE `user_id` = %d AND `state`>=0 GROUP BY `state`";
         $row = D()->query($sql, $uid)->fetch_array_all();
         return $row;
     }

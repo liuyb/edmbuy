@@ -7,7 +7,14 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 class UserCommision extends StorageNode {
-
+	
+	//佣金状态
+	const STATE_INVALID   =-1;  //无效
+	const STATE_INACTIVE  = 0;  //未生效
+	const STATE_ACTIVE    = 1;  //已生效，但未提现
+	const STATE_CASHED    = 2;  //已生效，且已提现
+	const STATE_LOCKED    = 3;  //操作锁定中
+	
 	//分成比例设定
 	static $share_ratio = [
 			'0' => PLATFORM_COMMISION,  //平台分成比例
@@ -117,6 +124,79 @@ class UserCommision extends StorageNode {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 获取用户的各种状态的佣金收入
+	 * @param integer $uid
+	 * @param integer $state
+	 * @return mixed(float|array|bool)
+	 */
+	static function get_commision_income($uid, $state = NULL)
+	{
+		$table = self::table();
+		$sql  = "SELECT SUM(`commision`) AS commision,`state` FROM {$table} WHERE `user_id` = %d AND `state`>=0 GROUP BY `state`";
+		$list = D()->query($sql, $uid)->fetch_array_all();
+		$ret  = [
+				self::STATE_INACTIVE => 0.00,
+				self::STATE_ACTIVE   => 0.00,
+				self::STATE_CASHED   => 0.00,
+				self::STATE_LOCKED   => 0.00
+		];
+		if (!empty($list)) {
+			foreach ($list AS $it) {
+				$ret[$it['state']] = $it['commision'];
+			}
+		}
+		return isset($state) ? (isset($ret[$state]) ? $ret[$state] : false) : $ret;
+	}
+	
+	/**
+	 * 获取用户可提现记录ID集合
+	 * @param integer $uid
+	 * @return array
+	 */
+	static function get_active_commision_ids($uid) {
+		$table = self::table();
+		$sql  = "SELECT `rid` FROM {$table} WHERE `user_id` = %d AND `state`=%d ORDER BY `rid` ASC"; //加入ORDER BY是为了确保顺序跟值完全一样
+		$rids = D()->query($sql, $uid, self::STATE_ACTIVE)->fetch_column('rid');
+		return $rids;
+	}
+	
+	/**
+	 * 获取用户当前可提现金额数
+	 * @param integer $uid
+	 * @return double
+	 */
+	static function get_active_commision($uid) {
+		$table = self::table();
+		$sql  = "SELECT SUM(`commision`) AS commision FROM {$table} WHERE `user_id` = %d AND `state`=%d";
+		$commision = D()->query($sql, $uid, self::STATE_ACTIVE)->result();
+		return $commision;
+	}
+	
+	/**
+	 * 更改佣金记录状态
+	 * @param string  $record_ids  记录ID字符串
+	 * @param integer $state_to    要变更的状态
+	 * @return boolean
+	 */
+	static function change_state($record_ids, $state_to) {
+		if (empty($record_ids)) return false;
+		D()->query("UPDATE ".self::table()." SET `state`=%d,`state_time`=%d WHERE `rid` IN(%s)",
+		           $state_to, simphp_time(), $record_ids);
+		return D()->affected_rows()==1 ? true : false;
+	}
+	
+	/**
+	 * 
+	 * @param string $record_ids
+	 * @return number
+	 */
+	static function count_commision($record_ids) {
+		if (empty($record_ids)) return 0;
+		$count = D()->query("SELECT SUM(`commision`) AS total_commision FROM ".self::table()." WHERE `rid` IN(%s)", $record_ids)->result();
+		return $count ? : 0;
 	}
 	
 }

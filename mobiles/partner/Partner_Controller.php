@@ -93,19 +93,30 @@ class Partner_Controller extends MobileController {
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);
 	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
 	    $Incomes = Partner_Model::getCommisionIncome($uid);
-	    $inactiveIncome = '0.00';
-	    $totalIncome = '0.00';
+	    $inactiveIncome = 0.00;
+	    $activeIncome   = 0.00;
+	    $cashedIncome   = 0.00;
+	    $totalIncome    = 0.00;
 	    foreach ($Incomes as $item){
-	        if(Partner::COMMISSION_VALID == $item['state']){
-	            $totalIncome = $item['commision'];
-	        }else if(Partner::COMMISSION_INVALID == $item['state']){
-	            $inactiveIncome = $item['commision'];
+	        if($item['state'] >= UserCommision::STATE_ACTIVE){ //总收入
+	          $totalIncome += $item['commision'];
+	        }
+	        if(UserCommision::STATE_INACTIVE == $item['state']){ //未生效
+	          $inactiveIncome = $item['commision'];
+	        }
+	        elseif (UserCommision::STATE_ACTIVE == $item['state']) { //已生效，未提现
+	        	$activeIncome = $item['commision'];
+	        }
+	        elseif (UserCommision::STATE_CASHED == $item['state']) { //已生效，已提现
+	        	$cashedIncome = $item['commision'];
 	        }
 	    }
 	    $ret = ["firstLevelCount" => $firstLevelCount, 
 	            "secondLevelCount" => $secondLevelCount,
 	            "thirdLevelCount" => $thirdLevelCount,
 	            "inactiveIncome" => $inactiveIncome,
+	            "activeIncome" => $activeIncome,
+	            "cashedIncome" => $cashedIncome,
 	            "totalIncome" => $totalIncome
 	    ];
 	    $response->sendJSON($ret);

@@ -63,7 +63,7 @@ class Tpl extends TplBase {
   public static function trans_time($params)
   {
     $time 	   = $params['time'];
-    if (!$time) return '-';
+    if (!$time) return '--';
     $is_real   = isset($params['is_real']) ? $params['is_real'] : false;
     $just_date = isset($params['just_date']) ? $params['just_date'] : false;
   
@@ -117,6 +117,12 @@ class Tpl extends TplBase {
       }
     }
     return $result;
+  }
+  
+  public static function encodeurl($params, $tpl = NULL)
+  {
+  	$str = isset($params['str']) ? $params['str'] : '';
+  	return $str ? rawurlencode($str) : '';
   }
   
   public static function include_pager($params, $tpl = NULL)

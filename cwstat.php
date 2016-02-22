@@ -27,8 +27,39 @@ if (!in_array($type, [0,1,2])) {
 	$type = 0;
 }
 
-$from_date = '';
-$to_date   = '2016-01-31';
+//获取统计时间
+$from = $request->get('from', '');
+$to   = $request->get('to',   '');
+$from_time = 0;
+$to_time   = 0;
+if (strlen($from)==10 && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from)) {
+	$from_time = strtotime($from.DAY_BEGIN);
+}
+if (strlen($to)==10 && preg_match('/^\d{4}-\d{2}-\d{2}$/', $to)) {
+	$to_time   = strtotime($to.DAY_END);
+}
+
+$filename  = SIMPHP_ROOT . '/var/tmp/CWSTAT_TYPE'.$type.'_%s.csv';
+$from_date = $from_time ? date('Y-m-d', $from_time) : '';
+$to_date   = $to_time   ? date('Y-m-d', $to_time)   : '';
+//$to_date   = '2016-01-31';
+$stat_time_text = '';
+if (!$from_time && !$to_time) {
+	$stat_time_text = '全部记录';
+	$filename  = sprintf($filename, 'ALL');
+}
+elseif ($from_time && !$to_time) {
+	$stat_time_text = date('Y-m-d H:i:s', $from_time) . ' 起至今';
+	$filename  = sprintf($filename, 'FROM'.$from);
+}
+elseif (!$from_time && $to_time) {
+	$stat_time_text = '截止至 '.date('Y-m-d H:i:s', $to_time);
+	$filename  = sprintf($filename, 'TO'.$to);
+}
+else {
+	$stat_time_text = '从 '.date('Y-m-d H:i:s', $from_time) . ' 起至 '.date('Y-m-d H:i:s', $to_time);
+	$filename  = sprintf($filename, 'FROM'.$from.'TO'.$to);
+}
 
 if (0==$type) { //显示链接
 	$html  =<<<HEREDOC
@@ -46,8 +77,8 @@ li { padding: 5px 10px; }
 <body>
 	<h1>益多米财务数据下载</h1>
 	<ul>
-	  <li><a href="?type=1">月度汇总统计(截止至 {$to_date} 23:59:59)</a></li>
-	  <li><a href="?type=2">半月结算给供应商统计(截止至 {$to_date} 23:59:59)</a></li>
+	  <li><a href="?type=1&from={$from_date}&to={$to_date}">汇总统计(统计时间：{$stat_time_text})</a></li>
+	  <li><a href="?type=2&from={$from_date}&to={$to_date}">结算给供应商统计(统计时间：{$stat_time_text})</a></li>
 	</ul>
 </body>
 </html>
@@ -56,14 +87,12 @@ HEREDOC;
 	exit;
 }
 
-$filename = SIMPHP_ROOT . '/var/tmp/cwstat_type_'.$type.'_%s.csv';
 $csv = '';
 
-if (1==$type) { //月度汇总统计
+if (1==$type) { //汇总统计
 	
-	$from_time = ThisFn::dtime2gmtime('');
-	$to_time   = ThisFn::dtime2gmtime($to_date.DAY_END);
-	$filename  = sprintf($filename, $to_date);
+	$from_time = $from_time ? simphp_gmtime($from_time) : 0;
+	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
 	$csv = "商家名称,商家ID,平台总收入,商家收入,产生总佣金,米商佣金收入,平台佣金收入".CSV_LN;
 	
@@ -92,17 +121,16 @@ if (1==$type) { //月度汇总统计
 			$totalMerchantIncome += $merchant_income;
 			$totalCommision += $total_commistion;
 		}
-		$csv .= '小结'.CSV_SEP.'--'.CSV_SEP.$totalIncome.CSV_SEP.$totalMerchantIncome.CSV_SEP.$totalCommision.CSV_SEP.$totalMsIncome.CSV_SEP.Fn::money_yuan($totalCommision-$totalMsIncome).CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.$totalIncome.CSV_SEP.$totalMerchantIncome.CSV_SEP.$totalCommision.CSV_SEP.$totalMsIncome.CSV_SEP.Fn::money_yuan($totalCommision-$totalMsIncome).CSV_LN;
 	}
 	
 }
-elseif (2==$type) { //半月结算给供应商统计
+elseif (2==$type) { //结算给供应商统计
 
-	$from_time = ThisFn::dtime2gmtime('');
-	$to_time   = ThisFn::dtime2gmtime($to_date.DAY_END);
-	$filename  = sprintf($filename, $to_date);
+	$from_time = $from_time ? simphp_gmtime($from_time) : 0;
+	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,订单金额,进货价(商家收入),产生佣金,订单时间".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantOrderDetail($from_time, $to_time);
@@ -112,12 +140,12 @@ elseif (2==$type) { //半月结算给供应商统计
 		$totalCommision    = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_LN;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_LN;
 			$totalOrderAmount += $it['money_paid'];
 			$totalIncomePrice += $it['income_price'];
 			$totalCommision   += $it['commision'];
 		}
-		$csv .= '小结'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.CSV_LN;
 	}
 	
 }
@@ -242,7 +270,7 @@ WHERE oa.`merchant_ids`='%s' AND oa.`pay_status`=2 AND oa.`is_separate`=0
 		if ($to_time) {
 			$where .= " AND o.`pay_time`<=".$to_time;
 		}
-		$sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`
+		$sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`
 FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id
 WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
 ORDER BY merchant_id DESC, order_id ASC";

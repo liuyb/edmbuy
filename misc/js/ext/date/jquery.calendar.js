@@ -67,8 +67,8 @@ $.fn.cld=function(options){
 			for(var j=1;j<8;j++){				
 				var tDay=Number(i*7)+Number(j)-Number(vWeek)+1;
 				if(tDay<1||tDay>vDayNum) carArr.push("<td width='40'>&nbsp;</td>");
-				else if(tDay==vDay) carArr.push("<td width='40'><a href='#this' id='cur' ipt='"+vipt+"'>"+tDay+"</a></td>");
-				else carArr.push("<td width='40'><a href='#this' ipt='"+vipt+"'>"+tDay+"</a></td>");
+				else if(tDay==vDay) carArr.push("<td width='40'><a href='javascript:;' id='cur' ipt='"+vipt+"'>"+tDay+"</a></td>");
+				else carArr.push("<td width='40'><a href='javascript:;' ipt='"+vipt+"'>"+tDay+"</a></td>");
 			}
 			carArr.push("</tr>");
 		}

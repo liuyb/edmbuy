@@ -1,6 +1,105 @@
 <!--{include_file name="_smenu_cash.htm"}-->
+<script type="text/javascript" src="/misc/js/ext/date/jquery.calendar.js"></script>
+<link href="/misc/js/ext/date/calendars.css" rel="stylesheet" type="text/css" />
+<style>
+.inpshort {width: 155px;}
+</style>
 <section id="ifr-main" class="ifr-main">
 
-提现管理
+<!-- 页面导航 -->
+<div class="breadcrumb">当前位置：<span>提现管理</span>&nbsp;&gt;&nbsp;<span>提现列表</span></div>
+
+<!-- search region -->
+<div class="boxSearch">
+  <form name="searchform" id="searchform" action="/pay" method="post" onsubmit="return listsearch(this);">
+    &nbsp;&nbsp;<input type="text" name="from_date" value="<!--{$searchinfo.from_date}-->" class="inptxt inpshort" id="search_from_date" placeholder="开始日期(YYYY-MM-DD)" bj="cBj" />&nbsp;&nbsp;--
+     &nbsp;&nbsp;<input type="text" name="to_date" value="<!--{$searchinfo.to_date}-->" class="inptxt inpshort" id="search_to_date" placeholder="结束日期(YYYY-MM-DD)" bj="cBj" />
+     &nbsp;&nbsp;<input type="submit" name="btnsubmit" value="搜 索" class="frmbtn" />
+     &nbsp;&nbsp;<a href="#/cash" class="oplink">清除条件</a>
+  </form>
+<script type="text/javascript">
+function listsearch(form) {
+  window.location.hash = '#/cash,fdate='+$('#search_from_date').val().trim()+'&tdate='+$('#search_to_date').val().trim();
+  return false;
+}
+$(document).ready(function(){
+  $("#search_from_date").cld();
+  $("#search_to_date").cld();
+});
+</script>
+</div>
+
+<!-- list nav region -->
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  <!-- 
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>批量转账</span>
+      </a>
+    </div>
+  </div>
+   -->
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+</div>
+
+<!-- list content region -->
+<div class="listContent">
+  <table class="listTable">
+  <tr class="rh">
+    <th class="c1"><input type="checkbox" name="chkall" value="<!--{$recordnum}-->" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+    <th class="c2 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=cashing_id">提现订单号<!--{sortfield field='cashing_id'}--></th>
+    <th class="c3">支付订单号</th>
+    <th class="c4 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=user_id">姓名<!--{sortfield field='user_id'}--></th>
+    <th class="c5">手机号</th>
+    <th class="c6">持卡人</th>
+    <th class="c7">提现账号</th>
+    <th class="c8 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=cashing_amount">提现金额<!--{sortfield field='cashing_amount'}--></th>
+    <th class="c9 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=actual_amount">实际到账<!--{sortfield field='actual_amount'}--></th>
+    <th class="c10 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=apply_time">提交时间<!--{sortfield field='apply_time'}--></th>
+    <th class="c11 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=payment_time">成功时间<!--{sortfield field='payment_time'}--></th>
+    <th class="c12">提现状态</th>
+    <th class="cl">操作</th>
+  </tr>
+  <!--{foreach from=$recordList item=it}-->
+  <tr class="rb">
+    <td class="c1"><input type="checkbox" name="cashing_id[]" value="1" id="cashing_id_<!--{$it.cashing_id}-->" class="chkrid"/>&nbsp;<label for="cashing_id_<!--{$it.cashing_id}-->"><!--{$it.cashing_id}--></label></td>
+    <td class="c2"><!--{$it.cashing_no}--></td>
+    <td class="c3"><!--{$it.payment_no}--></td>
+    <td class="c4"><!--{$it.user_nick}-->(<!--{$it.user_id}-->)</td>
+    <td class="c5"><!--{$it.user_mobile}--></td>
+    <td class="c6"><!--{$it.bank_uname}--></td>
+    <td class="c7"><!--{$it.bank_name}--><br/><!--{$it.bank_no}--></td>
+    <td class="c8"><!--{$it.cashing_amount}--></td>
+    <td class="c9"><!--{$it.actual_amount}--></td>
+    <td class="c10"><!--{trans_time time=$it.apply_time is_real=1}--></td>
+    <td class="c11"><!--{trans_time time=$it.payment_time is_real=1}--></td>
+    <td class="c12"><!--{$it.state_txt}--></td>
+    <td class="cl">
+      <a href="#/cash/<!--{$it.cashing_id}-->/detail,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">查看详情</a>
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="13">暂没有相应的记录</td></tr>
+  <!--{/foreach}-->
+  </table>
+</div>
 
 </section>
+

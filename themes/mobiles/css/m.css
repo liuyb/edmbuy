@@ -34,6 +34,7 @@ a { color: #333; }
 a:hover { text-decoration: none; }
 a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
 a.btna { display: block;height: 100%; }
+a.blka { display: block; }
 .cursor { cursor: pointer; }
 .hwspeed {
 	transform: translate3d(0, 0, 0);

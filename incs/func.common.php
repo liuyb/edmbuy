@@ -658,6 +658,7 @@ function headscript()
   $ctxpath = C('env.contextpath');
   $sesstoken=sess_token();
   $rendermode = View::RENDER_MODE_DEFAULT;
+  $debug_list = C('env.debug_white_list');
   
   $script  = '<script type="text/javascript">';
   $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
@@ -668,6 +669,7 @@ function headscript()
   			$script .= 'gUser.'.$k."={$v};";
   		}
   	}
+  	$script .= 'gUser.is_debug_user='.(in_array($user->uid, $debug_list) ? 'true;' : 'false;');
   }
   $script .= '</script>';
   

@@ -156,14 +156,7 @@ class Wxpay {
   					$ret['msg'] = '返回订单号跟提供订单号不一致';
   				}
   				else {
-  					$payment_no     = $wxpay_ret['payment_no'];
-  					$payment_time   = $wxpay_ret['payment_time'];
-  					
-  					$saveUCash = new UserCashing($exUCash->cashing_id);
-  					$saveUCash->payment_no   = $payment_no;
-  					$saveUCash->payment_time = strtotime($payment_time);
-  					$saveUCash->save(Storage::SAVE_UPDATE);
-  					$ret = ['code'=>'SUCC','msg'=>'付款成功'];
+  					$ret = ['code'=>'SUCC','msg'=>'付款成功','payment_no'=>$wxpay_ret['payment_no'],'payment_time'=>strtotime($wxpay_ret['payment_time'])];
   				}
   			}
   			else {

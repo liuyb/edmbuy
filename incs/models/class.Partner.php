@@ -15,11 +15,6 @@ class Partner extends StorageNode {
     const Partner_LEVEL_2 = 2; //二层
     const Partner_LEVEL_3 = 3; //三层
     
-    //生效佣金状态
-    const COMMISSION_VALID = 1;
-    //未生效佣金状态
-    const COMMISSION_INVALID = 0;
-    
     protected static function meta() {
         return array();
     }

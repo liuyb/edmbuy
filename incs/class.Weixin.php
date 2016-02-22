@@ -1024,7 +1024,7 @@ class WeixinJSSDK {
   	$debugWhiteList = C('env.debug_white_list');
   	$signPackage = $this->getSignPackage();
   	$jsApiStr    = "'" . implode("','", $jsApiList) . "'";
-  	$debugStr    = in_array($GLOBALS['user']->uid, $debugWhiteList) ? 'true' : 'false';
+  	$debugStr    = 0&&in_array($GLOBALS['user']->uid, $debugWhiteList) ? 'true' : 'false';
   	$now         = time();
   
   	$jsfile = '<script type="text/javascript" src="'.self::$sdkFile.'"></script>';
