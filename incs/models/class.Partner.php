@@ -114,7 +114,7 @@ class Partner extends StorageNode {
     static function findCommisionByLevelCount($uid, $level, $status){
         $column = self::outputCommisionCountQueryColumn();
         $sql = self::constructCommissionSql($column, FALSE);
-        $count = D()->query($sql, $uid, $level, $status)->fetch_array();
+        $count = D()->query($sql, $uid, $level, (1==$status ? '1,2' : $status))->fetch_array();
         return $count;
     }
     
@@ -124,7 +124,7 @@ class Partner extends StorageNode {
     static function findCommisionByLevelList($uid, $level, $status, PagerPull $pager){
         $column = self::outputCommisionListQueryColumn();
         $sql = self::constructCommissionSql($column, TRUE);
-        $rows = D()->query($sql, $uid, $level, $status, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $rows = D()->query($sql, $uid, $level, (1==$status ? '1,2' : $status), $pager->start, $pager->realpagesize)->fetch_array_all();
         foreach ($rows AS &$r) {
         	$r['paytime'] = date("Y-m-d\n H:i:s",simphp_gmtime2std($r['paytime']));
         }
@@ -132,7 +132,7 @@ class Partner extends StorageNode {
     }
     
     static function constructCommissionSql($column, $limit){
-        $sql = "select $column from shp_user_commision c where c.user_id = %d and parent_level = %d and state = %d ";
+        $sql = "select $column from shp_user_commision c where c.user_id = %d and parent_level = %d and state IN(%s) ";
         if($limit == true){
             $sql .= " order by paid_time desc limit %d,%d";
         }

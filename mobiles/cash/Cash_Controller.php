@@ -165,7 +165,7 @@ class Cash_Controller extends MobileController {
 			if (1==$step) { //提交提现申请
 				
 				$exUBank = UserBank::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('bank_code', $bank_code)));
-				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids)));
+				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids), new Query('state', UserCashing::STATE_FAIL,'<')));
 				if (!$exUCash->is_exist()) { //不存在才需要新建记录
 					$cashing_no = UserCashing::gen_cashing_no();
 					$nUC = new UserCashing();
@@ -239,7 +239,11 @@ class Cash_Controller extends MobileController {
 						else {
 							//设置提现记录状态为“提现失败”
 							UserCashing::change_state($cashing_id, UserCashing::STATE_FAIL, $wx_ret['msg']);
-							$ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>$wx_ret['msg']];
+							
+							//恢复佣金记录状态为“已生效”
+							UserCommision::change_state($commision_ids, UserCommision::STATE_ACTIVE);
+							
+							$ret = ['flag'=>'SUCC','msg'=>'提现失败','detail'=>$wx_ret['msg']];
 						}
 					}
 					else {

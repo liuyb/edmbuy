@@ -146,7 +146,7 @@ class Wxpay {
   		$input->SetOpenid($exUCash->bank_no);
   		$input->SetCheck_name(WxPayEnterprisePay::CHECK_NAME_OPTION);
   		$input->SetUser_name($exUCash->bank_uname);
-  		$input->SetAmount($exUCash->actual_amount);
+  		$input->SetAmount(intval($exUCash->actual_amount*100)); //单位是分
   		$input->SetDesc($desc.'('.$exUCash->user_id.','.$exUCash->user_nick.','.$exUCash->user_mobile.')');
   		
   		$wxpay_ret = WxPayApi::enterprisePay($input);

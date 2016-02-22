@@ -608,8 +608,10 @@ class WxPayApi
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
 		$startTimeStamp = self::getMillisecond();//请求开始时间
+		//trace_debug('WXPAY_API_ENTERPRISE_PAY', $xml);
 		$response = self::postXmlCurl($xml, $url, true, $timeOut);
 		$result = WxPayResults::Init($response);
+		//trace_debug('WXPAY_API_ENTERPRISE_PAY_RESPONSE', $result);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 	
 		return $result;

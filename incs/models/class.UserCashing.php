@@ -130,7 +130,7 @@ class UserCashing extends StorageNode {
 		if (!is_null($uid)) {
 			$where = "AND `user_id`=%d";
 		}
-		$sql = "SELECT * FROM ".self::table()." WHERE 1 {$where} AND `state`>=0";
+		$sql = "SELECT * FROM ".self::table()." WHERE 1 {$where} AND `state`>=0 ORDER BY `cashing_id` DESC LIMIT 0,50";
 		$list= D()->query($sql, $uid)->fetch_array_all();
 		if (!empty($list)) {
 			foreach ($list AS &$it) {

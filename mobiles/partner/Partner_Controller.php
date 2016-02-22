@@ -98,7 +98,7 @@ class Partner_Controller extends MobileController {
 	    $cashedIncome   = 0.00;
 	    $totalIncome    = 0.00;
 	    foreach ($Incomes as $item){
-	        if($item['state'] >= UserCommision::STATE_ACTIVE){ //总收入
+	        if(in_array($item['state'], [UserCommision::STATE_ACTIVE,UserCommision::STATE_CASHED])){ //总收入
 	          $totalIncome += $item['commision'];
 	        }
 	        if(UserCommision::STATE_INACTIVE == $item['state']){ //未生效
