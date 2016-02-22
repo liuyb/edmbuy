@@ -43,7 +43,7 @@
 	</table>
 </div>
 <div class="order_list">
-	<?php if (!empty($merchant_goods)):
+	<?php $first_goods_id=0; if (!empty($merchant_goods)):
 	      $total_amount = 0;$total_goods = 0;
 	?>
 	<div class="order_tit">
@@ -53,7 +53,7 @@
 	</div>
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
-			<?php $first_goods_id=0; foreach ($merchant_goods['goods'] as $gd):
+			<?php foreach ($merchant_goods['goods'] as $gd):
 			 $total_amount = doubleval($total_amount) + doubleval($gd['goods_price']);
 			 ++$total_goods;
 			 if(!$first_goods_id) $first_goods_id = $gd['goods_id'];
@@ -145,7 +145,7 @@ $().ready(function(){
 		return_product(this);
 	});
 	$(".btn_rebuy_good").bind('click', function(){
-		window.location.href='<?php echo U('/item/'.$first_goods_id)?>';
+		window.location.href='<?php echo $first_goods_id ? (U('/item/'.$first_goods_id)) : 'javascript:;'?>';
 	});
 	$(".btn_confirm_shipped").bind('click', function(){
 		confirm_ship(this);
