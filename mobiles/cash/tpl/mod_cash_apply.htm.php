@@ -80,7 +80,7 @@ function fill_wxpay_uname() {
 
 <div class="apply_cash_wx">（微信钱包查看提现余额）</div>
 
-<button type="button" class="apply_cash_btn">立即提现</button>
+<button type="button" class="apply_cash_btn" id="apply_cash_btn">立即提现</button>
 
 <div class="apply_cash_tips"><span>提醒：</span>每笔提现扣除<?=$fee_rate_percent?>的手续费，个人所得税暂时由益多米平台承担。</div>
 
@@ -96,8 +96,9 @@ function fill_wxpay_uname() {
 <script>
 var ids  = '<?=$available_ids?>';
 var cash = '<?=$available_cash?>';
-$(document).on("click", ".apply_cash_btn", function(){
-	//showAlert("无法提现！", "可提现金额少于20元");
+$(document).on("click", "#apply_cash_btn", function(){
+	$(this).attr('disabled',true);
+	var _this = this;
 	showWaiting();
 	F.post('<?php echo U('cash/doapply','step=1')?>',{cashing_amount:cash,commision_ids:ids},function(ret){
 		setTimeout(function(){
@@ -106,6 +107,7 @@ $(document).on("click", ".apply_cash_btn", function(){
 				showAlert(ret.msg, ret.detail,'<?php echo U('cash/detail')?>');
 			}
 			else {
+				$(_this).attr('disabled',false);
 				showAlert(ret.msg, ret.detail);
 			}
 		}, 1000);
