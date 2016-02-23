@@ -669,7 +669,7 @@ function headscript()
   			$script .= 'gUser.'.$k."={$v};";
   		}
   	}
-  	$script .= 'gUser.is_debug_user='.(in_array($user->uid, $debug_list) ? 'true;' : 'false;');
+  	$script .= 'gUser.is_debug_user='.(empty($debug_list) || in_array($user->uid, $debug_list) ? 'true;' : 'false;');
   }
   $script .= '</script>';
   
