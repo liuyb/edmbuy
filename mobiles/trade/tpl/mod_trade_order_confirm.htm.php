@@ -76,7 +76,7 @@
 
 <div class="order-topay">
   <div class="row"><button class="btn btn-block btn-green" id="btn-wxpay" data-payid="2">微信安全支付</button></div>
-  <div class="row"><a class="btn btn-block btn-white" href="<?php echo U('trade/cart/list')?>">返回购物车修改</a></div>
+  <div class="row"><a class="btn btn-block btn-white" href="<?php echo U('trade/cart/list','noback=1')?>">返回购物车修改</a></div>
   <div class="row row-last">支付完成后，如需退换货请及时联系商家</div>
 </div>
 
