@@ -98,7 +98,7 @@
 
 
 <?php 
-    $cftime = $order->shipping_confirm_time;
+function is_cft_over_7ds($cftime){
     $cf_over_7ds = false;
     if($cftime){
         $diff = (time() - simphp_gmtime2std($cftime)) / 86400;
@@ -106,6 +106,8 @@
             $cf_over_7ds = true;
         }
     }
+    return $cf_over_7ds;
+}
 ?>
 <div class="order_type_btn">
 <!-- 未支付 （立即付款、取消订单）-->
@@ -120,12 +122,12 @@
 <?php elseif ($order->pay_status == PS_PAYED && in_array($order->shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART]) ): ?>
 <button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
 <button class="order_but_l btn_confirm_shipped" data-order_id="<?=$order_id?>">确认收货</button>
-<!-- 已支付已发货已确认收货（退货、继续购买） -->
-<?php elseif ($order->shipping_status == SS_RECEIVED && !$cf_over_7ds):?>
+<!-- 已支付已发货已确认收货 - 七天内支持退货（退货、继续购买） -->
+<?php elseif ($order->shipping_status == SS_RECEIVED && !is_cft_over_7ds($order->shipping_confirm_time)):?>
 <button class="order_but_l btn_refund_order" data-order_id="<?=$order_id?>">退货</button>
 <button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
-<!-- 签收7天后 GMT 时间判断 -->
-<?php elseif ($order->shipping_status == SS_RECEIVED && $cf_over_7ds):?>
+<!-- 其他-->
+<?php else:?>
 <button class="order_but_l btn_rebuy_good" data-order_id="<?=$order_id?>">继续购买</button>
 <?php endif;?>
 </div>
