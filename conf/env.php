@@ -40,7 +40,7 @@ return [
   	'shop' => 'http://edmshop.fxmapp.com',
   ],
   //debug白名单uid
-  'debug_white_list' => ['10001','109'],
+  'debug_white_list' => ['10001','109','104'],
   //'debug_white_list' => [],
   //上传文件保存目录 
   'picsavedir'=>'/a/',

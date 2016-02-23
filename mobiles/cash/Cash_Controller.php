@@ -234,20 +234,30 @@ class Cash_Controller extends MobileController {
 							//设置佣金记录状态为“已提现”
 							UserCommision::change_state($commision_ids, UserCommision::STATE_CASHED);
 							
+							//设置成功返回码
 							$ret = ['flag'=>'SUCC','msg'=>'提现成功','detail'=>'(微信钱包查看提现金额)'];
+							
+							//微信模板消息通知提现成功
+							WxTplMsg::cashing_success($user->openid, "您的提现已成功！\n请查看“微信钱包”明细以确认。", '有任何疑问，请联系客服。', U('cash/detail','',true), ['apply_money'=>strval($cashing_amount),'actual_money'=>strval($actual_amount),'apply_time'=>simphp_dtime('std',$nUC->apply_time),'succ_time'=>simphp_dtime('std',$cashing_data['payment_time']),'cashing_no'=>$cashing_no,'payment_no'=>$cashing_data['payment_no']]);
 						}
 						else {
+							$ret = ['flag'=>'SUCC','msg'=>'提现失败','detail'=>$wx_ret['msg']];
+							
 							//设置提现记录状态为“提现失败”
 							UserCashing::change_state($cashing_id, UserCashing::STATE_FAIL, $wx_ret['msg']);
 							
 							//恢复佣金记录状态为“已生效”
 							UserCommision::change_state($commision_ids, UserCommision::STATE_ACTIVE);
 							
-							$ret = ['flag'=>'SUCC','msg'=>'提现失败','detail'=>$wx_ret['msg']];
+							//微信模板消息通知提现失败
+							WxTplMsg::cashing_fail($user->openid, "您的提现失败！\n\n失败原因: ".$wx_ret['msg'], '有任何疑问，请联系客服。', U('cash/detail','',true), ['money'=>strval($cashing_amount),'time'=>simphp_dtime('std',$nUC->apply_time),'cashing_no'=>$cashing_no]);
 						}
 					}
 					else {
 						$ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>'生成提现记录失败'];
+
+						//微信模板消息通知提现失败
+						WxTplMsg::cashing_fail($user->openid, "您的提现失败！\n\n失败原因: 生成提现记录失败", '有任何疑问，请联系客服。', U('cash/detail','',true), ['money'=>strval($cashing_amount),'time'=>simphp_dtime('std',$nUC->apply_time),'cashing_no'=>$cashing_no]);
 					}
 				}
 				else { //存在对应的提现记录，则提示
