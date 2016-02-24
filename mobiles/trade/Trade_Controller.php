@@ -185,6 +185,7 @@ class Trade_Controller extends MobileController {
     }
     
     $mnav = $request->get('mnav', 0);
+    $noback = $request->get('noback', 0);
     if ($mnav) {
     	$this->nav_no    = 2;
     	$this->nav_flag1 = 'cart_mnav';
@@ -194,6 +195,9 @@ class Trade_Controller extends MobileController {
     }
     else {
     	$this->backurl = 'javascript:history.back();';
+    }
+    if ($noback) {
+    	$this->backurl = '/';
     }
     $this->v->assign('mnav', $mnav);
     

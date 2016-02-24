@@ -1910,12 +1910,13 @@ td.cash_td2 img {
 	margin: 8px 10px;
 }
 .click_more{
-	font-size:12px;
+	font-size:13px;
 	color:#666;
 	height:50px;
 	margin-bottom:50px;
 	line-height:50px;
 	text-align:center;
+	cursor:pointer;
 }
 .fk_b_list{
 	height:44px;
@@ -1992,19 +1993,148 @@ td.cash_td2 img {
 }
 /*2106-2-19 e*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*2106-2-23 s 98专区，茶酒专区*/
+.bg_prefe img{
+	width:100%;
+  	vertical-align: middle;	
+}
+.pre_h{
+ 	position: fixed;
+  	top: 7px;
+  	left: 10px;	
+	cursor:pointer;
+}
+.pre_s{
+ 	position: fixed;
+  	top: 7px;
+  	right: 50px;	
+	cursor:pointer;
+}
+.pre_m{
+ 	position: fixed;
+  	top: 7px;
+  	right: 10px;	
+	cursor:pointer;
+}
+.pre_li li a{
+	text-align: center;
+	padding-left:0;
+}
+.pro_list_info li{
+	background:#fff;
+	margin:10px;
+	position:relative;
+}
+.pro_list_info img{
+	width:120px;
+	height:120px;
+	vertical-align: middle;
+}
+.pro_info_l{
+	float:left;
+	width:120px;
+}
+.pro_info_r{
+	float:left; 
+	margin:0 7px;
+}
+.pro_info_t{
+  	overflow: hidden;
+  	-webkit-line-clamp: 1;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding:0;
+	margin:15px 0 8px;
+  	font-size: 13px;
+  	color: #333;
+  	line-height: 12px;	
+}
+.pro_info_i{
+  	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0;
+  	font-size: 12px;
+  	color: #999;
+}
+.pro_info_btn{
+	position: absolute;
+  	background: #ff6d14;
+  	width: 80px;
+ 	height: 25px;
+  	border-radius: 4px;
+  	cursor: pointer;
+  	color: #fff;
+  	font-size: 14px;	
+	bottom:15px;
+	right:7px;
+}
+.pro_info_p{
+	font-size:14px;
+	color:#ff6d14;
+	line-height: 14px;
+	margin:4px 0;
+}
+.pro_info_s{
+	font-size:12px;
+	color:#999;
+	line-height: 12px;
+	margin-bottom:5px;	
+}
+.tea_and_wine li{
+	background:#fff;
+	width:50%;
+	text-align:center;
+	float:left;
+	height:40px;
+	font-size:16px;
+	line-height:40px;
+	cursor:pointer;
+}
+.tw_on{
+	background:#7f4400 !important;
+	color:#fefefe;	
+}
+.tea_pro_list img{
+	width:100%;
+	margin-top:10px;
+	vertical-align:middle;
+}
+.tea_info_list li{
+	float:left;
+	background:#fff;
+	margin:10px 0 0 10px;
+}
+.tea_info_list img{
+	vertical-align:middle;
+}
+.other_w{
+	margin-bottom:0 !important;
+}
+.tea_info_title{
+	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+	padding:10px 5px 0;
+	font-size:14px;
+	color:#333;
+}
+.tea_info_price{
+	padding-left:5px;
+	padding-bottom:5px;
+}
+.tea_info_price span{
+	font-size:14px;
+	color:#ff6d14;
+	padding-right:10px;
+}
+.tea_info_price b{
+	font-size:10px;
+	color:#999;
+}
+/*2106-2-23 e*/
 
 
 

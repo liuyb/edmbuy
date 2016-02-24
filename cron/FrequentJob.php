@@ -17,6 +17,9 @@ class FrequentJob extends CronJob {
 		
 		// 批量更新收货时间
 		$this->upShippingConfirmTime();
+		
+		// 批量更新佣金状态变化时间
+		$this->upCommisionState();
 	}
 	
 	/**
@@ -64,8 +67,8 @@ WHERE a.user_id=b.parent_id";
 		$the_time = simphp_gmtime() - 86400*7;
 		$now_time = simphp_time();
 		$sql = "UPDATE `shp_user_commision` uc, `shp_order_info` o
-SET uc.`state`=1 AND uc.`state_time`={$now_time}
-WHERE o.`pay_status`=".PS_PAYED." AND o.`shipping_status`=".SS_SHIPPED." AND o.`shipping_confirm_time`<{$the_time} AND o.`shipping_confirm_time`>0 AND uc.`state`=0";
+SET uc.`state`=1, uc.`state_time`={$now_time}
+WHERE o.`pay_status`=".PS_PAYED." AND o.`shipping_status`=".SS_RECEIVED." AND o.`shipping_confirm_time`<{$the_time} AND o.`shipping_confirm_time`>0 AND uc.`state`=0 AND uc.order_id=o.order_id";
 		D()->query($sql);
 		$this->log("OK. affected rows: ".D()->affected_rows());
 	}

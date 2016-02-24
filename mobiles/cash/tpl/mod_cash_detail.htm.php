@@ -48,7 +48,7 @@
 			<?php endif;?>
 					</td>
 					<td>
-						<h1>银行到账</h1>
+						<h1>微信钱包到账</h1>
 						<p style="width: 100px;">
 			<?php if(1==$cash['state_type']):?>
 			预计 <?php echo nl2br(date("Y-m-d\nH:i:s",$cash['apply_time']+86400*2))?>
