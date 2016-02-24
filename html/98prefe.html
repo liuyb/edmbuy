@@ -1,0 +1,96 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<body style="background:#da284c;">
+
+<style>
+
+</style>
+
+<div class="bg_prefe">
+	<img src="./img/98_02.png">
+	<span class="pre_h"><img src="./img/home.png" style="width:30px;"></span>
+	<span class="pre_s"><img src="./img/shopping00.png" style="width:30px;"></span>
+	<span class="pre_m"><img src="./img/more.png" style="width:30px;"></span>
+</div>
+<div class="p_detail_menulist cursor" style="display:none;">
+	<span class="p_detail_jian"></span>
+	<ul class="p_detail_menu pre_li">
+		<li><a href="teawine_prefe.html">茶/酒</a></li>
+		<li><a href="javascript:;">水果</a></li>
+		<li><a href="javascript:;">食品</a></li>
+		<li><a href="dress_prefe.html">服装</a></li>
+	</ul>
+</div>
+
+<div class="pro_list_info">
+	<ul>
+		<li>
+			<div class="pro_info_l"><img src="./img/xie.png"></div>
+			<div class="pro_info_r">
+				<p class="pro_info_t">万吨红富士“滞销”帮</p>
+				<p class="pro_info_i">月销千双，应季情侣经典款性价比 高防滑耐磨，冬季必备！</p>
+				<p class="pro_info_p">￥159.00</p>
+				<p class="pro_info_s">比网上省50元</p>
+				<p><button class="pro_info_btn">立即购买</button></p>
+			</div>
+			<div class="clear"></div>
+		</li>
+		<li>
+			<div class="pro_info_l"><img src="./img/xie.png"></div>
+			<div class="pro_info_r">
+				<p class="pro_info_t">万吨红富士“滞销”帮</p>
+				<p class="pro_info_i">月销千双，应季情侣经典款性价比 高防滑耐磨，冬季必备！</p>
+				<p class="pro_info_p">￥159.00</p>
+				<p class="pro_info_s">比网上省50元</p>
+				<p><button class="pro_info_btn">立即购买</button></p>
+			</div>
+			<div class="clear"></div>
+		</li>
+		<li>
+			<div class="pro_info_l"><img src="./img/xie.png"></div>
+			<div class="pro_info_r">
+				<p class="pro_info_t">万吨红富士“滞销”帮</p>
+				<p class="pro_info_i">月销千双，应季情侣经典款性价比 高防滑耐磨，冬季必备！</p>
+				<p class="pro_info_p">￥159.00</p>
+				<p class="pro_info_s">比网上省50元</p>
+				<p><button class="pro_info_btn">立即购买</button></p>
+			</div>
+			<div class="clear"></div>
+		</li>
+	</ul>
+</div>
+
+<div class="mask_menu cursor"></div>
+
+<script>
+var _width = $(".pro_list_info li").width() - 134;
+$(".pro_info_r").width(_width);
+
+//菜单开启
+$(".pre_m").on("click",function(){
+	$(".p_detail_menulist,.mask_menu").show();
+})
+
+//菜单关闭
+$(".mask_menu").live("click", function(){
+	$(".p_detail_menulist,.mask_menu").hide();
+});
+</script>
+
+
