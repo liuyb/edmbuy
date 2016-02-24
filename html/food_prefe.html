@@ -23,7 +23,7 @@
 </style>
 
 <div class="bg_prefe">
-	<img src="./img/tea_wine.png">
+	<img src="./img/dress.png">
 	<span class="pre_h"><img src="./img/home.png" style="width:30px;"></span>
 	<span class="pre_s"><img src="./img/shopping00.png" style="width:30px;"></span>
 	<span class="pre_m"><img src="./img/more.png" style="width:30px;"></span>
@@ -33,30 +33,24 @@
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu pre_li">
 		<li><a href="98prefe.html">98专区</a></li>
+		<li><a href="teawine_prefe.html">茶/酒</a></li>
+		<li><a href="dress_prefe.html">服装</a></li>
 		<li><a href="fruit_prefe.html">水果</a></li>
-		<li><a href="food_prefel.html">食品</a></li>
-		<li><a href="dress_prefe.html">服装</a></li
 	</ul>
 </div>
 
-<div class="tea_and_wine">
+<div class="dress_title">
 	<ul>
-		<li class="tw_on" id="tit1" onclick="f(1)">茶中臻品</li>
-		<li id="tit2" onclick="f(2)">酒香四溢</li>
+		<li id="tit1" onclick="f(1)"><p class="food_bg_r food_bg_b">进口食品</p></li>
+		<li id="tit2" onclick="f(2)"><p class="specialty_bg_b">地方特产</p></li>
+		<li id="tit3" onclick="f(3)"><p class="sanck_bg_b">休闲食品</p></li>
+		<span class="lineone"></span>
+		<span class="linetwo"></span>
 		<div class="clear"></div>
 	</ul>
 </div>
 
 <div class="teawinecomment" id="list1">
-	<div class="tea_pro_list">
-		<a href="javescript:;"><img src="./img/tea01.png"></a>
-		<a href="javescript:;"><img src="./img/tea_2.png"></a>
-		<a href="javescript:;"><img src="./img/tea03.png"></a></a>
-		<span class="tea_prices1">￥268.00</span>
-		<span class="tea_prices2">￥238.00</span>
-		<span class="tea_prices3">￥248.00</span>
-	</div>
-	
 	<div class="tea_info_list">
 		<ul>
 			<a href="javascript:;">
@@ -92,14 +86,41 @@
 </div>
 
 <div class="teawinecomment" id="list2" style="display:none;">
-	<div class="tea_pro_list">
-		<a href="javescript:;"><img src="./img/wine01.png"></a>
-		<a href="javescript:;"><img src="./img/wine02.png"></a>
-		<a href="javescript:;"><img src="./img/wine03.png"></a>
-		<span class="wine_prices1">￥268.00</span>
-		<span class="wine_prices2">￥238.00</span>
-		<span class="wine_prices3">￥248.00</span>
+	<div class="tea_info_list">
+		<ul>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+		</ul>
 	</div>
+</div>
+
+<div class="teawinecomment" id="list3" style="display:none;">
 	<div class="tea_info_list">
 		<ul>
 			<a href="javascript:;">
@@ -147,16 +168,38 @@
 function f(a){
 	var _tit = "#tit" + a;
 	var _list = "#list" + a;
-	$(".tea_and_wine li").removeClass("tw_on");
+	
 	$(".teawinecomment").hide();
 	
-	$(_tit).addClass("tw_on");
+	if(_tit == "#tit1"){
+		$("#tit1 p").addClass("food_bg_r");
+		$("#tit2 p").removeClass("specialty_bg_r");
+		$("#tit3 p").removeClass("sanck_bg_r")
+	}
+	if(_tit == "#tit2"){
+		$("#tit1 p").removeClass("food_bg_r");
+		$("#tit2 p").addClass("specialty_bg_r");
+		$("#tit3 p").removeClass("sanck_bg_r");
+	}
+	if(_tit == "#tit3"){
+		$("#tit1 p").removeClass("food_bg_r");
+		$("#tit2 p").removeClass("specialty_bg_r");
+		$("#tit3 p").addClass("sanck_bg_r");
+	}
+	
 	$(_list).show();
 }
 
 //图片
 var _width =( $(window).width() - 30 ) / 2;
 $(".tea_info_list img,.tea_info_list li").width(_width);
+
+var _width = $(window).width() / 3;
+var _linetwo =_width * 2 ;
+
+$(".dress_title li").width(_width);
+$(".lineone").css({"position":"absolute","left":_width});
+$(".linetwo").css({"position":"absolute","left":_linetwo});
 
 //菜单开启
 $(".pre_m").on("click",function(){
