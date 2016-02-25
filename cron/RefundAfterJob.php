@@ -239,14 +239,16 @@ class RefundAfterJob extends CronJob {
 	//"删除"佣金表`shp_user_commision`数据
 	private function removeCommision($order_id, $is_full = TRUE, $new_order_amount = NULL) {
 		if (empty($order_id)) return false;
+		$table = $this->table_commision;
 		if ($is_full) { //该订单全额退款，则全部"删除"
-			D()->update($this->table_commision, ['state'=>-1,'state_time'=>simphp_time()], ['order_id'=>$order_id]);
+			$sql = "UPDATE {$table} SET `state`=%d,`state_time`=%d WHERE `order_id`=%d AND `state`<%d";
+			D()->query($sql, -1, simphp_time(), $order_id, UserCommision::STATE_CASHED);//确保已提现和提现中的订单不能变更
 		}
 		else { //该订单部分退款，需要用新的订单佣金来重新算
 			if (!is_null($new_order_amount)) {
 				$canshare = UserCommision::can_share($new_order_amount);
-				$sql = "UPDATE ".$this->table_commision." SET `order_amount`=%n,`commision`=`use_ratio`*%n WHERE `order_id`=%d";
-				D()->query($sql, $new_order_amount, $canshare, $order_id);
+				$sql = "UPDATE {$table} SET `order_amount`=%n,`commision`=`use_ratio`*%n WHERE `order_id`=%d AND `state`<%d";
+				D()->query($sql, $new_order_amount, $canshare, $order_id, UserCommision::STATE_CASHED);//确保已提现和提现中的订单不能变更
 			}
 		}
 		return true;
