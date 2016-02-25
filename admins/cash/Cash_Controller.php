@@ -70,7 +70,7 @@ class Cash_Controller extends AdminController {
 		$extraurl .= $orderinfo[2];
 		$this->v->assign('extraurl', $extraurl);
 		$this->v->assign('qparturl', '#/cash');
-		$this->v->assign('backurl', '/cash,'.$extraurl);
+		$this->v->assign('backurl', '/cash,'.$extraurl.'&p='.$_GET['p']);
 		//END list order
 		
 		// Record List
@@ -114,8 +114,18 @@ class Cash_Controller extends AdminController {
 			$exUC->is_pass_auto = in_array($exUC->state, [UserCashing::STATE_NOPASS_AUTOCHECK,UserCashing::STATE_SUBMIT_MANUALCHECK,UserCashing::STATE_NOPASS_MANUALCHECK,UserCashing::STATE_PASS_MANUALCHECK]) ? false : true;
 			
 			$order_list = Cash_Model::getCashingOrderList($exUC->commision_ids);
-			foreach ($order_list AS $it) {
+			foreach ($order_list AS &$it) {
 				$total_commision += $it['commision'];
+				if (!empty($it['pay_trade_no']) && PS_PAYED==$it['pay_status']) {
+					$it['order_status_txt'] = '<em style="color:green">有效订单</em>';
+				}
+				elseif(empty($it['pay_trade_no'])) {
+					$it['order_status_txt'] = '<em style="color:red">无效订单</em>';
+				}
+				else {
+					$_status = Fn::pay_status($it['pay_status']);
+					$it['order_status_txt'] = '<em style="color:blue">异常订单('.$_status.')</em>';
+				}
 			}
 		}
 		$this->v->assign('userCash', $exUC);
