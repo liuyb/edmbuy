@@ -1,0 +1,106 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<body style="background:#eee;">
+
+<style>
+
+</style>
+
+<div class="bg_prefe" style="margin-bottom:10px;">
+	<img src="./img/receal.png">
+	<span class="pre_h"><img src="./img/home.png" style="width:30px;"></span>
+	<span class="pre_s"><img src="./img/shopping00.png" style="width:30px;"></span>
+	<span class="pre_m"><img src="./img/more.png" style="width:30px;"></span>
+</div>
+
+<div class="p_detail_menulist cursor" style="display:none;">
+	<span class="p_detail_jian"></span>
+	<ul class="p_detail_menu pre_li">
+		<li><a href="98prefe.html">98专区</a></li>
+		<li><a href="teawine_prefe.html">茶/酒</a></li>
+		<li><a href="dress_prefe.html">服装</a></li>
+		<li><a href="fruit_prefe.html">水果</a></li>
+	</ul>
+</div>
+
+<div class="teawinecomment" id="list1">
+	<div class="tea_info_list">
+		<ul>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260c</p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+			<a href="javascript:;">
+				<li>
+					<img src="./img/tea.png">
+					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
+				</li>
+			</a>
+		</ul>
+	</div>
+</div>
+<div class="clear"></div>
+
+<div class="click_more other_w">
+	点击加载更多......
+</div>
+
+<div class="mask_menu cursor"></div>
+
+<script>
+
+
+//图片
+var _width =( $(window).width() - 30 ) / 2;
+$(".tea_info_list img,.tea_info_list li").width(_width);
+
+
+
+$(".dress_title li").width(_width);
+
+//菜单开启
+$(".pre_m").on("click",function(){
+	$(".p_detail_menulist,.mask_menu").show();
+})
+
+//菜单关闭
+$(".mask_menu").live("click", function(){
+	$(".p_detail_menulist,.mask_menu").hide();
+});
+</script>
+
+
