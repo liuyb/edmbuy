@@ -2107,7 +2107,7 @@ td.cash_td2 img {
 .tea_info_list li{
 	float:left;
 	background:#fff;
-	margin:10px 0 0 10px;
+	margin:0 0 10px 10px;
 }
 .tea_info_list img{
 	vertical-align:middle;
@@ -2123,6 +2123,7 @@ td.cash_td2 img {
 	padding:10px 5px 0;
 	font-size:14px;
 	color:#333;
+	height:40px;
 }
 .tea_info_price{
 	padding-left:5px;
@@ -2205,6 +2206,7 @@ td.cash_td2 img {
 }
 .dress_type{
 	margin-right:10px;
+	margin-bottom: 10px;
 }
 
 .dress_type_on{
@@ -2220,7 +2222,7 @@ td.cash_td2 img {
 	height:30px;
 	background:#fff;
 	line-height:30px;
-	margin:15px 0 0 10px;
+	margin:5px 0 5px 10px;
 	cursor:pointer;
 	border:1px solid #fff;
 }
@@ -2276,6 +2278,7 @@ td.cash_td2 img {
 }
 .tea_pro_list{
   	position: relative;	
+	margin-bottom:10px;
 }
 .fruit_prices1{
   	position: absolute;
@@ -2301,7 +2304,8 @@ td.cash_td2 img {
 .tea_prices2,.wine_prices2{
 	position: absolute;
   	top: 256px;
-  	right: 70px;	
+  	right: 70px;	-+  
+	
 	font-size:16px;
 	color:#ff6d14;
 }
@@ -2314,7 +2318,9 @@ td.cash_td2 img {
 }
 /*2106-2-24 e*/
 
-
-
-
-
+/*2106-2-26 s*/
+.dress_title{
+	margin-bottom:10px;
+}
+/*2106-2-26 e*/
+ 

@@ -38,9 +38,10 @@ class Cash_Model extends Model {
 		}
 		if (isset($query_conds['to_date']) && $query_conds['to_date']) {
 			$endtime = strtotime($query_conds['to_date'].DAY_END);
-			$where_cond .= " AND o.`apply_time`<=".$endtime;
+			$where_cond .= " AND c.`apply_time`<=".$endtime;
 		}
 	
+		$where  = $where_cond;
 		$table  = UserCashing::table();
 		$sql    = "SELECT c.* FROM {$table} c WHERE 1 {$where} ORDER BY `%s` %s";
 		$sqlcnt = "SELECT COUNT(1) FROM {$table} c WHERE 1 {$where}";
@@ -57,7 +58,7 @@ class Cash_Model extends Model {
 	
 	static function getCashingOrderList($commision_ids) {
 		if (empty($commision_ids)) return [];
-		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,o.pay_trade_no,o.pay_name 
+		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,o.pay_trade_no,o.pay_name,o.pay_status
 				FROM `shp_user_commision` uc INNER JOIN `shp_order_info` o ON uc.order_id=o.order_id
 				WHERE uc.rid IN(%s)
 				";

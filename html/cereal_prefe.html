@@ -22,8 +22,8 @@
 
 </style>
 
-<div class="bg_prefe">
-	<img src="./img/tea_wine.png">
+<div class="bg_prefe" style="margin-bottom:10px;">
+	<img src="./img/receal.png">
 	<span class="pre_h"><img src="./img/home.png" style="width:30px;"></span>
 	<span class="pre_s"><img src="./img/shopping00.png" style="width:30px;"></span>
 	<span class="pre_m"><img src="./img/more.png" style="width:30px;"></span>
@@ -33,79 +33,19 @@
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu pre_li">
 		<li><a href="98prefe.html">98专区</a></li>
-		<li><a href="fruit_prefe.html">水果</a></li>
-		<li><a href="food_prefe.html">食品</a></li>
+		<li><a href="teawine_prefe.html">茶/酒</a></li>
 		<li><a href="dress_prefe.html">服装</a></li>
-	</ul>
-</div>
-
-<div class="tea_and_wine">
-	<ul>
-		<li class="tw_on" id="tit1" onclick="f(1)">茶中臻品</li>
-		<li id="tit2" onclick="f(2)">酒香四溢</li>
-		<div class="clear"></div>
+		<li><a href="fruit_prefe.html">水果</a></li>
 	</ul>
 </div>
 
 <div class="teawinecomment" id="list1">
-	<div class="tea_pro_list">
-		<a href="javescript:;"><img src="./img/tea01.png"></a>
-		<a href="javescript:;"><img src="./img/tea_2.png"></a>
-		<a href="javescript:;"><img src="./img/tea03.png"></a>
-		<span class="tea_prices1">￥268.00</span>
-		<span class="tea_prices2">￥238.00</span>
-		<span class="tea_prices3">￥248.00</span>
-	</div>
-	
 	<div class="tea_info_list">
 		<ul>
 			<a href="javascript:;">
 				<li>
 					<img src="./img/tea.png">
-					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
-					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
-				</li>
-			</a>
-			<a href="javascript:;">
-				<li>
-					<img src="./img/tea.png">
-					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
-					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
-				</li>
-			</a>
-			<a href="javascript:;">
-				<li>
-					<img src="./img/tea.png">
-					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
-					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
-				</li>
-			</a>
-			<a href="javascript:;">
-				<li>
-					<img src="./img/tea.png">
-					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
-					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
-				</li>
-			</a>
-		</ul>
-	</div>
-</div>
-
-<div class="teawinecomment" id="list2" style="display:none;">
-	<div class="tea_pro_list">
-		<a href="javescript:;"><img src="./img/wine01.png"></a>
-		<a href="javescript:;"><img src="./img/wine02.png"></a>
-		<a href="javescript:;"><img src="./img/wine03.png"></a>
-		<span class="wine_prices1">￥268.00</span>
-		<span class="wine_prices2">￥238.00</span>
-		<span class="wine_prices3">￥248.00</span>
-	</div>
-	<div class="tea_info_list">
-		<ul>
-			<a href="javascript:;">
-				<li>
-					<img src="./img/tea.png">
-					<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+					<p class="tea_info_title">仿古套壶 260c</p>
 					<p class="tea_info_price"><span>￥98.00</span><b>￥112.00</b></p>
 				</li>
 			</a>
@@ -143,20 +83,14 @@
 
 <script>
 
-//切换
-function f(a){
-	var _tit = "#tit" + a;
-	var _list = "#list" + a;
-	$(".tea_and_wine li").removeClass("tw_on");
-	$(".teawinecomment").hide();
-	
-	$(_tit).addClass("tw_on");
-	$(_list).show();
-}
 
 //图片
 var _width =( $(window).width() - 30 ) / 2;
 $(".tea_info_list img,.tea_info_list li").width(_width);
+
+
+
+$(".dress_title li").width(_width);
 
 //菜单开启
 $(".pre_m").on("click",function(){
