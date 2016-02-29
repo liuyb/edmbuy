@@ -143,11 +143,11 @@ class DB {
     }
     
     $this->_isSameWR = FALSE;
-    if (empty($config_read)) {
+    if (empty($config_read) && !empty($config_write)) {
       $this->_isSameWR = TRUE;
       $config_read = $config_write;
     }
-    if (empty($config_write)) {
+    elseif (empty($config_write) && !empty($config_read)) {
       $this->_isSameWR = TRUE;
       $config_write = $config_read;
     }
@@ -1003,6 +1003,44 @@ class DB {
   public function errno($server_mode = NULL) {
     $server_mode = $this->getServerMode($server_mode);
     return $this->_driverObj[$server_mode]->errno();
+  }
+  
+  /**
+   * Set transaction characteristics
+   * @param string $characteristics  optional value: 'ISOLATION LEVEL','READ WRITE','READ ONLY'
+   * @param string $level            optional value: 'REPEATABLE READ | READ COMMITTED | READ UNCOMMITTED | SERIALIZABLE'
+   * @param string $scope            optional value: 'GLOBAL' | 'SESSION'
+   */
+  public function setTransaction($characteristics, $level = '', $scope = '') {
+  	$this->realtime_query = TRUE;
+  	$this->query("SET {$scope} TRANSACTION {$characteristics} {$level}");
+  }
+  
+  /**
+   * Begin transaction
+   */
+  public function beginTransaction() {
+  	$this->realtime_query = TRUE;
+  	$this->query("SET autocommit = 0");
+  	$this->query("START TRANSACTION");
+  }
+  
+  /**
+   * Commit transaction
+   */
+  public function commit() {
+  	$this->query("COMMIT");
+  	$this->query("SET autocommit = 1");
+  	$this->realtime_query = FALSE;
+  }
+  
+  /**
+   * Rollback transaction
+   */
+  public function rollback() {
+  	$this->query("ROLLBACK");
+  	$this->query("SET autocommit = 1");
+  	$this->realtime_query = FALSE;
   }
   
   /**

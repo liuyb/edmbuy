@@ -401,7 +401,7 @@ abstract class DbDriver {
     }
     
     $ret = 0;
-    if (!is_resource($this->linkId)) {
+    if (!is_resource($this->linkId) && !is_object($this->linkId)) {
       $ret = 1;
     }
     elseif ($canping && !$this->ping()) {
