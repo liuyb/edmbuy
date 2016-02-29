@@ -68,8 +68,8 @@ window.location.reload();
 </div>
 
 <div class="por_list_title">
-	<span class="tit_left"></span> 年货特价
-	<span class="tit_right">益多米年货特供</span>
+	<span class="tit_left"></span> 益多米特价
+	<span class="tit_right">益多米特供</span>
 </div>
 
 <div class="rice_list_tjproduct">
@@ -95,7 +95,7 @@ window.location.reload();
 
 <div style="margin:10px 0 0px 0;">
 	<div class="por_list_title">
-		<span class="tit_left"></span> 年货精选
+		<span class="tit_left"></span> 益多米精选
 	</div>
 	<ul id="goods_list" class="list_product_info index_product_info"></ul>
 	<div id="pageContainer" onclick="pulldata(this);" style="line-height: 40px;" class="pull_more_data">点击加载更多...</div>
