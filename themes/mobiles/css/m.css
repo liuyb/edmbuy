@@ -3499,3 +3499,548 @@ td.cash_td2 img {
 }
 /* END 提现申请 */
 
+/*2106-2-19 首页*/
+.sp_t img,.sp_utwo img{
+	width:100%;
+	height:100px;
+}
+.sp_utwo li{
+	float:left;
+	width:25%;
+}
+.sp_u1{
+	border-right:1px solid #eee;	
+}
+.sp_t{
+	height:100px;
+	border-bottom:1px solid #eee;
+}
+.sp_l{
+	height:100px;	
+	float:left;
+	border-right:1px solid #eee;
+}
+.sp_r{
+	height:100px;	
+	float:left;
+	width:50%;
+}
+.time_buy{
+	background:#fff;
+	margin-top:5px;
+}
+.time_b_tit{
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #eee;
+}
+.b_tit_l{
+	background: url(../img/time00.png) no-repeat left;
+  	background-size: 16px;
+  	padding-left: 21px;	
+	float:left;
+	margin-left:10px;
+	font-size:15px;
+	color:#333;
+}
+.b_tit_r{
+	float:right;
+	margin-right:10px;
+}
+#t_h,#t_m,#t_s{
+	background:#444;
+	color:#fff;
+	font-size:12px;
+  	padding: 4px;
+  	border-radius: 4px;	
+}
+.r_f{
+	font-size:12px;
+	color:#666;
+	padding-right:6px;
+}
+
+.time_b_tab {
+  	width: 100%;
+}
+.time_b_tab td {
+  	position: relative;
+  	padding: 8px;
+ 	background: #fff;
+  	height: 110px;
+  	vertical-align: top;
+  	border-bottom: 1px solid #eee;
+}
+.time_b_tab img {
+  	vertical-align: inherit;
+  	width: 110px;
+  	border-radius: 3px;
+}
+.time_b_tab_list img{
+  	width: 95px !important;
+}
+.time_b_tab_list td{
+	height:95px !important;
+}
+.b_tab_tit{
+	margin: 10px 0 ;
+  	overflow: hidden;
+  	-webkit-line-clamp: 3;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0;
+  	font-size: 13px;
+  	color: #333;
+  	line-height: 17px;
+}
+.b_tab_price{
+	margin-top:20px;
+}
+.p_color{
+	font-size:14px;
+	color:#ff6d14;
+}
+.p_num{
+	font-size:13px;
+	color:#999;
+	float:right;
+}
+.p_ln{
+	font-size:13px;
+	color:#ff1414;
+}
+
+.fk_buy{
+	background:#fff;
+	margin-top:10px;
+}
+.fk_b_tit{
+	height:40px;
+	border-bottom:1px solid #eee;
+}
+.fk_b_tit img{
+	width:84px;
+	height:23px;  
+	margin: 8px 10px;
+}
+.click_more{
+	font-size:12px;
+	color:#666;
+	height:25px;
+	margin-bottom:25px;
+	line-height:50px;
+	text-align:center;
+	display :none;
+}
+.fk_b_list{
+	height:44px;
+	border-bottom:1px solid #eee;
+	z-index: 99;
+}
+.fk_b_list button{
+	cursor:pointer;
+	color:#333;
+	font-size:16px;	
+	border-radius:4px;	
+	width:70px;
+	height:30px;
+	margin-top:7px;
+	background:#fff;
+}
+.b_on{
+	color:#fff !important;	
+	background:#ff6d14 !important;	
+}
+.fk_b_list li{
+	text-align:center;
+	width:33.3%;
+	float:left;
+}
+.fk_b_fixed{
+	background:#fff;
+	position:fixed;
+	top : 0;
+}
+.tab_t_f{
+	margin: 0 0 0 -10px ;
+  	overflow: hidden;
+  	-webkit-line-clamp: 1;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0 5px;
+  	font-size: 14px;
+  	color: #333;
+  	line-height: 17px;	
+}
+.tab_t_i{
+	margin:2px 0 0 -10px;
+  	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0 5px;
+  	font-size: 12px;
+  	color: #999;
+  	line-height: 17px;	
+}
+.tab_t_price{
+	margin:0 0 0 -5px;
+}
+.tab_t_price span {
+  	font-size: 14px;
+  	color: #FF6d14;
+}
+.tab_t_type{
+	margin:0 0 0 -5px;
+}
+.type_l_css{
+  	background: #06c1a1;
+  	font-size: 12px;
+  	color: #fff;
+  	padding: 2px 5px;
+}
+.type_r_css{
+	border: 1px solid #06c1a1;
+  	font-size: 12px;
+  	color: #06c1a1;
+  	padding: 1px 5px;
+}
+/*2106-2-19 e*/
+/*2106-2-23 s 98专区，茶酒专区*/
+.bg_prefe img{
+	width:100%;
+  	vertical-align: middle;	
+}
+.pre_h{
+ 	position: fixed;
+  	top: 7px;
+  	left: 10px;	
+	cursor:pointer;
+	z-index:2000;
+}
+.pre_s{
+ 	position: fixed;
+  	top: 7px;
+  	right: 50px;	
+	cursor:pointer;
+	z-index:2000;	
+}
+.pre_m{
+ 	position: fixed;
+  	top: 7px;
+  	right: 10px;	
+	cursor:pointer;
+	z-index:2000;	
+}
+.pre_li li a{
+	text-align: center;
+	padding-left:0;
+}
+.pro_list_info li{
+	background:#fff;
+	margin:10px;
+	position:relative;
+}
+.pro_list_info img{
+	width:120px;
+	height:120px;
+	vertical-align: middle;
+}
+.pro_info_l{
+	float:left;
+	width:120px;
+}
+.pro_info_r{
+	float:left; 
+	margin:0 7px;
+}
+.pro_info_t{
+  	overflow: hidden;
+  	-webkit-line-clamp: 1;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding:0;
+	margin:15px 0 8px;
+  	font-size: 13px;
+  	color: #333;
+  	line-height: 15px;	
+}
+.pro_info_i{
+  	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 0;
+  	font-size: 12px;
+  	color: #999;
+}
+.pro_info_btn{
+	position: absolute;
+  	background: #ff6d14;
+  	width: 80px;
+ 	height: 25px;
+  	border-radius: 4px;
+  	cursor: pointer;
+  	color: #fff;
+  	font-size: 14px;	
+	bottom:15px;
+	right:7px;
+}
+.pro_info_p{
+	font-size:14px;
+	color:#ff6d14;
+	line-height: 14px;
+	margin:4px 0;
+}
+.pro_info_s{
+	font-size:12px;
+	color:#999;
+	line-height: 12px;
+	margin-bottom:5px;	
+}
+.tea_and_wine li{
+	background:#fff;
+	width:50%;
+	text-align:center;
+	float:left;
+	height:40px;
+	font-size:16px;
+	line-height:40px;
+	cursor:pointer;
+}
+.tw_on{
+	background:#7f4400 !important;
+	color:#fefefe;	
+}
+.tea_pro_list img{
+	width:100%;
+	margin-top:10px;
+	vertical-align:middle;
+}
+.tea_info_list li{
+	float:left;
+	background:#fff;
+	margin:0 0 10px 10px;
+}
+.tea_info_list img{
+	vertical-align:middle;
+}
+.other_w{
+	margin-bottom:0 !important;
+}
+.tea_info_title{
+	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+	padding:10px 5px 0;
+	font-size:14px;
+	color:#333;
+	height: 40px;
+}
+.tea_info_price{
+	padding-left:5px;
+	padding-bottom:5px;
+}
+.tea_info_price span{
+	font-size:14px;
+	color:#ff6d14;
+	padding-right:10px;
+}
+.tea_info_price b{
+	font-size:10px;
+	color:#999;
+}
+/*2106-2-23 e*/
+
+/*2106-2-24 s 服装,食品*/
+.dress_title li{
+	height:54px;
+	float:left;
+	text-align:center;
+	background:#fff;
+}
+.dress_bg_b{
+	background: url(../img/fz1.png) no-repeat center bottom;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.dress_bg_r{
+	background: url(../img/fz2.png) no-repeat center;
+  	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;
+	font-size:13px;
+	color:#ff547a;	
+}
+
+.shoes_bg_b{
+	background: url(../img/xz1.png) no-repeat center;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.shoes_bg_r{
+	background: url(../img/xz2.png) no-repeat center;
+	background-size: 25px 22px;	
+	font-size:13px;
+	color:#ff547a;	
+}
+.cases_bg_b{
+	background: url(../img/xb1.png) no-repeat center;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.cases_bg_r{
+	background: url(../img/xb2.png) no-repeat center;
+	background-size: 25px 22px;	
+	font-size:13px;
+	color:#ff547a;	
+}
+.lineone{
+  	border-right: 1px solid #eee;
+  	height: 54px;
+}
+.linetwo{
+	border-right: 1px solid #eee;
+  	height: 54px;
+}
+.dress_type{
+	margin-right:10px;
+}
+
+.dress_type_on{
+	color:#ff547a !important;
+	border:1px solid #ff547a !important;
+}
+.dress_type li{
+	float:left;
+	text-align:center;
+	border-radius:15px;
+	font-size:12px;
+	color:#666; 
+	height:30px;
+	background:#fff;
+	line-height:30px;
+	margin:15px 0 0 10px;
+	cursor:pointer;
+	border:1px solid #fff;
+}
+
+.food_bg_b{
+	background: url(../img/jksp1.png) no-repeat center bottom;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.food_bg_r{
+	background: url(../img/jksp2.png) no-repeat center;
+  	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;
+	font-size:13px;
+	color:#c54e02;	
+}
+
+.specialty_bg_b{
+	background: url(../img/dftc1.png) no-repeat center;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.specialty_bg_r{
+	background: url(../img/dftc2.png) no-repeat center;
+	background-size: 25px 22px;	
+	font-size:13px;
+	color:#c54e02;	
+}
+.sanck_bg_b{
+	background: url(../img/xxsp1.png) no-repeat center;
+	background-size: 25px 22px;	
+	height:0;
+  	padding-top: 22px;	
+	margin: 8px 0 2px;	
+	font-size:13px;
+	color:#333;	
+}
+.sanck_bg_r{
+	background: url(../img/xxsp2.png) no-repeat center;
+	background-size: 25px 22px;	
+	font-size:13px;
+	color:#c54e02;	
+}
+.tea_pro_list{
+  	position: relative;	
+}
+.fruit_prices1{
+  	position: absolute;
+  	top: 125px;
+  	right: 35px;	
+	font-size:16px;
+	color:#ff6d14;
+}
+.fruit_prices2{
+	position: absolute;
+  	bottom: 18px;
+  	right: 35px;
+	font-size:16px;
+	color:#ff6d14;	
+}
+.tea_prices1,.wine_prices1{
+	position: absolute;
+  	top: 126px;
+  	right: 85px;	
+	font-size:16px;
+	color:#ff6d14;
+}
+.tea_prices2,.wine_prices2{
+	position: absolute;
+  	top: 300px;
+  	right: 85px;	
+	font-size:16px;
+	color:#ff6d14;
+}
+.tea_prices3,.wine_prices3{
+	position: absolute;
+  	bottom: 24px;
+  	right: 85px;
+	font-size:16px;
+	color:#ff6d14;	
+}
+.ydm_com{
+  	position: fixed;
+  	width: 14px;
+  	height: 14px;
+  	line-height: 14px;
+  	border-radius: 50%;
+  	overflow: hidden;
+  	font-size: 8px;
+  	display: inline-block;
+  	color: #fff;
+  	background: #ff0006;
+  	top: 2px;
+  	right:50px;
+  	margin-left: 1px;
+	z-index:11111;	
+	text-align:center;
+}	
+/*2106-2-24 e*/

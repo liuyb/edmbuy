@@ -8,7 +8,7 @@
 
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
-	<span class="p_detail_back cursor" onclick="location.href='<?=$backurl?>'"></span>
+	<span class="p_detail_back cursor" onclick="<?=$back ?>"></span>
 	<span class="p_detail_more cursor"></span>
 </div>
 <div class="p_detail_menulist cursor">

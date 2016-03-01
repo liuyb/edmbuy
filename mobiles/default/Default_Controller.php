@@ -44,16 +44,20 @@ class Default_Controller extends MobileController {
     $this->v->set_tplname('mod_default_index');
     $this->nav_no    = 1;
     $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+    
     /*
     $debug = $request->get('debug',0);
     if (!$debug) {
     	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
     }
     */
-    $pager = new PagerPull(1, 10);
+    //$pager = new PagerPull(1, 10);
     //首页推荐商品列表
-    Default_Model::findGoodsList($pager, true);
-    $this->v->assign("result", $pager->result);
+    //Default_Model::findGoodsList($pager, true);
+    //$this->v->assign("result", $pager->result);
+    //首页
+    //拿到限时抢购的商品列表
+    $this->get_time_limit_goods();
     
     //分享信息
     $share_info = [
@@ -411,6 +415,20 @@ class Default_Controller extends MobileController {
   }
   
   /**
+   * 限时抢购
+   */
+  public function get_time_limit_goods(){
+      $package = Default_Model::find_time_limit_activity();
+      if(!empty($package)){
+          $limit_goods = Default_Model::find_time_limit_goods_list($package['act_id']);
+          if(!empty($limit_goods) && count($limit_goods) >0){
+              $this->v->assign('package', $package);
+              $this->v->assign('limit_goods', $limit_goods);
+          }
+      }
+  }
+  
+  /**
    * 首页面 商品列表展示
    * @param Request $request
    * @param Response $response
@@ -418,7 +436,8 @@ class Default_Controller extends MobileController {
   public function goods_list(Request $request, Response $response){
       $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
       $pager = new PagerPull($curpage, 50);
-      Default_Model::findGoodsList($pager, false);
+      $category = $request->get('category', Default_Model::CATEGORY_FOOD);
+      Default_Model::findGoodsListByCategory($pager, $category);
       $pageJson = $pager->outputPageJson();
       $ret = ["result" => $pager->result];
       $ret = array_merge($ret, $pageJson);

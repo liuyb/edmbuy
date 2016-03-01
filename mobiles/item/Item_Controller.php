@@ -30,7 +30,9 @@ class Item_Controller extends MobileController {
 		return [
 				'item/%d' => 'item',
 		    'item/promote' => 'item_promote',
-		    'item/promote/product' => 'promote_product'
+		    'item/promote/product' => 'promote_product',
+		    'item/pref/show' => 'pref_show',
+		    'item/pref/goods' => 'pref_goods_list'
 		];
 	}
 	
@@ -40,7 +42,7 @@ class Item_Controller extends MobileController {
 		$this->nav_no    = 1;
 		$this->nav_flag1 = 'item';
 		$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-		$this->backurl = '/';
+		//$this->backurl = '/';
 		
 		if (1||$request->is_hashreq()) {
 			
@@ -149,6 +151,14 @@ class Item_Controller extends MobileController {
 				}
 				$this->v->assign('kefu_link', $kefu_link);
 			}
+			//返回链接
+			$back = $request->get('back');
+			if(isset($back) && $back == 'index'){
+			    $back = "location.href='/';";
+			}else{
+			    $back = 'javascript:history.go(-1);';
+			}
+			$this->v->assign('back', $back);
 		}
 		else {
 			
@@ -167,6 +177,41 @@ class Item_Controller extends MobileController {
 	    $this->v->set_tplname('mod_item_promote_product');
 	    $this->topnav_no    = 1;
 	    throw new ViewResponse($this->v);
+	}
+	
+	/**
+	 * 专区页面
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws ViewResponse
+	 */
+	public function pref_show(Request $request, Response $response){
+	    $this->nav_no    = 0;
+	    $type = $request->get('type');
+	    $mod = Item_Model::createModByCategory($type);
+	    $this->v->set_tplname($mod);
+	    if($request->is_hashreq()){
+	        //购物车数
+	        $cartnum = Cart::getUserCartNum(Cart::shopping_uid());
+	        $this->v->assign('cartnum', $cartnum);
+	    }
+	    throw new ViewResponse($this->v);
+	}
+	
+	/**
+	 * 专区页面 商品列表展示
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function pref_goods_list(Request $request, Response $response){
+	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+	    $pager = new PagerPull($curpage, 50);
+	    $category = $request->get('category');
+	    Item_Model::findGoodsListByPref($pager, $category);
+	    $pageJson = $pager->outputPageJson();
+	    $ret = ["result" => $pager->result];
+	    $ret = array_merge($ret, $pageJson);
+	    $response->sendJSON($ret);
 	}
 	
 }

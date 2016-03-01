@@ -207,6 +207,52 @@ HERESQL;
 	    }
 	    return $goods;
 	}
+	
+	/**
+	 * 根据枚举出来的商品分类查询商品列表
+	 * @param PagerPull $pager
+	 * @param unknown $categoryids
+	 */
+	static function findGoodsListByCategory(PagerPull $pager, $categoryids){
+	    $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img from shp_goods g, edmbuy.shp_category c 
+	    where g.cat_id = c.cat_id 
+	    and (c.cat_id in (%s) or c.parent_id in (%s)) 
+	    and g.is_on_sale = 1 and g.is_promote = 1 and g.is_delete = 0 
+	    order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
+	    $goods = D()->query($sql, $categoryids, $categoryids, $pager->start, $pager->realpagesize)->fetch_array_all();
+	    if (!empty($goods)) {
+	        foreach ($goods AS &$g) {
+	            $g['goods_img'] = self::imgurl($g['goods_img']);
+	        }
+	    }
+	    else {
+	        $goods = [];
+	    }
+	    return $goods;
+	}
+	
+	/**
+	 * 专区商品列表
+	 * @param PagerPull $pager
+	 * @param unknown $cat
+	 */
+	static function findGoodsListByPref(PagerPull $pager, $cat){
+	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img 
+                from shp_goods g left join shp_goods_cat pg on	g.goods_id = pg.goods_id 
+                where	g.is_on_sale = 1 and g.is_delete = 0 
+                and 	(g.cat_id = %s or pg.cat_id = %s)
+                order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
+	    $goods = D()->query($sql, $cat, $cat, $pager->start, $pager->realpagesize)->fetch_array_all();
+	    if (!empty($goods)) {
+	        foreach ($goods AS &$g) {
+	            $g['goods_img'] = self::imgurl($g['goods_img']);
+	        }
+	    }
+	    else {
+	        $goods = [];
+	    }
+	    return $goods;
+	}
 
 }
  

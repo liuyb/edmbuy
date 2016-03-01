@@ -336,7 +336,7 @@
 	});
 	
 	/**
-	 * 覆写F.get 方法，增加loading方法 默认1秒才显示滚动条
+	 * 覆写F.get 方法，增加loading方法 默认2秒才显示滚动条
 	 */
 	F.get = function(url, data, callback){
 		var effect = "overlay";
@@ -347,7 +347,7 @@
 			if(isLoadingExist){
 				F.loading_canvas.show();
 			}
-		}, 1000);
+		}, 2000);
 		var promise = $.get(url, data, callback);
 		promise.always = function(){
 			F.loadingStop(effect);
