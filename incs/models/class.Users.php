@@ -578,6 +578,7 @@ class Users extends StorageNode {
 						'order_amount' => $order->money_paid.'元',
 						'order_state'  => '支付成功，你可以获得的%.2f元佣金'
 					];
+					$order_state = '支付成功，你可以获得的%.2f元佣金';
 					$first  = '你的%s级米客购买商品支付成功!';
 					$remark = '如分销商确认收货，你将可申请提现，点击查询详情';
 					$url    = U('partner/commission',['status'=>0],true);
@@ -585,7 +586,7 @@ class Users extends StorageNode {
 					//一级上级
 					if (!empty($uParent1->openid)) {
 						$commision = UserCommision::user_share($order->commision, 1);
-						$extra['order_state'] = sprintf($extra['order_state'], $commision);
+						$extra['order_state'] = sprintf($order_state, $commision);
 						WxTplMsg::sharepay_succ($uParent1->openid, sprintf($first, '一'), $remark, $url, $extra);
 					}
 					
@@ -595,7 +596,7 @@ class Users extends StorageNode {
 						if ($uParent2->is_exist()) {
 							if (!empty($uParent2->openid)) {
 								$commision = UserCommision::user_share($order->commision, 2);
-								$extra['order_state'] = sprintf($extra['order_state'], $commision);
+								$extra['order_state'] = sprintf($order_state, $commision);
 								WxTplMsg::sharepay_succ($uParent2->openid, sprintf($first, '二'), $remark, $url, $extra);
 							}
 							
@@ -605,7 +606,7 @@ class Users extends StorageNode {
 								if ($uParent3->is_exist()) {
 									if (!empty($uParent3->openid)) {
 										$commision = UserCommision::user_share($order->commision, 3);
-										$extra['order_state'] = sprintf($extra['order_state'], $commision);
+										$extra['order_state'] = sprintf($order_state, $commision);
 										WxTplMsg::sharepay_succ($uParent3->openid, sprintf($first, '三'), $remark, $url, $extra);
 									}
 								}
