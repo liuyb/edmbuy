@@ -80,7 +80,7 @@ window.location.reload();
 				<td style="width:110px;"><img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$good['goods_img']?>')"/></td>
 				<td>
 					<p class="b_tab_tit"><?=$good['goods_name'] ?></p>
-					<p class="b_tab_price"><span class="p_color">￥：<?=$good['shop_price'] ?></span><span class="p_num">仅剩<span class="p_ln"><?=$good['goods_number'] ?></span>份</span></p>
+					<p class="b_tab_price"><span class="p_color">￥<?=$good['shop_price'] ?></span><span class="p_num">仅剩<span class="p_ln"><?=$good['goods_number'] ?></span>份</span></p>
 				</td>
 			</tr>
 			<?php endforeach;?>
@@ -256,7 +256,8 @@ window.location.reload();
 		if(!promote_endtime){
 			return;
 		}
-		var EndTime= new Date(promote_endtime);
+		//兼容IOS的时间处理方式
+		var EndTime= new Date(promote_endtime.replace(/\s+/g, 'T'));
 		var NowTime = new Date();
 		var t =EndTime.getTime() - NowTime.getTime();
 		var h=Math.floor((t/(1000*60*60*24))*24);

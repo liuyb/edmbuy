@@ -3502,7 +3502,7 @@ td.cash_td2 img {
 /*2106-2-19 首页*/
 .sp_t img,.sp_utwo img{
 	width:100%;
-	height:100px;
+	height:100%;
 }
 .sp_utwo li{
 	float:left;
@@ -3589,21 +3589,23 @@ td.cash_td2 img {
   	display: -webkit-box;
   	-webkit-box-orient: vertical;
   	padding: 0;
-  	font-size: 13px;
+  	font-size: 1.6rem;
   	color: #333;
-  	line-height: 17px;
+  	line-height: 18px;
 }
 .b_tab_price{
 	margin-top:20px;
 }
 .p_color{
-	font-size:14px;
+	font-size:1.6rem;
 	color:#ff6d14;
 }
 .p_num{
 	font-size:13px;
 	color:#999;
 	float:right;
+	line-height:2.1rem;
+	
 }
 .p_ln{
 	font-size:13px;
@@ -3844,13 +3846,14 @@ td.cash_td2 img {
 	padding-bottom:5px;
 }
 .tea_info_price span{
-	font-size:14px;
+	font-size:1.4rem;
 	color:#ff6d14;
 	padding-right:10px;
 }
 .tea_info_price b{
-	font-size:10px;
+	font-size:1rem;
 	color:#999;
+	text-decoration: line-through;
 }
 /*2106-2-23 e*/
 
