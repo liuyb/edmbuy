@@ -18,23 +18,17 @@
 	</div>
 	<div class="guest_main">
 		<ul>
-				<li>
-			<a href="javascript:showLevelList('/partner/list',1);" class="blka">
+				<li onclick="showLevelList('/partner/list',1);">
 					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
-			</a>
 				</li>
-				<li>
-			<a href="javascript:showLevelList('/partner/list',2);" class="blka">
+				<li onclick="showLevelList('/partner/list',2);">
 					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
-			</a>
 				</li>
-				<li>
-			<a href="javascript:showLevelList('/partner/list',3);" class="blka">
+				<li onclick="showLevelList('/partner/list',3);">
 					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
-			</a>
 				</li>
 		</ul>
 	</div>
@@ -49,13 +43,13 @@
 			<li>
 			<a href="<?php echo U('cash/apply')?>" class="blka" onclick="return cash_available(this)">
 				<p>可提现金额（元）</p>
-				<h1 id="activeIncome">￥0.00</h1>
+				<h1 id="activeIncome">￥0</h1>
 			</a>
 			</li>
 			<li>
 			<a href="<?php echo U('partner/commission','status=0')?>" class="blka">
 				<p>未生效收入</p>
-				<h1 class="money_noforce" id="inactiveIncome">￥0.00</h1>
+				<h1 class="money_noforce" id="inactiveIncome">￥0</h1>
 			</a>
 			</li>
 		</ul>
@@ -66,13 +60,13 @@
 			<li>
 			<a href="<?php echo U('cash/detail')?>" class="blka" onclick="return cash_already(this)">
 				<p>已提现金额</p>
-				<h1 id="cashedIncome">￥0.00</h1>
+				<h1 id="cashedIncome">￥0</h1>
 			</a>
 			</li>
 			<li>
 			<a href="<?php echo U('partner/commission','status=1')?>" class="blka">
 				<p>总收入（元）</p>
-				<h1 id="totalIncome">￥0.00</h1>
+				<h1 id="totalIncome">￥0</h1>
 			</a>
 			</li>
 		</ul>
