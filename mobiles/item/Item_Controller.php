@@ -207,7 +207,11 @@ class Item_Controller extends MobileController {
 	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
 	    $pager = new PagerPull($curpage, 50);
 	    $category = $request->get('category');
-	    Item_Model::findGoodsListByPref($pager, $category);
+	    if(Item_Model::CATEGORY_98 == $category){
+	       Item_Model::findGoodsListByPrice($pager, 98);
+	    }else{
+	       Item_Model::findGoodsListByPref($pager, $category);
+	    }
 	    $pageJson = $pager->outputPageJson();
 	    $ret = ["result" => $pager->result];
 	    $ret = array_merge($ret, $pageJson);

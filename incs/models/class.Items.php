@@ -196,16 +196,7 @@ HERESQL;
 	    $sql = "select goods_id,goods_name,shop_price,market_price,
 	               goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by sort_order limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
-	    if (!empty($goods)) {
-	        foreach ($goods AS &$g) {
-	            $g['goods_thumb'] = self::imgurl($g['goods_thumb']);
-	            $g['goods_img'] = self::imgurl($g['goods_img']);
-	        }
-	    }
-	    else {
-	        $goods = [];
-	    }
-	    return $goods;
+	    return self::buildGoodsImg($goods);
 	}
 	
 	/**
@@ -220,15 +211,7 @@ HERESQL;
 	    and g.is_on_sale = 1 and g.is_promote = 1 and g.is_delete = 0 
 	    order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $categoryids, $categoryids, $pager->start, $pager->realpagesize)->fetch_array_all();
-	    if (!empty($goods)) {
-	        foreach ($goods AS &$g) {
-	            $g['goods_img'] = self::imgurl($g['goods_img']);
-	        }
-	    }
-	    else {
-	        $goods = [];
-	    }
-	    return $goods;
+	    return self::buildGoodsImg($goods);
 	}
 	
 	/**
@@ -243,6 +226,29 @@ HERESQL;
                 and 	(g.cat_id = %s or pg.cat_id = %s)
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $cat, $cat, $pager->start, $pager->realpagesize)->fetch_array_all();
+	    return self::buildGoodsImg($goods);
+	}
+	
+	/**
+	 * 根据价格获取商品列表
+	 * @param PagerPull $pager
+	 * @param unknown $cat
+	 */
+	static function findGoodsListByPrice(PagerPull $pager, $price){
+	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
+                from shp_goods g 
+                where	g.is_on_sale = 1 and g.is_delete = 0
+                and 	g.shop_price = %d 
+                order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
+	    $goods = D()->query($sql, $price, $pager->start, $pager->realpagesize)->fetch_array_all();
+	    return self::buildGoodsImg($goods);
+	}
+	
+	/**
+	 * 对商品图片做处理
+	 * @param unknown $goods
+	 */
+	static function buildGoodsImg($goods){
 	    if (!empty($goods)) {
 	        foreach ($goods AS &$g) {
 	            $g['goods_img'] = self::imgurl($g['goods_img']);

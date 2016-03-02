@@ -28,6 +28,9 @@
 <?php if(isset($category) && 'rice' != $category): ?>
 <li><a href="/item/pref/show?type=rice">精选好米</a></li>
 <?php endif; ?>
+<?php if(isset($category) && '98' != $category): ?>
+<li><a href="/item/pref/show?type=98">98专区</a></li>
+<?php endif; ?>
 </ul>
 </div>
 </script>
@@ -100,5 +103,23 @@ function goods_switch(cat, type){
 	
 	$(".click_more").attr('data-cat', cat);
 	getGoodsList(1, cat, true);
+}
+
+function buildGoodsListLI(ret){
+	var LI = "";
+	var result = ret.result;
+	for(var i = 0,len=result.length; i < len; i++){
+		var good = result[i];
+		var spread = good.market_price - good.shop_price;
+		spread = spread ? spread.toFixed(2) :0.00;
+		var goodimg = good.goods_img;
+		LI += "<li>";
+		LI += "<a href='javascript:gotoItem(\""+good.goods_id+"\");' class='blka'>";
+		LI += "<img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\">";
+		LI += "<p class=\"tea_info_title\">"+good.goods_name+"</p>";
+		LI += "<p class=\"tea_info_price\"><span>￥"+good.shop_price+"</span><b>￥"+good.market_price+"</b></p>";
+		LI += "</a></li>";
+	}
+	return LI;	
 }
 </script>

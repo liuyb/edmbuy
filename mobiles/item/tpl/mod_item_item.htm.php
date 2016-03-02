@@ -272,7 +272,7 @@ $(document).ready(function(){
 	});
 	
 	//产品数量填写
-	$cartmain.on("input propertychange", ".cart_inp", function(){
+	/* $cartmain.on("input propertychange", ".cart_inp", function(){
 		var t = $(this);
 		var num = t.val();
 		if(!isZZ(num)){
@@ -281,7 +281,7 @@ $(document).ready(function(){
 			return false;
 		}
 		showSelect();
-	});
+	}); */
 	
 	//产品数量减少
 	$cartmain.on("click", ".btn_minus", function(){
@@ -311,6 +311,10 @@ $(document).ready(function(){
 		var buy_type = $('#frm_buy_type').val();
 		var item_id  = $('#frm_item_id').val();
 		var item_num = $('#frm_item_num').val();
+		if(!isZZ(item_num)){
+			boxalert("产品数量不能再少啦!");
+			return;
+		}
 		if ('buy'==buy_type) {
 			immediate_buy(item_id, item_num);
 		}

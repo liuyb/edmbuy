@@ -49,19 +49,18 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p class="sp_l"><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/s400.png"></a></p>
-		<p class="sp_r"><a href='/item/pref/show?type=rice'><img src="/themes/mobiles/img/s500.png"></a></p>
+		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/s400.png"></a></p><p><a href='/item/pref/show?type=rice'><img src="/themes/mobiles/img/s500.png"></a></p>
+		<div class="line1"></div>
 	</div>
 
-	<div class="sp_utwo">
-		<ul>
-			<li class="sp_u1"><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/s600.png"></a></li>
-			<li class="sp_u1"><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/s100.png"></a></li>
-			<li class="sp_u1"><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/s200.png"></a></li>
-			<li><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/s300.png"></a></li>
-		</ul>
+	<div class="sp_ls">
+		<p><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/s600.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/s100.png"></a></p><p><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/s200.png"></a></p><p><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/s300.png"></a></p>
+		<div class="line2"></div>
+		<div class="line3"></div>
+		<div class="line4"></div>
 	</div>
 </div>
+
 
 <div class="clear"></div>
 
@@ -80,7 +79,7 @@ window.location.reload();
 				<td style="width:110px;"><img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$good['goods_img']?>')"/></td>
 				<td>
 					<p class="b_tab_tit"><?=$good['goods_name'] ?></p>
-					<p class="b_tab_price"><span class="p_color">￥：<?=$good['shop_price'] ?></span><span class="p_num">仅剩<span class="p_ln"><?=$good['goods_number'] ?></span>份</span></p>
+					<p class="b_tab_price"><span class="p_color">￥<?=$good['shop_price'] ?></span><span class="p_num">仅剩<span class="p_ln"><?=$good['goods_number'] ?></span>份</span></p>
 				</td>
 			</tr>
 			<?php endforeach;?>
@@ -122,7 +121,7 @@ window.location.reload();
 		getGoodsList(1, true);
 
 		//监听点击继续购买
-		$("#goods_list").on('click','.jx_btn_new', function(){
+		$("#goods_list").on('click','tr', function(){
 			var goodid = $(this).attr("data-goodid");
 			gotoItem(goodid);
 		});
@@ -145,10 +144,10 @@ window.location.reload();
 	});
 
 	function ajust_div_size(){
-		var _width = ( $(window).width()) / 2 - 1;
-		var _width1 = ( $(window).width()) / 4 - 1;
-		$(".sp_l").width(_width);
-		$(".sp_u1").width(_width1);
+		var line_height = $(".sp_t").height();
+		var line_heightl = $(".sp_ls").height();
+		$(".line1").height(line_height);
+		$(".line2,.line3,.line4").height(line_heightl);
 	}
 
 	function getGoodsList(curpage, isinit){
@@ -195,11 +194,11 @@ window.location.reload();
 			var spread = good.market_price - good.shop_price;
 			spread = spread ? spread.toFixed(2) :0.00;
 			var goodimg = good.goods_img;
-			TR += "<tr><td style=\"width:95px;\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\"></td><td>";
+			TR += "<tr data-goodid='"+good.goods_id+"'><td style=\"width:95px;\"><img class='hwspeed' src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\"></td><td>";
 			TR += "<p class=\"tab_t_f\">"+good.goods_name+"</p><p class=\"tab_t_i\">"+good.goods_brief+"</p><p class=\"tab_t_price\">";
 			TR += "<span>特价：￥"+good.shop_price+"</span></p>";
-			TR += "<p class=\"tab_t_type\"><span class=\"type_l_css\">比网省钱</span><span class=\"type_r_css\">"+spread+"元</span></p>";
-			TR += "<button class=\"jx_btn_new\" data-goodid='"+good.goods_id+"'>立即购买</button></td></tr>";
+			TR += "<p class=\"tab_t_type\"><span class=\"type_l_css\">比网上省</span><span class=\"type_r_css\">"+spread+"元</span></p>";
+			TR += "<button class=\"jx_btn_new\">立即购买</button></td></tr>";
 		}
 		handleGoodsListAppend(TR);
 	}
@@ -256,7 +255,8 @@ window.location.reload();
 		if(!promote_endtime){
 			return;
 		}
-		var EndTime= new Date(promote_endtime);
+		//兼容IOS的时间处理方式
+		var EndTime= new Date(promote_endtime.replace(/\s+/g, 'T'));
 		var NowTime = new Date();
 		var t =EndTime.getTime() - NowTime.getTime();
 		var h=Math.floor((t/(1000*60*60*24))*24);

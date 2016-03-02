@@ -24,17 +24,11 @@ include T('inc/pref_popup_menu');?>
 		<a href="javascript:gotoItem(1006);"><img src="/themes/mobiles/img/tea01.png"></a>
 		<a href="javascript:gotoItem(1009);"><img src="/themes/mobiles/img/tea_2.png"></a>
 		<a href="javascript:gotoItem(1011);"><img src="/themes/mobiles/img/tea03.png"></a></a>
-		<span class="tea_prices1">￥618.00</span>
-		<span class="tea_prices2">￥618.00</span>
-		<span class="tea_prices3">￥618.00</span>
 	</div>
 	<div class="tea_pro_list" data-cat='wine' style="display: none;">
 		<a href="javascript:gotoItem(1047);"><img src="/themes/mobiles/img/wine01.png"></a>
 		<a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine02.png"></a>
-		<a href="javascript:gotoItem(1006);"><img src="/themes/mobiles/img/wine03.png"></a>
-		<span class="wine_prices1">￥218.00</span>
-		<span class="wine_prices2">￥98.00</span>
-		<span class="wine_prices3">￥248.00</span>
+		<!-- <a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine03.png"></a> -->
 	</div>
 	<div class="tea_info_list" style="margin-top: 10px;">
 		<ul>
@@ -76,8 +70,8 @@ function tea_wine_switch(cat){
 	var tab = $("#"+cat);
 	$(".tea_and_wine li").removeClass("tw_on");
 	tab.addClass("tw_on");
-	$(".tea_pro_list").hide('slow');
-	$(".tea_pro_list[data-cat='"+cat+"']").show('slow');
+	$(".tea_pro_list").hide();
+	$(".tea_pro_list[data-cat='"+cat+"']").show();
 	$(".tea_info_list ul").empty();
 	getGoodsByCat(cat);
 	/* var _list = $("#"+cat+"list");
@@ -113,25 +107,12 @@ function contructGoodsHTML(ret, isinit, category){
 		//handleAppend(emptyTR);
 		return;
 	}
-	var LI = "";
-	var result = ret.result;
-	for(var i = 0,len=result.length; i < len; i++){
-		var good = result[i];
-		var spread = good.market_price - good.shop_price;
-		spread = spread ? spread.toFixed(2) :0.00;
-		var goodimg = good.goods_img;
-		LI += "<a href='javascript:gotoItem(\""+good.goods_id+"\");'>";
-		LI += "<li>";
-		LI += "<img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\">";
-		LI += "<p class=\"tea_info_title\">"+good.goods_name+"</p>";
-		LI += "<p class=\"tea_info_price\"><span>￥"+good.shop_price+"</span><b>￥"+good.market_price+"</b></p>";
-		LI += "</li></a>";
-	}
+	var LI = buildGoodsListLI(ret);
 	handleAppend(LI, category);
-	setTimeout(function(){
+	/* setTimeout(function(){
 		var _width =( $(window).width() - 30 ) / 2;
 		$(".tea_info_list img,.tea_info_list li").width(_width);
-	}, 0);
+	}, 0); */
 }
 function handleAppend(LI, cat){
 	//var _list = $("#"+cat+"list");

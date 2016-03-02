@@ -49,6 +49,16 @@ class Item_Model extends Model {
     }
     
     /**
+     * 根据价格查询商品列表
+     * @param PagerPull $pager
+     * @param unknown $cat
+     */
+    static function findGoodsListByPrice(PagerPull $pager, $price){
+        $result = Items::findGoodsListByPrice($pager, $price);
+        $pager->setResult($result);
+    }
+    
+    /**
      * 创建专区页面
      * @param unknown $type
      * @return string
