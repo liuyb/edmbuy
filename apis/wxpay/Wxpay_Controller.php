@@ -39,16 +39,19 @@ class Wxpay_Controller extends Controller {
         //对日志表"写锁定"，避免其他线程进入干扰(这时其他线程对表pay_log的读写都要等待)
         $ec_paylog = PayLog::table();
         $ec_order  = Order::table();
-        D()->lock_tables($ec_paylog, DB::LOCK_WRITE, '', TRUE);
+        //D()->lock_tables($ec_paylog, DB::LOCK_WRITE, '', TRUE);
+        D()->beginTransaction();
         
         //检查支付日志表，以确定订单是否存在(之所以用日志表而不是主表order_info，是为了在锁表期间不阻塞到前台访问频繁的主表)
-        $pay_log = D()->from($ec_paylog, DB::WRITABLE) //这里必须用写模式，因为lock表在写进程
+        $pay_log = D()->from($ec_paylog) //这里必须用写模式，因为lock表在写进程
                       ->where(['order_sn'=>$order_sn])
+                      ->for_update()
                       ->select()
                       ->get_one();
         if (empty($pay_log)) {
           $msg = '订单号不存在';
-          D()->unlock_tables();// 解锁
+          //D()->unlock_tables();// 解锁
+          D()->commit();
           return false;
         }
         $order_id = $pay_log['order_id'];
@@ -56,7 +59,8 @@ class Wxpay_Controller extends Controller {
         //检查支付金额是否正确
         if (intval($pay_log['order_amount']*100) != $total_fee) {
           $msg = '金额不对';
-          D()->unlock_tables();// 解锁
+          //D()->unlock_tables();// 解锁
+          D()->commit();
           return false;
         }
         
@@ -67,7 +71,8 @@ class Wxpay_Controller extends Controller {
           D()->update($ec_paylog, ['is_paid'=>1], ['order_id'=>$order_id]);
           
           // 更新完立马解锁
-          D()->unlock_tables();
+          //D()->unlock_tables();
+          D()->commit();
         
           //立马修改订单状态为已付款
           $updata = [
@@ -108,7 +113,8 @@ class Wxpay_Controller extends Controller {
           $cUser->notify_pay_succ($order_id);
         }
         else {
-          D()->unlock_tables();// 解锁
+          //D()->unlock_tables();// 解锁
+          D()->commit();
         }
         
         return true;

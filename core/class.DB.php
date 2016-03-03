@@ -696,6 +696,15 @@ class DB {
   }
   
   /**
+   * sql FOR UPDATE part
+   * @return DB
+   */
+  public function for_update() {
+  	$this->_sql .= " FOR UPDATE";
+  	return $this;
+  }
+  
+  /**
    * Call like SQL:
    * LOCK TABLES t READ
    * 
