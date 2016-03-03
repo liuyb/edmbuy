@@ -73,7 +73,7 @@ function getGoodsByCat(cat){
 
 function contructGoodsHTML(ret, isinit, category){
 	if(!ret || !ret.result || !ret.result.length){
-		var emptyTR = "<li style=\"text-align:center;margin:0px;width:100%;line-height:50px;\">还没有商品！</li>";
+		var emptyTR = "<li style=\"text-align:center;margin:0px;width:100%;line-height:35px;\">还没有商品！<br/>招商座机：0755-26418979</li>";
 		handleAppend(emptyTR);
 		return;
 	}

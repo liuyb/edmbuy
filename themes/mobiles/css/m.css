@@ -3794,18 +3794,20 @@ td.cash_td2 img {
   	padding: 0;
   	font-size: 12px;
   	color: #999;
+	height: 35px;
 }
 .pro_info_btn{
 	position: absolute;
   	background: #ff6d14;
-  	width: 80px;
+  	width: 70px;
  	height: 25px;
   	border-radius: 4px;
   	cursor: pointer;
   	color: #fff;
   	font-size: 14px;	
-	bottom:15px;
+	bottom:10px;
 	right:7px;
+	padding:0px !important;
 }
 .pro_info_p{
 	font-size:14px;

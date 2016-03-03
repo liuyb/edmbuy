@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 function contructGoodsHTML(ret, isinit){
 	if(!ret || !ret.result || !ret.result.length){
-		var emptyTR = "<li style=\"text-align:center;width: 100%;margin: 0px;line-height: 50px;\">还没有商品！</li>";
+		var emptyTR = "<li style=\"text-align:center;width: 100%;margin: 0px;line-height: 35px;\">还没有商品！<br/>招商座机：0755-26418979</li>";
 		handleGoodsListAppend(emptyTR);
 		return;
 	}

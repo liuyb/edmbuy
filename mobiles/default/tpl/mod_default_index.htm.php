@@ -183,7 +183,7 @@ window.location.reload();
 
 	function contructGoodsHTML(ret, isinit){
 		if(!ret || !ret.result || !ret.result.length){
-			var emptyTR = "<tr><td style=\"width:95px;text-align:center;line-height:85px;\">还没有商品！</td></tr>";
+			var emptyTR = "<tr><td style=\"width:95px;text-align:center;line-height:30px;\">还没有商品！<br/>招商座机：0755-26418979</td></tr>";
 			handleGoodsListAppend(emptyTR);
 			return;
 		}
