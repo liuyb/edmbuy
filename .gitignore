@@ -2,6 +2,7 @@
 a/*
 var/
 conf-pro/
+conf-test/
 t.php
 tapi.php
 t_*.php
