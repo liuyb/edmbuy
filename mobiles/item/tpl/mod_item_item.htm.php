@@ -34,8 +34,8 @@
 <?php endif;?>
 </div>
 </script>
-<script id="forBody" type="text/html">
 <div class="mask_menu cursor"></div>
+<script id="forBody" type="text/html">
 
 <div class="cursor p_detail_button p_detail_follow"></div>
 <div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
@@ -230,11 +230,11 @@ $(document).ready(function(){
 	
 	//菜单开启
 	$(document.body).on("click", ".p_detail_more", function(){
-		$(".p_detail_menulist").show();
+		$(".p_detail_menulist,.mask_menu").show();
 	});
 	//菜单关闭
 	$(document.body).on("click", ".mask_menu", function(){
-		//$(".p_detail_menulist,.mask_menu").hide();
+		$(".p_detail_menulist,.mask_menu").hide();
 	});
 	
 	//加入购物车
