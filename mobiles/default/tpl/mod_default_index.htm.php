@@ -123,6 +123,9 @@ window.location.reload();
 		//监听点击继续购买
 		$("#goods_list").on('click','tr', function(){
 			var goodid = $(this).attr("data-goodid");
+			if(!goodid){
+				return;
+			}
 			gotoItem(goodid);
 		});
 
