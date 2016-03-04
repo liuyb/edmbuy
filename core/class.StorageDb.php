@@ -44,8 +44,9 @@ class StorageDb extends Storage {
 	public function find(BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$field = $this->column($this->key);
+		$forup = isset($opts['forupdate']) && $opts['forupdate'] ? ' FOR UPDATE' : '';
 		$sql = "SELECT `{$field}` AS `id` " .
-		       "FROM {$this->table} {$where} {$order} {$limit}";
+		       "FROM {$this->table} {$where} {$order} {$limit}{$forup}";
 		$ids = D()->query($sql)->fetch_column('id');
 		return $ids;
 	}
@@ -61,8 +62,9 @@ class StorageDb extends Storage {
 	public function findUnique($field, BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$field = $this->column($field);
+		$forup = isset($opts['forupdate']) && $opts['forupdate'] ? ' FOR UPDATE' : '';
 		$sql = "SELECT DISTINCT `{$field}` AS `id` " .
-		       "FROM {$this->table} {$where} {$order} {$limit}";
+		       "FROM {$this->table} {$where} {$order} {$limit}{$forup}";
 		$ids = D()->query($sql)->fetch_column('id');
 		return $ids;
 	}
@@ -141,13 +143,15 @@ class StorageDb extends Storage {
 	/**
 	 * Chec whether id exists
 	 *
-	 * @param string $id
+	 * @param string  $id
+	 * @param boolean $for_update, default to false
 	 * @return bool
 	 * @see Storage::remove()
 	 */
-	public function id_exists($id) {
+	public function id_exists($id, $for_update = FALSE) {
 		$idcol = $this->column($this->key);
-		$idval = D()->query("SELECT {$idcol} FROM ".$this->table." WHERE {$idcol}='%s'", $id)->result();
+		$forup = $for_update ? ' FOR UPDATE' : '';
+		$idval = D()->query("SELECT {$idcol} FROM ".$this->table." WHERE {$idcol}='%s'{$forup}", $id)->result();
 		return $idval ? : FALSE;
 	}
 	

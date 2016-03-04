@@ -165,7 +165,9 @@ class Cash_Controller extends MobileController {
 			if (1==$step) { //提交提现申请
 				
 				$exUBank = UserBank::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('bank_code', $bank_code)));
-				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids), new Query('state', UserCashing::STATE_FAIL,'<')));
+				
+				D()->beginTransaction();
+				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids), new Query('state', UserCashing::STATE_FAIL,'<')),['forupdate'=>1]);
 				if (!$exUCash->is_exist()) { //不存在才需要新建记录
 					$cashing_no = UserCashing::gen_cashing_no();
 					$nUC = new UserCashing();
@@ -191,6 +193,7 @@ class Cash_Controller extends MobileController {
 					$nUC->save(Storage::SAVE_INSERT_IGNORE);
 					if ($nUC->id) { //插入成功
 						
+						D()->commit(); //尽早提交事务，避免锁表太久
 						$cashing_id = $nUC->id;
 						
 						//立马更新佣金记录状态为“锁定”
@@ -254,6 +257,7 @@ class Cash_Controller extends MobileController {
 						}
 					}
 					else {
+						D()->rollback();						
 						$ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>'生成提现记录失败'];
 
 						//微信模板消息通知提现失败
@@ -261,6 +265,7 @@ class Cash_Controller extends MobileController {
 					}
 				}
 				else { //存在对应的提现记录，则提示
+					D()->commit();
 					$ret = ['flag'=>'SUCC','msg'=>'提现已提交公司审核','detail'=>'提现未通过安全检查，已转为人工审核，5个工作日内完成提现，请留意微信通知。'];
 				}
 				
