@@ -4,7 +4,7 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-class ImportRefundJob extends CronJob {
+class RefundImportJob extends CronJob {
 	
 	public function main($argc, $argv) {
 		
@@ -86,4 +86,4 @@ class ImportRefundJob extends CronJob {
 	
 }
  
-/*----- END FILE: ImportRefundJob.php -----*/
+/*----- END FILE: RefundImportJob.php -----*/
