@@ -656,7 +656,7 @@ module.exports.FastClick=e):window.FastClick=e})();
 				dataType: 'json',
 				success: function(data){
 					oThis.ajaxComplete('post',ajax_complete_cb);
-					callback(data);
+					if(typeof(callback)=='function') callback(data);
 				},
 				error: function(xhr, status, error) {
 					oThis.ajaxComplete('post',ajax_complete_cb);
