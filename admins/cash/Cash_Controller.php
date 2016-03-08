@@ -8,6 +8,9 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Cash_Controller extends AdminController {
 	
+    const CSV_SEP = ',';
+    const CSV_LN = "\n";
+    
 	/**
 	 * init hook
 	 *
@@ -28,7 +31,7 @@ class Cash_Controller extends AdminController {
 	public function menu(){
 		return [
 				'cash/%d/detail'=>'detail',
-	
+	            'cash/export/excel'=>'export_excel'
 		];
 	}
 	
@@ -48,6 +51,9 @@ class Cash_Controller extends AdminController {
 		$searchinfo = ['from_date'=>'', 'to_date'=>''];
 		$searchinfo['from_date']  = $request->get('fdate','');
 		$searchinfo['to_date']    = $request->get('tdate','');
+		$searchinfo['period']     = $request->get('period', '');
+		$searchinfo['status']     = $request->get('status', '');
+		$searchinfo['searchTxt']  = $request->get('searchTxt', '');
 		if (strlen($searchinfo['from_date'])!=10) { //format: 'YYYY-MM-DD'
 			$searchinfo['from_date'] = '';
 		}
@@ -59,7 +65,8 @@ class Cash_Controller extends AdminController {
 			$searchinfo['from_date'] = $searchinfo['to_date'];
 			$searchinfo['to_date'] = $t;
 		}
-		$searchstr  = 'fdate='.$searchinfo['from_date'].'&tdate='.$searchinfo['to_date'];
+		$searchstr  = 'fdate='.$searchinfo['from_date'].'&tdate='.$searchinfo['to_date'].'&period='.$searchinfo['period'].'&status='.$searchinfo['status'];
+		$searchstr  .= '&searchTxt='.$searchinfo['searchTxt'];
 		$this->v->assign('searchinfo', $searchinfo);
 		$this->v->assign('searchstr', $searchstr);
 		$query_conds = array_merge($query_conds, $searchinfo);
@@ -70,7 +77,7 @@ class Cash_Controller extends AdminController {
 		$extraurl .= $orderinfo[2];
 		$this->v->assign('extraurl', $extraurl);
 		$this->v->assign('qparturl', '#/cash');
-		$this->v->assign('backurl', '/cash,'.$extraurl.'&p='.$_GET['p']);
+		$this->v->assign('backurl', '/cash,'.$extraurl.'&p='.(isset($_GET['p']) ? $_GET['p'] : ''));
 		//END list order
 		
 		// Record List
@@ -89,6 +96,51 @@ class Cash_Controller extends AdminController {
 		
 		$response->send($this->v);
 	
+	}
+	
+	public function export_excel(Request $request, Response $response){
+	    //查询条件
+	    $query_conds = [];
+	    $searchinfo = ['from_date'=>'', 'to_date'=>''];
+	    $searchinfo['from_date']  = $request->get('fdate','');
+	    $searchinfo['to_date']    = $request->get('tdate','');
+	    $searchinfo['status']     = $request->get('status', '');
+	    $searchinfo['searchTxt']  = $request->get('searchTxt', '');
+	    if (strlen($searchinfo['from_date'])!=10) { //format: 'YYYY-MM-DD'
+	        $searchinfo['from_date'] = '';
+	    }
+	    if (strlen($searchinfo['to_date'])!=10) { //format: 'YYYY-MM-DD'
+	        $searchinfo['to_date'] = '';
+	    }
+	    if (!empty($searchinfo['from_date']) && !empty($searchinfo['to_date']) && $searchinfo['from_date'] > $searchinfo['to_date']) { //交换
+	        $t = $searchinfo['from_date'];
+	        $searchinfo['from_date'] = $searchinfo['to_date'];
+	        $searchinfo['to_date'] = $t;
+	    }
+	    $query_conds = array_merge($query_conds, $searchinfo);
+	    //BEGIN list order
+	    $orderinfo = $this->v->set_listorder('cashing_id', 'desc');
+	    $recordList = Cash_Model::getCashingForExport($orderinfo[0],$orderinfo[1],$query_conds);
+	    
+	    $filename  = SIMPHP_ROOT . '/var/tmp/CASH_LIST_%s.csv';
+	    $filename  = sprintf($filename, $searchinfo['from_date'].'~'.$searchinfo['to_date']);
+	    
+	    
+    	$csv = "提现订单号,支付订单号,姓名,手机号,持卡人,提现账号,	提现金额,实际到账,提交时间,提交时间,提现状态".self::CSV_LN;
+    	$CSV_SEP = self::CSV_SEP;
+    	//获取商家收入订单详情
+    	if (!empty($recordList)) {
+    		foreach ($recordList AS $it) {
+    			$csv .= '"'.$it['cashing_no'].'"'.$CSV_SEP.'"'.$it['payment_no'].'"'.$CSV_SEP.'"'.$it['user_nick'].'"'.$CSV_SEP.'"'.$it['user_mobile'].'"';
+    			$csv .= $CSV_SEP.'"'.$it['bank_uname'].$it['bank_no'].'"'.$CSV_SEP.'"'.$it['bank_name'].'"'.$CSV_SEP.$it['cashing_amount'].$CSV_SEP.$it['actual_amount'];
+    			$csv .= $CSV_SEP.'"'.date('Y-m-d H:i:s', simphp_gmtime2std($it['apply_time'])).'"'.$CSV_SEP.'"'.date('Y-m-d H:i:s', simphp_gmtime2std($it['payment_time'])).'"';
+    			$csv .= $CSV_SEP.'"'.$it['state_txt'].'"'.self::CSV_LN;
+    		}
+    	}
+    	if (''!=$csv) {
+    	    file_put_contents($filename, $csv);
+    	    download($filename);
+    	}
 	}
 	
 	/**

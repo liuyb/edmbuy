@@ -795,20 +795,29 @@ class Trade_Controller extends MobileController {
   	if ($request->is_post()) {
   		$ret = ['flag'=>'FAIL','msg'=>'操作失败'];
   
+  		ignore_user_abort(TRUE);
+  		set_time_limit(60);
+  		
+  		$order_id  = $request->post('order_id', 0);
+  		$status_to = $request->post('status_to', 0);
+  		//trace_debug('order_chpaystatus', ['order_id'=>$order_id,'status_to'=>$status_to]);
+  		
   		$user_id = $GLOBALS['user']->uid;
   		if (!$user_id) {
   			$ret['msg'] = '未登录, 请登录';
   			$response->sendJSON($ret);
   		}
-  
-  		$order_id  = $request->post('order_id', 0);
-  		$status_to = $request->post('status_to', 0);
   		if (!$order_id) {
   			$ret['msg'] = '订单id为空';
   			$response->sendJSON($ret);
   		}
   		if (!is_numeric($status_to)) {
   			$ret['msg'] = '状态码不正确';
+  			$response->sendJSON($ret);
+  		}
+  		$status_to = intval($status_to);
+  		if (PS_PAYED==$status_to) { //客户端不能修改“已支付”状态，防止恶意修改关键业务
+  			$ret['msg'] = "客户端不能修改'已支付'状态";
   			$response->sendJSON($ret);
   		}
   

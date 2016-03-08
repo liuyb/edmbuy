@@ -3,6 +3,23 @@
 <link href="/misc/js/ext/date/calendars.css" rel="stylesheet" type="text/css" />
 <style>
 .inpshort {width: 155px;}
+#searchPanel{
+	font-size: 16px;
+}
+#searchPanel a {
+	margin-left:30px;
+	cursor: pointer;
+	text-decoration : none;
+}
+#searchPanel a.selected {
+	background-color: rgb(153,153,153);
+	border-radius: 2px;
+	padding: 3px 10px;
+	color:#fff;
+}
+#searchPanel div{
+	margin-bottom:10px;
+}
 </style>
 <section id="ifr-main" class="ifr-main">
 
@@ -12,20 +29,165 @@
 <!-- search region -->
 <div class="boxSearch">
   <form name="searchform" id="searchform" action="/pay" method="post" onsubmit="return listsearch(this);">
-    &nbsp;&nbsp;<input type="text" name="from_date" value="<!--{$searchinfo.from_date}-->" class="inptxt inpshort" id="search_from_date" placeholder="开始日期(YYYY-MM-DD)" bj="cBj" />&nbsp;&nbsp;--
+  	<div id="searchPanel">
+  	
+  		<div id="periodBlock">
+  			<span>选择时间：</span>
+  			<a data-value='all'>全部</a>
+  			<a data-value='today'>今天</a>
+  			<a data-value='week'>本周</a>
+  			<a data-value='month'>本月</a>
+  		</div>
+  	
+  		<div id="statusBlock">
+  			<span>提现状态：</span>
+  			<a data-value='all'>全部</a>
+  			<a data-value='wait_check'>待审核</a>
+  			<a data-value='checked'>已审核</a>
+  			<a data-value='transfer'>转账中</a>
+  			<a data-value='wdraw_succ'>提现成功</a>
+  			<a data-value='wdraw_fail'>提现失败</a>
+  		</div>
+  		
+  		<div>
+  			<span><input type="button" value="导出 excel" class="frmbtn" onclick="excelExport();"/></span>
+  			<span style="float:right;">
+  			<span style="margin-right:20px;">
+  			<input type="text" name="from_date" value="<!--{$searchinfo.from_date}-->" class="inptxt inpshort" id="search_from_date" placeholder="开始日期(YYYY-MM-DD)" bj="cBj" />&nbsp;&nbsp;--
      &nbsp;&nbsp;<input type="text" name="to_date" value="<!--{$searchinfo.to_date}-->" class="inptxt inpshort" id="search_to_date" placeholder="结束日期(YYYY-MM-DD)" bj="cBj" />
-     &nbsp;&nbsp;<input type="submit" name="btnsubmit" value="搜 索" class="frmbtn" />
-     &nbsp;&nbsp;<a href="#/cash" class="oplink">清除条件</a>
+  			</span>
+  			<input type="text" class="inptxt" id="searchTxt" name="searchTxt" placeholder="请输入 “用户名称”或“注册手机号”或“多米号”" value="<!--{$searchinfo.searchTxt}-->"/>
+  			<input type="submit" name="btnsubmit" id="btnsubmit" value="搜 索" class="frmbtn" />
+  			</span>
+  		</div>
+  	</div>
+  	<input type='hidden' name="period" id="period" value="<!--{$query_conds.period}-->"/>
+  	<input type='hidden' name="status" id="status" value="<!--{$query_conds.status}-->"/>
   </form>
 <script type="text/javascript">
+var period = "<!--{$query_conds.period}-->";
+period = period ? period : "all";
+var status = "<!--{$query_conds.status}-->";
+status = status ? status : "all";
+
 function listsearch(form) {
-  window.location.hash = '#/cash,fdate='+$('#search_from_date').val().trim()+'&tdate='+$('#search_to_date').val().trim();
+  var url = '#/cash,fdate='+$('#search_from_date').val().trim()+'&tdate='+$('#search_to_date').val().trim();
+  url+= '&period='+$('#period').val().trim()+'&status='+$('#status').val().trim()+'&searchTxt='+$("#searchTxt").val().trim();
+  window.location.hash = url;
   return false;
+}
+function submitForm(){
+	$("#btnsubmit").trigger('click');
 }
 $(document).ready(function(){
   $("#search_from_date").cld();
   $("#search_to_date").cld();
+  
+  if(period){
+	  $("#periodBlock").find("a").removeClass("selected");
+	  $("#periodBlock").find("a[data-value='"+period+"']").addClass("selected");
+  }
+  if(status){
+	  $("#statusBlock").find("a").removeClass("selected");
+	  $("#statusBlock").find("a[data-value='"+status+"']").addClass("selected");
+  }
+  
+  $("#periodBlock").find("a").on('click', function(){
+	  var OBJ = $(this);
+	  var val = OBJ.attr("data-value");
+	  periodRender(val, OBJ);
+  });
+  
+  $("#statusBlock").find("a").on('click', function(){
+	  var OBJ = $(this);
+	  var val = OBJ.attr("data-value");
+	  statusRender(val, OBJ);
+  });
 });
+
+//时间周期逻辑处理
+function periodRender(val, OBJ){
+	if(!OBJ){
+		OBJ = $("#periodBlock").find("a[data-value='"+val+"']")
+	}
+	if(!val || !OBJ){
+		return;
+	}
+	$("#periodBlock").find("a").removeClass("selected");
+ 	OBJ.addClass("selected");
+ 	$("#period").val(val);
+ 	var startEndDate = getStartAndEndDate(val);
+ 	$("#search_from_date").val(startEndDate[0]);
+ 	$("#search_to_date").val(startEndDate[1]);
+ 	submitForm();
+}
+//状态逻辑处理
+function statusRender(val, OBJ){
+	if(!OBJ){
+		OBJ = $("#statusBlock").find("a[data-value='"+val+"']")
+	}
+	if(!val || !OBJ){
+		return;
+	}
+	$("#statusBlock").find("a").removeClass("selected");
+ 	OBJ.addClass("selected");
+ 	$("#status").val(val);
+ 	submitForm();
+}
+
+function getStartAndEndDate(period){
+	var date = new Date();
+	var sdate = "";
+	var edate = "";
+	var year = date.getFullYear();
+	var month = date.getMonth();
+	var d = date.getDate();
+	var nowDayOfWeek = date.getDay(); //今天本周的第几天 
+	if("today" == period){
+		sdate = formatDate(date);
+		edate = sdate;
+	}else if("week" == period){
+		sdate = getWeekStartDate(year, month, d, nowDayOfWeek);
+		edate = formatDate(date);
+	}else if("month" == period){
+		sdate = getMonthStartDate(year, month);
+		edate = formatDate(date);
+	}
+	return [sdate,edate];
+}
+
+
+//获得本周的开端日期 
+function getWeekStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek) { 
+	var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+	return formatDate(weekStartDate); 
+} 
+
+//获得本月的开端日期 
+function getMonthStartDate(nowYear, nowMonth){ 
+	var monthStartDate = new Date(nowYear, nowMonth, 1); 
+	return formatDate(monthStartDate); 
+} 
+
+//格局化日期：yyyy-MM-dd 
+function formatDate(date) { 
+	var myyear = date.getFullYear(); 
+	var mymonth = date.getMonth()+1; 
+	var myweekday = date.getDate(); 
+	
+	if(mymonth < 10){ 
+		mymonth = "0" + mymonth; 
+	} 
+	if(myweekday < 10){ 
+		myweekday = "0" + myweekday; 
+	} 
+	return (myyear+"-"+mymonth + "-" + myweekday); 
+} 
+
+function excelExport(){
+	window.location='/cash/export/excel';
+}
+
 </script>
 </div>
 
@@ -63,7 +225,7 @@ $(document).ready(function(){
 <div class="listContent">
   <table class="listTable">
   <tr class="rh">
-    <th class="c1"><input type="checkbox" name="chkall" value="<!--{$recordnum}-->" onclick="F.checkListAll(this);" id="chkListAll" /></th>
+    <th class="c1"><input type="checkbox" name="chkall" value="<!--{$recordNum}-->" onclick="F.checkListAll(this);" id="chkListAll" /></th>
     <th class="c2 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=cashing_id">提现订单号<!--{sortfield field='cashing_id'}--></th>
     <th class="c3">支付订单号</th>
     <th class="c4 sortfield" data-rel="<!--{$qparturl}-->,<!--{$searchstr}-->&orderby=user_id">姓名<!--{sortfield field='user_id'}--></th>

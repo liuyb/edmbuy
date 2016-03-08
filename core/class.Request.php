@@ -183,7 +183,73 @@ class Request {
 	 */
 	public static function isIE($ua = NULL) {
 	  if (!isset($ua)) $ua = self::ua();
-	  return strpos('MSIE', $ua)===-1 ? FALSE : TRUE;
+	  return strpos($ua, 'MSIE')===false ? FALSE : TRUE;
+	}
+	
+	/**
+	 * Check whether is mobile device
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isMobile($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return preg_match('/AppleWebKit.*Mobile.*/', $ua) ? TRUE : FALSE;
+	}
+	
+	/**
+	 * Check whether is iOS browser
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isIOS($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return preg_match('/\(i[^;]+;( U;)? CPU.+Mac OS X/', $ua) ? TRUE : FALSE;
+	}
+	
+	/**
+	 * Check whether is iPhone browser
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isIPhone($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return strpos($ua, 'iPhone')===false ? FALSE : TRUE;
+	}
+	
+	/**
+	 * Check whether is iPad browser
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isIPad($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return strpos($ua, 'iPad')===false ? FALSE : TRUE;
+	}
+	
+	/**
+	 * Check whether is iPod browser
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isIPod($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return strpos($ua, 'iPod')===false ? FALSE : TRUE;
+	}
+	
+	/**
+	 * Check whether is Android browser
+	 * 
+	 * @param string $ua
+	 * @return boolean
+	 */
+	public static function isAndroid($ua = NULL) {
+		if (!isset($ua)) $ua = self::ua();
+		return strpos($ua, 'Android')===false && strpos($ua, 'Adr')===false ? FALSE : TRUE;
 	}
 	
 	/**
