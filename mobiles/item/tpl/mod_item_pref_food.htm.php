@@ -46,26 +46,6 @@ $(document).ready(function(){
 	$(".linetwo").css({"position":"absolute","left":_linetwo});
 });
 
-/* function food_switch(cat, type){
-	var cur_cat = $(".click_more").attr('data-cat');
-	if(cur_cat == cat){
-		return;
-	}
-	$(".dress_title li").each(function(){
-		var nav = $(this).find("p");
-		var _curtype = nav.attr("data-type");
-		if(_curtype == type){
-			if(!nav.hasClass(type+"_r")){
-				nav.addClass(type+"_r");
-			}
-		}else{
-			nav.removeClass(_curtype+"_r");
-		}
-	});
-	$(".tea_info_list ul").empty();
-	getGoodsByCat(cat);
-} */
-
 function getGoodsByCat(cat){
 	$(".click_more").attr('data-cat', cat);
 	getGoodsList(1, cat, true);
@@ -74,20 +54,11 @@ function getGoodsByCat(cat){
 function contructGoodsHTML(ret, isinit, category){
 	if(!ret || !ret.result || !ret.result.length){
 		var emptyTR = "<li style=\"text-align:center;margin:0px;width:100%;line-height:35px;background:#fff;\">还没有商品！<br/>招商座机：0755-26418979</li>";
-		handleAppend(emptyTR);
+		handleGoodsListAppend($(".tea_info_list ul"), emptyTR, isinit);
 		return;
 	}
 	var LI = buildGoodsListLI(ret);
-	handleAppend(LI, category);
-	/* setTimeout(function(){
-		var _width =( $(window).width() - 30 ) / 2;
-		$(".tea_info_list img,.tea_info_list li").width(_width);
-	}, 0); */
-}
-function handleAppend(LI, cat){
-	var _list = $("#goodslist");
-	_list.find(".tea_info_list ul").append(LI);
-	F.set_scroller(false, 100);
+	handleGoodsListAppend($(".tea_info_list ul"), LI, isinit);
 }
 </script>
 

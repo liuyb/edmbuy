@@ -195,6 +195,14 @@ class Item_Controller extends MobileController {
 	        $cartnum = Cart::getUserCartNum(Cart::shopping_uid());
 	        $this->v->assign('cartnum', $cartnum);
 	    }
+	    //分享信息
+	    $share_info = [
+	        'title' => '难得的好商城，值得关注！',
+	        'desc'  => Item_Model::$prefe_share_title[$type],
+	        'link'  => U('/item/pref/show?type='.$type, 'spm='.Spm::user_spm(), true),
+	        'pic'   => U(Item_Model::$prefe_share_pic[$type],'',true),
+	    ];
+	    $this->v->assign('share_info', $share_info);
 	    throw new ViewResponse($this->v);
 	}
 	

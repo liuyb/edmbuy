@@ -27,15 +27,11 @@ $(document).ready(function(){
 function contructGoodsHTML(ret, isinit){
 	if(!ret || !ret.result || !ret.result.length){
 		var emptyTR = "<li style=\"text-align:center;width: 100%;margin: 0px;line-height: 35px;background:#fff;\">还没有商品！<br/>招商座机：0755-26418979</li>";
-		handleGoodsListAppend(emptyTR);
+		handleGoodsListAppend($("#goods_list"), emptyTR, isinit);
 		return;
 	}
 	var LI = buildGoodsListLI(ret);
-	handleGoodsListAppend(LI);
-	/* setTimeout(function(){
-		var _width =( $(window).width() - 30 ) / 2;
-		$(".tea_info_list img,.tea_info_list li").width(_width);
-	}, 0); */
+	handleGoodsListAppend($("#goods_list"), LI, isinit);
 }
 </script>
 

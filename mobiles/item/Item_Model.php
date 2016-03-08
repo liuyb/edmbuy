@@ -37,6 +37,26 @@ class Item_Model extends Model {
         self::CATEGORY_RICE => '49',
     );
     
+    //专区对应的描述信息
+    static $prefe_share_title = array(
+        self::CATEGORY_98 => '【98专区】消费满98元 即可成为米商',
+        self::CATEGORY_FRUIT => '【水果专区】纯天然新鲜水果 绿色 安全 无公害',
+        self::CATEGORY_TEA_WINE => '【茶酒专区】茶中臻品 酒香四溢',
+        self::CATEGORY_FOOD => '【食品专区】严把质量关 让你吃的安全放心',
+        self::CATEGORY_CLOTHING => '【春季特卖】2016春季必备清单',
+        self::CATEGORY_RICE => '【精选好米】精选优质好米 绿色 健康 养生'
+    );
+    
+    //专区对应的图片
+    static $prefe_share_pic = array(
+        self::CATEGORY_98 => 'themes/mobiles/img/98_02.png',
+        self::CATEGORY_FRUIT => 'themes/mobiles/img/fruit3.png',
+        self::CATEGORY_TEA_WINE => 'themes/mobiles/img/tea_wine.png',
+        self::CATEGORY_FOOD => 'themes/mobiles/img/food001.png',
+        self::CATEGORY_CLOTHING => 'themes/mobiles/img/dress.png',
+        self::CATEGORY_RICE => 'themes/mobiles/img/receal.png'
+    );
+    
     /**
      * 专区商品列表
      * @param PagerPull $pager

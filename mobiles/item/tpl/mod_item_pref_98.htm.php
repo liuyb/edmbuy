@@ -36,7 +36,7 @@ $(document).ready(function(){
 function contructGoodsHTML(ret, isinit){
 	if(!ret || !ret.result || !ret.result.length){
 		var emptyTR = "<li style=\"text-align:center;width: 100%;margin: 0px;line-height: 35px;\">还没有商品！<br/>招商座机：0755-26418979</li>";
-		handleGoodsListAppend(emptyTR);
+		handleGoodsListAppend($("#goods_list"), emptyTR, isinit);
 		return;
 	}
 	var LI = "";
@@ -55,11 +55,7 @@ function contructGoodsHTML(ret, isinit){
 		LI += "<p><button class=\"pro_info_btn\">立即购买</button></p>";
 		LI += "</div><div class=\"clear\"></div></li>";
 	}
-	handleGoodsListAppend(LI);
-	setTimeout(function(){
-		var _width = $(".pro_list_info li").width() - 134;
-		$(".pro_info_r").width(_width);
-	}, 0);
+	handleGoodsListAppend($("#goods_list"), LI, isinit);
 }
 </script>
 

@@ -69,8 +69,12 @@ function handleWhenHasNextPage(data, category){
 	}
 }
 
-function handleGoodsListAppend(LI){
-	$("#goods_list").append($(LI));
+function handleGoodsListAppend(obj, LI, isinit){
+	if(isinit){
+		obj.html(LI);
+	}else{
+    	obj.append(LI);//加载更多用append
+	}
 	F.set_scroller(false, 100);
 }
 
@@ -99,7 +103,7 @@ function goods_switch(cat, type){
 			nav.removeClass(_curtype+"_r");
 		}
 	});
-	$(".tea_info_list ul").empty();
+	//$(".tea_info_list ul").empty();
 	
 	$(".click_more").attr('data-cat', cat);
 	getGoodsList(1, cat, true);

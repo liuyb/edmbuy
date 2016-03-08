@@ -39,11 +39,7 @@ function contructGoodsHTML(ret, isinit){
 		return;
 	}
 	var LI = buildGoodsListLI(ret);
-	handleGoodsListAppend(LI);
-	/* setTimeout(function(){
-		var _width =( $(window).width() - 30 ) / 2;
-		$(".tea_info_list img,.tea_info_list li").width(_width);
-	}, 0); */
+	handleGoodsListAppend($("#goods_list"), LI, isinit);
 }
 </script>
 

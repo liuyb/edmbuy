@@ -108,17 +108,7 @@ function contructGoodsHTML(ret, isinit, category){
 		return;
 	}
 	var LI = buildGoodsListLI(ret);
-	handleAppend(LI, category);
-	/* setTimeout(function(){
-		var _width =( $(window).width() - 30 ) / 2;
-		$(".tea_info_list img,.tea_info_list li").width(_width);
-	}, 0); */
-}
-function handleAppend(LI, cat){
-	//var _list = $("#"+cat+"list");
-	var _list = $("#teawinelist");
-	_list.find(".tea_info_list ul").append(LI);
-	F.set_scroller(false, 100);
+	handleGoodsListAppend($(".tea_info_list ul"), LI, isinit);
 }
 </script>
 
