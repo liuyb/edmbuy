@@ -114,7 +114,7 @@ window.location.reload();
 	var promote_endtime;
 	$().ready(function(){
 		//图片大小
-		ajust_div_size();
+		//ajust_div_size();
 		
 		//$(".scrollArea").css("overflow","hidden");
 		//显示吃喝穿商品列表
@@ -287,4 +287,5 @@ window.location.reload();
 			}
 		
 	}
+	setTimeout("ajust_div_size()",0);
 </script>
