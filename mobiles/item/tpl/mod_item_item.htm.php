@@ -164,7 +164,7 @@ $(function(){
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
 	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if($user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
-	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_order_count?>笔</span><span class="fl">快递：免运费</span></div>
+	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_goods_number?>件</span><span class="fl">快递：免运费</span></div>
 </div>
 
 <?php if($referee):?>

@@ -23,6 +23,7 @@ class Items extends StorageNode {
 					'click_count'     => 'click_count',
 					'collect_count'   => 'collect_count',
 					'paid_order_count'=> 'paid_order_count',
+					'paid_goods_number'=> 'paid_goods_number',
 					'brand_id'        => 'brand_id',
 					'provider_name'   => 'provider_name',
 					'item_number'     => 'goods_number',
@@ -208,11 +209,42 @@ ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
 		$sql =<<<HERESQL
 UPDATE {$ectb_goods} g, (
 				SELECT og.goods_id,COUNT(l.order_id) AS order_num
-				FROM {$ectb_order_goods} og LEFT JOIN {$ectb_pay_log} l ON og.order_id=l.order_id AND l.is_paid=1
+				FROM {$ectb_order_goods} og INNER JOIN {$ectb_pay_log} l ON og.order_id=l.order_id AND l.is_paid=1
 				WHERE og.goods_id IN(SELECT goods_id FROM {$ectb_order_goods} WHERE order_id={$order_id})
 				GROUP BY og.goods_id
 			) pgon
 SET g.paid_order_count = pgon.order_num
+WHERE g.goods_id = pgon.goods_id
+HERESQL;
+	
+		D()->raw_query($sql);
+		if (D()->affected_rows() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 更新订单下所有商品真正付费卖出的"单品数"
+	 *
+	 * @param integer $order_id
+	 * @return boolean
+	 */
+	static function updatePaidNumByOrderid($order_id) {
+		$order_id = intval($order_id);
+		if (empty($order_id)) return false;
+	
+		$ectb_goods       = Items::table();
+		$ectb_order_goods = OrderItems::table();
+		$ectb_pay_log     = PayLog::table();
+		$sql =<<<HERESQL
+UPDATE {$ectb_goods} g, (
+				SELECT og.goods_id,SUM(og.goods_number) AS paid_goods_num
+				FROM {$ectb_order_goods} og INNER JOIN {$ectb_pay_log} l ON og.order_id=l.order_id AND l.is_paid=1
+				WHERE og.goods_id IN(SELECT goods_id FROM {$ectb_order_goods} WHERE order_id={$order_id})
+				GROUP BY og.goods_id
+			) pgon
+SET g.paid_goods_number = pgon.paid_goods_num
 WHERE g.goods_id = pgon.goods_id
 HERESQL;
 	

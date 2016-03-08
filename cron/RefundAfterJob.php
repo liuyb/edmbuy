@@ -205,14 +205,17 @@ class RefundAfterJob extends CronJob {
 		//记录订单操作记录
 		Order::action_log($order_id, ['action_note'=>'用户支付']);
 		
-		//更新订单下所有商品的"订单数"
-		Items::updateOrderCntByOrderid($order_id);
-		
 		//检查用户资格
 		$cUser = Users::load($order_uid);
 		if ($cUser->is_exist()) {
 			$cUser->check_level();
 		}
+		
+		//更新订单下所有商品的"订单数"
+		Items::updateOrderCntByOrderid($order_id);
+		
+		//更新订单下所有商品卖出的"单品数"
+		Items::updatePaidNumByOrderid($order_id);
 		
 	}
 	
