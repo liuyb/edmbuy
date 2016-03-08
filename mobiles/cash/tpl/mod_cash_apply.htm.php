@@ -107,7 +107,7 @@ $(document).on("click", "#apply_cash_btn", function(){
 				showAlert(ret.msg, ret.detail,'<?php echo U('cash/detail')?>');
 			}
 			else {
-				$(_this).attr('disabled',false);
+				$(_this).removeAttr('disabled');
 				showAlert(ret.msg, ret.detail);
 			}
 		}, 1000);

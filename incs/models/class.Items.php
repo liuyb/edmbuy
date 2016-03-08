@@ -137,6 +137,45 @@ ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
 	}
 	
 	/**
+	 * 获得指定的商品属性信息
+	 * 
+	 * @param array       $arr        规格、属性ID数组
+	 * @param type        $type       设置返回结果类型：pice，显示价格，默认；no，不显示价格
+	 * @return string
+	 */
+	static function attrs_info($arr, $type = 'pice') {
+		$attr   = '';
+		
+		if (!empty($arr))
+		{
+			$fmt = "%s:%s[%s] \n";
+			$idstr = '';
+			if (is_array($arr)) {
+				$idstr = implode(',', $arr);
+			}
+			else {
+				$idstr = $arr;
+			}
+		
+			$tb_goods_attr = '`shp_goods_attr`';
+			$tb_attr       = '`shp_attribute`';
+			$sql = "SELECT a.attr_name, ga.attr_value, ga.attr_price ".
+					   "FROM {$tb_goods_attr} AS ga, {$tb_attr} AS a ".
+			       "WHERE ga.goods_attr_id IN(%s) AND a.attr_id = ga.attr_id";
+			$list = D()->query($sql, $idstr)->fetch_array_all();
+			if (!empty($list)) {
+				foreach ($list AS $row) {
+					$attr_price = round(floatval($row['attr_price']), 2);
+					$attr .= sprintf($fmt, $row['attr_name'], $row['attr_value'], $attr_price);
+				}
+			}
+			$attr = str_replace('[0]', '', $attr);
+		}
+		
+		return $attr;
+	}
+	
+	/**
 	 * 改变商品表库存
 	 *
 	 * @param integer $item_id

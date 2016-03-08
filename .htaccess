@@ -32,7 +32,7 @@ AddType text/cache-manifest manifest
   RewriteRule ^fst\.(js|gif)$ fst.php [L,QSA]
   
   # Rewrite URLs of the form 'x' to the form 'mobile.php?q=x'.
-  RewriteCond %{HTTP_HOST} ^edmdev\.fxmapp\.com$
+  RewriteCond %{HTTP_HOST} ^m\.ydmbuy\.com$
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !=/favicon.ico

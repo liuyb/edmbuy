@@ -61,7 +61,7 @@
 				<div class="p_cart_btit"><?=$attrgrp['attr_name']?></div>
 				<ul class="p_cart_ul clearfix">
 	<?php $i=0; foreach ($attrgrp['attrs'] AS $attr): ?>
-					<li <?php if(0===$i): ?>class="on"<?php endif;?> data-style="" data-attr_id="<?=$attr['attr_id']?>" data-attr_price="<?=$attr['attr_price']?>"><?=$attr['attr_value']?></li>
+					<li <?php if(0===$i): ?>class="on"<?php endif;?> data-style="" data-goods_attr_id="<?=$attr['goods_attr_id']?>" data-attr_id="<?=$attr['attr_id']?>" data-attr_price="<?=$attr['attr_price']?>"><?=$attr['attr_value']?></li>
 	<?php $i++; endforeach;?>
 					<input type="hidden"/>
 				</ul>
@@ -335,18 +335,21 @@ $(document).ready(function(){
 });
 
 //已选择的所有属性
+var spec_ids = '';
 function showSelect(){
 	if (typeof(showSelect.base_price)=='undefined') {
 		showSelect.base_price = parseFloat($('#cart_shop_price').attr('data-base_price'));
 	}
+	spec_ids = '';
 	var select = '', price = showSelect.base_price;
 	$("#p_cart_main .p_cart_ul").each(function(){
 		var li = $(this).find("li.on");
 		select += '"' + li.text() + '",';
-		price += parseFloat(li.attr('data-attr_price'));
+		spec_ids += li.attr('data-goods_attr_id') + ',';
+		price += parseFloat(li.attr('data-attr_price')?li.attr('data-attr_price'):0);
 	});
-	var length = select.length;
-	select = select.substr(0,length-1);
+	select = select.substr(0,select.length-1);
+	spec_ids = spec_ids.substr(0,spec_ids.length-1);
 	$("#product_select").text(select);
 	$('#cart_shop_price').text(price.toFixed(2));
 }
@@ -369,7 +372,7 @@ function immediate_buy(item_id, item_num) {
 	}
 	if (_self.ajaxing) return;
 	_self.ajaxing = 1;
-	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num},function(ret){
+	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num,spec:spec_ids},function(ret){
 		_self.ajaxing = 0;
 		var gourl = '<?php echo U('trade/order/confirm')?>';
 		if (gourl.lastIndexOf('?') < 0) gourl += '?';
@@ -387,7 +390,7 @@ function add_to_cart(item_id, item_num, callback) {
 	}
 	if (_self.ajaxing) return;
 	_self.ajaxing = 1;
-	F.post('<?php echo U('trade/cart/add')?>',{item_id:item_id,item_num:item_num},function(ret){
+	F.post('<?php echo U('trade/cart/add')?>',{item_id:item_id,item_num:item_num,spec:spec_ids},function(ret){
 		_self.ajaxing = 0;
 		if (ret.code > 0) {
 			var old_stock = parseInt($('#stock-num').text());

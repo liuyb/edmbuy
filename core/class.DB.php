@@ -458,7 +458,7 @@ class DB {
    * @param array $setarr
    *  set sql key-value array
    *
-   * @param array $wherearr
+   * @param array|string $wherearr
    *  where condition
    *  
    * @param string $flag
@@ -467,7 +467,7 @@ class DB {
    * @return int
    *  affected rows
    */
-  public function update($tablename, Array $setarr, Array $wherearr, $flag = '') {
+  public function update($tablename, Array $setarr, $wherearr, $flag = '') {
     $server_mode = self::WRITABLE; //Because of 'UPDATE', so use self::WRITABLE
     $setsql = $comma = '';
     foreach ($setarr as $set_key => $set_value) {
@@ -499,12 +499,12 @@ class DB {
    * update table record
    * 
    * @param string $tablename
-   * @param array $wherearr
+   * @param array|string $wherearr
    *  whether raw mode, when in raw mode, $tablename use original value, rather than with table prefix
    * @return int
    *   affected rows
    */
-  public function delete($tablename, Array $wherearr) {
+  public function delete($tablename, $wherearr) {
     $server_mode = self::WRITABLE; //Because of 'DELETE', so use self::WRITABLE
     $where = '';
     if(empty($wherearr)) {

@@ -2,16 +2,16 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <!-- <li><a href='/activity'><img src="/themes/mobiles/img/banner.png"></a></li> -->
-    <li style="display:block"><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
+    <li style="display:block"><a href='http://m.edmbuy.com/item/pref/show?type=clothing'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/38%E5%A5%B3%E7%8E%8B%E8%8A%822.png"></a></li>
+    <li><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
     <li><a href="http://m.edmbuy.com/item/1045"><img src="/themes/mobiles/img/banner02.png"></a></li>
     <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>
     </ul>
     <div id="slinav" class="slinav clearfix">
-    <!-- <a href="javascript:void(0);" class="hwspeed">1</a>  -->
     <a href="javascript:void(0);" class="hwspeed active">1</a>
     <a href="javascript:void(0);" class="hwspeed">2</a>
     <a href="javascript:void(0);" class="hwspeed">3</a>
+    <a href="javascript:void(0);" class="hwspeed">4</a>
      </div>
   </div>
 </div>

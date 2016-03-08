@@ -163,15 +163,17 @@ class Cart extends StorageNode {
 	 *
 	 * @param $item_id      integer
 	 * @param $num          integer
+	 * @param $spec_ids     string 
 	 * @param $is_immediate integer
 	 * @param $user_id      integer
 	 * @return array
 	 *   ['code' => >0, 'msg' => '添加成功']        //这时ret['code']即rec_id
 	 *   ['code' => -1, 'msg' => '对应商品不存在']
 	 *   ['code' => -2, 'msg' => '商品库存不足']
+	 *   ['code' => -3, 'msg' => '属性规格格式不正确']
 	 *   ['code' =>-10, 'msg' => '添加失败']
 	 */
-	static function addItem($item_id, $num = 1, $is_immediate = false, $user_id = NULL) {
+	static function addItem($item_id, $num = 1, $spec_ids = '', $is_immediate = false, $user_id = NULL) {
 		if (!$user_id) $user_id = $GLOBALS['user']->uid;
 	
 		$ret = ['code' => 0, 'msg' => '添加成功'];
@@ -184,6 +186,13 @@ class Cart extends StorageNode {
 				$ret = ['code' => -2, 'msg' => '商品库存不足'];
 				return $ret;
 			}
+			
+			$spec_ids = trim($spec_ids);
+			if (''!=$spec_ids && !preg_match('/^(\d)+[,\d ]*$/', $spec_ids)) {
+				$ret = ['code' => -3, 'msg' => '属性规格格式不正确'];
+				return $ret;
+			}
+			
 			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id, $is_immediate);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
 				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, false)) {
@@ -219,7 +228,7 @@ class Cart extends StorageNode {
 				$cart->goods_number= $num;
 				$cart->goods_thumb = $exItem->item_thumb;
 				$cart->goods_img   = $exItem->item_img;
-				$cart->goods_attr  = '';
+				$cart->goods_attr  = Items::attrs_info($spec_ids);
 				$cart->is_real     = $exItem->is_real;
 				$cart->extension_code = $exItem->extension_code;
 				$cart->parent_id   = 0;
@@ -228,7 +237,7 @@ class Cart extends StorageNode {
 				$cart->is_shipping = $exItem->is_shipping;
 				$cart->is_immediate = $is_immediate ? 1 : 0;
 				$cart->can_handsel = 0;
-				$cart->goods_attr_id = '';
+				$cart->goods_attr_id = $spec_ids;
 				$cart->save(Storage::SAVE_INSERT);
 				
 				if ($cart->id) {

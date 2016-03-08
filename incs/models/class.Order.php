@@ -170,18 +170,22 @@ class Order extends StorageNode{
      * @param integer $order_id
      * @param integer $status_to
      * @param integer $user_id
+     * @param integer $no_equal_status 不等的状态
      * @return boolean
      */
-    static function change_paystatus($order_id, $status_to, $user_id = NULL) {
+    static function change_paystatus($order_id, $status_to, $user_id = NULL, $no_equal_status = -1) {
     	if (!$order_id) return false;
     
     	$updata = ['pay_status'=>$status_to];
-    	$where  = ['order_id'=>$order_id];
+    	$where  = 'order_id='.intval($order_id);
     	if ($status_to==PS_PAYED) {
     		$updata['pay_time'] = simphp_gmtime();
     	}
     	if (!empty($user_id)) {
-    		$where['user_id'] = $user_id;
+    		$where  .= ' AND user_id='.intval($user_id);
+    	}
+    	if ($no_equal_status >=0 ) {
+    		$where  .= ' AND pay_status<>'.intval($no_equal_status);
     	}
     	D()->update(self::table(), $updata, $where);
     
