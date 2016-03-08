@@ -57,9 +57,10 @@ class Trade_Controller extends MobileController {
   
   		$item_id  = $request->post('item_id' , 0);
   		$item_num = $request->post('item_num', 1);
+  		$spec_ids = $request->post('spec', '');
   
   		$shopping_uid = Cart::shopping_uid();
-  		$ret = Cart::addItem($item_id, $item_num, true, $shopping_uid);
+  		$ret = Cart::addItem($item_id, $item_num, $spec_ids, true, $shopping_uid);
   		if ($ret['code']>0) {
   			$ret['ts'] = simphp_time();
   		}
@@ -79,10 +80,11 @@ class Trade_Controller extends MobileController {
       
       $item_id  = $request->post('item_id' , 0);
       $item_num = $request->post('item_num', 1);
+      $spec_ids = $request->post('spec', '');
       
       $shopping_uid = Cart::shopping_uid();
       
-      $ret = Cart::addItem($item_id, $item_num, false, $shopping_uid);
+      $ret = Cart::addItem($item_id, $item_num, $spec_ids, false, $shopping_uid);
       if ($ret['code']>0) {
         $ret['cart_num'] = Cart::getUserCartNum($shopping_uid);
       }

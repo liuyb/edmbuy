@@ -73,7 +73,7 @@ $(function(){
 
 <?php endforeach;?>
 
-<?php form_topay_script(U('trade/order/record'));?>
+<?php form_topay_script(U('trade/order/payok'));?>
 <?php require_scroll2old();?>
 <script>
 $(function(){
