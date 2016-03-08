@@ -58,7 +58,7 @@ return [
   ],
   'cookie' => [
     'default' => [
-      'domain'	  => 'edmdev.fxmapp.com',
+      'domain'	  => 'm.ydmbuy.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,

@@ -821,7 +821,7 @@ class Trade_Controller extends MobileController {
   			$response->sendJSON($ret);
   		}
   
-  		$b = Order::change_paystatus($order_id, $status_to, $user_id);
+  		$b = Order::change_paystatus($order_id, $status_to, $user_id, PS_PAYED);
   		if ($b) {
   			$ret = ['flag'=>'SUC','msg'=>'操作成功', 'order_id'=>$order_id];
   		}
