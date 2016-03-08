@@ -14,7 +14,7 @@ class Default_Model extends Model {
     
     private static $goods_category_mapping = array(
         self::CATEGORY_FOOD => '37,51',
-        self::CATEGORY_DRINK => '36',
+        self::CATEGORY_DRINK => '36,56',
         self::CATEGORY_WEAR => '52'
         
     );
