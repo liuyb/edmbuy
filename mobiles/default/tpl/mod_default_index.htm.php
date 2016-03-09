@@ -228,7 +228,7 @@ window.location.reload();
 	}
 
 	function gotoItem(goodId){
-		window.location = '/item/'+goodId+'&back=index';
+		window.location = '/item/'+goodId+'?back=index';
 	}
 
 	function scrollToHistoryPosition(){

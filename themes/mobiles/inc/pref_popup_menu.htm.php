@@ -86,7 +86,7 @@ function pulldata(obj){
 }
 
 function gotoItem(goodId){
-	window.location = '/item/'+goodId+'&back=pref&category='+cur_category;
+	window.location = '/item/'+goodId+'?back=pref&category='+cur_category;
 }
 
 //有些专区可以共用的分类切换
