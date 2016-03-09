@@ -185,7 +185,9 @@ function formatDate(date) {
 } 
 
 function excelExport(){
-	window.location='/cash/export/excel';
+	var url = '/cash/export/excel?fdate='+$('#search_from_date').val().trim()+'&tdate='+$('#search_to_date').val().trim();
+	url+= '&period='+$('#period').val().trim()+'&status='+$('#status').val().trim()+'&searchTxt='+$("#searchTxt").val().trim();
+	window.location = url;
 }
 
 </script>

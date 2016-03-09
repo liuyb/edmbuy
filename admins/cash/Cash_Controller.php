@@ -123,7 +123,17 @@ class Cash_Controller extends AdminController {
 	    $recordList = Cash_Model::getCashingForExport($orderinfo[0],$orderinfo[1],$query_conds);
 	    
 	    $filename  = SIMPHP_ROOT . '/var/tmp/CASH_LIST_%s.csv';
-	    $filename  = sprintf($filename, $searchinfo['from_date'].'~'.$searchinfo['to_date']);
+	    $format_str = "";
+	    if(!$searchinfo['from_date'] && !$searchinfo['to_date']){
+	        $format_str = "ALL";
+	    }else if($searchinfo['from_date'] && !$searchinfo['to_date']){
+	        $format_str = "FROM ".$searchinfo['from_date'];
+	    }else if(!$searchinfo['from_date'] && $searchinfo['to_date']){
+	        $format_str = "TO ".$searchinfo['to_date'];
+	    }else if($searchinfo['from_date'] && $searchinfo['to_date']){
+	        $format_str = "FROM ".$searchinfo['from_date']." TO ". $searchinfo['to_date'];
+	    }
+	    $filename  = sprintf($filename, $format_str);
 	    
 	    
     	$csv = "提现订单号,支付订单号,姓名,手机号,持卡人,提现账号,	提现金额,实际到账,提交时间,提交时间,提现状态".self::CSV_LN;
