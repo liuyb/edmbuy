@@ -151,14 +151,21 @@ class Item_Controller extends MobileController {
 				}
 				$this->v->assign('kefu_link', $kefu_link);
 			}
-			//返回链接
+			//从商品详情页面点击返回链接逻辑
 			$back = $request->get('back');
+			$backhref = '';
 			if(isset($back) && $back == 'index'){
-			    $back = "location.href='/';";
-			}else{
-			    $back = 'javascript:history.go(-1);';
+			    $backhref = "location.href='/';";
+			}else if(isset($back) && $back == 'pref'){
+			    $category = $request->get('category','');
+			    if(isset($category) && $category){
+    			    $backhref = "location.href='/item/pref/show?type=".$category."';";
+			    }
 			}
-			$this->v->assign('back', $back);
+			if(empty($backhref)){
+			    $backhref = "location.href='/';";
+			}
+			$this->v->assign('back', $backhref);
 		}
 		else {
 			

@@ -59,7 +59,13 @@ include T('inc/pref_popup_menu');?>
 
 <script>
 $(document).ready(function(){
-	getGoodsByCat('tea');
+	var category = Cookies.get('teawine_category');
+	if(category != 'tea' && referIsFromItem()){
+		tea_wine_switch(category);
+		return;
+	}else{
+		getGoodsByCat('tea');
+	}
 });
 
 function tea_wine_switch(cat){
@@ -73,6 +79,7 @@ function tea_wine_switch(cat){
 	$(".tea_pro_list").hide();
 	$(".tea_pro_list[data-cat='"+cat+"']").show();
 	$(".tea_info_list ul").empty();
+	Cookies.set('teawine_category',cat,{path:'/'});
 	getGoodsByCat(cat);
 	/* var _list = $("#"+cat+"list");
 	var tab = $("#"+cat);

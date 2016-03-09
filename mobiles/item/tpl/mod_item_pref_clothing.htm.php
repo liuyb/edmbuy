@@ -13,9 +13,9 @@ include T('inc/pref_popup_menu');?>
 
 <div class="dress_title" style="margin-bottom:10px;">
 	<ul>
-		<li onclick="goods_switch('clothing','dress_bg');"><p data-type='dress_bg' class="dress_bg_r dress_bg_b">服装</p></li>
-		<li onclick="goods_switch('shoe','shoes_bg');"><p data-type='shoes_bg' class="shoes_bg_b">鞋子</p></li>
-		<li onclick="goods_switch('bag','cases_bg');"><p data-type='cases_bg' class="cases_bg_b">箱包</p></li>
+		<li onclick="goods_switch('clothing','dress_bg');"><p data-cat='clothing' data-type='dress_bg' class="dress_bg_r dress_bg_b">服装</p></li>
+		<li onclick="goods_switch('shoe','shoes_bg');"><p data-cat='shoe' data-type='shoes_bg' class="shoes_bg_b">鞋子</p></li>
+		<li onclick="goods_switch('bag','cases_bg');"><p data-cat='bag' data-type='cases_bg' class="cases_bg_b">箱包</p></li>
 		<span class="lineone"></span>
 		<span class="linetwo"></span>
 		<div class="clear"></div>
@@ -37,7 +37,13 @@ include T('inc/pref_popup_menu');?>
 
 <script>
 $(document).ready(function(){
-	getGoodsByCat('clothing');
+	var category = Cookies.get('clothing_category');
+	if(category != 'clothing' && referIsFromItem()){
+		var p = $(".dress_title").find("p[data-cat='"+category+"']");
+		goods_switch(category, p.attr("data-type"));
+	}else{
+    	getGoodsByCat('clothing');
+	}
 	
 	var _width = $(window).width() / 3;
 	var _linetwo =_width * 2 ;

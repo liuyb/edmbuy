@@ -35,9 +35,11 @@
 </div>
 </script>
 <div class="mask_menu cursor"></div>
-
+<?php require_scroll2old();?>
 <script>
 show_mtop($('#forMtop').html());
+
+var cur_category = "<?=$category ?>";
 
 //菜单开启
 $(".pre_m").on("click",function(){
@@ -76,6 +78,7 @@ function handleGoodsListAppend(obj, LI, isinit){
     	obj.append(LI);//加载更多用append
 	}
 	F.set_scroller(false, 100);
+	scrollToHistoryPosition();
 }
 
 function pulldata(obj){
@@ -83,7 +86,7 @@ function pulldata(obj){
 }
 
 function gotoItem(goodId){
-	window.location = '/item/'+goodId;
+	window.location = '/item/'+goodId+'&back=pref&category='+cur_category;
 }
 
 //有些专区可以共用的分类切换
@@ -106,6 +109,7 @@ function goods_switch(cat, type){
 	//$(".tea_info_list ul").empty();
 	
 	$(".click_more").attr('data-cat', cat);
+	Cookies.set(cur_category+'_category',cat,{path:'/'});
 	getGoodsList(1, cat, true);
 }
 
@@ -125,5 +129,23 @@ function buildGoodsListLI(ret){
 		LI += "</a></li>";
 	}
 	return LI;	
+}
+
+function scrollToHistoryPosition(){
+	if(!referIsFromItem()){
+		return;
+	}
+	var historyPos = Cookies.get(F.scroll_cookie_key());
+	F.set_scroller(!F.scroll2old?false:historyPos,100);
+}
+
+//来自商品页面的返回需要读取cookie
+function referIsFromItem(){
+	var refer=document.referrer;
+	var reg = /item\/\d+/;
+	if(!reg.test(refer)){
+		return false;
+	}
+	return true;
 }
 </script>

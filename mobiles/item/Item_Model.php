@@ -34,7 +34,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => '53',
         self::CATEGORY_SHOE => '54',
         self::CATEGORY_BAG => '55',
-        self::CATEGORY_RICE => '49',
+        self::CATEGORY_RICE => '49'
     );
     
     //专区对应的描述信息

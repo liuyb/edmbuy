@@ -13,9 +13,9 @@ include T('inc/pref_popup_menu');?>
 
 <div class="dress_title" style="margin-bottom:10px;">
 	<ul>
-		<li onclick="goods_switch('importfood','food_bg');"><p data-type='food_bg' class="food_bg_r food_bg_b">进口食品</p></li>
-		<li onclick="goods_switch('localfood','specialty_bg');"><p data-type='specialty_bg' class="specialty_bg_b">地方特产</p></li>
-		<li onclick="goods_switch('snackfood','sanck_bg');"><p data-type='sanck_bg' class="sanck_bg_b">休闲食品</p></li>
+		<li onclick="goods_switch('importfood','food_bg');"><p data-cat='importfood' data-type='food_bg' class="food_bg_r food_bg_b">进口食品</p></li>
+		<li onclick="goods_switch('localfood','specialty_bg');"><p data-cat='localfood' data-type='specialty_bg' class="specialty_bg_b">地方特产</p></li>
+		<li onclick="goods_switch('snackfood','sanck_bg');"><p data-cat='snackfood' data-type='sanck_bg' class="sanck_bg_b">休闲食品</p></li>
 		<span class="lineone"></span>
 		<span class="linetwo"></span>
 		<div class="clear"></div>
@@ -37,7 +37,13 @@ include T('inc/pref_popup_menu');?>
 
 <script>
 $(document).ready(function(){
-	getGoodsByCat('importfood');
+	var category = Cookies.get('food_category');
+	if(category != 'importfood' && referIsFromItem()){
+		var p = $(".dress_title").find("p[data-cat='"+category+"']");
+		goods_switch(category, p.attr("data-type"));
+	}else{
+    	getGoodsByCat('importfood');
+	}
 	
 	var _width = $(window).width() / 3;
 	var _linetwo =_width * 2 ;
