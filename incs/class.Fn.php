@@ -137,7 +137,8 @@ class Fn extends Func {
       SS_PREPARING    => '备货中',
       SS_SHIPPED_PART => '已发货(部分商品)',
       SS_SHIPPED_ING  => '发货中(处理分单)',
-      OS_SHIPPED_PART => '已发货(部分商品)'
+      OS_SHIPPED_PART => '已发货(部分商品)',
+      SS_RECEIVED_PART=> '已收货(部分商品)',
     );
     return self::status($status_set, $status);
   }

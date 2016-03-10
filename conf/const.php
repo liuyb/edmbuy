@@ -84,6 +84,7 @@ define('SS_PREPARING',              3); // 备货中
 define('SS_SHIPPED_PART',           4); // 已发货(部分商品)
 define('SS_SHIPPED_ING',            5); // 发货中(处理分单)
 define('OS_SHIPPED_PART',           6); // 已发货(部分商品)
+define('SS_RECEIVED_PART',          7); // 已收货(部分商品)
 
 /* 支付状态 */
 define('PS_UNPAYED',                0); // 未付款
