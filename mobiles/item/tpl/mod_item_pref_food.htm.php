@@ -11,7 +11,7 @@ $category = 'food';
 
 include T('inc/pref_popup_menu');?>
 
-<div class="dress_title" style="margin-bottom:10px;">
+<div class="dress_title" style="margin-bottom:5px;">
 	<ul>
 		<li onclick="goods_switch('importfood','food_bg');"><p data-cat='importfood' data-type='food_bg' class="food_bg_r food_bg_b">进口食品</p></li>
 		<li onclick="goods_switch('localfood','specialty_bg');"><p data-cat='localfood' data-type='specialty_bg' class="specialty_bg_b">地方特产</p></li>

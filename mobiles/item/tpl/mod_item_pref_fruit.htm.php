@@ -17,7 +17,7 @@ include T('inc/pref_popup_menu');?>
 		<a href="javascript:gotoItem(1045);"><img src="/themes/mobiles/img/gnqc.png"></a>
 	</div>
 	
-	<div class="tea_info_list" style="margin-top:10px;">
+	<div class="tea_info_list" style="margin-top:5px;">
 		<ul id="goods_list" class="clearfix">
 		</ul>
 		<div class="clear"></div>

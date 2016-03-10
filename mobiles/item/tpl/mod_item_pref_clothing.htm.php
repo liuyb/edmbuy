@@ -10,7 +10,7 @@ $page_head_pic = '/themes/mobiles/img/dress.png';
 $category = 'clothing';
 
 include T('inc/pref_popup_menu');?>
-
+<!-- 
 <div class="dress_title" style="margin-bottom:10px;">
 	<ul>
 		<li onclick="goods_switch('clothing','dress_bg');"><p data-cat='clothing' data-type='dress_bg' class="dress_bg_r dress_bg_b">服装</p></li>
@@ -21,9 +21,9 @@ include T('inc/pref_popup_menu');?>
 		<div class="clear"></div>
 	</ul>
 </div>
-
+ -->
 <div class="teawinecomment" id="goodslist">
-	<div class="tea_info_list">
+	<div class="tea_info_list" style="margin-top:5px;">
 		<ul>
 		</ul>
 	</div>
@@ -37,13 +37,14 @@ include T('inc/pref_popup_menu');?>
 
 <script>
 $(document).ready(function(){
-	var category = Cookies.get('clothing_category');
+	/* var category = Cookies.get('clothing_category');
 	if(category != 'clothing' && referIsFromItem()){
 		var p = $(".dress_title").find("p[data-cat='"+category+"']");
 		goods_switch(category, p.attr("data-type"));
 	}else{
     	getGoodsByCat('clothing');
-	}
+	} */
+	getGoodsByCat('clothing');
 	
 	var _width = $(window).width() / 3;
 	var _linetwo =_width * 2 ;

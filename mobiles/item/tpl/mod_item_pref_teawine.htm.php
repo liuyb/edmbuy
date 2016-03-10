@@ -30,7 +30,7 @@ include T('inc/pref_popup_menu');?>
 		<a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine02.png"></a>
 		<!-- <a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine03.png"></a> -->
 	</div>
-	<div class="tea_info_list" style="margin-top: 10px;">
+	<div class="tea_info_list" style="margin-top: 5px;">
 		<ul>
 		</ul>
 	</div>
