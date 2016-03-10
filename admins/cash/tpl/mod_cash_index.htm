@@ -159,7 +159,7 @@ function getStartAndEndDate(period){
 
 //获得本周的开端日期 
 function getWeekStartDate(nowYear, nowMonth, nowDay, nowDayOfWeek) { 
-	var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+	var weekStartDate = new Date(nowYear, nowMonth, (nowDay - nowDayOfWeek) + 1); 
 	return formatDate(weekStartDate); 
 } 
 
