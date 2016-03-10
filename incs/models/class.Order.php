@@ -141,9 +141,9 @@ class Order extends StorageNode{
      * @param integer $order_id
      * @return boolean
      */
-    static function cancel($order_id) {
+    static function cancel($order_id, $action_note = '用户取消') {
     	if (!$order_id) return false;
-    
+        
     	D()->update(self::table(), ['order_status'=>OS_CANCELED,'pay_status'=>PS_CANCEL], ['order_id'=>$order_id]);
     
     	if (D()->affected_rows()==1) {
@@ -157,7 +157,7 @@ class Order extends StorageNode{
     		}
     
     		//写order_action的日志
-    		self::action_log($order_id, ['action_note'=>'用户取消']);
+    		self::action_log($order_id, ['action_note'=>$action_note]);
     
     		return true;
     	}
