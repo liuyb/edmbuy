@@ -108,7 +108,7 @@ append_to_body($('#forBody').html());
   <div class="swipe">
     <ul id="slider" class="slider">
     <?php $i=0; foreach ($galleries AS $g):?>
-    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?=$g->img_url?>" alt="" /></a></li>
+    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$g->img_url?>')" alt="" /></a></li>
     <?php endforeach;?>
     </ul>
     <div id="slinav" class="slinav clearfix">
@@ -163,7 +163,7 @@ $(function(){
 <div class="p_detail_msg">
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if($user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
+	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>￥<?=$item->market_price?></b><?php if(0&&$user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
 	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_goods_number?>件</span><span class="fl">快递：免运费</span></div>
 </div>
 
