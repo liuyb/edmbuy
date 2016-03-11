@@ -40,7 +40,7 @@ class Default_Model extends Model {
 	 */
 	static function find_time_limit_activity(){
 	    $sql = "select act_id, start_time, end_time from shp_goods_activity 
-                where unix_timestamp(now()) between start_time and end_time and is_finished = 0 
+                where utc_timestamp() between from_unixtime(start_time) and from_unixtime(end_time) and is_finished = 0 
                 limit 1";
 	    return D()->query($sql)->fetch_array();
 	}
