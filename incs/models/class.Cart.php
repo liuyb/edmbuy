@@ -173,7 +173,7 @@ class Cart extends StorageNode {
 	 *   ['code' => -3, 'msg' => '属性规格格式不正确']
 	 *   ['code' =>-10, 'msg' => '添加失败']
 	 */
-	static function addItem($item_id, $num = 1, $spec_ids = '', $is_immediate = false, $user_id = NULL) {
+	static function addItem($item_id, $num = 1, $spec_ids = '', $is_immediate = false, $user_id = NULL, $is_fixed_value = false) {
 		if (!$user_id) $user_id = $GLOBALS['user']->uid;
 	
 		$ret = ['code' => 0, 'msg' => '添加成功'];
@@ -195,7 +195,7 @@ class Cart extends StorageNode {
 			
 			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id, $is_immediate);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
-				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, false)) {
+				if (self::changeCartGoodsNum($shopping_uid, $cart_rec_id, $num, true, $is_fixed_value)) {
 					$ret['code'] = $cart_rec_id;
 					$ret['added_num'] = $num;
 				}

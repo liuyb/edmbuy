@@ -60,7 +60,7 @@ class Trade_Controller extends MobileController {
   		$spec_ids = $request->post('spec', '');
   
   		$shopping_uid = Cart::shopping_uid();
-  		$ret = Cart::addItem($item_id, $item_num, $spec_ids, true, $shopping_uid);
+  		$ret = Cart::addItem($item_id, $item_num, $spec_ids, true, $shopping_uid, true);
   		if ($ret['code']>0) {
   			$ret['ts'] = simphp_time();
   		}
