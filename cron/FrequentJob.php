@@ -72,17 +72,17 @@ WHERE a.user_id=b.parent_id";
 	 * 更新某订单的收货时间
 	 * @param integer $order_id
 	 * @param integer $status_to
+	 * @param integer $max_confirm_ship_time
 	 */
-	private function upShippingConfirmTime_ChildOrder($order_id, $status_to = SS_RECEIVED) {
+	private function upShippingConfirmTime_ChildOrder($order_id, $status_to, $max_confirm_ship_time) {
 		if (!in_array($status_to, [SS_RECEIVED, SS_RECEIVED_PART])) {
 			return;
 		}
 		$this->log("update child order shipping confirm time, order_id={$order_id}...");
-		$the_time = simphp_gmtime() - self::TIME_14DAYS;
 		$sql = "UPDATE `shp_order_info`"
-				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=%d,`shipping_confirm_time`=`pay_time`+%d"
+				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=%d,`shipping_confirm_time`=%d"
 				 . " WHERE `order_id`=%d";
-		D()->query($sql, $status_to, self::TIME_14DAYS, $order_id);
+		D()->query($sql, $status_to, $max_confirm_ship_time, $order_id);
 		$this->log("--OK. affected rows: ".D()->affected_rows());
 	}
 	
@@ -97,15 +97,17 @@ WHERE a.user_id=b.parent_id";
 			$total = count($parent_list);
 			foreach ($parent_list AS $order) {
 				$order_id   = $order['order_id'];
-				$child_sql  = "SELECT order_id,shipping_status,pay_status FROM `shp_order_info` WHERE parent_id=%d AND is_separate=0";
+				$child_sql  = "SELECT order_id,shipping_status,pay_status,shipping_confirm_time FROM `shp_order_info` WHERE parent_id=%d AND is_separate=0";
 				$child_list = D()->query($child_sql, $order_id)->fetch_array_all();
 				if (!empty($child_list)) {
 					$ship_status_to = SS_UNSHIPPED;
 					$finish_count   = 0; // "已确认收货" 数
 					$noeffect_count = 0; // "确定无效" 数
+					$max_confirm_ship_time = 0;
 					foreach ($child_list AS $child_order) {
 						if ($child_order['shipping_status']==SS_RECEIVED && $child_order['pay_status']==PS_PAYED) {
 							$finish_count++;
+							$max_confirm_ship_time = $child_order['shipping_confirm_time'] > $max_confirm_ship_time ? $child_order['shipping_confirm_time'] : $max_confirm_ship_time;
 						}
 						if ($child_order['pay_status']==PS_REFUND || $child_order['pay_status']==PS_REFUNDING) {
 							$noeffect_count++;
@@ -115,14 +117,14 @@ WHERE a.user_id=b.parent_id";
 					$total_child = count($child_list);
 					$this->log("parent order({$order_id}) has child records: {$total_child}");
 					if ($finish_count == $total_child) { //表明所有子订单都已经确认收货
-						$this->upShippingConfirmTime_ChildOrder($order_id);
+						$this->upShippingConfirmTime_ChildOrder($order_id, SS_RECEIVED, $max_confirm_ship_time);
 					}
 					elseif ($finish_count > 0) { //表明只有部分订单已经确认收货
 						if ($finish_count == $total_child-$noeffect_count) { //表明剩下的子订单都是已退款无效的订单，则总订单可以设置为“全部确认收货”
-							$this->upShippingConfirmTime_ChildOrder($order_id);
+							$this->upShippingConfirmTime_ChildOrder($order_id, SS_RECEIVED, $max_confirm_ship_time);
 						}
 						else { //只能设定为部分收货
-							$this->upShippingConfirmTime_ChildOrder($order_id, SS_RECEIVED_PART);
+							$this->upShippingConfirmTime_ChildOrder($order_id, SS_RECEIVED_PART, $max_confirm_ship_time);
 						}
 					}
 				}
