@@ -7,6 +7,12 @@
 
 class FrequentJob extends CronJob {
 	
+	/**
+	 * 14天时间秒数
+	 * @var constant
+	 */
+	const TIME_14DAYS = 1209600; //=86400*14
+	
 	public function main($argc, $argv) {
 		
 		// 批量更新上级昵称
@@ -17,6 +23,9 @@ class FrequentJob extends CronJob {
 		
 		// 批量更新收货时间
 		$this->upShippingConfirmTime();
+		
+		// 检查父订单的子订单是否已经全部确认收货，是的话确认父订单收货
+		$this->upShippingConfirmTime_ParentOrder();
 		
 		// 批量更新佣金状态变化时间
 		$this->upCommisionState();
@@ -51,12 +60,78 @@ WHERE a.user_id=b.parent_id";
 	 */
 	private function upShippingConfirmTime() {
 		$this->log("update shipping confirm time(14 days after pay_time)...");
-		$the_time = simphp_gmtime() - 86400*14;
-		$sql = "UPDATE `shp_order_info` "
-				 . "SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=`pay_time`+1209600 "
-		     . "WHERE `pay_status`=".PS_PAYED." AND `shipping_status`=".SS_SHIPPED." AND `pay_time`<={$the_time}";
-		D()->query($sql);
+		$the_time = simphp_gmtime() - self::TIME_14DAYS;
+		$sql = "UPDATE `shp_order_info`"
+				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=`pay_time`+%d"
+		     . " WHERE `pay_status`=".PS_PAYED." AND `shipping_status`=".SS_SHIPPED." AND `pay_time`<={$the_time}";
+		D()->query($sql, self::TIME_14DAYS);
 		$this->log("OK. affected rows: ".D()->affected_rows());
+	}
+	
+	/**
+	 * 更新某订单的收货时间
+	 * @param integer $order_id
+	 * @param integer $status_to
+	 */
+	private function upShippingConfirmTime_ChildOrder($order_id, $status_to = SS_RECEIVED) {
+		if (!in_array($status_to, [SS_RECEIVED, SS_RECEIVED_PART])) {
+			return;
+		}
+		$this->log("update child order shipping confirm time, order_id={$order_id}...");
+		$the_time = simphp_gmtime() - self::TIME_14DAYS;
+		$sql = "UPDATE `shp_order_info`"
+				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=%d,`shipping_confirm_time`=`pay_time`+%d"
+				 . " WHERE `order_id`=%d";
+		D()->query($sql, $status_to, self::TIME_14DAYS, $order_id);
+		$this->log("--OK. affected rows: ".D()->affected_rows());
+	}
+	
+	/**
+	 * 检查父订单的子订单是否已经全部确认收货，是的话确认父订单收货
+	 */
+	private function upShippingConfirmTime_ParentOrder() {
+		$this->log("update parent order shipping confirm time(14 days after pay_time)...");
+		$list_sql = "SELECT order_id FROM `shp_order_info` WHERE is_separate=1 AND pay_status=%d AND shipping_status NOT IN(".SS_RECEIVED.",".SS_RECEIVED_PART.")";
+		$parent_list = D()->query($list_sql, PS_PAYED)->fetch_array_all();
+		if (!empty($parent_list)) {
+			$total = count($parent_list);
+			foreach ($parent_list AS $order) {
+				$order_id   = $order['order_id'];
+				$child_sql  = "SELECT order_id,shipping_status,pay_status FROM `shp_order_info` WHERE parent_id=%d AND is_separate=0";
+				$child_list = D()->query($child_sql, $order_id)->fetch_array_all();
+				if (!empty($child_list)) {
+					$ship_status_to = SS_UNSHIPPED;
+					$finish_count   = 0; // "已确认收货" 数
+					$noeffect_count = 0; // "确定无效" 数
+					foreach ($child_list AS $child_order) {
+						if ($child_order['shipping_status']==SS_RECEIVED && $child_order['pay_status']==PS_PAYED) {
+							$finish_count++;
+						}
+						if ($child_order['pay_status']==PS_REFUND || $child_order['pay_status']==PS_REFUNDING) {
+							$noeffect_count++;
+						}
+					}
+					
+					$total_child = count($child_list);
+					$this->log("parent order({$order_id}) has child records: {$total_child}");
+					if ($finish_count == $total_child) { //表明所有子订单都已经确认收货
+						$this->upShippingConfirmTime_ChildOrder($order_id);
+					}
+					elseif ($finish_count > 0) { //表明只有部分订单已经确认收货
+						if ($finish_count == $total_child-$noeffect_count) { //表明剩下的子订单都是已退款无效的订单，则总订单可以设置为“全部确认收货”
+							$this->upShippingConfirmTime_ChildOrder($order_id);
+						}
+						else { //只能设定为部分收货
+							$this->upShippingConfirmTime_ChildOrder($order_id, SS_RECEIVED_PART);
+						}
+					}
+				}
+			}
+			$this->log("OK. {$total} parent records found.");
+		}
+		else {
+			$this->log("OK. No record found.");
+		}
 	}
 	
 	/**
