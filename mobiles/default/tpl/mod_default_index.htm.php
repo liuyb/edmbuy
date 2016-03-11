@@ -141,7 +141,7 @@ window.location.reload();
 		});
 		//倒计时处理
 		<?php if(isset($package)):?>
-			promote_endtime = '<?=date('Y-m-d H:i:s', simphp_gmtime2std($package['end_time'])) ?>';
+			promote_endtime = '<?=date('Y-m-d H:i:s', $package['end_time']) ?>';
 			setInterval(GetRTime,0);
 		<?php endif?>
 	});

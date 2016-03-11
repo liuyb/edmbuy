@@ -456,7 +456,7 @@ class Order extends StorageNode{
     	$ectb_order_goods = OrderItems::table();
     	$where = "";
     	if ('wait_pay'==$status) {
-    		$where .= " AND pay_status=".PS_UNPAYED;
+    		$where .= " AND pay_status IN(".PS_UNPAYED.", ".PS_PAYING.")";
     	}
     	elseif ('wait_ship'==$status) {
     		$where .= " AND pay_status=".PS_PAYED;
