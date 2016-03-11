@@ -135,7 +135,7 @@ class Default_Controller extends MobileController {
     $share_info = [
     		'title' => '米商专属特权',
     		'desc'  => '益多米是新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。',
-    		'link'  => U('about', 'spm='.Spm::user_spm(), true),
+    		'link'  => U('riceplan', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
     $pager = new PagerPull(1, 6);
