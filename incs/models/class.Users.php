@@ -576,11 +576,12 @@ class Users extends StorageNode {
 					$extra = [
 						'order_sn'     => $order->order_sn,
 						'order_amount' => $order->money_paid.'元',
-						'order_state'  => '支付成功，你可以获得的%.2f元佣金'
+						'order_state'  => '支付成功，你可以获得%.2f元佣金'
 					];
-					$order_state = '支付成功，你可以获得的%.2f元佣金';
-					$first  = '你的%s级米客购买商品支付成功!';
-					$remark = '如分销商确认收货，你将可申请提现，点击查询详情';
+					$order_upart = $cUser->uid . ',' . $cUser->nickname;
+					$order_state = '支付成功，你可以获得%.2f元佣金';
+					$first  = '你的%s级米客('.$order_upart.')购买商品支付成功!';
+					$remark = '米客确认收货7天后，你将可申请提现，点击查询详情';
 					$url    = U('partner/commission',['status'=>0],true);
 					
 					//一级上级
