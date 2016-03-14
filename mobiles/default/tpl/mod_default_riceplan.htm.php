@@ -9,7 +9,7 @@
 
 <div class="header">
 	米商专属特权
-	<a href="javascript:history.back();" class="back"></a>
+	<a href="javascript:goBack();" class="back"></a>
 </div>
 
 <div class="rice_bg">
@@ -41,6 +41,16 @@
 		</ul>
 	</div><div class="clear"></div>
 </div>
+
+<script>
+function goBack(){
+	if(history.length > 1){
+		history.back();
+	}else{
+		window.location.href = '/';
+	}
+}
+</script>
 
 <?php include T('inc/followbox');?>
 <?php endif;?>
