@@ -108,7 +108,7 @@ append_to_body($('#forBody').html());
   <div class="swipe">
     <ul id="slider" class="slider">
     <?php $i=0; foreach ($galleries AS $g):?>
-    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$g->img_url?>')" alt="" /></a></li>
+    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?php echo ploadingimg()?>" data-loaded="0" data-orisrc="<?=$g->img_url?>" onload="imgLazyLoad(this,'<?=$g->img_url?>')" alt="" /></a></li>
     <?php endforeach;?>
     </ul>
     <div id="slinav" class="slinav clearfix">
@@ -148,7 +148,7 @@ $(function(){
   var currpic = '';
   var picset = new Array();
   $('#slider img').each(function(){
-	  picset.push($(this).attr('src'));
+	  picset.push($(this).attr('data-orisrc'));
 	  if (''==currpic) currpic = $(this).attr('src');
 	})
 	.click(function(){

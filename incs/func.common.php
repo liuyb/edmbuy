@@ -726,11 +726,13 @@ HEREDOC_SHARE_JS0;
 			$item_id = $matches[1];
 			$item = Items::load($item_id);
 			if ($item->is_exist()) {
+				$item_name= str_replace(["\n","\r"], [";",""], $item->item_name);
+				$item_brief=str_replace(["\n","\r"], [";",""], $item->item_brief);
 				$item_url = $item->url(Spm::user_spm());
 				$item_pic = $item->imgurl($item->item_thumb);
 				$data_js .=<<<HEREDOC_SHARE_JS0
-wxData.shareinfo.title = '{$item->item_name}';
-wxData.shareinfo.desc  = '{$item->item_brief}';
+wxData.shareinfo.title = '{$item_name}';
+wxData.shareinfo.desc  = '{$item_brief}';
 wxData.shareinfo.link  = '{$item_url}';
 wxData.shareinfo.pic   = '{$item_pic}';
 HEREDOC_SHARE_JS0;
