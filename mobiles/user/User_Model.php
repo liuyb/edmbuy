@@ -117,7 +117,7 @@ class User_Model extends Model
         $userInfo = $dbDrver->get_one($sql);
         $result['userInfo'] = $userInfo;
         if (empty($userInfo)) {
-            return ['userInfo' => null, 'goodsInfo' => null];
+            return ['userInfo' => null, 'goodsInfo' => null,'ismBusiness'=>null];
         }
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = Self::getGoodsList($userInfo, $is_separate);
