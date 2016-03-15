@@ -213,14 +213,14 @@ class User_Model extends Model
         $sql = "select sum(money_paid) as money_paid from shp_order_info where user_id=" . $user_id . " and pay_status=" . PS_PAYED;
         $money_paids = D()->get_one($sql);
         if (empty($money_paids['money_paid'])) {
-            return "还差98元成为米商";
+            return "差98元成为米商";
         }
         $money_paid = $money_paids['money_paid'];
         if ($money_paid >= 98) {
             return "已是米商";
         } else {
             $result = 98 - $money_paid;
-            return "还差" . $result . "元成为米商";
+            return "差" . $result . "元成为米商";
         }
     }
 }

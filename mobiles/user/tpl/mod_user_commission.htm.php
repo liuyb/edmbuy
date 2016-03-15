@@ -18,15 +18,13 @@
 		<img src="<?=$user->logo?>">
 	</div>
 	<div class="my_name_info">
-		<div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?=$userInfo['nick_name']?><span class="name_info_p">(<?=$ismBusiness?>)</span> </div>
+		<div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?=$userInfo['nick_name']?><span class="name_info_p" style="font-size: 14px;">（<?=$ismBusiness?>）</span> </div>
 		<div>人脉层级：<?=$leve[$level]?></div>
 		<div style="padding-bottom:15px;">订单金额：￥<?=$userInfo['money_paid']?></div>
 	</div>
 	<div class="get_broke">
 		<span>获得佣金：￥<?=$userInfo['commision']?></span>
-		<?php if($is_user):?>
-		<span class="ck_broke">查看佣金明细</span>
-		<?php endif;?>
+		<span class="ck_broke"><a href="/partner/commission?status=0">查看佣金明细</a></span>
 	</div>
 
 	<div class="my_name_order">
@@ -39,7 +37,9 @@
 				$totalNumber=count($goodsInfo);
 			foreach ($goodsInfo AS $info):?>
 			<tr onclick="gotoItem(<?=$info['goods_id']?>)">
-				<td width="70px;"><img src="<?=$info['goods_thumb']?>"></td>
+				<td width="70px;">
+					<img src="<?php echo ploadingimg()?>" data-loaded="0" onload="imgLazyLoad(this,'<?=$info['goods_thumb']?>')"/>
+				</td>
 				<td>
 					<p class="m_n_tit"><?=$info['goods_name']?></p>
 					<p><button class="tit_btn_q"><?=$info['shipping_status']?></button></p>
@@ -54,7 +54,7 @@
 		</table>
 	</div>
 	<div class="income_nums">
-		<span>共<?=$totalNumber?>件商品</span><span  class="income_nums_r">合计：￥<?=$totalPrice?> (含运费：￥10)</span>
+		<span>共<?=$totalNumber?>件商品</span><span  class="income_nums_r">合计：￥<?=$totalPrice?></span>
 	</div>
 		<?php if($is_user):?>
 	<div class="my_income_btnc">
@@ -73,6 +73,9 @@
 	});
 	$(".my_income_btnc .btnc_share").click(function(){
 			$('#cover-wxtips').show();
+	});
+	$(".my_income_btnc .btnc_plan").click(function(){
+		window.location='/riceplan';
 	});
 	function gotoItem(goodId){
 		window.location = '/item/'+goodId+'?back=index';
