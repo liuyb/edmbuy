@@ -11,8 +11,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> 'gavin@asdf',
+      'user'		=> 'root',
+      'pass'		=> 'root',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -22,8 +22,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> 'gavin@asdf',
+      'user'		=> 'root',
+      'pass'		=> 'root',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -74,7 +74,7 @@ return [
       'prefix'    => 'FXM',
     ],
     'adm' => [
-      'domain'	  => 'edmadm.fxmapp.com',
+      'domain'	  => 'adm.ydmbuy.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,
