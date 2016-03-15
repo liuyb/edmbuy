@@ -117,13 +117,13 @@ class User_Model extends Model
         $userInfo = $dbDrver->get_one($sql);
         $result['userInfo'] = $userInfo;
         if (empty($userInfo)) {
-            return ['userInfo' => null, 'goodsInfo' => null,'ismBusiness'=>null];
+            return ['userInfo' => null, 'goodsInfo' => null, 'ismBusiness' => null];
         }
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = Self::getGoodsList($userInfo, $is_separate);
-        $ismBusiness=Self::CheckmBusiness($userInfo['user_id']);
+        $ismBusiness = Self::CheckmBusiness($userInfo['user_id']);
         $result['goodsInfo'] = $goodsInfo;
-        $result['ismBusiness']=$ismBusiness;
+        $result['ismBusiness'] = $ismBusiness;
         return $result;
     }
 
@@ -145,14 +145,13 @@ class User_Model extends Model
             foreach ($order_ids as $values) {
                 $ids .= $values['order_id'] . ",";
             }
-                 $ids = rtrim($ids, ",");
+            $ids = rtrim($ids, ",");
         }
         if (!empty($ids)) {
-            $res = $userInfo['order_id'] . "," . $ids;
-            $condition = "in(".$res.")";
+            $condition = "in(" . $ids . ")";
         } else {
             $res = $userInfo['order_id'];
-            $condition = "=".$res;
+            $condition = "=" . $res;
         }
         //判断是否为米商
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
@@ -167,7 +166,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = Self::CheckOrderStatus($g['shipping_status'],$g['shipping_confirm_time']);
+            $g['shipping_status'] = Self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -177,7 +176,7 @@ class User_Model extends Model
      * @auth hc_edm
      * @param $shipping_status 订单状态
      */
-    static function CheckOrderStatus($shipping_status,$shipping_confirm_time)
+    static function CheckOrderStatus($shipping_status, $shipping_confirm_time)
     {
         switch ($shipping_status) {
             case OS_CANCELED:
@@ -197,30 +196,31 @@ class User_Model extends Model
                 $shipping_status = "已发货";
                 break;
             case SS_RECEIVED:
-                $nowDateTime=strtotime(date("Y-m-d"));
-                $days=ceil(($nowDateTime-$shipping_confirm_time) / 3600 / 24);
-                $shipping_status = "已签收第".$days."天";
+                $nowDateTime = strtotime(date("Y-m-d"));
+                $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
+                $shipping_status = "已签收第" . $days . "天";
                 break;
         }
-                return $shipping_status;
+        return $shipping_status;
     }
 
     /**
      * @auth hc_edm
      * @param $order_ids用户订单号id
      */
-        static function CheckmBusiness($user_id){
-                $sql="select sum(money_paid) as money_paid from shp_order_info where user_id=" .$user_id." and pay_status=".PS_PAYED;
-                $money_paids=D()->get_one($sql);
-            if(empty($money_paids['money_paid'])){
-                return  "还差98元成为米商";
-            }
-                $money_paid=$money_paids['money_paid'];
-            if($money_paid>=98) {
-                return "已是米商";
-            }else{
-                $result=98-$money_paid;
-                return  "还差".$result."元成为米商";
-            }
+    static function CheckmBusiness($user_id)
+    {
+        $sql = "select sum(money_paid) as money_paid from shp_order_info where user_id=" . $user_id . " and pay_status=" . PS_PAYED;
+        $money_paids = D()->get_one($sql);
+        if (empty($money_paids['money_paid'])) {
+            return "还差98元成为米商";
         }
+        $money_paid = $money_paids['money_paid'];
+        if ($money_paid >= 98) {
+            return "已是米商";
+        } else {
+            $result = 98 - $money_paid;
+            return "还差" . $result . "元成为米商";
+        }
+    }
 }
