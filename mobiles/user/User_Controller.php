@@ -603,6 +603,7 @@ class User_Controller extends MobileController
         $level=$request->get('level',"1");
         $user = User_Model::findUserInfoById($user_id);
         $uid = $GLOBALS['user']->uid;
+        $user_id=100;$order_id=27;
         if ($request->is_hashreq()) {
             $flat=true;
             //是否为其他人浏览

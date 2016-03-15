@@ -110,7 +110,7 @@ class User_Model extends Model
     {
         $result = [];
         $dbDrver = D();
-        $sql = "select users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
+        $sql = "select users.user_id,users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
 			  from shp_users users RIGHT JOIN
 			  shp_order_info info on info.user_id=users.user_id
 			  where info.order_id=" . $order_id;
@@ -120,8 +120,8 @@ class User_Model extends Model
             return ['userInfo' => null, 'goodsInfo' => null];
         }
         $is_separate = $userInfo['is_separate'];
-        $ismBusiness=null;
-        $goodsInfo = Self::getGoodsList($userInfo, $is_separate,$ismBusiness);
+        $goodsInfo = Self::getGoodsList($userInfo, $is_separate);
+        $ismBusiness=Self::CheckmBusiness($userInfo['user_id']);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness']=$ismBusiness;
         return $result;
@@ -133,7 +133,7 @@ class User_Model extends Model
      * @param $userInfo 购买人基本信息
      * @param $is_separate
      */
-    static function getGoodsList($userInfo, $is_separate = 0,&$ismBusiness=null)
+    static function getGoodsList($userInfo, $is_separate = 0)
     {
         $dbDriver = D();
         $ids = "";
@@ -154,7 +154,6 @@ class User_Model extends Model
             $res = $userInfo['order_id'];
             $condition = "=".$res;
         }
-        $ismBusiness=Self::CheckmBusiness($condition);
         //判断是否为米商
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
                 info.shipping_status,info.shipping_confirm_time,
@@ -195,10 +194,9 @@ class User_Model extends Model
             case SS_SHIPPED:
             case SS_SHIPPED_PART:
             case OS_SHIPPED_PART:
-                $shipping_status = "未发货";
+                $shipping_status = "已发货";
                 break;
             case SS_RECEIVED:
-                date_default_timezone_set('PRC');
                 $nowDateTime=strtotime(date("Y-m-d"));
                 $days=ceil(($nowDateTime-$shipping_confirm_time) / 3600 / 24);
                 $shipping_status = "已签收第".$days."天";
@@ -211,8 +209,8 @@ class User_Model extends Model
      * @auth hc_edm
      * @param $order_ids用户订单号id
      */
-        static function CheckmBusiness($order_ids){
-                $sql="select sum(money_paid) as money_paid from shp_order_info where order_id  " .$order_ids." and shipping_status=".PS_PAYED;
+        static function CheckmBusiness($user_id){
+                $sql="select sum(money_paid) as money_paid from shp_order_info where user_id=" .$user_id." and pay_status=".PS_PAYED;
                 $money_paids=D()->get_one($sql);
             if(empty($money_paids['money_paid'])){
                 return  "还差98元成为米商";
@@ -221,7 +219,7 @@ class User_Model extends Model
             if($money_paid>=98) {
                 return "已是米商";
             }else{
-                $result=$money_paid-98;
+                $result=98-$money_paid;
                 return  "还差".$result."成为米商";
             }
         }

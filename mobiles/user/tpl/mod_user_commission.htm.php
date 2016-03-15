@@ -38,8 +38,7 @@
 				$totalPrice=0;
 				$totalNumber=count($goodsInfo);
 			foreach ($goodsInfo AS $info):?>
-
-			<tr>
+			<tr onclick="gotoItem(<?=$info['goods_id']?>)">
 				<td width="70px;"><img src="<?=$info['goods_thumb']?>"></td>
 				<td>
 					<p class="m_n_tit"><?=$info['goods_name']?></p>
@@ -75,5 +74,8 @@
 	$(".my_income_btnc .btnc_share").click(function(){
 			$('#cover-wxtips').show();
 	});
+	function gotoItem(goodId){
+		window.location = '/item/'+goodId+'?back=index';
+	}
 </script>
 
