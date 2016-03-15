@@ -612,7 +612,6 @@ class User_Controller extends MobileController
             $user = User_Model::findUserInfoById($user_id);
             //根据user_id获得用户的信息 获取每一个订单号下的商品
             $data = User_Model::getOrderInfo($order_id);
-            //todo 米商的判定
             $this->v->assign('userInfo',$data['userInfo']);
             $this->v->assign('goodsInfo',$data['goodsInfo']);
             $this->v->assign('level',$level);
