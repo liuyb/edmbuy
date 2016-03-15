@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="my_name_order">
-		订单编号：<?=$order_sn?>
+		订单编号：<?=$userInfo['order_sn']?>
 	</div>
 	<div class="m_order_infos">
 		<table cellspacing="0" cellpadding="0" class="m_n_table">

@@ -598,13 +598,11 @@ class User_Controller extends MobileController
     {
         $this->v->set_tplname('mod_user_commission');
         $this->nav_no = 0;
-        $user_id = $request->get("user_id", 0);
-        $order_sn = $request->get("order_sn", "");
+        $user_id = $request->get("user_id",0);
+        $order_id = $request->get("order_id",0);
         $level=$request->get('level',"1");
         $user = User_Model::findUserInfoById($user_id);
         $uid = $GLOBALS['user']->uid;
-        $order_sn="E2016012300241468314";
-        $user_id=100;
         if ($request->is_hashreq()) {
             $flat=true;
             //是否为其他人浏览
@@ -613,13 +611,12 @@ class User_Controller extends MobileController
             }
             $user = User_Model::findUserInfoById($user_id);
             //根据user_id获得用户的信息 获取每一个订单号下的商品
-            $data = User_Model::getOrderInfo($order_sn);
+            $data = User_Model::getOrderInfo($order_id);
             //todo 米商的判定
             $this->v->assign('userInfo',$data['userInfo']);
             $this->v->assign('goodsInfo',$data['goodsInfo']);
             $this->v->assign('level',$level);
             $this->v->assign("is_user",$flat);
-            $this->v->assign("order_sn",$order_sn);
             $this->v->assign("user",$user);
             $this->v->assign('ismBusiness',$data['ismBusiness']);
 
@@ -627,7 +624,7 @@ class User_Controller extends MobileController
             $share_info = [
                 'title' => '难得的好商城，值得关注！',
                 'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
-                'link'  => U('/user/commission?order_sn='.$order_sn."&level=".$level."&user_id=".$user_id, 'spm='.Spm::user_spm(), true),
+                'link'  => U('/user/commission?order_id='.$order_id."&level=".$level."&user_id=".$user_id, 'spm='.Spm::user_spm(), true),
                 'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
             ];
             $this->v->assign('share_info', $share_info);

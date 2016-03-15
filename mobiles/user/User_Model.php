@@ -106,14 +106,14 @@ class User_Model extends Model
      * @param $user_id
      * @param $order_sn
      */
-    static function getOrderInfo($order_sn)
+    static function getOrderInfo($order_id)
     {
         $result = [];
         $dbDrver = D();
-        $sql = "select users.*,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
+        $sql = "select users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
 			  from shp_users users RIGHT JOIN
 			  shp_order_info info on info.user_id=users.user_id
-			  where info.order_sn=" . "'$order_sn'";
+			  where info.order_id=" . $order_id;
         $userInfo = $dbDrver->get_one($sql);
         $result['userInfo'] = $userInfo;
         if (empty($userInfo)) {
