@@ -17,9 +17,9 @@
 <div style="border-top: 0;">
 	<div class="wx_uploading" id="wx_uploading">
 		<?php if($wxqr): ?>
-			<img id="avatar1" src="<?=$wxqr ?>" style="width:100%;height:100%;">
+			<img id="avatar1" src="<?=$wxqr ?>" style="height:100%;max-width:100%">
 		<?php else : ?>
-			<img id="avatar1" src="/themes/mobiles/img/tianj.png" style="height:200px;">	
+			<img id="avatar1" src="/themes/mobiles/img/tianj.png" style="height:100%;max-width:100%">	
 		<?php endif;?>
 		<input type="file" id="file" name="file" onchange="fileupload(event)" class="dia_file"> 
 		<input type="hidden" id="picUrl" name="picUrl" value="">

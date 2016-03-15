@@ -6,7 +6,7 @@
 <?php else:?>
 		<style>
 			body{
-				font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+				font-family: "Microsoft Yahei"!important;
 			}
 		</style>
 	<?php $leve=['1'=>'一级人脉','2'=>'二级人脉','3'=>'三级人脉'];?>
