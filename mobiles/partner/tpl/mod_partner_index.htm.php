@@ -18,17 +18,23 @@
 	</div>
 	<div class="guest_main">
 		<ul>
-				<li onclick="showLevelList('/partner/list',1);">
+				<li>
+				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',1);">
 					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
+				</a>
 				</li>
-				<li onclick="showLevelList('/partner/list',2);">
+				<li>
+				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',2);">
 					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
+				</a>
 				</li>
-				<li onclick="showLevelList('/partner/list',3);">
+				<li>
+				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',3);">
 					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
+				</a>
 				</li>
 		</ul>
 	</div>
@@ -123,7 +129,7 @@
 		if(!count || isNaN(count)){
 			count = 0;
 		}
-		window.location = url+"?level="+level+"&count="+count;
+		window.location.href = url+"?level="+level+"&count="+count;
 	}
 	function cash_available(obj) {
 		if (gUser.is_debug_user) return true;
