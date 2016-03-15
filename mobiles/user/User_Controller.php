@@ -601,7 +601,6 @@ class User_Controller extends MobileController
         $user_id = $request->get("user_id",0);
         $order_id = $request->get("order_id",0);
         $level=$request->get('level',"1");
-        $user = User_Model::findUserInfoById($user_id);
         $uid = $GLOBALS['user']->uid;
         if ($request->is_hashreq()) {
             $flat=true;
