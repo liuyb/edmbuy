@@ -120,8 +120,8 @@ class User_Model extends Model
             return ['userInfo' => null, 'goodsInfo' => null, 'ismBusiness' => null];
         }
         $is_separate = $userInfo['is_separate'];
-        $goodsInfo = Self::getGoodsList($userInfo, $is_separate);
-        $ismBusiness = Self::CheckmBusiness($userInfo['user_id']);
+        $goodsInfo = self::getGoodsList($userInfo, $is_separate);
+        $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
         return $result;
@@ -166,7 +166,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = Self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -213,14 +213,14 @@ class User_Model extends Model
         $sql = "select sum(money_paid) as money_paid from shp_order_info where user_id=" . $user_id . " and pay_status=" . PS_PAYED;
         $money_paids = D()->get_one($sql);
         if (empty($money_paids['money_paid'])) {
-            return "还差98元成为米商";
+            return "差98元成为米商";
         }
         $money_paid = $money_paids['money_paid'];
         if ($money_paid >= 98) {
             return "已是米商";
         } else {
             $result = 98 - $money_paid;
-            return "还差" . $result . "元成为米商";
+            return "差" . $result . "元成为米商";
         }
     }
 }
