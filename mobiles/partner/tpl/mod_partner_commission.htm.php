@@ -10,7 +10,7 @@
 	<ul>
 		<li class="<?php if ($status == 1):?>broke_on<?php endif;?>" id="broke1" onclick="showByStatus(this, 1)">已生效</li>
 		<li class="<?php if ($status == 0):?>broke_on<?php endif;?>" style="margin-left:20%;" id="broke2" onclick="showByStatus(this, 0)">未生效</li>
-		<a href="/partner" class="back"></a>
+		<a href="javascript:goBack();" class="back"></a>
 		<span class="broke_line"></span>
 	</ul>
 </div>

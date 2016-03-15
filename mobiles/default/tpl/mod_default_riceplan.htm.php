@@ -42,15 +42,5 @@
 	</div><div class="clear"></div>
 </div>
 
-<script>
-function goBack(){
-	if(history.length > 1){
-		history.back();
-	}else{
-		window.location.href = '/';
-	}
-}
-</script>
-
 <?php include T('inc/followbox');?>
 <?php endif;?>
