@@ -220,7 +220,7 @@ class User_Model extends Model
                 return "已是米商";
             }else{
                 $result=98-$money_paid;
-                return  "还差".$result."成为米商";
+                return  "还差".$result."元成为米商";
             }
         }
 }
