@@ -120,8 +120,8 @@ class User_Model extends Model
             return ['userInfo' => null, 'goodsInfo' => null, 'ismBusiness' => null];
         }
         $is_separate = $userInfo['is_separate'];
-        $goodsInfo = Self::getGoodsList($userInfo, $is_separate);
-        $ismBusiness = Self::CheckmBusiness($userInfo['user_id']);
+        $goodsInfo = self::getGoodsList($userInfo, $is_separate);
+        $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
         return $result;
@@ -166,7 +166,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = Self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
