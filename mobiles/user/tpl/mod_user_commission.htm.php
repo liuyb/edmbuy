@@ -23,7 +23,7 @@
 		<div style="padding-bottom:15px;">订单金额：￥<?=$userInfo['money_paid']?></div>
 	</div>
 	<div class="get_broke">
-		<span>获得佣金：￥<?=$userInfo['commision']?></span>
+		<span>获得佣金：￥<?=$commision?></span>
 		<span class="ck_broke"><a href="/partner/commission?status=0">查看佣金明细</a></span>
 	</div>
 
