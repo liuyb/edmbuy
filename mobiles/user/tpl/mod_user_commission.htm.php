@@ -14,8 +14,8 @@
 		<img src="/themes/mobiles/img/beijing.png">
 	</div>
 	<div class="my_in_name">
-		<?=$user->nickname?>
-		<img src="<?=$user->logo?>">
+		<?=$cUser->nickname?>
+		<img src="<?=$cUser->logo?>">
 	</div>
 	<div class="my_name_info">
 		<div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?=$userInfo['nick_name']?><span class="name_info_p" style="font-size: 14px;">（<?=$ismBusiness?>）</span> </div>
