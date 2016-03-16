@@ -18,9 +18,9 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
-	<?php if($mobile):?>
+	<?php if($ismoblie):?>
 <div class="update_p">
-	<input type="text" maxlength="20"  placeholder="请输入您的手机号码" value="<?=$mobile ?>" class="phone_text">
+	<input type="text" maxlength="20"  placeholder="请输入您的手机号码" value="<?=$mobile==1?"":$mobile ?>" class="phone_text">
 </div>
 <div style="font-size:14px;color:#ff0000;margin:12px;">
 	请输入正确的手机号码，方便客户与您联系
