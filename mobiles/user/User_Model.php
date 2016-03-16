@@ -122,8 +122,10 @@ class User_Model extends Model
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
         $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
+        $commision=UserCommision::user_share($userInfo['commision'], 1);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
+        $result['commision'] = $commision;
         return $result;
     }
 
