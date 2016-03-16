@@ -124,21 +124,11 @@ class User_Controller extends MobileController
 
     private function uploadImg($imgDIR)
     {
-        $ret = ['flag' => 'FAIL', 'errMsg' => '上传失败，请稍后重试！'];
         $img = $_POST["img"];
-        if ($img) {
-            $result = User_Upload::saveImgData($img, $imgDIR);
-            if (is_numeric($result)) {
-                if ($result == -1) {
-                    $ret['errMsg'] = '上传失败，图片格式不正确！';
-                }
-            } else {
-                $filePath = $result;
-                if ($filePath) {
-                    $ret = ['flag' => 'SUC', 'result' => $filePath];
-                }
-            }
-        }
+        $upload = new Upload($img, $imgDIR);
+        $upload->fixed_id = $GLOBALS['user']->uid;
+        $result = $upload->saveImgData();
+        $ret = $upload->buildUploadResult($result);
         return $ret;
     }
 

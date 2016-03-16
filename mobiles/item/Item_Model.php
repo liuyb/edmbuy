@@ -101,6 +101,30 @@ class Item_Model extends Model {
         return $mod;
     }
     
+    /**
+     * 用户发布评论
+     * @param Comment $c
+     */
+    static function postGoodsComment(Comment $c){
+        $c->user_id = $GLOBALS['user']->uid;
+        $c->user_name = $GLOBALS['user'] -> nickname;
+        $c->email = $GLOBALS['user'] -> email;
+        $c->add_time = simphp_time();
+        $c->ip_address = get_clientip();
+        $c->status = 1;
+        $c->save(Storage::SAVE_INSERT);
+    }
+    
+    /**
+     * 获取商品评论
+     * @param Comment $c
+     * @param PagerPull $pager
+     */
+    static function getGoodsComment(Comment $c, PagerPull $pager){
+        $result = Comment::getGoodsComment($c, $pager);
+        $pager->setResult($result);
+    }
+    
 	static function escape_kefu_link($string) {
 		return str_replace(['&','='], ['%26','%3D'], $string);
 	}
