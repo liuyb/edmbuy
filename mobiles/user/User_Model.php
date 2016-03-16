@@ -120,12 +120,10 @@ class User_Model extends Model
             return ['userInfo' => null, 'goodsInfo' => null, 'ismBusiness' => null];
         }
         $is_separate = $userInfo['is_separate'];
-        $commision=UserCommision::user_share($userInfo['commision'], 1);
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
         $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
-        $result['commision'] = $commision;
         return $result;
     }
 
@@ -140,6 +138,7 @@ class User_Model extends Model
         $dbDriver = D();
         $ids = "";
         if ($is_separate == 1) {
+            //取出parent_id得到order_id
             $parent_id = $userInfo['order_id'];
             $sql = "select order_id from shp_order_info where parent_id=%d";
             $order_ids = $dbDriver->query($sql, $parent_id)->fetch_array_all();
