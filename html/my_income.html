@@ -19,7 +19,14 @@
 <body style="background:#eee;">
 
 <style>
-
+.my_income_btnc li{
+	float:left;
+	width:50%;
+}
+.my_income_btnc a{
+	display:block;
+	margin:0 5px;
+}
 </style>
 
 <div class="my_income_tit">
@@ -74,19 +81,17 @@
 </div>
 
 <div class="my_income_btnc">
-	<button class="btnc_share">分享此页面</button>
-	<button class="btnc_plan">米商计划</button>
+	<ul>
+		<li><a href="javascript"><div class="btnc_share">分享此页面</div></a></li>
+		<li><a href="javascript"><div class="btnc_plan">米商计划</div></a></li>
+	</ul>
+	<div class="clear"></div>
 </div>
 
 <div class="my_income_foot">
 	<img src="./img/beijing.png">
 </div>
 
-<script>
-$(function(){
-	var _width =( $(window).width() - 34) / 2;
-	$(".btnc_share,.btnc_plan").width(_width);
-})
-</script>
+
 
 
