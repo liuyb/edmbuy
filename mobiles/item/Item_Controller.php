@@ -163,7 +163,7 @@ class Item_Controller extends MobileController {
 			    }
 			}
 			if(empty($backhref)){
-			    $backhref = "location.href='/';";
+			    $backhref = "goBack()";
 			}
 			$this->v->assign('back', $backhref);
 		}
@@ -227,6 +227,51 @@ class Item_Controller extends MobileController {
 	    }else{
 	       Item_Model::findGoodsListByPref($pager, $category);
 	    }
+	    $pageJson = $pager->outputPageJson();
+	    $ret = ["result" => $pager->result];
+	    $ret = array_merge($ret, $pageJson);
+	    $response->sendJSON($ret);
+	}
+	
+	public function upload_comment_pic(Request $request, Response $response){
+	    $imgDIR = '/a/comment/';
+	    if ($request->is_post()) {
+	        $img = $_POST["img"];
+            $upload = new Upload($img, $imgDIR);
+            $upload->has_thumb = true;
+            $upload->thumbwidth = 200;
+            $result = $upload->saveImgData();
+            $ret = $upload->buildUploadResult($result);
+	        $response->sendJSON($ret);
+	    }
+	}
+	
+	public function post_goods_comment(Request $request, Response $response){
+	    $id_value = $request->get('goods_id');
+	    $content = $request->get('content', '');
+	    $comment_img = $request->get('comment_img','');
+	    $comment_level = $request->get('comment_level');
+	    $shipping_level = $request->get('shipping_level');
+	    $service_level = $request->get('service_level');
+	    if ($id_value && $content){
+	        $c = new Comment();
+	        $c->content = $content;
+	        $c->comment_img = $comment_img;
+	        $c->comment_level = $comment_level;
+	        $c->shipping_level = $shipping_level;
+	        $c->service_level = $service_level;
+	        $c->id_value = $id_value;
+	        Item_Model::postGoodsComment($c);
+	    }
+	}
+	
+	public function get_goods_comment(Request $request, Response $response){
+	    $goods_id = $request->get('goods_id');
+	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+	    $pager = new PagerPull($curpage, 25);
+	    $c = new Comment();
+	    $c->id_value = $goods_id;
+	    Item_Model::getGoodsComment($c, $pager);
 	    $pageJson = $pager->outputPageJson();
 	    $ret = ["result" => $pager->result];
 	    $ret = array_merge($ret, $pageJson);

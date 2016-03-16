@@ -19,6 +19,9 @@
 <script src="./js/j.js"></script>
 <!-- head end -->
 </head>
+<style>
+
+</style>
 <body class="white_bg has_footer">
 
 <div class="p_header_btn">
@@ -79,13 +82,89 @@
 	<!-- <h1><p>向上拖动查看图文详情</p></h1> -->
 </div>
 
+
+
 <div class="p_detail_info">
-	<div class="p_i_title"><span>图文详情</span></div>
-	<div class="product_detail">
-		<p><img src="./img/123.jpg"></p>
-		<p><img src="./img/456.jpg"></p>
-		<p><img src="./img/789.jpg"></p>
-		<p><img src="./img/pro.jpg"></p>
+	<div class="pro_tab_check">
+		<ul>
+			<li class="check_on" id="li1" onclick="f(1)">图文详情</li>
+			<li class="" id="li2" onclick="f(2)">宝贝评价</li>
+			<li class="" id="li3" onclick="f(3)">店铺推荐</li>
+		</ul>
+		<span class="pro_line1"></span>
+		<span class="pro_line2"></span>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="pro_comment" id="list1">
+		<div class="product_detail">
+			<p><img src="./img/123.jpg"></p>
+			<p><img src="./img/456.jpg"></p>
+			<p><img src="./img/789.jpg"></p>
+			<p><img src="./img/pro.jpg"></p>
+		</div>
+	</div>
+	<div class="pro_comment pro_lsit_tab" id="list2" style="display:none">
+		<table cellspacing="0" cellpadding="0" class="pro_tab_evaluate">
+			<tr>
+				<td><div class="evaluate_on">全部</div></td>
+				<td><div>评价（1234）</div></td>
+				<td><div>中评（1234）</div></td>
+			</tr>
+			<tr>
+				<td><div>差评（2）</div></td>
+				<td><div>有图（124）</div></td>
+			</tr>
+		</table>
+		<div class="e_info_d">
+			<table cellspacing="0" cellpadding="0" class="evaluate_info">
+				<td width="45px;"><img src="./img/dress.png"></td>
+				<td>
+					<p class="eval_name">九五之尊</p>
+					<p class="eval_type">
+						<span>颜色：粉红色</span>
+						<span>尺寸：23</span>
+					</p>
+					<p class="eval_time">2016-5-12</p>
+				</td>
+			</table>
+			<p class="eval_idea">口感特别好，我很喜欢，谢谢!</p>
+			<div class="idea_img">
+				<ul>
+					<li><img src="./img/dress.png"></li>
+					<li><img src="./img/dress.png"></li>
+					<li><img src="./img/dress.png"></li>
+					<li><img src="./img/dress.png"></li>
+					<li><img src="./img/dress.png"></li>
+				</ul>
+			</div>
+			<div class="eval_reply">
+				掌柜回复：亲，没能让您特别满意真是抱歉有您的 支持我们会做的更好！谢谢！
+			</div>
+		</div>
+		<div class="remm_more">点击加载更多...</div>
+	</div>
+	<div class="pro_comment" id="list3" style="display:none">
+		<div class="shop_remm">
+			<ul>
+				<li>
+					<a href="javascript:;"><img src="./img/dress.png"></a>
+					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
+					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
+				</li>
+				<li>
+					<a href="javascript:;"><img src="./img/dress.png"></a>
+					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
+					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
+				</li>
+				<li>
+					<a href="javascript:;"><img src="./img/dress.png"></a>
+					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
+					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
 	</div>
 </div>
 			
@@ -181,6 +260,21 @@
 
 
 <script>
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	$(".pro_tab_check li").removeClass("check_on");
+	$(".pro_comment").hide();
+	
+	$(_li).addClass("check_on");
+	$(_list).show();
+}
+
+$(".pro_lsit_tab div").on("click",function(){
+	$(".pro_lsit_tab div").removeClass("evaluate_on");
+	$(this).addClass("evaluate_on");
+})
 
 $(".product_zyj").live("click",function(){
 	$(".cart_yj_f").fadeIn(255);
