@@ -2475,29 +2475,32 @@ td.cash_td2 img {
 	padding-right:10px;
 }
 .my_income_btnc{
-	margin:14px 5px;
+	padding:0 5px;
 	font-size: 0;
+	margin:10px 0;
 }
 .my_income_btnc button{
 	margin:0 5px;
 }
 .btnc_share{
+	text-align:center;
 	height:27px;
 	font-size:14px;
 	color:#333;
-	border:1px solid #ddd;
 	background:#fff;
 	border-radius:4px;
 	cursor:pointer;
+	line-height:27px;
 }
 .btnc_plan{
+	text-align:center;	
 	height:27px;
 	font-size:14px;
 	color:#fff;
-	border:1px solid #ff6d14;
 	background:#ff6d14;
 	border-radius:4px;
 	cursor:pointer;	
+	line-height:27px;	
 }
 
 /*2106-3-11 e*/
