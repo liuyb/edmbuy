@@ -24,7 +24,7 @@
 	</div>
 	<div class="get_broke">
 		<span>获得佣金：￥<?=$commision?></span>
-		<span class="ck_broke"><a href="/partner/commission?status=0">查看佣金明细</a></span>
+		<span class="ck_broke"><a href="/partner/commission?status=1">查看佣金明细</a></span>
 	</div>
 
 	<div class="my_name_order">
