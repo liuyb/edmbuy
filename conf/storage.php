@@ -11,8 +11,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'root',
-      'pass'		=> '123',
+      'user'		=> 'gavin',
+      'pass'		=> 'gavin@asdf',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -22,8 +22,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'root',
-      'pass'		=> '123',
+      'user'		=> 'gavin',
+      'pass'		=> 'gavin@asdf',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -63,7 +63,7 @@ return [
       'lifetime'  => 0,
       'secure'    => 0,
       'httponly'  => 0,
-      'prefix'    => 'FXM',
+      'prefix'    => 'EDM',
     ],
     'api' => [
       'domain'	  => 'edmapi.fxmapp.com',
@@ -71,7 +71,7 @@ return [
       'lifetime'  => 0,
       'secure'    => 0,
       'httponly'  => 0,
-      'prefix'    => 'FXM',
+      'prefix'    => 'EDM',
     ],
     'adm' => [
       'domain'	  => 'edm.ydmbuy.com',
@@ -80,6 +80,14 @@ return [
       'secure'    => 0,
       'httponly'  => 0,
       'prefix'    => 'ADM',
+    ],
+    'mch' => [
+      'domain'	  => 'edmmch.fxmapp.com',
+      'path'		  => '/',
+      'lifetime'  => 0,
+      'secure'    => 0,
+      'httponly'  => 0,
+      'prefix'    => 'MCH',
     ],
   ],
 ];

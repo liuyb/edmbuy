@@ -13,6 +13,14 @@ AddType text/cache-manifest manifest
   
   #
   # Rewrite URLs of the form 'x' to the form 'admin.php?q=x'.
+  RewriteCond %{HTTP_HOST} ^edmmch\.fxmapp\.com$
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteRule ^(.*)$ merchant.php?q=$1 [QSA,L]
+  
+  #
+  # Rewrite URLs of the form 'x' to the form 'admin.php?q=x'.
   RewriteCond %{HTTP_HOST} ^edmadm\.fxmapp\.com$
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

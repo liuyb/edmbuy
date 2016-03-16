@@ -1,0 +1,35 @@
+<!--{if $pageparams.pager_max}-->
+<!--{if NOT $pageparams.pager_eid}-->
+<script type="text/javascript">
+function gopage(pageto,callback) {
+  var phash = '<!--{$pageparams.pager_prefix}-->'+pageto;
+  if (typeof(callback)!='function' ) {
+    F.setHash(phash)
+  }
+  else {
+    callback(phash);
+  }
+  return true;
+}
+</script>
+<!--{/if}-->
+<div class="listPager">
+<!--{if $pageparams.pager_first}-->
+  <a href="<!--{$pageparams.pager_first}-->" class="hashlink" hidefocus="hidefocus">首页</a>
+  <a href="<!--{$pageparams.pager_prev}-->" class="hashlink" hidefocus="hidefocus">上一页</a>
+<!--{else}-->
+  <a href="javascript:void(0);" class="disabled-link" hidefocus="hidefocus">首页</a>
+  <a href="javascript:void(0);" class="disabled-link" hidefocus="hidefocus">上一页</a>
+<!--{/if}-->
+<!--{if $pageparams.pager_last}-->
+  <a href="<!--{$pageparams.pager_next}-->" class="hashlink" hidefocus="hidefocus">下一页</a>
+  <a href="<!--{$pageparams.pager_last}-->" class="hashlink" hidefocus="hidefocus">末页</a>
+<!--{else}-->
+  <a href="javascript:void(0);" class="disabled-link" hidefocus="hidefocus">下一页</a>
+  <a href="javascript:void(0);" class="disabled-link" hidefocus="hidefocus">末页</a>
+<!--{/if}-->
+  <select name="listpages<!--{$pageparams.pager_eid}-->" onchange="return gopage(this.value<!--{if $pageparams.callback}-->,<!--{$pageparams.callback}--><!--{/if}-->);">
+  <!--{$pageparams.pager_links}-->
+  </select>
+</div>
+<!--{/if}-->
