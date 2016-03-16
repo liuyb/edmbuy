@@ -10,7 +10,7 @@
 <div class="header">
 	个人信息
 <a href="javascript:history.back();" class="back"></a>
-	<?php if($mobile):?>
+	<?php if($ismoblie):?>
 <a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserMobile();'>保存</a>
 	<?php else:?>
 	<a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserNickname();'>保存</a>
@@ -29,13 +29,8 @@
 		<div class="update_p">
 			<input type="text" maxlength="20"  placeholder="请输入昵称" value="<?=$nickname ?>" class="phone_text">
 		</div>
-		<div style="font-size:14px;color:#ff0000;margin:12px;">
-				请输入昵称
-		</div>
 		<?php endif;?>
 <script>
-
-//	//'
 	var mobile = '<?=$mobile ?>';
 	function saveUserMobile(){
 		var phone = $('.phone_text').val();
@@ -56,32 +51,29 @@
 		    	myAlert(ret['msg']);
 		    	return;
 		    }
-		    debugger;
     		setTimeout(function(){
     			window.location.href = '/user/setting';
-        	}, 1000);
+        	}, 500);
     	});
 	}
 	var nickname='<?=$nickname?>';
 	function saveUserNickname(){
 		var name=$('.phone_text').val();
 		if(!name){
-			myAlert('请输入手机号码！');
-					return;
-	}
-			if(nickname==name){
-				return;
-			}
+			myAlert('请输入昵称！');
+			return;
+		}
+		if(nickname==name){
+			return;
+		}
 		F.post('/user/nickname/update', {'nickname' : name}, function(ret){
 			if(ret['result'] == 'FAIL'){
 				myAlert(ret['msg']);
 				return;
 			}
-			myAlert(ret['msg']);
-			debugger;
 			setTimeout(function(){
 				window.location.href = '/user/setting';
-			}, 1000);
+			}, 500);
 		});
 	}
 
