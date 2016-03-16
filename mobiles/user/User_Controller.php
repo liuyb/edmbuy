@@ -26,6 +26,7 @@ class User_Controller extends MobileController
             'user/mobile/update' => 'update_mobile',
             'user/oauth/%s' => 'oauth',
             'user/commission' => 'commission',
+            'user/nickname/update'=>'update_nickname',
         ];
     }
 
@@ -146,17 +147,18 @@ class User_Controller extends MobileController
         $this->v->set_tplname('mod_user_mobile');
         $this->topnav_no = 1;
         if ($request->is_hashreq()) {
-            $mobile = $_REQUEST['mobile'];
-            $mobile = $mobile ? $mobile : '';
+            $mobile=$request->get('mobile','');
+            $nickname=$request->get('nickname','');
+            $this->v->assign('nickname',$nickname);
             $this->v->assign('mobile', $mobile);
         }
-        throw new ViewResponse($this->v);
+             throw new ViewResponse($this->v);
     }
 
     public function update_mobile(Request $request, Response $response)
     {
         if ($request->is_post()) {
-            $mobile = $_POST['mobile'];
+            $mobile = isset($_POST['mobile'])?$_POST['mobile']:'';
             global $user;
             if ($user->mobilephone == $mobile) {
                 return;
@@ -628,6 +630,23 @@ class User_Controller extends MobileController
             $this->v->assign('share_info', $share_info);
         }
         throw new ViewResponse($this->v);
+    }
+    public function update_nickname(Request $request, Response $response){
+        if ($request->is_post()) {
+            $nickname = isset($_POST['nickname'])?$_POST['nickname']:'';
+            global $user;
+            if($user->nickname == $nickname){
+                return;
+            }
+            $nuser = Users::load_by_nickname($nickname);
+            if ($nuser && !empty($nuser->uid)) {
+                $ret = ['result' => 'FAIL', 'msg' => '昵称'.$nickname.'已经在系统存在！'];
+                $response->sendJSON($ret);
+            }
+            User_Model::updateUserInfo(array('nickname' => $nickname));
+            $ret = ['result' => 'SUC', 'msg' => '修改成功'];
+                $response->sendJSON($ret);
+        }
     }
 
 }

@@ -15,7 +15,7 @@
 <script>show_topnav($('#forTopnav').html())</script>
 
 <div style="background: #fff;">
-	<!-- <div class="person_head">
+	 <div class="person_head">
 		<span class="head_l">我的头像</span>
 		<span class="head_r" id="userHeaderImg">
 			<?php if($logo): ?>
@@ -25,7 +25,13 @@
 			<?php endif;?>
 		</span>
     	<input type="file" name="file" onchange="fileupload(event)" class="dia_file">
-	</div>	 -->
+	</div>
+	<a href="/user/mobile/show?nickname=<?=$nickname ?>">
+		<div class="person_head_comm">
+			<span class="head_l_com">昵称</span>
+			<span class="head_r_com"><?=$nickname ?></span>
+		</div>
+	</a>
 	<a href="/user/mobile/show?mobile=<?=$mobile ?>"> 
 		<div class="person_head_comm">
 			<span class="head_l_com">手机号</span>

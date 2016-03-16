@@ -4178,11 +4178,11 @@ td.cash_td2 img {
 }
 .tit_btn_q{
   background:#fff3ec;
-  border:1px solid #ff6d14;
+  /*border:1px solid #ff6d14;*/
   position: absolute;
-  bottom:10px;
-  width:90px;
-  height:25px;
+  bottom:18px;
+  /*width:90px;*/
+  /*height:25px;*/
   border-radius:4px;
   color:#ff6d14;
 }

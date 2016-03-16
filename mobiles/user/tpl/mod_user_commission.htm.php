@@ -62,9 +62,6 @@
 		<button class="btnc_plan">米商计划</button>
 	</div>
 		<?php endif;?>
-	<div class="my_income_foot">
-		<img src="/themes/mobiles/img/beijing.png">
-	</div>
 <?php endif;?>
 <script>
 	$(function(){

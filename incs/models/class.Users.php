@@ -160,7 +160,12 @@ class Users extends StorageNode {
 	static function load_by_mobile($mobile) {
 		return self::find_one(new Query('mobilephone', $mobile));
 	}
-	
+
+	static function load_by_nickname($mobile) {
+		return self::find_one(new Query('nickname', $mobile));
+	}
+
+
 	/**
 	 * Load user by app_userid
 	 * @param string $appuid
