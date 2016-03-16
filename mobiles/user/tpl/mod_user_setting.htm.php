@@ -32,7 +32,7 @@
 			<span class="head_r_com"><?=$nickname ?></span>
 		</div>
 	</a>
-	<a href="/user/mobile/show?mobile=<?=$mobile ?>"> 
+	<a href="/user/mobile/show?mobile=<?=$mobile ?>">
 		<div class="person_head_comm">
 			<span class="head_l_com">手机号</span>
 			<span class="head_r_com"><?=$mobile ?></span>

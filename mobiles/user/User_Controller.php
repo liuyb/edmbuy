@@ -149,6 +149,9 @@ class User_Controller extends MobileController
         if ($request->is_hashreq()) {
             $mobile=$request->get('mobile','');
             $nickname=$request->get('nickname','');
+            if(!isset($_REQUEST['mobile'])){
+                    $this->assign('mobile',false);
+            }
             $this->v->assign('nickname',$nickname);
             $this->v->assign('mobile', $mobile);
         }
