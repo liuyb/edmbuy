@@ -2504,3 +2504,155 @@ td.cash_td2 img {
 }
 
 /*2106-3-11 e*/
+
+/*2106-3-16 s*/
+.pro_tab_check{
+  	position: relative;	
+}	
+.check_on{
+	color:#ff6d14 !important;
+}
+.pro_tab_check li{
+	float:left;
+	width:33.33%;
+	text-align:center;
+	height:43px;
+	font-size:14px;
+	color:#111;
+	line-height:44px;
+	border-bottom:1px solid #eee;
+}
+.pro_line1{
+  	position: absolute;	
+	top:15px;
+	left:33.33%;
+	border-right:1px solid #ccc;
+	height:16px;
+}
+.pro_line2{
+  	position: absolute;	
+	top:15px;
+	left:66.66%;	
+	border-right:1px solid #ccc;
+	height:16px;	
+}
+.pro_tab_evaluate{
+	width:100%;
+	text-align:center;
+  	margin-bottom: 10px;	
+}
+.pro_tab_evaluate td{
+	width:33.33%;
+}
+.pro_tab_evaluate div{
+	background:#feeee5;
+ 	margin: 10px 5px 0 5px;	
+	font-size:12px;
+	color:#333;
+	height:25px;
+	border-radius:4px;
+	line-height:25px;
+	cursor:pointer;
+}
+.evaluate_on{
+	background:#f65d00 !important;
+	color:#fff !important;
+}
+.pro_lsit_tab{
+	margin:0 5px
+}
+.evaluate_info{
+	width:100%;
+}
+.evaluate_info img{
+  	width: 45px;
+  	height: 45px;
+  	vertical-align: middle;	
+	border-radius:50%;
+	padding:10px 10px 10px 5px;
+}
+.evaluate_info td{
+	position:relative;
+}
+.e_info_d{
+	border-top:1px solid #ccc;
+}
+.eval_name{
+	position:absolute;
+	top:10px;
+	font-size:14px;
+	color:#111;
+}
+.eval_type{
+	position:absolute;
+	bottom:13px;
+	font-size:12px;
+	color:#666;	
+}
+.eval_time{
+	position:absolute;
+	top:10px;
+	right: 10px;
+	font-size:12px;
+	color:#666;
+}
+.eval_idea{
+	font-size:12px;
+	color:#111;
+	margin-left:5px;
+}
+.idea_img li{
+	float:left;
+	width:50px;
+	height:50px;
+	margin:0 5px;
+}
+.idea_img img{  
+	max-width: 100%;
+  	max-height: 100%;
+}
+.idea_img{
+	margin:10px 0 80px;
+}
+.eval_reply{
+	margin:0 5px;
+	background:#efefef;
+	padding:5px;
+	border-radius:4px;
+}
+.shop_remm{
+	padding:5px 5px 0;
+}
+.shop_remm li{
+	float:left;
+	width:50%;
+}
+.shop_remm a{
+    margin: 5px;
+	display:block;
+}
+.shop_remm img{
+	max-width:100%;	
+	vertical-align: middle;
+}
+.remm_font{
+	overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    padding: 0 5px ;
+    font-size: 12px;
+    color: #333;
+    height: 38px;
+}
+.remm_p b{
+	float: right;
+  	margin-right: 5px;	  
+  	text-decoration: line-through;
+}
+.remm_more{
+  	text-align: center;
+  	height: 40px;
+  	line-height: 40px;	
+}
+/*2106-3-11 s*/
