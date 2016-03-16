@@ -59,8 +59,8 @@
 		<?php if($is_user):?>
 		<div class="my_income_btnc">
 			<ul>
-				<li><a href="javascript"><div class="btnc_share">分享此页面</div></a><>
-				<li><a href="javascript"><div class="btnc_plan">米商计划</div></a><>
+				<li><a href="javascript:;"><div class="btnc_share">分享此页面</div></a><>
+				<li><a href="javascript:;"><div class="btnc_plan">米商计划</div></a><>
 			</ul>
 			<div class="clear"></div>
 		</div>
