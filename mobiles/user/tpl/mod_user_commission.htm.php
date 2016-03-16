@@ -57,17 +57,16 @@
 		<span>共<?=$totalNumber?>件商品</span><span  class="income_nums_r">合计：￥<?=$totalPrice?></span>
 	</div>
 		<?php if($is_user):?>
-	<div class="my_income_btnc">
-		<button class="btnc_share">分享此页面</button>
-		<button class="btnc_plan">米商计划</button>
-	</div>
+		<div class="my_income_btnc">
+			<ul>
+				<li><a href="javascript"><div class="btnc_share">分享此页面</div></a><>
+				<li><a href="javascript"><div class="btnc_plan">米商计划</div></a><>
+			</ul>
+			<div class="clear"></div>
+		</div>
 		<?php endif;?>
 <?php endif;?>
 <script>
-	$(function(){
-		var _width =( $(window).width() - 60) / 2;
-		$(".btnc_share,.btnc_plan").width(_width);
-	});
 	$(".my_income_btnc .btnc_share").click(function(){
 			$('#cover-wxtips').show();
 	});
