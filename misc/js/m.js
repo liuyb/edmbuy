@@ -715,9 +715,11 @@
 	//全局化cartact
 	window.cartact = cartact;
 }
-
-
-
-
-
-
+//回退的处理方式 增加直接进入页面回退失效的处理
+;function goBack(){
+	if(history.length > 1){
+		history.back();
+	}else{
+		window.location.href = '/';
+	}
+}
