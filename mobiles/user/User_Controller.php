@@ -604,12 +604,14 @@ class User_Controller extends MobileController
             if($user_id!=$uid){
                 $flat=false;
             }
+            $cUser = User_Model::findUserInfoById($user_id);
             //根据user_id获得用户的信息 获取每一个订单号下的商品
             $data = User_Model::getOrderInfo($order_id);
             $this->v->assign('userInfo',$data['userInfo']);
             $this->v->assign('goodsInfo',$data['goodsInfo']);
             $this->v->assign('level',$level);
             $this->v->assign("is_user",$flat);
+            $this->v->assign("cUser",$cUser);
             $this->v->assign('ismBusiness',$data['ismBusiness']);
             $this->v->assign('commision',$data['commision']);
 

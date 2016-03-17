@@ -1,0 +1,52 @@
+<!-- for html pop -->
+<div id="popSrcHtml">
+  <div class="popUploadWrap">
+    <form name="fileForm" action="" method="post" onsubmit="return ajaxFileUpload(this);" enctype="multipart/form-data">
+      <p class="wFile"><input type="file" name="upfile" class="upfile" value="" size="30" /></p>
+      <div class="wSubmit">
+        <input type="submit" name="upbtn" value="上传" class="upbtn" />&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:;" class="undl" onclick="window._gPop.close();">关闭</a>
+      </div>  
+    </form>
+  </div>
+</div>
+<script>
+var _ajaxFileUpload_Succ, _ajaxFileUpload_Fail;
+function popUpload(title, action, succ_cb, fail_cb) {
+	if (typeof this._html == 'undefined') {
+		this._html = $('#popSrcHtml');
+	}
+	title = title==undefined ? '上传' : title;
+	action= action==undefined ? '' : action;
+	this._html.find('form').attr('action',action);
+	_ajaxFileUpload_Succ = succ_cb;
+	_ajaxFileUpload_Fail = fail_cb;
+  showAjaxDlg(this._html.html(), title, 380, 100, 3, {isHaveTitle: true});
+  return false;
+};
+function ajaxFileUpload(obj) {
+  var purl = $(obj).attr('action');
+  var fileEle = $(obj).find('input.upfile');
+  $.ajaxFileUpload({
+    url: purl,
+    secureuri: false,
+    fileElementId: fileEle,
+    //outFormId: 'fileForm', //使用 ajaxfileupload 创建的form来上传
+    dataType: 'json',
+    success: function (data, status) {
+    	if (typeof _ajaxFileUpload_Succ == 'function') {
+    		_ajaxFileUpload_Succ(data, status);
+    	}
+    },
+    error: function (xhr, status, e) {
+      if (typeof _ajaxFileUpload_Fail == 'function') {
+    	  F.log(xhr.responseText);
+    	  _ajaxFileUpload_Fail(xhr, status, e);
+      }
+    }
+  });
+  return false;
+};
+</script>
+
+
