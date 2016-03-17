@@ -32,12 +32,12 @@ return [
 	//当前服务器ID(用于多web服务器部署时的资源访问)
   'server_id'=> 1,
 	'resource_servers'  => [
-		1 => 'http://edmdev.fxmapp.com',	
+		1 => 'http://m.ydmbuy.com',	
 	],
   //站点信息
   'site' => [
-  	'mobile' => 'http://edmdev.fxmapp.com',
-  	'shop' => 'http://edmshop.fxmapp.com',
+  	'mobile' => 'http://m.ydmbuy.com',
+  	'shop' => 'http://m.ydmbuy.com',
   ],
   //debug白名单uid
   //'debug_white_list' => ['10001','109','104'],

@@ -108,6 +108,7 @@ class Item_Model extends Model {
     static function postGoodsComment(Comment $c){
         $c->user_id = $GLOBALS['user']->uid;
         $c->user_name = $GLOBALS['user'] -> nickname;
+        $c->user_logo = $GLOBALS['user'] -> logo;
         $c->email = $GLOBALS['user'] -> email;
         $c->add_time = simphp_time();
         $c->ip_address = get_clientip();
@@ -120,8 +121,8 @@ class Item_Model extends Model {
      * @param Comment $c
      * @param PagerPull $pager
      */
-    static function getGoodsComment(Comment $c, PagerPull $pager){
-        $result = Comment::getGoodsComment($c, $pager);
+    static function getGoodsComment(Comment $c, PagerPull $pager, $category){
+        $result = Comment::getGoodsComment($c, $pager, $category);
         $pager->setResult($result);
     }
     

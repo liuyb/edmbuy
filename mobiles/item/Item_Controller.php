@@ -32,7 +32,10 @@ class Item_Controller extends MobileController {
 		    'item/promote' => 'item_promote',
 		    'item/promote/product' => 'promote_product',
 		    'item/pref/show' => 'pref_show',
-		    'item/pref/goods' => 'pref_goods_list'
+		    'item/pref/goods' => 'pref_goods_list',
+		    'item/comment/image' => 'upload_comment_pic',
+		    'item/comment/list' => 'get_goods_comment',
+		    'item/comment' => 'post_goods_comment'
 		];
 	}
 	
@@ -92,6 +95,7 @@ class Item_Controller extends MobileController {
 				$item->commision_show = $item->commision > 0 ? $item->commision : ($item->shop_price > $item->income_price ? $item->shop_price - $item->income_price : 0);
 				$item->commision_show = number_format($item->commision_show*(1-PLATFORM_COMMISION),2);
 				$this->v->assign('item', $item);
+				$this->v->assign('item_desc', json_encode($item->item_desc));
 				
 				//商品规格、属性
 				$item_attrs = Items::attrs($item->id);
@@ -248,6 +252,7 @@ class Item_Controller extends MobileController {
 	
 	public function post_goods_comment(Request $request, Response $response){
 	    $id_value = $request->get('goods_id');
+	    $order_id = $request->get('order_id');
 	    $content = $request->get('content', '');
 	    $comment_img = $request->get('comment_img','');
 	    $comment_level = $request->get('comment_level');
@@ -261,20 +266,23 @@ class Item_Controller extends MobileController {
 	        $c->shipping_level = $shipping_level;
 	        $c->service_level = $service_level;
 	        $c->id_value = $id_value;
+	        $c->order_id = $order_id;
 	        Item_Model::postGoodsComment($c);
 	    }
 	}
 	
 	public function get_goods_comment(Request $request, Response $response){
 	    $goods_id = $request->get('goods_id');
-	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
-	    $pager = new PagerPull($curpage, 25);
+	    $category = $request->get('category', '');
+	    $curpage = $request->get('curpage', 1);
+	    $pager = new PagerPull($curpage, 2);
 	    $c = new Comment();
 	    $c->id_value = $goods_id;
-	    Item_Model::getGoodsComment($c, $pager);
+	    Item_Model::getGoodsComment($c, $pager, $category);
 	    $pageJson = $pager->outputPageJson();
 	    $ret = ["result" => $pager->result];
 	    $ret = array_merge($ret, $pageJson);
+	    $ret['gather'] = Comment::getCommentGroupCount($goods_id);
 	    $response->sendJSON($ret);
 	}
 	
