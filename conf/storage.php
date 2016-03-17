@@ -74,7 +74,7 @@ return [
       'prefix'    => 'FXM',
     ],
     'adm' => [
-      'domain'	  => 'edm.ydmbuy.com',
+      'domain'	  => 'adm.ydmbuy.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,
