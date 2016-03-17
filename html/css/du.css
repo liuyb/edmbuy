@@ -2765,5 +2765,17 @@ td.cash_td2 img {
 	font-size:14px;
 	margin-left:12px;
 }
+.comm_fb_p{
+  	position: fixed;
+  	width: 100%;
+  	background: #ff6d14;
+  	left: 0;
+  	bottom: 0;
+  	height: 44px;
+  	line-height: 44px;
+  	text-align: center;
+  	color: #fff;
+  	font-size: 16px;	
+}
 /*2106-3-17 e*/
 
