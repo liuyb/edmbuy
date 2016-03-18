@@ -2438,16 +2438,7 @@ td.cash_td2 img {
 	position: absolute;
 	top:6px;
 }
-.tit_btn_q{
-	background:#fff3ec;
-	border:1px solid #ff6d14;
-	position: absolute;
-	bottom:10px;
-	width:90px;
-	height:25px;
-	border-radius:4px;
-	color:#ff6d14;
-}
+
 .my_n_price{
 	position: absolute;	
 	top: 6px;
@@ -2779,3 +2770,24 @@ td.cash_td2 img {
 }
 /*2106-3-17 e*/
 
+/*2106-3-18 s*/
+.my_income_btnc li{
+	float:left;
+	width:50%;
+}
+.my_income_btnc a{
+	display:block;
+	margin:0 5px;
+}
+.tit_btn_q{
+	background:#fff3ec;
+	border:1px solid #ff6d14;
+	position: absolute;
+	bottom:10px;
+	width:90px;
+	height:25px;
+	border-radius:4px;
+	color:#ff6d14;
+	font-size:13px;
+}
+/*2106-3-18 e*/
