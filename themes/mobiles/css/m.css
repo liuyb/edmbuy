@@ -4245,8 +4245,27 @@ td.cash_td2 img {
   cursor: pointer;
   line-height: 27px;
 }
-.my_income_btnc li {
-  float: left;
-  width: 50%;
-}
 /*2106-3-11 e*/
+
+/*2106-3-18 s*/
+.my_income_btnc li{
+  float:left;
+  width:50%;
+}
+.my_income_btnc a{
+  display:block;
+  margin:0 5px;
+}
+.tit_btn_q{
+  background:#fff;
+  /*border:1px solid #ff6d14;*/
+  position: absolute;
+  bottom:10px;
+  left: -20px;
+  width:90px;
+  height:25px;
+  border-radius:4px;
+  color:#ff6d14;
+  font-size:13px;
+}
+/*2106-3-18 e*/
