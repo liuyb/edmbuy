@@ -1,0 +1,31 @@
+<!--{add_css file="index.css" scope="global"}-->
+<div id="login">
+  <h1>益多米商家后台</h1>
+  <form name="loginForm" id="loginForm" method="POST" action="/login">
+    <p>
+      <label for="loginname">用户名<br/>
+      <input type="text" name="loginname" id="loginname" class="input" value="<!--{$retuname}-->" maxlength="20"/></label>
+    </p>
+    <p>
+      <label for="password">密码<br/>
+      <input type="password" name="password" id="password" class="input" value="<!--{$retupass}-->" maxlength="20"/></label>
+    </p>
+    <p class="submit">
+      <label for="verifycode">验证码<br/>
+      <input type="text" name="verifycode" id="verifycode" class="input input-short" value="" maxlength="4"/>
+      <img id="verifyimg" src="/vc_mch.php" onclick="this.src='/vc_mch.php?_='+Math.random()*100000;" alt="验证码" title="点击刷新验证码" />
+      </label>
+      <input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录"/>
+    </p>
+    <p class="retcode"><!--{$retmsg}--></p>
+  </form>
+</div>
+<script>
+$(function(){
+  var $loginname = $('#loginname');
+  var $password = $('#password');
+  if ($loginname.val().trim()=='') $loginname.val('').focus();
+  else if ($password.val().trim()=='') $password.val('').focus();
+  else $('#verifycode').focus();
+});
+</script>
