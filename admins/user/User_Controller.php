@@ -17,8 +17,8 @@ class User_Controller extends Controller {
    */
   public function index(Request $request, Response $response)
   {
-    if (Common_Model::admin_logined()) {
-      $admin = D()->get_one("SELECT * FROM {admin_user} WHERE admin_uid=%d", $_SESSION['logined_uid']);
+    if (AdminUser2::is_logined()) {
+      $admin = D()->get_one("SELECT * FROM {admin_user} WHERE admin_uid=%d", $GLOBALS['user']->uid);
       $v = new PageView('mod_user_index');
       $v->assign('admin', $admin);
       $v->assign('nav', $this->_nav);
@@ -101,8 +101,9 @@ class User_Controller extends Controller {
         else { //Final Login Success
           $retmsg  = '登录成功！';
           unset($_SESSION['verifycode']);
-          $_SESSION['logined_uid']   = $admin['admin_uid'];
-          $_SESSION['logined_uname'] = $admin['admin_uname'];
+          $cAdmin = new AdminUser2($admin['admin_uid']);
+          $cAdmin->set_logined_status();
+          
           $response->redirect('/home');
         }
       }

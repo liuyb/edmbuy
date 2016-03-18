@@ -15,7 +15,7 @@ class Default_Controller extends Controller {
    */
   public function index(Request $request, Response $response)
   {
-    if (AdminUser2::is_logined()) {
+    if (Merchant::is_logined()) {
       $response->redirect('/home');
     }
     else {

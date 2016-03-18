@@ -66,9 +66,9 @@ class User_Controller extends MerchantController {
         else { //Final Login Success
           $retmsg  = '登录成功！';
           unset($_SESSION['verifycode']);
-          $_SESSION['logined_uid']   = $login_uinfo['merchant_id'];
-          $_SESSION['logined_idname']= $login_uinfo['idname'];
-          $_SESSION['logined_uname'] = $login_uinfo['facename'];
+          $cMerchantUser = new Merchant($login_uinfo['merchant_id']);
+          $cMerchantUser->set_logined_status();
+          
           $response->redirect('/home');
         }
       }

@@ -555,18 +555,20 @@ function gen_salt() {
 }
 /**
  * gen encoded password
- * @param string $password_raw
- * @param string $salt
+ * @param string  $password_raw
+ * @param string  $salt
+ * @param integer $len
+ * @param boolean $upper whether return upper format
  * @return encoded password
  */
-function gen_salt_password($password_raw, $salt=NULL, $len=40) {
+function gen_salt_password($password_raw, $salt=NULL, $len=40, $upper = TRUE) {
   $len = in_array($len,array(32,40)) ? $len : 40;
   $encfunc = $len==40 ? 'sha1' : 'md5';
   $password_enc = preg_match("/^\w{{$len}}$/", $password_raw) ? $password_raw : $encfunc($password_raw);
   if (!isset($salt)) {
     $salt = gen_salt();
   }
-  return strtoupper($encfunc($password_enc . $salt));
+  return $upper ? strtoupper($encfunc($password_enc . $salt)) : $encfunc($password_enc . $salt);
 }
 
 /**

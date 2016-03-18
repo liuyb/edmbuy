@@ -167,7 +167,7 @@ class SessionBase implements SessionHandlerInterface {
    * @return object - the user object.
    */
   public static function anonymous_user($_user, $_session = '') {
-    $_user->uid       = 0;
+    $_user->uid       = '';
     $_user->lastip    = get_clientip();
     $_user->cached    = array();
     $_user->session   = $_session;
