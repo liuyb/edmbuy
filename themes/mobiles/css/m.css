@@ -4185,6 +4185,8 @@ td.cash_td2 img {
   /*height:25px;*/
   border-radius:4px;
   color:#ff6d14;
+  font-size: 13px;
+  font-size: 1.3rem;
 }
 .my_n_price{
   position: absolute;
@@ -4215,6 +4217,10 @@ td.cash_td2 img {
 .my_income_btnc{
   margin:14px 5px;
   font-size: 0;
+}
+.my_income_btnc a {
+  display: block;
+  margin: 0 5px;
 }
 .my_income_btnc button{
   margin:0 5px;

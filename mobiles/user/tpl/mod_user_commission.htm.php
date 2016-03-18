@@ -24,7 +24,7 @@
 	</div>
 	<div class="get_broke">
 		<span>获得佣金：￥<?=$commision?></span>
-		<span class="ck_broke"><a href="/partner/commission?status=1">查看佣金明细</a></span>
+		<span class="ck_broke"><a href="/partner/commission?status=0">查看佣金明细</a></span>
 	</div>
 
 	<div class="my_name_order">
@@ -59,8 +59,8 @@
 		<?php if($is_user):?>
 		<div class="my_income_btnc">
 			<ul>
-				<li><a href="javascript:;"><div class="btnc_share">分享此页面</div></a>
-				<li><a href="javascript:;"><div class="btnc_plan">米商计划</div></a>
+				<li><a href="javascript:;"><div class="btnc_share">分享此页面</div></a></li>
+				<li><a href="javascript:;"><div class="btnc_plan">米商计划</div></a></li>
 			</ul>
 			<div class="clear"></div>
 		</div>
