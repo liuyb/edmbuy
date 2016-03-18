@@ -64,9 +64,9 @@ class SessionDB extends SessionBase {
       return TRUE;
     }
     
-    $this->_db->query("UPDATE `{$this->_dbtable}` SET `uid`=%d, `lasttime`=%d, `lastip`='%s', `data`='%s' WHERE `sid`='%s'", $user->uid, $this->_timestamp, get_clientip(), $sess_data, $sess_id);
+    $this->_db->query("UPDATE `{$this->_dbtable}` SET `uid`='%s', `lasttime`=%d, `lastip`='%s', `data`='%s' WHERE `sid`='%s'", $user->uid, $this->_timestamp, get_clientip(), $sess_data, $sess_id);
     if (!$this->_db->affected_rows()) {	//update error, indicating no the session
-      $this->_db->query("INSERT INTO `{$this->_dbtable}` (`sid`, `uid`, `lasttime`, `lastip`, `data`) VALUES('%s', %d, %d, '%s', '%s')", $sess_id, $user->uid, $this->_timestamp, get_clientip(), $sess_data);
+      $this->_db->query("INSERT INTO `{$this->_dbtable}` (`sid`, `uid`, `lasttime`, `lastip`, `data`) VALUES('%s', '%s', %d, '%s', '%s')", $sess_id, $user->uid, $this->_timestamp, get_clientip(), $sess_data);
     }
     return TRUE;
   }

@@ -16,9 +16,13 @@ class User_Model extends Model {
    * @return integer -1: no the user; 0: password error; 1: ok
    */
   static function check_logined($uname, $upass_raw, &$output = []) {
-  	$where = "idname='%s'";
-  	if ($uname) {
-  		
+  	$uname = strtolower($uname);
+  	$where = "LOWER(`idname`)='%s'";
+  	if (Fn::check_mobile($uname)) { //手机登录
+  		$where = "`mobile`='%s'";
+  	}
+  	elseif (Fn::check_email_address($uname)) { //邮箱登录
+  		$where = "LOWER(`email`)='%s'";
   	}
   	
     $admin = D()->get_one("SELECT * FROM `shp_merchant` WHERE {$where}", $uname);
@@ -27,8 +31,8 @@ class User_Model extends Model {
     }
     
     //check db password
-    $upass_enc = gen_salt_password($upass_raw,$admin['salt']);
-    if ($admin['admin_upass']!=$upass_enc) {
+    $upass_enc = gen_salt_password($upass_raw,$admin['salt'],32,false);
+    if ($admin['password']!=$upass_enc) {
       return 0;
     }
     

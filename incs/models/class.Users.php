@@ -103,7 +103,10 @@ class Users extends StorageNode {
 	
 		//设置登录session uid
 		$GLOBALS['user']->uid = $this->id;
-	
+
+		//重新变更session id
+		SimPHP::$session->regenerate_id();
+		
 		//新起一个对象来编辑，避免过多更新
 		$nUser = new self($this->id);
 		$nUser->lastlogin = simphp_time();

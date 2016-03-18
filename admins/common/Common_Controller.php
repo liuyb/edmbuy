@@ -51,10 +51,18 @@ class Common_Controller extends Controller {
   	}
   
   	// 检查登录状态
-  	if(!$loginIgnore && !Common_Model::admin_logined()){
+  	if(!$loginIgnore && !AdminUser2::is_logined()){
   		$response->redirect('/login');
   	}
-  
+  	
+  	//读取最新用户信息以客户端缓存
+  	global $user;
+  	if ($user->uid) {
+  		$curUser = AdminUser2::load($user->uid);
+  		$curUser->session = $user->session; //改写之前要先保存已有的session
+  		$user = $curUser;
+  		unset($curUser);
+  	}
   }
   
 }

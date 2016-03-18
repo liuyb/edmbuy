@@ -1,3 +1,19 @@
+Skip to content
+This repository  
+Search
+Pull requests
+Issues
+Gist
+ @lanzhengwu
+ Unwatch 5
+  Star 0
+ Fork 0 GavinLai/edmbuy
+ Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs
+Tree: ded9f30918 Find file Copy pathedmbuy/themes/mobiles/css/m.css
+ded9f30  17 minutes ago
+@GavinLai GavinLai 解决样式冲突
+4 contributors @GavinLai @EdmTest @lanzhengwu @qwe317149766
+RawBlameHistory     4271 lines (4211 sloc)  82.5 KB
 @CHARSET "UTF-8";
 /*
 *{margin:0;padding:0;color:#333;border:none;list-style:none;outline:none;font-family: "Microsoft Yahei" !important;-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
@@ -4185,6 +4201,8 @@ td.cash_td2 img {
   /*height:25px;*/
   border-radius:4px;
   color:#ff6d14;
+  font-size: 13px;
+  font-size: 1.3rem;
 }
 .my_n_price{
   position: absolute;
@@ -4216,6 +4234,10 @@ td.cash_td2 img {
   margin:14px 5px;
   font-size: 0;
 }
+.my_income_btnc a {
+  display: block;
+  margin: 0 5px;
+}
 .my_income_btnc button{
   margin:0 5px;
 }
@@ -4238,10 +4260,6 @@ td.cash_td2 img {
   border-radius: 4px;
   cursor: pointer;
   line-height: 27px;
-}
-.my_income_btnc li {
-  float: left;
-  width: 50%;
 }
 /*2106-3-11 e*/
 /*2106-3-16 s*/
@@ -4523,3 +4541,25 @@ td.cash_td2 img {
   	font-size: 16px;	
 }
 /*2106-3-17 e*/
+/*2106-3-18 s*/
+.my_income_btnc li{
+  float:left;
+  width:50%;
+}
+.my_income_btnc a{
+  display:block;
+  margin:0 5px;
+}
+.tit_btn_q{
+  background:#fff;
+  /*border:1px solid #ff6d14;*/
+  position: absolute;
+  bottom:10px;
+  left: -20px;
+  width:90px;
+  height:25px;
+  border-radius:4px;
+  color:#ff6d14;
+  font-size:13px;
+}
+/*2106-3-18 e*/
