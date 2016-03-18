@@ -10,7 +10,7 @@ class Comment extends StorageNode {
     
     protected static function meta() {
         return array(
-            'table'   => '{comment}',
+            'table'   => '`shp_comment`',
             'key'     => 'cid',
             'columns' => array(
                 'cid'     => 'comment_id',
@@ -44,7 +44,7 @@ class Comment extends StorageNode {
     static function getCommentGroupCount($goods_id){
         $sql = "SELECT comment_level,count(1) as total FROM edmbuy.shp_comment where status = %d and id_value = %d group by comment_level
                 union
-                select -1 as comment_level, count(1) as total FROM edmbuy.shp_comment where status = %d and id_value = %d and comment_img is not null;";
+                select -1 as comment_level, count(1) as total FROM edmbuy.shp_comment where status = %d and id_value = %d and (comment_img is not null and LENGTH(trim(comment_img)) > 0)";
         $ret = D()->query($sql,Comment::COMMENT_VALID_STATUS, $goods_id,Comment::COMMENT_VALID_STATUS, $goods_id)->fetch_array_all();
         return $ret;
     }
@@ -53,7 +53,7 @@ class Comment extends StorageNode {
         $where = '';
         if(is_numeric($category)){
             if($category == -1){
-                $where .= ' and comment_img is not null';
+                $where .= ' and (comment_img is not null and LENGTH(trim(comment_img)) > 0)';
             }else if($category){
                 $where .= ' and comment_level='.$category;
             }
@@ -63,6 +63,7 @@ class Comment extends StorageNode {
         $result = D()->query($sql, Comment::COMMENT_VALID_STATUS, $c->id_value, $pager->start, $pager->realpagesize)->fetch_array_all();
         if (!empty($result)) {
             foreach ($result AS &$g) {
+                $g['content'] = htmlentities($g['content']);
                 $g['comment_img'] = self::transformCommentImg($g['comment_img']);
                 $g['comment_thumb'] = self::transformCommentImg($g['comment_thumb']);
                 $g['user_name'] = self::confusedUsernameInComment($g['user_name']);

@@ -87,8 +87,8 @@ class Upload
             $oripath = $dstpath . $filecode . $extpart;
         } else {
             $filecode = date('d_His') . '_' . randstr();
-            $oripath = $img_dir . Upload::FOLDER_ORI . '/' . date('Ym') . '/';
-            $thumbpath = $img_dir . Upload::FOLDER_THUMB . '/' . date('Ym') . '/';
+            $oripath = $img_dir . Upload::FOLDER_ORI . '/' . date('Ym') . '/'. $filecode . $extpart;;
+            $thumbpath = $img_dir . Upload::FOLDER_THUMB . '/' . date('Ym') . '/'. $filecode . $extpart;;
         }
         
         // 写ori版本

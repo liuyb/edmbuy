@@ -64,13 +64,13 @@ function fileupload(e){
 
 function postImage(ev){
 	var img = ev.target.result;
-	F.post('/user/wxqr/update', {img:img}, function(ret){
-		$("body").append('<div class="mask"></div><div class="wtxje">加载中...</div>');
-		$(".mask").show();
+	F.postWithLoading('/user/wxqr/update', {img:img}, function(ret){
+		/* $("body").append('<div class="mask"></div><div class="wtxje">加载中...</div>');
+		$(".mask").show(); */
 		if(ret.flag=='SUC'){
 			$("#wx_uploading").find("img").attr("src",ret.result+'?r='+Math.random());//强制清缓存
-			$(".mask,.wtxje").hide();
-			myAlert('上传成功！');
+			//$(".mask,.wtxje").hide();
+			boxalert('上传成功！');
 		/* 	setTimeout(function(){
 				window.location.href = '/user/setting';
 			}, 1000); */

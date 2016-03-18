@@ -18,7 +18,7 @@
 <div class="order_number">
 	<p class="number_info">
 		<span class="number_name">物流编号：</span>
-		<span class="number_id"><?=$order->invoice_no ?></span>
+		<span class="number_id"><?=htmlentities($order->invoice_no) ?></span>
 		<span class="number_exp">（<?=$order->shipping_name ?>）</span>
 	</p>
 </div>
@@ -54,8 +54,8 @@
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
 			<?php foreach ($merchant_goods['goods'] as $gd):
-			 $total_amount = doubleval($total_amount) + doubleval($gd['goods_price']);
-			 ++$total_goods;
+			 $total_amount = doubleval($total_amount) + (doubleval($gd['goods_price']) * intval($gd['goods_number']));
+			 $total_goods += intval($gd['goods_number']);
 			 if(!$first_goods_id) $first_goods_id = $gd['goods_id'];
 			?>
 			<tr>
@@ -64,11 +64,14 @@
 				</td>
 				<td class="info_td2">
 					<p class="info_name"><a href="<?php echo U('item/'.$gd['goods_id'])?>"><?=$gd['goods_name'] ?></a></p>
-					<!-- <p class="ifno_etalon">颜色：蓝色；尺码：45</p> -->
+					<p class="ifno_etalon"><?=$gd['goods_attr'] ?></p>
 				</td>
 				<td class="info_td3">
 					<p class="info_price">￥<?=$gd['goods_price'] ?></p>
 					<p class="info_num">x<?=$gd['goods_number'] ?></p>	
+					<?php if($order->shipping_status == SS_RECEIVED && !$gd['has_comment']):?>
+					<p class="order-status-op"><a href="javascript:orderGoodsComment('<?=$gd['order_id']?>','<?=$gd['goods_id']?>');" class="btn btn-orange">晒单评价</a></p>
+					<?php endif;?>
 				</td>
 			</tr>
 			<?php endforeach;?>
@@ -187,6 +190,10 @@ function confirm_ship(obj){
 }
 function return_product(obj) {
 	myAlert('请联系在线客服');
+}
+
+function orderGoodsComment(order_id, goods_id){
+	window.location.href = '/item/comment/page?order_id='+order_id+'&goods_id='+goods_id;
 }
 </script>
 <?php endif;?>

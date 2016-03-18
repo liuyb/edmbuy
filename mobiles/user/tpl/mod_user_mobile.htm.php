@@ -46,7 +46,7 @@
 	    if(mobile == phone){
 			return;
 	    }
-	    F.post('/user/mobile/update', {mobile : phone}, function(ret){
+	    F.postWithLoading('/user/mobile/update', {mobile : phone}, function(ret){
 		    if(ret['result'] == 'FAIL'){
 		    	myAlert(ret['msg']);
 		    	return;
@@ -66,7 +66,7 @@
 		if(nickname==name){
 			return;
 		}
-		F.post('/user/nickname/update', {'nickname' : name}, function(ret){
+		F.postWithLoading('/user/nickname/update', {'nickname' : name}, function(ret){
 			if(ret['result'] == 'FAIL'){
 				myAlert(ret['msg']);
 				return;

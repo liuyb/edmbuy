@@ -217,26 +217,11 @@ $(function(){
 		</table>
 		<div class="e_info_d" id="commentlist" style="margin-bottom:10px;">
 		</div>
-		<div class="remm_more" onclick="pulldata(this);" style="display: none;">点击加载更多...</div>
+		<div class="remm_more" style="display: none;">下拉加载更多...</div>
 	</div>
 	<div class="pro_comment" id="list3" style="display:none">
 		<div class="shop_remm">
 			<ul>
-				<li>
-					<a href="javascript:;"><img src="./img/dress.png"></a>
-					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
-					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
-				</li>
-				<li>
-					<a href="javascript:;"><img src="./img/dress.png"></a>
-					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
-					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
-				</li>
-				<li>
-					<a href="javascript:;"><img src="./img/dress.png"></a>
-					<p class="remm_font">意真是抱歉有您的支持我们支持的支持我们支持的支持我们支持我们会做的更好</p>
-					<p class="tea_info_price remm_p"><span>￥58.00</span><b>￥88.00</b></p>
-				</li>
 			</ul>
 			<div class="clear"></div>
 		</div>
@@ -382,6 +367,25 @@ $(document).ready(function(){
 		}
 	});
 
+	 F.onScrollEnd(function(){
+		if(!$("#li2").hasClass("check_on")){
+			return;
+		}
+		if(!$(".remm_more").is(":visible")){
+			return;
+		}
+		var more = $(".remm_more");
+		var scrollHeight = $(".scrollArea").height();
+		var sh = Math.abs(this.y);
+		var windowH = $(window).height();
+		var btnNav = $("#Mnav").height();
+		windowH = windowH - (btnNav ? btnNav :0);
+		//提前20px开始加载
+		var bufferH = 20; 
+		if((sh + windowH + bufferH) > scrollHeight){
+			pulldata(more);
+		}
+	});
 });
 
 //已选择的所有属性
@@ -467,6 +471,8 @@ function detailTabSwitch(a){
 		$(_li).attr('data-loaded','Y');
 		if(a == 2){
 			loadGoodsComment(1, true);
+		}else if(a == 3){
+			getMerchantRecommend(1, true);
 		}
 	}
 	F.set_scroller(false, 100);
@@ -476,6 +482,8 @@ function loadGoodsComment(curpage, isinit, category){
 	F.get('<?php echo U('item/comment/list')?>',{curpage : curpage, goods_id : <?=$item->item_id ?>, category : category},function(ret){
 		var commentDom = $("#commentlist");
 		if(!ret || !ret.result || ret.result.length == 0){
+			$(".remm_more").html("下拉加载更多...");
+			$(".remm_more").attr("curpage",1).hide();
 			var _html = "<div style='margin:15px;text-align:center;'>还没有人评论哦~</div>";
 			commentDom.html(_html);
 			F.set_scroller(false, 100);
@@ -488,6 +496,9 @@ function loadGoodsComment(curpage, isinit, category){
  			_html += "<table cellspacing='0' cellpadding='0' class='evaluate_info'><tr>";
 			_html += "<td width=\"45px;\"><img src=\"/themes/mobiles/img/mt.png\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+comment.user_logo+"')\"></td>";
 			_html += "<td><p class=\"eval_name\">"+comment.user_name+"</p>";
+			if(comment.obj_attr){
+				_html += "<p class=\"eval_type\">"+comment.obj_attr+"</p>";
+			}
 			_html += "<p class=\"eval_time\">"+comment.add_time+"</p></td></tr></table>";
 			_html += "<p class=\"eval_idea\">"+comment.content+"</p>";
 			if(comment.comment_img){
@@ -556,21 +567,22 @@ function renderCommentNum(ret){
 function commentLoadedCallback(){
 	F.set_scroller(false, 100);
     //weixin img click
-    var comment_currpic = '';
-    var comment_picset = new Array();
-    $('.idea_img img').each(function(){
-    	comment_picset.push($(this).attr('data-orisrc'));
-    	  if (''==comment_currpic) comment_currpic = $(this).attr('src');
-    	})
-    	.on('click',function(){
-        	wx.previewImage({
-                current: comment_currpic,
-                urls: comment_picset
-         });
+    $('.idea_img img').on('click',function(){
+    	var comment_currpic = '';
+        var comment_picset = new Array();
+        $(this).closest("ul").find("img").each(function(){
+        	comment_picset.push($(this).attr('data-orisrc'));
+        	if (''==comment_currpic) comment_currpic = $(this).attr('src');
+        });	
+    	wx.previewImage({
+            current: comment_currpic,
+            urls: comment_picset
+    	});
     });
 }
 //当还有下一页时处理下拉
 function handleWhenHasNextPage(data, category){
+	$(".remm_more").html("下拉加载更多...");
 	var more = $(".remm_more");
 	var hasnex = data.hasnexpage;
 	if(hasnex){
@@ -583,7 +595,27 @@ function handleWhenHasNextPage(data, category){
 }
 
 function pulldata(obj){
+	$(".remm_more").html("加载中...");
 	loadGoodsComment($(obj).attr("curpage"), false, $(obj).attr("category"));
+}
+
+function getMerchantRecommend(curpage, isinit){
+	F.get('<?php echo U('item/merchant/recommend')?>',{curpage : curpage, merchant_uid : <?=$item->merchant_uid ?>},function(ret){
+		if(!ret || !ret.result || !ret.result.length){
+			$(".shop_remm").find("ul").html($("<li><p style='line-height:50px;margin-left:10px;'>还没有可显示的商品！</p></li>"));
+			return;
+		}
+		var LI = "";
+		var result = ret.result;
+		for(var i = 0,len=result.length; i < len; i++){
+			var good = result[i];
+			LI += "<li><a href='/item/"+good.goods_id+"'><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+good.goods_img+"')\">";
+			LI += "<p class=\"remm_font\">"+good.goods_name+"</p>";
+			LI += "<p class=\"tea_info_price remm_p\"><span>￥"+good.shop_price+"</span><b>￥"+good.market_price+"</b></p></a></li>";
+		}
+		$(".shop_remm").find("ul").html($(LI));
+		F.set_scroller(false, 100);
+	});
 }
 
 </script>

@@ -131,7 +131,7 @@ function fileupload(e){
     var fr = new FileReader();
     fr.onload = function(ev) {
     	var img = ev.target.result;
-    	F.post('/user/logo/upload', {img:img}, function(ret){
+    	F.postWithLoading('/user/logo/upload', {img:img}, function(ret){
     		if(ret.flag=='SUC'){
     			$("#userHeaderImg").find("img").attr("src",ret.result+'?r='+Math.random());
     		}else{

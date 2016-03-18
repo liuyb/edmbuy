@@ -74,7 +74,15 @@ class Item_Model extends Model {
      * @param unknown $cat
      */
     static function findGoodsListByPrice(PagerPull $pager, $price){
-        $result = Items::findGoodsListByPrice($pager, $price);
+        $result = Items::findGoodsListByCond($pager, ['shop_price' => $price]);
+        $pager->setResult($result);
+    }
+    
+    /**
+     * 获取当前商家的其他商品
+     */
+    static function findGoodsListInSameMerchant(PagerPull $pager, array $options){
+        $result = Items::findGoodsListByCond($pager, $options);
         $pager->setResult($result);
     }
     
@@ -113,7 +121,13 @@ class Item_Model extends Model {
         $c->add_time = simphp_time();
         $c->ip_address = get_clientip();
         $c->status = 1;
+        $order_goods = OrderItems::getOrderGoodsInfo($c->order_id, $c->id_value);
+        if(!empty($order_goods)){
+            $c->obj_attr = $order_goods['goods_attr'];
+        }
         $c->save(Storage::SAVE_INSERT);
+        OrderItems::updateCommentState($c->order_id, $c->id_value);
+        unset($c);
     }
     
     /**

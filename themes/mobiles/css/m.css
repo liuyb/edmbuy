@@ -4347,8 +4347,8 @@ td.cash_td2 img {
 	margin:0 5px;
 }
 .idea_img img{  
-	max-width: 100%;
-  	max-height: 100%;
+	width: 50px;
+  	height: 50px;
 }
 .idea_img{
 	margin:10px 0 80px;
@@ -4395,3 +4395,131 @@ td.cash_td2 img {
   	line-height: 40px;	
 }
 /*2106-3-16 e*/
+/*2106-3-17 s*/
+.comment_add{
+	padding:0 10px;
+  	background: #fff;	
+}
+#post_party_content {
+  	min-height: 100px;
+  	padding-bottom: 10px;
+}
+.richtext {
+  	margin-top: -28px;
+  	padding: 3px;
+  	height: auto;
+	font-size: 16px;
+	color: #000000;
+  	line-height: 28px;
+}
+.placeholder {
+  	width: 288px;
+  	height: 20px;
+  	overflow: hidden;
+  	padding: 4px;
+  	font-size: 12px;
+  	line-height: 28px;
+  	color: #666;
+}
+.publish_image {
+ 	padding: 12px 0 12px;
+}
+.dj_index {
+  	float: left;
+  	width: 60px;
+  	height: 60px;
+  	margin: 10px 10px 0 0;
+  	overflow: hidden;
+  	position: relative;
+	text-align: center;
+}
+.tshop_add img ,.publish_image img{
+  	border-radius: 0;
+  	border: 0;
+  	width: 60px;
+  	height: 60px;
+}
+.publish_image .dj_file{
+	width: 100%;
+	height:100%;
+	left:0;
+	top:0;
+	opacity:0;
+	position:absolute;
+}
+.comment_p{
+	margin-top:10px;
+	background:#fff;
+}
+.p_rank{
+	padding:10px 5px;
+}
+.p_rank div{
+	display:inline-block;
+	width:32.33%;
+}
+.p_rank p{
+	margin:10px;
+	height: 23px;
+	cursor:pointer;
+}
+.p_hp{
+	background:url(../img/haoping-weixuan.png) no-repeat center;
+	background-size: 80px;
+}
+.p_hp_on{
+	background:url(../img/haoping-xuanzhong.png) no-repeat center;
+	background-size: 80px;
+}
+.p_zp{
+	background:url(../img/zhongping=weixuan.png) no-repeat center;
+	background-size: 80px;
+}
+.p_zp_on{
+	background:url(../img/zhongping-xuanzhong.png) no-repeat center;
+	background-size: 80px;
+}
+.p_cp{
+	background:url(../img/chaping-weixuan.png) no-repeat center;
+	background-size: 80px;
+}
+.p_cp_on{
+	background:url(../img/chaping-xuanzhong.png) no-repeat center;
+	background-size: 80px;
+}
+
+.p_1,.p_2,.p_3,.p_4,.p_5,.n_1,.n_2,.n_3,.n_4,.n_5{
+	background:url(../img/pingxing-weixuan.png) no-repeat center;
+	background-size: 32px;
+  	padding: 15px 16px;
+  	float: right;
+	margin-right:10px;
+}
+.red_on{
+	background:url(../img/pingxing-xuanzhong.png) no-repeat center;
+	background-size: 32px;
+}
+.fwtd_xj{
+	padding: 25px 0;
+}
+.fhsd_xj{
+	margin-top:-20px;
+}
+.fhsd_font ,.fwtd_font{
+	float:left;
+	font-size:14px;
+	margin-left:12px;
+}
+.comm_fb_p{
+  	position: fixed;
+  	width: 100%;
+  	background: #ff6d14;
+  	left: 0;
+  	bottom: 0;
+  	height: 50px;
+  	line-height: 50px;
+  	text-align: center;
+  	color: #fff;
+  	font-size: 16px;	
+}
+/*2106-3-17 e*/
