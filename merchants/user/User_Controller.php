@@ -15,8 +15,9 @@ class User_Controller extends MerchantController {
    */
   public function index(Request $request, Response $response)
   {
-    if (1) {
-      exit('index');
+    if (Merchant::is_logined()) {
+      $this->v->set_tplname('mod_user_index');
+      $response->send($this->v);
     }
     else {
       $response->redirect('/login');

@@ -1,35 +1,18 @@
-<div class="headerMain">
-  <div class="headLogo"><a href="/">益多米商家管理后台</a></div>
-  <div class="headLink">
-    <span>当前登录用户：</span><span style="font-weight:bold;"><!--{$admin.admin_uname}--></span>
-    <span class="wsep">|</span><a href="javascript:;" onclick="return clear_cache();">清除缓存</a>
-    <span class="wsep">|</span><a href="/logout">退出</a>
+<div class="header">
+  <div class="headRt">
+    <a href="">浏览店铺</a>
+    <a href="/logout">admin </a>
   </div>
-</div>
-<nav class="headerNav">
-  <ul id="htabs-bar" class="htabs-bar">
-    <li class="htabs-list sy htabs-list-on" id="hMainTab">
-      <a href="#/home" class="link hashreq"><span class="htabs-item-text">首页</span></a>
-    </li>
-    <!--{checkperms perms="mod_refund"}-->
-    <li class="htabs-list refund">
-      <a href="#/refund" class="link hashreq"><span class="htabs-item-text">退款管理</span></a>
-    </li>
-    <!--{/checkperms}-->
-    <!--{checkperms perms="mod_cash"}-->
-    <li class="htabs-list cash">
-      <a href="#/cash" class="link hashreq"><span class="htabs-item-text">提现管理</span></a>
-    </li>
-    <!--{/checkperms}-->
-    <!--{checkperms perms="mod_other"}-->
-    <li class="htabs-list other">
-      <a href="#/other" class="link hashreq"><span>其它</span></a>
-    </li>
-    <!--{/checkperms}-->
+  <div class="headLogo"><a href="/">商家后台</a></div>
+  <ul class="headNav">
+    <li class="navit on"><a href="/home" class="blka">首页</a></li>
+    <li class="navit"><a href="/shop/" class="blka">商城</a></li>
+    <li class="navit"><a href="/goods/" class="blka">商品</a></li>
+    <li class="navit"><a href="/order/" class="blka">订单</a></li>
+    <li class="navit"><a href="/market/" class="blka">营销</a></li>
   </ul>
-  <div class="bgx hline"></div>
-</nav>
-<div id="toploading"><b></b><span>数据加载中...</span></div>
+</div>
+<div id="topLoading"><b></b><span>数据加载中...</span></div>
 <div id="mainMsgBox"><span class="msg msg-error">数据保存中...</span></div>
 <script>
 function clear_cache(){
