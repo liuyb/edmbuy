@@ -301,17 +301,24 @@ HERESQL;
 	}
 	
 	/**
-	 * 根据价格获取商品列表
+	 * 根据不同条件获取商品列表
 	 * @param PagerPull $pager
 	 * @param unknown $cat
 	 */
-	static function findGoodsListByPrice(PagerPull $pager, $price){
+	static function findGoodsListByCond(PagerPull $pager, array $options){
+	    $where = '';
+	    if(isset($options['shop_price']) && $options['shop_price']){
+	        $where .= " and g.shop_price = $options[shop_price] ";
+	    }
+	    if(isset($options['merchant_uid']) && $options['merchant_uid']){
+	        $where .= " and g.merchant_uid = $options[merchant_uid] ";
+	    }
 	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
                 from shp_goods g 
-                where	g.is_on_sale = 1 and g.is_delete = 0
-                and 	g.shop_price = %d 
+                where	g.is_on_sale = 1 and g.is_delete = 0 
+                $where 
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
-	    $goods = D()->query($sql, $price, $pager->start, $pager->realpagesize)->fetch_array_all();
+	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    return self::buildGoodsImg($goods);
 	}
 	

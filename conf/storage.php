@@ -55,6 +55,13 @@ return [
       'handler'	  => 'db',	//option value: 'file', 'mm', 'db'
       'dbtable'	  => 'tb_session_adm',	//when handler=='db', indicating the session table
     ],
+    'mch' => [
+      'sessname'  => 'PHPSESSID_MCH',		//new session name, if keep empty, default to 'PHPSESSID'
+      'interval'	=> '300',
+      'lifetime'	=> '1800',
+      'handler'	  => 'db',	//option value: 'file', 'mm', 'db'
+      'dbtable'	  => 'tb_session_mch',	//when handler=='db', indicating the session table
+    ],
   ],
   'cookie' => [
     'default' => [
@@ -74,7 +81,7 @@ return [
       'prefix'    => 'EDM',
     ],
     'adm' => [
-      'domain'	  => 'edm.ydmbuy.com',
+      'domain'	  => 'edmadm.fxmapp.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,

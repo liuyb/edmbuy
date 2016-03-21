@@ -12,7 +12,7 @@ class SystemLog {
   private static $_log_prefix = '';
   
   public static function local_log($name, $msg) {
-    @file_put_contents(LOG_DIR . DS . self::$_log_prefix . $name . '.log',
+    @file_put_contents('D:/work/Apache24/logs' . DS . self::$_log_prefix . $name . '.log',
                        '['.date('Y-m-d H:i:s') . "]: {$msg}\n",
                        FILE_APPEND | LOCK_EX);
   }

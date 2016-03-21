@@ -30,10 +30,28 @@ class OrderItems extends StorageNode {
 						'parent_id'      => 'parent_id',
 						'is_gift'        => 'is_gift',
 						'goods_attr_id'  => 'goods_attr_id',
+				        'has_comment'    => 'has_comment'
 				)
 		);
 	}
 	
+	static function getOrderGoodsInfo($order_id, $goods_id){
+	    $ectb_order_goods = OrderItems::table();
+	    $sql = "SELECT og.* FROM {$ectb_order_goods} og WHERE og.`order_id`=%d and og.`goods_id`=%d ";
+	    return D()->query($sql, $order_id, $goods_id)->get_one();
+	}
+	
+	//修改评论状态为已评论
+	static function updateCommentState($order_id, $goods_id){
+	    $sql = <<<HERESQL
+	       update shp_order_goods set has_comment = 1 where order_id = %d and goods_id = %d ;
+HERESQL;
+	    D()->raw_query($sql,$order_id, $goods_id);
+		if (D()->affected_rows() > 0) {
+			return true;
+		}
+		return false;
+	}
 }
  
 /*----- END FILE: class.OrderItems.php -----*/

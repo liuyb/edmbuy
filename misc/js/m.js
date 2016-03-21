@@ -352,7 +352,27 @@
 		promise.always = function(){
 			F.loadingStop(effect);
 		}
-	}
+	};
+	
+	/**
+	 * 增加post 方法，增加loading方法 默认2秒才显示滚动条 
+	 */
+	F.postWithLoading = function(url, data, callback, ajax_start_cb, ajax_complete_cb){
+		F.loadingStart();
+		F.loading_canvas.hide();
+		setTimeout(function(){
+			var isLoadingExist = $("#loadingCover").find(".spinner").length;
+			if(isLoadingExist){
+				F.loading_canvas.show();
+			}
+		}, 2000);
+		F.post(url, data, callback, ajax_start_cb, function(param){
+			if(ajax_complete_cb){
+				ajax_complete_cb(param);
+			}
+			F.loadingStop();
+		});
+	};
 	
 })(jQuery, FUI, this);
 

@@ -15,7 +15,7 @@ class Default_Controller extends Controller {
    */
   public function index(Request $request, Response $response)
   {
-    if (Common_Model::admin_logined()) {
+    if (AdminUser2::is_logined()) {
       $response->redirect('/home');
     }
     else {

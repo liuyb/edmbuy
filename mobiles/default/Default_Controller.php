@@ -436,10 +436,16 @@ class Default_Controller extends MobileController {
   public function goods_list(Request $request, Response $response){
       $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
       $pager = new PagerPull($curpage, 50);
-      $category = $request->get('category', Default_Model::CATEGORY_FOOD);
+      $category = $request->get('category', Default_Model::CATEGORY_EAT);
       Default_Model::findGoodsListByCategory($pager, $category);
       $pageJson = $pager->outputPageJson();
       $ret = ["result" => $pager->result];
+      if (!empty($ret['result'])) {
+      	foreach ($ret['result'] AS &$it) {
+      		$it['goods_name']  = str_replace(["\n","\r"], [" ",""], $it['goods_name']);
+      		$it['goods_brief'] = str_replace(["\n","\r"], [" ",""], $it['goods_brief']);
+      	}
+      }
       $ret = array_merge($ret, $pageJson);
       $response->sendJSON($ret);
   }

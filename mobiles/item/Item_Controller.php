@@ -32,7 +32,12 @@ class Item_Controller extends MobileController {
 		    'item/promote' => 'item_promote',
 		    'item/promote/product' => 'promote_product',
 		    'item/pref/show' => 'pref_show',
-		    'item/pref/goods' => 'pref_goods_list'
+		    'item/pref/goods' => 'pref_goods_list',
+		    'item/comment/image' => 'upload_comment_pic',
+		    'item/comment/list' => 'get_goods_comment',
+		    'item/comment/page' => 'goods_comment',
+		    'item/comment' => 'post_goods_comment',
+		    'item/merchant/recommend' => 'get_merchant_recommend'
 		];
 	}
 	
@@ -92,6 +97,7 @@ class Item_Controller extends MobileController {
 				$item->commision_show = $item->commision > 0 ? $item->commision : ($item->shop_price > $item->income_price ? $item->shop_price - $item->income_price : 0);
 				$item->commision_show = number_format($item->commision_show*(1-PLATFORM_COMMISION),2);
 				$this->v->assign('item', $item);
+				$this->v->assign('item_desc', json_encode($item->item_desc));
 				
 				//商品规格、属性
 				$item_attrs = Items::attrs($item->id);
@@ -233,6 +239,20 @@ class Item_Controller extends MobileController {
 	    $response->sendJSON($ret);
 	}
 	
+	//进入评论页面
+	public function goods_comment(Request $request, Response $response){
+	    $this->v->set_tplname('mod_item_comment');
+	    $this->nav_no    = 1;
+	    $this->topnav_no = 1;
+	    $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+	    $goods_id = $request->get('goods_id');
+	    $order_id = $request->get('order_id');
+	    $this->v->assign('goods_id', $goods_id);
+	    $this->v->assign('order_id', $order_id);
+	    throw new ViewResponse($this->v);
+	}
+	
+	//上传评论图片
 	public function upload_comment_pic(Request $request, Response $response){
 	    $imgDIR = '/a/comment/';
 	    if ($request->is_post()) {
@@ -246,32 +266,57 @@ class Item_Controller extends MobileController {
 	    }
 	}
 	
+	//提交评论
 	public function post_goods_comment(Request $request, Response $response){
-	    $id_value = $request->get('goods_id');
-	    $content = $request->get('content', '');
-	    $comment_img = $request->get('comment_img','');
-	    $comment_level = $request->get('comment_level');
-	    $shipping_level = $request->get('shipping_level');
-	    $service_level = $request->get('service_level');
-	    if ($id_value && $content){
-	        $c = new Comment();
-	        $c->content = $content;
-	        $c->comment_img = $comment_img;
-	        $c->comment_level = $comment_level;
-	        $c->shipping_level = $shipping_level;
-	        $c->service_level = $service_level;
-	        $c->id_value = $id_value;
-	        Item_Model::postGoodsComment($c);
+	    $ret = 'FAIL';
+	    if ($request->is_post()) {
+    	    $goods_id = $request->post('goods_id');
+    	    $order_id = $request->post('order_id');
+    	    $content = $request->post('content', '');
+    	    $comment_img = $request->post('comment_img','');
+    	    $comment_thumb = $request->post('comment_thumb','');
+    	    $comment_level = $request->post('comment_level',1);
+    	    $shipping_level = $request->post('shipping_level',0);
+    	    $service_level = $request->post('service_level',0);
+    	    if ($goods_id && $content){
+    	        $c = new Comment();
+    	        $c->content = $content;
+    	        $c->comment_img = $comment_img;
+    	        $c->comment_thumb = $comment_thumb;
+    	        $c->comment_level = $comment_level;
+    	        $c->shipping_level = $shipping_level;
+    	        $c->service_level = $service_level;
+    	        $c->id_value = $goods_id;
+    	        $c->order_id = $order_id;
+    	        Item_Model::postGoodsComment($c);
+    	        $ret = 'SUCC';
+    	    }
 	    }
+	    $response->sendJSON($ret);
 	}
 	
+	//获取商品的评论数据
 	public function get_goods_comment(Request $request, Response $response){
 	    $goods_id = $request->get('goods_id');
-	    $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
-	    $pager = new PagerPull($curpage, 25);
+	    $category = $request->get('category', '');
+	    $curpage = $request->get('curpage', 1);
+	    $pager = new PagerPull($curpage, 10);
 	    $c = new Comment();
 	    $c->id_value = $goods_id;
-	    Item_Model::getGoodsComment($c, $pager);
+	    Item_Model::getGoodsComment($c, $pager, $category);
+	    $pageJson = $pager->outputPageJson();
+	    $ret = ["result" => $pager->result];
+	    $ret = array_merge($ret, $pageJson);
+	    $ret['gather'] = Comment::getCommentGroupCount($goods_id);
+	    $response->sendJSON($ret);
+	}
+	
+	//查询店铺推荐
+	public function get_merchant_recommend(Request $request, Response $response){
+	    $merchant_uid = $request->get('merchant_uid');
+	    $curpage = $request->get('curpage', 1);
+	    $pager = new PagerPull($curpage, 20);
+	    Item_Model::findGoodsListInSameMerchant($pager, ["merchant_uid"=>$merchant_uid]);
 	    $pageJson = $pager->outputPageJson();
 	    $ret = ["result" => $pager->result];
 	    $ret = array_merge($ret, $pageJson);

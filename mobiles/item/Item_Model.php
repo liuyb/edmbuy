@@ -74,7 +74,15 @@ class Item_Model extends Model {
      * @param unknown $cat
      */
     static function findGoodsListByPrice(PagerPull $pager, $price){
-        $result = Items::findGoodsListByPrice($pager, $price);
+        $result = Items::findGoodsListByCond($pager, ['shop_price' => $price]);
+        $pager->setResult($result);
+    }
+    
+    /**
+     * 获取当前商家的其他商品
+     */
+    static function findGoodsListInSameMerchant(PagerPull $pager, array $options){
+        $result = Items::findGoodsListByCond($pager, $options);
         $pager->setResult($result);
     }
     
@@ -108,11 +116,18 @@ class Item_Model extends Model {
     static function postGoodsComment(Comment $c){
         $c->user_id = $GLOBALS['user']->uid;
         $c->user_name = $GLOBALS['user'] -> nickname;
+        $c->user_logo = $GLOBALS['user'] -> logo;
         $c->email = $GLOBALS['user'] -> email;
         $c->add_time = simphp_time();
         $c->ip_address = get_clientip();
         $c->status = 1;
+        $order_goods = OrderItems::getOrderGoodsInfo($c->order_id, $c->id_value);
+        if(!empty($order_goods)){
+            $c->obj_attr = $order_goods['goods_attr'];
+        }
         $c->save(Storage::SAVE_INSERT);
+        OrderItems::updateCommentState($c->order_id, $c->id_value);
+        unset($c);
     }
     
     /**
@@ -120,8 +135,8 @@ class Item_Model extends Model {
      * @param Comment $c
      * @param PagerPull $pager
      */
-    static function getGoodsComment(Comment $c, PagerPull $pager){
-        $result = Comment::getGoodsComment($c, $pager);
+    static function getGoodsComment(Comment $c, PagerPull $pager, $category){
+        $result = Comment::getGoodsComment($c, $pager, $category);
         $pager->setResult($result);
     }
     

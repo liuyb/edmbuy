@@ -9,14 +9,16 @@ defined('IN_SIMPHP') or die('Access Denied');
 class Default_Model extends Model {
   
     const CATEGORY_FOOD = 'food'; 
+    const CATEGORY_EAT = 'eat';
     const CATEGORY_DRINK = 'drink';
     const CATEGORY_WEAR = 'wear';
+    const CATEGORY_USE = 'use';
     
     private static $goods_category_mapping = array(
-        self::CATEGORY_FOOD => '37,51',
+        self::CATEGORY_EAT => '37,51',
         self::CATEGORY_DRINK => '36,56',
-        self::CATEGORY_WEAR => '52'
-        
+        self::CATEGORY_WEAR => '52',
+        self::CATEGORY_USE => '57'
     );
     
     /**

@@ -16,7 +16,7 @@ class User_Model extends Model {
    * @return integer -1: no the user; 0: password error; 1: ok
    */
   public static function check_logined($uname, $upass_raw, &$output = []) {
-    $admin = D()->get_one("SELECT * FROM {admin_user} WHERE admin_uname='%s'", $uname);
+    $admin = D()->get_one("SELECT * FROM {admin_user} WHERE LOWER(`admin_uname`)='%s'", strtolower($uname));
     if (empty($admin)) {
       return -1;
     }
