@@ -1,7 +1,5 @@
 @CHARSET "UTF-8";
 
-#rtWrap {background-color:#d7d7d7;}
-
 #login {margin:108px auto 0;width:480px;background-color: #fff;border-radius: 8px;-moz-border-radius: 8px;-webkit-border-radius: 8px;}
 #login h1 {text-align:center;font-size:24px;padding-top:25px;}
 #login form {padding: 26px 30px 36px;}
