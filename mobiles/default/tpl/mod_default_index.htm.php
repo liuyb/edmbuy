@@ -97,6 +97,7 @@ window.location.reload();
 			<li><button class="b_on" data-cat='food'>吃的</button></li>
 			<li><button data-cat='drink'>喝的</button></li>
 			<li><button data-cat='wear'>穿的</button></li>
+			<li><button data-cat='use'>用的</button></li>
 		</ul>
 		<div class="clear"></div>
 	</div>
