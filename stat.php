@@ -26,8 +26,8 @@ $startTime = strtotime($startDate);
 $endTime = strtotime($endDate);
 $html = "";
 if ($startTime && $endTime) {
-    $html = getHtmlInfo($startTime, $endTime,$page);
-   // var_dump(D()->getSqlFinal());
+    $html = getHtmlInfo($startTime, $endTime, $page);
+    // var_dump(D()->getSqlFinal());
 }
 
 function isdate($str, $format = "Y-m-d")
@@ -63,7 +63,7 @@ function getResult($data)
         return ['day' => 0, 'week' => 0, 'month' => 0];
     };
     $list = [];
-     //   var_dump($data);exit;
+    //   var_dump($data);exit;
     for ($i = 0; $i < count($data); $i++) {
         $result = $data[$i]['totalVie'] - $data[$i]['userCount'];
         switch ($i) {
@@ -114,7 +114,7 @@ function  getHtmlInfo($starTime, $endTime, $page = 1)
         for ($star_t = $starTime; $star_t <= $endTime; $star_t += ONE_DAY_TIME) {
             $end_t = $star_t + ONE_DAY_TIME;
 
-            $getLevelNum = GetInfo::getLevelNum($starTime,$end_t);//chnum 最大一级的人数
+            $getLevelNum = GetInfo::getLevelNum($starTime, $end_t);//chnum 最大一级的人数
 
             $maxLevelNum = GetInfo::getMaxLevelNum($starTime, $end_t);//todo 最大一二三级人数
             $maxCommision = GetInfo::getMaxCommision($starTime, $end_t);//commision 最大佣金
@@ -124,14 +124,14 @@ function  getHtmlInfo($starTime, $endTime, $page = 1)
             $vieNumber = GetInfo::getVieNumber($starTime, $end_t);//pv uv ip数目
 
             $dayNumber = GetInfo::getDayNumber($star_t);//获取日 周 月活跃数 vieCount - userCount
-                //var_dump($dayNumber);exit;
+            //var_dump($dayNumber);exit;
             $result = getResult($dayNumber); //day ,week,month
             $html .= '<tr>';
             $html .= '<td>' . date('Y-m-d', $star_t) . '</td>';
             $html .= '<td>' . $getLevelNum['chnum'] . '</td>';
-            $html .= '<td>' ."--". '</td>';
+            $html .= '<td>' . $maxLevelNum. '</td>';
             $html .= '<td>' . $maxCommision['commision'] . '</td>';
-            $html .= '<td> ' . $maxOrderNum. '</td>';
+            $html .= '<td> ' . $maxOrderNum . '</td>';
             $html .= '<td> ' . $userNumber['userNum'] . ' </td>';
             $html .= '<td> ' . "--" . ' </td>';
             $html .= '<td>' . $vieNumber['pv'] . '</td>';
@@ -161,10 +161,10 @@ class GetInfo
         $sql = "SELECT count(*) as total_order ,sum(order_amount) as order_amount FROM
               {$ectb_order} WHERE  is_separate = 0 AND add_time BETWEEN
               $startTime AND  $endTime";
-        $result=D()->query($sql)->get_one();
-        $result['total_order']=empty($result['total_order'])?0:$result['total_order'];
-        $result['order_amount']=empty($result['order_amount'])?0:$result['order_amount'];
-         return $result;
+        $result = D()->query($sql)->get_one();
+        $result['total_order'] = empty($result['total_order']) ? 0 : $result['total_order'];
+        $result['order_amount'] = empty($result['order_amount']) ? 0 : $result['order_amount'];
+        return $result;
     }
 
     /**获取成交的数量
@@ -177,9 +177,9 @@ class GetInfo
         $sql = "select count(DISTINCT user_id) as user_num,count('order_id') as order_num ,SUM(order_amount) as order_amount from shp_order_info
                 where pay_status = 2 and pay_time BETWEEN $starTime and $endTime and is_separate = 0";
         $result = D()->query($sql)->get_one();
-        $result['user_num']=empty($result['user_num'])?0:$result['user_num'];
-        $result['order_num']=empty($result['order_num'])?0:$result['order_num'];
-        $result['order_amount']=empty($result['order_amount'])?0:$result['order_amount'];
+        $result['user_num'] = empty($result['user_num']) ? 0 : $result['user_num'];
+        $result['order_num'] = empty($result['order_num']) ? 0 : $result['order_num'];
+        $result['order_amount'] = empty($result['order_amount']) ? 0 : $result['order_amount'];
         return $result;
     }
 
@@ -195,7 +195,7 @@ class GetInfo
         if (empty($result['totalMoney'])) {
             return ['totalMoney' => 0];
         }
-            return $result;
+        return $result;
     }
 
     /**
@@ -210,9 +210,9 @@ class GetInfo
               goods on info.order_id=goods.order_id where  info.pay_time BETWEEN $starTime and $endTime and info.pay_status=2 GROUP BY
               goods.goods_id
               ORDER BY goods_id desc LIMIT 1";
-        $result=D()->query($sql)->get_one();
-        if(empty($result)){
-            return ['goodsNumber'=>0,'money_paid'=>0];
+        $result = D()->query($sql)->get_one();
+        if (empty($result)) {
+            return ['goodsNumber' => 0, 'money_paid' => 0];
         }
         return $result;
     }
@@ -222,7 +222,7 @@ class GetInfo
      * @param $starTime
      * @param $endTime
      */
-    static function getLevelNum($starTime,$endTime)
+    static function getLevelNum($starTime, $endTime)
     {
         $sql = "select max(childnum_1) as chnum from shp_users where reg_time BETWEEN $starTime and $endTime";
         $result = D()->query($sql)->get_one();
@@ -239,7 +239,14 @@ class GetInfo
      */
     static function getMaxLevelNum($starTime, $endTime)
     {
-
+        $sql = "select max(childnum_1) as chnum_1,max(childnum_2) as chnum_2,max(childnum_3) as chnum_3
+             from shp_users where reg_time BETWEEN  $starTime and $endTime";
+        $result = D()->query($sql)->get_one();
+        $result['chnum_1'] = empty($result['chnum_1']) ? 0 : $result['chnum_1'];
+        $result['chnum_2'] = empty($result['chnum_2']) ? 0 : $result['chnum_2'];
+        $result['chnum_2'] = empty($result['chnum_3']) ? 0 : $result['chnum_3'];
+        $num=$result['chnum_1']+$result['chnum_2']+$result['chnum_2'];
+        return $num;
     }
     //commision
     /**
@@ -252,7 +259,7 @@ class GetInfo
         $sql = "select max(commision) as commision from shp_order_info where pay_status = 2
               and shipping_time BETWEEN  $starTime AND $endTime";
         $commision = D()->query($sql)->get_one();
-        $commision['commision']=empty($commision['commision'])?0:$commision['commision'];
+        $commision['commision'] = empty($commision['commision']) ? 0 : $commision['commision'];
         return $commision;
     }
 
@@ -281,7 +288,7 @@ class GetInfo
     {
         $sql = "select count(user_id) as userNum from shp_users  where reg_time BETWEEN $starTime AND $endTime";
         $userNum = D()->query($sql)->get_one();
-        $userNum['userNum']=empty($userNum['userNum'])?0:$userNum['userNum'];
+        $userNum['userNum'] = empty($userNum['userNum']) ? 0 : $userNum['userNum'];
         return $userNum;
     }
 
@@ -294,9 +301,9 @@ class GetInfo
         $sql = "select count(*) as pv , count(DISTINCT ip) as ip ,count(DISTINCT uv) as uv  from tb_visiting
                 where created BETWEEN $starTime AND $endTime";
         $vieNumber = D()->query($sql)->get_one();
-        $vieNumber['pv']=empty($vieNumber['pv'])?0:$vieNumber['pv'];
-        $vieNumber['ip']=empty($vieNumber['ip'])?0:$vieNumber['ip'];
-        $vieNumber['uv']=empty($vieNumber['uv'])?0:$vieNumber['uv'];
+        $vieNumber['pv'] = empty($vieNumber['pv']) ? 0 : $vieNumber['pv'];
+        $vieNumber['ip'] = empty($vieNumber['ip']) ? 0 : $vieNumber['ip'];
+        $vieNumber['uv'] = empty($vieNumber['uv']) ? 0 : $vieNumber['uv'];
         return $vieNumber;
 
     }
@@ -347,17 +354,17 @@ class GetInfo
               UNION  ALL SELECT count(visi.vid) as vieCount ,count(users.user_id) as userCount FROM  tb_visiting visi join shp_users users
               on visi.uid =users.user_id where visi.created BETWEEN  $monthStart AND $monthEnd AND  users.reg_time BETWEEN $monthStart and $monthEnd";
         $result = D()->query($sql)->fetch_array_all();
-        $sql="select count(*) as vieNum from tb_visiting  where created BETWEEN $starTime and $lastDay UNION ALL
+        $sql = "select count(*) as vieNum from tb_visiting  where created BETWEEN $starTime and $lastDay UNION ALL
               select count(*) as vieNum from tb_visiting  where created BETWEEN $weekStart and $weekEnd UNION ALL
               select count(*) as vieNum from tb_visiting  where created BETWEEN $monthStart and $monthEnd ";
-        $data=D()->query($sql)->fetch_array_all();
-            //var_dump(D()->getSqlFinal());exit;
-        foreach($data as $val1){
-                foreach($result as &$val2){
-                    $val2['totalVie']=$val1['vieNum'];
-                }
+        $data = D()->query($sql)->fetch_array_all();
+        //var_dump(D()->getSqlFinal());exit;
+        foreach ($data as $val1) {
+            foreach ($result as &$val2) {
+                $val2['totalVie'] = $val1['vieNum'];
+            }
         }
-         return $result;
+        return $result;
 
     }
 
@@ -469,7 +476,7 @@ class GetInfo
     }
 </style>
 <h1>统计</h1>
-<form action="stat.php?page=<?=$page?>" method="post">
+<form action="stat.php?page=<?= $page ?>" method="post">
     <div class="midle">
         请输入开始日期：<input type="text" placeholder="<?php echo empty($startDate) ? '请输入开始日期' : $startDate ?>"
                        name="startDate"/>
@@ -491,7 +498,9 @@ class GetInfo
             <th>最大单品成交金额</th>
         </tr>
         <!--            --><?= $html ?>
-        <div class="page"><a href="stat.php?page=<?= $page + 1 ?>&startDate=<?=$startDate?>&endDate=<?=$endDate?>"><b>下一页</b></a></div>
+        <div class="page"><a
+                href="stat.php?page=<?= $page + 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>下一页</b></a>
+        </div>
     <?php endif; ?>
     <?php if ($page == 2): ?>
         <tr>
@@ -509,8 +518,10 @@ class GetInfo
             <th>周活跃数</th>
             <th>月活跃数</th>
         </tr>
-            <?= $html ?>
-        <div class="page"><a href="stat.php?page=<?= $page - 1 ?>&startDate=<?=$startDate?>&endDate=<?=$endDate?>"><b>上一页</b></a></div>
+        <?= $html ?>
+        <div class="page"><a
+                href="stat.php?page=<?= $page - 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>上一页</b></a>
+        </div>
     <?php endif; ?>
 </table>
 
