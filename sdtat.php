@@ -8,7 +8,7 @@
 require(__DIR__ . '/core/init.php');
 
 define('ONE_DAY_TIME', 86400);
-
+@header("Content-Type: text/html;charset=UTF-8");
 $startDate = @$_REQUEST['startDate'];
 $endDate = @$_REQUEST['endDate'];
 
