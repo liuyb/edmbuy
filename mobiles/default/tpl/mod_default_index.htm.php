@@ -94,7 +94,7 @@ window.location.reload();
 	</div>
 	<div class="fk_b_list">
 		<ul>
-			<li><button class="b_on" data-cat='food'>吃的</button></li>
+			<li><button class="b_on" data-cat='eat'>吃的</button></li>
 			<li><button data-cat='drink'>喝的</button></li>
 			<li><button data-cat='wear'>穿的</button></li>
 			<li><button data-cat='use'>用的</button></li>
@@ -160,7 +160,7 @@ window.location.reload();
 		if(isinit && referIsFromItem()){
 			category = Cookies.get('index-category');
 			if(!category){
-				category = 'food';
+				category = 'eat';
 			}else{
 				$(".fk_b_list button").removeClass("b_on");
 				$(".fk_b_list").find("button[data-cat='"+category+"']").first().addClass("b_on");
