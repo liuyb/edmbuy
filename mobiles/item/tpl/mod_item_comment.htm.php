@@ -161,7 +161,7 @@ $(function(){
 	});
 });
 
-function fileupload(e){
+function fileupload(e, obj){
 	var picNum = parseInt($(".publish_img").length);
 	if(picNum >= 5){
 		boxalert('最多只能添加5张图片哦！');
@@ -184,9 +184,9 @@ function fileupload(e){
     	F.postWithLoading('/item/comment/image', {img:img}, function(ret){
     		F.loadingStop();
     		if(ret.flag=='SUC'){
-    			oripath.push(ret.result);
-    			thumbpath.push(ret.thumb);
-    			preappendImg(ret.thumb);
+    			//oripath.push(ret.result);
+    			//thumbpath.push(ret.thumb);
+    			preappendImg(ret.result, ret.thumb, obj);
     		}else{
     			boxalert(ret.errMsg);
     		}
@@ -195,16 +195,22 @@ function fileupload(e){
   	fr.readAsDataURL(file);
 }
 
-function preappendImg(img){
+function preappendImg(img, thumb, obj){
+	if(obj){
+		var oldDIV = $(obj).closest("div");
+		var html =   '<img src="'+thumb+'" data-img="'+img+'">	'
+			+' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
+		oldDIV.html(html);
+		return;
+	}
 	var html =   '	<div class="dj_index publish_img">'
-		+'		<img src="'+img+'">	'
+		+'		<img src="'+thumb+'" data-img="'+img+'">	'
+		+' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
 		+'	</div>';
 		
 	$(".tshop_add").before(html);
 }
 
-var oripath = [];
-var thumbpath = [];
 function submitComment(){
 	var content = $("#post_party_content").text();
 	if(!content){
@@ -223,6 +229,9 @@ function submitComment(){
 	clevel = clevel ? clevel : 1;
 	var shipping = $(".fhsd_xj").attr("data-ship");
 	var service = $(".fwtd_xj").attr("data-service");
+	var oripath = [];
+	var thumbpath = [];
+	getUploadImgs(oripath, thumbpath);
 	var comment_img = "";
 	var comment_thumb = "";
 	if(oripath.length){
@@ -251,6 +260,13 @@ function submitComment(){
 			boxalert('评论出现意外，请稍后重试！');
 			$(".comm_fb_p").attr("data-lock", "N").css("opacity",1);
 		}
+	});
+}
+
+function getUploadImgs(imgs, thumbs){
+	$(".publish_img img").each(function(){
+		thumbs.push($(this).attr("src"));
+		imgs.push($(this).attr("data-img"));
 	});
 }
 
