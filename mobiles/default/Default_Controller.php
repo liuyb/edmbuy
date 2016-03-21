@@ -440,6 +440,12 @@ class Default_Controller extends MobileController {
       Default_Model::findGoodsListByCategory($pager, $category);
       $pageJson = $pager->outputPageJson();
       $ret = ["result" => $pager->result];
+      if (!empty($ret['result'])) {
+      	foreach ($ret['result'] AS &$it) {
+      		$it['goods_name']  = str_replace(["\n","\r"], [" ",""], $it['goods_name']);
+      		$it['goods_brief'] = str_replace(["\n","\r"], [" ",""], $it['goods_brief']);
+      	}
+      }
       $ret = array_merge($ret, $pageJson);
       $response->sendJSON($ret);
   }
