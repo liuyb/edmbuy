@@ -5,9 +5,24 @@
  * Date: 2016-03-18
  * Time: 12:19
  */
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
 require(__DIR__ . '/core/init.php');
 
+
+$request  = new Request();
+$response = new Response();
+
+SimPHP::I()->boot();
+
 define('ONE_DAY_TIME', 86400);
+define('DAY_SEP', ' ');
+define('DAY_BEGIN', DAY_SEP.'00:00:00');
+define('DAY_END',   DAY_SEP.'23:59:59');
+define('CSV_SEP', ',');
+define('CSV_LN', "\n");
+
 @header("Content-Type: text/html;charset=UTF-8");
 $startDate = @$_REQUEST['startDate'];
 $endDate = @$_REQUEST['endDate'];
@@ -23,7 +38,7 @@ if ($startDate > $endDate) {
 }
 
 $startTime = strtotime($startDate);
-$endTime = strtotime($endDate);
+$endTime = strtotime($endDate.DAY_END);
 $html = "";
 if ($startTime && $endTime) {
 	$html = getHtmlInfo($startTime, $endTime, $page);
@@ -92,12 +107,12 @@ function  getHtmlInfo($starTime, $endTime, $page = 1)
 	$html = "";
 	if ($page == 1) {
 		for ($star_t = $starTime; $star_t <= $endTime; $star_t += ONE_DAY_TIME) {
-			$end_t = $star_t + ONE_DAY_TIME;
+			$end_t = $star_t + ONE_DAY_TIME - 1;
 			$ectb_order = Order::table();
-			$order = GetInfo::getTotalOrderNumber($ectb_order, $starTime, $end_t);//订单成交量
-			$perNum = GetInfo::susPayPerNum($starTime, $end_t);
-			$quitOrder = GetInfo::quitPayMoney($starTime, $end_t);
-			$MaxOrderNum = GetInfo::getMaxOrderNum($starTime, $end_t);
+			$order = GetInfo::getTotalOrderNumber($ectb_order, $star_t, $end_t);//订单成交量
+			$perNum = GetInfo::susPayPerNum($star_t, $end_t);
+			$quitOrder = GetInfo::quitPayMoney($star_t, $end_t);
+			$MaxOrderNum = GetInfo::getMaxOrderNum($star_t, $end_t);
 			$html .= '<tr>';
 			$html .= '<td>' . date('Y-m-d', $star_t) . '</td>';
 			$html .= '<td>' . $order['total_order'] . '</td>';
@@ -112,16 +127,16 @@ function  getHtmlInfo($starTime, $endTime, $page = 1)
 		}
 	} elseif ($page == 2) {
 		for ($star_t = $starTime; $star_t <= $endTime; $star_t += ONE_DAY_TIME) {
-			$end_t = $star_t + ONE_DAY_TIME;
+			$end_t = $star_t + ONE_DAY_TIME - 1;
 
-			$getLevelNum = GetInfo::getLevelNum($starTime, $end_t);//chnum 最大一级的人数
+			$getLevelNum = GetInfo::getLevelNum($star_t, $end_t);//chnum 最大一级的人数
 
-			$maxLevelNum = GetInfo::getMaxLevelNum($starTime, $end_t);//todo 最大一二三级人数
-			$maxCommision = GetInfo::getMaxCommision($starTime, $end_t);//commision 最大佣金
-			$maxOrderNum = GetInfo::getPlantMoney($starTime, $end_t);//平台收益 int
+			$maxLevelNum = GetInfo::getMaxLevelNum($star_t, $end_t);//todo 最大一二三级人数
+			$maxCommision = GetInfo::getMaxCommision($star_t, $end_t);//commision 最大佣金
+			$maxOrderNum = GetInfo::getPlantMoney($star_t, $end_t);//平台收益 int
 
-			$userNumber = GetInfo::getUserNumber($starTime, $end_t);//userNum平台用户数
-			$vieNumber = GetInfo::getVieNumber($starTime, $end_t);//pv uv ip数目
+			$userNumber = GetInfo::getUserNumber($star_t, $end_t);//userNum平台用户数
+			$vieNumber = GetInfo::getVieNumber($star_t, $end_t);//pv uv ip数目
 
 			$dayNumber = GetInfo::getDayNumber($star_t);//获取日 周 月活跃数 vieCount - userCount
 			//var_dump($dayNumber);exit;
@@ -298,7 +313,7 @@ class GetInfo
 	 */
 	static function getVieNumber($starTime, $endTime)
 	{
-		$sql = "select count(*) as pv , count(DISTINCT ip) as ip ,count(DISTINCT uv) as uv  from tb_visiting
+		$sql = "select count(1) as pv , count(DISTINCT ip) as ip ,count(DISTINCT uv) as uv  from tb_visiting
                 where created BETWEEN $starTime AND $endTime";
 		$vieNumber = D()->query($sql)->get_one();
 		$vieNumber['pv'] = empty($vieNumber['pv']) ? 0 : $vieNumber['pv'];
@@ -340,23 +355,22 @@ class GetInfo
 	static function getDayNumber($starTime)
 	{
 		//取出当天
-		$lastDay = $starTime + ONE_DAY_TIME;
+		$lastDay = $starTime + ONE_DAY_TIME - 1;
 		$weekTime = self::getDateStam($starTime);
 		$weekStart = $weekTime['start_day'];
 		$weekEnd = $weekTime['end_day'];
 		$monthTime = self::getMonthStam($starTime);
 		$monthStart = $monthTime['start_day'];
 		$monthEnd = $monthTime['end_day'];
-		$sql = "select count(visi.vid) as vieCount ,count(users.user_id) as userCount from tb_visiting visi join shp_users users
-              on visi.uid =users.user_id where visi.created BETWEEN $starTime and $lastDay and users.reg_time BETWEEN $starTime and $lastDay
-              UNION all SELECT  count(visi.vid) as vieCount,count(users.user_id) as userCount from tb_visiting visi join shp_users users
-              on visi.uid =users.user_id where visi.created BETWEEN  $weekStart AND $weekEnd AND users.reg_time BETWEEN $weekStart and $weekEnd
-              UNION  ALL SELECT count(visi.vid) as vieCount ,count(users.user_id) as userCount FROM  tb_visiting visi join shp_users users
-              on visi.uid =users.user_id where visi.created BETWEEN  $monthStart AND $monthEnd AND  users.reg_time BETWEEN $monthStart and $monthEnd";
+		$sql = "select count(users.user_id) as userCount from shp_users users where users.reg_time BETWEEN {$starTime} and {$lastDay}
+		        UNION ALL
+		        select count(users.user_id) as userCount from shp_users users where users.reg_time BETWEEN {$weekStart} and {$weekEnd}
+		        UNION ALL
+		        select count(users.user_id) as userCount from shp_users users where users.reg_time BETWEEN {$monthStart} and {$monthEnd}";
 		$result = D()->query($sql)->fetch_array_all();
-		$sql = "select count(*) as vieNum from tb_visiting  where created BETWEEN $starTime and $lastDay UNION ALL
-              select count(*) as vieNum from tb_visiting  where created BETWEEN $weekStart and $weekEnd UNION ALL
-              select count(*) as vieNum from tb_visiting  where created BETWEEN $monthStart and $monthEnd ";
+		$sql = "select count(distinct uid) as vieNum from tb_visiting  where created BETWEEN $starTime and $lastDay UNION ALL
+              select count(distinct uid) as vieNum from tb_visiting  where created BETWEEN $weekStart and $weekEnd UNION ALL
+              select count(distinct uid) as vieNum from tb_visiting  where created BETWEEN $monthStart and $monthEnd ";
 		$data = D()->query($sql)->fetch_array_all();
 		//var_dump(D()->getSqlFinal());exit;
 		foreach ($data as $val1) {
@@ -476,7 +490,7 @@ class GetInfo
 	}
 </style>
 <h1>统计</h1>
-<form action="stat.php?page=<?= $page ?>" method="post">
+<form action="sdtat.php?page=<?= $page ?>" method="post">
 	<div class="midle">
 		请输入开始日期：<input type="text" placeholder="<?php echo empty($startDate) ? '请输入开始日期' : $startDate ?>"
 					   name="startDate"/>
@@ -499,7 +513,7 @@ class GetInfo
 		</tr>
 		<!--            --><?= $html ?>
 		<div class="page"><a
-				href="stat.php?page=<?= $page + 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>下一页</b></a>
+				href="sdtat.php?page=<?= $page + 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>下一页</b></a>
 		</div>
 	<?php endif; ?>
 	<?php if ($page == 2): ?>
@@ -520,7 +534,7 @@ class GetInfo
 		</tr>
 		<?= $html ?>
 		<div class="page"><a
-				href="stat.php?page=<?= $page - 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>上一页</b></a>
+				href="sdtat.php?page=<?= $page - 1 ?>&startDate=<?= $startDate ?>&endDate=<?= $endDate ?>"><b>上一页</b></a>
 		</div>
 	<?php endif; ?>
 </table>
