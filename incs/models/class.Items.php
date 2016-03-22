@@ -294,7 +294,7 @@ HERESQL;
 	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img 
                 from shp_goods g left join shp_goods_cat pg on	g.goods_id = pg.goods_id 
                 where	g.is_on_sale = 1 and g.is_delete = 0 
-                and 	(g.cat_id = %s or pg.cat_id = %s)
+                and 	(g.cat_id = %d or pg.cat_id = %d)
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $cat, $cat, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    return self::buildGoodsImg($goods);

@@ -205,7 +205,7 @@ class TplBase {
   public static function add_css($params, $tpl = NULL) {
     
     $files   = isset($params['file']) ? trim($params['file']) : '';
-    $scope   = isset($params['scope']) ? trim($params['scope']) : 'module';  //'module' or 'global'
+    $scope   = isset($params['scope']) ? trim($params['scope']) : 'global';  //'module' or 'global'
     $mod     = isset($params['mod']) ? trim($params['mod']) : '';            //when scope='module', indicating module name
     $pos     = isset($params['pos']) ? trim($params['pos']) : 'head';        //'head' or 'foot' or 'current'
     $media   = isset($params['media']) ? trim($params['media']) : 'screen';  //css media property
