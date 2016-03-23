@@ -178,32 +178,27 @@ class User_Model extends Model
      * @auth hc_edm
      * @param $order_status 订单状态
      */
-    static function CheckOrderStatus($order_status, $shipping_confirm_time)
+    static function CheckOrderStatus($order_status, $shipping_status, $shipping_confirm_time)
     {
-        switch ($order_status) {
-            case OS_CANCELED:
-            case OS_INVALID:
-            case OS_RETURNED:
-            case OS_REFUND:
-                $order_status = "已取消";
-                break;
-            case SS_UNSHIPPED:
-            case SS_PREPARING:
-            case SS_SHIPPED_ING:
-                $order_status = "未发货";
-                break;
-            case SS_SHIPPED:
-            case SS_SHIPPED_PART:
-            case OS_SHIPPED_PART:
-                $order_status = "已发货";
-                break;
-            case SS_RECEIVED:
-                $nowDateTime = strtotime(date("Y-m-d"));
-                $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
-                $order_status = "已签收第" . $days . "天";
-                break;
+        $msg = "";
+        if ($order_status == OS_CANCELED || $order_status == OS_INVALID
+            || $order_status == OS_RETURNED || $order_status == OS_REFUND
+        ) {
+            $msg = "已取消";
+        } elseif ($shipping_status == SS_UNSHIPPED || $shipping_status == SS_PREPARING
+            || $shipping_status == SS_SHIPPED_ING
+        ) {
+            $msg = "未发货";
+        } elseif ($shipping_status == SS_SHIPPED || $shipping_status == SS_SHIPPED_PART
+            || $shipping_status == OS_SHIPPED_PART
+        ) {
+            $msg = "已发货";
+        } elseif ($shipping_status == SS_RECEIVED) {
+            $nowDateTime = strtotime(date("Y-m-d"));
+            $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
+            $msg = "已签收第" . $days . "天";
         }
-        return $order_status;
+            return $msg;
     }
 
     /**
