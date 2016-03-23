@@ -157,7 +157,7 @@ class User_Model extends Model
         }
         //判断是否为米商
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
-                info.order_status,info.shipping_confirm_time,
+                info.order_status,info.shipping_status,info.shipping_confirm_time,
                 goods.goods_name,goods.goods_thumb
  				from shp_order_goods orders LEFT JOIN shp_goods goods on orders.goods_id = goods.goods_id
  				LEFT JOIN shp_order_info info on orders.order_id=info.order_id
@@ -168,7 +168,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'],$g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -196,9 +196,13 @@ class User_Model extends Model
         } elseif ($shipping_status == SS_RECEIVED) {
             $nowDateTime = strtotime(date("Y-m-d"));
             $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
-            $msg = "已签收第" . $days . "天";
+            if($days>7){
+                    $msg="已生效";
+            }else{
+                $msg = "已签收第" . $days . "天";
+            }
         }
-            return $msg;
+                return $msg;
     }
 
     /**
