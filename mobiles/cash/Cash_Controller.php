@@ -148,16 +148,31 @@ class Cash_Controller extends MobileController {
 			
 			$ret = ['flag'=>'FAIL','msg'=>'操作失败', 'detail'=>''];
 			
+			if (!Users::is_logined()) {
+				$ret['msg'] = '无法提现';
+				$ret['detail'] = '未登录，请先登录';
+				$response->sendJSON($ret);
+			}
 			if (empty($cashing_amount) || $cashing_amount < self::CASH_THRESHOLD) {
 				$ret['msg'] = '无法提现';
 				$ret['detail'] = '可提现金额须'.self::CASH_THRESHOLD.'元起';
 				$response->sendJSON($ret);
 			}
+			$commision_ids = trim($commision_ids);
 			if (empty($commision_ids)) {
 				$ret['msg'] = '无法提现';
 				$ret['detail'] = '提现记录为空';
 				$response->sendJSON($ret);
 			}
+			elseif (!preg_match('/^(\d)+[,\d]*$/', $commision_ids)) {
+				$ret['msg'] = '无法提现';
+				$ret['detail'] = '提现记录非法';
+				$response->sendJSON($ret);
+			}
+			//重排序保证id已升序排列
+			$commision_ids_arr = explode(',', $commision_ids);
+			asort($commision_ids_arr);
+			$commision_ids = join(',', $commision_ids_arr);
 			
 			global $user;
 			$bank_code = self::$default_bank_code;
@@ -193,14 +208,23 @@ class Cash_Controller extends MobileController {
 					$nUC->save(Storage::SAVE_INSERT_IGNORE);
 					if ($nUC->id) { //插入成功
 						
-						D()->commit(); //尽早提交事务，避免锁表太久
 						$cashing_id = $nUC->id;
 						
 						//立马更新佣金记录状态为“锁定”
 						UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
+
+						//尽早提交事务，避免锁表太久
+						D()->commit();
 						
 						//设置提现记录状态为“自动审核”
 						UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_AUTOCHECK, '提交自动审核');
+						
+						//: 检查最新两次提现记录的时间间隔是否大于1个小时
+						if (!Cash_Model::check_cashing_interval($user->uid)) {
+							UserCashing::change_state($cashing_id, UserCashing::STATE_FAIL, '申请提现时间间隔需1个小时以上');
+							$ret = ['flag'=>'FAIL','msg'=>'无法提现','detail'=>'申请提现时间间隔需1个小时以上'];
+							$response->sendJSON($ret);
+						}
 						
 						//: 检查提交提现金额跟实际金额是否一致
 						$__cashing_amount = UserCommision::count_commision($commision_ids);
