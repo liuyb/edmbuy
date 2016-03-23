@@ -122,7 +122,7 @@ class User_Model extends Model
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
         $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
-        $commision=UserCommision::user_share($userInfo['commision'], 1);
+        $commision = UserCommision::user_share($userInfo['commision'], 1);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
         $result['commision'] = $commision;
@@ -157,7 +157,7 @@ class User_Model extends Model
         }
         //判断是否为米商
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
-                info.shipping_status,info.shipping_confirm_time,
+                info.order_status,info.shipping_confirm_time,
                 goods.goods_name,goods.goods_thumb
  				from shp_order_goods orders LEFT JOIN shp_goods goods on orders.goods_id = goods.goods_id
  				LEFT JOIN shp_order_info info on orders.order_id=info.order_id
@@ -168,7 +168,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = self::CheckOrderStatus($g['shipping_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -176,34 +176,34 @@ class User_Model extends Model
     /**
      * 获取订单的状态
      * @auth hc_edm
-     * @param $shipping_status 订单状态
+     * @param $order_status 订单状态
      */
-    static function CheckOrderStatus($shipping_status, $shipping_confirm_time)
+    static function CheckOrderStatus($order_status, $shipping_confirm_time)
     {
-        switch ($shipping_status) {
+        switch ($order_status) {
             case OS_CANCELED:
             case OS_INVALID:
             case OS_RETURNED:
             case OS_REFUND:
-                $shipping_status = "已取消";
+                $order_status = "已取消";
                 break;
             case SS_UNSHIPPED:
             case SS_PREPARING:
             case SS_SHIPPED_ING:
-                $shipping_status = "未发货";
+                $order_status = "未发货";
                 break;
             case SS_SHIPPED:
             case SS_SHIPPED_PART:
             case OS_SHIPPED_PART:
-                $shipping_status = "已发货";
+                $order_status = "已发货";
                 break;
             case SS_RECEIVED:
                 $nowDateTime = strtotime(date("Y-m-d"));
                 $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
-                $shipping_status = "已签收第" . $days . "天";
+                $order_status = "已签收第" . $days . "天";
                 break;
         }
-        return $shipping_status;
+        return $order_status;
     }
 
     /**

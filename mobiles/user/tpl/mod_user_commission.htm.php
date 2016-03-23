@@ -34,7 +34,7 @@
 		<table cellspacing="0" cellpadding="0" class="m_n_table">
 			<?php
 				$totalPrice=0;
-				$totalNumber=count($goodsInfo);
+				$totalNumber=0;
 			foreach ($goodsInfo AS $info):?>
 			<tr onclick="gotoItem(<?=$info['goods_id']?>)">
 				<td width="70px;">
@@ -47,6 +47,7 @@
 				<td width="70px;">
 					<p class="my_n_price">￥<?=$info['goods_price']?></p>
 					<?php $totalPrice +=$info['goods_price'] ?>
+						<?php $totalNumber+=$info['goods_number'];?>
 					<p class="my_n_nums">x<?=$info['goods_number']?></p>
 				</td>
 			</tr>
