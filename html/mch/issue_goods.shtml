@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/goods.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<style>
+.iss_infos{
+	margin:20px;
+}
+.infos_go{
+	
+}
+.font_common{
+	font-size:16px; 
+	color:#333;	
+}
+.goods_type{
+	width:130px;
+	text-align:right;
+	float:left;
+}
+.fill_red{
+	color:red;
+  	vertical-align: sub;
+  	padding: 0 5px;	
+}
+.type_right{
+	margin-left:10px;
+}
+.write_common{
+  	border: 1px solid #ddd;
+  	height: 28px;
+  	vertical-align: top;
+  	width: 40%;	
+}
+.write_short{
+	border: 1px solid #ddd;
+  	height: 28px;
+  	vertical-align: top;
+  	width: 15%;	
+}
+.infos_go{
+	margin-bottom:20px;
+}
+.control-short{
+	padding-left:30px;
+}
+.prompt_common{
+	font-size:12px;
+	color:#aaa;
+	padding-left:10px;
+}
+.add_common{
+  	background: #eee;
+  	border: 1px solid #eee;
+  	vertical-align: top;
+  	width: 80px;
+  	border-radius: 4px;	
+  	height: 29px;	
+	cursor:pointer;
+}
+.add_input{
+  	width: 120px;
+  	margin-right: 10px;
+  	border: 1px solid #eee;	
+	height:27px;
+	padding-left:5px;
+}
+.add_type_hide{
+	padding-left:20px;
+	display:none;
+}
+.other_type{
+	margin-right:10px;
+}
+.add_img{
+  	float: left;
+  	width: 100px;
+  	height: 100px;
+ 	overflow: hidden;
+  	position: relative;
+ 	text-align: center;	
+}
+.add_img img{
+	width: 100px;
+  	height: 100px;  
+  	border-radius: 0;
+  	border: 0;
+} 
+.dj_file{
+  	position: absolute;
+  	width: 100%;
+  	height: 100%;
+  	left: 0;
+  	top: 0;
+  	opacity: 0;
+}
+</style>
+
+
+<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+
+<div id="body" class="ifr-body">
+	<!--#include file="goods_left_common.html"-->
+	<div class="goods_right">
+		<div class="goods_nums">
+			<ul>
+				<li id="li1"  class="li_on">发布商品</li>
+			</ul>
+		</div>
+		<div>
+			<div class="iss_infos font_common">商品信息</div>
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>商品名称：</label>
+				</div>
+				<div class="type_right font_common">
+					<input type="text" val="" class="write_common">
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>市场价：</label>
+				</div>
+				<div class="type_right font_common">
+					<input type="text" val="" class="write_short"> 元
+					
+					<label class="control-short" style="padding-left:47px;">成本价：</label>
+					<input type="text" val="" class="write_short"> 元<span class="prompt_common">净毛利统计时会使用到，买家不可见</span>
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>售价：</label>
+				</div>
+				<div class="type_right font_common">
+					<input type="text" val="" class="write_short"> 元
+					
+					<label class="control-short"><span class="fill_red">*</span>供货价：</label>
+					<input type="text" val="" class="write_short"> 元<span class="prompt_common">佣金<i>0.00</i>元 给到平台的价格，用来计算佣金 ，买家不可见</span>
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>库存：</label>
+				</div>
+				<div class="type_right font_common">
+					<input type="text" val="" class="write_short">
+					
+					<label class="control-short" style="padding-left:35px;"><span class="fill_red">*</span>每日限购：</label>
+					<input type="text" val="" class="write_short"> 元<span class="prompt_common">0代表不限购</span>
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>商品分类：</label>
+				</div>
+				<div class="type_right font_common">
+					<select class="check_s c_goods_type">
+						<option value ="1">酒</option>
+  						<option value ="2">衣服</option>
+  						<option value ="3">食品饮料饮料</option>
+  						<option value ="4">饮料</option>
+					</select>
+					<button class="add_common add_type">添加分类</button> 
+					<label class="add_type_hide">
+						<input type="text" val="" class="add_input"><button class="add_common add_ok">确定</button>
+					</label>
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label">扩展分类：</label>
+				</div>
+				<div class="type_right font_common">
+					<button class="add_common add_other_type">新增分类</button>
+				</div>
+			</div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label">商品图片：</label>
+				</div>
+				<div class="type_right font_common">
+					<div class="add_img">	
+						<img src="../mch/img/editor_plus.png">			
+						<input type="file" id="file" name="file" class="dj_file" onchange="fileupload1(this)">	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
+
+<script>
+$("#fbsp").addClass("goods_on");
+	
+//显示添加分类
+$(".add_type").on("click",function(){
+	$(".add_type_hide").show();
+})
+
+//确定添加分类
+$(".add_ok").on("click",function(){
+	var _val = $(".add_input").val();
+	$(".c_goods_type").append('<option value="5">'+_val+"</option>");
+	$(".add_type_hide").hide();
+})
+
+//添加一个分类
+$(".add_other_type").on("click",function(){
+	var _select = '<select class="check_s c_goods_type other_type">'
+			   	+ '<option value ="1">酒</option>'
+			  	+ '<option value ="1">酒</option>'
+			   	+ '</select>';
+	$(this).parent().append(_select);
+})
+
+//新增一个上传框
+$(".add_img").live("click", function(){
+	
+	var html =   '<div class="add_img">	'
+		+'		<img src="../mch/img/editor_plus.png">		'
+		+'		<input type="file" id="file" name="file" class="dj_file" onchange="fileupload1(this)">'
+		+'	</div>';
+		
+	$(this).parent().find(".add_img").before(html);
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+

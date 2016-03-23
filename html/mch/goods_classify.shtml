@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/goods.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<style>
+</style>
+
+
+<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+
+<div id="body" class="ifr-body">
+	<!--#include file="goods_left_common.html"-->
+	<div class="goods_right">
+	
+	</div>
+</div>
+
+<div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
+
+<script>
+	$("#spfl").addClass("goods_on");
+</script>
+
+
+
+
+
+
+
+
+
+
+
