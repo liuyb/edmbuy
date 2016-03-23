@@ -4555,11 +4555,12 @@ td.cash_td2 img {
   /*border:1px solid #ff6d14;*/
   position: absolute;
   bottom:10px;
-  left: -20px;
-  width:90px;
+  left: 1px;
+  width:91px;
   height:25px;
   border-radius:4px;
   color:#ff6d14;
   font-size:13px;
+  text-align: left;
 }
 /*2106-3-18 e*/
