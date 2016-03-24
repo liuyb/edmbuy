@@ -97,23 +97,23 @@ function fill_wxpay_uname() {
 var ids  = '<?=$available_ids?>';
 var cash = '<?=$available_cash?>';
 $(document).on("click", "#apply_cash_btn", function(){
-	$(this).attr('disabled',true);
 	var _this = this;
-	showWaiting();
-	F.post('<?php echo U('cash/doapply','step=1')?>',{cashing_amount:cash,commision_ids:ids},function(ret){
-		setTimeout(function(){
-			hideWaiting();
-			if(ret.flag=='SUCC') {
-				showAlert(ret.msg, ret.detail,'<?php echo U('cash/detail')?>');
-			}
-			else {
-				/*$(_this).removeAttr('disabled');*/
-				showAlert(ret.msg, ret.detail);
-			}
-		}, 1000);
-	});
-	
-	//showAlert("提现成功！", "微信钱包查看提现金额", "apply_cash.html");
+	if (confirm('确定现在提现？')) {
+		$(_this).attr('disabled',true);
+		showWaiting();
+		F.post('<?php echo U('cash/doapply','step=1')?>',{cashing_amount:cash,commision_ids:ids},function(ret){
+			setTimeout(function(){
+				hideWaiting();
+				if(ret.flag=='SUCC') {
+					showAlert(ret.msg, ret.detail,'<?php echo U('cash/detail')?>');
+				}
+				else {
+					/*$(_this).removeAttr('disabled');*/
+					showAlert(ret.msg, ret.detail);
+				}
+			}, 1000);
+		});
+	}
 });
 
 /**
