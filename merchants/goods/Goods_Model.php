@@ -222,19 +222,91 @@ class Goods_Model extends Model
         }
         return $goods;
     }
-    
+
 
     /**
+     * @auth hc_edm
      * 获取商家的分类列表
      */
-    static function getCategoryList(){
-        $merchant_id = $GLOBALS['user']->uid;
-        if(empty($merchant_id)){
+    static function getCategoryList()
+    {
+        $merchant_id = $GLOBALS['user']->uid = "mc_56f279b356351";
+        Cookie::set("merchant_id", $merchant_id);
+        if (empty($merchant_id)) {
             return false;
         }
-        $sql="select merchant_id ,cat_name,parent_id ,cat_url from ";
+        $sql = "select cat_id, cat_name,parent_id,cat_url,sort_order from shp_category where merchant_id ='{$merchant_id}' order by sort_order ASC ";
+        $list = D()->query($sql)->fetch_array_all();
+        return $list;
+    }
+
+    /**@auth hc_edm
+     * 判断是否有了二个分类
+     * @param $cat_id
+     */
+    static function isHadCategory($cat_id)
+    {
+        $sql = "select parent_id from shp_category where cat_id = %s";
+        $result = D()->query($sql, $cat_id)->get_one();
+        return $result;
+    }
+
+    /**
+     * @auth hc_edm
+     *根据merchant_id查询商家所有的商品分类
+     * @param $cat_id
+     * @return array|bool
+     */
+    static function getCatNameList($merchant_id)
+    {
+        if (empty($merchant_id)) {
+            return false;
+        }
+        $sql = "select cat_name ,cat_id ,cat_url from shp_category where merchant_id = %d";
+        $list = D()->query($sql, $merchant_id)->fetch_array_all();
+        return $list;
+    }
+
+    /**
+     * 新增一个分类
+     * @param int $cat_id
+     */
+    static function addCategory($cat_id = 0)
+    {
+        /**
+         * cat_id=0为新增加一个分类
+         */
+        $merchant_id = $GLOBALS['user']->uid;
+        if ($cat_id == 0) {
+            //todo 新增一个一级分类
+        }
+        //todo 新增一个二级分类
+    }
+
+    /**
+     * 删除一个分类
+     * @auth hc_edm
+     * @param $cat_id
+     */
+    static function delgoodsCategory($cat_id)
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        /**
+         * 先查询出是否有子分类
+         */
+        $sql = "select parent_id from shp_category where cat_id = %d";
+        $parent_id = D()->query($sql, $cat_id)->result();
+        $where = array(
+            'cat_id' => $cat_id,
+        );
+        if ($parent_id > 0) {
+            $where=array(
+                'cat_id'=>array('in',"$parent_id,$cat_id")
+            );
+        }
+        $result= D()->delete('category', $where);
+        var_dump(D()->getSqlFinal());exit;
+
     }
     
 }
- 
-/*----- END FILE: Goods_Model.php -----*/

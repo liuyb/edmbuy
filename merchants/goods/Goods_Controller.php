@@ -16,7 +16,9 @@ class Goods_Controller extends MerchantController {
             'goods/gallery' => 'upload_goods_gallery',
             'goods/list'    => 'get_goods_list',
             'goods/status'  => 'update_goods_status',
-            'goods/delete'  => 'delete_goods'
+            'goods/delete'  => 'delete_goods',
+			'goods/category/list' => 'goodsCategory',
+			'goods/catetory' => 'addCatetory',
         ];
     }
     
@@ -152,7 +154,101 @@ class Goods_Controller extends MerchantController {
 	    }
 	    $response->sendJSON(['result' => 'SUCC']);
 	}
-	
+
+	/**
+	 * 产品分类
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function goodsCategory(Request $request, Response $response)
+	{
+		$this->v->set_tplname("mod_goods_category");
+		//todo 获取分类列表以及分页数据源---根据session_uid查询
+		$categoryList = Goods_Model::getCategoryList();
+		$this->v->assign('category', $categoryList);
+		$response->send($this->v);
+	}
+
+	/**
+	 * 新增一个分类页面
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function addCategory(Request $request, Response $response)
+	{
+		$this->v->set_tplname('mod_goods_index');
+		$cat_id = $request->get('cat_id',0);
+		/**
+		 * 将分类信息传到页面
+		 */
+		$merchant_id=$GLOBALS['user']->uid;
+		$list=Goods_Model::getCatNameList($merchant_id);
+		$this->assign('catName',$list);
+		$this->v->assign('cat_id',$cat_id);
+		$response->send($this->v);
+	}
+
+	/**
+	 * 新增保存一个分类
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function doAddCategory(Request $request, Response $response)
+	{
+		//先判断是否有了二级分类
+		$cat_id = $request->post('cat_id', 0);
+		$result = Goods_Model::IsHadCategory($cat_id);
+		if ($result['parent_id'] > 0) {
+			$retmsg = "此分类已经有了二个分类！";
+			$data['status'] = 0;
+			$data['retmsg'] = $retmsg;
+			$response->sendJSON($data);
+		} else {
+			if ($cat_id == 'new') {
+				$result = Goods_Model::addCategory();//新增一个分类
+				if ($result) {
+					$data['status'] = 1;
+					$data['retmsg'] = "新增成功！";
+				} else {
+					$data['status'] = 0;
+					$data['retmsg'] = "新增失败！";
+				}
+				$response->sendJSON($data);
+			}
+			if ($cat_id > 0) {
+				$result = Goods_Model::addCategory($cat_id);
+				if ($result) {
+					$data['status'] = 1;
+					$data['retmsg'] = "新增下级分类成功！";
+				} else {
+					$data['status'] = 0;
+					$data['retmsg'] = "新增下级分类失败！";
+				}
+				$response->sendJSON($data);
+			}
+		}
+		/**
+		 * 如果没有选择则新建一个分类
+		 */
+
+	}
+
+	/**
+	 * 删除一个分类
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function deleCategory(Request $request, Response $response)
+	{
+		$cat_id = $request->get('cat_id', 0);
+		$result = Goods_Model::delgoodsCategory($cat_id);
+		if ($result) {
+			$data['status'] = 1;
+			$data['retmsg'] = "删除分类成功！";
+		} else {
+			$data['status'] = 0;
+			$data['retmsg'] = "删除分类失败！";
+		}
+		$response->sendJSON($data);
+	}
 }
- 
-/*----- END FILE: Goods_Controller.php -----*/
