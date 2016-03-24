@@ -335,6 +335,12 @@ HERESQL;
 	    if (!empty($goods)) {
 	        foreach ($goods AS &$g) {
 	            $g['goods_img'] = self::imgurl($g['goods_img']);
+	            if (isset($g['goods_name'])) {
+	            	$g['goods_name'] = str_replace(["\r","\n"], [""," "], $g['goods_name']);
+	            }
+	            if (isset($g['goods_brief'])) {
+	            	$g['goods_brief'] = str_replace(["\r","\n"], [""," "], $g['goods_brief']);
+	            }
 	        }
 	    }
 	    else {
