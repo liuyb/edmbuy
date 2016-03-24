@@ -24,15 +24,30 @@ class MobileController extends Controller {
 	 */
 	public function init($action, Request $request, Response $response)
 	{
-		$this->v = new PageView();
+		$this->setPageView($request, $response);
+	}
+	
+	/**
+	 * set page view
+	 * @param Request $request
+	 * @param Response $response
+	 * @param string $basetpl
+	 */
+	public function setPageView(Request $request, Response $response, $basetpl = '_page') {
+		$this->v = new PageView('', $basetpl);
+		if ($basetpl=='_page_mpa') {
+			if ($request->isIOS()) {
+				$this->extra_css = 'iOS';
+			}
+		}
 		$this->v->add_render_filter(function(View $v){
 			$v->assign('nav_no',  $this->nav_no)
-			  ->assign('topnav_no',  $this->topnav_no)
-			  ->assign('nav_flag1',  $this->nav_flag1)
-			  ->assign('nav_flag2',  $this->nav_flag2)
-			  ->assign('backurl',    $this->backurl)
-			  ->assign('extra_css',  $this->extra_css)
-			  ;
+			->assign('topnav_no',  $this->topnav_no)
+			->assign('nav_flag1',  $this->nav_flag1)
+			->assign('nav_flag2',  $this->nav_flag2)
+			->assign('backurl',    $this->backurl)
+			->assign('extra_css',  $this->extra_css)
+			;
 		});
 		$cart_num = 0;
 		if ($GLOBALS['user']->uid) {

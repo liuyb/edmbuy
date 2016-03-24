@@ -8,7 +8,7 @@ html {font-size: 62.5%;}
 
 /* base */
 html,body {width: 100%;height: 100%;display: block;}
-body {font-size: 14px;font-size: 1.4rem;line-height: 1.5;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;text-rendering: optimizeLegibility;color: #333;background: #bebdc1;word-wrap: break-word;word-break: break-all;}
+body {font-size: 14px;font-size: 1.4rem;line-height: 1.6;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;text-rendering: optimizeLegibility;color: #333;background: #bebdc1;word-wrap: break-word;word-break: break-all;}
 
 /* appearance */
 a, input, button, textarea, select { -ms-touch-action: none !important;-webkit-tap-highlight-color: transparent;-webkit-appearance: none;-moz-appearance: none; }

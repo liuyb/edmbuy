@@ -1,23 +1,5 @@
-Skip to content
-This repository  
-Search
-Pull requests
-Issues
-Gist
- @lanzhengwu
- Unwatch 5
-  Star 0
- Fork 0 GavinLai/edmbuy
- Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs
-Tree: ded9f30918 Find file Copy pathedmbuy/themes/mobiles/css/m.css
-ded9f30  17 minutes ago
-@GavinLai GavinLai 解决样式冲突
-4 contributors @GavinLai @EdmTest @lanzhengwu @qwe317149766
-RawBlameHistory     4271 lines (4211 sloc)  82.5 KB
 @CHARSET "UTF-8";
-/*
-*{margin:0;padding:0;color:#333;border:none;list-style:none;outline:none;font-family: "Microsoft Yahei" !important;-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
-*/
+
 /* Disable certain interactions on touch devices */
 html,body {
   /*
@@ -39,10 +21,9 @@ html,body {
   -ms-touch-action: none;
   overflow: hidden;
 }
-html.SPA,body.SPA { overflow: auto; }
-html.SPA { background: #e7e8eb; }
-body.SPA { height: auto;min-height: 100%;background: #fff; }
-body.SPA.greybg { background: #eee; }
+html.SPA,body.SPA,html.MPA,body.MPA { background: #e7e8eb;overflow: auto; }
+body.SPA,body.MPA { height: auto;min-height: 100%;background: #fff; }
+body.SPA.greybg,body.MPA.greybg { background: #eee; }
 
 /*----- project relative css -----*/
 /*通用*/
@@ -52,13 +33,7 @@ a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
 a.btna { display: block;height: 100%; }
 a.blka { display: block; }
 .cursor { cursor: pointer; }
-.hwspeed {
-	transform: translate3d(0, 0, 0);
-	-webkit-transform: translate3d(0, 0, 0);
-	-moz-transform: translate3d(0, 0, 0);
-	-ms-transform: translate3d(0, 0, 0);
-	-o-transform: translate3d(0, 0, 0);
-}
+.hwspeed { transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0);-moz-transform: translate3d(0, 0, 0);-ms-transform: translate3d(0, 0, 0);-o-transform: translate3d(0, 0, 0); }
 .btn {
   display: inline-block;
   background-color: #fff;
@@ -139,7 +114,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 
 /*主体页面dom*/
 #Mtop { position: absolute;left: 0;top: 0;width: 100%;display: none; }
-#Mbody { width: 100%;height: 100%;min-height: 100%;position: relative;background: #eee;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
+#Mbody { width: 100%;height: 100%;position: relative;background: #eee;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
 #activePage,#loadingCover { position: absolute;top: 0;bottom: 0;width: 100%;-webkit-overflow-scrolling: touch;overflow: hidden; }
 #activePage.useTopNav-1,#loadingCover.useTopNav-1 { top: 45px; }
 #activePage.useNav-1,#loadingCover.useNav-1 { bottom: 50px; }
@@ -270,10 +245,22 @@ textarea.flexText,.flex-text-wrap pre {
 }
 /* END flexText plugin style */
 
+/* ASPA页面框架样式 */
+body.MPA.iOS { height: 100%;overflow: hidden; }
+.MPA #Mhead,.MPA #Mnav { position: fixed; }
+.MPA.iOS #Mhead,.MPA.iOS #Mnav { position: absolute; }
+.MPA #Mbody { width: 100%;height: auto;overflow-y: auto;margin: 0;padding: 0; }
+.MPA.iOS #Mbody { position: absolute;top: 0;bottom: 0;width:100%;-webkit-overflow-scrolling: touch;overflow-y:scroll; }
+.MPA #Mbody.useTopNav-1 { margin-top: 45px; }
+.MPA #Mbody.useNav-1 { margin-bottom: 50px; }
+.MPA #Mbody .pageBg { position:absolute;left:0;top:20px;width:100%;text-align:center; }
+.MPA.iOS #Mbody.useTopNav-1 { top: 45px;margin: 0; }
+.MPA.iOS #Mbody.useNav-1 { bottom: 50px;margin: 0; }
+
 /*PC下的样式*/
 @media only screen and (min-width: 1025px){
 
-	body.SPA,#Mbody {width: 480px;margin: 0 auto;}
+	body.SPA,body.MPA,#Mbody{max-width: 480px;margin: 0 auto;}
 
 }
 
@@ -567,6 +554,25 @@ textarea.flexText,.flex-text-wrap pre {
 .order-status .btn { padding: 0 5px; }
 
 /*----- from wu.css ------*/
+
+/* 通用部分 */
+.gicon_btn{
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  right: 12px;
+  z-index: 199;  
+}
+.gicon_btn_qr{
+  background: url(../img/wxg.png) no-repeat;
+  background-size: 40px;
+  bottom: 110px;  
+}
+.gicon_btn_gotop{
+  background: url(../img/hdb.png) no-repeat;
+  background-size: 40px;
+  bottom: 60px;
+}
 
 /* 表单提交加载等待 */
 #zxloading{

@@ -1,5 +1,5 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?><!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="MPA">
 <head>
 <meta charset="utf-8">
 <title><?php echo $seo['title']?></title>
@@ -24,6 +24,7 @@
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
 <script>gData.page_render_mode=parseInt('<?=$page_render_mode?>');
+gData.page_use_iscroll = 1==gData.page_render_mode ? 0 : 1;
 function show_mtop(html) {
 	if (typeof(show_mtop.dom)=='undefined' || !show_mtop.dom) {
 		show_mtop.dom = $('#Mtop');
@@ -32,7 +33,7 @@ function show_mtop(html) {
 }
 function show_topnav(html) {
 	if (typeof(show_topnav.dom)=='undefined' || !show_topnav.dom) {
-		show_topnav.dom = $('#topnav');
+		show_topnav.dom = $('#Mhead');
 	}
 	show_topnav.dom.html(html).show();
 }
@@ -44,8 +45,8 @@ function show_mnav(html, append) {
 	
 	if (append<0) { 
 		show_mnav.dom.prepend(html).show();
-	}else if(append>0) {
-		show_mnav.dom.append(html).show;
+	} else if(append>0) {
+		show_mnav.dom.append(html).show();
 	} else {
 		show_mnav.dom.html(html).show();
 	}
@@ -58,33 +59,7 @@ function required_uinfo_empty() {
 }
 </script>
 </head>
-<body style="background: #eee;">
-<div class="hide"><img src="<?php echo ploadingimg()?>" alt=""/></div>
-<div id="Mtop"></div>
-<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
-<div id="Mbody">
-  <nav id="topnav" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
-  <div id="activePage" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><section class="scrollArea<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>">
-  	<?php if(1==$page_render_mode):?>
-  		<?php include T($tpl_content);?>
-  		<script>$(window).load(function(){F.set_scroller(false,100)})</script>
-  	<?php endif;?>
-  	</section>
-    <div class="pageBg">品质生活从这里开始🔛</div>
-  </div>
-  <div id="loadingCover" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"></div>
-  <?php include T('inc/popalert');?>
-</div>
-<?php include T('inc/popdlg');?>
-<!-- 微信操作提示 -->
-<div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
-</body>
-<?php tplholder('FOOT_JS');?>
-<script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>
-<script type="text/javascript" src="<?=$contextpath;?>misc/js/fst.min.js"></script>
-<?php shareinfo(isset($share_info) ? $share_info : array());?>
-<?php footscript();?>
-</html><?php
+<body class="MPA<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>"><?php
 
 //: add css & js files
 if (C('env.usecdn')):
@@ -101,3 +76,17 @@ add_js('g.js',['pos'=>'head']);
 add_js('m.js',['pos'=>'foot']);
 
 ?>
+<div id="Mtop"></div>
+<nav id="Mhead" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
+<div id="Mbody" class="userTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><div class="pageBg">品质生活从这里开始🔛</div><?php include T($tpl_content);?></div>
+<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
+<script id="Mpending" type="text/html"></script>
+<div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
+<?php include T('inc/popdlg');?>
+</body>
+<?php tplholder('FOOT_JS');?>
+<script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>
+<script type="text/javascript" src="<?=$contextpath;?>misc/js/fst.min.js"></script>
+<?php shareinfo(isset($share_info) ? $share_info : array());?>
+<?php footscript();?>
+</html>

@@ -8,10 +8,10 @@
     <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>
     </ul>
     <div id="slinav" class="slinav clearfix">
-    <a href="javascript:void(0);" class="hwspeed active">1</a>
-    <a href="javascript:void(0);" class="hwspeed">2</a>
-    <a href="javascript:void(0);" class="hwspeed">3</a>
-    <a href="javascript:void(0);" class="hwspeed">4</a>
+    <a href="javascript:void(0);" class="active">1</a>
+    <a href="javascript:void(0);" class="">2</a>
+    <a href="javascript:void(0);" class="">3</a>
+    <a href="javascript:void(0);" class="">4</a>
      </div>
   </div>
 </div>
@@ -110,7 +110,7 @@ window.location.reload();
 <div class="click_more" onclick="pulldata(this);">
 	点击加载更多......
 </div>
-<?php require_scroll2old();?>
+<?php /*require_scroll2old();*/?>
 <script>
 	var promote_endtime;
 	$().ready(function(){
@@ -198,7 +198,7 @@ window.location.reload();
 			var spread = good.market_price - good.shop_price;
 			spread = spread ? spread.toFixed(2) :0.00;
 			var goodimg = good.goods_img;
-			TR += "<tr data-goodid='"+good.goods_id+"'><td style=\"width:95px;\"><img class='hwspeed' src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\"></td><td>";
+			TR += "<tr data-goodid='"+good.goods_id+"'><td style=\"width:95px;\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\"></td><td>";
 			TR += "<p class=\"tab_t_f\">"+good.goods_name+"</p><p class=\"tab_t_i\">"+good.goods_brief+"</p><p class=\"tab_t_price\">";
 			TR += "<span>特价：￥"+good.shop_price+"</span></p>";
 			TR += "<p class=\"tab_t_type\"><span class=\"type_l_css\">比网上省</span><span class=\"type_r_css\">"+spread+"元</span></p>";
@@ -290,3 +290,4 @@ window.location.reload();
 	}
 	setTimeout("ajust_div_size()",0);
 </script>
+<?php include T('inc/popqr');?>

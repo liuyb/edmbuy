@@ -8,6 +8,7 @@
 	F.isTouch = "createTouch" in document;
 	//gData.downpull_display = true; //允许下拉显示标志位，默认允许，页面可改变此变量以改变其默认行为 (不能在这个位置设置该值，放这里是提醒有这么一个全局变量)
 	//gData.page_render_mode = 2; //1: general一般请求页面；2: hash请求页面 (不能在这个位置设置该值，放这里是提醒有这么一个全局变量)
+	//gData.page_use_iscroll = 0; //是否使用iScroll插件
 	
 	// Set dom constants
 	F.doms = {wrapper:"#Mbody",nav:"#Mnav",topnav:"#topnav",activepage:"#activePage",loading:"#loadingCover",scroller:".scrollArea"};
@@ -85,6 +86,7 @@
 	};
 	// set content minimal height
 	F.set_content_minheight = function(){
+		if (typeof(gData.page_use_iscroll)!='undefined' && !gData.page_use_iscroll) return false;
 		if (F.scrollArea.size()>0) {
 			var $topnav  = $(F.doms.topnav);
 			var $nav     = $(F.doms.nav);
@@ -98,6 +100,7 @@
 	};
 	// set iScroll object
 	F.set_scroller = function(toY, runTimeout){
+		if (typeof(gData.page_use_iscroll)!='undefined' && !gData.page_use_iscroll) return false;
 		if (typeof(toY)=='undefined') toY = false;
 		if (typeof(runTimeout)=='undefined') runTimeout = 0;
 		

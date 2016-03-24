@@ -41,16 +41,11 @@ class Default_Controller extends MobileController {
    */
   public function index(Request $request, Response $response)
   {
+  	$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_default_index');
     $this->nav_no    = 1;
     $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
     
-    /*
-    $debug = $request->get('debug',0);
-    if (!$debug) {
-    	Fn::show_error_message('页面开发中，敬请关注...', false, '页面提示');
-    }
-    */
     //$pager = new PagerPull(1, 10);
     //首页推荐商品列表
     //Default_Model::findGoodsList($pager, true);
@@ -63,7 +58,7 @@ class Default_Controller extends MobileController {
     $share_info = [
     		'title' => '难得的好商城，值得关注！',
     		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
-    		'link'  => U('/', 'spm='.Spm::user_spm(), true),
+    		'link'  => U('', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
     $this->v->assign('share_info', $share_info);
