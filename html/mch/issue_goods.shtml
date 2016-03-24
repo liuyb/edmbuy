@@ -20,7 +20,9 @@
 <body>
 
 <style>
-
+.stand1,.stand2{
+	display:none;
+}
 </style>
 
 
@@ -130,60 +132,64 @@
 				</div>
 				
 				<div class="type_right font_common" style="float:left;">
-					<div class="stand_check_top" data-id="a1">
-						<div class="stand_check"></div>
-					 	<div class="z_in_height">
-							<div class="check_list_info">
-								<ul>
-						 			<li>酒1</li>
-									<li>酒2</li>
-									<li>酒3</li>
-									<li>酒4</li>
-						 		</ul>
+					<div class="stand1" data-standard="1">		
+						<div class="stand_check_top" data-id="a1">
+							<div class="stand_check"></div>
+						 	<div class="z_in_height">
+								<div class="check_list_info">
+									<ul>
+							 			<li>酒1</li>
+										<li>酒2</li>
+										<li>酒3</li>
+										<li>酒4</li>
+							 		</ul>
+								</div>
 							</div>
+						</div>
+						
+						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
+						<div class="common_a_tow">
+				 			<div class="result_d">
+				 				<div  class="common_a_li" style="display:none;">
+			 						<ul>
+										<li data-num="1" id="1">1</li>
+									 	<li data-num="2" id="2">2</li>
+									 	<li data-num="3" id="3">3</li>
+									 </ul>
+								</div>
+			 				</div>
+			 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
 						</div>
 					</div>
 					
-					<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
-					<div class="common_a_tow">
-			 			<div class="result_d">
-			 				<div  class="common_a_li" style="display:none;">
-		 						<ul>
-									<li data-num="1" id="1">1</li>
-								 	<li data-num="2" id="2">2</li>
-								 	<li data-num="3" id="3">3</li>
-								 </ul>
-							</div>
-		 				</div>
-		 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
-					</div>
-					
-					<div class="stand_check_top" data-id="a1">
-						<div class="stand_check"></div>
-					 	<div class="z_in_height">
-							<div class="check_list_info">
-								<ul>
-						 			<li>酒1</li>
-									<li>酒2</li>
-									<li>酒3</li>
-									<li>酒4</li>
-						 		</ul>
+					<div class="stand2" data-standard="2">		
+						<div class="stand_check_top" data-id="a1">
+							<div class="stand_check"></div>
+						 	<div class="z_in_height">
+								<div class="check_list_info">
+									<ul>
+							 			<li>酒1</li>
+										<li>酒2</li>
+										<li>酒3</li>
+										<li>酒4</li>
+							 		</ul>
+								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
-					<div class="common_a_tow">
-			 			<div class="result_d">
-			 				<div  class="common_a_li" style="display:none;">
-		 						<ul>
-									<li data-num="1" id="1">1</li>
-								 	<li data-num="2" id="2">2</li>
-								 	<li data-num="3" id="3">3</li>
-								 </ul>
-							</div>
-		 				</div>
-		 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
+						
+						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
+						<div class="common_a_tow">
+				 			<div class="result_d">
+				 				<div  class="common_a_li" style="display:none;">
+			 						<ul>
+										<li data-num="1" id="1">1</li>
+									 	<li data-num="2" id="2">2</li>
+									 	<li data-num="3" id="3">3</li>
+									 </ul>
+								</div>
+			 				</div>
+			 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
+						</div>
 					</div>
 					
 					<div class="add_stand">
@@ -233,28 +239,46 @@
 <script>
 $("#fbsp").addClass("goods_on");
 
+var _stand ;
+
+$(".add_common").on("click",function(){
+	$(".stand1").show();
+	_stand = $(".stand1").data("standard");
+	//alert(_stand);
+})
+	
+
 $(function(){
-	$(".check_list_info li:first").addClass("li_on1");
-	 
-	$('.check_list_info li').mouseover(function(){
-		  $(this).addClass("li_on1");
-	});
-	$('.check_list_info li').mouseout(function(){
-		  $(this).removeClass("li_on1");
-	});
+	gl();
 })
 
 $(".stand_check").on("click",function(){
+	var display =$('.z_in_height').css('display');
 	
-	if($(".z_in_height").is(":hidden")){
-		$(".z_in_height").show();    
+	if(display == 'none'){
+		$(".z_in_height").show();   
 	}else{
-		$(".z_in_height").hide();     
+		$(".z_in_height").hide();  
 	}
 
 	$(".common_a_li").hide();
 	
 	isnull();
+	
+	var check_val1 = $(".stand_check").text();
+	//alert(check_val1)
+	
+	$(".check_list_info li").on("click",function(){
+		var _this_val = $(this).text();
+		if(_this_val != check_val){
+			//alert(_this_val+"d"+check_val)
+			$(".add_del_y .yjtj").remove();
+			$(".common_a_li li").show();
+		}else{
+			alert("规格不能相同");
+			return false;
+		}
+	})
 })
 
 $('.check_list_info li').on("click",function(){
@@ -264,32 +288,11 @@ $('.check_list_info li').on("click",function(){
 	isnull(); 
 })
 
-function isnull(){
-	var check_val = $(".stand_check").text();
-	
-	if(check_val == null || check_val.length == 0) 
-	{ 
-		
-		$(".add_common_a").hide();
-		
-	}else{
-		$(".add_common_a").show();
-	}
-}
-
 $(".add_common_a").on("click",function(){
 	$(".common_a_tow").show();
 	$(".common_a_li").show();
-	
-	$(".common_a_li li:first").addClass("li_on1");
-	 
-	$('.common_a_li li').mouseover(function(){
-		  $(this).addClass("li_on1");
-	});
-	
-	$('.common_a_li li').mouseout(function(){
-		  $(this).removeClass("li_on1");
-	});
+	gl();
+	$(".result_d .jt_g").remove();
 });
 
 $(".common_a_li li").on("click",function(){
@@ -312,9 +315,7 @@ $(".common_a_li li").on("click",function(){
 		
 		$(".common_a_li li").each(function(){
 		    if(_id == $(this).data("num")){
-		    	$(".common_a_li li").each(function(){
-		    		$("#"+_id).show();
-		    	});
+		    	$("#"+_id).show();
 		    }
 		});
 	})
@@ -324,6 +325,43 @@ $(".common_a_li li").on("click",function(){
 		$(".common_a_tow").hide();
 	})
 })
+
+function isnull(){
+	var check_val = $(".stand_check").text();
+	
+	if(check_val == null || check_val.length == 0) 
+	{ 
+		
+		$(".add_common_a").hide();
+		
+	}else{
+		$(".add_common_a").show();
+	}
+}
+
+function gl(){
+	$(".check_list_info li:first").addClass("li_on1");
+	 
+	$('.check_list_info li').mouseover(function(){
+		  $(this).addClass("li_on1");
+	});
+	$('.check_list_info li').mouseout(function(){
+		  $(this).removeClass("li_on1");
+	});
+	
+
+	$(".common_a_li li:first").addClass("li_on1");
+	 
+	$('.common_a_li li').mouseover(function(){
+		  $(this).addClass("li_on1");
+	});
+	
+	$('.common_a_li li').mouseout(function(){
+		  $(this).removeClass("li_on1");
+	});
+}
+
+
 
 
 //显示添加分类
