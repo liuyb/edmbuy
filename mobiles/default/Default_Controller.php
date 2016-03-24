@@ -262,6 +262,7 @@ class Default_Controller extends MobileController {
   	
   	$cid   = $request->get('cid',0);
   	$refer = $request->get('refer','');
+  	$cid = intval($cid);
   	$this->v->assign('cid',   $cid);
   	$this->v->assign('refer', $refer);
   	
@@ -294,6 +295,7 @@ class Default_Controller extends MobileController {
   	$cid   = $request->get('cid',0);
   	$refer = $request->get('refer','/');
   	$this->v->assign('refer', $refer);
+  	$cid = intval($cid);
   	
   	if (!Users::is_logined()) { //未登录，直接使用详细授权登录
   		$local_refer = U('app_doactivate',['cid'=>$cid, 'refer'=>$refer]);
