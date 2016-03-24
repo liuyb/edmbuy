@@ -74,7 +74,7 @@
 
 /*========== 以下部分为框架共用部分 ==========*/
 
-html,body {background-color:#e7e8eb;}
+html,body {background-color:#eee;}
 .btn {padding:4px 10px 3px;background-color:#FEFEFE;border:1px solid #ddd;font-size:16px;line-height:18px;overflow:visible;cursor:pointer;font-weight:normal;}
 .btn:hover {background-color:#fff;border:1px solid #aaa;color:#000;}
 .bgx {background-image: url(../img/bgx.png);}
@@ -83,6 +83,7 @@ a.undl{text-decoration:underline;}
 a.oplink,a.hashreq {color:#039;}
 a.listbtn-link {color:#333;}
 a.listbtn-hlink {color:#ff6600;}
+a:hover { text-decoration: none;}
 
 .smbg {background:url(../img/bg.png) no-repeat;}
 .smbg2 {background:url(../img/bg2.png) no-repeat;}
@@ -231,7 +232,7 @@ i.desc {background-position: 0 -23px;display: inline-block;}
 html,body { height: auto;min-height: 100%; }
 body { line-height: 1.6;font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","\9ED1\4F53",Arial,sans-serif;color: #222;font-size: 14px; }
 body { min-width: 1200px;background: #e7e8eb;}
-.ifr-head { background: #f86236;height:58px;position: -webkit-sticky;position: -moz-sticky;position: -ms-sticky;position: sticky;top: 0;left: 0; }
+.ifr-head { background: #f26427;height:58px;position: -webkit-sticky;position: -moz-sticky;position: -ms-sticky;position: sticky;top: 0;left: 0; }
 .ifr-head .header { width: 1200px;height: 100%;margin: 0 auto; }
 .ifr-head .headRt { float: right;height: 100%; }
 .ifr-head .headLogo { float: left;margin-right: 50px;height: 100%; }
@@ -246,9 +247,40 @@ body { min-width: 1200px;background: #e7e8eb;}
 
 .ifr-foot {  }
 
+/* 左侧公用菜单 */
+.page_common_left{
+	float:left;
+	width:240px;
+  	min-height: 900px;
+	background:#fff;	
+}
+.page_common_left li{
+	text-align:center;
+	cursor:pointer;	
+	height:50px;
+	line-height:50px;
+	font-size:18px;
+}
+.page_common_left a{
+	color:#333;
+}
+.item_on{
+	background:#f26427;
+	color:#fff;
+}
+/*排序*/
+.sort_down{
+    background:#eee url(../img/6.png) no-repeat right !important;
+	padding-right:5px;
+}
+.sort_up{
+    background:#eee url(../img/6.png) no-repeat right !important;
+	padding-right:5px;
+}
 /*========== 以下部分为模块私有部分 ==========*/
 
 
+.clear{clear:bloth;}
 
 
 

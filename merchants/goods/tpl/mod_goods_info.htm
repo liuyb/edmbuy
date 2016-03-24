@@ -1,0 +1,142 @@
+<ul class="nav nav-pills nav-stacked" style="width: 200px;">
+	<li role="presentation" class="active"><a href="#">商品分类</a></li>
+	<li role="presentation"><a href="#">发布商品</a></li>
+	<li role="presentation"><a href="#">商品分类</a></li>
+	<li role="presentation"><a href="#">评价管理</a></li>
+</ul>
+<div class="container">
+	<div class="row">
+		<!-- form: -->
+		<section>
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="page-header">
+					<h2>发布商品</h2>
+				</div>
+
+				<form id="defaultForm" method="post" class="form-horizontal"
+					action="/goods/publish" onsubmit="return goods_submit();">
+					<div class="form-group">
+						<label class="col-lg-3 control-label">商品名称</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="goods_name"
+								placeholder="商品名称" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-lg-3 control-label">市场价</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="market_price"
+								placeholder="市场价" style="width:100px;"/>
+						</div>
+						<label class="col-lg-3 control-label">成本价</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="cost_price"
+								placeholder="成本价" style="width:100px;"/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-lg-3 control-label">售价</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="shop_price"
+								placeholder="售价" style="width:100px;"/>
+						</div>
+						<label class="col-lg-3 control-label">供货价</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="income_price"
+								placeholder="供货价" style="width:100px;"/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-lg-3 control-label">库存</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="goods_number"
+								placeholder="库存" style="width:100px;"/>
+						</div>
+						<label class="col-lg-3 control-label">每人限购</label>
+						<div class="col-lg-4">
+							<input type="text" class="form-control" name="per_limit_buy"
+								placeholder="每人限购" style="width:100px;"/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-3 control-label">商家分类</label>
+						<div class="col-lg-5">
+							<input type="text" class="form-control" name="cat_id" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-lg-3 control-label">统一邮费</label>
+						<div class="col-lg-5">
+							<input type="text" class="form-control" name="shipping_fee" />
+						</div>
+					</div>
+					
+					<input type="hidden" value="3"/>
+					<input type="hidden" id="aaa" value="4"/>
+					
+					<div class="publish_image" style="margin-top:8px;">
+						
+					</div>
+					<img src="/themes/mobiles/img/editor_plus.png" onclick="fileupload();">		
+					<input type="file" name="file" class="dj_file" onchange="fileupload(event);">
+					
+                    <div class="form-group">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <button type="submit" class="btn btn-primary" name="signup" value="Sign up">发布</button>
+                        </div>
+                    </div>
+				</form>
+		</section>
+		<!-- :form -->
+	</div>
+</div>
+<script>
+function goods_submit(){
+	var data = $("#defaultForm").serializeJson();
+	data.other_cat = [22];
+	data.gallery_list = {};
+	$.post('/goods/publish', data);
+	return false;
+}
+
+function fileupload(e, obj){
+	var url = '/goods/gallery';
+	/* popUpload('上传图片', url, function(){
+		alert('in..');
+	},function(xhr, status, e){
+		var msg = "上传失败!";
+		if(xhr && xhr.responseText){
+			msg = $(xhr.responseText).text();
+		}
+		alert(msg);
+	}); */
+	/* F.postWithLoading(url, {}, function(ret){
+		if(ret.flag=='SUC'){
+			alert('in..');
+		}else{
+			alert(ret.errMsg);
+		}
+	}); */
+	image_upload(url, e, obj, function(ret){
+		/* if(obj){
+			var oldDIV = $(obj).closest("div");
+			var html =   '<img src="'+thumb+'" data-img="'+img+'">	'
+				+' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
+			oldDIV.html(html);
+			return;
+		}
+		var html =   '	<div class="dj_index publish_img">'
+			+'		<img src="'+thumb+'" data-img="'+img+'">	'
+			+' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
+			+'	</div>';
+			
+		$(".publish_image").append(html); */
+		console.log(ret);
+	});
+}
+</script>

@@ -351,6 +351,73 @@
 		});
 	});
 	
+	/**
+	 * 覆写F.get 方法，增加loading方法 默认2秒才显示滚动条
+	 */
+	F.get = function(url, data, callback){
+		/*var effect = "overlay";
+		F.loadingStart(effect);
+		F.loading_canvas.hide();
+		setTimeout(function(){
+			var isLoadingExist = $("#loadingCover").find(".spinner").length;
+			if(isLoadingExist){
+				F.loading_canvas.show();
+			}
+		}, 2000);*/
+		var promise = $.get(url, data, callback);
+		promise.always = function(){
+			//F.loadingStop(effect);
+		}
+	};
+	
+	/**
+	 * 增加post 方法，增加loading方法 默认2秒才显示滚动条 
+	 */
+	F.postWithLoading = function(url, data, callback, ajax_start_cb, ajax_complete_cb){
+		/*F.loadingStart();
+		F.loading_canvas.hide();
+		setTimeout(function(){
+			var isLoadingExist = $("#loadingCover").find(".spinner").length;
+			if(isLoadingExist){
+				F.loading_canvas.show();
+			}
+		}, 2000);*/
+		F.post(url, data, callback, ajax_start_cb, function(param){
+			if(ajax_complete_cb){
+				ajax_complete_cb(param);
+			}
+			//F.loadingStop();
+		});
+	};
+	
+	F.deleteAjax = function(url, data, succ_cb, fail_cb){
+		$.ajax({
+			url : url,
+			type : 'DELETE',
+			data :data,
+			success: function(data){
+				if(typeof(succ_cb)=='function') succ_cb(data);
+			},
+			error: function(xhr, status, error) {
+				if(typeof(fail_cb)=='function') fail_cb(xhr, status, error);
+			}
+		});
+	};
+	
+	F.putAjax = function(url, data, succ_cb, fail_cb){
+		$.ajax({
+			url : url,
+			type : 'PUT',
+			data :data,
+			success: function(data){
+				if(typeof(succ_cb)=='function') succ_cb(data);
+			},
+			error: function(xhr, status, error) {
+				if(typeof(fail_cb)=='function') fail_cb(xhr, status, error);
+			}
+		});
+	};
+	
 })(jQuery, FUI, this);
 
 /*-------------------------Page Message Prompt-------------------------BEGIN*/

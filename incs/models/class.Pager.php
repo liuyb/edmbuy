@@ -61,13 +61,15 @@ class Pager extends CBase {
         $view->assign("maxpage", $this->maxpage);
         $view->assign("totalnum", $this->totalnum);
         $view->assign("pagesize", $this->pagesize);
+        $view->assign("result", $this->result);
     }
     
     public function outputPageJson(){
         return ["curpage" => $this->curpage,
                 "maxpage" => $this->maxpage,
                 "totalnum" => $this->totalnum,
-                "pagesize" => $this->pagesize
+                "pagesize" => $this->pagesize,
+                "result"   => $this->result
         ];
     }
 }

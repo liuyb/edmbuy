@@ -182,7 +182,6 @@ function fileupload(e, obj){
     fr.onload = function(ev) {
     	var img = ev.target.result;
     	F.postWithLoading('/item/comment/image', {img:img}, function(ret){
-    		F.loadingStop();
     		if(ret.flag=='SUC'){
     			//oripath.push(ret.result);
     			//thumbpath.push(ret.thumb);

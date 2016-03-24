@@ -1,0 +1,287 @@
+<!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
+<div id="body" class="ifr-body">
+	<!--{include file="inc/left_common.htm"}-->
+	<div class="goods_right">
+		<div class="goods_nums">
+			<ul>
+				<li id="li1" onclick="list_switch(1)" data-sale='2' class="li_on">销售中<span id="on_sale"></span></li>
+				<li id="li2" onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
+			</ul>
+		</div>
+		<div class="goods_search">
+			<div class="hand_input">商品名称：<input id="goods_name" type="text" val=""></div>
+			<div class="check_input">
+				<!-- <select class="check_s">
+					<option value ="all">全部类型</option>
+  					<option value ="bargain">特价商品</option>
+  					<option value ="flash">限时抢购商品</option>
+  					<option value ="remm">推荐至益多米平台</option>
+				</select> -->
+				<input type="date" id="start_date"/>
+				至
+				<input type="date" id="end_date"/>
+				<button class="search_button" onclick="loadTableContent(1, true);">搜索</button>
+			</div>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="common_go" id="list1">
+			<div class="search_result">
+				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
+					<tr>	
+						<th>选择</th>
+						<th>商品名称</th>
+						<th>商品分类</th>
+						<th>售价</th>
+						<th>供货价</th>
+						<th>佣金</th>
+						<th onclick="sort_click(this, 'paid_goods_number');"><a href="javascript:void(0);">销量</a></th>
+						<th>访问量(次)</th>
+						<th>库存</th>
+						<!-- <th>商品类型</th> -->
+						<th width="60">操作</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="batch_week" style="padding-bottom:30px;">
+			<div class="batch_l">
+				<span class="all_check">全选</span>
+				<button class="btn_common batch_del" onclick="deleteGoods();">批量删除</button>
+				<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
+				<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
+			</div>
+			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	loadTableContent(1, true);
+});
+function loadTableContent(curpage, isinit, param){
+	var container = $("#resultList");
+	container.find("tr:gt(0)").remove();
+	var data = getConditions();
+	if(param){
+		$.extend(data, param);
+	}
+	data.curpage = curpage ? curpage : 1;
+	F.get('/goods/list', data, function(ret){
+		var TR = "";
+		if(!ret || !ret.result.length){
+			TR = "<tr><td colspan='10' style='text-align:center;'>还没有数据~</td></tr>";
+		}else{
+			var result = ret.result;
+			result.forEach(function(item){
+				TR += costructHtml(item);
+			});
+		}
+		container.append($(TR));
+		DOMEventBind();
+		if(isinit){
+			generatePage(ret.curpage, ret.maxpage, ret.totalnum);
+		}
+		displaySaleNotSaleNum(ret);
+	});
+	refreshAfterRender(data);
+}
+//获取当前页面条件
+function getConditions(){
+	var is_sale = 1;
+	$(".goods_nums").find("li").each(function(){
+		var THIS = $(this);
+		if(THIS.hasClass("li_on")){
+			is_sale = THIS.attr("data-sale");
+		}
+	});
+	var goods_name = $("#goods_name").val();
+	var start_date = $("#start_date").val();
+	var end_date = $("#end_date").val();
+	
+	return {is_sale : is_sale, goods_name : goods_name, start_date : start_date, end_date : end_date};
+}
+function costructHtml(result){
+	var TR = "";
+	TR+= "<tr data-id="+result.goods_id+"><td class=\"check_go\"></td><td><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
+	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></td>";
+	TR+= "<td>"+result.cat_name+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
+	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
+	TR+= "<td class=\"goods_edit\">编辑<div class=\"edit_info\"><ul><li><a href=\"javascript:;\" data-type='edit'>编辑</a></li><li>";
+	var saleDOM = "";
+	if(result.is_on_sale == 1){
+		saleDOM = "<a href=\"javascript:;\" data-type='sale'>下架</a></li>";
+	}else{
+		saleDOM = "<a href=\"javascript:;\" data-type='nosale'>上架</a></li>";
+	}
+	TR+= saleDOM;
+	TR+= "<li><a href=\"javascript:;\" data-type='delete'>删除</a></li><li><a href=\"javascript:;\" data-type='share'>分享</a></li></ul></div></td>";
+	TR+= "</tr>";
+	return TR;
+}
+function generatePage(pageNo, totalPage, totalRecords){
+	//生成分页
+	kkpager.generPageHtml({
+		pno : pageNo,
+		//总页码
+		total : totalPage,
+		//总数据条数
+		totalRecords : totalRecords,
+		isGoPage : false,
+		mode : 'click',
+		click : function(n){
+			this.selectPage(n);
+			loadTableContent(n, false);
+		}
+	}, true);
+};
+function displaySaleNotSaleNum(ret){
+	var sale = 0;
+	var notsale = 0;
+	if(ret && ret.otherResult){
+		ret.otherResult.forEach(function(item){
+			if(item.cat == 0){
+				notsale = item.count; 
+			}else if(item.cat == 1){
+				sale = item.count;
+			}
+		});
+	}
+	$("#on_sale").html("("+sale+")");
+	$("#not_sale").html("("+notsale+")");
+}
+function list_switch(a){
+	var _li = "#li" + a ;
+	if($(_li).hasClass("li_on")){
+		return;
+	}
+	var _list = "#list" + a;
+	$(".goods_nums li").removeClass("li_on");
+	$(_li).addClass("li_on");
+	loadTableContent(1, true);
+}
+$(function(){
+	//全选
+	$(".all_check").on('click',function(){
+		var THIS = $(this);
+		if(THIS.hasClass("all_on")){
+			THIS.removeClass("all_on");
+			$(".check_go").removeClass("go_on");
+		}else{
+			THIS.addClass("all_on");
+			$(".check_go").addClass("go_on");
+		}
+	});
+});
+function DOMEventBind(){
+	//单选
+	$(".check_go").on('click',function(){
+		var THIS = $(this);
+		if(THIS.hasClass("go_on")){
+			THIS.removeClass("go_on");
+		}else{
+			THIS.addClass("go_on");
+		}
+		cartSelectAll();
+	});
+	$(".goods_edit").on('click',function(){
+		var THIS = $(this);
+		if(THIS.find(".edit_info").is(":visible")){
+			THIS.find(".edit_info").fadeOut();
+		}else{
+			THIS.find(".edit_info").fadeIn();
+		}
+	});
+	$(".edit_info").find("a").on('click', function(){
+		var THIS = $(this);
+		var type = THIS.attr("data-type");
+		if(type == "sale"){
+			var obj = THIS.closest("tr");
+			updateGoodsStatus(obj,0);
+		}else if(type == "nosale"){
+			var obj = THIS.closest("tr");
+			updateGoodsStatus(obj,1);			
+		}else if(type == "delete"){
+			var obj = THIS.closest("tr");
+			deleteGoods(obj);
+		}
+	});
+}
+//表格重新渲染后的刷新
+function refreshAfterRender(data){
+	if($('.all_check').hasClass("all_on")){
+		$('.all_check').removeClass("all_on");
+	}
+	if(data && data.is_sale == 1){
+		$("#goodsNotSale").hide();
+		$("#goodsOnSale").show();
+	}else{
+		$("#goodsNotSale").show();
+		$("#goodsOnSale").hide();
+	}
+}
+
+//是否符合全选
+function cartSelectAll(){
+	var item_num = $(".check_go").length;
+	var select_num = $(".go_on").length;
+	if(item_num == select_num){
+		$(".all_check").addClass("all_on");
+	}else{
+		$(".all_check").removeClass("all_on");
+	}
+}
+function deleteGoods(obj){
+	var goods_id = batchHandleData(obj);
+	if(!goods_id || !goods_id.length){
+		alert('还没有选择商品！');
+		return;
+	}
+	var data = {goods_ids : goods_id};
+	F.post('/goods/delete', data, function(data){
+		//alert('操作成功');
+		loadTableContent(1, true);
+	});
+}
+function updateGoodsStatus(obj, statusVal){
+	var goods_id = batchHandleData(obj);
+	if(!goods_id || !goods_id.length){
+		alert('还没有选择商品！');
+		return;
+	}
+	var data = {status : 'sale', goods_ids : goods_id, statusVal : statusVal};
+	F.post('/goods/status', data, function(data){
+		//alert('操作成功');
+		loadTableContent(1, true);
+	});
+}
+function batchHandleData(obj){
+	var goods_id = [];
+	if(obj){
+		goods_id.push(obj.attr("data-id"));
+	}else{
+		$(".check_go").each(function(){
+			if($(this).hasClass("go_on")){
+				goods_id.push($(this).closest("tr").attr("data-id"));
+			}
+		});
+	}
+	return goods_id;
+}
+function sort_click(obj, field){
+	obj = $(obj);
+	var orderby = '';
+	if(obj.hasClass("sort_down")){
+		orderby = 'asc';
+		obj.removeClass('sort_down').addClass('sort_up');
+	}else{
+		obj.removeClass('sort_up').addClass('sort_down');
+		orderby = 'desc';
+	}
+	loadTableContent(kkpager._getCurrentPagerNo(), false, {orderby : orderby, order_field : field});
+}
+</script>

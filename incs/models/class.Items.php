@@ -14,7 +14,8 @@ class Items extends StorageNode {
 				'key'   => 'item_id',   //该key是应用逻辑的列，当columns为array时，为columns的key，否则，则要设成实际存储字段
 				'columns' => array( //命名特点：'goods_%s'=>'item_%s'，其他不变
 					'item_id'     => 'goods_id',
-					'merchant_uid'=> 'merchant_uid',
+					'merchant_uid'=> 'merchant_uid',//兼容老数据 INT 格式
+				    'merchant_id' => 'merchant_id',//新增 CHAR格式的 ID
 					'cat_id'      => 'cat_id',
 					'origin_place_id' => 'origin_place_id',
 					'item_sn'     => 'goods_sn',
@@ -33,6 +34,7 @@ class Items extends StorageNode {
 					'income_price'    => 'income_price',
 					'commision'       => 'commision',
 					'promote_price'   => 'promote_price',
+				    'cost_price'      => 'cost_price',
 					'promote_start_date' => 'promote_start_date',
 					'promote_end_date'   => 'promote_end_date',
 					'warn_number'     => 'warn_number',
@@ -65,6 +67,9 @@ class Items extends StorageNode {
 					'rank_integral'   => 'rank_integral',
 					'suppliers_id'    => 'suppliers_id',
 					'is_check'        => 'is_check',
+				    'per_limit_buy'   => 'per_limit_buy',
+				    'shipping_fee'    => 'shipping_fee',
+				    'shipping_template' => 'shipping_template'
 				)
 		);
 	}

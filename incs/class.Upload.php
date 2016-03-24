@@ -2,7 +2,7 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 /**
- * 上传公共类
+ * 上传公共类  BASE64方式上传
  *
  * @author Jean
  *        
@@ -11,6 +11,8 @@ class Upload
 {
 
     const FOLDER_ORI = 'original';
+    
+    const FOLDER_STANDARD = 'stardard';
 
     const FOLDER_THUMB = 'thumb';
 
@@ -26,11 +28,13 @@ class Upload
     // 图片存放目录
     private $img_dir;
     
+    public $standardwidth = 640;
+    
     // 是否生成缩略图
     public $has_thumb = false;
     
     // 缩略图宽度
-    public $thumbwidth;
+    public $thumbwidth = 220;
     
     // 固定ID 用户头像二维码等用固定ID存放
     public $fixed_id;
@@ -80,6 +84,7 @@ class Upload
         }
         // 文件名
         $oripath = '';
+        $stardardpath = '';
         $thumbpath = '';
         if ($this->fixed_id) {
             $filecode = $this->fixed_id;
@@ -87,21 +92,27 @@ class Upload
             $oripath = $dstpath . $filecode . $extpart;
         } else {
             $filecode = date('d_His') . '_' . randstr();
-            $oripath = $img_dir . Upload::FOLDER_ORI . '/' . date('Ym') . '/'. $filecode . $extpart;;
-            $thumbpath = $img_dir . Upload::FOLDER_THUMB . '/' . date('Ym') . '/'. $filecode . $extpart;;
+            $oripath = $img_dir . Upload::FOLDER_ORI . '/' . date('Ym') . '/'. $filecode . $extpart;
+            $stardardpath = $img_dir . Upload::FOLDER_STANDARD . '/' . date('Ym') . '/'. $filecode . $extpart; 
+            $thumbpath = $img_dir . Upload::FOLDER_THUMB . '/' . date('Ym') . '/'. $filecode . $extpart;
         }
         
         // 写ori版本
         $oripath = $this->writeImgData($oripath, $file_data);
         if ($thumbpath) {
             // thumb版本
-            $thumbpath = $this->generateThumb($oripath, $thumbpath, $imgtype, $width, $height, $ratio);
+            $thumbpath = $this->generateNewImage($oripath, $thumbpath, $this->thumbwidth, $imgtype, $width, $height, $ratio);
+        }
+        if ($stardardpath) {
+            // 标准版本
+            $stardardpath = $this->generateNewImage($oripath, $stardardpath, $this->standardwidth, $imgtype, $width, $height, $ratio);
         }
         if (! $oripath || empty($oripath)) {
             return UPload::FILE_UPLOAD_ERROR;
         }
         return array(
             'oripath' => $oripath,
+            'stdpath' => $stardardpath,
             'thumbpath' => $thumbpath
         );
     }
@@ -120,12 +131,15 @@ class Upload
         return '';
     }
 
-    private function generateThumb($oripath, $thumbpath, $imgtype, $width, $height, $ratio)
+    private function generateNewImage($oripath, $destpath, $destwidth, $imgtype, $width, $height, $ratio)
     {
+        $oripath = SIMPHP_ROOT . $oripath;
+        if ($width <= $destwidth) { // 只有宽度大于$destwidth才需要生成缩略图，否则直接用原图做缩略图
+            return $oripath;
+        }
+        
         $img = FALSE;
         if (is_string($oripath)) {
-            
-            $oripath = SIMPHP_ROOT . $oripath;
             
             switch ($imgtype) { // image type
                 default:
@@ -141,13 +155,10 @@ class Upload
             }
             
             if (is_resource($img)) {
-                $thumbwidth = $this->thumbwidth;
-                // thumb版本
-                if ($width > $thumbwidth) { // 只有宽度大于$thumbwidth才需要生成缩略图，否则直接用原图做缩略图
-                    $rv = $this->writeImgFile($img, SIMPHP_ROOT . $thumbpath, $imgtype, $width, $height, $thumbwidth, intval($thumbwidth / $ratio));
-                    if ($rv) {
-                        return preg_replace("/^" . preg_quote(SIMPHP_ROOT, '/') . "/", '', $thumbpath);
-                    }
+              
+                $rv = $this->writeImgFile($img, SIMPHP_ROOT . $destpath, $imgtype, $width, $height, $destwidth, intval($destwidth / $ratio));
+                if ($rv) {
+                    return preg_replace("/^" . preg_quote(SIMPHP_ROOT, '/') . "/", '', $destpath);
                 }
                 
                 imagedestroy($img);
@@ -212,6 +223,7 @@ class Upload
                 $ret = [
                     'flag' => 'SUC',
                     'result' => $filePath,
+                    'stdpath' =>  (isset($result['stdpath']) ? $result['stdpath'] : ''),
                     'thumb' => (isset($result['thumbpath']) ? $result['thumbpath'] : '')
                 ];
             }

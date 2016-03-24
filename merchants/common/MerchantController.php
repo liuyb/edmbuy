@@ -40,6 +40,16 @@ class MerchantController extends Controller {
 	
 	}
 	
+	/**
+	 * 
+	 * @param unknown $module 模块
+	 * @param unknown $item 当前项高亮
+	 */
+	public function setPageLeftMenu($module, $item){
+	    $this->v->assign("left_module", $module);
+	    $this->v->assign("left_item", $item);
+	}
+	
 }
 
 /*----- END FILE: MerchantController.php -----*/
