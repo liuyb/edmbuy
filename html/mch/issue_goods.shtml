@@ -109,7 +109,9 @@
 					</select>
 					<button class="add_common add_type">添加分类</button> 
 					<label class="add_type_hide">
-						<input type="text" val="" class="add_input"><button class="add_common add_ok">确定</button>
+						<input type="text" val="" class="add_input">
+						<button class="add_common add_ok">确定</button>
+						<button class="add_common cancel_s"> << </button>
 					</label>
 				</div>
 			</div>
@@ -131,6 +133,7 @@
 					<div class="add_img">	
 						<img src="../mch/img/editor_plus.png">			
 						<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload1(this)">	
+						<img src="../mch/img/close_11.png" class="close_img_d" style="display:none;">
 					</div>
 				</div>
 			</div>
@@ -314,8 +317,8 @@ $(".cal1 li").on("click",function(){
 	$(this).hide();
 	
 	$(".rd1	").append('<span class="jt_g" data-id='+_data+'>'+_child+'</span>');
-	$(".ady1").prepend('<span class="yjtj" data-id='+_data+'>'+_child+'</span>');
-
+	$(".ady1").prepend('<span class="yjtj" data-id='+_data+'>'+_child+'<img src="../mch/img/close_11.png" class="close_gg" style="display:none"></span>');
+	
 	$(".jt_g").on("click",function(){
 		$(this).remove();
 		var _id = $(this).data("id");
@@ -372,8 +375,12 @@ function gl(){
 	});
 }
 
-
-
+$(".yjtj").mouseover(function(){
+	 $(".close_gg").show();
+});
+$(".yjtj").mouseout(function(){
+	 $(".close_gg").show();
+});
 
 //显示添加分类
 $(".add_type").on("click",function(){
@@ -406,6 +413,25 @@ $(".add_img").live("click", function(){
 		
 	$(".add_img").before(html);
 });
+
+
+//上传图片删除
+$('.add_img').mouseover(function(){
+	 $(".close_img_d").show();
+});
+$('.add_img').mouseout(function(){
+	 $(".close_img_d").hide();
+});
+
+$(".close_img_d").on("click",function(){
+
+})
+
+//
+$(".cancel_s").on("click",function(){
+	$(".add_type_hide").hide();
+})
+
 </script>
 
 
