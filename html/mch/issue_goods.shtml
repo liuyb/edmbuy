@@ -23,6 +23,19 @@
 .stand1,.stand2{
 	display:none;
 }
+.goods_stocks{
+	width:72%;
+}
+.goods_stocks td{
+	width:12%;
+	text-align:center;
+	border: 1px solid #ddd;
+	height:40px;
+	line-height:40px;
+}
+.goods_stocks input{
+	width: 60px;
+}
 </style>
 
 
@@ -132,11 +145,11 @@
 				</div>
 				
 				<div class="type_right font_common" style="float:left;">
-					<div class="stand1" data-standard="1">		
+					<div class="stand1 scommon" data-standard="1">		
 						<div class="stand_check_top" data-id="a1">
-							<div class="stand_check"></div>
-						 	<div class="z_in_height">
-								<div class="check_list_info">
+							<div class="stand_check sck1"></div>
+						 	<div class="z_in_height zin1">
+								<div class="check_list_info cli1">
 									<ul>
 							 			<li>酒1</li>
 										<li>酒2</li>
@@ -147,10 +160,10 @@
 							</div>
 						</div>
 						
-						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
-						<div class="common_a_tow">
-				 			<div class="result_d">
-				 				<div  class="common_a_li" style="display:none;">
+						<div style="height:40px;" class="add_del_y ady1"><span class="add_common_a aca1">+添加</span></div>
+						<div class="common_a_tow cat1">
+				 			<div class="result_d rd1">
+				 				<div  class="common_a_li cal1" style="display:none;">
 			 						<ul>
 										<li data-num="1" id="1">1</li>
 									 	<li data-num="2" id="2">2</li>
@@ -158,43 +171,48 @@
 									 </ul>
 								</div>
 			 				</div>
-			 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
-						</div>
-					</div>
-					
-					<div class="stand2" data-standard="2">		
-						<div class="stand_check_top" data-id="a1">
-							<div class="stand_check"></div>
-						 	<div class="z_in_height">
-								<div class="check_list_info">
-									<ul>
-							 			<li>酒1</li>
-										<li>酒2</li>
-										<li>酒3</li>
-										<li>酒4</li>
-							 		</ul>
-								</div>
-							</div>
-						</div>
-						
-						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
-						<div class="common_a_tow">
-				 			<div class="result_d">
-				 				<div  class="common_a_li" style="display:none;">
-			 						<ul>
-										<li data-num="1" id="1">1</li>
-									 	<li data-num="2" id="2">2</li>
-									 	<li data-num="3" id="3">3</li>
-									 </ul>
-								</div>
-			 				</div>
-			 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
+			 				<button class="add_common ok_one oo1">确定</button><button class="add_common cancel_one co1">取消</button>
 						</div>
 					</div>
 					
 					<div class="add_stand">
 						<button class="add_common add_s_projcet">添加规格项目</button>
 					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			
+			<div class="infos_go">
+				<div class="goods_type font_common">
+					<label class="control-label"><span class="fill_red">*</span>商品库存：</label>
+				</div>
+				<div class="type_right font_common" style="margin-top:20px;">
+					<table cellspacing="0" cellpadding="0" class="goods_stocks">
+						<tr>
+							<td>颜色</td>
+							<td>市场价</td>
+							<td>售价</td>
+							<td>供货价</td>
+							<td>成本价</td>
+							<td>库存</td> 	 	
+						</tr>
+						<tr>
+							<td>颜色</td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+						</tr>
+						<tr>
+							<td>颜色</td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td>
+							<td><input type="text" val=""></td> 	
+						</tr>
+					</table>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -234,129 +252,122 @@
 
 <div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
 
-<div class="mask"></div>
 
 <script>
 $("#fbsp").addClass("goods_on");
 
-var _stand ;
+var _stand = 0;
+var check_val;
 
 $(".add_common").on("click",function(){
-	$(".stand1").show();
 	_stand = $(".stand1").data("standard");
-	//alert(_stand);
+	$(".stand1").show();
 })
-	
 
 $(function(){
 	gl();
 })
 
-$(".stand_check").on("click",function(){
-	var display =$('.z_in_height').css('display');
+$(".sck1").on("click",function(){
+	var display =$('.zin1').css('display');
 	
 	if(display == 'none'){
-		$(".z_in_height").show();   
+		$(".zin1").show();   
 	}else{
-		$(".z_in_height").hide();  
+		$(".zin1").hide();  
 	}
 
-	$(".common_a_li").hide();
+	$(".cal1").hide();
 	
 	isnull();
 	
-	var check_val1 = $(".stand_check").text();
-	//alert(check_val1)
-	
-	$(".check_list_info li").on("click",function(){
+	check_val = $(this).text();
+
+	$(".cli1 li").on("click",function(){
 		var _this_val = $(this).text();
 		if(_this_val != check_val){
-			//alert(_this_val+"d"+check_val)
-			$(".add_del_y .yjtj").remove();
-			$(".common_a_li li").show();
+			$(".ady1 .yjtj").remove();
+			$(".cal1 li").show();
 		}else{
-			alert("规格不能相同");
 			return false;
 		}
 	})
 })
 
-$('.check_list_info li').on("click",function(){
+$('.cli1 li').on("click",function(){
 	var _text = $(this).text();
-	$(".stand_check").text(_text);
-	$(".z_in_height").hide();   
+	$(".sck1").text(_text);
+	$(".zin1").hide();   
 	isnull(); 
 })
 
-$(".add_common_a").on("click",function(){
-	$(".common_a_tow").show();
-	$(".common_a_li").show();
+$(".aca1").on("click",function(){
+	$(".cat1").show();
+	$(".cal1").show();
 	gl();
-	$(".result_d .jt_g").remove();
+	$(".rd1 .jt_g").remove();
 });
 
-$(".common_a_li li").on("click",function(){
+$(".cal1 li").on("click",function(){
 	var _child = $(this).text();
 	var _data = _child
 	$(this).hide();
 	
-	$(".result_d").append('<span class="jt_g" data-id='+_data+'>'+_child+'</span>');
-	$(".add_del_y").prepend('<span class="yjtj" data-id='+_data+'>'+_child+'</span>');
+	$(".rd1	").append('<span class="jt_g" data-id='+_data+'>'+_child+'</span>');
+	$(".ady1").prepend('<span class="yjtj" data-id='+_data+'>'+_child+'</span>');
 
 	$(".jt_g").on("click",function(){
 		$(this).remove();
 		var _id = $(this).data("id");
 		
-		$(".add_del_y span").each(function(){
+		$(".ady1 span").each(function(){
 			if(_id == $(this).data("id")){
 				$(this).remove();
 		    }
     	});
 		
-		$(".common_a_li li").each(function(){
+		$(".cal1 li").each(function(){
 		    if(_id == $(this).data("num")){
 		    	$("#"+_id).show();
 		    }
 		});
 	})
 	
-	$(".ok_one").on("click",function(){
+	$(".oo1").on("click",function(){
 		$(".yjtj").show();
-		$(".common_a_tow").hide();
+		$(".cat1").hide();
 	})
 })
 
 function isnull(){
-	var check_val = $(".stand_check").text();
+	var check_val = $(".sck1").text();
 	
 	if(check_val == null || check_val.length == 0) 
 	{ 
-		
-		$(".add_common_a").hide();
-		
+		$(".aca1").hide();
 	}else{
-		$(".add_common_a").show();
+		$(".aca1").show();
 	}
 }
 
 function gl(){
-	$(".check_list_info li:first").addClass("li_on1");
+	$(".cli1 li:first").addClass("li_on1");
 	 
-	$('.check_list_info li').mouseover(function(){
+	$('.cli1 li').mouseover(function(){
 		  $(this).addClass("li_on1");
 	});
-	$('.check_list_info li').mouseout(function(){
+	$('.cli1 li').mouseout(function(){
 		  $(this).removeClass("li_on1");
 	});
 	
 
-	$(".common_a_li li:first").addClass("li_on1");
+	$(".cal1 li:first").addClass("li_on1");
 	 
-	$('.common_a_li li').mouseover(function(){
+	$('.cal1 li').mouseover(function(){
 		  $(this).addClass("li_on1");
 	});
 	
-	$('.common_a_li li').mouseout(function(){
+	$('.cal1 li').mouseout(function(){
 		  $(this).removeClass("li_on1");
 	});
 }
