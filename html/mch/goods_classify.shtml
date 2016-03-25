@@ -41,7 +41,6 @@
 					<tr>	
 						<th width="220px">分类名称</th>
 						<th>分类排序</th>
-						<th>分类图标</th>
 						<th>操作</th>
 					</tr>
 					<tr>
@@ -52,17 +51,23 @@
 								<p>tel</p>
 							</div>
 						</td>
-						<td><input type="text" val="" style="width:60px;"></td>
-						<td><img src="../mch/img/01_ba.png"></td>
-						<td><a href="javascript:;" class="new_adds">新增下级</a><a href="javascript:;" class="del_cla">删除</a></td>
+						<td><span class="nums_px">65</span></td>
+						<td>
+							<a href="javascript:;" class="new_adds">新增下级</a>
+							<a href="javaScript:;" class="edit_type">编辑</a>
+							<a href="javascript:;" class="del_cla">删除</a>
+							</td>
 					</tr>
 					<tr>
 						<td>	
 							<div class="f_type_name">手机</div>
 						</td>
-						<td><input type="text" val="" style="width:60px;"></td>
-						<td><img src="../mch/img/01_ba.png"></td>
-						<td><a href="javascript:;" class="new_adds">新增下级</a><a href="javascript:;" class="del_cla">删除</a></td>
+						<td><span class="nums_px">65</span></td>
+						<td>
+							<a href="javascript:;" class="new_adds">新增下级</a>
+							<a href="javaScript:;" class="edit_type">编辑</a>
+							<a href="javascript:;" class="del_cla">删除</a>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -75,9 +80,9 @@
 <div class="mask"></div>
 
 <div class="add_fix">
-	<div class="add_name_go">分类名称：<input type="text" value></div>
+	<div class="add_name_go"><span class="fill_red">*</span>分类名称：<input type="text" value></div>
 	<div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
-	<div class="add_super_go">上级分类：
+	<div class="add_super_go"><span class="fill_red">*</span>上级分类：
 		<select class="check_s c_goods_type">
 			<option value ="1">酒</option>
 			<option value ="2">衣服</option>
@@ -85,7 +90,7 @@
 			<option value ="4">饮料</option>
 		</select>
 	</div>
-	<div class="add_img_go">分类图标：</div>
+	<div class="add_img_go"><span class="fill_red">*</span>分类图标：</div>
 	<div class="add_img img_go_ds">	
 		<img src="../mch/img/editor_plus.png">			
 		<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload1(this)">	
@@ -95,13 +100,14 @@
 		<p>图片支持格式：jpg,png</p>
 		<p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
 	</div>
+	<div class="add_name_go"> 分类排序：<input type="text" value></div>
 	<div class="btn_save">保存</div>
 </div>
 
 <script>
 $("#spfl").addClass("goods_on");
-
-$(".new_adds").on("click",function(){
+ 
+$(".new_adds,.edit_type").on("click",function(){
 	$(".mask").show();
 	$(".add_fix").show();
 })

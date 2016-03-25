@@ -460,8 +460,8 @@
 	height:28px;
 	vertical-align: middle;	
 }
-.new_adds,.del_cla{
-	margin-left:5px;
+.new_adds,.del_cla,.edit_type{
+	margin-left:15px;
 	cursor:pointer;
 	color:#0085d7;
 }
@@ -526,7 +526,7 @@
 .file_sca_img{
 	font-size:14px;
 	color:#aaa;	
-	margin-left:120px;
+	margin-left:135px;
 }
 .btn_save {
   	background: #f26427;
@@ -540,9 +540,11 @@
   	font-size: 17px;
   	border-radius: 2px;
 }
-
-
-
+.nums_px{
+  	display: inline-block;
+  	border: 1px solid #ddd;
+  	width: 70px;	
+}
 
 
 
