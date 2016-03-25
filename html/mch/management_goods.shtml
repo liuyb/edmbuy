@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/goods.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<style>
+</style>
+
+
+<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+
+<div id="body" class="ifr-body">
+	<!--#include file="goods_left_common.html"-->
+	<div class="goods_right">
+		<div class="goods_nums">
+			<ul>
+				<li id="li1" onclick="f(1)" class="li_on">全部</li>
+				<li id="li2" onclick="f(2)">未处理</li>
+			</ul>
+		</div>
+		
+		<div class="common_go" id="list1">
+			<div class="search_result">
+				<table cellspacing="0" cellpadding="0" class="search_result_tab">
+					<tr>	
+						<th>评价商品</th>
+						<th>评价内容</th>
+						<th>商品评分</th>
+						<th>评价人</th>
+						<th>日期</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+					<tr>
+						<td>
+							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+						</td>
+						<td><p class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</p></td>
+						<td>5</td>
+						<td>昂等非</td>
+						<td>2016-6-6</td>
+						<td>未回复</td>
+						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+						</td>
+						<td><div class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</div></td>
+						<td>5</td>
+						<td>昂等非</td>
+						<td>2016-6-6</td>
+						<td>未回复</td>
+						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+						</td>
+						<td><div class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</div></td>
+						<td>5</td>
+						<td>昂等非</td>
+						<td>2016-6-6</td>
+						<td>未回复</td>
+						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="common_go" id="list2" style="display:none;">
+			<div class="search_result">
+				<table cellspacing="0" cellpadding="0" class="search_result_tab">
+					<tr>	
+						<th>评价商品</th>
+						<th>评价内容</th>
+						<th>商品评分</th>
+						<th>评价人</th>
+						<th>日期</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+					<tr>
+						<td>
+							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+						</td>
+						<td><p class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</p></td>
+						<td>5</td>
+						<td>昂等非</td>
+						<td>2016-6-6</td>
+						<td>未回复</td>
+						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+						</td>
+						<td><div class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</div></td>
+						<td>5</td>
+						<td>昂等非</td>
+						<td>2016-6-6</td>
+						<td>未回复</td>
+						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="batch_week">
+			<div class="batch_r">
+				<span>共20条数据</span>
+				<span class="disabled">上一页</span><span class="current f_on">1</span><span class="current">2</span><span class="disabled">下一页</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
+
+<script>
+$("#pjgl").addClass("goods_on");
+
+//切换
+function f(a){
+	var _li = "#li" + a ;
+	var _list = "#list" + a;
+	
+	$(".goods_nums li").removeClass("li_on");
+	$(".common_go").hide();
+	
+	$(_li).addClass("li_on");
+	$(_list).show();
+}
+</script>
+
+
+
+
+
+
+
+

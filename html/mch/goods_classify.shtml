@@ -28,18 +28,107 @@
 <div id="body" class="ifr-body">
 	<!--#include file="goods_left_common.html"-->
 	<div class="goods_right">
-	
+		<div class="goods_nums">
+			<ul>
+				<li id="li1" onclick="f(1)" class="li_on">管理</li>
+				<li id="li2" onclick="f(2)">新增</li>
+			</ul>
+		</div>
+		
+		<div class="common_go" id="list1">
+			<div class="search_result">
+				<table cellspacing="0" cellpadding="0" class="search_result_tab1">
+					<tr>	
+						<th width="220px">分类名称</th>
+						<th>分类排序</th>
+						<th>分类图标</th>
+						<th>操作</th>
+					</tr>
+					<tr>
+						<td>	
+							<div class="f_type_name f_t_on">手机</div>
+							<div class="f_y_fe">
+								<p>phone</p>
+								<p>tel</p>
+							</div>
+						</td>
+						<td><input type="text" val="" style="width:60px;"></td>
+						<td><img src="../mch/img/01_ba.png"></td>
+						<td><a href="javascript:;" class="new_adds">新增下级</a><a href="javascript:;" class="del_cla">删除</a></td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="f_type_name">手机</div>
+						</td>
+						<td><input type="text" val="" style="width:60px;"></td>
+						<td><img src="../mch/img/01_ba.png"></td>
+						<td><a href="javascript:;" class="new_adds">新增下级</a><a href="javascript:;" class="del_cla">删除</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
 <div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
 
+<div class="mask"></div>
+
+<div class="add_fix">
+	<div class="add_name_go">分类名称：<input type="text" value></div>
+	<div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
+	<div class="add_super_go">上级分类：
+		<select class="check_s c_goods_type">
+			<option value ="1">酒</option>
+			<option value ="2">衣服</option>
+			<option value ="3">食品饮料饮料</option>
+			<option value ="4">饮料</option>
+		</select>
+	</div>
+	<div class="add_img_go">分类图标：</div>
+	<div class="add_img img_go_ds">	
+		<img src="../mch/img/editor_plus.png">			
+		<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload1(this)">	
+	</div>
+	<div class="clear"></div>
+	<div class="file_sca_img">
+		<p>图片支持格式：jpg,png</p>
+		<p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
+	</div>
+	<div class="btn_save">保存</div>
+</div>
+
 <script>
-	$("#spfl").addClass("goods_on");
+$("#spfl").addClass("goods_on");
+
+$(".new_adds").on("click",function(){
+	$(".mask").show();
+	$(".add_fix").show();
+})
+
+$(".f_type_name").on("click",function(){
+	var _t = $(this);
+	if(_t.hasClass("f_t_on")){
+		_t.parent().find(".f_type_name").removeClass("f_t_on");
+		$(".f_y_fe").hide();
+	}else{
+		_t.parent().find(".f_type_name").addClass("f_t_on");
+		$(".f_y_fe").show();
+	}
+})
+
+//切换
+function f(a){
+	var _li = "#li" + a ;
+	var _list = "#list" + a;
+	
+	$(".goods_nums li").removeClass("li_on");
+	$(".common_go").hide();
+	
+	$(_li).addClass("li_on");
+	$(_list).show();
+}
 </script>
-
-
-
 
 
 
