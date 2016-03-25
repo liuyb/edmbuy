@@ -130,14 +130,15 @@ class Partner_Controller extends MobileController {
 	 * @throws ViewResponse
 	 */
 	public function partner_commission(Request $request, Response $response){
+		$this->setPageView($request, $response, '_page_mpa');
 	    $this->v->set_tplname('mod_partner_commission');
 	    $this->nav_no = 0;
 	    $this->topnav_no = 1;
 	    if ($request->is_hashreq()) {
-	        $status = $_REQUEST['status'];
-	        $this->v->assign("status", $status);
+
 	    }
-	    
+	    $status = $_REQUEST['status'];
+	    $this->v->assign("status", $status);
 	    throw new ViewResponse($this->v);
 	}
 	

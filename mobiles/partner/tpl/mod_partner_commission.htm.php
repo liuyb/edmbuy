@@ -9,23 +9,15 @@
 <div class="header broke">
 	<ul>
 		<li class="<?php if ($status == 1):?>broke_on<?php endif;?>" id="broke1" onclick="showByStatus(this, 1)">已生效</li>
-		<li class="<?php if ($status == 0):?>broke_on<?php endif;?>" style="margin-left:20%;" id="broke2" onclick="showByStatus(this, 0)">未生效</li>
-		<a href="javascript:goBack();" class="back"></a>
-		<span class="broke_line"></span>
+		<li class="<?php if ($status == 0):?>broke_on<?php endif;?>" id="broke2" onclick="showByStatus(this, 0)" style="margin-left:20%;">未生效</li>
 	</ul>
+	<a href="javascript:goBack();" class="back"></a>
+	<span class="broke_line"></span>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
-<style>
-.animation_tr{
-	display : none;
-}
-</style>
 <div class="broke_list" id="list1">
-	<div class="wsx_broke_ts" style="display:none;">
-		<p class="wsx_ts_tit">怎样才能生效?</p>
-	</div>
-	
+	<div class="wsx_broke_ts hide"><p class="wsx_ts_tit">怎样才能生效?</p></div>
 	<div class="broke_tab">
 		<table cellspacing="0" cellpadding="0" class="broke_table" style="border-collapse:inherit">
 			<tr>
@@ -83,9 +75,9 @@
 
 <script>
 var variable = {};
-variable.status = "<?=$status ?>";
+variable.status = "<?=$status?>";
 //切换
-if(variable.status == 0){
+if(variable.status == '0'){
 	$(".wsx_broke_ts").show();
 }
 function showByStatus(obj, status){
@@ -204,7 +196,7 @@ function renderDataRegion(data, isPullData){
 		$(this).show('slow');
 		$(this).removeClass("animation_tr");
 	});
-	F.set_scroller(false, 100);
+	//F.set_scroller(false, 100);
 };
 //当还有下一页时处理下拉
 function handleWhenHasNextPage(data, level){

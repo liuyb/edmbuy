@@ -30,8 +30,8 @@ body.SPA.greybg,body.MPA.greybg { background: #eee; }
 a { color: #333; }
 a:hover { text-decoration: none; }
 a.op { color: #00a0f8;font-size: 14px;font-size: 1.4rem; }
-a.btna { display: block;height: 100%; }
-a.blka { display: block; }
+a.btna { display: block;height: 100%;cursor: default; }
+a.blka { display: block;cursor: default; }
 .cursor { cursor: pointer; }
 .hwspeed { transform: translate3d(0, 0, 0);-webkit-transform: translate3d(0, 0, 0);-moz-transform: translate3d(0, 0, 0);-ms-transform: translate3d(0, 0, 0);-o-transform: translate3d(0, 0, 0); }
 .btn {
@@ -162,7 +162,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 .nav li a{ display: block;height: 49px;text-align: center;position: relative; }
 
 /*顶部导航*/
-.topnav { height: 45px;color: #5f646e;background: #fff;position: relative; }
+.topnav { height: 45px;width: 100%;color: #5f646e;background: #fff;position: relative; }
 .topnav-0 { display: none; }
 
 /*pic slider*/
@@ -1973,6 +1973,7 @@ a.ph_btn{
   text-align:right;
   line-height:40px;
 }
+.animation_tr { display: none; }
 .partner_ad{
   height:44px;
   background:#fff url(../img/back.png) no-repeat 97% center;  
