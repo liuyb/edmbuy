@@ -2,10 +2,10 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li style="display:block"><a href='http://m.edmbuy.com/item/1093'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/homepage_ad_1.jpg"></a></li>
-    <li><a href="http://m.edmbuy.com/item/1010"><img src="/themes/mobiles/img/banner04.jpg"></a></li>
-    <li><a href="http://m.edmbuy.com/item/1045"><img src="/themes/mobiles/img/banner02.png"></a></li>
-    <li><a href="http://m.edmbuy.com/item/1016"><img src="/themes/mobiles/img/banner03.png"></a></li>
+    <li style="display:block"><a href="<?php echo U('zt/newtea')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/2016newtea.png"></a></li>
+    <li><a href='<?php echo U('item/1093')?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/homepage_ad_1.jpg"></a></li>
+    <li><a href="<?php echo U('item/1045')?>"><img src="/themes/mobiles/img/banner02.png"></a></li>
+    <li><a href="<?php echo U('item/1016')?>"><img src="/themes/mobiles/img/banner03.png"></a></li>
     </ul>
     <div id="slinav" class="slinav clearfix">
     <a href="javascript:void(0);" class="active">1</a>
