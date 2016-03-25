@@ -45,6 +45,7 @@ class Partner_Controller extends MobileController {
 	 */
 	public function index(Request $request, Response $response)
 	{
+		$this->setPageView($request, $response, '_page_mpa');
 		$this->v->set_tplname('mod_partner_index');
         $this->topnav_no = 0;
         $this->nav_no    = 1;

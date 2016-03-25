@@ -19,22 +19,22 @@
 	<div class="guest_main">
 		<ul>
 				<li>
-				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',1);">
+				<div class="cursor" onclick="showLevelList('/partner/list',1)">
 					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
-				</a>
+				</div>
 				</li>
 				<li>
-				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',2);">
+				<div class="cursor" onclick="showLevelList('/partner/list',2)">
 					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
-				</a>
+				</div>
 				</li>
 				<li>
-				<a class="blka" href="javascript:;" onclick="showLevelList('/partner/list',3);">
+				<div class="cursor" onclick="showLevelList('/partner/list',3)">
 					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
-				</a>
+				</div>
 				</li>
 		</ul>
 	</div>
@@ -83,7 +83,7 @@
 <div class="guest_list">
 	<ul>
 		<li>
-			<a href="/item/promote" class="blka">
+			<a href="<?php echo U('item/promote')?>" class="blka">
 				<h1><img src="/themes/mobiles/img/tui.png"></h1>
 				<p>我要推广</p>
 			</a>
