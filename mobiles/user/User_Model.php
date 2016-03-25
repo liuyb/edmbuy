@@ -167,7 +167,7 @@ class User_Model extends Model
             $condition = "=" . $res;
         }
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
-                info.order_status,info.shipping_status,info.shipping_confirm_time,
+                info.order_status,info.shipping_status,info.pay_status,info.shipping_confirm_time,
                 goods.goods_name,goods.goods_thumb
  				from shp_order_goods orders LEFT JOIN shp_goods goods on orders.goods_id = goods.goods_id
  				LEFT JOIN shp_order_info info on orders.order_id=info.order_id
@@ -178,7 +178,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'],$g['shipping_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'],$g['pay_status'],$g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -188,31 +188,36 @@ class User_Model extends Model
      * @auth hc_edm
      * @param $order_status 订单状态
      */
-    static function CheckOrderStatus($order_status, $shipping_status, $shipping_confirm_time)
+    static function CheckOrderStatus($order_status, $pay_status, $shipping_status, $shipping_confirm_time)
     {
         $msg = "";
-        if ($order_status == OS_CANCELED || $order_status == OS_INVALID
-            || $order_status == OS_RETURNED || $order_status == OS_REFUND
-        ) {
-            $msg = "已取消";
-        } elseif ($shipping_status == SS_UNSHIPPED || $shipping_status == SS_PREPARING
-            || $shipping_status == SS_SHIPPED_ING
-        ) {
-            $msg = "未发货";
-        } elseif ($shipping_status == SS_SHIPPED || $shipping_status == SS_SHIPPED_PART
-            || $shipping_status == OS_SHIPPED_PART
-        ) {
-            $msg = "已发货";
-        } elseif ($shipping_status == SS_RECEIVED) {
-            $nowDateTime = strtotime(date("Y-m-d"));
-            $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
-            if($days>7){
-                    $msg="已生效";
-            }else{
-                $msg = "已签收第" . $days . "天";
-            }
+        if ($pay_status == PS_PAYED) {
+        	if ($shipping_status==SS_RECEIVED) {
+        		$nowDateTime = simphp_gmtime();
+        		$days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
+        		if($days>7){
+        			$msg="佣金已生效";
+        		}else{
+        			$msg = "已签收" . $days . "天";
+        		}
+        	}
+        	elseif (in_array($shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART])) {
+        		$msg = "已发货";
+        	}
+        	else{
+        		$msg = "未发货";
+        	}
         }
-                return $msg;
+        else {
+        	$msg = "未支付";
+        	if ($order_status==OS_CANCELED) {
+        		$msg = "已取消";
+        	}
+        	elseif (in_array($order_status,[OS_REFUND,OS_REFUND_PART])) {
+        		$msg = "已退款";
+        	}
+        }
+        return $msg;
     }
 
     /**
