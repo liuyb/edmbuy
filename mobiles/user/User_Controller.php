@@ -606,7 +606,7 @@ class User_Controller extends MobileController
             }
             $cUser = User_Model::findUserInfoById($user_id);
             //根据user_id获得用户的信息 获取每一个订单号下的商品
-            $data = User_Model::getOrderInfo($order_id);
+            $data = User_Model::getOrderInfo($order_id,$user_id);
             $this->v->assign('userInfo',$data['userInfo']);
             $this->v->assign('goodsInfo',$data['goodsInfo']);
             $this->v->assign('level',$level);
@@ -625,7 +625,7 @@ class User_Controller extends MobileController
         	];
         	$this->v->assign('share_info', $share_info);
         }
-        throw new ViewResponse($this->v);
+             throw new ViewResponse($this->v);
     }
     public function update_nickname(Request $request, Response $response){
         if ($request->is_post()) {

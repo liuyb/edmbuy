@@ -106,7 +106,7 @@ class User_Model extends Model
      * @param $user_id
      * @param $order_sn
      */
-    static function getOrderInfo($order_id)
+    static function getOrderInfo($order_id,$user_id)
     {
         $result = [];
         $dbDrver = D();
@@ -122,13 +122,24 @@ class User_Model extends Model
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
         $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
-        $commision = UserCommision::user_share($userInfo['commision'], 1);
+        /**
+         * 获取用户的佣金
+         */
+        $commision =self::getUserCommision($order_id,$user_id);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
         $result['commision'] = $commision;
         return $result;
     }
 
+    /**
+     * 获得用户的金额
+     */
+        static function getUserCommision($order_id,$user_id){
+            $sql="select commision  from shp_user_commision where user_id={$user_id} and order_id = {$order_id}";
+            $commsion=D()->query($sql)->result();
+            return $commsion;
+        }
     /**
      * 获取订单商品列表
      * @auth hc_adm
@@ -155,7 +166,6 @@ class User_Model extends Model
             $res = $userInfo['order_id'];
             $condition = "=" . $res;
         }
-        //判断是否为米商
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
                 info.order_status,info.shipping_status,info.shipping_confirm_time,
                 goods.goods_name,goods.goods_thumb
