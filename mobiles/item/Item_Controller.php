@@ -181,8 +181,10 @@ class Item_Controller extends MobileController {
 	}
 	
 	public function item_promote(Request $request, Response $response){
-	    $this->v->set_tplname('mod_item_promote');
-	    $this->topnav_no    = 1;
+	  $this->setPageView($request, $response, '_page_mpa');  
+		$this->v->set_tplname('mod_item_promote');
+	    $this->topnav_no = 1;
+	    $this->nav_no    = 0;
 	    throw new ViewResponse($this->v);
 	}
 	

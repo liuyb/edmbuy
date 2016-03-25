@@ -19,19 +19,19 @@
 	<div class="guest_main">
 		<ul>
 				<li>
-				<div class="cursor" onclick="showLevelList('/partner/list',1)">
+				<div onclick="showLevelList('/partner/list',1)">
 					<h1 id="LevelCount1">0</h1>
 					<p>一层</p>
 				</div>
 				</li>
 				<li>
-				<div class="cursor" onclick="showLevelList('/partner/list',2)">
+				<div onclick="showLevelList('/partner/list',2)">
 					<h1 id="LevelCount2">0</h1>
 					<p>二层</p>
 				</div>
 				</li>
 				<li>
-				<div class="cursor" onclick="showLevelList('/partner/list',3)">
+				<div onclick="showLevelList('/partner/list',3)">
 					<h1 id="LevelCount3">0</h1>
 					<p>三层</p>
 				</div>

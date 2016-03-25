@@ -51,12 +51,14 @@ class User_Controller extends MobileController
      */
     public function index(Request $request, Response $response)
     {
+    	$this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_index');
         if ($request->is_hashreq()) {
-            $this->showUserBaseInfo();
+            //$this->showUserBaseInfo();
         } else {
             //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
             Users::check_detail_info();
+            $this->showUserBaseInfo();
         }
         throw new ViewResponse($this->v);
     }
@@ -78,11 +80,13 @@ class User_Controller extends MobileController
      */
     public function user_setting(Request $request, Response $response)
     {
+    	$this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_setting');
         $this->topnav_no = 1;
         if ($request->is_hashreq()) {
-            $user = $this->showUserBaseInfo();
+            //$user = $this->showUserBaseInfo();
         }
+        $user = $this->showUserBaseInfo();
         throw new ViewResponse($this->v);
     }
 
