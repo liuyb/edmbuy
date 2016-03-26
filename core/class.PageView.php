@@ -143,8 +143,17 @@ class PageView extends View {
     $foot_css.= $this->append_to_foot_css;
     $foot_js .= $this->append_to_foot_js;
     
-    $content  = str_replace(array('<!--#HEAD_CSS#-->','<!--#HEAD_JS#-->','<!--#FOOT_JS#-->','<!--#FOOT_CSS#-->'), 
-                            array($head_css,$head_js,$foot_js,$foot_css), $content);
+    // Appending extra css to header
+    //<!--[HEAD_CSS]-->(.*)<!--[/HEAD_CSS]-->
+    $ext_css = array();
+    $content = preg_replace_callback('/<!--\[HEAD_CSS]-->(.*)<!--\[\/HEAD_CSS\]-->/sU', function($matches) use(&$ext_css){
+    	$ext_css[] = $matches[1];
+    	return '';
+    }, $content);
+    $head_css.= implode('', $ext_css);
+    
+    $content = str_replace(array('<!--#HEAD_CSS#-->','<!--#HEAD_JS#-->','<!--#FOOT_JS#-->','<!--#FOOT_CSS#-->'), 
+                           array($head_css,$head_js,$foot_js,$foot_css), $content);
     
     return $content;
   }
