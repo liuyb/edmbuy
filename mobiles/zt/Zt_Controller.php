@@ -58,8 +58,8 @@ class Zt_Controller extends MobileController {
 		
 		//分享信息
 		$share_info = [
-				'title' => '初茶一舍2016雨前上品龙井新茶预定',
-				'desc'  => '西湖，龙井的故乡，茶树已悄然破芽，与柳枝竹梢编织着三月的水墨江南。',
+				'title' => '【西湖明前龙井43号】2016雨前上品龙井43号新茶预定',
+				'desc'  => '西湖明前龙井43号，2016新茶春茶上市益多米优惠5折购',
 				'link'  => U('zt/newtea', 'spm='.Spm::user_spm(), true),
 				'pic'   => U('misc/images/tea/newtea_01.jpg','',true),
 		];
