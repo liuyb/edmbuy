@@ -174,11 +174,12 @@ class Trade_Controller extends MobileController {
    */
   public function cart_list(Request $request, Response $response)
   {
+  	//$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_cart_list');
     $this->nav_flag1 = 'cart';
     $this->nav_no    = 1;
     $this->topnav_no = 1;
-    $this->backurl = '/';
+    $this->backurl   = '/';
     
     $shop_uid = Cart::shopping_uid();
     $cartNum  = Cart::getUserCartNum($shop_uid);
