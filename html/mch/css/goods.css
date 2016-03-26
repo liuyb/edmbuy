@@ -459,7 +459,7 @@
 .search_result_tab1 img{
 	width:28px;
 	height:28px;
-	vertical-align: middle;	
+	vertical-align: middle;
 }
 .new_adds,.del_cla,.edit_type{
 	margin-left:15px;
@@ -515,7 +515,7 @@
 }
 .img_go_ds{
 	margin-top:25px;
-	margin-left:20px;	
+	margin-left:20px;
 }
 .dj_fil{
   	width: 100px;
@@ -556,7 +556,7 @@
 }
 .close_gg{
   	position: absolute;
-  	right: -10px;	
+  	right: -10px;
 }
 .mask_bg{
 	display:none;

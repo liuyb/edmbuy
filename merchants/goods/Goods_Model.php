@@ -28,20 +28,20 @@ class Goods_Model extends Model
             $goods->save(($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE));
             $goods_id = $is_insert ? D()->insert_id() : $goods->item_id;
             $other_cat =  isset($_POST['other_cat']) ? $_POST['other_cat'] : [];
-            
+
             self::handle_other_cat($is_insert, $goods_id,$goods->cat_id, array_unique($other_cat));
-            
+
             if (isset($_POST['gallery_list'])) {
                 self::handle_goods_gallery($is_insert, $goods_id, $_POST['gallery_list']);
             }
-            
+
             if (isset($_POST['attribute_list'])) {
                 self::handle_goods_attribute($is_insert, $goods_id, $_POST['attribute_list']);
             }
-            
+
         } catch (Exception $e) {
             D()->rollback();
-            $ret = false; 
+            $ret = false;
         }finally{
             D()->commit();
         }
@@ -50,7 +50,7 @@ class Goods_Model extends Model
 
     /**
      * 保存某商品的扩展分类
-     * 
+     *
      * @param int $goods_id
      *            商品编号
      * @param array $cat_list
@@ -64,7 +64,7 @@ class Goods_Model extends Model
         if(!$is_insert){
             /* 查询现有的扩展分类 */
             $exist_list = Goods_Atomic::get_goods_ext_category($goods_id);
-            
+
             /* 删除不再有的分类 */
             $delete_list = array_diff($exist_list, $cat_list);
             if ($delete_list) {
@@ -72,7 +72,7 @@ class Goods_Model extends Model
     	        AND cat_id " . Func::db_create_in($delete_list). " and is_main = 0 ";
                 D()->query($sql);
             }
-            
+
             /* 添加新加的分类 */
             $add_list = array_diff($cat_list, $exist_list, array(
                 0
@@ -93,7 +93,7 @@ class Goods_Model extends Model
             D()->query($sql);
         }
     }
-    
+
     /**
      * 商品相册处理
      * @param unknown $goods_id
@@ -118,25 +118,25 @@ class Goods_Model extends Model
             $sql .= $batchs;
         }
     }
-    
+
     //商品属性处理
     private static function handle_goods_attribute($is_insert, $goods_id, array $attribute_list){
         if(!$is_insert){
             // 删除原数据
             Goods_Atomic::delete_goods_attr($goods_id);
         }
-        
+
         foreach ($attribute_list as $attr) {
             $sql = "INSERT INTO shp_goods_attr(goods_id, attr_id, attr_value, attr2_id, attr2_value, attr3_id, attr3_value,
                     market_price, shop_price, income_price, cost_price, goods_number) " .
-                    "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."', 
+                "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."',
                         '".self::setDefaultValueIfUnset($attr ,'attr_id2', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value2', '')."',
                         '".self::setDefaultValueIfUnset($attr ,'attr_id3', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value3', '')."',
                         $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
             D()->query($sql);
         }
     }
-    
+
     private static function setDefaultValueIfUnset($arr, $key, $default){
         if($arr && $key){
             if(isset($arr[$key])){
@@ -145,7 +145,7 @@ class Goods_Model extends Model
         }
         return $default;
     }
-    
+
     /**
      * 删除指定商品
      * @param unknown $goods_id
@@ -167,7 +167,7 @@ class Goods_Model extends Model
             D()->commit();
         }
     }
-    
+
     static function batchUpdateGoods(array $goods_ids, $field, $val){
         if(empty($goods_ids)){
             return 0;
@@ -177,7 +177,7 @@ class Goods_Model extends Model
         D()->query($sql);
         return D()->affected_rows();
     }
-    
+
     /**
      * 分页显示商品列表
      * @param Pager $pager
@@ -217,9 +217,9 @@ class Goods_Model extends Model
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
-        
+
     }
-    
+
     /**
      * 对商品图片做处理
      * @param unknown $goods
@@ -239,29 +239,47 @@ class Goods_Model extends Model
 
 
     /**
-     * @auth hc_edm
-     * 获取商家的分类列表
+     * 获取分页列表
+     * @param $pager
+     * @param $options
+     * @return array|bool
      */
-    static function getCategoryList()
+    static function getCatePageList(Pager $pager, array $options)
     {
-        $merchant_id = $GLOBALS['user']->uid = "mc_56f279b356351";
-        Cookie::set("merchant_id", $merchant_id);
+        $merchant_id = $options['merchant_id'];
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select cat_id, cat_name,parent_id,cat_url,sort_order from shp_category where merchant_id ='{$merchant_id}' order by sort_order ASC ";
+        $sql = "select count(1) from shp_category where merchant_id='{$merchant_id}' and parent_id = 0 and cat_level =1";
+        $totalCount = D()->query($sql)->result();
+        $pager->setTotalNum($totalCount);
+        $limit = $pager->start . "," . $pager->pagesize;
+        $sql = "select cat_id, cat_name,parent_id,cate_thums,sort_order from shp_category where merchant_id ='{$merchant_id}' and parent_id = 0 and cat_level =1 order by sort_order ASC  limit {$limit}";
         $list = D()->query($sql)->fetch_array_all();
+        $data = self::getChirlList($merchant_id);
+        $p = 0;
+        for ($i = 0; $i < count($list); $i++) {
+            for ($j = 0; $j < count($data); $j++) {
+                if ($list[$i]['cat_id'] == $data[$j]['parent_id']) {
+                    $list[$i]['childs'][$p] = $data[$j];
+                    $list[$i]['flat'] = true;
+                    $p++;
+                }
+            }
+            $p = 0;//清零
+        }
+        $pager->result = $list;
         return $list;
     }
 
-    /**@auth hc_edm
-     * 判断是否有了二个分类
+    /**
+     * 获取所有的二级分类
      * @param $cat_id
      */
-    static function isHadCategory($cat_id)
+    static function getChirlList($merchant_id)
     {
-        $sql = "select parent_id from shp_category where cat_id = '%s' ";
-        $result = D()->query($sql, $cat_id)->get_one();
+        $sql = "select cat_id, cat_name,parent_id,cate_thums,sort_order from shp_category WHERE parent_id > 0 and merchant_id='{$merchant_id}' and cat_level = 2";
+        $result = D()->query($sql)->fetch_array_all();
         return $result;
     }
 
@@ -276,40 +294,52 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select cat_name ,cat_id ,cat_url from shp_category where merchant_id = %d";
+        $sql = "select cat_name ,cat_id ,cate_thums from shp_category where merchant_id ='%s' and parent_id=0";
         $list = D()->query($sql, $merchant_id)->fetch_array_all();
         return $list;
     }
+
 
     /**
      * 新增一个分类
      * @param int $cat_id
      */
-    static function addCategory($cateArr,$cat_id = 0)
+    static function addCategory($cateArr, $cat_id = 0)
     {
         /**
          * cat_id=0为新增加一个分类
          */
         $merchant_id = $GLOBALS['user']->uid;
-        if (!$cat_id) {
-            $insertarr['parent_id']=0;
-        }else{
-            $insertarr['parent_id']=$cat_id;
+        if (intval($cat_id) == 0) {
+            $insertarr['parent_id'] = 0;
+            $insertarr['cat_level'] = 1;
+        } else {
+            $insertarr['parent_id'] = $cat_id;
+            $insertarr['cat_level'] = 2;
         }
         $insertarr['cat_name'] = $cateArr['cat_name'];
-        $sql="select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s' ";
-        $cat_name=D()->query($sql,$insertarr['cat_name'], $merchant_id)->result();
-        if($cat_name){
+        $sql = "select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s'";
+        $cat_name = D()->query($sql, $insertarr['cat_name'], $merchant_id)->result();
+        if ($cat_name && !$cateArr['edit']) {
             return "分类名已存在！";
         }
         $tablename = "`shp_category`";
         $insertarr['merchant_id'] = $merchant_id;
         $insertarr['cate_thums'] = isset($cateArr['cate_thums']) ? $cateArr['cate_thums'] : '';
         $insertarr['sort_order'] = isset($cateArr['sort_order']) ? $cateArr['sort_order'] : 0;
-        return D()->insert($tablename,$insertarr);
-    
+        if ($cateArr['edit'] != 1) {
+            return D()->insert($tablename, $insertarr);
+        } else {
+            unset($insertarr['merchant_id']);
+            unset($insertarr['parent_id']);
+            unset($insertarr['cat_level']);
+            $whereArr['cat_id'] = $cat_id;
+            return D()->update($tablename, $insertarr, $whereArr);
+        }
+
+
     }
-    
+
 
     /**
      * 删除一个分类
@@ -327,14 +357,103 @@ class Goods_Model extends Model
         $where = array(
             'cat_id' => $cat_id,
         );
+        $table = "`shp_category`";
+
         if ($parent_id > 0) {
-            $where=array(
-                'cat_id'=>array('in',"$parent_id,$cat_id")
-            );
+            /*
+             * 如果删除的是二级分类
+             */
+            $result = self::updateCateStatus($cat_id, $table, $parent_id);
+        } else {
+            /**
+             * 如果删除的是一级分类
+             */
+            $result = self::updateCateStatus($cat_id, $table);
         }
-        $result= D()->delete('category', $where);
-        var_dump(D()->getSqlFinal());exit;
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
-    
+
+    static function updateCateStatus($cat_id, $table, $parent_id = 0)
+    {
+        //查出关联表中所有的goods_id
+        $where = "cat_id = {$cat_id}";
+        if ($parent_id == 0) {//如果parent_id=0则代表是一级分类
+            //求出所有的cat_id
+            $cat_where = "parent_id ={$cat_id}";
+            $sql = "select cat_id from shp_category where $cat_where";
+            $cat_ids = D()->query($sql)->fetch_array_all();
+            $cats = "";
+            foreach ($cat_ids as $id) {
+                $cats .= $id['cat_id'] . ",";
+            }
+            $cats = rtrim($cats, ",");
+            $where = "cat_id in($cat_id,{$cats})";
+            if (empty($cats)) {
+                $where = "cat_id ={$cat_id}";
+            }
+        }
+        $sql = "select goods_id from shp_goods_cat where {$where}";
+        $goods_ids = D()->query($sql)->fetch_array_all();
+        $ids = "";
+        foreach ($goods_ids as $id) {
+            $ids .= $id['goods_id'] . ",";
+        }
+        $ids = rtrim($ids, ",");
+        $setarr['cat_level'] = 0;
+//        $whereIds = "goods_id in({$ids})"; //得到条件
+        //0代表没有分类
+        $category = D()->update($table, $setarr, $where);//第一步更新分类表的cat_level
+        //第二步更新goods_cat关联表
+        //$cateTable = "`shp_goods_cat`";
+        // $goods_cat = D()->delete($cateTable, $whereIds);//删除goods_cat表中的记录
+        //第三步更新shp_goods中的cat_id字段
+        //
+        $sql = "select cat_id from shp_goods where $where";
+        $result = D()->query($sql)->fetch_array_all();
+        if (!$result && $category) {
+            return true;
+        }
+        $set['cat_id'] = 0;
+        $goods = D()->update("`shp_goods`", $set, $where);
+        return $category && $goods;
+    }
+
+    /**
+     * 判断是否已经有了二级分类
+     * @param $cat_id
+     */
+    static function IsHadCategory($cat_id)
+    {
+        $sql = "select parent_id from shp_category WHERE  cat_id=%d and cat_level = 2";
+        $parent_id = D()->query($sql, $cat_id)->get_one();
+        return $parent_id;
+    }
+
+    /**根据cat_id获取分类信息
+     * @param $cat_id
+     */
+    static function getOneCategory($cat_id)
+    {
+        $sql = "select cate_thums,cat_name ,sort_order from shp_category where cat_id = {$cat_id}";
+        return D()->query($sql)->get_one();
+    }
+
+    /**
+     * 更新分类short_order
+     * @param $cat_id
+     * @param $short_order
+     */
+    static function updateShortOrder($cat_id,$short_order){
+        $tablename = "`shp_category`";
+        $setArr['sort_order']=$short_order;
+        $wherearr['cat_id']=$cat_id;
+        return D()->update($tablename,  $setArr, $wherearr);
+
+    }
+
 }

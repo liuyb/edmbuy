@@ -1,0 +1,58 @@
+<!--{add_css file="index.css" scope="global"}-->
+<!--{add_js file="user.css"}-->
+<style>
+</style>
+<div id="login">
+    <h1>找回密码</h1>
+    <form name="loginForm" id="loginForm" method="POST" action="/login">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="in-phone">
+                    <input type="text" value="" placeholder="请输入手机号码" name="phone"/>
+                    <button type="button" value="" style="width: 120px;height: 20px;">点击获取验证码</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" value="" placeholder="请输入手机验证码" name="phoneCode"/>
+                </td>
+            </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="下一步" />
+                    </td>
+                </tr>
+        </table>
+    </form>
+</div>
+<script>
+    $("#loginForm").submit(function(){
+            if($("#loginForm input[name=phone]").val()==''){
+                    alert("不能为空！")
+                    return false;
+            }
+                if($("#loginForm input[name=phoneCode]").val()==''){
+                    alert("不能为空！")
+                    return false;
+                }
+                if(typeof doing == 'undefined'){
+                         var doing = 0;
+                     }
+                 if(doing==1){
+                    return false;
+                  }
+                url="/checkSmsCode"
+                var phone = $("#loginForm input[name=phone]").val();
+                var phoneCode=$("#loginForm input[name=phoneCode]").val()
+                var data ={'phone':phone,'imgCode':phoneCode};
+                 $.get(url,data,function(ret){
+                     if(ret.status==0){
+                            alert(ret.retmsg);
+                     }else{
+                          doing = 1;
+                         window.location.href="/setpassword";
+                     }
+                 },"JSON")
+                    return false;
+    });
+</script>

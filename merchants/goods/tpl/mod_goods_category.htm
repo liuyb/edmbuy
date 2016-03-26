@@ -1,0 +1,193 @@
+<!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="goods_right">
+        <div class="goods_nums">
+            <ul>
+                <li id="li1" onclick="f(1)" class="li_on">管理</li>
+                <li id="li2" onclick="addGoodsCatery('new')">新增</li>
+            </ul>
+        </div>
+
+        <div class="common_go" id="list1">
+            <div class="search_result">
+                <table cellspacing="0" cellpadding="0" class="search_result_tab1" id="resultList">
+                    <tr>
+                        <th width="220px">分类名称</th>
+                        <th>分类排序</th>
+                        <th>操作</th>
+                    </tr>
+                </table>
+                <div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        loadTableContent(1, true);
+    });
+    function loadTableContent(curpage, isinit, param) {
+
+        var container = $("#resultList");
+        container.find("tr:gt(0)").remove();
+
+        curpage = curpage ? curpage : 1;
+        var data = {"current_page": curpage}
+        F.get('/goods/getCateList', data, function (ret) {
+            var TR = "";
+            if (!ret || !ret.result.length) {
+                TR = "<tr><td colspan='4' style='text-align:center;'>还没有数据~</td></tr>";
+            } else {
+                var result = ret.result;
+                result.forEach(function (item) {
+                    TR += costructHtml(item);
+                });
+            }
+            container.append($(TR));
+            if (isinit) {
+                generatePage(ret.curpage, ret.maxpage, ret.totalnum);
+            }
+        });
+    }
+    /**
+     * 得到html
+     */
+    function costructHtml(item) {
+
+        var TR = "";
+        TR += "<tr><td><div class='f_type_name ' data-type=" + item.cat_id + ">" + item.cat_name + "</div>" +
+                "<div class='f_y_fe' data-type=" + item.cat_id + ">"
+        if (item.flat) {
+            // console.log(item.childs);
+            var cate = item.childs
+            for (var i = 0; i < cate.length; i++) {
+                TR += "<p style='margin:0;'>" + cate[i]['cat_name'] + "</p>";
+            }
+        }
+        TR += "</div></td><td>" +
+                "<input class='nums_px' data-id="+item.cat_id+" value="+item.sort_order+" style='text-align: center;' /></td><td>";
+
+        TR += "<div style='padding:10px 0;'><a href='javascript:;'onclick='addGoodsCatery(" + item.cat_id + ")'  class='new_adds'>新增下级</a>" +
+                "<a href='javaScript:;' onclick='editGoodsCatery(" + item.cat_id + ")' class='edit_type'>编辑</a>" +
+                "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ")' class='del_cla'>删除</a></div>";
+        if (item.flat) {
+            var cate = item.childs
+            for (var i = 0; i < cate.length; i++) {
+                TR+="<div class='f_y_fe' data-type=" + item.cat_id + ">"+
+                        "<a href='javascript:;'onclick='addGoodsCatery(" + cate[i]['cat_id'] + ")'  class='new_adds'>新增下级</a>" +
+                        "<a href='javaScript:;' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' class='edit_type'>编辑</a>" +
+                        "<a href='javascript:;'   onclick='delCategory(" +cate[i]['cat_id'] + ")' class='del_cla'>删除</a></div>";
+
+            }
+        } else {
+            TR += "</td></tr>";
+        }
+        return TR;
+    }
+
+    /**
+     * 新增分类
+     * @param pageNo
+     * @param totalPage
+     * @param totalRecords
+     */
+    function addGoodsCatery(cat_id) {
+        layer.open({
+            type: 2,
+            title: '新增分类',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['470px', '512px'],
+            content: '/goods/catetory?cat_id=' + cat_id//iframe的url
+        });
+    }
+
+    function editGoodsCatery(cat_id){
+        layer.open({
+            type: 2,
+            title: '编辑分类',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['470px', '512px'],
+            content: '/goods/catetory?cat_id=' + cat_id+"&edit=1"//iframe的url
+        });
+    }
+    /**
+     *删除一个分类
+     */
+    function delCategory(cat_id) {
+        layer.confirm('删除该分类会同时删除该分类下的子分类,您确定删除吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var data = {"cat_id": cat_id}
+            $.post("/goods/delcatery", data, function (ret) {
+                layer.msg(ret.retmsg)
+                setTimeout(function(){
+                    window.location.reload()
+                },1500);
+            })
+        });
+    }
+    function generatePage(pageNo, totalPage, totalRecords) {
+        //生成分页
+        kkpager.generPageHtml({
+            pno: pageNo,
+            //总页码
+            total: totalPage,
+            //总数据条数
+            totalRecords: totalRecords,
+            isGoPage: false,
+            mode: 'click',
+            click: function (n) {
+                this.selectPage(n);
+                loadTableContent(n, false);
+            }
+        }, true);
+    }
+    ;
+</script>
+
+<script>
+    $("#spfl").addClass("goods_on");
+
+    $(".new_adds").on("click", function () {
+        $(".mask").show();
+        $(".add_fix").show();
+    })
+    $(document).on('click', '.f_type_name', function () {
+        var _t = $(this);
+        var type = _t.attr('data-type')
+        if (_t.hasClass("f_t_on")) {
+            _t.parent().find(".f_type_name[data-type=" + type + "]").removeClass("f_t_on");
+            $(".f_y_fe[data-type=" + type + "]").hide();
+        } else {
+            _t.parent().find(".f_type_name[data-type=" + type + "]").addClass("f_t_on");
+            $(".f_y_fe[data-type=" + type + "]").show();
+        }
+    })
+
+    //切换
+    function f(a) {
+        var _li = "#li" + a;
+        var _list = "#list" + a;
+
+        $(".goods_nums li").removeClass("li_on");
+        $(".common_go").hide();
+
+        $(_li).addClass("li_on");
+        $(_list).show();
+    }
+
+   $(document).on('mouseleave','.nums_px',function(){
+       var cat_id=$(this).attr("data-id")
+       var short_order=$(this).val();
+        var data={'cat_id':cat_id,'short_order':short_order};
+       $.get('/goods/updateShortOrder',data,function(){
+       });
+   })
+
+</script>
