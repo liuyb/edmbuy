@@ -342,7 +342,7 @@
   	border: 1px solid #ddd;	
 	left:-1px;
 	position: absolute;
-	z-index:1111;
+	z-index:2222;
 }
 .check_list_info li{
   	padding-left: 8px;	
@@ -354,7 +354,7 @@
 }
 .add_common_a{
   	font-size: 14px;
-  	color: #f46267;	
+  	color: #0085d7;	
 	display:none;
 	position: relative;	
 	cursor:pointer;
@@ -378,6 +378,7 @@
   	margin-left: -88px;
   	background: #fff;
 	display:none;	
+	z-index:1111;
 }
 .result_d{
   	width: 242px;
@@ -418,8 +419,8 @@
 }
 .yjtj{
   	background: #ddd;
-  	padding: 2px 30px;
-  	line-height: 40px;
+  	padding: 5px 30px;
+  	line-height: 60px;
   	border-radius: 2px;
   	position: relative;	
 	color:#333;
@@ -522,6 +523,7 @@
   	position: absolute;
   	left: 0;
   	opacity: 0;
+	top:0;
 }
 .file_sca_img{
 	font-size:14px;
@@ -556,12 +558,45 @@
   	position: absolute;
   	right: -10px;	
 }
+.mask_bg{
+	display:none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  min-height: 100%;
+  min-width: 100%;
+  height: auto;
+  width: auto;
+  opacity: 0;
+  z-index: 1000;
+  background-color: #fff;
+  filter: alpha(opacity=0);
+}
+.close_s{
+  position: absolute;
+  right: -100px;
+  top: 6px;	
+}
 
-
-
-
-
-
+.select_check{
+	display:none;
+}
+.chile_select{
+	margin-bottom: 20px;
+	display:none;
+}
+.add_del_y{
+	display:none;
+}
+.yjtj img{
+  	position: absolute;
+  	right: -8px;
+	top:-8px;
+	display:none;	
+}
 
 
 
