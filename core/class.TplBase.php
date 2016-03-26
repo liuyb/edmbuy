@@ -306,6 +306,13 @@ class TplBase {
     return $content;
   }
   
+  public static function genurl($params, $tpl = NULL) {
+  	$uri = isset($params['uri']) ? trim($params['uri']) : '';
+  	$vars= isset($params['var']) ? trim($params['var']) : '';
+  	$doms= isset($params['domain']) ? $params['domain'] : false;
+  	return U($uri, $vars, $doms);
+  }
+  
 }
 
 
