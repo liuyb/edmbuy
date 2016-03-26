@@ -30,19 +30,20 @@
 		<div class="common_go" id="list1">
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
-					<tr>	
+					<tr class="header">	
 						<th>选择</th>
 						<th>商品名称</th>
 						<th>商品分类</th>
 						<th>售价</th>
 						<th>供货价</th>
 						<th>佣金</th>
-						<th onclick="sort_click(this, 'paid_goods_number');"><a href="javascript:void(0);">销量</a></th>
+						<th onclick="sort_click(this);" data-field='paid_goods_number'><a href="javascript:void(0);">销量</a></th>
 						<th>访问量(次)</th>
 						<th>库存</th>
 						<!-- <th>商品类型</th> -->
 						<th width="60">操作</th>
 					</tr>
+					<tbody class="body-data"></tbody>
 				</table>
 			</div>
 		</div>
@@ -65,7 +66,7 @@ $(function(){
 });
 function loadTableContent(curpage, isinit, param){
 	var container = $("#resultList");
-	container.find("tr:gt(0)").remove();
+	//container.find("tr:gt(0)").remove();
 	var data = getConditions();
 	if(param){
 		$.extend(data, param);
@@ -81,7 +82,7 @@ function loadTableContent(curpage, isinit, param){
 				TR += costructHtml(item);
 			});
 		}
-		container.append($(TR));
+		container.find("tbody.body-data").html($(TR));
 		DOMEventBind();
 		if(isinit){
 			generatePage(ret.curpage, ret.maxpage, ret.totalnum);
@@ -103,7 +104,9 @@ function getConditions(){
 	var start_date = $("#start_date").val();
 	var end_date = $("#end_date").val();
 	
-	return {is_sale : is_sale, goods_name : goods_name, start_date : start_date, end_date : end_date};
+	var data = {is_sale : is_sale, goods_name : goods_name, start_date : start_date, end_date : end_date};
+	getSortCondition(data);
+	return data;
 }
 function costructHtml(result){
 	var TR = "";
@@ -199,15 +202,15 @@ function DOMEventBind(){
 	$(".edit_info").find("a").on('click', function(){
 		var THIS = $(this);
 		var type = THIS.attr("data-type");
+		var obj = THIS.closest("tr").first();
 		if(type == "sale"){
-			var obj = THIS.closest("tr");
 			updateGoodsStatus(obj,0);
 		}else if(type == "nosale"){
-			var obj = THIS.closest("tr");
 			updateGoodsStatus(obj,1);			
 		}else if(type == "delete"){
-			var obj = THIS.closest("tr");
 			deleteGoods(obj);
+		}else if(type == "edit"){
+			editGoods(obj);
 		}
 	});
 }
@@ -238,26 +241,30 @@ function cartSelectAll(){
 function deleteGoods(obj){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
-		alert('还没有选择商品！');
+		showWarn('还没有选择商品！');
 		return;
 	}
 	var data = {goods_ids : goods_id};
-	F.post('/goods/delete', data, function(data){
-		//alert('操作成功');
+	F.postWithLoading('/goods/delete', data, function(data){
+		showSucc('操作成功');
 		loadTableContent(1, true);
 	});
 }
 function updateGoodsStatus(obj, statusVal){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
-		alert('还没有选择商品！');
+		showWarn('还没有选择商品！');
 		return;
 	}
 	var data = {status : 'sale', goods_ids : goods_id, statusVal : statusVal};
-	F.post('/goods/status', data, function(data){
-		//alert('操作成功');
+	F.postWithLoading('/goods/status', data, function(data){
+		showSucc('操作成功');
 		loadTableContent(1, true);
 	});
+}
+function editGoods(obj){
+	var goods_id = obj.attr("data-id");
+	window.location.href = "/goods/info?goods_id="+goods_id;
 }
 function batchHandleData(obj){
 	var goods_id = [];
@@ -266,7 +273,7 @@ function batchHandleData(obj){
 	}else{
 		$(".check_go").each(function(){
 			if($(this).hasClass("go_on")){
-				goods_id.push($(this).closest("tr").attr("data-id"));
+				goods_id.push($(this).closest("tr").first().attr("data-id"));
 			}
 		});
 	}
@@ -275,13 +282,40 @@ function batchHandleData(obj){
 function sort_click(obj, field){
 	obj = $(obj);
 	var orderby = '';
+	var objcls = '';
 	if(obj.hasClass("sort_down")){
 		orderby = 'asc';
-		obj.removeClass('sort_down').addClass('sort_up');
+		objcls = 'sort_up';
+		//obj.removeClass('sort_down').addClass('sort_up');
 	}else{
-		obj.removeClass('sort_up').addClass('sort_down');
 		orderby = 'desc';
+		objcls = 'sort_down';
+		//obj.removeClass('sort_up').addClass('sort_down');
 	}
-	loadTableContent(kkpager._getCurrentPagerNo(), false, {orderby : orderby, order_field : field});
+	var tableHeader= obj.closest("tr").first().find("th");
+	tableHeader.removeClass("sort_down").removeClass("sort_up");
+	obj.addClass(objcls);
+	loadTableContent(kkpager._getCurrentPagerNo(), false);
+}
+//获取当前排序的字段 作为查询条件
+function getSortCondition(data){
+	var orderby = '';
+	var order_field = '';
+	$("#resultList").find("tr.header").find("th").each(function(){
+		var obj = $(this);
+		if(obj.hasClass("sort_up")){
+			orderby = 'asc';
+			order_field = obj.data('field');
+			return false;
+		}else if(obj.hasClass("sort_down")){
+			orderby = 'desc';
+			order_field = obj.data('field');
+			return false;
+		}
+	});
+	if(orderby &&　order_field){
+		data.orderby = orderby;
+		data.order_field = order_field;
+	}
 }
 </script>
