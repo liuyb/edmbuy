@@ -15,9 +15,10 @@ class Goods_Model extends Model
      */
     static function insertOrUpdateGoods(Items $goods)
     {
+        $ret = true;
         D()->beginTransaction();
         $is_insert = false;
-        if (! $goods->item_id) {
+        if (!$goods->item_id) {
             $is_insert = true;
             $goods->add_time = simphp_gmtime();
             $goods->merchant_id = $GLOBALS['user']->uid;
@@ -40,9 +41,11 @@ class Goods_Model extends Model
             
         } catch (Exception $e) {
             D()->rollback();
+            $ret = false; 
+        }finally{
+            D()->commit();
         }
-        
-        D()->commit();
+        return $ret;
     }
 
     /**
@@ -56,11 +59,11 @@ class Goods_Model extends Model
      */
     private static function handle_other_cat($is_insert, $goods_id, $cat_id, array $cat_list)
     {
+        array_filter($cat_list);//去空
         $add_list = $cat_list;
         if(!$is_insert){
             /* 查询现有的扩展分类 */
-            $sql = "SELECT cat_id FROM shp_goods_cat WHERE goods_id = '$goods_id' and is_main = 0 ";
-            $exist_list = D()->query($sql)->fetch_column();
+            $exist_list = Goods_Atomic::get_goods_ext_category($goods_id);
             
             /* 删除不再有的分类 */
             $delete_list = array_diff($exist_list, $cat_list);
@@ -90,7 +93,7 @@ class Goods_Model extends Model
             D()->query($sql);
         }
     }
-
+    
     /**
      * 商品相册处理
      * @param unknown $goods_id
@@ -100,14 +103,19 @@ class Goods_Model extends Model
     {
         if(!$is_insert){
             // 删除原数据
-            $sql = "DELETE FROM shp_goods_gallery WHERE goods_id = '$goods_id' ";
-            D()->query($sql);
+            Goods_Atomic::delete_goods_gallery($goods_id);
         }
-        
+        $sql = "INSERT INTO shp_goods_gallery(goods_id, img_url, img_desc, thumb_url, img_original) VALUES ";
+        $batchs = [];
         foreach ($gallery_list as $gallery) {
-            $sql = "INSERT INTO shp_goods_gallery(goods_id, img_url, img_desc, thumb_url, img_original) " . 
-                   "VALUES ('$goods_id', '$gallery[gallery_img]', '', '$gallery[gallery_thumb]', '$gallery[origin_img]')";
-            D()->query($sql);
+            if(!$gallery || !$gallery['gallery_img']){
+                continue;
+            }
+            array_push($batchs, "('$goods_id', '$gallery[gallery_img]', '', '$gallery[gallery_thumb]', '$gallery[origin_img]')");
+        }
+        if(count($batchs) > 0){
+            $batchs = implode(',', $batchs);
+            $sql .= $batchs;
         }
     }
     
@@ -115,17 +123,27 @@ class Goods_Model extends Model
     private static function handle_goods_attribute($is_insert, $goods_id, array $attribute_list){
         if(!$is_insert){
             // 删除原数据
-            $sql = "DELETE FROM shp_goods_attr WHERE goods_id = '$goods_id' ";
-            D()->query($sql);
+            Goods_Atomic::delete_goods_attr($goods_id);
         }
         
         foreach ($attribute_list as $attr) {
-            $sql = "INSERT INTO shp_goods_attr(goods_id, attr_id, attr_value, attr_id2, attr_value2, attr_id3, attr_value3,
+            $sql = "INSERT INTO shp_goods_attr(goods_id, attr_id, attr_value, attr2_id, attr2_value, attr3_id, attr3_value,
                     market_price, shop_price, income_price, cost_price, goods_number) " .
-                    "VALUES ('$goods_id', '$attr[attr_id]', '$attr[attr_value]', '$attr[attr_id2]', '$attr[attr_value2]', '$attr[attr_id3]', '$attr[attr_value3]',
-                    $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
+                    "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."', 
+                        '".self::setDefaultValueIfUnset($attr ,'attr_id2', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value2', '')."',
+                        '".self::setDefaultValueIfUnset($attr ,'attr_id3', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value3', '')."',
+                        $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
             D()->query($sql);
         }
+    }
+    
+    private static function setDefaultValueIfUnset($arr, $key, $default){
+        if($arr && $key){
+            if(isset($arr[$key])){
+                return $arr[$key];
+            }
+        }
+        return $default;
     }
     
     /**
@@ -139,14 +157,10 @@ class Goods_Model extends Model
         $goods_ids = implode(',', $goods_ids);
         D()->beginTransaction();
         try {
-            $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) ";
-            D()->query($sql);
-            $sql = "DELETE FROM shp_goods_cat WHERE goods_id in ($goods_ids) ";
-            D()->query($sql);
-            $sql = "DELETE FROM shp_goods_attr WHERE goods_id in ($goods_ids) ";
-            D()->query($sql);
-            $sql = "DELETE FROM shp_goods_gallery WHERE goods_id in ($goods_ids) ";
-            D()->query($sql);
+            Goods_Atomic::batch_delete_goods($goods_ids);
+            Goods_Atomic::batch_delete_goods_cat($goods_ids);
+            Goods_Atomic::batch_delete_goods_attr($goods_ids);
+            Goods_Atomic::batch_delete_goods_gallery($goods_ids);
         }catch(Exception $e){
             D()->rollback();
         }finally {
@@ -246,7 +260,7 @@ class Goods_Model extends Model
      */
     static function isHadCategory($cat_id)
     {
-        $sql = "select parent_id from shp_category where cat_id = %s";
+        $sql = "select parent_id from shp_category where cat_id = '%s' ";
         $result = D()->query($sql, $cat_id)->get_one();
         return $result;
     }
@@ -271,17 +285,31 @@ class Goods_Model extends Model
      * 新增一个分类
      * @param int $cat_id
      */
-    static function addCategory($cat_id = 0)
+    static function addCategory($cateArr,$cat_id = 0)
     {
         /**
          * cat_id=0为新增加一个分类
          */
         $merchant_id = $GLOBALS['user']->uid;
-        if ($cat_id == 0) {
-            //todo 新增一个一级分类
+        if (!$cat_id) {
+            $insertarr['parent_id']=0;
+        }else{
+            $insertarr['parent_id']=$cat_id;
         }
-        //todo 新增一个二级分类
+        $insertarr['cat_name'] = $cateArr['cat_name'];
+        $sql="select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s' ";
+        $cat_name=D()->query($sql,$insertarr['cat_name'], $merchant_id)->result();
+        if($cat_name){
+            return "分类名已存在！";
+        }
+        $tablename = "`shp_category`";
+        $insertarr['merchant_id'] = $merchant_id;
+        $insertarr['cate_thums'] = isset($cateArr['cate_thums']) ? $cateArr['cate_thums'] : '';
+        $insertarr['sort_order'] = isset($cateArr['sort_order']) ? $cateArr['sort_order'] : 0;
+        return D()->insert($tablename,$insertarr);
+    
     }
+    
 
     /**
      * 删除一个分类

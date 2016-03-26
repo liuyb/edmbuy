@@ -5,9 +5,8 @@
     <div class="error"><?= $errmsg ?></div>
 <?php else: ?>
     <style>
-        body {
-            font-family: "Microsoft Yahei" !important;
-        }
+    .btmad {margin: 10px;}
+        .btmad img{max-width: 100%;}
     </style>
     <?php $leve = ['1' => '一级人脉', '2' => '二级人脉', '3' => '三级人脉']; ?>
     <div class="my_income_tit">
@@ -18,15 +17,15 @@
         <img src="<?= $cUser->logo ?>">
     </div>
     <div class="my_name_info">
-        <div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?= $userInfo['nick_name'] ?><span class="name_info_p"
-                                                                                                  style="font-size: 14px;">（<?= $ismBusiness ?>
-                ）</span></div>
+        <div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?= $userInfo['nick_name'] ?>
+        <span class="name_info_p" style="font-size: 14px;">（<?= $ismBusiness ?>）</span>
+        </div>
         <div>人脉层级：<?= $leve[$level] ?></div>
         <div style="padding-bottom:15px;">订单金额：￥<?= $userInfo['money_paid'] ?></div>
     </div>
     <div class="get_broke">
         <span>获得佣金：￥<?= $commision ?></span>
-        <span class="ck_broke"><a href="/partner/commission?status=0">查看佣金明细</a></span>
+        <span class="ck_broke"><a href="<?php echo U('partner/commission','status=0')?>">查看佣金明细</a></span>
     </div>
 
     <div class="my_name_order">
@@ -47,7 +46,7 @@
                         <p class="m_n_tit"><?= $info['goods_name'] ?></p>
 
                         <p>
-                            <button class="tit_btn_q"><?= $info['shipping_status'] ?></button>
+                            <span class="tit_btn_q"><?= $info['shipping_status'] ?></span>
                         </p>
                     </td>
                     <td width="70px;">
@@ -76,6 +75,9 @@
             <div class="clear"></div>
         </div>
     <?php endif; ?>
+    <div class="btmad">
+    <a href="<?php echo U('zt/newtea')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/2016newtea.png" alt=""/></a>
+    </div>
 <?php endif; ?>
 <script>
     $(".my_income_btnc .btnc_share").click(function () {

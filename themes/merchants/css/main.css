@@ -253,6 +253,7 @@ body { min-width: 1200px;background: #e7e8eb;}
 	width:240px;
   	min-height: 900px;
 	background:#fff;	
+	cursor:pointer;
 }
 .page_common_left li{
 	text-align:center;
@@ -274,8 +275,25 @@ body { min-width: 1200px;background: #e7e8eb;}
 	padding-right:5px;
 }
 .sort_up{
-    background:#eee url(../img/6.png) no-repeat right !important;
+    background:#eee url(../img/sort_up.png) no-repeat right !important;
 	padding-right:5px;
+}
+.mask {
+	display:none;
+  	position: fixed;
+  	top: 0;
+  	left: 0;
+  	width: 100%;
+  	height: 100%;
+  	z-index: 3000;
+	background: url(../img/black.png) repeat;
+}
+div .alert {
+	position: absolute;
+    width: 400px;
+    line-height: 30px;
+    min-height: 70px;
+	display: none;
 }
 /*========== 以下部分为模块私有部分 ==========*/
 

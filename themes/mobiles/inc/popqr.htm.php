@@ -1,6 +1,7 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <script id="popqr-html" type="text/html">
-<div class="cursor gicon_btn gicon_btn_qr" id="global-popqrbtn"></div>
+<div class="gicon_btn gicon_btn_qr" id="global-popqrbtn"></div>
+<div class="gicon_btn gicon_btn_gotop" id="global-gotopbtn"></div>
 <div class="mask no-bounce hide" id="global-popqrmask"></div>
 <div class="cart_wx no-bounce" id="global-popqr">
 	<div class="c_wx_tit">益多米</div>
@@ -17,6 +18,14 @@ $(function(){
 	$("#global-popqrbtn").click(function(){
 		$mask.fadeIn(300);
 		$popqr.fadeIn(300);
+	});
+	$("#global-gotopbtn").click(function(){
+		if ($("body").hasClass('iOS')) {
+			$("#Mbody").animate({scrollTop:0},600);
+		}
+		else {
+			$("body,html").animate({scrollTop:0},600);
+		}
 	});
 	$popqr.on("click",".w_wx_colse",function(){
 		$mask.hide();

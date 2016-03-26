@@ -30,14 +30,22 @@ class MerchantController extends Controller {
 	 */
 	public function init($action, Request $request, Response $response)
 	{
+		$this->setPageView($request, $response);
+	}
 	
-		$this->v = new PageView();
+	/**
+	 * set page view
+	 * @param Request $request
+	 * @param Response $response
+	 * @param string $basetpl
+	 */
+	public function setPageView(Request $request, Response $response, $basetpl = '_page') {
+		$this->v = new PageView('', $basetpl);
 		$this->v->add_render_filter(function(View $v){
 			$v->assign('nav',        $this->nav)
 			  ->assign('nav_second', $this->nav_second)
 			;
 		});
-	
 	}
 	
 	/**

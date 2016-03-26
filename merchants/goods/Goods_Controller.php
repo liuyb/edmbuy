@@ -19,6 +19,7 @@ class Goods_Controller extends MerchantController {
             'goods/delete'  => 'delete_goods',
 			'goods/category/list' => 'goodsCategory',
 			'goods/catetory' => 'addCatetory',
+            'goods/simply/category' => 'doAddCategory'
         ];
     }
     
@@ -35,6 +36,11 @@ class Goods_Controller extends MerchantController {
 	    $response->send($this->v);
 	}
 	
+	/**
+	 * 商品列表
+	 * @param Request $request
+	 * @param Response $response
+	 */
 	public function get_goods_list(Request $request, Response $response){
 	    $curpage = $request->get('curpage', 1);
 	    $is_sale = $request->get('is_sale', 1);
@@ -47,24 +53,55 @@ class Goods_Controller extends MerchantController {
 	        "start_date" => $start_date, "end_date" => $end_date,
 	        "orderby"  => $orderby, "order_field" => $order_field
 	    );
-        $pager = new Pager($curpage, 9);	    
+        $pager = new Pager($curpage, 8);	    
 	    Goods_Model::getPagedGoods($pager, $options);
 	    $ret = $pager->outputPageJson();
 	    $ret['otherResult'] = $pager->otherMap;
 	    $response->sendJSON($ret);
 	}
-	
+	/**
+	 * 增加修改商品
+	 * @param Request $request
+	 * @param Response $response
+	 */
 	public function goods_info(Request $request, Response $response)
 	{
 	    $this->v->set_tplname('mod_goods_info');
-	     
+	    $goods_id = $request->get('goods_id', 0);
+	    $selectedCat = 0;
+	    $options = Goods_Common::cat_list(0);
+	    if($goods_id){
+	        $goods = Items::load($goods_id);
+    	    $selectedCat = $goods->cat_id;
+    	    $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
+    	    $other_cat = Goods_Model::get_goods_ext_category($goods_id);
+    	    $goods->other_cat = $other_cat;
+    	    foreach ($other_cat AS $cat_id){
+    	        $other_cat_list[$cat_id] = Goods_Common::build_options($options, $cat_id);
+    	    }
+    	    $this->v->assign('goodsinfo', $goods);
+    	    $this->v->assign('other_cat_list', $other_cat_list);
+    	    $this->v->assign('gallery', $gallery);
+    	    $this->v->assign('goods_type', Goods_Atomic::get_goods_type());
+	    }else{
+	        $newitem = new Items();
+	        $newitem->per_limit_buy = 0;
+	        $newitem->shipping_fee = 0;
+	        $this->v->assign('goodsinfo', $newitem);
+	    }
+	    $cat_list = Goods_Common::build_options($options, $selectedCat);
+	    $this->v->assign('cat_list', $cat_list);
+	    $this->setPageLeftMenu('goods', 'publish');
 	    $response->send($this->v);
 	}
 	
+	/**
+	 * 发布商品
+	 * @param Request $request
+	 * @param Response $response
+	 */
 	public function goods_publish(Request $request, Response $response)
 	{
-	    print_r($_POST);
-	    exit();
 	    /* 处理商品数据 */
 	    $goods_id   = $request->post('goods_id', 0);
 	    $goods_name = htmlspecialchars($request->post('goods_name', ''));
@@ -80,7 +117,7 @@ class Goods_Controller extends MerchantController {
 	    $goods_img = $request->post('goods_img','');
 	    $original_img = $request->post('original_img','');
 	    $shipping_fee = $request->post('shipping_fee',0);
-	    $goods_desc = $request->post('$goods_desc','');
+	    $goods_desc = $request->post('goods_desc','');
 	    
 	    $goods = new Items();
 	    $goods->item_id = $goods_id;
@@ -99,19 +136,22 @@ class Goods_Controller extends MerchantController {
 	    $goods->per_limit_buy = $per_limit_buy;
 	    $goods->shipping_fee = $shipping_fee;
 	    
+	    $ret = false;
 	    if($goods_name){
-    	    Goods_Model::insertOrUpdateGoods($goods);
+    	    $ret = Goods_Model::insertOrUpdateGoods($goods);
 	    }
-	    
-	    //$response->redirect('/goods');
+        $response->sendJSON(["result" => $ret ? 'SUCC' :'FAIL']);	    
 	}
 	
+	/**
+	 * 上传商品图片
+	 * @param Request $request
+	 * @param Response $response
+	 */
 	public function upload_goods_gallery(Request $request, Response $response){
 	    $imgDIR = "/a/mch/goods/";
 	    $img = $_POST["img"];
         $upload = new Upload($img, $imgDIR);
-        $upload->has_thumb = true;
-        $upload->thumbwidth = 200;
         $result = $upload->saveImgData();
         $ret = $upload->buildUploadResult($result);
         $response->sendJSON($ret);
@@ -197,40 +237,29 @@ class Goods_Controller extends MerchantController {
 	{
 		//先判断是否有了二级分类
 		$cat_id = $request->post('cat_id', 0);
+		$cateArr['cat_name']=$request->post('cat_name');
+		$cateArr['sort_order']=$request->post('sort_order', 0);
+		$cateArr['cate_thums']=$request->post('cate_thums');
 		$result = Goods_Model::IsHadCategory($cat_id);
 		if ($result['parent_id'] > 0) {
-			$retmsg = "此分类已经有了二个分类！";
+			$retmsg = "当前已是二级分类，不能增加子分类！";
 			$data['status'] = 0;
 			$data['retmsg'] = $retmsg;
-			$response->sendJSON($data);
 		} else {
-			if ($cat_id == 'new') {
-				$result = Goods_Model::addCategory();//新增一个分类
-				if ($result) {
-					$data['status'] = 1;
-					$data['retmsg'] = "新增成功！";
-				} else {
-					$data['status'] = 0;
-					$data['retmsg'] = "新增失败！";
+			$result = Goods_Model::addCategory($cateArr, $cat_id);//新增一个分类
+			if (is_numeric($result)) {
+				$data['status'] = 1;
+				$data['retmsg'] = "新增成功！";
+				$data['result'] = $result;
+			} else {
+				$data['status'] = 0;
+				$data['retmsg'] = "新增失败！";
+				if(is_string($result)){
+					$data['retmsg'] = $result;
 				}
-				$response->sendJSON($data);
-			}
-			if ($cat_id > 0) {
-				$result = Goods_Model::addCategory($cat_id);
-				if ($result) {
-					$data['status'] = 1;
-					$data['retmsg'] = "新增下级分类成功！";
-				} else {
-					$data['status'] = 0;
-					$data['retmsg'] = "新增下级分类失败！";
-				}
-				$response->sendJSON($data);
 			}
 		}
-		/**
-		 * 如果没有选择则新建一个分类
-		 */
-
+		$response->sendJSON($data);
 	}
 
 	/**
