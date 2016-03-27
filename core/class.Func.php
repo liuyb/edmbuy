@@ -361,12 +361,15 @@ class Func extends CStatic {
       {
           return $result[$cache_name];
       }
-      $cache_file_path = ROOT_PATH . '/var/static_caches/' . $cache_name . '.php';
+      $cache_file_path = SIMPHP_ROOT . '/var/static_caches/' . $cache_name . '.php';
       if (file_exists($cache_file_path))
       {
           include_once($cache_file_path);
-          $result[$cache_name] = $data;
-          return $result[$cache_name];
+          if(isset($data)){
+              $result[$cache_name] = $data;
+              return $result[$cache_name];
+          }
+          return false;
       }
       else
       {
@@ -384,7 +387,7 @@ class Func extends CStatic {
    */
   public static function write_static_cache($cache_name, $caches)
   {
-      $cache_file_path = ROOT_PATH . '/var/static_caches/' . $cache_name . '.php';
+      $cache_file_path = SIMPHP_ROOT . '/var/static_caches/' . $cache_name . '.php';
       $content = "<?php\r\n";
       $content .= "\$data = " . var_export($caches, true) . ";\r\n";
       $content .= "?>";
