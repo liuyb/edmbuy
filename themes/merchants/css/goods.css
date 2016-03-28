@@ -299,7 +299,7 @@
 	border: 1px solid #ddd;
 	left:-1px;
 	position: absolute;
-	z-index:1111;
+	z-index:2222;
 }
 .check_list_info li{
 	padding-left: 8px;
@@ -311,8 +311,7 @@
 }
 .add_common_a{
 	font-size: 14px;
-	color: #f46267;
-	display:none;
+	color: #0085d7;
 	position: relative;
 	cursor:pointer;
 	line-height:40px;
@@ -335,6 +334,7 @@
 	margin-left: -88px;
 	background: #fff;
 	display:none;
+	z-index:1111;
 }
 .result_d{
 	width: 242px;
@@ -372,16 +372,18 @@
 	line-height: 20px;
 	padding-left: 5px;
 	border-radius: 2px;
+	cursor: pointer;
 }
 .yjtj{
 	background: #ddd;
-	padding: 2px 30px;
-	line-height: 40px;
+	padding: 5px 30px;
+	line-height: 60px;
 	border-radius: 2px;
 	position: relative;
 	color:#333;
 	margin-right: 10px;
 	display:none;
+	cursor: pointer;
 }
 .dj_fil{
 	position: absolute;
@@ -390,6 +392,7 @@
 	top: 0;
 	left: 0;
 	opacity: 0;
+	top:0;
 }
 .manage_goods_name{
 	height: 42px;
@@ -464,7 +467,7 @@
 	display:block;
 }
 .add_name_go{
-	padding: 14px 33px 34px;
+	margin: 40px 30px 30px;
 	font-size:14px;
 	color:#333;
 }
@@ -514,7 +517,7 @@
 	margin-left: 120px;
 	height: 40px;
 	line-height: 40px;
-	/*margin-top: 50px;*/
+	margin-top: 50px;
 	color: #fff;
 	text-align: center;
 	font-size: 17px;
@@ -532,11 +535,11 @@
 	width:12%;
 	text-align:center;
 	border: 1px solid #ddd;
-	height:40px;
-	line-height:40px;
+	height:30px;
 }
 .goods_stocks input{
 	width: 60px;
+	margin: 5px;
 }
 .close_img_d{
 	position: absolute !important;
@@ -548,4 +551,35 @@
 .close_gg{
 	position: absolute;
 	right: -10px;
+}
+.mask_bg{
+	display:none;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+	min-height: 100%;
+	min-width: 100%;
+	height: auto;
+	width: auto;
+	opacity: 0;
+	z-index: 1000;
+	background-color: #fff;
+	filter: alpha(opacity=0);
+}
+.close_s{
+	position: absolute;
+	right: -100px;
+	top: 6px;
+}
+.add_del_y{
+	margin-bottom:15px;
+}
+.yjtj img{
+	position: absolute;
+	right: -8px;
+	top:-8px;
+	display:none;
 }

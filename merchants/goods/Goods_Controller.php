@@ -16,6 +16,7 @@ class Goods_Controller extends MerchantController {
 			'goods/gallery' => 'upload_goods_gallery',
 			'goods/list'    => 'get_goods_list',
 			'goods/status'  => 'update_goods_status',
+		    'goods/attribute' => 'get_attr_by_type',
 			'goods/delete'  => 'delete_goods',
 			'goods/category/list' => 'goodsCategory',
 			'goods/catetory' => 'addCatetory',
@@ -76,21 +77,26 @@ class Goods_Controller extends MerchantController {
 			$goods = Items::load($goods_id);
 			$selectedCat = $goods->cat_id;
 			$gallery = ItemsGallery::find(new Query('item_id', $goods_id));
-			$other_cat = Goods_Model::get_goods_ext_category($goods_id);
+			$other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
 			$goods->other_cat = $other_cat;
+			$other_cat_list = [];
 			foreach ($other_cat AS $cat_id){
 				$other_cat_list[$cat_id] = Goods_Common::build_options($options, $cat_id);
 			}
 			$this->v->assign('goodsinfo', $goods);
 			$this->v->assign('other_cat_list', $other_cat_list);
 			$this->v->assign('gallery', $gallery);
-			$this->v->assign('goods_type', Goods_Atomic::get_goods_type());
+			$specifis = Goods_Model::get_goods_attrs($goods_id);
+			$this->v->assign('goods_attributes', $specifis);
+			$this->v->assign('count_goods_attributes', count($specifis));
+			$this->v->assign('goods_attr_html', Goods_Common::generateSpecifiTable($specifis));
 		}else{
 			$newitem = new Items();
 			$newitem->per_limit_buy = 0;
 			$newitem->shipping_fee = 0;
 			$this->v->assign('goodsinfo', $newitem);
 		}
+		$this->v->assign('goods_type', Goods_Common::generateSpecifiDropdown(Goods_Atomic::get_goods_type()));
 		$cat_list = Goods_Common::build_options($options, $selectedCat);
 		$this->v->assign('cat_list', $cat_list);
 		$this->setPageLeftMenu('goods', 'publish');
@@ -198,6 +204,17 @@ class Goods_Controller extends MerchantController {
 	}
 
 	/**
+	 * 根据type获取属性值
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function get_attr_by_type(Request $request, Response $response){
+	    $cat_id = $request->get('cat_id');
+	    $result = Goods_Atomic::get_merchant_attribute($cat_id);
+	    $response->sendJSON($result);
+	}
+	
+	/**
 	 * 产品分类
 	 * @param Request $request
 	 * @param Response $response
@@ -274,8 +291,8 @@ class Goods_Controller extends MerchantController {
 		$cat_id = $request->post('cat_id', 0);
 		$id = $request->post('id', 0);
 		$cateArr['cat_name'] = $request->post('cat_name');
-		$cateArr['sort_order'] = $request->post('sort_order');
-		$cateArr['cate_thums'] = $request->post('cate_thums');
+		$cateArr['sort_order'] = $request->post('sort_order',0);
+		$cateArr['cate_thums'] = $request->post('cate_thums','');
 		$cateArr['edit'] = $request->post('edit');
 		if (empty($cateArr['cat_name']) ||
 			empty($cateArr['sort_order']) ||

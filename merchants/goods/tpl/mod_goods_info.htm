@@ -1,11 +1,13 @@
 <!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
 <!--{add_js file="/misc/editor/ueditor_full/ueditor.config.js" scope="module"}-->
 <!--{add_js file="/misc/editor/ueditor_full/ueditor.all.min.js" scope="module"}-->
+<!--[HEAD_CSS]-->
 <style>
 .stand1,.stand2{
 	display:none;
 }
 </style>
+<!--[/HEAD_CSS]-->
 <div id="body" class="ifr-body">
 	<!--{include file="inc/left_common.htm"}-->
 	<form id="defaultForm" method="post" action="" onsubmit="return goods_submit();">
@@ -128,43 +130,72 @@
 						 	<div class="z_in_height">
 								<div class="check_list_info">
 									<ul>
-							 			<li data-cat='1'>酒1</li>
-										<li data-cat='2'>酒2</li>
-										<li data-cat='3'>酒3</li>
+									<!--{$goods_type}-->
 							 		</ul>
 								</div>
 							</div>
 						</div>
 						
-						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
+						<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 						<div class="common_a_tow">
 				 			<div class="result_d">
 				 				<div  class="common_a_li" style="display:none;">
 			 						<ul>
-										<li data-attr="1">黄</li>
-									 	<li data-attr="2">红</li>
-									 	<li data-attr="3">蓝</li>
 									 </ul>
 								</div>
 			 				</div>
 			 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
 						</div>
 					</div>
-					
+					<!--{if isset($goods_attributes)}-->
+					<!--{foreach from=$goods_attributes item=type}-->
+						<div class="standFlag">		
+						<div class="stand_check_top">
+							<div class="stand_check" data-cat='<!--{$type.cat_id}-->'><!--{$type.cat_name}--></div>
+						 	<div class="z_in_height" style="display:none;">
+								<div class="check_list_info">
+									<ul>
+									<!--{$goods_type}-->
+							 		</ul>
+								</div>
+							</div>
+						</div>
+						
+						<div style="height:40px;" class="add_del_y">
+						<!--{foreach from=$type.display_attrs item=attr}-->
+						<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
+						<!--{/foreach}-->
+						<span class="add_common_a">+添加</span></div>
+						<div class="common_a_tow">
+				 			<div class="result_d">
+				 				<div  class="common_a_li" style="display:none;">
+			 						<ul>
+									 </ul>
+								</div>
+			 				</div>
+			 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
+						</div>
+						</div>
+					<!--{/foreach}-->
+					<!--{/if}-->
+					<!--{if $count_goods_attributes < 3}-->
 					<div class="add_stand">
 						<button type="button" class="add_common add_s_projcet">添加规格项目</button>
 					</div>
+					<!--{/if}-->
 				</div>
 			</div>
 			<div class="clear"></div>
 			
-			<div class="infos_go goods_stockDIV" style="display:none;">
+			<div class="infos_go goods_stockDIV" <!--{if !isset($goods_attr_html)}-->style="display:none;"<!--{/if}-->>
 				<div class="goods_type font_common">
 					<label class="control-label"><span class="fill_red">*</span>商品库存：</label>
 				</div>
 				<div class="type_right font_common" style="margin-top:20px;">
 					<table cellspacing="0" cellpadding="0" class="goods_stocks">
-						
+						<!--{if isset($goods_attr_html)}-->
+							<!--{$goods_attr_html}-->
+						<!--{/if}-->
 					</table>
 				</div>
 			</div>
@@ -191,11 +222,11 @@
 					
 					<div class="infos_go">
 					<div class="goods_type font_common">
-						<label class="control-label"><span class="fill_red">*</span>商品描述：</label>
+						<label class="control-label"><span class="fill_red">*</span>商品描述</label>
 					</div>
-					<script id="editor" name="goods_desc" type="text/plain" style="width:90%;height:200px;"></script>
-					<input type="submit" val="publish" id="submitBtn"/>
-				</div>
+					</div>
+					<script id="editor" name="goods_desc" type="text/plain" style="width:90%;height:200px;margin:35px 0px 0px 55px;"></script>
+					<div><button type="submit" id="submitBtn" class="btn btn-lg btn-default">Default</button></div>
 			</div>
 		</div>
 	</div>
@@ -286,7 +317,7 @@ function initCategoryEvent(){
           	return;
       	}
 		var parent_id = $("#cat_id").val();
-      	var params = {cat_id : parent_id, cat_name : cat};
+      	var params = {cat_id : parent_id,id : parent_id, cat_name : cat};
       	F.postWithLoading('/goods/simply/category', params, function(ret){
       		if(!ret.status){
       			alert(ret.retmsg);
@@ -410,7 +441,7 @@ function goodsSpecifiEvent(){
 		}
 	})
 	//点击选择规格
-	$(".stand_check").on("click",function(){
+	$(document).on("click",'.stand_check',function(){
 		var container = getContainer(this);
 		var z_in_height = container.find('.z_in_height');
 		
@@ -424,7 +455,7 @@ function goodsSpecifiEvent(){
 		isSpecifSelected(container);
 	})
 	//点击规格项
-	$('.check_list_info li').on("click",function(){
+	$(document).on("click",'.check_list_info li',function(){
 		var container = getContainer(this);
 		var _text = $(this).text();
 		var cat = $(this).data('cat')
@@ -444,21 +475,34 @@ function goodsSpecifiEvent(){
 		//重新选择规格，需要做一次重置
 		container.find(".add_del_y .yjtj").remove();
 		container.find(".common_a_li li").show();
-		container.find(".z_in_height").hide();   
+		container.find(".z_in_height").hide();
 		isSpecifSelected(container);
 		generateSpecifTable();
 		
 	})
 	//点击添加属性
-	$(".add_common_a").on("click",function(){
+	$(document).on("click",'.add_common_a',function(){
 		var container = getContainer(this);
 		container.find(".common_a_tow").show();
 		container.find(".result_d .jt_g").remove();
-		container.find(".common_a_li").show();
-		showAttrList(container);
+		var cat_id = container.find(".stand_check").data('cat');
+		var attr_list = container.find(".common_a_li");
+		get_attr_by_type(cat_id, function(ret){
+			var li = "";
+			if(ret && ret.length){
+				ret.forEach(function(item){
+					li　+= "<li data-attr='"+item.attr_id+"'>"+item.attr_name+"</li>";
+				});
+			}
+			attr_list.find("ul").html($(li));
+			attr_list.find("li").show();
+			attr_list.show();
+			container.find(".common_a_li li:first").addClass("li_on1");
+		});
+		//showAttrList(container);
 	});
 	//点击属性项
-	$(".common_a_li li").on("click",function(){
+	$(document).on("click",'.common_a_li li',function(){
 		var container = getContainer(this);
 		var _child = $(this).text();
 		$(this).hide();
@@ -466,7 +510,7 @@ function goodsSpecifiEvent(){
 		container.find(".result_d").append('<span class="jt_g" data-attr='+attr+' onclick="jt_g_click(this)">'+_child+'</span>');
 	});
 	//点击确定属性
-	$(".ok_one").on("click",function(){
+	$(document).on("click",'.ok_one',function(){
 		var container = getContainer(this);
 		if(container.find("span.jt_g").length){//不为空
 			container.find(".result_d").find('span.jt_g').each(function(){
@@ -476,7 +520,7 @@ function goodsSpecifiEvent(){
 				if(container.find(".yjtj[data-attr="+attr+"]").length){
 					return true;
 				}
-				container.find(".add_del_y").prepend('<span class="yjtj" data-attr='+attr+' onmouseover="yjtjshow(this)" onmouseout="yjtjout(this)">'+_child+'<img src="/themes/merchants/img/close_11.png" onclick="yjtjclick(this)" class="close_gg" style="display:none;"></span>');
+				container.find(".add_del_y").prepend('<span class="yjtj" data-attr='+attr+'>'+_child+'<img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display:none;"></span>');
 			});
 			generateSpecifTable();
 		}
@@ -484,18 +528,28 @@ function goodsSpecifiEvent(){
 		container.find(".common_a_tow").hide();
 	});
 	//点击取消属性
-	$(".cancel_one").on("click",function(){
+	$(document).on("click",'.cancel_one',function(){
 		var container = getContainer(this);
 		//隐藏属性选择
 		container.find(".common_a_tow").hide();
 		//移除文本框数据
 		container.find("span.jt_g").remove();
-		showAttrList(container);
+		//showAttrList(container);
 	});
-	
+	$(document).on("mouseover",'.yjtj',function(){
+		yjtjshow(this);
+	});
+	$(document).on("mouseout",'.yjtj',function(){
+		yjtjout(this);
+	})
+}
+function get_attr_by_type(cat_id, callback){
+	F.get('/goods/attribute', {cat_id : cat_id}, function(ret){
+		callback(ret);
+	});
 }
 //根据选择的属性判断属性选择区域是否显示隐藏
-function showAttrList(container){
+/* function showAttrList(container){
 	//获取已选择的数据
 	var filterM = {};
 	container.find("span.yjtj").each(function(){
@@ -519,7 +573,7 @@ function showAttrList(container){
 	}else{
 		attrListDOM.show()
 	}
-}
+} */
 //当前选中的属性mouseover
 function yjtjshow(obj){
 	$(obj).find("img").show();
@@ -542,14 +596,12 @@ function highlightSpecifi(){
 	$('.check_list_info li').mouseout(function(){
 		  $(this).removeClass("li_on1");
 	});
-	$(".common_a_li li:first").addClass("li_on1");
-	 
-	$('.common_a_li li').mouseover(function(){
-		  $(this).addClass("li_on1");
-	});
-	$('.common_a_li li').mouseout(function(){
-		  $(this).removeClass("li_on1");
-	});
+	$(document).on("mouseover",".common_a_li li",function(){
+		$(this).addClass("li_on1");
+    });
+	$(document).on("mouseout",".common_a_li li",function(){
+		$(this).removeClass("li_on1");
+    });
 }
 //选择框里面的属性 点击删除
 function jt_g_click(obj){
@@ -602,11 +654,11 @@ function generateSpecifTable(){
 		});
 		arr.push({cat_id : obj.data('cat'), cat_name : obj.text(), attrs : attr_arr});
 	});
-	var TR_HD = "<tr>";
+	var TR_HD = "<tr class='firsttr'>";
 	var attr_as = [];
 	for(var i = 0,len=arr.length; i < len; i++){
 		var spe = arr[i];
-		TR_HD += "<td>"+spe.cat_name+"</td>";
+		TR_HD += "<td data-cat="+spe.cat_id+">"+spe.cat_name+"</td>";
 		attr_as.push(spe.attrs);
 	}
 	if(!arr.length || !attr_as.length){
@@ -638,7 +690,7 @@ function generateSpecifTable(){
 	$(".goods_stocks").html($(TR_HD));
 	$(".goods_stockDIV").show();
 }
-
+//商品规格数据构建
 function buildGoodsSpecif(data){
 	var attrsDOM = $(".goods_stocks").find("tr.attr_data");
 	var attrdata = [];
@@ -647,8 +699,13 @@ function buildGoodsSpecif(data){
 		var attr = {};
 		var at_count = 1;
 		obj.find(".attrcls").each(function(){
-			attr['attr_id'+at_count] = $(this).data("attr");
-			attr['attr_value'+at_count] = $(this).text();
+			var obj = $(this);
+			var index = obj.closest("tr").first().find("td").index(obj);
+			var th = $(".goods_stocks").find("tr.firsttr").find("td:eq("+index+")");
+			attr['attr_id'+at_count] = obj.data("attr");
+			attr['attr_value'+at_count] = obj.text();
+			attr['cat_id'+at_count] = th.data("cat");
+			attr['cat_value'+at_count] = th.text();
 			at_count++;
 		});
 		attr.market_price = obj.find(".attr_market_price").val();

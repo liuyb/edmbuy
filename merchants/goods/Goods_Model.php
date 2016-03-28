@@ -28,7 +28,7 @@ class Goods_Model extends Model
             $goods->save(($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE));
             $goods_id = $is_insert ? D()->insert_id() : $goods->item_id;
             $other_cat =  isset($_POST['other_cat']) ? $_POST['other_cat'] : [];
-
+            $other_cat = is_array($other_cat) ? $other_cat : [$other_cat];
             self::handle_other_cat($is_insert, $goods_id,$goods->cat_id, array_unique($other_cat));
 
             if (isset($_POST['gallery_list'])) {
@@ -127,9 +127,13 @@ class Goods_Model extends Model
         }
 
         foreach ($attribute_list as $attr) {
-            $sql = "INSERT INTO shp_goods_attr(goods_id, attr_id, attr_value, attr2_id, attr2_value, attr3_id, attr3_value,
+            $sql = "INSERT INTO shp_goods_attr(goods_id, cat1_id,cat1_name,cat2_id,cat2_name,cat3_id,cat3_name,
+                    attr1_id, attr1_value, attr2_id, attr2_value, attr3_id, attr3_value,
                     market_price, shop_price, income_price, cost_price, goods_number) " .
-                "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."',
+                "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'cat_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value1', '')."',
+                        '".self::setDefaultValueIfUnset($attr ,'cat_id2', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value2', '')."',
+                        '".self::setDefaultValueIfUnset($attr ,'cat_id3', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value3', '')."',
+                        '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."',
                         '".self::setDefaultValueIfUnset($attr ,'attr_id2', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value2', '')."',
                         '".self::setDefaultValueIfUnset($attr ,'attr_id3', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value3', '')."',
                         $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
@@ -144,6 +148,86 @@ class Goods_Model extends Model
             }
         }
         return $default;
+    }
+    
+    /**
+     * 解析成页面需要的商品属性格式
+     * array(cat_id=>1,cat_name=>商品,attrs=>array([attr1_id] => 2
+                    [attr1_value] => 300g
+                    [attr2_id] => 5
+                    [attr2_value] => 黄色
+                    [attr3_id] => 0
+                    [attr3_value] => 
+                    [market_price] => 9.00
+                    [shop_price] => 9.00
+                    [income_price] => 8.00
+                    [cost_price] => 7.00
+                    [goods_number] => 6))
+     * @param unknown $goods_id
+     */
+    public static function get_goods_attrs($goods_id){
+        $result = Goods_Atomic::get_goods_attribute($goods_id);
+        $cat_arr = [];
+        foreach ($result as $item){
+            self::map_goods_attrs($cat_arr, $item, 1);
+            self::map_goods_attrs($cat_arr, $item, 2);
+            self::map_goods_attrs($cat_arr, $item, 3);
+        }
+        $ret_arr = [];
+        if($cat_arr && count($cat_arr) > 0){
+            foreach ($cat_arr as $type => $attrs){
+                $typeOBJ = explode('【~~】', $type);
+                if(count($typeOBJ) == 0){
+                    continue;
+                }
+                //处理每个type下的重复属性
+                $display_attrs = self::get_goods_select_attr($typeOBJ[0], $attrs);
+                array_push($ret_arr, array('cat_id' => $typeOBJ[0], 'cat_name' => $typeOBJ[1], 'attrs' => $attrs, 'display_attrs' => $display_attrs));
+            }
+        }
+        return $ret_arr;
+    }
+    
+    /**
+     * 当前商品 选中的属性 唯一过滤
+     * @param unknown $index
+     * @param unknown $attrs
+     */
+    public static function get_goods_select_attr($cat_id, $attrs){
+        $ret = [];
+        $map = [];
+        foreach ($attrs as $at){
+            $at_id = $at['attr'.$cat_id.'_id'];
+            $key = 'key_'.$at_id;
+            if(isset($map[$key]) && $map[$key] > 0){
+                continue;
+            }
+            $map[$key] = '1';
+            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
+        }
+        unset($map);
+        return $ret;
+    }
+    
+    /**
+     * 用map来构造商品属性规格
+     * 商品type（颜色、重量）=> array(对应的属性列表)
+     * @param unknown $cat_arr
+     * @param unknown $item
+     * @param unknown $index
+     */
+    private static function map_goods_attrs(&$cat_arr, $item, $index){
+        $cat_id = $item['cat'.$index.'_id'];
+        $cat_name = $item['cat'.$index.'_name'];
+        if($cat_id && $cat_name){
+            $key = $cat_id.'【~~】'.$cat_name;
+            if(isset($cat_arr[$key]) && $cat_arr[$key]){
+                array_push($cat_arr[$key], $item);
+            }else{
+                $cat_arr[$key] = [];
+                array_push($cat_arr[$key], $item);
+            }
+        }
     }
 
     /**

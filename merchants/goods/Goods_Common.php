@@ -307,4 +307,49 @@ class Goods_Common {
             return $spec_cat_id_array;
         }
     }
+    
+    /**
+            生成商品规格HTML
+     */
+    static function generateSpecifiDropdown($specifis){
+        $html = "";
+        foreach ($specifis as $cat){
+            $html .= "<li data-cat='$cat[cat_id]'>$cat[cat_name]</li>";
+        }
+        return $html;
+    }
+    
+    /**
+     * 生成商品编辑时看到的根据商品属性展示的商品库存信息
+     * @param unknown $specifis
+     * @return string
+     */
+    static function generateSpecifiTable($specifis){
+        if(!$specifis || count($specifis) == 0){
+            return '';
+        }
+        $TR_HD = "<tr class='firsttr'>";
+        $count = 0;
+        foreach ($specifis as $item){
+            $count ++;
+            $TR_HD .= "<td data-cat=".$item['cat_id'].">".$item['cat_name']."</td>";
+        }
+        $TR_HD .= "<td>市场价</td>";
+        $TR_HD .= "<td>售价</td>";
+        $TR_HD .= "<td>供货价</td>";
+        $TR_HD .= "<td>成本价</td>";
+        $TR_HD .= "<td>库存</td></tr>";
+        foreach ($specifis[0]['attrs'] as $attr){
+            $TR_HD .= "<tr class='attr_data'>";
+            for($i = 1; $i <= $count; $i++){
+                $TR_HD .= "<td class='attrcls' data-attr='".$attr['attr'.$i.'_id']."'>".$attr['attr'.$i.'_value']."</td>";
+            }
+            $TR_HD .= "<td><input type='text' class='attr_market_price' data-type='money' value='$attr[market_price]' required ></td>";
+            $TR_HD .= "<td><input type='text' class='attr_shop_price' data-type='money' value='$attr[shop_price]' required ></td>";
+            $TR_HD .= "<td><input type='text' class='attr_income_price' data-type='money' value='$attr[income_price]' required ></td>";
+            $TR_HD .= "<td><input type='text' class='attr_cost_price' data-type='money' value='$attr[cost_price]' required ></td>";
+            $TR_HD .= "<td><input type='number' class='attr_goods_number' value='$attr[goods_number]' required ></td></tr>";
+        }
+        return $TR_HD;   
+    }
 }
