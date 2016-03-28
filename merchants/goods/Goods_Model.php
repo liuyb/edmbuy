@@ -247,9 +247,8 @@ class Goods_Model extends Model
             Goods_Atomic::batch_delete_goods_gallery($goods_ids);
         }catch(Exception $e){
             D()->rollback();
-        }finally {
-            D()->commit();
         }
+        D()->commit();
     }
 
     static function batchUpdateGoods(array $goods_ids, $field, $val){
