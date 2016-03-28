@@ -18,6 +18,9 @@ class Common_Controller extends Controller {
       '!^login[a-z_]*$!i'  => 'user/$0',
       '!^logout[a-z_]*$!i' => 'user/$0',
       '!^home$!i' => 'user/index',
+		'!^forgetPwd[a-z_]*$!i'  => 'user/$0',
+		'!^checkSmsCode[a-z_]*$!i'  => 'user/$0',
+		'!^setpassword[a-z_]*$!i'  => 'user/$0',
     );
   }
   
@@ -28,6 +31,11 @@ class Common_Controller extends Controller {
   public static $loginWhiteList = [
   		'user/login',
   		'user/logout',
+	  	'user/forgetPwd',
+	  	'user/checkSmsCode',
+	  	'user/setpassword',
+	  	/***test wait del**/
+	  	'goods/goodsCategory'
   ];
   
   /**

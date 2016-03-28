@@ -235,7 +235,9 @@ class Goods_Controller extends MerchantController {
 		/**
 		 * 将分类信息传到页面
 		 */
-		$this->v = new PageView('mod_goods_addcategory', '_page_box');
+		//$this->v = new PageView('mod_goods_addcategory', '_page_box');
+		$this->setPageView($request, $response, '_page_box');
+		$this->v->set_tplname('mod_goods_addcategory');
 		$edit = $request->get('edit', 0);
 		$merchant_id = $GLOBALS['user']->uid;
 		$list = Goods_Model::getCatNameList($merchant_id);
