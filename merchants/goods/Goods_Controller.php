@@ -290,18 +290,18 @@ class Goods_Controller extends MerchantController {
 		//先判断是否有了二级分类
 		$cat_id = $request->post('cat_id', 0);
 		$id = $request->post('id', 0);
-		$cateArr['cat_name'] = $request->post('cat_name');
+		$cateArr['cat_name'] = $request->post('cat_name', '');
 		$cateArr['sort_order'] = $request->post('sort_order',0);
 		$cateArr['cate_thums'] = $request->post('cate_thums','');
 		$cateArr['edit'] = $request->post('edit');
-		if (empty($cateArr['cat_name']) ||
+		/* if (empty($cateArr['cat_name']) ||
 			empty($cateArr['sort_order']) ||
 			empty($cateArr['cate_thums'])
 		) {
 			$data['status'] = 0;
 			$data['retmsg'] = "参数不能为空！";
 			$response->sendJSON($data);
-		}
+		} */
 		if(strlen($cateArr['cat_name'])>12){
 			$data['status'] = 0;
 			$data['retmsg'] = "名称不能多于12个字！";

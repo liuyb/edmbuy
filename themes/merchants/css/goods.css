@@ -127,7 +127,7 @@
 }
 .all_check{
 	background:url(../img/ask03.png) no-repeat left;
-	padding-left:25px;
+	padding-left:20px;
 	margin:0 20px;
 }
 .all_on{
@@ -144,7 +144,6 @@
 	border: 1px solid #ddd;
 	background: #fff;
 	border-radius: 4px;
-	margin: 0 5px;
 }
 .batch_l{
 	float:left;
@@ -582,4 +581,10 @@
 	right: -8px;
 	top:-8px;
 	display:none;
+}
+.del_check{
+	position: absolute;
+    top: 0px;
+    right: -60px;
+    display: none;
 }

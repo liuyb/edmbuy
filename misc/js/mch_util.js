@@ -72,7 +72,7 @@ function topCenterDOM(obj){
         	var val = OBJ.val();
         	if(OBJ.attr("required")){
         		if(!val){
-        			alert('必填不能为空！');
+        			layer.msg('必填不能为空！');
         			OBJ.focus();
         			valid = false;
         			return false;
@@ -81,21 +81,20 @@ function topCenterDOM(obj){
         	var type = OBJ.attr("data-type");
         	if(type && "money" == type){
         		if(!isMoney(val)){
-        			alert('请输入正确的金额！');
+        			layer.msg('请输入正确的金额！');
         			OBJ.focus();
         			valid = false;
         			return false;
         		}
         	}
-        	/*if(type && "positive" == type){
-        		debugger;
+        	if(type && "positive" == type){
         		if(!isPositiveNum(val)){
-        			alert('请输入正整数！');
+        			layer.msg('请输入正整数！');
         			OBJ.focus();
         			valid = false;
         			return false;
         		}
-        	}*/
+        	}
         });
         return valid;
     };  
@@ -110,7 +109,7 @@ function image_upload(url, e, obj, callback){
     	valid = reg.test(file.type);
     }
     if(!valid){
-    	alert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
+    	layer.msg('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
 		return;
     }
     var fr = new FileReader();
@@ -120,14 +119,14 @@ function image_upload(url, e, obj, callback){
     		if(ret.flag=='SUC'){
     			callback(ret, obj);
     		}else{
-    			alert(ret.errMsg);
+    			layer.msg(ret.errMsg);
     		}
     	});
     };
   	fr.readAsDataURL(file);
 }
 function isMoney(s){
-	if(!s){//不验证空
+	if(!s || s == 0){//不验证空
 		return true;
 	}
     if (isNaN(s)) {
@@ -136,7 +135,7 @@ function isMoney(s){
     return true;
 }
 function isPositiveNum(s){
-	if(!s){//不验证空
+	if(!s || s == 0){//不验证空
 		return true;
 	}
 	var type = /^[0-9]*[1-9][0-9]*$/;

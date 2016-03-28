@@ -50,7 +50,7 @@
 		
 		<div class="batch_week" style="padding-bottom:30px;">
 			<div class="batch_l">
-				<span class="all_check">全选</span>
+				<span class="all_check"></span>
 				<button class="btn_common batch_del" onclick="deleteGoods();">批量删除</button>
 				<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
 				<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
@@ -241,24 +241,24 @@ function cartSelectAll(){
 function deleteGoods(obj){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
-		showWarn('还没有选择商品！');
+		layer.msg('还没有选择商品！');
 		return;
 	}
 	var data = {goods_ids : goods_id};
 	F.postWithLoading('/goods/delete', data, function(data){
-		showSucc('操作成功');
+		layer.msg('操作成功');
 		loadTableContent(1, true);
 	});
 }
 function updateGoodsStatus(obj, statusVal){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
-		showWarn('还没有选择商品！');
+		layer.msg('还没有选择商品！');
 		return;
 	}
 	var data = {status : 'sale', goods_ids : goods_id, statusVal : statusVal};
 	F.postWithLoading('/goods/status', data, function(data){
-		showSucc('操作成功');
+		layer.msg('操作成功');
 		loadTableContent(1, true);
 	});
 }

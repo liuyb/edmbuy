@@ -24,7 +24,7 @@
 					<label class="control-label"><span class="fill_red">*</span>商品名称：</label>
 				</div>
 				<div class="type_right font_common">
-					<input type="text" value="<!--{$goodsinfo->item_name}-->" class="write_common" name="goods_name" required >
+					<input type="text" maxlength="120" value="<!--{$goodsinfo->item_name}-->" class="write_common" name="goods_name" required >
 				</div>
 			</div>
 			
@@ -57,10 +57,10 @@
 					<label class="control-label"><span class="fill_red">*</span>库存：</label>
 				</div>
 				<div class="type_right font_common">
-					<input type="number" value="<!--{$goodsinfo->item_number}-->" class="write_short" name="goods_number" required >
+					<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->item_number}-->" class="write_short" name="goods_number" required >
 					
 					<label class="control-short" style="padding-left:35px;"><span class="fill_red"></span>每人限购：</label>
-					<input type="number" value="<!--{$goodsinfo->per_limit_buy}-->" class="write_short" name="per_limit_buy" ><span class="prompt_common">0代表不限购</span>
+					<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->per_limit_buy}-->" class="write_short" name="per_limit_buy" ><span class="prompt_common">0代表不限购</span>
 				</div>
 			</div>
 			
@@ -75,7 +75,7 @@
 					</select>
 					<button type="button" class="add_common add_type">添加分类</button> 
 					<label class="add_type_hide">
-						<input type="text" val="" class="add_input category_val"><button type="button" class="add_common add_category">确定</button>
+						<input type="text" val="" maxlength="20" class="add_input category_val"><button type="button" class="add_common add_category">确定</button>
 						<button class="add_common cancel_s hide_category"> << </button>
 					</label>
 				</div>
@@ -134,6 +134,7 @@
 							 		</ul>
 								</div>
 							</div>
+							<button class="add_common del_check">删除</button>
 						</div>
 						
 						<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
@@ -159,8 +160,8 @@
 							 		</ul>
 								</div>
 							</div>
+							<button class="add_common del_check">删除</button>
 						</div>
-						
 						<div style="height:40px;" class="add_del_y">
 						<!--{foreach from=$type.display_attrs item=attr}-->
 						<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
@@ -178,11 +179,10 @@
 						</div>
 					<!--{/foreach}-->
 					<!--{/if}-->
-					<!--{if $count_goods_attributes < 3}-->
-					<div class="add_stand">
+					
+					<div class="add_stand" <!--{if isset($count_goods_attributes) && $count_goods_attributes >= 3}--> style="display:none;" <!--{/if}-->>
 						<button type="button" class="add_common add_s_projcet">添加规格项目</button>
 					</div>
-					<!--{/if}-->
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -199,7 +199,7 @@
 					</table>
 				</div>
 			</div>
-			
+			</div>
 			<div>
 				<div class="iss_infos font_common">物流信息</div>
 					<div class="infos_go">
@@ -226,14 +226,14 @@
 					</div>
 					</div>
 					<script id="editor" name="goods_desc" type="text/plain" style="width:90%;height:200px;margin:35px 0px 0px 55px;"></script>
-					<div><button type="submit" id="submitBtn" class="btn btn-lg btn-default">Default</button></div>
+					<div><button type="submit" id="submitBtn" class="btn btn-lg btn-default">提交</button></div>
 			</div>
 		</div>
 	</div>
 </div>
 	<input type="hidden" value="<!--{$goodsinfo->item_id}-->" name="goods_id"/>
 	</form>
-<div class="mask"></div>
+<div class="mask_bg"></div>
 
 <script>
 $(function(){
@@ -251,7 +251,7 @@ function goods_submit(){
 	}
 	var gallerys = $(".goods_gallery");
 	if(!gallerys || !gallerys.length){
-		alert('请上传商品图片！');
+		layer.msg('请上传商品图片！');
 		return false;
 	}
 	var data = $("#defaultForm").serializeJson();
@@ -269,12 +269,12 @@ function goods_submit(){
 		data.gallery_list.push(gall);
 	});
 	if(!data.goods_img){
-		alert('请点击商品图片选择预览图片');
+		layer.msg('请点击商品图片选择预览图片');
 		return false;
 	}
 	var goods_desc = UE.getEditor('editor').getContent();
 	if(!goods_desc || !goods_desc.length){
-		alert('还没有填写商品描述！');
+		layer.msg('还没有填写商品描述！');
 		return false;
 	}
 	buildGoodsSpecif(data);
@@ -282,10 +282,10 @@ function goods_submit(){
 	$("#submitBtn").attr("disabled", "disabled");
 	$.post('/goods/publish', data, function(ret){
 		if(ret && ret.result == 'SUCC'){
-			alert('商品发布成功！');
+			layer.msg('商品发布成功！');
 			window.location.href = '/goods';
 		}else{
-			alert('商品发布失败，请稍后重试！');
+			layer.msg('商品发布失败，请稍后重试！');
 			$("#submitBtn").removeAttr("disabled");
 		}
 	});
@@ -313,14 +313,14 @@ function initCategoryEvent(){
       	var cat = $(".category_val").val();
       	if(!cat || cat.replace(/^\s+|\s+$/g, '') == '')
       	{
-          	alert('分类不能为空！');
+          	layer.msg('分类不能为空！');
           	return;
       	}
 		var parent_id = $("#cat_id").val();
       	var params = {cat_id : parent_id,id : parent_id, cat_name : cat};
       	F.postWithLoading('/goods/simply/category', params, function(ret){
       		if(!ret.status){
-      			alert(ret.retmsg);
+      			layer.msg(ret.retmsg);
       			return;
       		}else{
 	      		addCatResponse(ret.result, parent_id, cat);
@@ -436,6 +436,9 @@ function goodsSpecifiEvent(){
 		}else{
 			$(".standFlag:last").after(clone);
 		}
+		clone.find(".check_list_info li:first").addClass("li_on1");
+		clone.find('.z_in_height').show();
+		$(".mask_bg").show();
 		if($(".standFlag").length == 3){
 			$(".add_s_projcet").hide();
 		}
@@ -451,11 +454,12 @@ function goodsSpecifiEvent(){
 			z_in_height.hide();  
 		}
 		container.find(".common_a_li").hide();
-		
 		isSpecifSelected(container);
+		$(".mask_bg").show();
 	})
 	//点击规格项
 	$(document).on("click",'.check_list_info li',function(){
+		$(".mask_bg").hide();
 		var container = getContainer(this);
 		var _text = $(this).text();
 		var cat = $(this).data('cat')
@@ -467,7 +471,7 @@ function goodsSpecifiEvent(){
 		} */
 		//不能跟其他规格相同
 		if($(".stand_check[data-cat="+cat+"]").length){
-			alert("规格不能相同");
+			layer.msg("规格不能相同");
 			return false;
 		}
 		container.find(".stand_check").text(_text);
@@ -542,6 +546,21 @@ function goodsSpecifiEvent(){
 	$(document).on("mouseout",'.yjtj',function(){
 		yjtjout(this);
 	})
+	$(document).on("mouseover",'.standFlag',function(){
+		$(this).find(".del_check").show();
+	});
+	$(document).on("mouseout",'.standFlag',function(){
+		$(this).find(".del_check").hide();
+	});
+	//删除规格
+	$(document).on("click",'.del_check',function(){
+		getContainer(this).remove();
+		generateSpecifTable();
+	});
+	$(".mask_bg").on('click',function(){
+		$(".z_in_height").hide();
+		$(this).hide();
+	});
 }
 function get_attr_by_type(cat_id, callback){
 	F.get('/goods/attribute', {cat_id : cat_id}, function(ret){
@@ -588,8 +607,6 @@ function yjtjclick(obj){
 	generateSpecifTable();
 }
 function highlightSpecifi(){
-	$(".check_list_info li:first").addClass("li_on1");
-	 
 	$('.check_list_info li').mouseover(function(){
 		  $(this).addClass("li_on1");
 	});
@@ -684,7 +701,7 @@ function generateSpecifTable(){
 			TR_HD += "<td><input type='text' class='attr_shop_price' data-type='money' value='' required ></td>";
 			TR_HD += "<td><input type='text' class='attr_income_price' data-type='money' value='' required ></td>";
 			TR_HD += "<td><input type='text' class='attr_cost_price' data-type='money' value='' required ></td>";
-			TR_HD += "<td><input type='number' class='attr_goods_number' value='' required ></td></tr>";
+			TR_HD += "<td><input type='text' data-type='positive' class='attr_goods_number' value='' required ></td></tr>";
 		}
 	});
 	$(".goods_stocks").html($(TR_HD));
