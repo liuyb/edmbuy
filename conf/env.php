@@ -38,6 +38,7 @@ return [
   'site' => [
   	'mobile' => 'http://m.ydmbuy.com',
   	'shop' => 'http://m.ydmbuy.com',
+    'merchant' => 'http://mch.ydmbuy.com'
   ],
   //debug白名单uid
   //'debug_white_list' => ['10001','109','104'],

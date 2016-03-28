@@ -45,10 +45,10 @@
 					<label class="control-label"><span class="fill_red">*</span>售价：</label>
 				</div>
 				<div class="type_right font_common">
-					<input type="text" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" data-type='money' required > 元
+					<input type="text" oninput="commissionCalc()" onpropertychange="commissionCalc()" id="shop_price" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" data-type='money' required > 元
 					
 					<label class="control-short"><span class="fill_red">*</span>供货价：</label>
-					<input type="text" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" data-type='money' required > 元<span class="prompt_common">佣金<i>0.00</i>元 给到平台的价格，用来计算佣金 ，买家不可见</span>
+					<input type="text" oninput="commissionCalc()" onpropertychange="commissionCalc()" id="income_price" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" data-type='money' required > 元<span id="commissionTxt" class="prompt_common">佣金<i>0.00</i>元 给到平台的价格，用来计算佣金 ，买家不可见</span>
 				</div>
 			</div>
 			
@@ -187,7 +187,8 @@
 			</div>
 			<div class="clear"></div>
 			
-			<div class="infos_go goods_stockDIV" <!--{if !isset($goods_attr_html)}-->style="display:none;"<!--{/if}-->>
+			
+			<div class="infos_go goods_stockDIV" <!--{if isset($count_goods_attributes) && $count_goods_attributes > 0}-->style=""<!--{else}-->style="display:none;"<!--{/if}-->>
 				<div class="goods_type font_common">
 					<label class="control-label"><span class="fill_red">*</span>商品库存：</label>
 				</div>
@@ -292,6 +293,24 @@ function goods_submit(){
 	return false;
 }
 
+//计算佣金
+function commissionCalc(){
+	var shop_price = $("#shop_price").val();
+	var income_price = $("#income_price").val();
+	var isvalid = false;
+	if(shop_price && income_price){
+		if(isMoney(shop_price) && isMoney(income_price)){
+			isvalid = true;
+		}
+	}
+	var commission = 0;
+	if(isvalid){
+		commission = shop_price - income_price;
+		commission = commission < 0 ? 0 : commission;
+	}
+	$("#commissionTxt i").text(commission.toFixed(2));
+}
+//隐藏添加分类区
 function hideCatDiv(){
 	if($(".add_type_hide").is(":visible")){
 		$(".add_type_hide").hide();
