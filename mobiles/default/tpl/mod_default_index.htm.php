@@ -107,13 +107,12 @@ window.location.reload();
 	</div>
 </div>
 
-<div class="click_more" onclick="pulldata(this);">
-	点击加载更多......
-</div>
-<?php /*require_scroll2old();*/?>
+<div class="click_more" onclick="pulldata(this);">点击加载更多...</div>
 <script>
 	var promote_endtime;
-	$().ready(function(){
+	var $glist;
+	$(function(){
+		$glist = $('#goods_list');
 		//图片大小
 		//ajust_div_size();
 		
@@ -122,7 +121,7 @@ window.location.reload();
 		getGoodsList(1, true);
 
 		//监听点击继续购买
-		$("#goods_list").on('click','tr', function(){
+		$glist.on('click','tr', function(){
 			var goodid = $(this).attr("data-goodid");
 			if(!goodid){
 				return;
@@ -137,8 +136,8 @@ window.location.reload();
 			}
 			$(".fk_b_list button").removeClass("b_on");
 			$(this).addClass("b_on");
-			$("#goods_list").empty();
 			getGoodsList(1, false);
+			return false;
 		});
 		//倒计时处理
 		<?php if(isset($package)):?>
@@ -208,9 +207,10 @@ window.location.reload();
 	}
 
 	function handleGoodsListAppend(TR){
-		$("#goods_list").append($(TR));
-		F.set_scroller(false, 100);
-		scrollToHistoryPosition();
+		//$glist.append($(TR));
+		$glist.html(TR);
+		//F.set_scroller(false, 100);
+		//scrollToHistoryPosition();
 	}
 
 	//当还有下一页时处理下拉
