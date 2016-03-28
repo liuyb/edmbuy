@@ -348,7 +348,7 @@ class Goods_Common {
             $TR_HD .= "<td><input type='text' class='attr_shop_price' data-type='money' value='$attr[shop_price]' required ></td>";
             $TR_HD .= "<td><input type='text' class='attr_income_price' data-type='money' value='$attr[income_price]' required ></td>";
             $TR_HD .= "<td><input type='text' class='attr_cost_price' data-type='money' value='$attr[cost_price]' required ></td>";
-            $TR_HD .= "<td><input type='number' class='attr_goods_number' value='$attr[goods_number]' required ></td></tr>";
+            $TR_HD .= "<td><input type='text' data-type='positive' class='attr_goods_number' value='$attr[goods_number]' required ></td></tr>";
         }
         return $TR_HD;   
     }

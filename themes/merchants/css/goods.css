@@ -583,3 +583,9 @@
 	top:-8px;
 	display:none;
 }
+.del_check{
+	position: absolute;
+    top: 0px;
+    right: -60px;
+    display: none;
+}

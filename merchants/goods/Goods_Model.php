@@ -78,18 +78,18 @@ class Goods_Model extends Model
                 0
             ));
         }
-        foreach ($add_list as $cat_id) {
-            // 插入记录
-            $sql = "INSERT INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 0) ";
-            D()->query($sql);
-        }
-        //冗余主分类到扩展分类
+        //冗余主分类到扩展分类 主分类放在扩展分类前，保证主分类一定存在
         if($cat_id){
             if($is_insert){
-                $sql = "INSERT INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
+                $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
             }else{
                 $sql = "UPDATE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
             }
+            D()->query($sql);
+        }
+        foreach ($add_list as $cat_id) {
+            // 插入记录
+            $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 0) ";
             D()->query($sql);
         }
     }
