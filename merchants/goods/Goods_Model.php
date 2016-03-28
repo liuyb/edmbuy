@@ -117,6 +117,7 @@ class Goods_Model extends Model
             $batchs = implode(',', $batchs);
             $sql .= $batchs;
         }
+        D()->query($sql);
     }
 
     //商品属性处理
