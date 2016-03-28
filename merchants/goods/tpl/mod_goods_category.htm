@@ -65,7 +65,7 @@
             // console.log(item.childs);
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
-                TR += "<p style='margin:0;'>" + cate[i]['cat_name'] + "</p>";
+                TR += "<p style='margin:0;margin-left:-57px;'>" + cate[i]['cat_name'] + "</p>";
             }
         }
         TR += "</div></td><td>" +
@@ -78,7 +78,7 @@
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
                 TR+="<div class='f_y_fe' data-type=" + item.cat_id + ">"+
-                        "<a href='javascript:;'onclick='addGoodsCatery(" + cate[i]['cat_id'] + ")'  class='new_adds'>新增下级</a>" +
+                        "<a href='javascript:;' class='new_adds'></a>" +
                         "<a href='javaScript:;' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' class='edit_type'>编辑</a>" +
                         "<a href='javascript:;'   onclick='delCategory(" +cate[i]['cat_id'] + ")' class='del_cla'>删除</a></div>";
 
@@ -182,7 +182,7 @@
         $(_list).show();
     }
 
-   $(document).on('mouseleave','.nums_px',function(){
+   $(document).on('blur','.nums_px',function(){
        var cat_id=$(this).attr("data-id")
        var short_order=$(this).val();
         var data={'cat_id':cat_id,'short_order':short_order};

@@ -302,6 +302,11 @@ class Goods_Controller extends MerchantController {
 			$data['retmsg'] = "参数不能为空！";
 			$response->sendJSON($data);
 		}
+		if(strlen($cateArr['cat_name'])>12){
+			$data['status'] = 0;
+			$data['retmsg'] = "名称不能多于12个字！";
+			$response->sendJSON($data);
+		}
 		$result = Goods_Model::IsHadCategory($id);
 		if ($result['parent_id'] > 0) {
 			$retmsg = "当前已是二级分类，不能增加子分类！";

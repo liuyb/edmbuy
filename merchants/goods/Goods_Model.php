@@ -335,11 +335,11 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select count(1) from shp_category where merchant_id='{$merchant_id}' and parent_id = 0 and cat_level =1";
+        $sql = "select count(1) from shp_category where merchant_id='{$merchant_id}' and parent_id = 0 and is_delete =0";
         $totalCount = D()->query($sql)->result();
         $pager->setTotalNum($totalCount);
         $limit = $pager->start . "," . $pager->pagesize;
-        $sql = "select cat_id, cat_name,parent_id,cate_thums,sort_order from shp_category where merchant_id ='{$merchant_id}' and parent_id = 0 and cat_level =1 order by sort_order ASC  limit {$limit}";
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category where merchant_id ='{$merchant_id}' and parent_id = 0 and is_delete =0  limit {$limit}";
         $list = D()->query($sql)->fetch_array_all();
         $data = self::getChirlList($merchant_id);
         $p = 0;
@@ -363,7 +363,7 @@ class Goods_Model extends Model
      */
     static function getChirlList($merchant_id)
     {
-        $sql = "select cat_id, cat_name,parent_id,cate_thums,sort_order from shp_category WHERE parent_id > 0 and merchant_id='{$merchant_id}' and cat_level = 2";
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category WHERE parent_id > 0 and merchant_id='{$merchant_id}' and is_delete = 0";
         $result = D()->query($sql)->fetch_array_all();
         return $result;
     }
@@ -379,7 +379,7 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select cat_name ,cat_id ,cate_thums from shp_category where merchant_id ='%s' and parent_id=0";
+        $sql = "select cat_name ,cat_id ,cat_thumb from shp_category where merchant_id ='%s' and parent_id=0";
         $list = D()->query($sql, $merchant_id)->fetch_array_all();
         return $list;
     }
@@ -397,10 +397,8 @@ class Goods_Model extends Model
         $merchant_id = $GLOBALS['user']->uid;
         if (intval($cat_id) == 0) {
             $insertarr['parent_id'] = 0;
-            $insertarr['cat_level'] = 1;
         } else {
             $insertarr['parent_id'] = $cat_id;
-            $insertarr['cat_level'] = 2;
         }
         $insertarr['cat_name'] = $cateArr['cat_name'];
         $sql = "select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s'";
@@ -410,14 +408,13 @@ class Goods_Model extends Model
         }
         $tablename = "`shp_category`";
         $insertarr['merchant_id'] = $merchant_id;
-        $insertarr['cate_thums'] = isset($cateArr['cate_thums']) ? $cateArr['cate_thums'] : '';
+        $insertarr['cat_thumb'] = isset($cateArr['cate_thums']) ? $cateArr['cate_thums'] : '';
         $insertarr['sort_order'] = isset($cateArr['sort_order']) ? $cateArr['sort_order'] : 0;
         if ($cateArr['edit'] != 1) {
             return D()->insert($tablename, $insertarr);
         } else {
             unset($insertarr['merchant_id']);
             unset($insertarr['parent_id']);
-            unset($insertarr['cat_level']);
             $whereArr['cat_id'] = $cat_id;
             return D()->update($tablename, $insertarr, $whereArr);
         }
@@ -489,7 +486,7 @@ class Goods_Model extends Model
             $ids .= $id['goods_id'] . ",";
         }
         $ids = rtrim($ids, ",");
-        $setarr['cat_level'] = 0;
+        $setarr['is_delete'] = 1;
 //        $whereIds = "goods_id in({$ids})"; //得到条件
         //0代表没有分类
         $category = D()->update($table, $setarr, $where);//第一步更新分类表的cat_level
@@ -514,7 +511,7 @@ class Goods_Model extends Model
      */
     static function IsHadCategory($cat_id)
     {
-        $sql = "select parent_id from shp_category WHERE  cat_id=%d and cat_level = 2";
+        $sql = "select parent_id from shp_category WHERE  cat_id=%d";
         $parent_id = D()->query($sql, $cat_id)->get_one();
         return $parent_id;
     }
@@ -524,7 +521,7 @@ class Goods_Model extends Model
      */
     static function getOneCategory($cat_id)
     {
-        $sql = "select cate_thums,cat_name ,sort_order from shp_category where cat_id = {$cat_id}";
+        $sql = "select cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id}";
         return D()->query($sql)->get_one();
     }
 

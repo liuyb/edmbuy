@@ -10,7 +10,7 @@
             <select class="check_s c_goods_type" name="cat_id">
                 <option value ="new">请选择</option>
                 <!--{foreach from=$goodsList item=val}-->
-                <option  <!--{if $val.cat_id==$cat_id && $edit==1}-->selected<!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
+                <option  <!--{if $val.cat_id==$cat_id }-->selected<!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
                 <!--{/foreach}-->
             </select>
         </div>
@@ -19,7 +19,7 @@
             <!--{if $edit==0}-->
             <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();" id="file">
             <!--{elseif $edit==1}-->
-            <img src="<!--{$catgory.cate_thums}--> " onclick="fileupload();" id="file">
+            <img src="<!--{$catgory.cate_thumb}--> " onclick="fileupload();" id="file">
             <!--{/if}-->
             <input type="file" name="file" class="dj_fil" onchange="fileupload(event)">
             <input type="hidden" name="cat_url" value="" >
@@ -43,10 +43,6 @@
         }
         image_upload(url, e, obj, function(ret){
             var thumb = ret.thumb;
-            var html =   '	<div class="add_img goods_gallery" onmouseover="galleryover(this)" onmouseout="galleryout(this)">'
-                    +'		<img src="'+thumb+'" class="'+selectedCls+'" data-ori="'+ret.result+'" data-std="'+ret.stdpath+'" onclick="galleryPicSelect(this)">	'
-                    +'      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
-                    +'	</div>';
             $("#file").attr("src",thumb);
             $("input[name=cat_url]").val(thumb);
         });
