@@ -42,9 +42,8 @@ class Goods_Model extends Model
         } catch (Exception $e) {
             D()->rollback();
             $ret = false;
-        }finally{
-            D()->commit();
         }
+        D()->commit();
         return $ret;
     }
 
@@ -150,20 +149,20 @@ class Goods_Model extends Model
         }
         return $default;
     }
-    
+
     /**
      * 解析成页面需要的商品属性格式
      * array(cat_id=>1,cat_name=>商品,attrs=>array([attr1_id] => 2
-                    [attr1_value] => 300g
-                    [attr2_id] => 5
-                    [attr2_value] => 黄色
-                    [attr3_id] => 0
-                    [attr3_value] => 
-                    [market_price] => 9.00
-                    [shop_price] => 9.00
-                    [income_price] => 8.00
-                    [cost_price] => 7.00
-                    [goods_number] => 6))
+    [attr1_value] => 300g
+    [attr2_id] => 5
+    [attr2_value] => 黄色
+    [attr3_id] => 0
+    [attr3_value] =>
+    [market_price] => 9.00
+    [shop_price] => 9.00
+    [income_price] => 8.00
+    [cost_price] => 7.00
+    [goods_number] => 6))
      * @param unknown $goods_id
      */
     public static function get_goods_attrs($goods_id){
@@ -188,7 +187,7 @@ class Goods_Model extends Model
         }
         return $ret_arr;
     }
-    
+
     /**
      * 当前商品 选中的属性 唯一过滤
      * @param unknown $index
@@ -209,7 +208,7 @@ class Goods_Model extends Model
         unset($map);
         return $ret;
     }
-    
+
     /**
      * 用map来构造商品属性规格
      * 商品type（颜色、重量）=> array(对应的属性列表)
@@ -537,5 +536,22 @@ class Goods_Model extends Model
         return D()->update($tablename,  $setArr, $wherearr);
 
     }
-
+    /**
+     * 获取商家商品的评论列表
+     * @param Pager $pager
+     * @return mixed
+     */
+    static function getCommentList(Pager $pager)
+    {
+        //comment_id ,id_value,content,comment_rank,user_name,add_time,status
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select count(1) from shp_comment where merchant_id=%d";
+        $comment_count = D()->query($sql, $merchant_id)->result();
+        $pager->setTotalNum($comment_count);
+        $limit="{$pager->start},{$pager->pagesize}";
+        $sql="select comment_id ,id_value,content,comment_rank,user_name,add_time,status from shp_comment where merchant_id=%d
+              order by add_time DESC limit {$limit}";
+        $result=$pager->result;
+        return $result;
+    }
 }

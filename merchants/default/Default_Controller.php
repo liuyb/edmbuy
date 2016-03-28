@@ -7,7 +7,7 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 class Default_Controller extends Controller {
-  
+
   /**
    * default action 'index'
    * @param Request $request
@@ -24,5 +24,5 @@ class Default_Controller extends Controller {
   }
 
 }
- 
+
 /*----- END FILE: Default_Controller.php -----*/
