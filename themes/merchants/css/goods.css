@@ -442,10 +442,11 @@
 	color:#0085d7;
 }
 .f_y_fe{
-	padding-left: 90px;
-	text-align: left;
+	/*padding-left: 90px;*/
+	/*text-align: left;*/
 	line-height: 20px;
-	text-align:left;
+	/*text-align:left;*/
+	display: none;
 }
 .add_fix{
 	/*width: 100%;*/
@@ -459,7 +460,7 @@
 	width:500px;
 	border-radius: 4px;
 	background: #fff;
-	min-height:450px;
+	height:450px;
 	display:block;
 }
 .add_name_go{

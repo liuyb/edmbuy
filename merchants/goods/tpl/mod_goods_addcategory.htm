@@ -16,54 +16,39 @@
         </div>
         <div class="add_img_go">分类图标：</div>
         <div class="add_img img_go_ds">
-            <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();">
+            <!--{if $edit==0}-->
+            <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();" id="file">
+            <!--{elseif $edit==1}-->
+            <img src="<!--{$catgory.cate_thums}--> " onclick="fileupload();" id="file">
+            <!--{/if}-->
             <input type="file" name="file" class="dj_fil" onchange="fileupload(event)">
-            <input type="hidden" value="/a/mch/goodscategory" name="cat_url"/>
-            <input type="hidden" value="<!--{$cat_id}-->" name="id"/>
+            <input type="hidden" name="cat_url" value="" >
         </div>
         <div class="clear"></div>
         <div class="file_sca_img">
             <p>图片支持格式：jpg,png</p>
             <p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
         </div>
-        <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value=""></div>
+        <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value="<!--{$catgory.sort_order}-->"></div>
         <div class="btn_save">保存</div>
     </div>
 
 <script>
     function fileupload(e, obj){
         var url = '/goods/upload_goods_categroy';
-        /* popUpload('上传图片', url, function(){
-         alert('in..');
-         },function(xhr, status, e){
-         var msg = "上传失败!";
-         if(xhr && xhr.responseText){
-         msg = $(xhr.responseText).text();
-         }
-         alert(msg);
-         }); */
-        /* F.postWithLoading(url, {}, function(ret){
-         if(ret.flag=='SUC'){
-         alert('in..');
-         }else{
-         alert(ret.errMsg);
-         }
-         }); */
+        var galleryCount = $(".goods_gallery").length;
+        var selectedCls = "";
+        if(galleryCount < 1){
+            selectedCls = "add_img_selected";
+        }
         image_upload(url, e, obj, function(ret){
-            /* if(obj){
-             var oldDIV = $(obj).closest("div");
-             var html =   '<img src="'+thumb+'" data-img="'+img+'">	'
-             +' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
-             oldDIV.html(html);
-             return;
-             }
-             var html =   '	<div class="dj_index publish_img">'
-             +'		<img src="'+thumb+'" data-img="'+img+'">	'
-             +' <input type="file" name="file" class="dj_file" onchange="fileupload(event, this);">'
-             +'	</div>';
-
-             $(".publish_image").append(html); */
-            console.log(ret);
+            var thumb = ret.thumb;
+            var html =   '	<div class="add_img goods_gallery" onmouseover="galleryover(this)" onmouseout="galleryout(this)">'
+                    +'		<img src="'+thumb+'" class="'+selectedCls+'" data-ori="'+ret.result+'" data-std="'+ret.stdpath+'" onclick="galleryPicSelect(this)">	'
+                    +'      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
+                    +'	</div>';
+            $("#file").attr("src",thumb);
+            $("input[name=cat_url]").val(thumb);
         });
     }
     $(".btn_save").click(function(){
@@ -78,17 +63,14 @@
         var sort_order =$("input[name=sort_order]").val()
         var id =$("input[name=id]").val()
         var cat_id =$(".check_s").val();
-        console.log(cat_id);
-        console.log(cat_name);
-        console.log(cat_url);
         var data={"cat_name":cat_name,"cat_id":cat_id,'cate_thums':cat_url,'sort_order':sort_order,'edit':edit,'id':id};
         $.post(url,data,function(ret){
-            if(edit==0 && ret.status==1){
+            if(ret.status==1){
                         layer.closeAll();
                         layer.msg(ret.retmsg);
 
             }
-            if(edit==0 && ret.status==0){
+            if(ret.status==0){
                         layer.msg(ret.retmsg);
             }
 

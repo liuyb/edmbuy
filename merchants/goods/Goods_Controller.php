@@ -245,6 +245,7 @@ class Goods_Controller extends MerchantController {
 		$this->v->assign('edit', 0);
 		if ($show_page) {
 			$catgory['cat_name'] = "";
+			$catgory['sort_order'] = "";
 			$catgory['cat_url'] = "";
 			$this->v->assign('catgory', $catgory);
 			if ($edit == 1) {
@@ -280,8 +281,9 @@ class Goods_Controller extends MerchantController {
 			empty($cateArr['sort_order']) ||
 			empty($cateArr['cate_thums'])
 		) {
-			$data['status'] = 1;
+			$data['status'] = 0;
 			$data['retmsg'] = "参数不能为空！";
+			$response->sendJSON($data);
 		}
 		$result = Goods_Model::IsHadCategory($id);
 		if ($result['parent_id'] > 0) {
@@ -292,11 +294,11 @@ class Goods_Controller extends MerchantController {
 			$result = Goods_Model::addCategory($cateArr, $cat_id);//新增一个分类
 			if (is_numeric($result)) {
 				$data['status'] = 1;
-				$data['retmsg'] = "新增成功！";
+				$data['retmsg'] = "编辑成功！";
 				$data['result'] = $result;
 			} else {
 				$data['status'] = 0;
-				$data['retmsg'] = "新增失败！";
+				$data['retmsg'] = "编辑失败！";
 				if (is_string($result)) {
 					$data['retmsg'] = $result;
 				}
