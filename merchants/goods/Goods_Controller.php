@@ -21,8 +21,9 @@ class Goods_Controller extends MerchantController {
             'goods/category/list' => 'goodsCategory',
             'goods/catetory' => 'addCatetory',
             'goods/delcatery' => 'deleCategory',
-            'goods/updateShortOrder' => 'updateShortOrder',
-            'goods/simply/category' => 'doAddCategory'
+            'goods/update/shortorder' => 'updateShortOrder',
+            'goods/simply/category' => 'doAddCategory',
+            'goods/comment' => 'goodsComment'
         ];
     }
 
@@ -388,7 +389,7 @@ class Goods_Controller extends MerchantController {
      * @param Request $request
      * @param Response $response
      */
-    public function Goodscomment(Request $request, Response $response)
+    public function goodsComment(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_goods_comment');
         $this->setPageLeftMenu('goods', 'comment');
@@ -402,10 +403,14 @@ class Goods_Controller extends MerchantController {
      */
     public function ajaxGetCommentList(Request $request, Response $response)
     {
-        $currentPage = $request->get('currentpage', 1);
+        $currentPage = $request->get('current_page', 1);
         $pager = new Pager($currentPage, 20);
-        Goods_Model::getCommentList($pager);//获取分页列表
+        $list = Goods_Model::getCommentList($pager);//获取分页列表
+        $this->v->assign('commentList',$list);
         $ret = $pager->outputPageJson();
-        $response->sendJSON($ret);
+        $this->setPageView($request, $response, '_page_box');
+        $this->v->set_tplname('mod_goods_ajaxcomment');
+        $this->v->assign('page',$ret);
+        $response->send($this->v);
     }
 }

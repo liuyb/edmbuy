@@ -551,7 +551,8 @@ class Goods_Model extends Model
         $limit="{$pager->start},{$pager->pagesize}";
         $sql="select comment_id ,id_value,content,comment_rank,user_name,add_time,status from shp_comment where merchant_id=%d
               order by add_time DESC limit {$limit}";
-        $result=$pager->result;
+        $result= D()->query($sql,$merchant_id)->fetch_array_all();
+        $pager->result=$result;
         return $result;
     }
 }
