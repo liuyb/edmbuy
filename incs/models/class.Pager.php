@@ -56,6 +56,10 @@ class Pager extends CBase {
         $this->maxpage = $maxpage;
     }
     
+    public function setResult($ret){
+        $this->result = $ret;
+    }
+    
     public function outputPageVar($view){
         $view->assign("curpage", $this->curpage);
         $view->assign("maxpage", $this->maxpage);

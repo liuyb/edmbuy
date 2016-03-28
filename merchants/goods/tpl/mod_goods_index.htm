@@ -74,7 +74,7 @@ function loadTableContent(curpage, isinit, param){
 	data.curpage = curpage ? curpage : 1;
 	F.get('/goods/list', data, function(ret){
 		var TR = "";
-		if(!ret || !ret.result.length){
+		if(!ret || !ret.result || !ret.result.length){
 			TR = "<tr><td colspan='10' style='text-align:center;'>还没有数据~</td></tr>";
 		}else{
 			var result = ret.result;

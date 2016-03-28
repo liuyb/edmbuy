@@ -131,6 +131,9 @@ class Goods_Common {
     }
     
     static function build_options($options, $selected = 0){
+        if(!$options || count($options) == 0){
+            return '';
+        }
         $select = '';
         foreach ($options AS $var)
         {

@@ -296,7 +296,7 @@ class Goods_Model extends Model
         $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
-        $pager->result = $goods;
+        $pager->setResult($goods);
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
