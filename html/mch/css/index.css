@@ -57,3 +57,154 @@
 	text-shadow: 0 1px 0 rgba(0,0,0,0.1);
 }
 #login form .loginbtn {float: right;margin-right: 5px;}
+
+
+/*忘记密码*/
+
+#login_new_header{
+	width:100%;
+	background:#323a4d;
+	height:60px;
+}
+#header_center{
+	width:1200px;
+	margin:0 auto;
+}
+#login_header_left img{
+  	margin-top:9px;
+	padding-right:10px;
+}
+#login_header_left{
+  	vertical-align: top;	
+	line-height:60px;
+	color:#fff;
+	font-size:16px;
+	float:left;
+}
+#login_header_right{
+	float:right;
+}
+#login_header_right li{	
+	font-size:16px;
+	color:#fff;
+	float:left;
+	line-height:60px;
+	padding-left:50px;
+}
+
+#forget_bg{
+	min-height:100%;
+	width:100%;
+}
+#find_word_tit{
+	width:1200px;
+	margin:50px auto 0;
+	font-size:24px;
+	color:#f26427;
+}
+#find_word_one{
+	width:1200px;
+	margin:10px auto 0;
+	background:#fff;
+}
+.one_password{
+  	padding-top: 80px;
+  	text-align: center;	
+}
+.one_flow{
+	text-align:center;
+	padding-bottom:90px;
+}
+.one_flow li{
+  	width: 235px;
+  	display: inline-block;	
+}
+.flow_on{
+	color:#f26427;
+	font-size:14px;
+}
+.one_verify{
+	text-align:center;	
+}
+.phone_id{
+	font-size:14px;
+	color:#333;
+	margin-bottom:20px;
+}
+#verify_phone{
+	margin-left:10px;
+	width:360px;
+	border:1px solid #ddd;
+	height:30px;
+	padding-left:5px;
+}
+.auth_code{  
+	margin-right: 15px;
+	width:215px;
+	border:1px solid #ddd;
+	height:30px;	
+	margin-left: 20px;	
+}
+.gain_note{
+	width:130px;
+	height:33px;
+	background:#f69267;
+	color:#fff;
+	border:0;
+	vertical-align: top;
+	border-radius:2px;
+}
+.code_ts{
+	font-size:14px;
+	color:#999;
+	padding:10px 0 0 240px;
+}
+#next_one{
+	margin-top:50px;
+	text-align:center;
+	padding-bottom:100px;
+}
+#next_step{
+	width:100px;
+	height:40px;
+	border:0;
+	background:#f26427;
+	font-size:12px;
+	color:#fff;
+	border-radius:5px;
+	margin-left:-175px;
+}
+.three_infos{
+	text-align:center;
+	padding-bottom:150px;
+}
+.success_ts{
+	display:inline-block;
+	vertical-align: top;
+	text-align:left !important;
+	margin-left:10px;
+}
+.success_img{
+	display: inline-block;
+}
+.ts_tit{
+	font-size:24px;
+	color:#f26427;
+}
+.ts_password{
+	font-size:16px;
+	color:#666;
+}
+.ts_password a{
+	color:#0085d7 !important;
+}
+.find_two,.find_three{
+	display:none;
+}
+
+
+
+
+
+
+

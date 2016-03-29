@@ -74,7 +74,7 @@
 
 /*========== 以下部分为框架共用部分 ==========*/
 
-html,body {background-color:#eee;}
+html,body {background-color:#ecf1f5;}
 .btn {padding:4px 10px 3px;background-color:#FEFEFE;border:1px solid #ddd;font-size:16px;line-height:18px;overflow:visible;cursor:pointer;font-weight:normal;}
 .btn:hover {background-color:#fff;border:1px solid #aaa;color:#000;}
 .bgx {background-image: url(../img/bgx.png);}
@@ -231,7 +231,7 @@ i.desc {background-position: 0 -23px;display: inline-block;}
 /* 页面框架 */
 html,body { height: auto;min-height: 100%; }
 body { line-height: 1.6;font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","\9ED1\4F53",Arial,sans-serif;color: #222;font-size: 14px; }
-body { min-width: 1200px;background: #e7e8eb;}
+body { min-width: 1200px;}
 .ifr-head { background: #f26427;height:58px;position: -webkit-sticky;position: -moz-sticky;position: -ms-sticky;position: sticky;top: 0;left: 0; }
 .ifr-head .header { width: 1200px;height: 100%;margin: 0 auto; }
 .ifr-head .headRt { float: right;height: 100%; }
