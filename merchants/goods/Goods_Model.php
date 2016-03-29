@@ -247,9 +247,8 @@ class Goods_Model extends Model
             Goods_Atomic::batch_delete_goods_gallery($goods_ids);
         }catch(Exception $e){
             D()->rollback();
-        }finally {
-            D()->commit();
         }
+        D()->commit();
     }
 
     static function batchUpdateGoods(array $goods_ids, $field, $val){
@@ -287,7 +286,7 @@ class Goods_Model extends Model
             $where .= " and g.is_on_sale = ".(intval($options['is_sale']) - 1);
         }
         if($options['orderby'] && $options['order_field']){
-            $orderby .= " order by $options[order_field] $options[orderby] ";
+            $orderby .= " order by $options[order_field] $options[orderby],g.last_update $options[orderby] ";
         }else{
             $orderby .= " order by g.last_update desc ";
         }
@@ -297,7 +296,7 @@ class Goods_Model extends Model
         $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
-        $pager->result = $goods;
+        $pager->setResult($goods);
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
@@ -311,8 +310,8 @@ class Goods_Model extends Model
     static function buildGoodsImg($goods){
         if (!empty($goods)) {
             foreach ($goods AS &$g) {
-                $g['goods_img'] = Items::imgurl($g['goods_img']);
-                $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+                $g['goods_img'] = Goods_Common::imgurl($g['goods_img']);
+                $g['goods_thumb'] = Goods_Common::imgurl($g['goods_thumb']);
             }
         }
         else {

@@ -146,7 +146,7 @@ class Goods_Controller extends MerchantController {
         $goods->shipping_fee = $shipping_fee;
 
         $ret = false;
-        if($goods_name){
+        if($request->is_post() && $goods_name){
             $ret = Goods_Model::insertOrUpdateGoods($goods);
         }
         $response->sendJSON(["result" => $ret ? 'SUCC' :'FAIL']);
@@ -158,11 +158,17 @@ class Goods_Controller extends MerchantController {
      * @param Response $response
      */
     public function upload_goods_gallery(Request $request, Response $response){
-        $imgDIR = "/a/mch/goods/";
-        $img = $_POST["img"];
-        $upload = new Upload($img, $imgDIR);
-        $result = $upload->saveImgData();
-        $ret = $upload->buildUploadResult($result);
+        $ret = [
+            'flag' => 'FAIL',
+            'errMsg' => '上传失败，请稍后重试！'
+        ];
+        if($request->is_post()){
+            $imgDIR = "/a/mch/goods/";
+            $img = $_POST["img"];
+            $upload = new Upload($img, $imgDIR);
+            $result = $upload->saveImgData();
+            $ret = $upload->buildUploadResult($result);
+        }
         $response->sendJSON($ret);
     }
 
@@ -174,7 +180,7 @@ class Goods_Controller extends MerchantController {
     public function delete_goods(Request $request, Response $response){
         $ret = ['result' => 'FAIL'];
         $goods_ids = $request->post('goods_ids');
-        if($goods_ids){
+        if($request->is_post() && $goods_ids){
             if(!is_array($goods_ids)){
                 $goods_ids = [$goods_ids];
             }
@@ -193,7 +199,7 @@ class Goods_Controller extends MerchantController {
         $goods_ids = $request->post('goods_ids');
         $status = $request->post('status');
         $statusVal = $request->post('statusVal');
-        if($goods_ids){
+        if($request->is_post() && $goods_ids){
             if(!is_array($goods_ids)){
                 $goods_ids = [$goods_ids];
             }

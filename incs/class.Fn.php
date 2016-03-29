@@ -219,6 +219,40 @@ class Fn extends Func {
   	return $val;
   }
   
+  /**
+   * 根据传入的综合状态返回 订单状态
+   * @param unknown $composite_status
+   */
+  static function get_order_status($composite_status){
+      switch($composite_status){
+          //待付款
+          case CS_AWAIT_PAY :
+              $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING));
+              break;
+          //待发货
+          case CS_AWAIT_SHIP : 
+              $ret = array("pay_status" => PS_PAYED,
+                           "shipping_status" => array(SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING));
+              break;
+          //待收货
+          case CS_AWAIT_RECEIVE : 
+              $ret = array("pay_status" => PS_PAYED,
+                  "shipping_status" => array(SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART));
+              break;
+          //已完成
+          case CS_FINISHED : 
+              $ret = array("pay_status" => PS_PAYED, "shipping_status" => SS_RECEIVED);
+              break;
+          //已关闭
+          case CS_CLOSED : 
+              $ret = array("pay_status" => PS_CANCEL, "order_status" => array(OS_CANCELED, OS_INVALID));
+              break;
+          default:
+              $ret = [];
+      }
+      return $ret;
+  }
+  
 }
  
 /*----- END FILE: class.Fn.php -----*/

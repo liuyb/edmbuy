@@ -645,35 +645,40 @@ function ectable( $tbname )
  */
 function headscript()
 {
-  global $user;
-  
-  // Global data
-  $wxVer   = Weixin::browserVer();
-  $wxVer   = $wxVer ? "'".$wxVer."'" : 0;
-  $isWxBro = $wxVer ? 'true' : 'false';
-  $wxConf  = C('api.weixin_edmbuy');
-  $wxAppId = $wxConf['appId'];
-  $appName = L('appname');
-  $currUri = Request::uri();
-  $ctxpath = C('env.contextpath');
-  $sesstoken=sess_token();
-  $rendermode = View::RENDER_MODE_DEFAULT;
-  $debug_list = C('env.debug_white_list');
-  
-  $script  = '<script type="text/javascript">';
-  $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
-  if ($user->uid) {
-  	foreach ($user->column_data() AS $k => $v) {
-  		if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
-  			$v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
-  			$script .= 'gUser.'.$k."={$v};";
-  		}
-  	}
-  	$script .= 'gUser.is_debug_user='.(empty($debug_list) || in_array($user->uid, $debug_list) ? 'true;' : 'false;');
-  }
-  $script .= '</script>';
+  $script = get_headscript();
   
   echo $script;
+}
+
+function get_headscript(){
+    global $user;
+    
+    // Global data
+    $wxVer   = Weixin::browserVer();
+    $wxVer   = $wxVer ? "'".$wxVer."'" : 0;
+    $isWxBro = $wxVer ? 'true' : 'false';
+    $wxConf  = C('api.weixin_edmbuy');
+    $wxAppId = $wxConf['appId'];
+    $appName = L('appname');
+    $currUri = Request::uri();
+    $ctxpath = C('env.contextpath');
+    $sesstoken=sess_token();
+    $rendermode = View::RENDER_MODE_DEFAULT;
+    $debug_list = C('env.debug_white_list');
+    
+    $script  = '<script type="text/javascript">';
+    $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
+    if ($user->uid) {
+        foreach ($user->column_data() AS $k => $v) {
+            if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
+                $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
+                $script .= 'gUser.'.$k."={$v};";
+            }
+        }
+        $script .= 'gUser.is_debug_user='.(empty($debug_list) || in_array($user->uid, $debug_list) ? 'true;' : 'false;');
+    }
+    $script .= '</script>';
+    return $script;
 }
 
 /**

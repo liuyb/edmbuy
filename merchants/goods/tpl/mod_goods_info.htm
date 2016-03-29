@@ -103,7 +103,8 @@
 					<!--{if isset($gallery) }-->
 				  	<!--{foreach from=$gallery item=g}-->
 					<div class="add_img goods_gallery">
-					<img src="<!--{$g->thumb_url}-->" data-ori="<!--{$g->img_original}-->" data-std="<!--{$g->img_url}-->" onclick="galleryPicSelect(this)" class="<!--{if $g->thumb_url == $goodsinfo->item_thumb }-->add_img_selected<!--{/if}-->">	'
+					<img src="<!--{$g->thumb_url}-->" data-ori="<!--{$g->img_original}-->" data-std="<!--{$g->img_url}-->" onclick="galleryPicSelect(this)" class="<!--{if $g->thumb_url == $goodsinfo->item_thumb }-->add_img_selected<!--{/if}-->">
+					<img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">
 					</div>
 					<!--{/foreach}-->
 	              	<!--{/if}-->
@@ -134,9 +135,8 @@
 							 		</ul>
 								</div>
 							</div>
-							<button class="add_common del_check">删除</button>
 						</div>
-						
+						<button class="add_common del_check">删除</button>
 						<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 						<div class="common_a_tow">
 				 			<div class="result_d">
@@ -160,8 +160,8 @@
 							 		</ul>
 								</div>
 							</div>
-							<button class="add_common del_check">删除</button>
 						</div>
+						<button class="add_common del_check">删除</button>
 						<div style="height:40px;" class="add_del_y">
 						<!--{foreach from=$type.display_attrs item=attr}-->
 						<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
@@ -411,7 +411,7 @@ function fileupload(e, obj){
 	}
 	image_upload(url, e, obj, function(ret){
 		var thumb = ret.thumb;
-		var html =   '	<div class="add_img goods_gallery" onmouseover="galleryover(this)" onmouseout="galleryout(this)">'
+		var html =   '	<div class="add_img goods_gallery">'
 			+'		<img src="'+thumb+'" class="'+selectedCls+'" data-ori="'+ret.result+'" data-std="'+ret.stdpath+'" onclick="galleryPicSelect(this)">	'
 			+'      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
 			+'	</div>';
@@ -419,17 +419,21 @@ function fileupload(e, obj){
 	});
 }
 
+$(function(){
+	$(document).on("mouseover",'.goods_gallery',function(){
+		$(this).find("img:last").show();
+	});
+	$(document).on("mouseout",'.goods_gallery',function(){
+		$(this).find("img:last").hide();
+	});
+	
+	goodsSpecifiEvent();
+	highlightSpecifi();
+});
+
 function galleryPicSelect(obj){
 	$(".add_img img").removeClass("add_img_selected");
 	$(obj).addClass("add_img_selected");
-}
-
-function galleryover(obj){
-	$(obj).find("img:last").show();
-}
-
-function galleryout(obj){
-	$(obj).find("img:last").hide();
 }
 
 function deleteGallery(obj){
@@ -439,10 +443,7 @@ function deleteGallery(obj){
 	}
 }
 
-$(function(){
-	goodsSpecifiEvent();
-	highlightSpecifi();
-})
+
 //商品规格事件监听
 function goodsSpecifiEvent(){
 	//添加规格

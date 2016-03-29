@@ -34,7 +34,7 @@ class Items extends StorageNode {
 					'income_price'    => 'income_price',
 					'commision'       => 'commision',
 					'promote_price'   => 'promote_price',
-				    //'cost_price'      => 'cost_price',
+				    'cost_price'      => 'cost_price',
 					'promote_start_date' => 'promote_start_date',
 					'promote_end_date'   => 'promote_end_date',
 					'warn_number'     => 'warn_number',
