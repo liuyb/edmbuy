@@ -242,23 +242,75 @@ body { min-width: 1200px;}
 .ifr-head .navit a { display: block;height: 100%;line-height: 58px;text-align: center;}
 .ifr-head .navit.on a { background: #de461f; }
 
-.ifr-body { width: 1200px;margin: 10px auto; }
+.ifr-body { width: 1200px;margin: 0px auto; }
 .ifr-body .blk { background: #fff;padding: 10px;margin-bottom: 10px; }
 
 .ifr-foot {  }
-
+.clear{clear:bloth;}
 /*========== 以下部分为模块私有部分 ==========*/
 
+/*========== 公用头部样式 ==========*/
+#common_header_left{
+	display:inline-block;
+	height:60px;
+	line-height:60px;
+	font-size:16px;
+	color:#fff;
+	background:#f26427;
+	width:140px;
+	vertical-align: top;
+}
+#common_header_left img{
+	margin:9px 0 9px 20px;
+}
+.common_on{
+	color:#f26427 !important;
+	border-bottom:2px solid #f26427;
+}
+#common_list{
+	height:60px;
+	line-height:58px;
+  	display: inline-block;	
+}
+#common_list li{
+	padding:0 30px;
+  	display: inline-block;	
+	font-size:16px;
+	color:#fff;
+	cursor:pointer;
+}
+#common_right{
+	float:right;
+}
+#common_btn{
+	width:94px;
+	height:40px;
+	margin-top:10px;
+	font-size:14px;
+	color:#fff;
+	background:#404b63;	
+	border:0;
+	margin-left:10px;
+}
+.common_name{
+	background:#404b63 url("../img/xl.png") no-repeat 90% !important;
+	padding-right:15px;
+}
 
-.clear{clear:bloth;}
-
-
-
-
-
-
-
-
+/*========== 左边公用样式 ==========*/
+#common_left{
+	width:140px;
+	background:#fff;
+	min-height:900px;
+	float:left;
+}
+#common_left li{
+	font-size:14px;
+	color:#1f1f1f;
+	height:55px;
+	border-bottom:1px solid #e9e9e9;
+	line-height:55px;
+}
 
 
 

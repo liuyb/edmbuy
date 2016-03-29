@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/order.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+
+<style>
+#order_list_right{
+	margin:20px 0 0 20px;
+	width:1040px;
+	float:left;
+	min-height:880px;
+}
+#order_type li{
+	width:100px;
+	height:40px;
+	font-size:14px;
+	color:#fff;
+	background:#bcbac2;
+	display:inline-block;
+	border-radius:2px;
+	line-height:40px;
+	text-align:center;
+	margin-right:10px;
+	cursor:pointer;
+}
+.order_type_on{
+	background:#f26427 !important;
+}
+#type_infos{
+	width:1040px;
+	background:#fff;
+}
+#type_table_list{
+	width:100%;
+}
+#type_table_list th{
+	font-size:12px;
+	color:#1f1f1f;
+	border-bottom:1px solid #e9e9e9;
+	height:46px;
+	line-height:46px;
+}
+#type_table_list td{
+	font-size:12px;
+	color:#1f1f1f;
+	border-bottom:1px solid #e9e9e9;
+	text-align:center;
+	height:60px;
+	line-height:60px;
+	font-size:12px;
+	color:#7d7d7d;
+}
+.common_check{
+ 	background: url(../mch/img/xk.png) no-repeat center;
+	cursor:pointer;
+}
+#look_up{
+	background: url(../mch/img/check_order.png) no-repeat center;
+	padding-top:35px;
+	margin-right: 10px;
+}
+#send_goods{
+	background: url(../mch/img/check_send.png) no-repeat center;
+	padding-top:35px;
+}
+#all_check{
+ 	background: url(../mch/img/xk.png) no-repeat center;
+	cursor:pointer;	
+	padding-left:53px;
+}
+#list_type_foot{
+	background:#fff;
+	height:60px;
+	line-height:60px;
+}
+#batch_send{
+	border:1px solid #e9e9e9;
+	background:#fff;
+	width:86px;
+	height:30px;
+	color:#7d7d7d;
+	font-size:12px;
+	border-radius:4px;
+}
+#choose_condition{
+	height:70px;
+	background:#e9e9e9;
+}
+.check_time_left{
+	line-height:40px;
+	padding-left:5px;
+	width:200px;
+	background:#fff;
+	height:40px;
+	display:inline-block;
+	margin:15px 0 0 15px;
+	border-radius:4px;
+	border:0;
+}
+#search_type_infos{
+	width:80px;
+	height:40px;
+	background:#f26427;
+	color:#fff;
+	font-size:13px;
+	border:0;
+	margin-left:20px;
+	border-radius:4px;
+}
+#time_left,#time_right{
+	background:#fff url(../mch/img/xl2.png) no-repeat 95%;
+}
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="order_left_common.html"-->
+	<div id="order_list_right">
+		<div id="order_type">
+			<ul>	
+				<li class="order_type_on">所有订单</li>
+				<li>待付款</li>
+				<li>待发货</li>
+				<li>待收货</li>
+				<li>交易完成</li>
+			</ul>
+		</div>
+		
+		<div id="choose_condition">
+			<div class="check_time_left" id="time_left">dd</div> 
+			<span style="padding-left:15px;">至</span>
+			<div class="check_time_left" id="time_right">dd</div>
+			<input class="check_time_left" contenteditable id="order_num" placeholder="订单号">
+			<input class="check_time_left" contenteditable id="buyer"  placeholder="买家">
+			<button id="search_type_infos">搜索</button>
+		</div>
+		
+		<div id="type_infos">
+			<table cellspacing="0" cellpadding="0" id="type_table_list">
+				<tr>
+					<th>选择</th>
+					<th>订单号</th>
+					<th>买家</th>
+					<th>下单时间</th>
+					<th>订单总额</th>
+					<th>订单状态</th>
+					<th>支付方式</th>
+					<th>操作</th>
+				</tr>
+				<tr>
+					<td class="common_check"></td>
+					<td>123456789545</td>
+					<td>haojaitom</td>
+					<td>2016-5-5 14:20</td>
+					<td>￥88.88</td>
+					<td>待发货</td>
+					<td>微信支付</td>
+					<td>
+						<span id="look_up">查看</span><span id="send_goods">发货</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="common_check"></td>
+					<td>123456789545</td>
+					<td>haojaitom</td>
+					<td>2016-5-5 14:20</td>
+					<td>￥88.88</td>
+					<td>待发货</td>
+					<td>微信支付</td>
+					<td>
+						<span id="look_up">查看</span><span id="send_goods">发货</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+			
+		<div id="list_type_foot">
+			<span id="all_check"></span>
+			<button id="batch_send">批量发货</button>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$("#ddgl").addClass("order_left_common");
+</script>
+ 
