@@ -519,7 +519,7 @@ class Goods_Model extends Model
      */
     static function getOneCategory($cat_id)
     {
-        $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id} and is_delete = 0";
+        $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id} and is_delete=0";
         return  D()->query($sql)->get_one();
     }
 
@@ -579,6 +579,6 @@ class Goods_Model extends Model
      */
     static function ViewComment($comment_id){
             $sql="select content,merchart_content from shp_comment where comment_id = %d";
-            D()->query($sql,$c);
+            D()->query($sql,$comment_id);
     }
 }

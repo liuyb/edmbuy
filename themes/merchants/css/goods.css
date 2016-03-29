@@ -447,6 +447,7 @@
 	/*padding-left: 90px;*/
 	/*text-align: left;*/
 	line-height: 20px;
+	margin-left: 57px;
 	/*text-align:left;*/
 	display: none;
 }
@@ -459,14 +460,15 @@
 	left: 50%;
 	position: fixed;
 	z-index: 5000;*/
-	width:500px;
+	width:470px;
 	border-radius: 4px;
 	background: #fff;
 	height:450px;
 	display:block;
 }
 .add_name_go{
-	margin: 40px 30px 30px;
+	margin: 1px 30px 30px;
+	padding-top: 15px;
 	font-size:14px;
 	color:#333;
 }
@@ -516,7 +518,7 @@
 	margin-left: 120px;
 	height: 40px;
 	line-height: 40px;
-	margin-top: 50px;
+	/*margin-top: 50px;*/
 	color: #fff;
 	text-align: center;
 	font-size: 17px;

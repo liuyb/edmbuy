@@ -273,7 +273,10 @@ class Goods_Controller extends MerchantController {
                 $this->v->assign('catgory', $catgory);
             }
             //$v = new PageView('mod_goods_addcategory', '_page_front');
+            //得到parent_id
+            $parent_id=Goods_Model::IsHadCategory($cat_id);
             $this->v->assign('goodsList', $list);
+            $this->v->assign('parent_id', $parent_id['parent_id']);
             $this->v->assign('cat_id', $cat_id);
             $response->send($this->v);
         }

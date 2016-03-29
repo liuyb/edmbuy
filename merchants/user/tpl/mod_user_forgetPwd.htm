@@ -2,29 +2,83 @@
 <!--{add_js file="user.css"}-->
 <style>
 </style>
-<div id="login">
-    <h1>找回密码</h1>
-    <form name="loginForm" id="loginForm" method="POST" action="/login">
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <td class="in-phone">
-                    <input type="text" value="" placeholder="请输入手机号码" name="phone"/>
-                    <button type="button" value="" style="width: 120px;height: 20px;">点击获取验证码</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" value="" placeholder="请输入手机验证码" name="phoneCode"/>
-                </td>
-            </tr>
-                <tr>
-                    <td>
-                        <input type="submit" value="下一步" />
-                    </td>
-                </tr>
-        </table>
-    </form>
+
+<div id="forget_bg">
+    <div id="find_word_tit">找回密码</div>
+    <div id="find_word_one" class="find_one">
+        <div class="one_password">
+            <img src="/themes/merchants/img/yzsf2.png"><img src="themes/merchants/img/szmm2.png"><img src="themes/merchants/img/wc2.png">
+        </div>
+        <div class="one_flow">
+            <ul>
+                <li class="flow_on">验证身份</li>
+                <li>设置新密码</li>
+                <li>完成</li>
+            </ul>
+        </div>
+
+        <div class="one_verify">
+            <div class="phone_id">手机号码：<input type="text" value="" id="verify_phone" class="phone_nums"></div>
+            <div>
+                验证码：
+                <input type="text" value="" class="auth_code">
+                <button class="gain_note" id="getCode">获取短信验证码</button>
+            </div>
+            <div class="code_ts">验证码已发出，请注意查收短信，如果没有收到，你可以在60秒后要求系统重新发送</div>
+        </div>
+
+        <div id="next_one">
+            <button id="next_step" class="one_submit">下一步</button>
+        </div>
+    </div>
+
+    <div id="find_word_one" class="find_two">
+        <div class="one_password">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img src="/themes/merchants/img/wc2.png">
+        </div>
+        <div class="one_flow">
+            <ul>
+                <li class="flow_on">验证身份</li>
+                <li class="flow_on">设置新密码</li>
+                <li>完成</li>
+            </ul>
+        </div>
+
+        <div class="one_verify">
+            <div class="phone_id">新登录密码：<input type="text" value="" id="verify_phone" class="new_password" placeholder="请输入6-12位的新登录密码"></div>
+            <div class="phone_id">确认新密码：<input type="text" value="" id="verify_phone" class="ok_new_password" placeholder="请再次输入密码"></div>
+        </div>
+
+        <div id="next_one">
+            <button id="next_step" class="two_submit">提交</button>
+        </div>
+    </div>
+
+    <div id="find_word_one" class="find_three">
+        <div class="one_password">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm1.png"><img src="/themes/merchants/img/wc1.png">
+        </div>
+        <div class="one_flow">
+            <ul>
+                <li class="flow_on">验证身份</li>
+                <li class="flow_on">设置新密码</li>
+                <li>完成</li>
+            </ul>
+        </div>
+
+        <div class="three_infos">
+            <div class="success_img">
+                <img src="/themes/merchants/img/cg.png">
+            </div>
+
+            <div class="success_ts">
+                <p class="ts_tit">新密码设置成功！</p>
+                <p class="ts_password">请牢记您新设置的密码。<a href="javascript:;">返回重新登录</a></p>
+            </div>
+        </div>
+    </div>
 </div>
+
 <script>
     $("#loginForm").submit(function(){
             if($("#loginForm input[name=phone]").val()==''){
@@ -55,4 +109,57 @@
                  },"JSON")
                     return false;
     });
+
+
+    $(".one_submit").on("click",function(){
+        $(".find_one").hide();
+        $(".find_two").show();
+    })
+
+    $(".two_submit").on("click",function(){
+        $(".find_one").hide();
+        $(".find_two").hide();
+        $(".find_three").show();
+    })
+
+
+
+    var num = 60;
+    var count = num;
+    var time;
+
+    //发送验证码
+    $("#getCode").on("click", function(){
+
+        _this = $(this);
+
+        //仍在倒数中
+        if(_this.hasClass("sending")){
+            return false;
+        }
+
+        refresh();
+        time = setInterval("refresh();", 1000);
+
+        if(dat=="timeLimit"){
+            boxalert("验证码发送失败，请稍后在试");
+        } else {
+            boxalert("验证码已发送");
+        }
+    });
+
+    function refresh(){
+
+        num = num - 1;
+        var msg = num + "秒";
+
+        $("#getCode").html(msg);
+
+        if(num == 0){
+            num = count;
+            $("#getCode").removeClass("sending").html("重新获取");
+            clearInterval(time);
+            return false;
+        }
+    }
 </script>
