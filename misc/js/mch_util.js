@@ -164,3 +164,7 @@ function dke_Array(arrIndex,aresult, oriArr, result)
     dke_Array(arrIndex+1,theResult, oriArr, result);
   }
 }
+
+function showMsg(msg){
+	layer.msg(msg);
+}

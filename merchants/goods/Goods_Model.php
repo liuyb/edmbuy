@@ -310,8 +310,8 @@ class Goods_Model extends Model
     static function buildGoodsImg($goods){
         if (!empty($goods)) {
             foreach ($goods AS &$g) {
-                $g['goods_img'] = Items::imgurl($g['goods_img']);
-                $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+                $g['goods_img'] = Goods_Common::imgurl($g['goods_img']);
+                $g['goods_thumb'] = Goods_Common::imgurl($g['goods_thumb']);
             }
         }
         else {

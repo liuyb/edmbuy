@@ -355,4 +355,16 @@ class Goods_Common {
         }
         return $TR_HD;   
     }
+    
+    /**
+     * full the img path
+     * @param string $img_path
+     * @return string
+     */
+    static function imgurl($img_path) {
+        static $urlpre;
+        if (!isset($urlpre)) $urlpre = C('env.site.merchant');
+        $img_path = Media::path($img_path);
+        return preg_match('/^http(s?):\/\//i', $img_path) ? $img_path : ($urlpre.$img_path);
+    }
 }

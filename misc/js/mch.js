@@ -361,7 +361,13 @@
 				layer.load(0, {shade: [0.5,'#fff']});
 			}
 		}, 1000);
-		var promise = $.get(url, data, callback);
+		var promise = $.get(url, data, function(){
+			if(callback){
+				F.loading =false;
+				callback.apply(this,arguments);
+				layer.closeAll('loading');
+			}
+		});
 		promise.always = function(){
 			F.loading =false;
 			layer.closeAll('loading');
@@ -374,10 +380,10 @@
 	F.postWithLoading = function(url, data, callback, ajax_start_cb, ajax_complete_cb){
 		layer.load(0, {shade: [0.5,'#fff']});
 		F.post(url, data, callback, ajax_start_cb, function(param){
+			layer.closeAll('loading');
 			if(ajax_complete_cb){
 				ajax_complete_cb(param);
 			}
-			layer.closeAll('loading');
 		});
 	};
 	
