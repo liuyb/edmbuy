@@ -8,7 +8,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	订单详情
-<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
+<?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
 <a href="/trade/order/record" class="back"></a>
 <a href="/user" class="back_r"></a>
 <?php endif;?>

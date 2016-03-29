@@ -121,7 +121,7 @@ class Item_Controller extends MobileController {
 				//Spm信息
 				$referee = false;
 				$spm = Spm::check_spm();
-				if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+				if ($spm && preg_match('/^user\.(\d+)(\.\w+)?$/i', $spm, $matchspm)) {
 					$referee = Users::load($matchspm[1]);
 					if (!$referee->is_exist() || !$referee->nickname) {
 						$referee =  false;

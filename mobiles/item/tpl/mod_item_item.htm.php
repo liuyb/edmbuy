@@ -36,7 +36,7 @@
 </script>
 <div class="mask_menu cursor"></div>
 <script id="forBody" type="text/html">
-<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
+<?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
 <div class="cursor p_detail_button p_detail_follow"></div>
 <?php endif;?>
 <div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
@@ -101,7 +101,7 @@
 </div>
 </script>
 <script>
-<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
+<?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
 show_mtop($('#forMtop').html());
 <?php endif;?>
 show_mnav($('#forMnav').html());

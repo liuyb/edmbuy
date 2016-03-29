@@ -349,7 +349,7 @@ class User_Controller extends MobileController
             $parent_id = 0;
             $parent_nick = '';
             $spm = Spm::check_spm($refer);
-            if ($spm && preg_match('/^user\.(\d+)$/', $spm, $matchspm)) {
+            if ($spm && preg_match('/^user\.(\d+)(\.\w+)?$/i', $spm, $matchspm)) {
                 $pUser = Users::load($matchspm[1]);
                 if ($pUser->is_exist()) {
                     $parent_id = $pUser->id;
