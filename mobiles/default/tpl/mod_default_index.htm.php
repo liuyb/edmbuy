@@ -176,6 +176,7 @@ window.location.reload();
 			return;
 		}
 		F.get('/default/goods', {curpage : curpage, category : category}, function(ret){
+			$glist.empty();
 			contructGoodsHTML(ret, isinit);
 			handleWhenHasNextPage(ret);
 			//设置
@@ -208,7 +209,8 @@ window.location.reload();
 
 	function handleGoodsListAppend(TR){
 		//$glist.append($(TR));
-		$glist.html(TR);
+		$glist.append(TR);
+		//$glist.html(TR);
 		//F.set_scroller(false, 100);
 		//scrollToHistoryPosition();
 	}
