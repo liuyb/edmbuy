@@ -36,8 +36,9 @@
 </script>
 <div class="mask_menu cursor"></div>
 <script id="forBody" type="text/html">
-
+<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
 <div class="cursor p_detail_button p_detail_follow"></div>
+<?php endif;?>
 <div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
 
 <div class="mask no-bounce" id="bodymask" style="display:none;"></div>
@@ -99,7 +100,10 @@
 	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
 </div>
 </script>
-<script>show_mtop($('#forMtop').html());
+<script>
+<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
+show_mtop($('#forMtop').html());
+<?php endif;?>
 show_mnav($('#forMnav').html());
 append_to_body($('#forBody').html());
 </script>
@@ -191,13 +195,16 @@ $(function(){
 <div class="p_detail_info">
 	<div class="pro_tab_check">
 		<ul>
-			<li class="check_on" id="li1" onclick="detailTabSwitch(1)" data-loaded='Y'>图文详情</li>
+		<li class="check_on" id="li1" data-loaded='Y' style="width:100%;">图文详情</li>
+		<!-- 
+			<li class="check_on" id="li1" onclick="detailTabSwitch(1)" data-loaded='Y'>图文详情</li>	
 			<li class="" id="li2" onclick="detailTabSwitch(2)">宝贝评价</li>
 			<li class="" id="li3" onclick="detailTabSwitch(3)">店铺推荐</li>
-		</ul>
+		 -->
+		</ul><!-- 
 		<span class="pro_line1"></span>
-		<span class="pro_line2"></span>
-		<div class="clear"></div>
+		<span class="pro_line2"></span>-->
+		<div class="clear"></div> 
 	</div>
 	<div class="pro_comment" id="list1">
 		<div class="product_detail">

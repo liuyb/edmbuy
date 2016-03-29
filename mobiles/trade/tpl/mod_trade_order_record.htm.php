@@ -3,7 +3,9 @@
 <script id="forTopnav" type="text/html">
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
+<?php if(!isset($_GET['spm']) || !preg_match('/^merchant\.mc_[a-z0-9]+/i', $_GET['spm'])):?>
     <li class="noon"><a href="<?php echo U('user')?>" class="btna back">&nbsp;</a></li>
+<?php endif;?>
 		<li <?php if($status == '' || $status == 'all'): ?> class="header_order_on" <?php endif;?> data_status="all">全部</li>
 		<li <?php if($status == 'wait_pay'): ?> class="header_order_on" <?php endif;?> data_status="wait_pay">待付款</li>
 		<li <?php if($status == 'wait_ship'): ?> class="header_order_on" <?php endif;?> data_status="wait_ship">待发货</li>
@@ -19,7 +21,7 @@ $(function(){
 		if(!$(this).hasClass('noon')) {
 			$(this).parent().find('li').removeClass('header_order_on');
 			$(this).addClass('header_order_on');
-			var url = "<?php echo U('trade/order/record')?>?status="+$(this).attr('data_status');
+			var url = "<?php echo U('trade/order/record','spm='.(isset($_GET['spm'])?$_GET['spm']:''))?>&status="+$(this).attr('data_status');
 			window.location = url;
 		}
 	});
@@ -82,7 +84,7 @@ $(function(){
 	
 	$('.withclickurl',$lbod).click(function(){
 		//window.location.href = $(this).parent().attr('data-url')+'?ref=/trade/order/record';
-		window.location.href = '/order/'+$(this).parent().attr('data-rid')+'/detail';
+		window.location.href = '/order/'+$(this).parent().attr('data-rid')+'/detail'+'<?php echo (isset($_GET['spm']) ? '?spm='.$_GET['spm'] : '')?>';
 		return false;
 	});
 	$('.btn-order-cancel',$lbod).click(function(){
