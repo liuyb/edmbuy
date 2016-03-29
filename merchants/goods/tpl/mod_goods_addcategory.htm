@@ -21,8 +21,9 @@
             <!--{elseif $edit==1}-->
             <img src="<!--{$catgory.cate_thumb}--> " onclick="fileupload();" id="file">
             <!--{/if}-->
-            <input type="file" name="file" class="dj_fil" onchange="fileupload(event)">
-            <input type="hidden" name="cat_url" value="" >
+            <input type="file" name="file" class="dj_fil" onchange="fileupload(event)"/>
+            <input type="hidden" name="cat_url" value="" />
+            <input type="hidden" name="id" value="<!--{$cat_id}-->" />
         </div>
         <div class="clear"></div>
         <div class="file_sca_img">
@@ -57,9 +58,9 @@
         var cat_name =$("input[name=cat_name]").val()
         var cat_url =$("input[name=cat_url]").val()
         var sort_order =$("input[name=sort_order]").val()
-        var id =$("input[name=id]").val()
-        var cat_id =$(".check_s").val();
-        var data={"cat_name":cat_name,"cat_id":cat_id,'cate_thums':cat_url,'sort_order':sort_order,'edit':edit,'id':id};
+        var id =$("input[name=id]").val();
+        var parent_id =$(".check_s").val();
+        var data={"cat_name":cat_name,"parent_id":parent_id,'cate_thums':cat_url,'sort_order':sort_order,'edit':edit,'cat_id':id};
         $.post(url,data,function(ret){
             if(ret.status==1){
                         layer.closeAll();

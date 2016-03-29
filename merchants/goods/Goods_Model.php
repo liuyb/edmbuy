@@ -247,8 +247,9 @@ class Goods_Model extends Model
             Goods_Atomic::batch_delete_goods_gallery($goods_ids);
         }catch(Exception $e){
             D()->rollback();
+        }finally {
+            D()->commit();
         }
-        D()->commit();
     }
 
     static function batchUpdateGoods(array $goods_ids, $field, $val){
@@ -296,7 +297,7 @@ class Goods_Model extends Model
         $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
-        $pager->setResult($goods);
+        $pager->result = $goods;
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
@@ -310,8 +311,8 @@ class Goods_Model extends Model
     static function buildGoodsImg($goods){
         if (!empty($goods)) {
             foreach ($goods AS &$g) {
-                $g['goods_img'] = Goods_Common::imgurl($g['goods_img']);
-                $g['goods_thumb'] = Goods_Common::imgurl($g['goods_thumb']);
+                $g['goods_img'] = Items::imgurl($g['goods_img']);
+                $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
             }
         }
         else {
@@ -412,8 +413,7 @@ class Goods_Model extends Model
             return D()->insert($tablename, $insertarr);
         } else {
             unset($insertarr['merchant_id']);
-            unset($insertarr['parent_id']);
-            $whereArr['cat_id'] = $cat_id;
+            $whereArr['cat_id'] = $cateArr['cat_id'];
             return D()->update($tablename, $insertarr, $whereArr);
         }
 
@@ -519,8 +519,8 @@ class Goods_Model extends Model
      */
     static function getOneCategory($cat_id)
     {
-        $sql = "select cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id}";
-        return D()->query($sql)->get_one();
+        $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id} and is_delete = 0";
+        return  D()->query($sql)->get_one();
     }
 
     /**
@@ -540,7 +540,7 @@ class Goods_Model extends Model
      * @param Pager $pager
      * @return mixed
      */
-    static function getCommentList(Pager $pager)
+    static function getCommentList(Pager $pager,$current)
     {
         //comment_id ,id_value,content,comment_rank,user_name,add_time,status
         $merchant_id = $GLOBALS['user']->uid;
@@ -548,10 +548,37 @@ class Goods_Model extends Model
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit="{$pager->start},{$pager->pagesize}";
-        $sql="select comment_id ,id_value,content,comment_rank,user_name,add_time,status from shp_comment where merchant_id=%d
+       $current==1?$where="merchant_id='{$merchant_id}'":$where="merchant_id='{$merchant_id}' and is_reply = 0";
+        $sql="select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
+              comment.id_value as id_value ,comment.is_reply as is_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
+              as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
+              LEFT JOIN shp_goods goods on comment.id_value=goods.goods_id where {$where}
               order by add_time DESC limit {$limit}";
-        $result= D()->query($sql,$merchant_id)->fetch_array_all();
+        $result= D()->query($sql)->fetch_array_all();
         $pager->result=$result;
         return $result;
+    }
+
+    /**
+     * 商家回复
+     * @param $merchart_content 回复类容
+     */
+    static function merchantRely($merchart_content){
+        $merchant_id=$GLOBALS['user']->uid;
+//        public function update($tablename, Array $setarr, $wherearr, $flag = '')
+        $table="`shp_comment`";
+        $setArr['merchart_content']=$merchart_content;
+        $setArr['is_reply']=1;
+        $whereArr['merchant_id']=$merchant_id;
+        D()->update($table,$setArr,$whereArr);
+    }
+
+    /**
+     * 查看评论类容
+     * @param $comment_id
+     */
+    static function ViewComment($comment_id){
+            $sql="select content,merchart_content from shp_comment where comment_id = %d";
+            D()->query($sql,$c);
     }
 }

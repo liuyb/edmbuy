@@ -289,12 +289,13 @@ class Goods_Controller extends MerchantController {
     public function doAddCategory(Request $request, Response $response)
     {
         //先判断是否有了二级分类
-        $cat_id = $request->post('cat_id', 0);
-        $id = $request->post('id', 0);
+        $parent_id = $request->post('parent_id',0);
+        $cat_id = $request->post('cat_id');
         $cateArr['cat_name'] = $request->post('cat_name', '');
         $cateArr['sort_order'] = $request->post('sort_order',0);
         $cateArr['cate_thums'] = $request->post('cate_thums','');
         $cateArr['edit'] = $request->post('edit');
+        $cateArr['cat_id']=$cat_id;
         /* if (empty($cateArr['cat_name']) ||
             empty($cateArr['sort_order']) ||
             empty($cateArr['cate_thums'])
@@ -308,13 +309,13 @@ class Goods_Controller extends MerchantController {
             $data['retmsg'] = "名称不能多于12个字且不能为空！";
             $response->sendJSON($data);
         }
-        $result = Goods_Model::IsHadCategory($id);
-        if ($result['parent_id'] > 0) {
+        $result = Goods_Model::IsHadCategory($cat_id);
+        if ($result['parent_id'] > 0 &&!$cateArr['edit']) {
             $retmsg = "当前已是二级分类，不能增加子分类！";
             $data['status'] = 0;
             $data['retmsg'] = $retmsg;
         } else {
-            $result = Goods_Model::addCategory($cateArr, $cat_id);//新增一个分类
+            $result = Goods_Model::addCategory($cateArr, $parent_id);//新增一个分类
             if (is_numeric($result)) {
                 $data['status'] = 1;
                 $data['retmsg'] = "编辑成功！";
