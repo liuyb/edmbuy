@@ -1,0 +1,20 @@
+#ddgl{
+	background:url("../img/ddgl.png") no-repeat 20px;	
+	padding-left:45px;
+}
+#tkcl{
+	background:url("../img/tkcl.png") no-repeat 20px;
+	padding-left:45px;
+}
+#thcl{
+	background:url("../img/thcl.png") no-repeat 20px;
+	padding-left:45px;
+}
+#yfmbgl{
+	background:url("../img/yfmb.png") no-repeat 20px;
+	padding-left:45px;
+}
+.order_left_common{
+	color:#f26427 !important;
+	border-bottom:1px solid #f23427 !important;
+}
