@@ -75,7 +75,7 @@ class User_Controller extends MerchantController
             $v->assign('retmsg', $retmsg)
                 ->assign('retuname', $retuname)
                 ->assign('retupass', $retupass);
-                 $response->send($v);
+            $response->send($v);
         }
     }
 
@@ -111,15 +111,27 @@ class User_Controller extends MerchantController
      */
     public function forgetPwd(Request $request, Response $response)
     {
-        $show_page=true;
+//        $_SESSION['step']=2;
+//        $_SESSION['phone']=18124682152;
+        $show_page = true;
         $this->v->set_tplname('mod_user_forgetPwd');
-        $step=1;
+        if (!empty($_SESSION['step'])) {
+            $this->v->assign('step', $_SESSION['step']);
+            if($_SESSION['step']==3){
+                    unset($_SESSION['step']);
+            }
+        } else {
+            $this->v->assign('step', 1);
+        }
+        if (!empty($_SESSION['phone'])) {
+            $this->v->assign('phone', $_SESSION['phone']);
+        }
         if ($show_page) {
             $v = new PageView('mod_user_forgetPwd', '_page_front');
-            $v->assign('retmsg', $step);
-                 $response->send($v);
+            $response->send($v);
         }
     }
+
     /**
      * 获取短信验证
      * @auth hc_edm
@@ -128,10 +140,12 @@ class User_Controller extends MerchantController
      */
     public function getPhoneCodeAjax(Request $request, Response $response)
     {
-        $phone = $request->get('phone', '');
+        $phone = $request->post('phone', '');
         $phone = htmlspecialchars($phone);
 //    $imgCode = htmlspecialchars($_POST["imgCode"]);
-        if (verify_phone($phone)) {
+        //验证用户是否1分钟以内是否已经发过短信
+
+        if (!verify_phone($phone)) {
             $data['retmsg'] = "手机号码输入有误！";
             $data['status'] = 0;
             $response->sendJSON($data);
@@ -142,21 +156,18 @@ class User_Controller extends MerchantController
             $data['status'] = '0';
             $response->sendJSON($data);
         }
-//      if (!empty($imgCode)) {
-//        if ($_SESSION ['verify'] != md5($imgCode)) {
-//        $data['retmsg'] = "验证码不正确！";
-//        $data['status'] = '-3';
-//        json_encode($data);
-//        }
-//      }
-        /**
-         * 加载手机短信的类发送短信
-         * todo require SMs
-         */
-        //require_once(ROOT_PATH . 'inc/class.Sms.php');
-      //  $result = SMS::_sendCodeSMS("", "", $phone, "forgetPwd");
-        $result=true;
+
+        $limit = User_Model::checkSmsLimit($phone);
+        if (!$limit) {
+            $data['retmsg'] = "发送超时！";
+            $data['status'] = 0;
+            $response->sendJSON($data);
+        }
+        $result = Sms::sendSms($phone, $type = "forgetPwd");
+//        $result = "888888";
+//        $_SESSION['forgetPwd'] = "888888";
         if ($result) {
+            $_SESSION['phone']=$phone;
             $data['retmsg'] = "发送验证码成功！";
             $data['status'] = 1;
             $response->sendJSON($data);
@@ -176,11 +187,17 @@ class User_Controller extends MerchantController
      */
     public function checkSmsCode(Request $request, Response $response)
     {
-        $phone = $request->get("phone", "");
-        $phoneCode = $request->get("imgCode", "");
+        $phone = $request->post("phone");
+        $phoneCode = $request->post("phoneCode");
+        $imgCode = $request->post("imgeCode");
         $phone = htmlspecialchars($phone);
         $chkcode = htmlspecialchars($phoneCode);
 
+        if (0 && $imgCode != $_SESSION ['verifycode']) {
+            $data['retmsg'] = "验证码不正确！";
+            $data['status'] = '0';
+            json_encode($data);
+        }
         if (!verify_phone($phone)) {
             $data['retmsg'] = '手机号码不正确！';
             $data['status'] = 0;
@@ -191,92 +208,68 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-        //todo require Sms function getPhoneCode
-      //  $result = Sms::getPhoneCode($phone);
-        $result="888888";
-        if ($result == $chkcode) {
-            Cookie::set('findPhone',authKF($phone, 'ENCODE', MKYE),300);
+
+        if ($_SESSION['forgetPwd'] == $chkcode) {
+            $_SESSION['step'] = "2";
+            $_SESSION['phone'] = $phone;
+            unset($_SESSION['verifycode']);
             $data['retmsg'] = '动态密码正确！';
             $data['status'] = 1;
-            /***表单验证用到**/
-            $cookies=Cookie::get("findPhone");
-            $this->v->assign('formCookies',$cookies);//传到页面
             $response->sendJSON($data);
         };
-            $data['retmsg']='动态密码不正确！';
-            $data['status']=0;
-            $response->sendJSON($data);
+        $data['retmsg'] = '动态密码不正确！';
+        $data['status'] = 0;
+        $response->sendJSON($data);
     }
 
-    /**
-     * 进入重置密码页面
-     * @auth hc_edm
-     * @param Request $request
-     * @param Response $response
-     */
-    public function setpassword(Request $request, Response $response) {
-        $this->v->set_tplname("mod_user_setPwd");
-        $dephone = Cookie::get('findPhone');
-        $phone = authKF($dephone, 'DECODE', MKYE);
-        $this->v->assign("phone", $phone);
-        $step=2;
-        $show_page = true;
-        if ($show_page) {
-            $v = new PageView('mod_user_forgetPwd', '_page_front');
-            $v->assign('retmsg', $step);
-            $response->send($v);
-        }
-    }
 
     /**
      * 重置密码
      * @param Request $request
      * @param Response $response
      */
-    public function forgotSavePw(Request $request, Response $response) {
-        $formCookies=$request->post('formCookies',"");
-        $dephone = Cookie::get('findPhone');
-        if($formCookies==$dephone){
-            $data['retmsg']="cookies已过期！";
-            $data['status']=0;
+    public function forgotSavePwd(Request $request, Response $response)
+    {
+        $phone = $request->post("phone");
+//        $phone="18124682152";
+        if ($_SESSION['phone'] != $phone) {
+            $data['retmsg'] = "session已过期！";
+            $data['status'] = -1;
             $response->sendJSON($data);
         }
-        /**
-         *cookies超时处理
-         */
-        $cookiesPhone= authKF($dephone, 'DECODE', MKYE);
-        $password=$request->post("admin_upass","");
-        $confirmpassword=$request->post("confirmpassword","");
-        if(empty($password)||empty($confirmpassword)){
-            $data['retmsg']="密码不能为空！";
-            $data['status']=0;
+        $password = $request->post("pwd");
+        $confirmpassword = $request->post("confirmpwd");
+        if (empty($password) || empty($confirmpassword)) {
+            $data['retmsg'] = "密码不能为空！";
+            $data['status'] = 0;
             $response->sendJSON($data);
         }
         if ($password != $confirmpassword) {
-            $data['retmsg']="输入密码不一致！";
-            $data['status']=0;
+            $data['retmsg'] = "输入密码不一致！";
+            $data['status'] = 0;
             $response->sendJSON($data);
         }
-        if (empty($cookiesPhone)) {
-            $data['retmsg']="对不起设置密码超时！";
-            $data['status']=0;
+        if (empty($_SESSION['phone'])) {
+            $data['retmsg'] = "对不起设置密码超时！";
+            $data['status'] = 0;
             $response->sendJSON($data);
         }
 
         if (strlen($password) < 6) {
-            $data['retmsg']="对不起，密码至少6位";
-            $data['status']=0;
+            $data['retmsg'] = "对不起，密码至少6位";
+            $data['status'] = 0;
             $response->sendJSON($data);
         }
-        $result = User_Model::forgetPassword($cookiesPhone,$password,3);
+        $result = User_Model::forgetPassword($phone, $password, 3);
         if ($result * 1 > 0) {
-            Cookie::set("findPhoone",null);
-            $data['retmsg']="重置密码成功!";
-            $data['status']=1;
+            $_SESSION["phone"] = null;
+            $_SESSION["step"] = 3;
+            $data['retmsg'] = "重置密码成功!";
+            $data['status'] = 1;
             $response->sendJSON($data);
         } else {
-            $data['retmsg']="设置密码失败!";
-            $data['status']=0;
+            $data['retmsg'] = "设置密码失败!";
+            $data['status'] = 0;
             $response->sendJSON($data);
         }
     }

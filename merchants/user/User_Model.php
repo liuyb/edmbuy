@@ -32,7 +32,7 @@ class User_Model extends Model
         }
 
         //check db password
-        $upass_enc = gen_salt_password($upass_raw, $admin['salt'], 32, false);var_dump($upass_enc);
+        $upass_enc = gen_salt_password($upass_raw, $admin['salt'], 32, false);
         if ($admin['password'] != $upass_enc) {
             return 0;
         }
@@ -56,12 +56,12 @@ class User_Model extends Model
             $where = "email={$key}";
         }
         if ($type == 3) {
-            $where = "mobile={$key}";
+            $where = "mobile='{$key}'";
         }
-        $sql = "select admin_id from shp_merchant where {$where} ";
+        $sql = "select merchant_id from shp_merchant where {$where} ";
         $result = D()->query($sql)->get_one();
-        $admin_uid = $result['admin_id'];
-        if ($admin_uid && $admin_uid > 0) {
+        $admin_uid = $result['merchant_id'];
+        if ($admin_uid ) {
             return $admin_uid;
         }
              return false;
@@ -75,9 +75,10 @@ class User_Model extends Model
      */
     static function forgetPassword($key, $password, $type)
     {
-        $upass_enc = gen_salt_password($password, $salt = NULL, $len = 32, $upper = false);
+
+
         if ($type == 1) {
-            $where['UPPER(admin_uname)'] = $key;
+            $where['UPPER(idname)'] = $key;
         }
         if ($type == 2) {
             $where['email'] = $key;
@@ -85,10 +86,28 @@ class User_Model extends Model
         if ($type == 3) {
             $where['mobile'] = $key;
         }
-        //  $sql="update shp_users set password = {$upass_enc} where {$where}";
-        $set['admin_upass'] = $upass_enc;
-        $result = D()->query('merchant', $set, $where);
+
+           $sql="select salt from shp_merchant where mobile='{$key}'";
+            $salt=D()->query($sql)->result();
+             $upass_enc = gen_salt_password($password, $salt, 32, $upper = false);
+        $table="`shp_merchant`";
+        $set['password'] = $upass_enc;
+        $result = D()->update($table, $set, $where);
         return $result;
+    }
+
+    /**
+     * 校验短信时间
+     * @param $phone
+     */
+    static function checkSmsLimit($phone){
+            $sql="select overdueTime from shp_usersms_log where receivePhone = {$phone} and result = 1 ORDER by id DESC  limit 1";
+            $limit=D()->query($sql)->result();
+             if(time() < $limit && $limit){
+                    return false;
+                }
+                return true;
+
     }
 }
 

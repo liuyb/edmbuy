@@ -34,8 +34,7 @@ class Common_Controller extends Controller {
 	  	'user/forgetPwd',
 	  	'user/checkSmsCode',
 	  	'user/setpassword',
-	  	/***test wait del**/
-	  	'goods/goodsCategory'
+	  	'user/getPhoneCodeAjax',
   ];
   
   /**
