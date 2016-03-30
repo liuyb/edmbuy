@@ -21,7 +21,7 @@
 <script>$(function(){$('#nav_cart_tool').html($('#for_nav_cart_tool').html())});</script>
 <?php else:?>
 <!--[HEAD_CSS]-->
-<style>body.MPA,#nav_cart_tool{background:#eee;} .cart_body{min-height:300px;}</style>
+<style>body.MPA,#nav_cart_tool{background:#eee;} .cart_empty{top:45%;} .cart_body{min-height:270px;}</style>
 <!--[/HEAD_CSS]-->
 <?php endif;?>
 
