@@ -66,16 +66,15 @@
 #look_up{
 	position: absolute;
 	background: url(../img/check_order.png) no-repeat center;
-	padding-top:35px;
-	margin-right: 10px;  
-	top: -25px;
+	background-position: 5px 5px;
+	top: 10px;
   	left: 20px;
 }
 #send_goods{
 	position: absolute;
 	background: url(../img/check_send.png) no-repeat center;
-	padding-top:35px;
-	top: -25px;
+	background-position: 5px 5px;
+	top: 10px;
   	left: 55px;
 }
 #all_check{
