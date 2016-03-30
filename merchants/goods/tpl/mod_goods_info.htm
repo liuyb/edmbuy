@@ -250,6 +250,13 @@ function goods_submit(){
 	if(!$("#defaultForm").formValid()){
 		return false;
 	}
+	var shop_price = $("#shop_price").val();
+	var income_price = $("#income_price").val();
+	var commission = parseFloat(shop_price) - parseFloat(income_price);
+	if(commission < 0){
+		layer.msg('售价不能小于供货价！');
+		return false;
+	}
 	var gallerys = $(".goods_gallery");
 	if(!gallerys || !gallerys.length){
 		layer.msg('请上传商品图片！');
@@ -281,7 +288,7 @@ function goods_submit(){
 	buildGoodsSpecif(data);
 	console.log(data);
 	$("#submitBtn").attr("disabled", "disabled");
-	$.post('/goods/publish', data, function(ret){
+	F.postWithLoading('/goods/publish', data, function(ret){
 		if(ret && ret.result == 'SUCC'){
 			layer.msg('商品发布成功！');
 			window.location.href = '/goods';

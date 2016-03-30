@@ -82,7 +82,7 @@ class Goods_Model extends Model
             if($is_insert){
                 $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
             }else{
-                $sql = "UPDATE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
+                $sql = "UPDATE IGNORE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
             }
             D()->query($sql);
         }
@@ -174,6 +174,7 @@ class Goods_Model extends Model
             self::map_goods_attrs($cat_arr, $item, 3);
         }
         $ret_arr = [];
+        $count = 1;
         if($cat_arr && count($cat_arr) > 0){
             foreach ($cat_arr as $type => $attrs){
                 $typeOBJ = explode('【~~】', $type);
@@ -181,32 +182,12 @@ class Goods_Model extends Model
                     continue;
                 }
                 //处理每个type下的重复属性
-                $display_attrs = self::get_goods_select_attr($typeOBJ[0], $attrs);
+                $display_attrs = self::get_goods_select_attr($count, $attrs);
                 array_push($ret_arr, array('cat_id' => $typeOBJ[0], 'cat_name' => $typeOBJ[1], 'attrs' => $attrs, 'display_attrs' => $display_attrs));
+                $count ++;
             }
         }
         return $ret_arr;
-    }
-
-    /**
-     * 当前商品 选中的属性 唯一过滤
-     * @param unknown $index
-     * @param unknown $attrs
-     */
-    public static function get_goods_select_attr($cat_id, $attrs){
-        $ret = [];
-        $map = [];
-        foreach ($attrs as $at){
-            $at_id = $at['attr'.$cat_id.'_id'];
-            $key = 'key_'.$at_id;
-            if(isset($map[$key]) && $map[$key] > 0){
-                continue;
-            }
-            $map[$key] = '1';
-            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
-        }
-        unset($map);
-        return $ret;
     }
 
     /**
@@ -228,6 +209,27 @@ class Goods_Model extends Model
                 array_push($cat_arr[$key], $item);
             }
         }
+    }
+    
+    /**
+     * 当前商品 选中的属性 唯一过滤
+     * @param unknown $index
+     * @param unknown $attrs
+     */
+    public static function get_goods_select_attr($cat_id, $attrs){
+        $ret = [];
+        $map = [];
+        foreach ($attrs as $at){
+            $at_id = $at['attr'.$cat_id.'_id'];
+            $key = 'key_'.$at_id;
+            if(isset($map[$key]) && $map[$key] > 0){
+                continue;
+            }
+            $map[$key] = '1';
+            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
+        }
+        unset($map);
+        return $ret;
     }
 
     /**
