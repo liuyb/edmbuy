@@ -293,7 +293,7 @@ class Goods_Model extends Model
             $orderby .= " order by g.last_update desc ";
         }
         $sql = "select count(*) from shp_goods g where merchant_id='".$muid."' $where ";
-        $count = D()->query($sql, $muid)->result();
+        $count = D()->query($sql)->result();
         $pager->setTotalNum($count);
         $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();

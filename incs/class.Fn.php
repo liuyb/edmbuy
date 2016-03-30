@@ -253,6 +253,30 @@ class Fn extends Func {
       return $ret;
   }
   
+  /**
+   * 根据订单状态返回显示的订单文本
+   * @param unknown $pay_status
+   * @param unknown $ship_status
+   * @param unknown $order_status
+   */
+  static function get_order_text($pay_status, $ship_status, $order_status){
+      $ret = "未知状态";
+      if($pay_status == PS_CANCEL || in_array($order_status, array(OS_CANCELED, OS_INVALID))){
+          $ret = "已关闭";
+      }else if(in_array($pay_status, array(PS_UNPAYED, PS_PAYING))){
+          $ret = "待付款";
+      }else if($pay_status == PS_PAYED){
+          if($ship_status == SS_RECEIVED){
+              $ret = "已完成";
+          }else if(in_array($ship_status, array(SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING))){
+              $ret = "待发货";
+          }else if(in_array($ship_status, array(SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART))){
+              $ret = "待收货";
+          }
+      }
+      return $ret;
+  }
+  
 }
  
 /*----- END FILE: class.Fn.php -----*/

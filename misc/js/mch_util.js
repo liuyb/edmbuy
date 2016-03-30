@@ -1,3 +1,4 @@
+//form表单数据序列化成json
 (function($){  
     $.fn.serializeJson=function(){  
         var serializeObj={};  
@@ -17,7 +18,7 @@
         return serializeObj;  
     };  
 })(jQuery); 
-function showSucc(text){
+/*function showSucc(text){
 	showBootstrapAlert('alert-success', text);
 }
 function showInfo(text){
@@ -62,7 +63,7 @@ function topCenterDOM(obj){
 	var objLeft = (screenWidth - obj.width())/2 ;
 	var objTop = obj.height() + scrolltop;
 	obj.css({left: objLeft + 'px', top: objTop + 'px','display': 'block'});
-}
+}*/
 //表单验证
 (function($){  
     $.fn.formValid=function(){  
@@ -168,3 +169,96 @@ function dke_Array(arrIndex,aresult, oriArr, result)
 function showMsg(msg){
 	layer.msg(msg);
 }
+/**
+ * 页面table 的复选框事件监听
+ * @returns
+ */
+function tableCheckBoxEvent(){
+	$("#all_check").on('click',function(){
+		var THIS = $(this);
+		if(THIS.hasClass("common_check_on")){
+			THIS.removeClass("common_check_on");
+			$(".common_check").removeClass("common_check_on");
+		}else{
+			THIS.addClass("common_check_on");
+			$(".common_check").addClass("common_check_on");
+		}
+	});
+	$(document).on('click','.common_check',function(){
+		var THIS = $(this);
+		if(THIS.hasClass("common_check_on")){
+			THIS.removeClass("common_check_on");
+		}else{
+			THIS.addClass("common_check_on");
+		}
+		handleSelectAll();
+	});
+}
+//复选框全选事件
+function handleSelectAll(){
+	var item_num = $(".common_check").length;
+	var select_num = $(".common_check_on").length;
+	if(item_num == select_num){
+		$("#all_check").addClass("common_check_on");
+	}else{
+		$("#all_check").removeClass("common_check_on");
+	}
+}
+
+/**
+ * 页面数据table处理
+ * @param curpage
+ * @param isinit
+ * @param options
+ */
+function loadPageDataTable(curpage, isinit, options){
+	var id = options.id;
+	var url = options.url;
+	var colspan = options.colspan;
+	var container = $("#"+id);
+	var data = [];
+	if(typeof(pageQueryCondtion) != 'undefined' && typeof(pageQueryCondtion) == 'function'){
+		data = pageQueryCondtion.call(this);
+	}
+	data.curpage = curpage ? curpage : 1;
+	F.get(url, data, function(ret){
+		var TR = "";
+		if(!ret || !ret.result || !ret.result.length){
+			TR = "<tr><td colspan='"+colspan+"' style='text-align:center;'>没有符合条件的数据!</td></tr>";
+		}else{
+			var result = ret.result;
+			result.forEach(function(item){
+				TR += costructRowData.call(this, item);
+			});
+		}
+		container.find("tbody.body-data").html($(TR));
+		if(isinit){
+			generatePager(ret.curpage, ret.maxpage, ret.totalnum, options);
+		}
+		//全选框选中时去除全选框
+		if($('#all_check') && $('#all_check').hasClass("common_check_on")){
+			$('#all_check').removeClass("common_check_on");
+		}
+		if(typeof(afterLoadRender) != 'undefined' && typeof(afterLoadRender) == 'function'){
+    		afterLoadRender.call(this, ret);
+    	}
+	});
+}
+
+//生成分页
+function generatePager(pageNo, totalPage, totalRecords, options){
+	//生成分页
+	kkpager.generPageHtml({
+		pno : pageNo,
+		//总页码
+		total : totalPage,
+		//总数据条数
+		totalRecords : totalRecords,
+		isGoPage : false,
+		mode : 'click',
+		click : function(n){
+			this.selectPage(n);
+			loadPageDataTable(n, false, options);
+		}
+	}, true);
+};

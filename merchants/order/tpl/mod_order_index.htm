@@ -1,0 +1,105 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/bootstrap-datetimepicker.min.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
+<!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
+<div id="body" class="ifr-body">
+	<!--{include file="inc/left_common.htm"}-->
+	<div id="order_list_right">
+		<div id="order_type">
+			<ul>	
+				<li class="order_type_on">所有订单</li>
+				<li data-type='100'>待付款</li>
+				<li data-type='101'>待发货</li>
+				<li data-type='103'>待收货</li>
+				<li data-type='102'>交易完成</li>
+				<li data-type='104'>交易关闭</li>
+			</ul>
+		</div>
+		
+		<div id="choose_condition">
+			<input type="date" id="start_date">
+			<!-- <div class="check_time_left" id="time_left">
+			</div> --> 
+			<span style="padding-left:15px;">至</span>
+			<input type="date" id="end_date">
+			<!-- <div class="check_time_left" id="time_right">
+			</div> -->
+			<input class="check_time_left" contenteditable id="order_num" placeholder="订单号">
+			<input class="check_time_left" contenteditable id="buyer"  placeholder="买家">
+			<button id="search_type_infos">搜索</button>
+		</div>
+		
+		<div id="type_infos">
+			<table cellspacing="0" cellpadding="0" id="type_table_list">
+				<tr>
+					<th>选择</th>
+					<th>订单号</th>
+					<th>买家</th>
+					<th>下单时间</th>
+					<th>订单总额</th>
+					<th>订单状态</th>
+					<th>支付方式</th>
+					<th>操作</th>
+				</tr>
+				<tbody class="body-data"></tbody>
+			</table>
+		</div>
+			
+		<div id="list_type_foot">
+			<span id="all_check"></span>
+			<button id="batch_send">批量发货</button>
+			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+		</div>
+	</div>
+</div>
+<script>
+var tableOptions = {id : 'type_table_list',url : '/order/list',colspan : 8};
+$(function(){
+	loadPageDataTable(1, true, tableOptions);
+	tableCheckBoxEvent();
+	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
+	$("#order_type").on('click','li',function(){
+		var obj = $(this);
+		if(obj.hasClass("order_type_on")){
+			return;
+		}
+		obj.siblings().removeClass("order_type_on");
+		obj.addClass("order_type_on");
+		loadPageDataTable(1, true, tableOptions);
+	});
+	$("#search_type_infos").on('click',function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+});
+
+//获取当前页面条件
+function pageQueryCondtion(){
+	var status = 0;
+	$("#order_type").find("li").each(function(){
+		var THIS = $(this);
+		if(THIS.hasClass("order_type_on")){
+			status = THIS.attr("data-type");
+		}
+	});
+	var order_num = $("#order_num").val();
+	var buyer = $("#buyer").val();
+	var start_date = $("#start_date").val();
+	var end_date = $("#end_date").val();
+	
+	var data = {order_sn : order_num,buyer : buyer, status : status, start_date : start_date, end_date : end_date};
+	return data;
+}
+function costructRowData(result){
+	var TR = "<tr data-id="+result.order_id+"><td class=\"common_check\"></td>";
+	TR += "<td>"+result.order_sn+"</td>";
+	TR += "<td>"+result.nick_name+"</td>";
+	TR += "<td>"+result.add_time+"</td>";
+	TR += "<td>￥"+result.order_amount+"</td>";
+	TR += "<td>"+result.order_status_text+"</td>";
+	TR += "<td>"+result.pay_name+"</td>";
+	TR += "<td><span id=\"look_up\">查看</span><span id=\"send_goods\">发货</span></td></tr>";
+	return TR;
+}
+
+</script>

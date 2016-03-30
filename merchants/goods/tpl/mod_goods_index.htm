@@ -1,6 +1,8 @@
 <!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/bootstrap-datetimepicker.min.css" scope="module"}-->
 <!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
-<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
+<!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
 <div id="body" class="ifr-body">
 	<!--{include file="inc/left_common.htm"}-->
 	<div class="goods_right">
@@ -19,9 +21,9 @@
   					<option value ="flash">限时抢购商品</option>
   					<option value ="remm">推荐至益多米平台</option>
 				</select> -->
-				<input type="date" id="start_date"/>
+				<input type="input" id="start_date" readonly class="form_datetime"/>
 				至
-				<input type="date" id="end_date"/>
+				<input type="input" id="end_date" readonly class="form_datetime"/>
 				<button class="search_button" onclick="loadTableContent(1, true);">搜索</button>
 			</div>
 		</div>
@@ -63,6 +65,7 @@
 <script>
 $(function(){
 	loadTableContent(1, true);
+	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
 });
 function loadTableContent(curpage, isinit, param){
 	var container = $("#resultList");
@@ -75,7 +78,7 @@ function loadTableContent(curpage, isinit, param){
 	F.get('/goods/list', data, function(ret){
 		var TR = "";
 		if(!ret || !ret.result || !ret.result.length){
-			TR = "<tr><td colspan='10' style='text-align:center;'>还没有数据~</td></tr>";
+			TR = "<tr><td colspan='10' style='text-align:center;'>没有符合条件的数据!</td></tr>";
 		}else{
 			var result = ret.result;
 			result.forEach(function(item){
@@ -83,7 +86,6 @@ function loadTableContent(curpage, isinit, param){
 			});
 		}
 		container.find("tbody.body-data").html($(TR));
-		DOMEventBind();
 		if(isinit){
 			generatePage(ret.curpage, ret.maxpage, ret.totalnum);
 		}
@@ -168,6 +170,9 @@ function list_switch(a){
 	loadTableContent(1, true);
 }
 $(function(){
+	DOMEventBind();
+});
+function DOMEventBind(){
 	//全选
 	$(".all_check").on('click',function(){
 		var THIS = $(this);
@@ -179,10 +184,8 @@ $(function(){
 			$(".check_go").addClass("go_on");
 		}
 	});
-});
-function DOMEventBind(){
 	//单选
-	$(".check_go").on('click',function(){
+	$("#list1").on('click','.check_go',function(){
 		var THIS = $(this);
 		if(THIS.hasClass("go_on")){
 			THIS.removeClass("go_on");
@@ -191,7 +194,7 @@ function DOMEventBind(){
 		}
 		cartSelectAll();
 	});
-	$(".goods_edit").on('click',function(){
+	$("#list1").on('click','.goods_edit',function(){
 		var THIS = $(this);
 		if(THIS.find(".edit_info").is(":visible")){
 			THIS.find(".edit_info").fadeOut();
@@ -199,7 +202,7 @@ function DOMEventBind(){
 			THIS.find(".edit_info").fadeIn();
 		}
 	});
-	$(".edit_info").find("a").on('click', function(){
+	$("#list1").on('click','.edit_info a', function(){
 		var THIS = $(this);
 		var type = THIS.attr("data-type");
 		var obj = THIS.closest("tr").first();

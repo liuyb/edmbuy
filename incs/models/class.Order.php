@@ -536,6 +536,41 @@ class Order extends StorageNode{
     
     	return $html;
     }
+    
+    /**
+     * 根据传入的综合状态返回 查询订单的SQL
+     * @param unknown $composite_status
+     * @param $prefix 表前缀
+     */
+    static function build_order_status_sql($composite_status, $prefix = ''){
+        //取消订单处理
+        if(CS_CLOSED == $composite_status){
+            return " AND ($prefix.pay_status = ".PS_CANCEL." or $prefix.order_status in (".OS_CANCELED.", ".OS_INVALID."))";
+        }
+        $status = Fn::get_order_status($composite_status);
+        if(!$status || count($status) == 0){
+            return '';
+        }
+        $sql = "";
+        foreach ($status as $field => $arr){
+            if(is_array($arr)){
+                $sql .= " AND $prefix.$field ".Func::db_create_in($arr);
+            }else{
+                $sql .= " AND $prefix.$field = $arr ";
+            }
+        }
+        return $sql;
+    }
+    
+    /**
+     * 查询地址选择列表
+     * @param number $type  省市县type[1,2,3]
+     * @param number $parent 父ID
+     */
+    static function get_regions($type = 0, $parent = 0){
+        $sql = "SELECT region_id, region_name FROM shp_region WHERE region_type = $type AND parent_id = $parent ";
+        return D()->query($sql)->fetch_array_all();
+    }
 }
 
 ?>
