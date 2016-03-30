@@ -43,6 +43,7 @@ class Item_Controller extends MobileController {
 	
 	public function item(Request $request, Response $response)
 	{
+		$this->setPageView($request, $response, '_page_mpa');
 		$this->v->set_tplname('mod_item_item');
 		$this->nav_no    = 1;
 		$this->nav_flag1 = 'item';
@@ -201,11 +202,13 @@ class Item_Controller extends MobileController {
 	 * @throws ViewResponse
 	 */
 	public function pref_show(Request $request, Response $response){
+		$this->setPageView($request, $response, '_page_mpa');
+		$this->extra_css = 'greybg';
 	    $this->nav_no    = 0;
 	    $type = $request->get('type');
 	    $mod = Item_Model::createModByCategory($type);
 	    $this->v->set_tplname($mod);
-	    if($request->is_hashreq()){
+	    if(1||$request->is_hashreq()){
 	        //购物车数
 	        $cartnum = Cart::getUserCartNum(Cart::shopping_uid());
 	        $this->v->assign('cartnum', $cartnum);

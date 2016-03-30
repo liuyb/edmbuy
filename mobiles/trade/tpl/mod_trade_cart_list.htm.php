@@ -18,9 +18,11 @@
 <span class="fr cart_t_money">合计:<i class="cart_t_price">￥<small id="all_price">0.00</small></i></span>
 </div>
 </script>
-<script>$('#nav_cart_tool').html($('#for_nav_cart_tool').html())</script>
+<script>$(function(){$('#nav_cart_tool').html($('#for_nav_cart_tool').html())});</script>
 <?php else:?>
-<style>#nav_cart_tool{background:#eee;}</style>
+<!--[HEAD_CSS]-->
+<style>body.MPA,#nav_cart_tool{background:#eee;} .cart_body{min-height:300px;}</style>
+<!--[/HEAD_CSS]-->
 <?php endif;?>
 
 <div class="cart_body">

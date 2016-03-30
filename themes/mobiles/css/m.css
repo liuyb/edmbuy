@@ -1164,6 +1164,7 @@ a.h_btn{
 }
 .p_detail_msg{
   padding: 15px 12px 12px;
+  background: #fff;
 }
 .p_d_title{
   font-size: 18px;
@@ -1211,6 +1212,7 @@ a.h_btn{
 }
 .p_detail_serv{
   padding: 8px 12px;
+  background: #fff;
 }
 .p_detail_serv li{
   float: left;
@@ -1317,7 +1319,7 @@ a.h_btn{
   border-top: 1px solid #ff6d14;  
 }
 .p_detail_button{
-  position: absolute;
+  position: fixed;
   width: 40px;
   height: 40px;
   right: 12px;
@@ -1337,7 +1339,7 @@ a.h_btn{
 /* 加入购物车 */
 .p_cart_main{
   display: none;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;

@@ -12,12 +12,9 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
-
-<style>
-.animation_tr{
-	display : none;
-}
-</style>
+<!--[HEAD_CSS]-->
+<style>.animation_tr{display : none;}</style>
+<!--[/HEAD_CSS]-->
 <div class="copartner_list">
 	<table cellspacing="10" cellpadding="10" class="copartner_list_table">
 	</table>
@@ -85,7 +82,7 @@
 			$(this).show('slow');
 			$(this).removeClass("animation_tr");
 		});
-		F.set_scroller(false, 100);
+		//F.set_scroller(false, 100);
 	}
 
 	//当还有下一页时处理下拉

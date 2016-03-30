@@ -105,9 +105,10 @@ class User_Controller extends MobileController
 
     public function show_wxqr(Request $request, Response $response)
     {
+    	$this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_wxqr');
         $this->topnav_no = 1;
-        if ($request->is_hashreq()) {
+        if (1||$request->is_hashreq()) {
             $user = $this->showUserBaseInfo();
         }
         throw new ViewResponse($this->v);
@@ -138,9 +139,10 @@ class User_Controller extends MobileController
 
     public function show_mobile(Request $request, Response $response)
     {
+    	$this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_mobile');
         $this->topnav_no = 1;
-        if ($request->is_hashreq()) {
+        if (1||$request->is_hashreq()) {
             $mobile=$request->get('mobile','');
             $nickname=$request->get('nickname','');
             $this->v->assign('ismoblie',false);

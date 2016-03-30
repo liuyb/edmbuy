@@ -8,10 +8,10 @@
 
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
-	<span class="p_detail_back cursor" onclick="<?=$back ?>"></span>
-	<span class="p_detail_more cursor"></span>
+	<span class="p_detail_back" onclick="<?=$back ?>"></span>
+	<span class="p_detail_more" data-show="0"></span>
 </div>
-<div class="p_detail_menulist cursor">
+<div class="p_detail_menulist">
 	<span class="p_detail_jian"></span>
 	<ul class="p_detail_menu">
 		<li class="p_menu_sy"><a href="/">首页</a></li>
@@ -34,13 +34,8 @@
 <?php endif;?>
 </div>
 </script>
-<div class="mask_menu cursor"></div>
+<?php include T('inc/popqr');?>
 <script id="forBody" type="text/html">
-<?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
-<div class="cursor p_detail_button p_detail_follow"></div>
-<?php endif;?>
-<div class="cursor p_detail_button p_detail_gotop" id="Mgotop"></div>
-
 <div class="mask no-bounce" id="bodymask" style="display:none;"></div>
 <div class="p_cart_main no-bounce" id="p_cart_main" style="display:none;">
 	<input type="hidden" id="frm_buy_type" value="cart"/>
@@ -82,14 +77,6 @@
 	</div>
 </div>
 
-<!-- 二维码 -->
-<div class="cart_wx no-bounce" id="cart_wx">
-	<div class="c_wx_tit">益多米</div>
-	<div class="c_wx_img"><img src="/themes/mobiles/img/ydm.png"></div>
-	<div class="c_wx_ewm">长按识别二维码，关注益多米</div>
-	<div class="w_wx_colse"><img src="/themes/mobiles/img/gub.png"></div>
-</div>
-
 <!-- 佣金分配  -->
 <div class="cart_yj_f no-bounce" id="cart_yj_f">
 	<div class="yi_artio_tit">佣金分配比例</div>
@@ -104,8 +91,10 @@
 <?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
 show_mtop($('#forMtop').html());
 <?php endif;?>
-show_mnav($('#forMnav').html());
-append_to_body($('#forBody').html());
+$(function(){
+	show_mnav($('#forMnav').html());
+	append_to_body($('#forBody').html());
+});
 </script>
 
 <div class="mainb">
@@ -241,11 +230,6 @@ $(document).ready(function(){
 	//缓存对象
 	var $mask     = $("#bodymask");
 	var $cartmain = $('#p_cart_main');
-	var $cartwx   = $('#cart_wx');
-	
-	$('#Mgotop').on("click",function(){
-		F.set_scroller(true);
-	});
 	
 	$('#product_zyj').on("click",function(){
 		$mask.fadeIn(255);
@@ -257,26 +241,16 @@ $(document).ready(function(){
 		$("#cart_yj_f").fadeOut(255);
 	});
 	
-	//弹出二维码
-	$(document.body).on("click",".p_detail_follow",function(){
-		$mask.fadeIn(300);
-		$cartwx.fadeIn(300);
-	});
-	$cartwx.on("click",".w_wx_colse",function(){
-		$mask.hide();
-		$cartwx.addClass("is_confirmwx");
-		setTimeout(function(){
-			$cartwx.hide().removeClass("is_confirmwx");
-		},500);
-	});
-	
 	//菜单开启
 	$(document.body).on("click", ".p_detail_more", function(){
-		$(".p_detail_menulist,.mask_menu").show();
-	});
-	//菜单关闭
-	$(document.body).on("click", ".mask_menu", function(){
-		$(".p_detail_menulist,.mask_menu").hide();
+		if($(this).attr('data-show')=='0') {
+			$(".p_detail_menulist").show();
+			$(this).attr('data-show','1');
+		}
+		else {
+			$(".p_detail_menulist").hide();
+			$(this).attr('data-show','0');
+		}
 	});
 	
 	//加入购物车

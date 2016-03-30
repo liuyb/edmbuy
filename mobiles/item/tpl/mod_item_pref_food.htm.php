@@ -10,15 +10,18 @@ $page_head_pic = '/themes/mobiles/img/food001.png';
 $category = 'food';
 
 include T('inc/pref_popup_menu');?>
-
-<div class="dress_title" style="margin-bottom:5px;">
-	<ul>
-		<li onclick="goods_switch('snackfood','sanck_bg');"><p data-cat='snackfood' data-type='sanck_bg' class="sanck_bg_b sanck_bg_r">休闲食品</p></li>
-		<li onclick="goods_switch('localfood','specialty_bg');"><p data-cat='localfood' data-type='specialty_bg' class="specialty_bg_b">地方特产</p></li>
-		<li onclick="goods_switch('importfood','food_bg');"><p data-cat='importfood' data-type='food_bg' class="food_bg_b">进口食品</p></li>
-		<span class="lineone"></span>
-		<span class="linetwo"></span>
-		<div class="clear"></div>
+<!--[HEAD_CSS]-->
+<style>
+.dress_title {margin-bottom:5px;}
+.dress_title li {border-right: 1px solid #eee;}
+.dress_title li.last {border-right: none;}
+</style>
+<!--[/HEAD_CSS]-->
+<div class="dress_title">
+	<ul class="clearfix">
+		<li onclick="goods_switch('snackfood','sanck_bg');" class="bbsizing c-3-1"><p data-cat='snackfood' data-type='sanck_bg' class="sanck_bg_b sanck_bg_r">休闲食品</p></li>
+		<li onclick="goods_switch('localfood','specialty_bg');" class="bbsizing c-3-1"><p data-cat='localfood' data-type='specialty_bg' class="specialty_bg_b">地方特产</p></li>
+		<li onclick="goods_switch('importfood','food_bg');" class="bbsizing c-3-1 last"><p data-cat='importfood' data-type='food_bg' class="food_bg_b">进口食品</p></li>
 	</ul>
 </div>
 
@@ -44,12 +47,6 @@ $(document).ready(function(){
 	}else{
     	getGoodsByCat('snackfood');
 	}
-	
-	var _width = $(window).width() / 3;
-	var _linetwo =_width * 2 ;
-	$(".dress_title li").width(_width);
-	$(".lineone").css({"position":"absolute","left":_width});
-	$(".linetwo").css({"position":"absolute","left":_linetwo});
 });
 
 function getGoodsByCat(cat){

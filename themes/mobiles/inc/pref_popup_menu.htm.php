@@ -5,7 +5,7 @@
 <div class="bg_prefe">
 <span class="pre_h"><a href='/'><img src="/themes/mobiles/img/home.png" style="width:30px;"></a></span>
 <span class="pre_s"><a href='/trade/cart/list'><img src="/themes/mobiles/img/shopping00.png" style="width:30px;"></a></span>
-<span class="pre_m"><img src="/themes/mobiles/img/more.png" style="width:30px;"></span>
+<span class="pre_m" data-show="0"><img src="/themes/mobiles/img/more.png" style="width:30px;"></span>
 <?php if($cartnum): ?>
 <span class="ydm_com"><?=$cartnum ?></span>
 <?php endif;?>
@@ -43,7 +43,14 @@ var cur_category = "<?=$category ?>";
 
 //菜单开启
 $(".pre_m").on("click",function(){
-	$(".p_detail_menulist,.mask_menu").show();
+	if ($(this).attr('data-show')=='0') {
+		$(".p_detail_menulist").show();
+		$(this).attr('data-show','1');
+	}
+	else {
+		$(".p_detail_menulist").hide();
+		$(this).attr('data-show','0');
+	}
 })
 
 //菜单关闭
@@ -77,8 +84,8 @@ function handleGoodsListAppend(obj, LI, isinit){
 	}else{
     	obj.append(LI);//加载更多用append
 	}
-	F.set_scroller(false, 100);
-	scrollToHistoryPosition();
+	//F.set_scroller(false, 100);
+	//scrollToHistoryPosition();
 }
 
 function pulldata(obj){

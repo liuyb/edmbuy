@@ -174,7 +174,7 @@ class Trade_Controller extends MobileController {
    */
   public function cart_list(Request $request, Response $response)
   {
-  	//$this->setPageView($request, $response, '_page_mpa');
+  	$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_cart_list');
     $this->nav_flag1 = 'cart';
     $this->nav_no    = 1;
@@ -204,7 +204,7 @@ class Trade_Controller extends MobileController {
     }
     $this->v->assign('mnav', $mnav);
     
-    if ($request->is_hashreq()) {
+    if (1||$request->is_hashreq()) {
       $cartGoods= Cart::getUserCart($shop_uid);
       
       //将数据库列表转化成根据商家聚合列表
@@ -232,11 +232,12 @@ class Trade_Controller extends MobileController {
    */
   public function order_record(Request $request, Response $response)
   {
+  	$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_order_record');
     $this->nav_flag2 = 'buyrecord';
     $this->nav_no    = 0;
     $this->topnav_no = 1; // >0: 表示有topnav bar，具体值标识哪个topnav bar(有多个的情况下)
-    if ($request->is_hashreq()) {
+    if (1||$request->is_hashreq()) {
       
       $orders_num = 0;
       $errmsg = '';
@@ -260,13 +261,15 @@ class Trade_Controller extends MobileController {
       
     }
     else {
-      $refer = $request->refer();
-      $backurl = U('explore');
-      if (strpos($refer, '/user')!==false) { //来自用户中心
-        $backurl = U('user');
-      }
-      $this->v->assign('backurl', $backurl);
+      
     }
+    $refer = $request->refer();
+    $backurl = U('explore');
+    if (strpos($refer, '/user')!==false) { //来自用户中心
+    	$backurl = U('user');
+    }
+    $this->v->assign('backurl', $backurl);
+    
     $response->send($this->v);
   }
   
@@ -278,11 +281,45 @@ class Trade_Controller extends MobileController {
    */
   public function order_confirm(Request $request, Response $response)
   {
+  	$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_order_confirm');
     $this->nav_flag1 = 'order';
     $this->nav_flag2 = 'order_confirm';
     $this->nav_no    = 0;
-    if ($request->is_hashreq()) {
+    $this->extra_css = 'greybg';
+    
+    $code = $request->get('code', '');
+    if (''!=$code) { //微信base授权
+    
+    	$state = $request->get('state', '');
+    
+    	//授权出错
+    	if (!in_array($state, Weixin::$allowOAuthScopes)) {
+    		Fn::show_error_message('授权出错，提交订单失败！', true);
+    	}
+    
+    	$wx = new Weixin([Weixin::PLUGIN_JSADDR]);
+    
+    	//用code换取access token
+    	$code_ret = $wx->request_access_token($code);
+    	if (!empty($code_ret['errcode'])) {
+    		Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>', true);
+    	}
+    
+    	$accessToken = $code_ret['access_token'];
+    	$wxAddrJs = $wx->jsaddr->js($accessToken);
+    	$this->v->add_append_filter(function(PageView $v) use($wxAddrJs) {
+    		$v->append_to_foot_js .= $wxAddrJs;
+    	},'foot');
+    
+    }
+    else { //正常访问
+    	if (Weixin::isWeixinBrowser()) {
+    		(new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
+    	}
+    }
+    
+    if (1||$request->is_hashreq()) {
       $cart_rids = $request->get('cart_rids','');
       $cart_nums = $request->get('cart_nums','');
       $timestamp = $request->get('t',0);
@@ -325,36 +362,7 @@ class Trade_Controller extends MobileController {
       
     }
     else {
-      $code = $request->get('code', '');
-      if (''!=$code) { //微信base授权
-        
-        $state = $request->get('state', '');
-        
-        //授权出错
-        if (!in_array($state, Weixin::$allowOAuthScopes)) {
-          Fn::show_error_message('授权出错，提交订单失败！', true);
-        }
-        
-        $wx = new Weixin([Weixin::PLUGIN_JSADDR]);
-        
-        //用code换取access token
-        $code_ret = $wx->request_access_token($code);
-        if (!empty($code_ret['errcode'])) {
-          Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>', true);
-        }
-        
-        $accessToken = $code_ret['access_token'];
-        $wxAddrJs = $wx->jsaddr->js($accessToken);
-        $this->v->add_append_filter(function(PageView $v) use($wxAddrJs) {
-          $v->append_to_foot_js .= $wxAddrJs;
-        },'foot');
-        
-      }
-      else { //正常访问
-        if (Weixin::isWeixinBrowser()) {
-        	(new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
-        }
-      }
+
     }
     
     throw new ViewResponse($this->v);
@@ -762,9 +770,11 @@ class Trade_Controller extends MobileController {
    */
   public function order_payok(Request $request, Response $response)
   {
+  	$this->setPageView($request, $response, '_page_mpa');
   	$this->v->set_tplname('mod_trade_order_payok');
   	$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
   	$this->nav_no = 0;
+  	$this->extra_css = 'greybg';
   	
   	$order_id = $request->get('order_id',0);
   	$order = Order::load($order_id);

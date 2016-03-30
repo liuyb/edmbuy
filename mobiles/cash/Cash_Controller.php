@@ -45,12 +45,13 @@ class Cash_Controller extends MobileController {
 	 */
 	public function apply(Request $request, Response $response)
 	{
+		$this->setPageView($request, $response, '_page_mpa');
 		$this->v->set_tplname('mod_cash_apply');
 		$this->nav_no    = 0;
 		$this->topnav_no = 1;
 		$this->backurl   = '/partner';
 		
-		if ($request->is_hashreq()) {
+		if (1||$request->is_hashreq()) {
 			
 			global $user;
 			
@@ -306,12 +307,13 @@ class Cash_Controller extends MobileController {
 	 */
 	public function detail(Request $request, Response $response)
 	{
+		$this->setPageView($request, $response, '_page_mpa');
 		$this->v->set_tplname('mod_cash_detail');
 		$this->nav_no    = 0;
 		$this->topnav_no = 1;
 		$this->backurl = '/partner';
 		
-		if ($request->is_hashreq()) {
+		if (1||$request->is_hashreq()) {
 			
 			$cashing_list = UserCashing::cashing_list($GLOBALS['user']->uid);
 			$this->v->assign('cashing_list', $cashing_list);

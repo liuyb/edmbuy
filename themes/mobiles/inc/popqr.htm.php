@@ -1,6 +1,8 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <script id="popqr-html" type="text/html">
+<?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
 <div class="gicon_btn gicon_btn_qr" id="global-popqrbtn"></div>
+<?php endif;?>
 <div class="gicon_btn gicon_btn_gotop" id="global-gotopbtn"></div>
 <div class="mask no-bounce hide" id="global-popqrmask"></div>
 <div class="cart_wx no-bounce" id="global-popqr">
