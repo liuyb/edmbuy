@@ -210,7 +210,7 @@ class Goods_Model extends Model
             }
         }
     }
-    
+
     /**
      * 当前商品 选中的属性 唯一过滤
      * @param unknown $index
@@ -549,7 +549,7 @@ class Goods_Model extends Model
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit="{$pager->start},{$pager->pagesize}";
-       $current==1?$where="merchant_id='{$merchant_id}'":$where="merchant_id='{$merchant_id}' and is_reply = 0";
+        $current==1?$where="merchant_id='{$merchant_id}'":$where="merchant_id='{$merchant_id}' and is_reply = 0";
         $sql="select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
               comment.id_value as id_value ,comment.is_reply as is_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
@@ -579,7 +579,7 @@ class Goods_Model extends Model
      * @param $comment_id
      */
     static function ViewComment($comment_id){
-            $sql="select content,merchart_content from shp_comment where comment_id = %d";
-            D()->query($sql,$comment_id);
+        $sql="select content,merchart_content from shp_comment where comment_id = %d";
+        D()->query($sql,$comment_id);
     }
 }

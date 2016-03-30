@@ -337,7 +337,7 @@ class Goods_Controller extends MerchantController {
                 }
             }
         }
-        $response->sendJSON($data);
+             $response->sendJSON($data);
     }
 
     /**
