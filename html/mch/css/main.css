@@ -311,8 +311,15 @@ body { min-width: 1200px;}
 	border-bottom:1px solid #e9e9e9;
 	line-height:55px;
 }
+.order_left_common{
+	color:#f26427 !important;
+	border-bottom:1px solid #f23427 !important;
+}
 
-
-
-
+#order_list_right{
+	margin:20px 0 0 20px;
+	width:1040px;
+	float:left;
+	min-height:880px;
+}
 
