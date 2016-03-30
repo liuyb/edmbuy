@@ -243,7 +243,7 @@ $(function(){
 	//判断ueditor 编辑器是否创建成功
     UE.getEditor('editor').addListener("ready", function () {
 	    // editor准备好之后才可以使用
-	    UE.getEditor('editor').setContent("<!--{$goodsinfo->item_desc}-->");
+	    UE.getEditor('editor').setContent(<!--{$goodsinfo->item_desc}-->);
     });
 });
 function goods_submit(){
@@ -466,9 +466,7 @@ function goodsSpecifiEvent(){
 		clone.find(".check_list_info li:first").addClass("li_on1");
 		clone.find('.z_in_height').show();
 		$(".mask_bg").show();
-		if($(".standFlag").length == 3){
-			$(".add_s_projcet").hide();
-		}
+		add_s_project_display();
 	})
 	//点击选择规格
 	$(document).on("click",'.stand_check',function(){
@@ -520,10 +518,14 @@ function goodsSpecifiEvent(){
 		var attr_list = container.find(".common_a_li");
 		get_attr_by_type(cat_id, function(ret){
 			var li = "";
-			if(ret && ret.length){
-				ret.forEach(function(item){
-					li　+= "<li data-attr='"+item.attr_id+"'>"+item.attr_name+"</li>";
-				});
+			if(!ret || !ret.length){
+				li = "<li>还没有属性数据！</li>";
+			}else{
+				if(ret && ret.length){
+					ret.forEach(function(item){
+						li　+= "<li data-attr='"+item.attr_id+"'>"+item.attr_name+"</li>";
+					});
+				}
 			}
 			attr_list.find("ul").html($(li));
 			attr_list.find("li").show();
@@ -532,12 +534,15 @@ function goodsSpecifiEvent(){
 		});
 		//showAttrList(container);
 	});
-	//点击属性项
+	//点击选择属性项
 	$(document).on("click",'.common_a_li li',function(){
+		var attr = $(this).data('attr');
+		if(!attr){
+			return;
+		}
 		var container = getContainer(this);
 		var _child = $(this).text();
 		$(this).hide();
-		var attr = $(this).data('attr');
 		container.find(".result_d").append('<span class="jt_g" data-attr='+attr+' onclick="jt_g_click(this)">'+_child+'</span>');
 	});
 	//点击确定属性
@@ -567,11 +572,12 @@ function goodsSpecifiEvent(){
 		container.find("span.jt_g").remove();
 		//showAttrList(container);
 	});
+	//选择好的属性over事件
 	$(document).on("mouseover",'.yjtj',function(){
-		yjtjshow(this);
+		$(this).find("img").show();
 	});
 	$(document).on("mouseout",'.yjtj',function(){
-		yjtjout(this);
+		$(this).find("img").hide();
 	})
 	$(document).on("mouseover",'.standFlag',function(){
 		$(this).find(".del_check").show();
@@ -583,11 +589,21 @@ function goodsSpecifiEvent(){
 	$(document).on("click",'.del_check',function(){
 		getContainer(this).remove();
 		generateSpecifTable();
+		add_s_project_display();
 	});
+	//mask 处理
 	$(".mask_bg").on('click',function(){
 		$(".z_in_height").hide();
 		$(this).hide();
 	});
+}
+//判断添加规格按钮是否能可以显示出来
+function add_s_project_display(){
+	if($(".standFlag").length >= 3){
+		$(".add_s_projcet").hide();
+	}else{
+		$(".add_s_projcet").show();
+	}
 }
 function get_attr_by_type(cat_id, callback){
 	F.get('/goods/attribute', {cat_id : cat_id}, function(ret){
@@ -620,14 +636,6 @@ function get_attr_by_type(cat_id, callback){
 		attrListDOM.show()
 	}
 } */
-//当前选中的属性mouseover
-function yjtjshow(obj){
-	$(obj).find("img").show();
-}
-//当前选中的属性mouseout
-function yjtjout(obj){
-	$(obj).find("img").hide();
-}
 //删除一个属性
 function yjtjclick(obj){
 	$(obj).closest("span").first().remove();
@@ -685,6 +693,10 @@ function getContainer(obj){
 //根据选择的属性规格，生成table
 function generateSpecifTable(){
 	var specifs = $(".standFlag").find(".stand_check");
+	if(specifs && specifs.length > 3){
+		showMsg('规格不能超过三个！');
+		return;
+	}
 	var arr = [];
 	specifs.each(function(){
 		var obj = $(this);
