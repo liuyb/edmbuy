@@ -55,7 +55,7 @@
 					<th>订单总额</th>
 					<th>订单状态</th>
 					<th>支付方式</th>
-					<th>操作</th>
+					<th width="100px;">操作</th>
 				</tr>
 				<tr>
 					<td class="common_check"></td>
@@ -65,7 +65,7 @@
 					<td>￥88.88</td>
 					<td>待发货</td>
 					<td>微信支付</td>
-					<td>
+					<td class="attr_rel">
 						<span id="look_up">查看</span><span id="send_goods">发货</span>
 					</td>
 				</tr>
@@ -77,7 +77,7 @@
 					<td>￥88.88</td>
 					<td>待发货</td>
 					<td>微信支付</td>
-					<td>
+					<td class="attr_rel">
 						<span id="look_up">查看</span><span id="send_goods">发货</span>
 					</td>
 				</tr>

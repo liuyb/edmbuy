@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/goods.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+
+<style>
+
+</style>
+
+<body id="bg_common"> 
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="goods_left_common.html"-->
+	<div id="order_list_right">
+		<div id="attr_top">
+			<table cellspacing="0" cellpadding="0" id="attrib_tab">
+				<tr>
+					<th>属性名称</th>
+					<th>属性值列表</th>
+					<th>操作</th>
+				</tr>
+				<tr>
+					<td>颜色</td>
+					<td>白色，红色，蓝色，黑色，紫色，灰色</td>
+					<td class="attr_rel"><span class="attr_edit">编辑</span></td>
+				</tr>
+				<tr>
+					<td>尺寸</td>
+					<td>3.0寸,3.0寸,3.0寸,3.0寸,3.5寸</td>
+					<td class="attr_rel"><span class="attr_edit">编辑</span></td>
+				</tr>
+				<tr>
+					<td>尺码</td>
+					<td>35,36,37,38,39</td>
+					<td class="attr_rel"><span class="attr_edit">编辑</span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="mask"></div>
+
+<div class="common_fixed" id="attr_fixed">
+	<div class="attr_type">
+		<div>
+			<span class="fill_red">*</span>属性名称：
+			<select class="ship_select">
+				<option>颜色</option>
+				<option>颜色</option>
+				<option>颜色</option>
+			</select>
+		</div>
+		<div style="margin-top:20px;"><button class="add_attr_sx">添加属性值</button></div>
+		
+		<div class="attr_edit_type">
+			<table cellspacing="0" cellpadding="0" id="edit_type_tab">
+				<tr>
+					<th width="60%">属性值名称</th>
+					<th width="40%">操作</th>
+				</tr>
+				<tr>
+					<td><input type="text" value="白色"></td>
+					<td class="attr_rel">
+						<span class="move_up">上移</span>
+						<span class="shift_down">下移1</span>
+						<span class="attr_del">删除</span>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="text" value="蓝色"></td>
+					<td class="attr_rel">
+						<span class="move_up">上移</span>
+						<span class="shift_down">下移2</span>
+						<span class="attr_del">删除</span>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="text" value="黑色"></td>
+					<td class="attr_rel">
+						<span class="move_up">上移</span>
+						<span class="shift_down">下移3</span>
+						<span class="attr_del">删除</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script>
+$("#sxgl").addClass("order_left_common");
+
+$(".attr_edit").on("click",function(){
+	$("#attr_fixed").show();
+	$(".mask").show();
+})
+
+//上移
+$("#edit_type_tab").on("click", ".move_up",function(){
+	var _length = $("#edit_type_tab").find("tr").length - 1;
+	var _index = $(this).parent().parent("tr").index();  
+	
+	if(_index > 1){
+		var _tr = $(this).parent().parent("tr");
+		var _trhtml = _tr.html();
+		var _nexthtml = _tr.prev().html();
+		_tr.html(_nexthtml);
+		_tr.prev().html(_trhtml);
+	}else{
+		alert("到头了");
+	}
+})
+
+//下移
+$("#edit_type_tab").on("click", ".shift_down",function(){
+	var _length = $("#edit_type_tab").find("tr").length - 1;
+	var _index = $(this).parent().parent("tr").index();  
+	
+	if(_index < _length){
+		var _tr = $(this).parent().parent("tr");
+		var _trhtml = _tr.html();
+		var _nexthtml = _tr.next().html();
+		_tr.html(_nexthtml);
+		_tr.next().html(_trhtml);
+	}else{
+		alert("到底了");
+	}
+})
+
+//删除
+$("#edit_type_tab").on("click", ".attr_del",function(){
+	$(this).parent().parent("tr").remove();
+})
+
+$(".add_attr_sx").on("click",function(){
+	var _trs = '<tr><td><input type="text" value=""></td><td class="attr_rel"><span class="move_up">上移</span><span class="shift_down">下移3</span><span class="attr_del">删除</span></td></tr>'
+	$("#edit_type_tab").append(_trs);
+})
+</script>
+ 

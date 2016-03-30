@@ -372,6 +372,10 @@
 			F.loading =false;
 			layer.closeAll('loading');
 		}
+		promise.fail = function(){
+			layer.msg('数据加载异常，请刷新重试!');
+			layer.closeAll('loading');
+		}
 	};
 	
 	/**

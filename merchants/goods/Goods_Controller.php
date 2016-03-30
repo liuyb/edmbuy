@@ -79,6 +79,7 @@ class Goods_Controller extends MerchantController {
             $selectedCat = $goods->cat_id;
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
+            $goods->item_desc = json_encode($goods->item_desc);
             $goods->other_cat = $other_cat;
             $other_cat_list = [];
             foreach ($other_cat AS $cat_id){
