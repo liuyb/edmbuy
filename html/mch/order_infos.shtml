@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/order.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="order_left_common.html"-->
+	<div id="order_list_right">
+		<div id="orders_info_top">订单详情</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name">
+				<p>商品清单</p>
+				<button id="update_price" class="commondity_btn">修改价格</button>
+			</div>
+			<div id="commodity_infos">
+				<table cellspacing="0" cellpadding="0" id="commondity_tab">
+					<tr>
+						<th width="500px" style="padding-left:20px;">商品名称</th>
+						<th width="160px">数量</th>
+						<th width="160px">单价</th>
+						<th width="160px">总价</th>
+					</tr>
+					<tr>
+						 <td>	
+						 	<img src="../mch/img/01_ba.png">
+						 	<span>是否收费所发生的十分的的覅偶是丹佛</span>
+						 </td>
+						 <td>2</td>
+						 <td class="unit_price">￥343.20</td>
+						 <td class="total_price">￥343.20</td>
+					</tr>
+					<tr>
+						 <td>	
+						 	<img src="../mch/img/01_ba.png">
+						 	<span>是否收费所发生的十分的的覅偶是丹佛</span>
+						 </td>
+						 <td>2</td>
+						 <td class="unit_price">￥343.20</td>
+						 <td class="total_price">￥343.20</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div id="money_z">
+				<span>商品总价：<i class="total_price" id="total_price">￥25.00</i></span>
+				<span>运费：25.00</span>
+				<span>实付金额：<i class="total_price" id="out_money">￥25.00</i></span>	
+			</div>
+		</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name">
+				<p>订单信息</p>
+				<button id="send_goods_s" class="q_send_btn">去发货</button>
+				<button id="update_order" class="commondity_btn">修改</button>
+			</div>
+			
+			<div id="infos_googs_n">
+				<table cellspacing="0" cellpadding="0" id="gos_tab">
+					<tr><td class="gos_left">订单号：</td><td>1234567895466</td></tr>
+					<tr><td class="gos_left">下单时间：</td><td>2016-6-5 12:12:12</td></tr>
+					<tr><td class="gos_left">订单状态：</td><td>待付款</td></tr>
+					<tr><td class="gos_left">买家账号：</td><td>text123</td></tr>
+					<tr><td class="gos_left">收货人：</td><td>张三</td></tr>
+					<tr><td class="gos_left">地址：</td><td>北京市深圳去桥头镇356号</td></tr>
+					<tr><td class="gos_left">手机号码：</td><td>14375437543</td></tr>
+				</table>
+			</div>
+			<div class="gos_l">
+				不需要发票
+			</div>
+		</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name"><p>物流跟踪</p></div>
+			
+			<div id="log_tracking">
+				<table cellspacing="0" cellpadding="0" id="tracking_tab">	
+					<tr>
+						<th>操作者</th>
+						<th>时间</th>
+						<th>描述</th>
+					</tr>
+					<tr>
+						<td>sedlef</td>
+						<td>2016/2/2 12:15:45</td>
+						<td>点睡地方惮烦手动大幅度</td>
+					</tr>
+					<tr>
+						<td>sedlef</td>
+						<td>2016/2/2 12:15:45</td>
+						<td>点睡地方惮烦手动大幅度</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="mask"></div>
+
+<div class="common_fixed update_t">
+	<div class="t_update"> 
+		<div class="up_common">总<i class="i_mi"></i>金<i class="i_mi"></i>额：<p>5000.00</p>元</div>
+		<div class="up_common">折<i class="i_li"></i>扣：<input type="text" value="500.00">元</div>
+		<div class="up_common">运<i class="i_li"></i>费：<p>50.00</p>元</div>
+		<div class="up_common">付款金额：<p>5000.00</p>元</div>
+		<div class="up_common">商品数量：<p>5</p>件</div>
+		<button class="up_btn_ok" id="up_ok_btn">确认修改</button>
+	</div>
+</div>
+
+<div class="common_fixed update_order_s">
+	<div class="up_order_s"> 
+		<div class="order_s_comm">收<i class="i_mi"></i>货<i class="i_mi"></i>人：<input type="text" value="500.00" id="put_person"></div>
+		<div class="order_s_comm">地<i class="i_li"></i>址：
+			<select>
+				<option>广东省</option>
+			</select>
+			<select>
+				<option>深圳市</option>
+			</select>
+			<select>
+				<option>福田区</option>
+			</select>
+		</div>
+		<div class="order_s_comm"><input type="text" value="500.00" id="put_address"></div>
+		<div class="order_s_comm">手机号码：<input type="text" value="500.00" id="phone_num"></div>
+		<button class="up_btn_ok" id="order_ok_btn">确认修改</button>
+	</div>
+</div>
+
+
+<script>
+$("#ddgl").addClass("order_left_common");
+
+$("#update_price").on("click",function(){
+	$(".update_t").show();
+	$(".mask").show();
+})
+
+$("#update_order").on("click",function(){
+	$(".update_order_s").show();
+	$(".mask").show();
+})
+
+$(".mask").on("click",function(){
+	$(".update_t").hide();
+	$(".update_order_s").hide();
+	$(".mask").hide();
+})
+</script>
+ 
