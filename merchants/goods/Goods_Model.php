@@ -82,7 +82,7 @@ class Goods_Model extends Model
             if($is_insert){
                 $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
             }else{
-                $sql = "UPDATE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
+                $sql = "UPDATE IGNORE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
             }
             D()->query($sql);
         }
@@ -174,6 +174,7 @@ class Goods_Model extends Model
             self::map_goods_attrs($cat_arr, $item, 3);
         }
         $ret_arr = [];
+        $count = 1;
         if($cat_arr && count($cat_arr) > 0){
             foreach ($cat_arr as $type => $attrs){
                 $typeOBJ = explode('【~~】', $type);
@@ -181,32 +182,12 @@ class Goods_Model extends Model
                     continue;
                 }
                 //处理每个type下的重复属性
-                $display_attrs = self::get_goods_select_attr($typeOBJ[0], $attrs);
+                $display_attrs = self::get_goods_select_attr($count, $attrs);
                 array_push($ret_arr, array('cat_id' => $typeOBJ[0], 'cat_name' => $typeOBJ[1], 'attrs' => $attrs, 'display_attrs' => $display_attrs));
+                $count ++;
             }
         }
         return $ret_arr;
-    }
-
-    /**
-     * 当前商品 选中的属性 唯一过滤
-     * @param unknown $index
-     * @param unknown $attrs
-     */
-    public static function get_goods_select_attr($cat_id, $attrs){
-        $ret = [];
-        $map = [];
-        foreach ($attrs as $at){
-            $at_id = $at['attr'.$cat_id.'_id'];
-            $key = 'key_'.$at_id;
-            if(isset($map[$key]) && $map[$key] > 0){
-                continue;
-            }
-            $map[$key] = '1';
-            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
-        }
-        unset($map);
-        return $ret;
     }
 
     /**
@@ -229,6 +210,27 @@ class Goods_Model extends Model
             }
         }
     }
+    
+    /**
+     * 当前商品 选中的属性 唯一过滤
+     * @param unknown $index
+     * @param unknown $attrs
+     */
+    public static function get_goods_select_attr($cat_id, $attrs){
+        $ret = [];
+        $map = [];
+        foreach ($attrs as $at){
+            $at_id = $at['attr'.$cat_id.'_id'];
+            $key = 'key_'.$at_id;
+            if(isset($map[$key]) && $map[$key] > 0){
+                continue;
+            }
+            $map[$key] = '1';
+            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
+        }
+        unset($map);
+        return $ret;
+    }
 
     /**
      * 删除指定商品
@@ -247,9 +249,8 @@ class Goods_Model extends Model
             Goods_Atomic::batch_delete_goods_gallery($goods_ids);
         }catch(Exception $e){
             D()->rollback();
-        }finally {
-            D()->commit();
         }
+        D()->commit();
     }
 
     static function batchUpdateGoods(array $goods_ids, $field, $val){
@@ -287,7 +288,7 @@ class Goods_Model extends Model
             $where .= " and g.is_on_sale = ".(intval($options['is_sale']) - 1);
         }
         if($options['orderby'] && $options['order_field']){
-            $orderby .= " order by $options[order_field] $options[orderby] ";
+            $orderby .= " order by $options[order_field] $options[orderby],g.last_update $options[orderby] ";
         }else{
             $orderby .= " order by g.last_update desc ";
         }
@@ -297,7 +298,7 @@ class Goods_Model extends Model
         $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
-        $pager->result = $goods;
+        $pager->setResult($goods);
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
@@ -311,8 +312,8 @@ class Goods_Model extends Model
     static function buildGoodsImg($goods){
         if (!empty($goods)) {
             foreach ($goods AS &$g) {
-                $g['goods_img'] = Items::imgurl($g['goods_img']);
-                $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+                $g['goods_img'] = Goods_Common::imgurl($g['goods_img']);
+                $g['goods_thumb'] = Goods_Common::imgurl($g['goods_thumb']);
             }
         }
         else {

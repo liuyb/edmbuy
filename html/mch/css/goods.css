@@ -315,6 +315,7 @@
 	position: relative;	
   	border: 1px solid #ddd;	
 	width:105px;
+	display:inline-block;
 }
 .check_list_info{
 	padding:5px 0 10px 5px;

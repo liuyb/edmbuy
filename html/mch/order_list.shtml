@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/order.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+
+
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="order_left_common.html"-->
+	<div id="order_list_right">
+		<div id="order_type">
+			<ul>	
+				<li class="order_type_on">所有订单</li>
+				<li>待付款</li>
+				<li>待发货</li>
+				<li>待收货</li>
+				<li>交易完成</li>
+			</ul>
+		</div>
+		
+		<div id="choose_condition">
+			<div class="check_time_left" id="time_left">dd</div> 
+			<span style="padding-left:15px;">至</span>
+			<div class="check_time_left" id="time_right">dd</div>
+			<input class="check_time_left" contenteditable id="order_num" placeholder="订单号">
+			<input class="check_time_left" contenteditable id="buyer"  placeholder="买家">
+			<button id="search_type_infos">搜索</button>
+		</div>
+		
+		<div id="type_infos">
+			<table cellspacing="0" cellpadding="0" id="type_table_list">
+				<tr>
+					<th>选择</th>
+					<th>订单号</th>
+					<th>买家</th>
+					<th>下单时间</th>
+					<th>订单总额</th>
+					<th>订单状态</th>
+					<th>支付方式</th>
+					<th>操作</th>
+				</tr>
+				<tr>
+					<td class="common_check"></td>
+					<td>123456789545</td>
+					<td>haojaitom</td>
+					<td>2016-5-5 14:20</td>
+					<td>￥88.88</td>
+					<td>待发货</td>
+					<td>微信支付</td>
+					<td>
+						<span id="look_up">查看</span><span id="send_goods">发货</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="common_check common_check_on"></td>
+					<td>123456789545</td>
+					<td>haojaitom</td>
+					<td>2016-5-5 14:20</td>
+					<td>￥88.88</td>
+					<td>待发货</td>
+					<td>微信支付</td>
+					<td>
+						<span id="look_up">查看</span><span id="send_goods">发货</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+			
+		<div id="list_type_foot">
+			<span id="all_check"></span>
+			<button id="batch_send">批量发货</button>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$("#ddgl").addClass("order_left_common");
+
+</script>
+ 

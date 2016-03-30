@@ -112,7 +112,7 @@ function costructHtml(result){
 	var TR = "";
 	TR+= "<tr data-id="+result.goods_id+"><td class=\"check_go\"></td><td><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
 	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></td>";
-	TR+= "<td>"+result.cat_name+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
+	TR+= "<td>"+(result.cat_name ? result.cat_name : '')+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
 	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
 	TR+= "<td class=\"goods_edit\">编辑<div class=\"edit_info\"><ul><li><a href=\"javascript:;\" data-type='edit'>编辑</a></li><li>";
 	var saleDOM = "";

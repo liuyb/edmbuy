@@ -313,6 +313,10 @@ class TplBase {
   	return U($uri, $vars, $doms);
   }
   
+  public static function output_headscript($params, $tpl = NULL){
+      return get_headscript();
+  }
+  
 }
 
 
