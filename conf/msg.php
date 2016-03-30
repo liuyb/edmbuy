@@ -7,10 +7,7 @@
 defined('IN_SIMPHP') or die('Access Denied');
 
 return [
-        'username'=>'ylx2',
-        'userpwd'=>'123456',
-        'smsnumber'=>'470',
-        'url'=>"http://sms.gknet.com.cn"
+        'forgetPwd'=>'尊敬的用户您好,您正在找回益多米商城登录密码,验证码为:%s',
 ];
 
 /*----- END FILE: port.php -----*/
