@@ -1,0 +1,122 @@
+<!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="goods_right">
+        <div class="goods_nums">
+            <ul>
+                <li id="li1" onclick="f(1)" class="li_on">全部</li>
+                <li id="li2" onclick="f(2)">未处理</li>
+            </ul>
+        </div>
+        <div class="common_go" id="list1">
+            <div class="search_result">
+            </div>
+        </div>
+        <div class="common_go" id="list2">
+            <div class="search_result_without">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        loadTableContent(1, true,1);
+    });
+    function loadTableContent(curpage, isinit, param) {
+
+        var container = $("#resultList");
+        container.find("tr:gt(0)").remove();
+        curpage = curpage ? curpage : 1;
+        if(param==1){
+            var data = {"current_page": curpage,'current':"1"}
+        }else{
+            var data = {"current_page": curpage,'current':"2"}
+        }
+        F.get('/goods/ajaxGetCommentList', data, function (ret) {
+            if(param==1){
+                $(".common_go .search_result").html(ret);
+            }else{
+                $(".common_go .search_result_without").html(ret);
+            }
+
+        },"HTML");
+    }
+
+    /**
+     * 新增分类
+     * @param pageNo
+     * @param totalPage
+     * @param totalRecords
+     */
+    function addGoodsCatery(cat_id) {
+        layer.open({
+            type: 2,
+            title: '新增分类',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['470px', '510px'],
+            content: '/goods/catetory?cat_id=' + cat_id//iframe的url
+        });
+    }
+
+    function editGoodsCatery(cat_id){
+        layer.open({
+            type: 2,
+            title: '编辑分类',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['470px', '510px'],
+            content: '/goods/catetory?cat_id=' + cat_id+"&edit=1"//iframe的url
+        });
+    }
+    /**
+     *删除一个分类
+     */
+    function delCategory(cat_id) {
+        layer.confirm('删除该分类会同时删除该分类下的子分类,您确定删除吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var data = {"cat_id": cat_id}
+            $.post("/goods/delcatery", data, function (ret) {
+                layer.msg(ret.retmsg)
+                setTimeout(function(){
+                    window.location.reload()
+                },1500);
+            })
+        });
+    }
+</script>
+
+<script>
+    $("#spfl").addClass("goods_on");
+
+    $(".new_adds").on("click", function () {
+        $(".mask").show();
+        $(".add_fix").show();
+    })
+    //切换
+    function f(a) {
+        var _li = "#li" + a;
+        var _list = "#list" + a;
+
+        $(".goods_nums li").removeClass("li_on");
+        $(".common_go").hide();
+
+        $(_li).addClass("li_on");
+        $(_list).show();
+        loadTableContent(1, true,a);
+    }
+
+    $(document).on('blur','.nums_px',function(){
+        var cat_id=$(this).attr("data-id")
+        var short_order=$(this).val();
+        var data={'cat_id':cat_id,'short_order':short_order};
+        $.get('/goods/updateShortOrder',data,function(){
+        });
+    })
+
+
+</script>

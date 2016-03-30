@@ -1056,4 +1056,17 @@ function formatBytes($bytes) {
 	}
 	return $bytes;
 }
+
+/**
+ *  电话号码验证
+ *
+ * @author abc
+ */
+function verify_phone($phone) {
+  if (preg_match('/^(1(([3|5|7][0-9])|(47)|[8][0123456789]))\d{8}$/', $phone)) {
+    return true;
+  } else {
+    return false;
+  }
+}
 /*----- END FILE: func.global.php -----*/

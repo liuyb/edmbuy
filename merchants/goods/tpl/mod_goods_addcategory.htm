@@ -20,7 +20,7 @@
             <!--{if $edit==0}-->
             <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();" id="file">
             <!--{elseif $edit==1}-->
-            <img src="<!--{$catgory.cate_thumb}--> " onclick="fileupload();" id="file">
+            <img src="<!--{$catgory.cat_thumb}--> " onclick="fileupload();" id="file">
             <!--{/if}-->
             <input type="file" name="file" class="dj_fil" onchange="fileupload(event)"/>
             <input type="hidden" name="cat_url" value="" />

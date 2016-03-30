@@ -1,0 +1,54 @@
+<table cellspacing="0" cellpadding="0" class="search_result_tab">
+    <tr>
+        <th>评价商品</th>
+        <th>评价内容</th>
+        <th>商品评分</th>
+        <th>评价人</th>
+        <th>日期</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <!--{foreach from=$commentList item=val}-->
+        <tr>
+            <td>
+                <div class="goods_img" style="float:left;"><img src="<!--{$val.goods_thumb}-->"></div>
+                <div class="goods_name"><!--{$val.goods_name}--></div>
+            </td>
+            <td><div class="manage_goods_name"><!--{$val.content}--></div></td>
+            <td><!--{$val.comment_rank}--></td>
+            <td><!--{$val.user_name}--></td>
+            <td><!--{$val.add_time|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
+            <td><!--{if $val.is_reply==1}-->已回复
+                <!--{else}-->未回复
+                <!--{/if}--></td>
+            <td>回复</td>
+        </tr>
+    <!--{/foreach}-->
+</table>
+    <div id="kkpager<!--{$current}-->" class="kkpager" style="float:right;clear:none;padding:0px;"></div>
+<script>
+        var curpage=<!--{$page.curpage}-->
+        var maxpage =<!--{$page.maxpage}-->
+        var totalnum =<!--{$page.totalnum}-->
+        var current=<!--{$current}-->
+    $(function(){
+        generatePage(curpage, maxpage, totalnum ,current);
+    })
+    function generatePage(pageNo, totalPage, totalRecords,current) {
+        //生成分页
+       kkpager.pagerid ="kkpager"+current;
+        kkpager.generPageHtml({
+            pno: pageNo,
+            //总页码
+            total: totalPage,
+            //总数据条数
+            totalRecords: totalRecords,
+            isGoPage: false,
+            mode: 'click',
+            click: function (n) {
+                this.selectPage(n);
+                loadTableContent(n, false,current);
+            }
+        }, true);
+    };
+</script>
