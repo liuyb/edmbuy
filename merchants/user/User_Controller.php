@@ -263,6 +263,7 @@ class User_Controller extends MerchantController
         $result = User_Model::forgetPassword($phone, $password, 3);
         if ($result * 1 > 0) {
             $_SESSION["phone"] = null;
+            $_SESSION["forgetPwd"] = null;
             $_SESSION["step"] = 3;
             $data['retmsg'] = "重置密码成功!";
             $data['status'] = 1;

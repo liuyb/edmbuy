@@ -27,9 +27,9 @@ class Goods_Model extends Model
         try {
             $goods->save(($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE));
             $goods_id = $is_insert ? D()->insert_id() : $goods->item_id;
-            $other_cat =  isset($_POST['other_cat']) ? $_POST['other_cat'] : [];
+            $other_cat = isset($_POST['other_cat']) ? $_POST['other_cat'] : [];
             $other_cat = is_array($other_cat) ? $other_cat : [$other_cat];
-            self::handle_other_cat($is_insert, $goods_id,$goods->cat_id, array_unique($other_cat));
+            self::handle_other_cat($is_insert, $goods_id, $goods->cat_id, array_unique($other_cat));
 
             if (isset($_POST['gallery_list'])) {
                 self::handle_goods_gallery($is_insert, $goods_id, $_POST['gallery_list']);
@@ -60,7 +60,7 @@ class Goods_Model extends Model
     {
         array_filter($cat_list);//去空
         $add_list = $cat_list;
-        if(!$is_insert){
+        if (!$is_insert) {
             /* 查询现有的扩展分类 */
             $exist_list = Goods_Atomic::get_goods_ext_category($goods_id);
 
@@ -68,7 +68,7 @@ class Goods_Model extends Model
             $delete_list = array_diff($exist_list, $cat_list);
             if ($delete_list) {
                 $sql = "DELETE FROM shp_goods_cat WHERE goods_id = '$goods_id'
-    	        AND cat_id " . Func::db_create_in($delete_list). " and is_main = 0 ";
+    	        AND cat_id " . Func::db_create_in($delete_list) . " and is_main = 0 ";
                 D()->query($sql);
             }
 
@@ -78,10 +78,10 @@ class Goods_Model extends Model
             ));
         }
         //冗余主分类到扩展分类 主分类放在扩展分类前，保证主分类一定存在
-        if($cat_id){
-            if($is_insert){
+        if ($cat_id) {
+            if ($is_insert) {
                 $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
-            }else{
+            } else {
                 $sql = "UPDATE IGNORE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
             }
             D()->query($sql);
@@ -100,19 +100,19 @@ class Goods_Model extends Model
      */
     private static function handle_goods_gallery($is_insert, $goods_id, array $gallery_list)
     {
-        if(!$is_insert){
+        if (!$is_insert) {
             // 删除原数据
             Goods_Atomic::delete_goods_gallery($goods_id);
         }
         $sql = "INSERT INTO shp_goods_gallery(goods_id, img_url, img_desc, thumb_url, img_original) VALUES ";
         $batchs = [];
         foreach ($gallery_list as $gallery) {
-            if(!$gallery || !$gallery['gallery_img']){
+            if (!$gallery || !$gallery['gallery_img']) {
                 continue;
             }
             array_push($batchs, "('$goods_id', '$gallery[gallery_img]', '', '$gallery[gallery_thumb]', '$gallery[origin_img]')");
         }
-        if(count($batchs) > 0){
+        if (count($batchs) > 0) {
             $batchs = implode(',', $batchs);
             $sql .= $batchs;
         }
@@ -120,8 +120,9 @@ class Goods_Model extends Model
     }
 
     //商品属性处理
-    private static function handle_goods_attribute($is_insert, $goods_id, array $attribute_list){
-        if(!$is_insert){
+    private static function handle_goods_attribute($is_insert, $goods_id, array $attribute_list)
+    {
+        if (!$is_insert) {
             // 删除原数据
             Goods_Atomic::delete_goods_attr($goods_id);
         }
@@ -130,20 +131,21 @@ class Goods_Model extends Model
             $sql = "INSERT INTO shp_goods_attr(goods_id, cat1_id,cat1_name,cat2_id,cat2_name,cat3_id,cat3_name,
                     attr1_id, attr1_value, attr2_id, attr2_value, attr3_id, attr3_value,
                     market_price, shop_price, income_price, cost_price, goods_number) " .
-                "VALUES ('$goods_id', '".self::setDefaultValueIfUnset($attr ,'cat_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value1', '')."',
-                        '".self::setDefaultValueIfUnset($attr ,'cat_id2', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value2', '')."',
-                        '".self::setDefaultValueIfUnset($attr ,'cat_id3', 0)."', '".self::setDefaultValueIfUnset($attr ,'cat_value3', '')."',
-                        '".self::setDefaultValueIfUnset($attr ,'attr_id1', 0)."', '".self::setDefaultValueIfUnset($attr ,'attr_value1', '')."',
-                        '".self::setDefaultValueIfUnset($attr ,'attr_id2', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value2', '')."',
-                        '".self::setDefaultValueIfUnset($attr ,'attr_id3', 0)."','".self::setDefaultValueIfUnset($attr ,'attr_value3', '')."',
+                "VALUES ('$goods_id', '" . self::setDefaultValueIfUnset($attr, 'cat_id1', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'cat_value1', '') . "',
+                        '" . self::setDefaultValueIfUnset($attr, 'cat_id2', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'cat_value2', '') . "',
+                        '" . self::setDefaultValueIfUnset($attr, 'cat_id3', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'cat_value3', '') . "',
+                        '" . self::setDefaultValueIfUnset($attr, 'attr_id1', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'attr_value1', '') . "',
+                        '" . self::setDefaultValueIfUnset($attr, 'attr_id2', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value2', '') . "',
+                        '" . self::setDefaultValueIfUnset($attr, 'attr_id3', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value3', '') . "',
                         $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
             D()->query($sql);
         }
     }
 
-    private static function setDefaultValueIfUnset($arr, $key, $default){
-        if($arr && $key){
-            if(isset($arr[$key])){
+    private static function setDefaultValueIfUnset($arr, $key, $default)
+    {
+        if ($arr && $key) {
+            if (isset($arr[$key])) {
                 return $arr[$key];
             }
         }
@@ -153,38 +155,39 @@ class Goods_Model extends Model
     /**
      * 解析成页面需要的商品属性格式
      * array(cat_id=>1,cat_name=>商品,attrs=>array([attr1_id] => 2
-    [attr1_value] => 300g
-    [attr2_id] => 5
-    [attr2_value] => 黄色
-    [attr3_id] => 0
-    [attr3_value] =>
-    [market_price] => 9.00
-    [shop_price] => 9.00
-    [income_price] => 8.00
-    [cost_price] => 7.00
-    [goods_number] => 6))
+     * [attr1_value] => 300g
+     * [attr2_id] => 5
+     * [attr2_value] => 黄色
+     * [attr3_id] => 0
+     * [attr3_value] =>
+     * [market_price] => 9.00
+     * [shop_price] => 9.00
+     * [income_price] => 8.00
+     * [cost_price] => 7.00
+     * [goods_number] => 6))
      * @param unknown $goods_id
      */
-    public static function get_goods_attrs($goods_id){
+    public static function get_goods_attrs($goods_id)
+    {
         $result = Goods_Atomic::get_goods_attribute($goods_id);
         $cat_arr = [];
-        foreach ($result as $item){
+        foreach ($result as $item) {
             self::map_goods_attrs($cat_arr, $item, 1);
             self::map_goods_attrs($cat_arr, $item, 2);
             self::map_goods_attrs($cat_arr, $item, 3);
         }
         $ret_arr = [];
         $count = 1;
-        if($cat_arr && count($cat_arr) > 0){
-            foreach ($cat_arr as $type => $attrs){
+        if ($cat_arr && count($cat_arr) > 0) {
+            foreach ($cat_arr as $type => $attrs) {
                 $typeOBJ = explode('【~~】', $type);
-                if(count($typeOBJ) == 0){
+                if (count($typeOBJ) == 0) {
                     continue;
                 }
                 //处理每个type下的重复属性
                 $display_attrs = self::get_goods_select_attr($count, $attrs);
                 array_push($ret_arr, array('cat_id' => $typeOBJ[0], 'cat_name' => $typeOBJ[1], 'attrs' => $attrs, 'display_attrs' => $display_attrs));
-                $count ++;
+                $count++;
             }
         }
         return $ret_arr;
@@ -197,14 +200,15 @@ class Goods_Model extends Model
      * @param unknown $item
      * @param unknown $index
      */
-    private static function map_goods_attrs(&$cat_arr, $item, $index){
-        $cat_id = $item['cat'.$index.'_id'];
-        $cat_name = $item['cat'.$index.'_name'];
-        if($cat_id && $cat_name){
-            $key = $cat_id.'【~~】'.$cat_name;
-            if(isset($cat_arr[$key]) && $cat_arr[$key]){
+    private static function map_goods_attrs(&$cat_arr, $item, $index)
+    {
+        $cat_id = $item['cat' . $index . '_id'];
+        $cat_name = $item['cat' . $index . '_name'];
+        if ($cat_id && $cat_name) {
+            $key = $cat_id . '【~~】' . $cat_name;
+            if (isset($cat_arr[$key]) && $cat_arr[$key]) {
                 array_push($cat_arr[$key], $item);
-            }else{
+            } else {
                 $cat_arr[$key] = [];
                 array_push($cat_arr[$key], $item);
             }
@@ -216,17 +220,18 @@ class Goods_Model extends Model
      * @param unknown $index
      * @param unknown $attrs
      */
-    public static function get_goods_select_attr($cat_id, $attrs){
+    public static function get_goods_select_attr($cat_id, $attrs)
+    {
         $ret = [];
         $map = [];
-        foreach ($attrs as $at){
-            $at_id = $at['attr'.$cat_id.'_id'];
-            $key = 'key_'.$at_id;
-            if(isset($map[$key]) && $map[$key] > 0){
+        foreach ($attrs as $at) {
+            $at_id = $at['attr' . $cat_id . '_id'];
+            $key = 'key_' . $at_id;
+            if (isset($map[$key]) && $map[$key] > 0) {
                 continue;
             }
             $map[$key] = '1';
-            array_push($ret, array("attr_id" =>$at_id, "attr_value" => $at['attr'.$cat_id.'_value']));
+            array_push($ret, array("attr_id" => $at_id, "attr_value" => $at['attr' . $cat_id . '_value']));
         }
         unset($map);
         return $ret;
@@ -236,8 +241,9 @@ class Goods_Model extends Model
      * 删除指定商品
      * @param unknown $goods_id
      */
-    static function batchDeleteGoods(array $goods_ids){
-        if(empty($goods_ids)){
+    static function batchDeleteGoods(array $goods_ids)
+    {
+        if (empty($goods_ids)) {
             return;
         }
         $goods_ids = implode(',', $goods_ids);
@@ -247,14 +253,15 @@ class Goods_Model extends Model
             Goods_Atomic::batch_delete_goods_cat($goods_ids);
             Goods_Atomic::batch_delete_goods_attr($goods_ids);
             Goods_Atomic::batch_delete_goods_gallery($goods_ids);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             D()->rollback();
         }
         D()->commit();
     }
 
-    static function batchUpdateGoods(array $goods_ids, $field, $val){
-        if(empty($goods_ids)){
+    static function batchUpdateGoods(array $goods_ids, $field, $val)
+    {
+        if (empty($goods_ids)) {
             return 0;
         }
         $goods_ids = implode(',', $goods_ids);
@@ -268,38 +275,39 @@ class Goods_Model extends Model
      * @param Pager $pager
      * @param array $options
      */
-    static function getPagedGoods(Pager $pager, array $options){
+    static function getPagedGoods(Pager $pager, array $options)
+    {
         $muid = $GLOBALS['user']->uid;
         $where = "";
         $orderby = "";
-        if($options['goods_name']){
-            $where .= " and g.goods_name like '%".htmlspecialchars($options['goods_name'])."%' ";
+        if ($options['goods_name']) {
+            $where .= " and g.goods_name like '%" . htmlspecialchars($options['goods_name']) . "%' ";
         }
-        if($options['start_date']){
-            $starttime = simphp_gmtime(strtotime($options['start_date'].DAY_BEGIN));
+        if ($options['start_date']) {
+            $starttime = simphp_gmtime(strtotime($options['start_date'] . DAY_BEGIN));
             $where .= " and g.add_time >= $starttime ";
         }
-        if($options['end_date']){
-            $endtime = simphp_gmtime(strtotime($options['end_date'].DAY_END));
+        if ($options['end_date']) {
+            $endtime = simphp_gmtime(strtotime($options['end_date'] . DAY_END));
             $where .= " and g.add_time <= $endtime ";
         }
         $groupbyWhere = $where;
-        if($options['is_sale']){
-            $where .= " and g.is_on_sale = ".(intval($options['is_sale']) - 1);
+        if ($options['is_sale']) {
+            $where .= " and g.is_on_sale = " . (intval($options['is_sale']) - 1);
         }
-        if($options['orderby'] && $options['order_field']){
+        if ($options['orderby'] && $options['order_field']) {
             $orderby .= " order by $options[order_field] $options[orderby],g.last_update $options[orderby] ";
-        }else{
+        } else {
             $orderby .= " order by g.last_update desc ";
         }
-        $sql = "select count(*) from shp_goods g where merchant_id='".$muid."' $where ";
+        $sql = "select count(*) from shp_goods g where merchant_id='" . $muid . "' $where ";
         $count = D()->query($sql)->result();
         $pager->setTotalNum($count);
-        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='".$muid."' $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='" . $muid . "' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
         $pager->setResult($goods);
-        $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='".$GLOBALS['user']->uid."' $groupbyWhere group by is_on_sale";
+        $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='" . $GLOBALS['user']->uid . "' $groupbyWhere group by is_on_sale";
         $result = D()->query($sql)->fetch_array_all();
         $pager->otherMap = $result;
 
@@ -309,14 +317,14 @@ class Goods_Model extends Model
      * 对商品图片做处理
      * @param unknown $goods
      */
-    static function buildGoodsImg($goods){
+    static function buildGoodsImg($goods)
+    {
         if (!empty($goods)) {
             foreach ($goods AS &$g) {
                 $g['goods_img'] = Goods_Common::imgurl($g['goods_img']);
                 $g['goods_thumb'] = Goods_Common::imgurl($g['goods_thumb']);
             }
-        }
-        else {
+        } else {
             $goods = [];
         }
         return $goods;
@@ -521,7 +529,7 @@ class Goods_Model extends Model
     static function getOneCategory($cat_id)
     {
         $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id} and is_delete=0";
-        return  D()->query($sql)->get_one();
+        return D()->query($sql)->get_one();
     }
 
     /**
@@ -529,34 +537,36 @@ class Goods_Model extends Model
      * @param $cat_id
      * @param $short_order
      */
-    static function updateShortOrder($cat_id,$short_order){
+    static function updateShortOrder($cat_id, $short_order)
+    {
         $tablename = "`shp_category`";
-        $setArr['sort_order']=$short_order;
-        $wherearr['cat_id']=$cat_id;
-        return D()->update($tablename,  $setArr, $wherearr);
+        $setArr['sort_order'] = $short_order;
+        $wherearr['cat_id'] = $cat_id;
+        return D()->update($tablename, $setArr, $wherearr);
 
     }
+
     /**
      * 获取商家商品的评论列表
      * @param Pager $pager
      * @return mixed
      */
-    static function getCommentList(Pager $pager,$current)
+    static function getCommentList(Pager $pager, $current)
     {
         //comment_id ,id_value,content,comment_rank,user_name,add_time,status
         $merchant_id = $GLOBALS['user']->uid;
         $sql = "select count(1) from shp_comment where merchant_id=%d";
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
-        $limit="{$pager->start},{$pager->pagesize}";
-        $current==1?$where="merchant_id='{$merchant_id}'":$where="merchant_id='{$merchant_id}' and is_reply = 0";
-        $sql="select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
+        $limit = "{$pager->start},{$pager->pagesize}";
+        $current == 1 ? $where = "merchant_id='{$merchant_id}'" : $where = "merchant_id='{$merchant_id}' and is_reply = 0";
+        $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
               comment.id_value as id_value ,comment.is_reply as is_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
               LEFT JOIN shp_goods goods on comment.id_value=goods.goods_id where {$where}
               order by add_time DESC limit {$limit}";
-        $result= D()->query($sql)->fetch_array_all();
-        $pager->result=$result;
+        $result = D()->query($sql)->fetch_array_all();
+        $pager->result = $result;
         return $result;
     }
 
@@ -564,22 +574,134 @@ class Goods_Model extends Model
      * 商家回复
      * @param $merchart_content 回复类容
      */
-    static function merchantRely($merchart_content){
-        $merchant_id=$GLOBALS['user']->uid;
+    static function merchantRely($merchart_content)
+    {
+        $merchant_id = $GLOBALS['user']->uid;
 //        public function update($tablename, Array $setarr, $wherearr, $flag = '')
-        $table="`shp_comment`";
-        $setArr['merchart_content']=$merchart_content;
-        $setArr['is_reply']=1;
-        $whereArr['merchant_id']=$merchant_id;
-        D()->update($table,$setArr,$whereArr);
+        $table = "`shp_comment`";
+        $setArr['merchart_content'] = $merchart_content;
+        $setArr['is_reply'] = 1;
+        $whereArr['merchant_id'] = $merchant_id;
+        D()->update($table, $setArr, $whereArr);
     }
 
     /**
      * 查看评论类容
      * @param $comment_id
      */
-    static function ViewComment($comment_id){
-        $sql="select content,merchart_content from shp_comment where comment_id = %d";
-        D()->query($sql,$comment_id);
+    static function ViewComment($comment_id)
+    {
+        $sql = "select content,merchart_content from shp_comment where comment_id = %d";
+        D()->query($sql, $comment_id);
+    }
+
+    /**
+     * 获取商品的属性列表
+     */
+    static function getGoodsAttrList()
+    {
+        $sql = "select cat_id ,cat_name from shp_goods_type";
+        $result = D()->query($sql)->fetch_array_all();
+        foreach ($result as &$val) {
+            $val['attr_name'] = self::getAttrName($val['cat_id']);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据cat_id拿到attrName
+     * @param $cat_id
+     */
+    static function getAttrName($cat_id)
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select attr_name from shp_attribute where cat_id ={$cat_id} and merchant_id = '{$merchant_id}'";
+        $result = D()->query($sql)->fetch_array_all();
+        $str = "";
+        foreach ($result as $val) {
+            $str .= $val["attr_name"] . ",";
+        }
+        return rtrim($str, ",");
+    }
+
+    /**
+     * 获取商品属性
+     * @param $attrId
+     */
+    static function getGoodsAttr($attrId)
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select attr.attr_id as attr_id ,attr.attr_name as attr_name ,attr.sort_order as sort_order ,ty.cat_id as cat_id ,ty.cat_name as cat_name
+                from shp_attribute  as attr  LEFT JOIN  shp_goods_type as ty on ty.cat_id = attr.cat_id  where
+                attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order ASC";
+        $result = D()->query($sql, $merchant_id, $attrId)->fetch_array_all();
+        $list['attr'] = $result;
+        $sql = "select cat_name , cat_id from shp_goods_type";
+        $goods_type = D()->query($sql)->fetch_array_all();
+        $list["type"] = $goods_type;
+        return $list;
+    }
+
+    /**
+     * 新增商品的属性
+     * @param $cat_name
+     */
+    static function addGoodsAttr($attr_name, $cat_id)
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $tablename = "`shp_attribute`";
+        $insertarr['attr_name'] = $attr_name;
+        $insertarr['merchant_id'] = $merchant_id;
+        $insertarr['cat_id'] = $cat_id;
+
+//        $insertarr['sort_order'] = $sort_order;
+        return D()->insert($tablename, $insertarr);
+    }
+
+    /**
+     * 校验attr_name
+     * @param $attrName
+     */
+    static function checkAttrName($cat_id, $attr_name)
+    {
+        $where = "attr_name in({$attr_name})";
+        $sql = "select attr_name from shp_attribute where cat_id = {$cat_id} and $where";
+        return D()->query($sql)->result();
+    }
+
+    /**
+     * 改变商品的short_order
+     * @param $attr_id
+     */
+    static function updateGoodsShortOrder($attr_id, $sort_order)
+    {
+//        update($tablename, Array $setarr, $wherearr, $flag = '')
+        $tablename = "`shp_attribute`";
+        $setarr['sort_order'] = $sort_order;
+        $wherearr['attr_id'] = $attr_id;
+        D()->update($tablename, $setarr, $wherearr);
+    }
+
+    /**
+     * 得到cat_id
+     * @param $cat_id
+     */
+    static function getAttrIds($cat_id)
+    {
+        $sql = "select attr_id from shp_attribute where cat_id = {$cat_id}";
+        return D()->query($sql)->fetch_array_all();
+    }
+
+    /**
+     * 删除一个属性
+     */
+    static function delGoodsAttr($attr_id)
+    {
+            $where = "attr_id in ({$attr_id})";
+        if (strlen($attr_id) == 1) {
+            $where = "attr_id ={$attr_id}";
+        }
+            $tablename="`shp_attribute`";
+            D()->delete($tablename,$where);
     }
 }

@@ -15,10 +15,6 @@
             <div class="search_result">
             </div>
         </div>
-        <div class="common_go" id="list2">
-            <div class="search_result_without">
-            </div>
-        </div>
     </div>
 </div>
 <script>
@@ -36,57 +32,10 @@
             var data = {"current_page": curpage,'current':"2"}
         }
         F.get('/goods/ajaxGetCommentList', data, function (ret) {
-            if(param==1){
                 $(".common_go .search_result").html(ret);
-            }else{
-                $(".common_go .search_result_without").html(ret);
-            }
+
 
         },"HTML");
-    }
-
-    /**
-     * 新增分类
-     * @param pageNo
-     * @param totalPage
-     * @param totalRecords
-     */
-    function addGoodsCatery(cat_id) {
-        layer.open({
-            type: 2,
-            title: '新增分类',
-            shadeClose: true,
-            shade: 0.8,
-            area: ['470px', '510px'],
-            content: '/goods/catetory?cat_id=' + cat_id//iframe的url
-        });
-    }
-
-    function editGoodsCatery(cat_id){
-        layer.open({
-            type: 2,
-            title: '编辑分类',
-            shadeClose: true,
-            shade: 0.8,
-            area: ['470px', '510px'],
-            content: '/goods/catetory?cat_id=' + cat_id+"&edit=1"//iframe的url
-        });
-    }
-    /**
-     *删除一个分类
-     */
-    function delCategory(cat_id) {
-        layer.confirm('删除该分类会同时删除该分类下的子分类,您确定删除吗？', {
-            btn: ['确定', '取消'] //按钮
-        }, function () {
-            var data = {"cat_id": cat_id}
-            $.post("/goods/delcatery", data, function (ret) {
-                layer.msg(ret.retmsg)
-                setTimeout(function(){
-                    window.location.reload()
-                },1500);
-            })
-        });
     }
 </script>
 
@@ -103,10 +52,10 @@
         var _list = "#list" + a;
 
         $(".goods_nums li").removeClass("li_on");
-        $(".common_go").hide();
+       // $(".common_go").hide();
 
         $(_li).addClass("li_on");
-        $(_list).show();
+        //$(_list).show();
         loadTableContent(1, true,a);
     }
 

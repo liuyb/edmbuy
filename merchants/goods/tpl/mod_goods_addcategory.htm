@@ -10,7 +10,7 @@
             <select class="check_s c_goods_type" name="cat_id">
                 <option value ="new">请选择</option>
                 <!--{foreach from=$goodsList item=val}-->
-                <option  <!--{if $val.cat_id==$cat_id }-->selected<!--{/if}-->  <!--{if $parent_id==0 && $edit}--> disabled
+                <option  <!--{if $val.cat_id==$cat_id || $val.cat_id == $catgory.parent_id }-->selected<!--{/if}-->  <!--{if $parent_id==0 && $edit}--> disabled
                 <!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
                 <!--{/foreach}-->
             </select>
