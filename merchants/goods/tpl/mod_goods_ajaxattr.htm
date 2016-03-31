@@ -1,0 +1,91 @@
+<table cellspacing="0" cellpadding="0" id="edit_type_tab">
+    <tr>
+        <th width="60%">属性值名称</th>
+        <th width="40%">操作</th>
+    </tr>
+    <!--{foreach from=$goodAttr.attr item=val}-->
+
+    <tr>
+        <td><input type="text" value=" <!--{$val.attr_name}-->" attr_id="<!--{$val.attr_id}-->" name="attr_name">
+        </td>
+        <td class="attr_rel">
+            <span class="move_up">上移</span>
+            <span class="shift_down">下移1</span>
+            <span class="attr_del">删除</span>
+        </td>
+    </tr>
+    <!--{/foreach}-->
+</table>
+<script>
+    //上移
+    $("#edit_type_tab").on("click", ".move_up", function () {
+        var _length = $("#edit_type_tab").find("tr").length - 1;
+        var _index = $(this).parent().parent("tr").index();
+
+        if (_index > 1) {
+            var _tr = $(this).parent().parent("tr");
+            var _trhtml = _tr.html();
+            var _nexthtml = _tr.prev().html();
+            _tr.html(_nexthtml);
+            _tr.prev().html(_trhtml);
+        } else {
+            alert("到头了");
+        }
+    })
+
+    //下移
+    $("#edit_type_tab").on("click", ".shift_down", function () {
+        var _length = $("#edit_type_tab").find("tr").length - 1;
+        var _index = $(this).parent().parent("tr").index();
+
+        if (_index < _length) {
+            var _tr = $(this).parent().parent("tr");
+            var _trhtml = _tr.html();
+            var _nexthtml = _tr.next().html();
+            _tr.html(_nexthtml);
+            _tr.next().html(_trhtml);
+        } else {
+            alert("到底了");
+        }
+    })
+
+    //删除
+    $("#edit_type_tab").on("click", ".attr_del", function () {
+        $(this).parent().parent("tr").remove();
+    })
+
+    $(".add_attr_sx").on("click", function () {
+        var _trs = '<tr><td><input type="text" value="" name="attr_name" attr_id="" required></td><td class="attr_rel"><span class="move_up">上移</span><span class="shift_down">下移3</span><span class="attr_del">删除</span></td></tr>'
+        $("#edit_type_tab").append(_trs);
+    })
+
+    $("#but_sub").click(function () {
+        //遍历dom
+        var length = $("#edit_type_tab input").length;
+        var goodsAttr=[];
+        if(!$("#edit_type_tab").formValid()){
+            return false;
+        }
+        $("#edit_type_tab input").each(function(){
+            var  input =$(this)
+            var attr_id =input.attr("attr_id");
+            var attr_name =input.val();
+            var arr= new Array();
+            arr[0]=attr_id;
+            arr[1]=attr_name;
+            goodsAttr.push(arr);
+        })
+        var cat_id="<!--{$cat_id}-->"
+        var url="/goods/saveGoodsAttr";
+        var data={"attrDate":goodsAttr,"cat_id":cat_id}
+        $.post(url,data,function(ret){
+            if(ret.status==1){
+                setTimeout(function(){
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                },"2000")
+                layer.msg(ret.retmsg);
+            }
+        });
+    })
+</script>
