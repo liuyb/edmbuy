@@ -285,7 +285,9 @@ function goods_submit(){
 		layer.msg('还没有填写商品描述！');
 		return false;
 	}
-	buildGoodsSpecif(data);
+	if(!buildGoodsSpecif(data)){
+		return false;
+	}
 	console.log(data);
 	$("#submitBtn").attr("disabled", "disabled");
 	F.postWithLoading('/goods/publish', data, function(ret){
@@ -750,6 +752,7 @@ function generateSpecifTable(){
 function buildGoodsSpecif(data){
 	var attrsDOM = $(".goods_stocks").find("tr.attr_data");
 	var attrdata = [];
+	var valid = true;
 	attrsDOM.each(function(){
 		var obj = $(this);
 		var attr = {};
@@ -769,9 +772,16 @@ function buildGoodsSpecif(data){
 		attr.income_price = obj.find(".attr_income_price").val();
 		attr.cost_price = obj.find(".attr_cost_price").val();
 		attr.goods_number = obj.find(".attr_goods_number").val();
+		if(parseInt(attr.shop_price) < parseInt(attr.income_price)){
+			showMsg("商品库存里面售价不能小于供货价！");
+			obj.find(".attr_shop_price").focus();
+			valid = false;
+			return false;
+		}
 		attrdata.push(attr);
 	});
 	data.attribute_list = attrdata;
+	return valid;
 }
 
 </script>

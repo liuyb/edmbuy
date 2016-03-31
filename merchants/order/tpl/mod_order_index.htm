@@ -62,9 +62,10 @@ $(function(){
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
 	$("#order_type").on('click','li',function(){
 		var obj = $(this);
-		if(obj.hasClass("order_type_on")){
+		/* if(obj.hasClass("order_type_on")){
 			return;
-		}
+		} */
+		clearQueryCondtion();
 		obj.siblings().removeClass("order_type_on");
 		obj.addClass("order_type_on");
 		loadPageDataTable(1, true, tableOptions);
@@ -82,6 +83,14 @@ $(function(){
 		deliveryOrderGoods(this, 'edit');
 	}); */
 });
+
+//清空当前页面条件
+function clearQueryCondtion(){
+	$("#order_num").val("");
+	$("#buyer").val("");
+	$("#start_date").val("");
+	$("#end_date").val("");
+}
 
 //获取当前页面条件
 function pageQueryCondtion(){

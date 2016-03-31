@@ -63,7 +63,7 @@
 	color:#7d7d7d;
 }
 .common_check{
- 	background: url(../img/xk.png) no-repeat center;
+ 	background: url(../img/check_true.png) no-repeat center;
 	cursor:pointer;
 }
 .common_check_on{
@@ -90,7 +90,7 @@
 	left: 55px;
 }
 #all_check{
- 	background: url(../img/xk.png) no-repeat center;
+ 	background: url(../img/check_true.png) no-repeat center;
 	cursor:pointer;	
 	padding-left:53px;
 }

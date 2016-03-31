@@ -543,13 +543,17 @@ class Order extends StorageNode{
      * @param $prefix 表前缀
      */
     static function build_order_status_sql($composite_status, $prefix = ''){
-        //取消订单处理
-        if(CS_CLOSED == $composite_status){
-            return " AND ($prefix.pay_status = ".PS_CANCEL." or $prefix.order_status in (".OS_CANCELED.", ".OS_INVALID."))";
-        }
         $status = Fn::get_order_status($composite_status);
         if(!$status || count($status) == 0){
             return '';
+        }
+        //关闭订单处理
+        if(CS_CLOSED == $composite_status){
+            return " AND ($prefix.pay_status ".Func::db_create_in($status['pay_status'])." or 
+                         $prefix.order_status ".Func::db_create_in($status['order_status']).")";
+        }else if(CS_AWAIT_PAY == $composite_status){//待付款
+            return " AND $prefix.pay_status ".Func::db_create_in($status['pay_status'])." 
+                      AND order_status NOT ".Func::db_create_in(array(OS_CANCELED, OS_INVALID));
         }
         $sql = "";
         foreach ($status as $field => $arr){

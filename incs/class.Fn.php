@@ -220,12 +220,14 @@ class Fn extends Func {
   }
   
   /**
+   * 待付款   查询的时候需要判断订单是否已关闭
+   * 已关闭用或条件，其他用and条件
    * 根据传入的综合状态返回 订单状态
    * @param unknown $composite_status
    */
   static function get_order_status($composite_status){
       switch($composite_status){
-          //待付款
+          //待付款  
           case CS_AWAIT_PAY :
               $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING));
               break;
@@ -248,9 +250,10 @@ class Fn extends Func {
           case CS_FINISHED : 
               $ret = array("pay_status" => PS_PAYED, "shipping_status" => SS_RECEIVED);
               break;
-          //已关闭
+          //已关闭  
           case CS_CLOSED : 
-              $ret = array("pay_status" => PS_CANCEL, "order_status" => array(OS_CANCELED, OS_INVALID));
+              $ret = array("pay_status" => array(PS_CANCEL, PS_REFUND), 
+                           "order_status" => array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED));
               break;
           default:
               $ret = [];
@@ -266,7 +269,8 @@ class Fn extends Func {
    */
   static function get_order_text($pay_status, $ship_status, $order_status){
       $ret = "未知状态";
-      if($pay_status == PS_CANCEL || in_array($order_status, array(OS_CANCELED, OS_INVALID))){
+      if(in_array($pay_status, array(PS_CANCEL, PS_REFUND)) 
+            || in_array($order_status, array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED))){
           $ret = "已关闭";
       }else if(in_array($pay_status, array(PS_UNPAYED, PS_PAYING))){
           $ret = "待付款";
