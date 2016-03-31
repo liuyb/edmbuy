@@ -473,6 +473,24 @@ class Goods_Controller extends MerchantController
     }
 
     /**
+     * ajax获取属性列表
+     * @param Request $request
+     * @param Response $response
+     */
+    public function ajaxGetAttr(Request $request, Response $response){
+        $this->setPageView($request, $response, "_page_box");
+        $this->v->set_tplname("mod_goods_ajaxattr");
+        $attrId = $request->post("cat_id");
+        $show_page = true;
+        if ($show_page) {
+            $goodsAttr = Goods_Model::getGoodsAttr($attrId);
+            $this->v->assign('goodAttr', $goodsAttr);
+            $this->v->assign('cat_id', $attrId);
+            $response->send($this->v);
+        }
+    }
+
+    /**
      * 编辑保存商品的属性信息
      * @param Request $request
      * @param Response $response

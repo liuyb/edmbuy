@@ -7,7 +7,7 @@
     <div class="attr_type">
         <div>
             <span class="fill_red">*</span>属性名称：
-            <select class="ship_select">
+            <select class="ship_select" id="selchage">
                 <!--{foreach from=$goodAttr.type item=val}-->
                 <option value=" <!--{$val.cat_id}-->"
                 <!--{if $val.cat_id == $cat_id}--> selected <!--{/if}--> >
@@ -20,106 +20,34 @@
             <button class="add_attr_sx">添加属性值</button>
         </div>
 
-        <div class="attr_edit_type">
-            <table cellspacing="0" cellpadding="0" id="edit_type_tab">
-                <tr>
-                    <th width="60%">属性值名称</th>
-                    <th width="40%">操作</th>
-                </tr>
-                <!--{foreach from=$goodAttr.attr item=val}-->
+        <div class="attr_edit_type" id="ajax_attr">
 
-                <tr>
-                    <td><input type="text" value=" <!--{$val.attr_name}-->" attr_id="<!--{$val.attr_id}-->" name="attr_name">
-                    </td>
-                    <td class="attr_rel">
-                        <span class="move_up">上移</span>
-                        <span class="shift_down">下移1</span>
-                        <span class="attr_del">删除</span>
-                    </td>
-                </tr>
-                <!--{/foreach}-->
-            </table>
         </div>
         <button type="button" id="but_sub" style="width: 80px;height: 30px;float: right">保存</button>
     </div>
 </div>
+
 <script>
-    $("#sxgl").addClass("order_left_common");
-
-    $(".attr_edit").on("click", function () {
-        $("#attr_fixed").show();
-        $(".mask").show();
+    $(function(){
+        var cat_id = <!--{$cat_id}-->
+                getAttr(cat_id)
     })
+//    $("#sxgl").addClass("order_left_common");
+//    $(".attr_edit").on("click", function () {
+//        $("#attr_fixed").show();
+//        $(".mask").show();
+//    })
 
-    //上移
-    $("#edit_type_tab").on("click", ".move_up", function () {
-        var _length = $("#edit_type_tab").find("tr").length - 1;
-        var _index = $(this).parent().parent("tr").index();
-
-        if (_index > 1) {
-            var _tr = $(this).parent().parent("tr");
-            var _trhtml = _tr.html();
-            var _nexthtml = _tr.prev().html();
-            _tr.html(_nexthtml);
-            _tr.prev().html(_trhtml);
-        } else {
-            alert("到头了");
-        }
-    })
-
-    //下移
-    $("#edit_type_tab").on("click", ".shift_down", function () {
-        var _length = $("#edit_type_tab").find("tr").length - 1;
-        var _index = $(this).parent().parent("tr").index();
-
-        if (_index < _length) {
-            var _tr = $(this).parent().parent("tr");
-            var _trhtml = _tr.html();
-            var _nexthtml = _tr.next().html();
-            _tr.html(_nexthtml);
-            _tr.next().html(_trhtml);
-        } else {
-            alert("到底了");
-        }
-    })
-
-    //删除
-    $("#edit_type_tab").on("click", ".attr_del", function () {
-        $(this).parent().parent("tr").remove();
-    })
-
-    $(".add_attr_sx").on("click", function () {
-        var _trs = '<tr><td><input type="text" value="" name="attr_name" attr_id="" required></td><td class="attr_rel"><span class="move_up">上移</span><span class="shift_down">下移3</span><span class="attr_del">删除</span></td></tr>'
-        $("#edit_type_tab").append(_trs);
-    })
-
-    $("#but_sub").click(function () {
-        //遍历dom
-        var length = $("#edit_type_tab input").length;
-        var goodsAttr=[];
-        if(!$("#edit_type_tab").formValid()){
-            return false;
-        }
-        $("#edit_type_tab input").each(function(){
-            var  input =$(this)
-            var attr_id =input.attr("attr_id");
-            var attr_name =input.val();
-            var arr= new Array();
-            arr[0]=attr_id;
-            arr[1]=attr_name;
-            goodsAttr.push(arr);
-        })
-            var cat_id="<!--{$cat_id}-->"
-            var url="/goods/saveGoodsAttr";
-        var data={"attrDate":goodsAttr,"cat_id":cat_id}
+    function getAttr(cat_id){
+        var data ={"cat_id":cat_id};
+        var url="/goods/ajaxGetAttr";
         $.post(url,data,function(ret){
-            if(ret.status==1){
-                setTimeout(function(){
-                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭
-                },"2000")
-                layer.msg(ret.retmsg);
-            }
-        });
-    })
+            $("#ajax_attr").html(ret)
+        },"HTML");
+
+    }
+        $(document).on("change","#selchage",function(){
+                var cat_id = $(this).val()
+                getAttr(cat_id)
+        })
 </script>
