@@ -34,28 +34,46 @@
 </ul>
 </div>
 </script>
-<div class="mask_menu cursor"></div>
 <?php require_scroll2old();?>
 <script>
 show_mtop($('#forMtop').html());
 
 var cur_category = "<?=$category ?>";
 
-//菜单开启
-$(".pre_m").on("click",function(){
-	if ($(this).attr('data-show')=='0') {
-		$(".p_detail_menulist").show();
-		$(this).attr('data-show','1');
-	}
-	else {
-		$(".p_detail_menulist").hide();
-		$(this).attr('data-show','0');
-	}
-})
-
-//菜单关闭
-$(".mask_menu").on("click", function(){
-	$(".p_detail_menulist,.mask_menu").hide();
+$(function(){
+	//菜单开启
+	$(".pre_m").on("click",function(){
+		if ($(this).attr('data-show')=='0') {
+			$(".p_detail_menulist").show();
+			$(this).attr('data-show','1');
+		}
+		else {
+			$(".p_detail_menulist").hide();
+			$(this).attr('data-show','0');
+		}
+	});
+	//菜单关闭
+	$(document.body).on("click",function(e){
+		var firecls = 'pre_m';
+		var canfire = true;
+		if ($(e.target).hasClass(firecls)) {
+			canfire = false;
+		}
+		else {
+			var $pn = $(e.target).parent();
+			while($pn.size()>0 && $pn.get(0).tagName!='body') {
+				if ($pn.hasClass(firecls)) {
+					canfire = false;
+					break;
+				}
+				$pn = $pn.parent();
+			}
+		}
+		if (canfire) {
+			$(".p_detail_menulist").hide();
+			$("."+firecls).attr('data-show','0');
+		}
+	});
 });
 
 function getGoodsList(curpage, category, isinit){

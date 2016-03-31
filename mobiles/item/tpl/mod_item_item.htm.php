@@ -252,6 +252,28 @@ $(document).ready(function(){
 			$(this).attr('data-show','0');
 		}
 	});
+	//菜单关闭
+	$(document.body).on("click",function(e){
+		var firecls = 'p_detail_more';
+		var canfire = true;
+		if ($(e.target).hasClass(firecls)) {
+			canfire = false;
+		}
+		else {
+			var $pn = $(e.target).parent();
+			while($pn.size()>0 && $pn.get(0).tagName!='body') {
+				if ($pn.hasClass(firecls)) {
+					canfire = false;
+					break;
+				}
+				$pn = $pn.parent();
+			}
+		}
+		if (canfire) {
+			$(".p_detail_menulist").hide();
+			$("."+firecls).attr('data-show','0');
+		}
+	});
 	
 	//加入购物车
 	$('#Mnav-add-cart,#Mnav-buy').bind("click", function(){
