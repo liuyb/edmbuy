@@ -1,0 +1,36 @@
+<!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
+    <!--{include file="inc/left_common.htm"}-->
+    <div id="order_list_right">
+        <div id="attr_top">
+            <table cellspacing="0" cellpadding="0" id="attrib_tab">
+                <tr>
+                    <th>属性名称</th>
+                    <th>属性值列表</th>
+                    <th>操作</th>
+                </tr>
+                <!--{foreach from=$goodsAttr item=val}-->
+                <tr>
+                    <td><!--{$val.cat_name}--></td>
+                    <td><!--{$val.attr_name}--></td>
+                    <td class="attr_rel"  ><span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span></td>
+                </tr>
+                <!--{/foreach}-->
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function editAttr(val){
+                layer.open({
+                    type: 2,
+                    title: '新增分类',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['600px', '600px'],
+                    content: '/goods/editGoodsAttr?cat_id=' + val//iframe的url
+                });
+    }
+</script>
