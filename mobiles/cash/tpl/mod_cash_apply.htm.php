@@ -10,7 +10,7 @@
 <div class="apply_tx">
 	<ul>
 		<li><p class="apply_price"><?=$available_cash?>元</p><p style="font-size:14px ;color:#666;">可提现金额</p></li>
-		<li><p class="apply_price"><?=$true_cash?>元</p><p style="font-size:14px ;color:#666;">实际到账金额</p></li>
+		<li><p class="apply_price"><?=$true_cash?>元</p><p style="font-size:14px ;color:#666;">实际到账金额<br/>(1%手续费)</p></li>
 	</ul>
 	<span class="apply_x"></span>
 </div>
@@ -19,7 +19,7 @@
 	成为“米商”，才能申请提现。
 </div>
 
-<div class="apply_btn" onclick="location.href='<?php echo U('/')?>'">
+<div class="apply_btn" onclick="location.href='<?php echo U('/riceplan')?>'">
 	我要成为米商	
 </div>
 
