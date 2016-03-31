@@ -229,10 +229,15 @@ class Fn extends Func {
           case CS_AWAIT_PAY :
               $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING));
               break;
+          //备货中
+          case CS_STOCKING :
+              $ret = array("pay_status" => PS_PAYED,
+              "shipping_status" => array(SS_PREPARING, SS_SHIPPED_ING));
+              break;
           //待发货
           case CS_AWAIT_SHIP : 
               $ret = array("pay_status" => PS_PAYED,
-                           "shipping_status" => array(SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING));
+                           "shipping_status" => array(SS_UNSHIPPED));
               break;
           //待收货
           case CS_AWAIT_RECEIVE : 
@@ -268,8 +273,10 @@ class Fn extends Func {
       }else if($pay_status == PS_PAYED){
           if($ship_status == SS_RECEIVED){
               $ret = "已完成";
-          }else if(in_array($ship_status, array(SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING))){
+          }else if($ship_status == SS_UNSHIPPED){
               $ret = "待发货";
+          }else if(in_array($ship_status, array(SS_PREPARING, SS_SHIPPED_ING))){
+              $ret = "备货中";
           }else if(in_array($ship_status, array(SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART))){
               $ret = "待收货";
           }

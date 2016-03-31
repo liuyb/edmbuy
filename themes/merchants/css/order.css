@@ -70,16 +70,24 @@
  	background: url(../img/xz.png) no-repeat center !important;
 	cursor:pointer;
 }
-#look_up{
-	background: url(../img/check_order.png) no-repeat center;
-	padding-top:35px;
-	margin-right: 10px;
-	cursor: pointer;
+.common_check_disabled{
+	background: url(../img/xk.png) no-repeat center;
 }
-#send_goods{
-	background: url(../img/check_send.png) no-repeat center;
-	padding-top:35px;
+.order_look_up{
+	position: absolute;
+	background: url(../img/check_order.png) no-repeat center;
 	cursor: pointer;
+	background-position: 5px 5px;
+	top: 10px;
+	left: 20px;
+}
+.order_send_goods{
+	position: absolute;
+	background: url(../img/check_send.png) no-repeat center;
+	cursor: pointer;
+	background-position: 5px 5px;
+	top: 10px;
+	left: 55px;
 }
 #all_check{
  	background: url(../img/xk.png) no-repeat center;
@@ -130,3 +138,261 @@
 #time_left,#time_right{
 	background:#fff url(../img/xl2.png) no-repeat 95%;
 }
+
+/*-- 16-3-30 s */
+
+#orders_info_top{
+	background:url(../img/left_l.png) no-repeat left;
+	padding-left:15px;	
+	font-size:12px;
+	color:#333;
+	cursor: pointer;
+}
+#commodity_list{
+	background:#fff;
+	margin-top:12px;
+}
+#commodity_name{
+	margin:0 20px;
+	height:40px;
+	border-bottom:1px solid #e9e9e9;
+}
+#commodity_name p{
+	height:39px;
+	border-bottom:1px solid #f26427;
+	display:inline-block;
+	line-height:39px;
+	font-size:12px;
+	color:#f26427;
+}
+.commondity_btn{
+	float:right;
+	width:78px;
+	height:30px;
+	margin-top:5px;
+	background:#f26427;
+	color:#fff;
+	font-size:12px;
+	border:0;
+	border-radius:4px;
+}
+.q_send_btn{
+	float:right;
+	width:82px;
+	height:30px;
+	margin-top:5px;
+	background:#f26427;
+	color:#fff;
+	font-size:12px;
+	border:0;
+	border-radius:4px;
+	margin-left:10px;
+}
+#commondity_tab{
+	width:100%;
+}
+#commondity_tab th{
+	text-align:left;
+	font-size:12px;
+	height:40px;
+	line-height:40px;
+	color:#1f1f1f;
+	border-bottom:1px solid #e9e9e9;
+}
+#commodity_infos{
+	margin:0 20px;
+}
+#commondity_tab img{	
+	width:40px;
+	height:40px;
+	padding:5px 0 5px 20px;  
+	vertical-align: middle;
+}
+#commondity_tab td{
+	font-size:12px;
+	color:#1f1f1f;
+	border-bottom:1px solid #e9e9e9;
+	text-align:left;
+}
+.unit_price,.total_price{
+	font-size:12px !important;
+	color:#f26427 !important;
+}
+#money_z{
+	height:40px;
+	line-height:40px;
+	text-align:right;
+	padding-right:10px;
+	font-size:12px;
+}
+#money_z span{
+	margin-right:10px;
+}
+#infos_googs_n{
+	margin:5px 20px 0;
+}
+#gos_tab td{
+	font-size:12px;
+	color:#1f1f1f;
+}
+.gos_left{
+	text-align:right;
+	color:#7d7d7d !important;  
+	padding: 5px 40px 5px 0;
+}
+.gos_l{
+	font-size:12px;
+	color:#1f1f1f;
+	padding:10px 20px;
+}	
+#log_tracking{
+	margin:0 20px;  
+	padding-bottom: 20px;
+}
+#tracking_tab{
+	width:100%;
+}
+#tracking_tab th{
+	text-align:center;
+	border-bottom:1px solid #e9e9e9;
+	height:40px;
+	line-height:40px;
+	font-size:12px;
+	color:#1f1f1f;
+}
+#tracking_tab td{
+	text-align:center;	
+	border-bottom:1px solid #e9e9e9;	
+	height:40px;
+	line-height:40px;
+	font-size:12px;
+	color:#7d7d7d;	
+}
+
+.common_fixed{
+	top: 20%;
+  	width: 600px;
+  	margin-left: -300px;
+  	left: 50%;
+  	border-radius: 4px;
+  	position: fixed;
+  	z-index: 5000;
+  	background: #fff;
+  	height: 500px;
+  	display: none;
+}
+.t_update{
+	margin:50px 30px;
+}
+.up_common{
+	font-size:12px;
+	color:#7d7d7d;
+	margin-bottom:20px;
+}
+.up_common p{
+	display:inline-block;
+	width:150px;
+  	padding-left: 10px;
+  	margin-right: 10px;	
+}
+.i_mi{
+	padding: 0 3px;
+}
+.i_li{
+	padding:0 12px;
+}
+.up_common input{
+  	border: 0;
+  	width: 150px;
+  	background: #e9e9e9;
+  	height: 30px;
+  	padding-left: 10px;
+  	margin-right: 10px;
+	border-radius:4px;
+}
+.up_btn_ok{
+  	width: 80px;
+  	height: 40px;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 13px;
+  	border: 0;
+  	border-radius: 4px;
+	margin-top:20px;
+}
+.up_order_s{
+	width:450px;
+	margin:20px auto;
+}
+.up_order_s{
+	font-size:12px;
+	color:#7d7d7d;
+}
+.order_s_comm{
+	margin-bottom:20px;
+}
+.order_s_comm input{
+	width:350px;
+	hieght:40px;
+	line-height:40px;
+	border:0;
+	background:#e9e9e9;
+	padding-left:10px;
+	border-radius:4px;
+	margin-left:10px;
+}
+.order_s_comm select{
+	background:url(../img/f26427.png) no-repeat 95%;
+	margin-left:7px;
+	width:112px;
+	height:40px;
+	border-radius:4px;
+	border:1px solid #e9e9e9;
+}
+.ship_select{
+	background:url(../img/f26427.png) no-repeat 95%;
+	width:112px;
+	height:40px;
+	border-radius:4px;
+	border:1px solid #e9e9e9;
+}
+#put_address{
+	margin-left:75px !important;
+}
+.mask {
+	display:none;
+  	position: fixed;
+  	top: 0;
+  	left: 0;
+  	width: 100%;
+  	height: 100%;
+  	z-index: 3000;
+	background: url(../img/black.png) repeat;
+}
+.attr_rel{
+	position: relative;
+}
+.shipments_tab td{
+	height:60px;
+  	vertical-align: middle;	
+	color:#7d7d7d !important;
+}
+.ship_order_num{
+  	background: #e9e9e9;
+  	width: 135px;
+  	border: 0;
+  	border-radius: 4px;
+  	height: 38px;
+  	padding-left: 10px;	
+}
+#all_shipments{
+  	width: 78px;
+  	height: 30px;
+  	margin: 30px 0;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 12px;
+  	border: 0;
+  	border-radius: 4px;
+}
+/*-- 16-3-30 e */

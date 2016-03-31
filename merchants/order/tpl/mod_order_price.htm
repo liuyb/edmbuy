@@ -1,0 +1,43 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--[HEAD_CSS]-->
+<style>
+body{
+	min-width:200px;
+}
+html, body{
+	background-color:#fff;
+}
+</style>
+<!--[/HEAD_CSS]-->
+<div class="t_update"> 
+	<div class="up_common">总<i class="i_mi"></i>金<i class="i_mi"></i>额：<p><!--{$order->goods_amount}--></p>元</div>
+	<div class="up_common">折<i class="i_li"></i>扣：<input type="text" id="orderDiscount" value="<!--{$order->discount}-->">元</div>
+	<div class="up_common">运<i class="i_li"></i>费：<p><!--{$order->shipping_fee}--></p>元</div>
+	<div class="up_common">付款金额：<p><!--{$order->actual_amount}--></p>元</div>
+	<!-- <div class="up_common">商品数量：<p>5</p>件</div> -->
+	<button class="up_btn_ok" id="up_ok_btn" onclick="submitOrderPrice();">确认修改</button>
+</div>
+<script>
+var order_id = <!--{$order->order_id}-->;
+function submitOrderPrice(){
+	var orderDiscount = $("#orderDiscount").val();
+	if(!orderDiscount){
+		showMsg("请输入折扣金额");
+		return;
+	}
+	if(orderDiscount <= 0 || !isMoney(orderDiscount)){
+		showMsg("请输入正确的折扣金额");
+		return;
+	}
+	F.postWithLoading('/order/price', {order_id : order_id, discount :　orderDiscount}, function(ret){
+		if(ret && ret.result){
+			if(ret.result == 'SUCC'){
+				window.parent.location.href = '/order/detail?order_id='+order_id;
+				parent.layer.closeAll();
+			}else{
+				showMsg(ret.msg);
+			}
+		}
+	});
+}
+</script>

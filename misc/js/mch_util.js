@@ -73,7 +73,7 @@ function topCenterDOM(obj){
         	var val = OBJ.val();
         	if(OBJ.attr("required")){
         		if(!val){
-        			layer.msg('必填不能为空！');
+        			layer.msg('必填项不能为空！');
         			OBJ.focus();
         			valid = false;
         			return false;
@@ -146,6 +146,13 @@ function isPositiveNum(s){
 	}
 	return false;
 }
+function isMobile(s){
+	var reg = /^1\d{10}$/;  //11数字
+    if(!s || !reg.test(s)){
+		return false;
+    }
+    return true;
+}
 /**
  * 根据传入的多个数组返回笛卡尔数组
  * @param arrIndex 
@@ -203,6 +210,20 @@ function handleSelectAll(){
 	}else{
 		$("#all_check").removeClass("common_check_on");
 	}
+}
+//根据选中状态拿到当前ID
+function getSelectIds(obj){
+	var ids = [];
+	if(obj){
+		ids.push(obj.attr("data-id"));
+	}else{
+		$(".common_check").each(function(){
+			if($(this).hasClass("common_check_on")){
+				ids.push($(this).closest("tr").first().attr("data-id"));
+			}
+		});
+	}
+	return ids;
 }
 
 /**

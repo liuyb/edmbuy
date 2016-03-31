@@ -49,11 +49,28 @@ class Order_Model extends Model {
         $sql = "SELECT o.*, IFNULL(u.nick_name,'') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='".$muid."' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $orders = D()->query($sql)->fetch_array_all();
         foreach ($orders as &$order){
-            $order['add_time'] = date('Y-m-d H:i', simphp_gmtime2std($order['add_time']));
-            $order['order_status_text'] = Fn::get_order_text($order['pay_status'], $order['shipping_status'], $order['order_status']);
+            self::rebuild_order_info($order);
         }
         $pager->setResult($orders);
     }
+
+    /**
+     * 拿到订单详情数据
+     * @param unknown $order_id
+     */
+    static function getOrderDetail($order_id){
+        $sql = "SELECT o.*, IFNULL(u.nick_name,'') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.order_id=$order_id ";
+        $order = D()->query($sql)->fetch_array();
+        self::rebuild_order_info($order);
+        return $order;
+    }
+    
+    static function rebuild_order_info(&$order){
+        $order['add_time'] = date('Y-m-d H:i', simphp_gmtime2std($order['add_time']));
+        $order['order_status_text'] = Fn::get_order_text($order['pay_status'], $order['shipping_status'], $order['order_status']);
+        $order['actual_order_amount'] = Order::get_actual_order_amount($order);
+    }
+    
     
     /**
      * 根据从Order里面获取的商品列表及商家信息
@@ -91,7 +108,36 @@ class Order_Model extends Model {
         }
         return $region;
     }
-
+    
+    /**
+     * 构建物流公司选择列表
+     * @param number $selectedId
+     * @return string|number
+     */
+    static function buildShippingDropdown($selectedId = 0){
+        $ret = Order::get_shipping_list();
+        $select = "";
+        foreach ($ret as $ship){
+            $selected = "";
+            if($selectedId){
+                if($selectedId == $ship['shipping_id']){
+                    $selected = "selected";
+                }
+            }
+            $select .= "<option value=".$ship['shipping_id']." ".$selected.">".$ship['shipping_name']."</option>";
+        }
+        return $select;
+    }
+    
+    /**
+     * 订单状态是否已经失效
+     * @param unknown $order_status
+     * @return boolean
+     */
+    static function isOrderValid($order_status){
+        return !($order_status == OS_CANCELED || $order_status == OS_INVALID);
+    }
+    
 }
 
 /*----- END FILE: Order_Model.php -----*/

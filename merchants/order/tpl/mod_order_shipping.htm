@@ -1,0 +1,93 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<div id="body" class="ifr-body">
+	<!--{include file="inc/left_common.htm"}-->
+	<div id="order_list_right">
+		<div id="orders_info_top" onclick="javascript:history.back(-1);">发货</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name">
+				<p><!--{$shipment_label}--></p>
+			</div>
+			<form id="shipForm" onsubmit="return submitShip();">
+			<div id="commodity_infos">
+				<table cellspacing="0" cellpadding="0" id="commondity_tab" class="shipments_tab">
+					<tr>
+						<th width="130px">订单号</th>
+						<th width="110px">收货人</th>
+						<th width="400px">收货地址</th>
+						<th width="150px">快递</th>
+						<th width="180px">快递单号</th>
+					</tr>
+					<tbody id="shippingBody">
+					<!--{if $order_list}-->
+					<!--{foreach from=$order_list item=order}-->
+					<tr>
+						<td><!--{$order.order_sn}--> <input type='hidden' name="order_ids" value='<!--{$order.order_id}-->'/></td>
+						<td><!--{$order.consignee}--></td>
+						<td><!--{$order.order_region}--><!--{$order.address}--></td>
+						<td>
+							<select class="ship_select" onchange="shipSelect(this);" name="ship_ids" required >
+								<option value=''>请选择...</option>
+								<!--{$ship_select}-->
+							</select>
+						</td>
+						<td>
+							<input type="text" value="<!--{$order.invoice_no}-->" name="invoice_nos" class="ship_order_num" data-type='positive' required >
+						</td>
+					</tr>
+					<!--{/foreach}-->
+					<!--{else}-->
+					<tr colspan="5" style="text-align:center;">当前所选订单还不能发货！</tr>
+					<!--{/if}-->
+					</tbody>
+				</table>
+				
+				<button id="all_shipments"><!--{$shipment_label}--></button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+var fromOrder = <!--{$fromOrder}-->;
+/**
+ * 选择一家快递时，如果其他快递为空则刷新到其他选择框
+ */
+function shipSelect(obj){
+	var val = $(obj).val();
+	$(".ship_select").each(function(){
+		if(!$(this).val()){
+			$(this).val(val);
+		}
+	});
+}
+
+function submitShip(){
+	if(!$("#shipForm").formValid()){
+		return false;
+	}
+	var data = $("#shipForm").serializeJson();
+	var ship_names = [];
+	$(".ship_select").each(function(){
+		var txt = $(this).find("option:selected").text();
+		ship_names.push(txt);
+	});
+	data.ship_names = ship_names;
+	console.log(data);
+	F.postWithLoading('/order/shipping', data, function(ret){
+		if(ret && ret.result == "SUCC"){
+			showMsg('发货成功！');
+			var url = "";
+			if(fromOrder){
+				url = "/order/detail?order_id="+fromOrder;
+			}else{
+				url = "/order";
+			}
+			window.location.href = url;
+		}else{
+			showMsg('修改失败，请稍后重试！');
+		}
+	});
+	return false;
+}
+</script>

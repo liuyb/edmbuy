@@ -571,6 +571,74 @@ class Order extends StorageNode{
         $sql = "SELECT region_id, region_name FROM shp_region WHERE region_type = $type AND parent_id = $parent ";
         return D()->query($sql)->fetch_array_all();
     }
+    
+    /**
+     * 应付订单总额=订单总额+各种费用-折扣
+     * @param unknown $order
+     * @return number
+     */
+    static function get_actual_order_amount($order){
+        $goods_amount = $order['goods_amount'];
+        $shipping_fee = $order['shipping_fee'];
+        $insure_fee = $order['insure_fee'];
+        $pay_fee = $order['pay_fee'];
+        $pack_fee = $order['pack_fee'];
+        $card_fee = $order['card_fee'];
+        $discount = $order['discount'];
+        $acutal_amount = doubleval($goods_amount) + doubleval($shipping_fee) + doubleval($insure_fee) 
+                        + doubleval($pack_fee) + doubleval($pack_fee) + doubleval($card_fee) - doubleval($discount);
+        return $acutal_amount;
+    }
+    /**
+     * std 对象格式的订单对象
+     * @param unknown $order
+     */
+    static function get_actual_orderobj_amount($order, $discount = 0){
+        $goods_amount = $order->goods_amount;
+        $shipping_fee = $order->shipping_fee;
+        $insure_fee = $order->insure_fee;
+        $pay_fee = $order->pay_fee;
+        $pack_fee = $order->pack_fee;
+        $card_fee = $order->card_fee;
+        if(!$discount){
+            $discount = $order->discount;
+        }
+        $acutal_amount = doubleval($goods_amount) + doubleval($shipping_fee) + doubleval($insure_fee)
+        + doubleval($pack_fee) + doubleval($pack_fee) + doubleval($card_fee) - doubleval($discount);
+        return $acutal_amount;
+    }
+    
+    /**
+     * 物流信息json串解析成一个List对象返回
+     * @param unknown $express
+     * @return NULL
+     */
+    static function get_express_list($express){
+        $ret = [];
+        if(!$express || !$express['express_trace']){
+            return $ret;
+        }
+        $json = json_decode($express['express_trace']);
+        $list = $json->result ? $json->result->list :null;
+        if($list && count($list) > 0){
+            foreach ($list as &$ex){
+                if($ex->time && strlen($ex->time) > 19){
+                    $ex->time = substr($ex->time, 0, 19);
+                }
+            }
+            $ret = $list;
+        }
+        return $ret;
+    }
+    
+    /**
+     * 获取物流公司列表
+     */
+    static function get_shipping_list(){
+        $sql = "select shipping_id,shipping_name from shp_shipping where enabled=1 order by shipping_order desc ";
+        $result = D()->query($sql)->fetch_array_all();
+        return $result;
+    }
 }
 
 ?>

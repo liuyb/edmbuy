@@ -47,7 +47,7 @@ class Goods_Atomic{
      */
     public static function get_merchant_attribute($cat_id){
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "SELECT attr_id,attr_name FROM shp_attribute where merchant_id = '$merchant_id' and cat_id=$cat_id order by sort_order desc";
+        $sql = "SELECT attr_id,attr_name FROM shp_attribute where merchant_id = '$merchant_id' and cat_id=$cat_id order by sort_order asc ";
         return D()->query($sql)->fetch_array_all();
     }
     

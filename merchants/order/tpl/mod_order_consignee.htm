@@ -1,0 +1,93 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--[HEAD_CSS]-->
+<style>
+body{
+	min-width:200px;
+}
+html, body{
+	background-color:#fff;
+}
+</style>
+<!--[/HEAD_CSS]-->
+<div class="t_update">
+<form id="consigneeForm" onsubmit="return submitConsignee();">
+	<div class="up_order_s"> 
+		<div class="order_s_comm">收<i class="i_mi"></i>货<i class="i_mi"></i>人：<input type="text" required name="consignee" value="<!--{$order->consignee}-->" id="put_person"></div>
+		<div class="order_s_comm">地<i class="i_li"></i>址：
+			<select onchange="regionChange(this,2,'selCity');" name="province" required>
+				<option value="">请选择...</option>
+				<!--{foreach from=$province_list item=province}-->
+	        		<option value="<!--{$province.region_id}-->" <!--{if $order->province eq $province.region_id}-->selected<!--{/if}-->><!--{$province.region_name}--></option>
+	        	<!--{/foreach}-->
+			</select>
+			<select id="selCity" onchange="regionChange(this,3,'selDistrict');" data-child="selDistrict" name="city" required>
+				<option value="">请选择...</option>
+				<!--{foreach from=$city_list item=city}-->
+	        		<option value="<!--{$city.region_id}-->" <!--{if $order->city eq $city.region_id}-->selected<!--{/if}-->><!--{$city.region_name}--></option>
+	        	<!--{/foreach}-->
+			</select>
+			<select id="selDistrict" name="district" required>
+				<option value="">请选择...</option>
+				<!--{foreach from=$district_list item=district}-->
+	        		<option value="<!--{$district.region_id}-->" <!--{if $order->district eq $district.region_id}-->selected<!--{/if}-->><!--{$district.region_name}--></option>
+	        	<!--{/foreach}-->
+			</select>
+		</div>
+		<div class="order_s_comm"><input type="text" required name="address" value="<!--{$order->address}-->" id="put_address"></div>
+		<div class="order_s_comm">手机号码：<input type="text" required name="mobile" value="<!--{$order->mobile}-->" id="phone_num"></div>
+		<button class="up_btn_ok" type="submit" id="order_ok_btn" onclick="submitConsignee();">确认修改</button>
+	</div>
+</form>	
+</div>
+
+<script>
+var order_id=<!--{$order->order_id}-->;
+function submitConsignee(){
+	if(!$("#consigneeForm").formValid()){
+		return false;
+	}
+	var mobile = $("#phone_num").val();
+	if(!isMobile(mobile)){
+		showMsg("请输入正确的手机号！");
+		return false;
+	}
+	var data = $("#consigneeForm").serializeJson();
+	data.order_id=order_id;
+	console.log(data);
+	F.postWithLoading('/order/consignee', data, function(ret){
+		if(ret && ret.result == "SUCC"){
+			window.parent.location.href = '/order/detail?order_id='+order_id;
+			parent.layer.closeAll();
+		}else{
+			showMsg('修改失败，请稍后重试！');
+		}
+	});
+	return false;
+}
+//区域选择
+function regionChange(obj, type, selDom){
+	var selectVal = $(obj).val();
+	F.get('/order/region', {type : type, region : selectVal}, function(ret){
+		var selectObj = $("#"+selDom);
+		var html = "<option value=\"\">请选择...</option>";
+		var selectedVal = "";
+		if(ret && ret.length){
+			for(var i = 0,len=ret.length; i < len; i++){
+				var op = ret[i];
+				if(i == 0){
+					selectedVal = op.region_id;
+				}
+				html += "<option value=\""+op.region_id+"\">"+op.region_name+"</option>";
+			}
+		}
+		selectObj.html($(html));
+		if(selectedVal){
+			selectObj.val(selectedVal);
+			selectObj.trigger('change');
+		}else{
+			var childId = $(obj).data("child");
+			$("#"+childId).html($("<option value=\"\">请选择...</option>"));
+		}
+	});
+}
+</script>

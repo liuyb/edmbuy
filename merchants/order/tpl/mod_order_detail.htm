@@ -1,0 +1,129 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<div id="body" class="ifr-body">
+	<!--{include file="inc/left_common.htm"}-->
+	<div id="order_list_right">
+		<div id="orders_info_top" onclick="javascript:location.href='/order';">订单详情</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name">
+				<p>商品清单</p><!-- 订单未关闭并且未支付才能修改价格 -->
+		   		<!--{if $order.order_status neq 2 and $order.order_status neq 3 and $order.pay_status eq 0}-->
+				<button id="update_price" class="commondity_btn">修改价格</button>
+				<!--{/if}-->
+			</div>
+			<div id="commodity_infos">
+				<table cellspacing="0" cellpadding="0" id="commondity_tab">
+					<tr>
+						<th width="500px" style="padding-left:20px;">商品名称</th>
+						<th width="160px">数量</th>
+						<th width="160px">单价</th>
+						<th width="160px">总价</th>
+					</tr>
+					<!--{if $merchant_goods && $merchant_goods.goods}-->
+						<!--{foreach from=$merchant_goods.goods item=good}-->
+						<tr>
+						 <td>	
+						 	<img src="<!--{$good.goods_thumb}-->">
+						 	<span><!--{$good.goods_name}--></span>
+						 </td>
+						 <td><!--{$good.goods_number}--></td>
+						 <td class="unit_price">￥<!--{$good.goods_price}--></td>
+						 <td class="total_price">￥<!--{$good.goods_price*$good.goods_number}--></td>
+						</tr>
+						<!--{/foreach}-->
+					<!--{/if}-->
+				</table>
+			</div>
+			
+			<div id="money_z">
+				<span>商品总价：<i class="total_price" id="total_price">￥<!--{$order.goods_amount}--></i></span>
+				<span>运费：<!--{$order.shipping_fee}--></span>
+				<span>折扣：<!--{$order.discount}--></span>
+				<span>实付金额：<i class="total_price" id="out_money">￥<!--{$order.actual_order_amount}--></i></span>	
+			</div>
+		</div>
+		
+		<div id="commodity_list">
+			<div id="commodity_name">
+				<p>订单信息</p>
+				<!-- 已支付 并且订单 未关闭 才能发货 -->
+				<!--{if $order.pay_status eq 2 and $order.order_status neq 2 and $order.order_status neq 3}-->
+				<!--{if $order.shipping_status eq 0 or $order.shipping_status eq 3 or $order.shipping_status eq 5}-->
+				<button id="send_goods_s" class="q_send_btn" onclick="gotoshipping('ship');">去发货</button>
+				<!--{elseif $order.shipping_status neq 2}-->
+				<button id="send_goods_s" class="q_send_btn" onclick="gotoshipping('edit');">修改发货</button>
+				<!--{/if}-->
+				<!--{/if}-->
+				<!-- 未发货时才能修改发货信息 -->
+				<!--{if $order.shipping_status eq 0 or $order.shipping_status eq 3 or $order.shipping_status eq 5}-->
+				<button id="update_order" class="commondity_btn">修改</button>
+				<!--{/if}-->
+			</div>
+			<div id="infos_googs_n">
+				<table cellspacing="0" cellpadding="0" id="gos_tab">
+					<tr><td class="gos_left">订单号：</td><td><!--{$order.order_sn}--></td></tr>
+					<tr><td class="gos_left">下单时间：</td><td><!--{$order.add_time}--></td></tr>
+					<tr><td class="gos_left">订单状态：</td><td><!--{$order.order_status_text}--></td></tr>
+					<tr><td class="gos_left">买家账号：</td><td><!--{$order.nick_name}--></td></tr>
+					<tr><td class="gos_left">收货人：</td><td><!--{$order.consignee}--></td></tr>
+					<tr><td class="gos_left">地址：</td><td><!--{$order.order_region}--><!--{$order.address}--></td></tr>
+					<tr><td class="gos_left">手机号码：</td><td><!--{$order.mobile}--></td></tr>
+				</table>
+			</div>
+			<div class="gos_l">
+				不需要发票
+			</div>
+		</div>
+		<!--{if $expressList }-->
+		<div id="commodity_list">
+			<div id="commodity_name"><p>物流跟踪</p></div>
+			
+			<div id="log_tracking">
+				<table cellspacing="0" cellpadding="0" id="tracking_tab">	
+					<tr>
+						<th style="width:15%;">时间</th>
+						<th>描述</th>
+					</tr>
+					<!--{foreach from=$expressList item=express}-->
+					<tr>
+						<td><!--{$express->time}--></td>
+						<td><!--{$express->status}--></td>
+					</tr>
+					<!--{/foreach}-->
+				</table>
+			</div>
+		<!--{/if}-->
+		</div>
+	</div>
+</div>
+
+<script>
+var order_id="<!--{$order.order_id}-->";
+$("#update_price").on("click",function(){
+	layer.open({
+        type: 2,
+        title: '修改价格',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['400px', '380px'],
+        content: '/order/detail/step?step=price&order_id=' + order_id
+    });
+})
+
+$("#update_order").on("click",function(){
+	layer.open({
+        type: 2,
+        title: '修改收货地址',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['550px', '480px'],
+        content: '/order/detail/step?step=consignee&order_id=' + order_id
+    });
+})
+
+function gotoshipping(act){
+	var order_ids = order_id;
+	var fromOrder = order_id;
+	window.location.href = '/order/shipping/form?act='+act+'&order_ids='+order_ids+'&fromOrder='+fromOrder;
+}
+</script>
