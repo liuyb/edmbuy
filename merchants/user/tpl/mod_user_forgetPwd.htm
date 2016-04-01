@@ -1,6 +1,13 @@
 <!--{add_css file="index.css" scope="global"}-->
 <!--{add_js file="user.css"}-->
 <style>
+    .verify_phone{
+        margin-left:10px;
+        width:360px;
+        border:1px solid #ddd;
+        height:30px;
+        padding-left:5px;
+    }
 </style>
 
 <div id="forget_bg">
@@ -52,7 +59,7 @@
             </div>
 
             <div class="one_verify">
-                <div class="phone_id">新登录密码：<input type="password" value="" id="verify_phone"  class="new_password" placeholder="请输入6-12位的新登录密码" name="pwd"></div>
+                <div class="phone_id">新登录密码：<input type="password" value="" class="verify_phone"  class="new_password" placeholder="请输入6-12位的新登录密码" name="pwd"></div>
                 <div class="phone_id">确认新密码：<input type="password" value="" id="verify_phone" class="ok_new_password" placeholder="请再次输入密码" name="confirmpwd"></div>
                 <input type="hidden" name="phone" value="<!--{$phone}-->"/>
             </div>
@@ -82,7 +89,7 @@
 
                 <div class="success_ts">
                     <p class="ts_tit">新密码设置成功！</p>
-                    <p class="ts_password">请牢记您新设置的密码。<a href="javascript:;">返回重新登录</a></p>
+                    <p class="ts_password">请牢记您新设置的密码。<a href="/login">返回重新登录</a></p>
                 </div>
             </div>
         </div>
@@ -117,13 +124,17 @@
             return false;
         }
 
-        refresh();
-        time = setInterval("refresh();", 1000);
+
          url="/user/getPhoneCodeAjax";
             var phone=$("input[name=phone]").val()
             var  data ={"phone":phone};
-        $.post(url,data,function(ret){
-            alert(ret.retmsg)
+        F.postWithLoading(url,data,function(ret){
+            showMsg(ret.retmsg)
+            if(ret.status==1){
+                refresh();
+                time = setInterval("refresh();", 1000);
+                $("#getCode").attr("disabled","disabled").css("background","grey");
+            }
         });
 //        if(dat=="timeLimit"){
 //            boxalert("验证码发送失败，请稍后在试");
@@ -141,6 +152,7 @@
 
         if(num == 0){
             num = count;
+            $("#getCode").removeAttr("disabled").css("background","#f69267");
             $("#getCode").removeClass("sending").html("重新获取");
             clearInterval(time);
             return false;
@@ -150,16 +162,16 @@
         var phone=$("input[name=phone]").val()
         var  data ={"phone":phone};
         if(phone==""||data==""){
-            alert("参数不能为空！")
+            showMsg("参数不能为空！")
             return;
         }
         url="/checkSmsCode"
         var phoneCode=$("input[name=phoneCode]").val()
         var imgCode=$("input[name=imgCode]").val()
         var data ={'phone':phone,'imgCode':imgCode,"phoneCode":phoneCode};
-        $.post(url,data,function(ret){
+        F.postWithLoading(url,data,function(ret){
             if(ret.status==0){
-               alert(ret.retmsg);
+               showMsg(ret.retmsg);
             }else{
                 window.location.href="/forgetPwd?step=2";
             }
@@ -170,17 +182,16 @@
        var pwd=$("input[name=pwd]").val();
         var confirmpwd=$("input[name=confirmpwd]").val();
         if(pwd==""||confirmpwd==""||pwd!=confirmpwd){
-                alert("参数错误!");
+            showMsg("参数错误!");
         }
         url="/user/forgotSavePwd";
         var phone =$("input[name=phone]").val()
         var data={"pwd":pwd,"confirmpwd":confirmpwd,"phone":phone};
-        console.log(data)
         $.post(url,data,function(ret){
             if(ret.status==1){
                 window.location.href="/forgetPwd?step=3";
             }else{
-               alert(ret.retmsg)
+                showMsg(ret.retmsg)
             }
         })
     });

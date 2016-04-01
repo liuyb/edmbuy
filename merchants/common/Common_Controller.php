@@ -21,6 +21,7 @@ class Common_Controller extends Controller {
 		'!^forgetPwd[a-z_]*$!i'  => 'user/$0',
 		'!^checkSmsCode[a-z_]*$!i'  => 'user/$0',
 		'!^setpassword[a-z_]*$!i'  => 'user/$0',
+		'!^forgotSavePwd[a-z_]*$!i'  => 'user/$0',
     );
   }
   
@@ -35,6 +36,7 @@ class Common_Controller extends Controller {
 	  	'user/checkSmsCode',
 	  	'user/setpassword',
 	  	'user/getPhoneCodeAjax',
+	  	'user/forgotSavePwd',
   ];
   
   /**

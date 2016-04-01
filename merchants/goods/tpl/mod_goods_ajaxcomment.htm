@@ -18,10 +18,13 @@
             <td><!--{$val.comment_rank}--></td>
             <td><!--{$val.user_name}--></td>
             <td><!--{$val.add_time|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
-            <td><!--{if $val.is_reply==1}-->已回复
-                <!--{else}-->未回复
-                <!--{/if}--></td>
-            <td>回复</td>
+            <!--{if $val.is_reply==1}-->
+            <td>已回复</td>
+            <td style="color: red" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
+                <!--{else}-->
+            <td>未回复</td>
+            <td style="color: red" onclick="repalyCommon( <!--{$val.comment_id}-->)">回复</td>
+                <!--{/if}-->
         </tr>
     <!--{/foreach}-->
 </table>
@@ -51,4 +54,10 @@
             }
         }, true);
     };
+    function viewCommon(comment_id){
+
+    }
+    function relayCommon(comment_id){
+
+    }
 </script>

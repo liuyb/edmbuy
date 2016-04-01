@@ -71,7 +71,7 @@ class User_Controller extends MerchantController
         }
 
         if ($show_page) {
-            $v = new PageView('mod_user_login', '_page_front');
+            $v = new PageView('mod_user_login', '_page_box');
             $v->assign('retmsg', $retmsg)
                 ->assign('retuname', $retuname)
                 ->assign('retupass', $retupass);
@@ -111,7 +111,9 @@ class User_Controller extends MerchantController
      */
     public function forgetPwd(Request $request, Response $response)
     {
-//        $_SESSION['step']=2;
+//           unset($_SESSION['step']);
+//           $_SESSION['step']=2;
+//           $_SESSION['phone']=15728743912;
 //        $_SESSION['phone']=18124682152;
         $show_page = true;
         $this->v->set_tplname('mod_user_forgetPwd');
@@ -127,7 +129,7 @@ class User_Controller extends MerchantController
             $this->v->assign('phone', $_SESSION['phone']);
         }
         if ($show_page) {
-            $v = new PageView('mod_user_forgetPwd', '_page_front');
+            $v = new PageView('mod_user_forgetPwd', '_page_box');
             $response->send($v);
         }
     }
@@ -142,9 +144,8 @@ class User_Controller extends MerchantController
     {
         $phone = $request->post('phone', '');
         $phone = htmlspecialchars($phone);
-//    $imgCode = htmlspecialchars($_POST["imgCode"]);
-        //验证用户是否1分钟以内是否已经发过短信
 
+        //验证用户是否1分钟以内是否已经发过短信
         if (!verify_phone($phone)) {
             $data['retmsg'] = "手机号码输入有误！";
             $data['status'] = 0;
@@ -164,8 +165,8 @@ class User_Controller extends MerchantController
             $response->sendJSON($data);
         }
         $result = Sms::sendSms($phone, $type = "forgetPwd");
-//        $result = "888888";
-//        $_SESSION['forgetPwd'] = "888888";
+       $result = "888888";
+      $_SESSION['forgetPwd'] = "888888";
         if ($result) {
             $_SESSION['phone']=$phone;
             $data['retmsg'] = "发送验证码成功！";
@@ -189,14 +190,13 @@ class User_Controller extends MerchantController
     {
         $phone = $request->post("phone");
         $phoneCode = $request->post("phoneCode");
-        $imgCode = $request->post("imgeCode");
+        $imgCode = $request->post("imgCode");
         $phone = htmlspecialchars($phone);
         $chkcode = htmlspecialchars($phoneCode);
-
-        if (0 && $imgCode != $_SESSION ['verifycode']) {
+        if ($imgCode != $_SESSION ['verifycode']) {
             $data['retmsg'] = "验证码不正确！";
             $data['status'] = '0';
-            json_encode($data);
+            $response->sendJSON($data);
         }
         if (!verify_phone($phone)) {
             $data['retmsg'] = '手机号码不正确！';
@@ -205,6 +205,11 @@ class User_Controller extends MerchantController
         }
         if (empty($chkcode)) {
             $data['retmsg'] = '动态密码不能为空！';
+            $data['status'] = 0;
+            $response->sendJSON($data);
+        }
+        if(!empty($_SESSION['phone'])&&$phone!=$_SESSION['phone']){
+            $data['retmsg'] = "手机号码输入有误！";
             $data['status'] = 0;
             $response->sendJSON($data);
         }
