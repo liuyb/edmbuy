@@ -1,3 +1,4 @@
+<!--[HEAD_CSS]-->
 <style>
     .view-hidden{
         border: 1px solid red;
@@ -27,7 +28,7 @@
     .rlay-show{
         display: block;
     }
-    .div-button{
+    .div-button,.div-button-view{
         width: 50px;
         height: 20px;
         background-color: blue;
@@ -42,6 +43,7 @@
         position: relative;
     }
 </style>
+<!--[/HEAD_CSS]-->
 <table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
     <tr>
         <th>评价商品</th>
@@ -69,9 +71,9 @@
                 <span>评论内容： </span><textarea  name="rplay" id="view-rplay<!--{$val.comment_id}-->" cols="30" rows="3" readonly>
                                         </textarea>
 
-                <span>回复内容： </span><textarea name="rplay" id="mechart-rplay<!--{$val.comment_id}-->" cols="30" rows="3">
+                <span>回复内容： </span><textarea name="rplay" id="mechart-rplay<!--{$val.comment_id}-->" cols="30" rows="3" readonly>
                                         </textarea>
-                <div class="div-button" id="button-view">确定</div>
+                <div class="div-button-view" id="button-view">确定</div>
             </div>
                 <!--{else}-->
             <td>未回复</td>
@@ -147,6 +149,6 @@
         })
     })
         $("#button-view").click(function(){
-            $(this).parents().removeClass("rlay-show").addClass("hidden");
+            $(this).parents().removeClass("rlay-show");
         })
 </script>

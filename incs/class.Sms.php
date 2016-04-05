@@ -31,9 +31,9 @@ class Sms
         $smsnumber = $SmsConfig['smsnumber'];
         $pwd = $SmsConfig['userpwd'];
         $url = $SmsConfig['url'];
-        $content = urlencode($content);
+        $text = urlencode($content);
         $time = time();
-        $url = "{$url}:8180/service.asmx/SendMessage?Id={$smsnumber}&Name={$uname}&Psw={$pwd}&Message={$content}&Phone={$mobile}&Timestamp={$time}";
+        $url = "{$url}:8180/service.asmx/SendMessage?Id={$smsnumber}&Name={$uname}&Psw={$pwd}&Message={$text}&Phone={$mobile}&Timestamp={$time}";
         try {
             $sendState = file_get_contents($url);
         } catch (Exception $e) {

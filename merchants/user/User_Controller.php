@@ -117,6 +117,9 @@ class User_Controller extends MerchantController
 //           $_SESSION['step']=2;
 //           $_SESSION['phone']=15728743912;
 //        $_SESSION['phone']=18124682152;
+        if(!empty($GLOBALS['user']->uid)){
+            $response->redirect("/home");
+        }
         $show_page = true;
         $this->v->set_tplname('mod_user_forgetPwd');
         $step = $request->get('step');
