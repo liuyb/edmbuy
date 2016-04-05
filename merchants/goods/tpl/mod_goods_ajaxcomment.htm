@@ -1,4 +1,10 @@
 <style>
+    .view-hidden{
+        border: 1px solid red;
+        width: 20%;
+        height: 50px;
+        padding: 30px;
+    }
     .rplay-hidden{
         display: none;
         border:1px solid red;
@@ -6,8 +12,15 @@
         height:150px;
         text-align: center;
         overflow: hidden;
-        padding: 10px;
+        /*position: absolute;*/
         }
+    .rplay-hidden-view{
+        display: none;
+        border:1px solid red;
+        width: 30%;
+        text-align: center;
+        overflow: hidden;
+    }
     .rplay-hidden span{
         margin-left: -82px;
     }
@@ -25,8 +38,11 @@
         float: right;
         margin-right: 20px;
     }
+    #common{
+        position: relative;
+    }
 </style>
-<table cellspacing="0" cellpadding="0" class="search_result_tab">
+<table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
     <tr>
         <th>评价商品</th>
         <th>评价内容</th>
@@ -49,19 +65,28 @@
             <!--{if $val.is_reply==1}-->
             <td>已回复</td>
             <td style="color: red" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
+            <div class="rplay-hidden-view" id="common<!--{$val.comment_id}-->">
+                <span>评论内容： </span><textarea  name="rplay" id="view-rplay<!--{$val.comment_id}-->" cols="30" rows="3" readonly>
+                                        </textarea>
+
+                <span>回复内容： </span><textarea name="rplay" id="mechart-rplay<!--{$val.comment_id}-->" cols="30" rows="3">
+                                        </textarea>
+                <div class="div-button" id="button-view">确定</div>
+            </div>
                 <!--{else}-->
             <td>未回复</td>
             <td style="color: red" onclick="relayCommon( <!--{$val.comment_id}-->)">回复</td>
+            <div class="rplay-hidden" id="rplay-common<!--{$val.comment_id}-->">
+                <span>请输入回复类容： </span><textarea name="rplay" id="content" cols="30" rows="3">
+                    </textarea>
+                <input type="hidden" value="<!--{$val.comment_id}-->" id="comment_id"/>
+                <div class="div-button">确定</div>
+            </div>
                 <!--{/if}-->
         </tr>
     <!--{/foreach}-->
 </table>
     <div id="kkpager<!--{$current}-->" class="kkpager" style="float:right;clear:none;padding:0px;"></div>
-<div class="rplay-hidden">
-   <span>请输入评论类容： </span><textarea name="rplay" id="" cols="30" rows="3">
-                    </textarea>
-                    <div class="div-button">确定</div>
-</div>
 <script>
         var curpage=<!--{$page.curpage}-->
         var maxpage =<!--{$page.maxpage}-->
@@ -88,21 +113,40 @@
         }, true);
     };
     function viewCommon(comment_id){
-        layer.open({
-            type: 2,
-            title: '新增分类',
-            shadeClose: true,
-            shade: 0.8,
-            area: ['600px', '600px'],
-            content: '/goods/editGoodsAttr?cat_id=' + val//iframe的url
-        });
+        var id= "#common"+comment_id
+        $(id).removeClass("hidden").addClass("rlay-show");
+        var url ="/goods/viewrplay";
+        var data={"common_id":comment_id};
+        F.postWithLoading(url,data,function(ret){
+            if(ret.status==1){
+                     var commonList=ret.common
+                $("#view-rplay"+comment_id).val(commonList.content)
+                $("#mechart-rplay"+comment_id).val(commonList.merchart_content)
+            }
+        })
     }
 
     function relayCommon(comment_id){
-        $(".rplay-hidden").removeClass("hidden").addClass("rlay-show");
+        var id= "#rplay-common"+comment_id
+        $(id).removeClass("hidden").addClass("rlay-show");
+
     }
         function getMousePos(event) {
             var e = event || window.event;
-            return [""+e.screenX,""+ e.screenY]
+            return [e.screenX,e.screenY]
         }
+    $(".div-button").click(function(){
+        var url ="/goods/rplayCommone";
+        var common_id=$("#comment_id").val()
+        var content=$("#content").val()
+        var data ={"common_id":common_id,"content":content}
+        F.postWithLoading(url,data,function(ret){
+            if(ret.status==1){
+                showMsg(ret.retmsg);
+            }
+        })
+    })
+        $("#button-view").click(function(){
+            $(this).parents().removeClass("rlay-show").addClass("hidden");
+        })
 </script>

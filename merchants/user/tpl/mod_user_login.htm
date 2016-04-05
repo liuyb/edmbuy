@@ -1,32 +1,73 @@
-<!--{add_css file="index.css" scope="global"}-->
-<div id="login">
-  <h1>益多米商家后台</h1>
-  <form name="loginForm" id="loginForm" method="POST" action="/login">
-    <p>
-      <label for="loginname">用户名<br/>
-      <input type="text" name="loginname" id="loginname" class="input" value="<!--{$retuname}-->" maxlength="20"/></label>
-    </p>
-    <p>
-      <label for="password">密码<br/>
-      <input type="password" name="password" id="password" class="input" value="<!--{$retupass}-->" maxlength="20"/></label>
-    </p>
-    <p class="submit">
-      <label for="verifycode">验证码<br/>
-      <input type="text" name="verifycode" id="verifycode" class="input input-short" value="" maxlength="4"/>
-      <img id="verifyimg" src="/vc_mch.php" onclick="this.src='/vc_mch.php?_='+Math.random()*100000;" alt="验证码" title="点击刷新验证码" />
-      </label>
-      <input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录"/>
-       <a href="/forgetPwd?step=1" class="forget-pwd">忘记密码？</a>
-    </p>
-    <p class="retcode"><!--{$retmsg}--></p>
-  </form>
+<!--{add_css file="user.css" scope="global"}-->
+<div id="login_new_header">
+  <div id="header_center">
+    <div id="login_header_left">
+      <img src="/themes/merchants/img/logo.png">
+      益多米
+    </div>
+    <div id="login_header_right">
+      <ul>
+        <li>商家入驻流程申请</li>
+        <li>商家管理中心</li>
+        <li>商家帮助中心</li>
+      </ul>
+    </div>
+  </div>
 </div>
+
+
+<div class="login">
+  <div class="lg_in">
+    <div class="login_ins">
+      <p class="ins_l">店铺管理<i class="ins_b">(使用已注册的会员账号)</i></p>
+      <form name="loginForm" id="loginForm" method="POST" action="/login">
+        <input type="text" name="loginname" id="loginname" class="input" value="<!--{$retuname}-->" maxlength="20" placeholder="请输入注册时的手机号码">
+        <input type="password" name="password" id="password" class="input" value="<!--{$retupass}-->" maxlength="20" placeholder="请输入登录密码">
+
+        <!-- <p class="submit">
+          <input type="text" name="verifycode" id="verifycode" class="input input-short" value="" maxlength="4">
+          <img id="verifyimg" src="/vc_mch.php" onclick="" alt="验证码" title="点击刷新验证码">
+        </p> -->
+
+        <div style="margin:0 40px;">
+          <a href="javascript:;" class="remember_me">记住我</a>
+          <a href="/forgetPwd?step=1"  class="forget-pwd">忘记密码？</a>
+        </div>
+        <div style="margin:20px 40px 0;">
+          <input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录">
+          <p id="retcode"><!--{$retmsg}--></p>
+        </div>
+        <div>
+          <a class="apply_for" href="javascript:;" class="remember_me">没有账号？申请入驻</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="enter_reason">
+  <h1>入驻理由</h1>
+  <p><img src="/themes/merchants/img/xtzc.png"><img src="/themes/merchants/img/ksyl.png"><img src="/themes/merchants/img/yzfw.png"></p>
+</div>
+
+<div class="enter_flow">
+  <h1>入驻流程</h1>
+  <p><img src="/themes/merchants/img/rzlc.png"></p>
+</div>
+
+<div class="contact_us">
+  <h1>联系我们</h1>
+  <p><img src="/themes/merchants/img/ydm.png"></p>
+  <p style="font-size:14px;color:#333;margin-top:-20px;">人工服务时间：周一至周五，早8：30--18：00(周末、法定节假日休息)</p>
+</div>
+
+
 <script>
 $(function(){
   var $loginname = $('#loginname');
   var $password = $('#password');
   if ($loginname.val().trim()=='') $loginname.val('').focus();
   else if ($password.val().trim()=='') $password.val('').focus();
-  else $('#verifycode').focus();
+//  else $('#verifycode').focus();
 });
 </script>

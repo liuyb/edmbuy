@@ -438,6 +438,38 @@ class Goods_Controller extends MerchantController
     }
 
     /**
+     *
+     * 回复评论
+     * @param Request $request
+     * @param Response $response
+     */
+    public function rplayCommone(Request $request, Response $response){
+        $common_id=$request->post("common_id");
+        $comtent=$request->post("content");
+        if(strlen($comtent)>200){
+            $ret['retmsg']="字数超出限制！";
+            $ret['status']=1;
+            $response->sendJSON($ret);
+        }
+        Goods_Model::merchantRely($common_id,$comtent);
+        $ret['retmsg']="回复成功！";
+        $ret['status']=1;
+        $response->sendJSON($ret);
+    }
+
+    /**
+     * 商家查看回复
+     * @param Request $request
+     * @param Response $response
+     */
+    public function viewrplay(Request $request, Response $response){
+        $common_id=$request->post("common_id");
+        $list=Goods_Model::viewComment($common_id);
+        $ret['status']=1;
+        $ret['common']=$list;
+            $response->sendJSON($ret);
+    }
+    /**
      * 商品的属性列表管理
      * @param Request $request
      * @param Response $response

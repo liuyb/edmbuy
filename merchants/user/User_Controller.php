@@ -32,11 +32,11 @@ class User_Controller extends MerchantController
      */
     public function login(Request $request, Response $response)
     {
+
         $show_page = true;
         $retmsg = '';
         $retuname = '';
         $retupass = '';
-
         if (isset($_POST['loginname']) && isset($_POST['password'])) {
             $loginname = trim($_POST['loginname']);
             $password = trim($_POST['password']);
@@ -49,10 +49,11 @@ class User_Controller extends MerchantController
                 $retmsg = '请输入用户名';
             } elseif ('' == $password) {
                 $retmsg = '请输入密码';
-            } elseif ('' == $verifycode) {
-                $retmsg = '请输入验证码';
-            } elseif (0 && $verifycode != $_SESSION['verifycode']) {
-                $retmsg = '请输入正确的验证码';
+//            } elseif ('' == $verifycode) {
+//                $retmsg = '请输入验证码';
+
+// elseif (0 && $verifycode != $_SESSION['verifycode']) {
+//                $retmsg = '请输入正确的验证码';
             } else {
                 $check = User_Model::check_logined($loginname, $password, $login_uinfo);
                 if ($check < 0) {
@@ -118,14 +119,22 @@ class User_Controller extends MerchantController
 //        $_SESSION['phone']=18124682152;
         $show_page = true;
         $this->v->set_tplname('mod_user_forgetPwd');
+        $step = $request->get('step');
         if (!empty($_SESSION['step'])) {
             $this->v->assign('step', $_SESSION['step']);
-            if($_SESSION['step']==3){
-                    unset($_SESSION['step']);
+            if ($_SESSION['step'] == 3) {
+                unset($_SESSION['step']);
+            } elseif ($step == 1 && $_SESSION['step'] == 2) {
+                unset($_SESSION['step']);
+                unset( $_SESSION['forgetPwd']);
+                $this->v->assign('step', $step);
+            } elseif ($step == 3 && $_SESSION['step'] == 2) {
+                $this->v->assign('step', 2);//只有2不unset
             }
         } else {
             $this->v->assign('step', 1);
         }
+
         if (!empty($_SESSION['phone'])) {
             $this->v->assign('phone', $_SESSION['phone']);
         }
@@ -167,9 +176,10 @@ class User_Controller extends MerchantController
         }
 //        $result = Sms::sendSms($phone, $type = "forgetPwd");
         $result = "888888";
-         $_SESSION['forgetPwd'] = "888888";
+        $_SESSION['forgetPwd'] = "888888";
         if ($result) {
-            $_SESSION['phone']=$phone;
+            $_SESSION['phone'] = $phone;
+            Cookie::set("forgetPwd",$_SESSION['forgetPwd'],60 * 5);//验证码5分钟过后过期
             $data['retmsg'] = "发送验证码成功！";
             $data['status'] = 1;
             $response->sendJSON($data);
@@ -209,7 +219,7 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-        if(!empty($_SESSION['phone'])&&$phone!=$_SESSION['phone']){
+        if (!empty($_SESSION['phone']) && $phone != $_SESSION['phone']) {
             $data['retmsg'] = "手机号码输入有误！";
             $data['status'] = 0;
             $response->sendJSON($data);
@@ -236,9 +246,16 @@ class User_Controller extends MerchantController
      */
     public function forgotSavePwd(Request $request, Response $response)
     {
+      $cookiePhone=Cookie::get("forgetPwd");
+        if(empty($cookiePhone)){
+            unset($_SESSION['step']);
+            $data['retmsg'] = "手机验证码已过期！";
+            $data['status'] = -1;
+            $response->sendJSON($data);
+        }
         $phone = $request->post("phone");
-
         if ($_SESSION['phone'] != $phone) {
+            unset($_SESSION['step']);
             $data['retmsg'] = "session已过期！";
             $data['status'] = -1;
             $response->sendJSON($data);
@@ -261,7 +278,7 @@ class User_Controller extends MerchantController
             $response->sendJSON($data);
         }
 
-        if (strlen($password) < 6 || strlen($password) >12) {
+        if (strlen($password) < 6 || strlen($password) > 12) {
             $data['retmsg'] = "密码格式错误";
             $data['status'] = 0;
             $response->sendJSON($data);

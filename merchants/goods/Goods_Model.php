@@ -574,14 +574,14 @@ class Goods_Model extends Model
      * 商家回复
      * @param $merchart_content 回复类容
      */
-    static function merchantRely($merchart_content)
+    static function merchantRely($comment_id,$merchart_content)
     {
         $merchant_id = $GLOBALS['user']->uid;
 //        public function update($tablename, Array $setarr, $wherearr, $flag = '')
         $table = "`shp_comment`";
         $setArr['merchart_content'] = $merchart_content;
         $setArr['is_reply'] = 1;
-        $whereArr['merchant_id'] = $merchant_id;
+        $whereArr['comment_id'] = $comment_id;
         D()->update($table, $setArr, $whereArr);
     }
 
@@ -589,10 +589,10 @@ class Goods_Model extends Model
      * 查看评论类容
      * @param $comment_id
      */
-    static function ViewComment($comment_id)
+    static function viewComment($comment_id)
     {
         $sql = "select content,merchart_content from shp_comment where comment_id = %d";
-        D()->query($sql, $comment_id);
+       return D()->query($sql, $comment_id)->get_one();
     }
 
     /**
