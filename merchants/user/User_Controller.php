@@ -112,6 +112,7 @@ class User_Controller extends MerchantController
     public function forgetPwd(Request $request, Response $response)
     {
 //           unset($_SESSION['step']);
+//          unset($_SESSION['phone']);
 //           $_SESSION['step']=2;
 //           $_SESSION['phone']=15728743912;
 //        $_SESSION['phone']=18124682152;
@@ -164,9 +165,9 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-        $result = Sms::sendSms($phone, $type = "forgetPwd");
-       $result = "888888";
-      $_SESSION['forgetPwd'] = "888888";
+//        $result = Sms::sendSms($phone, $type = "forgetPwd");
+        $result = "888888";
+         $_SESSION['forgetPwd'] = "888888";
         if ($result) {
             $_SESSION['phone']=$phone;
             $data['retmsg'] = "发送验证码成功！";
@@ -236,7 +237,7 @@ class User_Controller extends MerchantController
     public function forgotSavePwd(Request $request, Response $response)
     {
         $phone = $request->post("phone");
-//        $phone="18124682152";
+
         if ($_SESSION['phone'] != $phone) {
             $data['retmsg'] = "session已过期！";
             $data['status'] = -1;
@@ -260,8 +261,8 @@ class User_Controller extends MerchantController
             $response->sendJSON($data);
         }
 
-        if (strlen($password) < 6) {
-            $data['retmsg'] = "对不起，密码至少6位";
+        if (strlen($password) < 6 || strlen($password) >12) {
+            $data['retmsg'] = "密码格式错误";
             $data['status'] = 0;
             $response->sendJSON($data);
         }

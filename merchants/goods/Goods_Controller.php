@@ -478,16 +478,16 @@ class Goods_Controller extends MerchantController
      * @param Response $response
      */
     public function ajaxGetAttr(Request $request, Response $response){
-        $this->setPageView($request, $response, "_page_box");
-        $this->v->set_tplname("mod_goods_ajaxattr");
-        $attrId = $request->post("cat_id");
-        $show_page = true;
-        if ($show_page) {
-            $goodsAttr = Goods_Model::getGoodsAttr($attrId);
-            $this->v->assign('goodAttr', $goodsAttr);
-            $this->v->assign('cat_id', $attrId);
-            $response->send($this->v);
-        }
+            $this->setPageView($request, $response, "_page_box");
+            $this->v->set_tplname("mod_goods_ajaxattr");
+            $attrId = $request->post("cat_id");
+            $show_page = true;
+            if ($show_page) {
+                $goodsAttr = Goods_Model::getGoodsAttr($attrId);
+                $this->v->assign('goodAttr', $goodsAttr);
+                $this->v->assign('cat_id', $attrId);
+                $response->send($this->v);
+            }
     }
 
     /**
@@ -497,60 +497,63 @@ class Goods_Controller extends MerchantController
      */
     public function saveGoodsAttr(Request $request, Response $response)
     {
-        $cat_id = $request->post("cat_id");
-        $attrData = $request->post("attrDate");//前台的二维数组数据
-        $sort_order = 1;
-        $attr_names = [];
-        foreach ($attrData as $val3) {
-            if (empty($val3[0])) {
-                $str = "'$val3[1]'";
-                array_push($attr_names, $str);
+        if($request->is_post()){
+            $cat_id = $request->post("cat_id");
+            $attrData = $request->post("attrDate");//前台的二维数组数据
+            $sort_order = 1;
+            $attr_names = [];
+            foreach ($attrData as $val3) {
+                if (empty($val3[0])) {
+                    $str = "'$val3[1]'";
+                    array_push($attr_names, $str);
+                }
             }
-        }
-        if (!empty($attr_names)) {
-            $limit_name = implode(",", $attr_names);
-            $result = Goods_Model::checkAttrName($cat_id, $limit_name);
-            if ($result) {
-                $ret['status'] = 0;
-                $ret['retmsg'] = "属性名不能重复！";
-                $response->sendJSON($ret);
+            if (!empty($attr_names)) {
+                $limit_name = implode(",", $attr_names);
+                $result = Goods_Model::checkAttrName($cat_id, $limit_name);
+                if ($result) {
+                    $ret['status'] = 0;
+                    $ret['retmsg'] = "属性名不能重复！";
+                    $response->sendJSON($ret);
+                }
             }
-        }
-        $attr_ids = Goods_Model::getAttrIds($cat_id);//得到attr_id
-        $new = [];
-        foreach ($attrData as &$val1) {
-            if (!empty($val1[0])) {
-                //处理删除(删除以前已经添加过的)
-                //先查询出以前的attr_id
-                array_push($new, "$val1[0]");
+            $attr_ids = Goods_Model::getAttrIds($cat_id);//得到attr_id
+            $new = [];
+            foreach ($attrData as &$val1) {
+                if (!empty($val1[0])) {
+                    //处理删除(删除以前已经添加过的)
+                    //先查询出以前的attr_id
+                    array_push($new, "$val1[0]");
+                }
+                if (empty($val1[0])) {
+                    $attr_id = Goods_Model::addGoodsAttr($val1[1], $cat_id);//新增
+                    $val[0] = $attr_id;
+                }
+                $val1['sort_order'] = $sort_order;
+                $sort_order++;
             }
-            if (empty($val1[0])) {
-                $attr_id = Goods_Model::addGoodsAttr($val1[1], $cat_id);//新增
-                $val[0] = $attr_id;
+            foreach ($attrData as $val2) {
+                //编辑上移或者下移动改变short_order
+                Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order']);
             }
-            $val1['sort_order'] = $sort_order;
-            $sort_order++;
-        }
-        foreach ($attrData as $val2) {
-            //编辑上移或者下移动改变short_order
-            Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order']);
-        }
-        $str = "";
-        foreach ($attr_ids as $ids) {
-            if (!in_array($ids['attr_id'], $new)) {
-                $str .= $ids['attr_id'] . ",";
+            $str = "";
+            foreach ($attr_ids as $ids) {
+                if (!in_array($ids['attr_id'], $new)) {
+                    $str .= $ids['attr_id'] . ",";
+                }
             }
+            $str = rtrim($str, ",");
+            if (!empty($str)) {
+                Goods_Model::delGoodsAttr($str);
+            }
+            $view = true;
+            if ($view) {
+                $ret['status'] = 1;
+                $ret['retmsg'] = "保存成功！";
+            }
+            $response->sendJSON($ret);
         }
-        $str = rtrim($str, ",");
-        if (!empty($str)) {
-            Goods_Model::delGoodsAttr($str);
-        }
-        $view = true;
-        if ($view) {
-            $ret['status'] = 1;
-            $ret['retmsg'] = "保存成功！";
-        }
-        $response->sendJSON($ret);
+
     }
 
 }

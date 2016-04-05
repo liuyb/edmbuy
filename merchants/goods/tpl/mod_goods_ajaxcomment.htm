@@ -1,3 +1,31 @@
+<style>
+    .rplay-hidden{
+        display: none;
+        border:1px solid red;
+        width: 30%;
+        height:150px;
+        text-align: center;
+        overflow: hidden;
+        padding: 10px;
+        }
+    .rplay-hidden span{
+        margin-left: -82px;
+    }
+    .rlay-show{
+        display: block;
+    }
+    .div-button{
+        width: 50px;
+        height: 20px;
+        background-color: blue;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+        float: right;
+        margin-right: 20px;
+    }
+</style>
 <table cellspacing="0" cellpadding="0" class="search_result_tab">
     <tr>
         <th>评价商品</th>
@@ -23,12 +51,17 @@
             <td style="color: red" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
                 <!--{else}-->
             <td>未回复</td>
-            <td style="color: red" onclick="repalyCommon( <!--{$val.comment_id}-->)">回复</td>
+            <td style="color: red" onclick="relayCommon( <!--{$val.comment_id}-->)">回复</td>
                 <!--{/if}-->
         </tr>
     <!--{/foreach}-->
 </table>
     <div id="kkpager<!--{$current}-->" class="kkpager" style="float:right;clear:none;padding:0px;"></div>
+<div class="rplay-hidden">
+   <span>请输入评论类容： </span><textarea name="rplay" id="" cols="30" rows="3">
+                    </textarea>
+                    <div class="div-button">确定</div>
+</div>
 <script>
         var curpage=<!--{$page.curpage}-->
         var maxpage =<!--{$page.maxpage}-->
@@ -55,9 +88,21 @@
         }, true);
     };
     function viewCommon(comment_id){
-
+        layer.open({
+            type: 2,
+            title: '新增分类',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['600px', '600px'],
+            content: '/goods/editGoodsAttr?cat_id=' + val//iframe的url
+        });
     }
+
     function relayCommon(comment_id){
-
+        $(".rplay-hidden").removeClass("hidden").addClass("rlay-show");
     }
+        function getMousePos(event) {
+            var e = event || window.event;
+            return [""+e.screenX,""+ e.screenY]
+        }
 </script>
