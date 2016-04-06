@@ -31,6 +31,7 @@ class Order_Controller extends MerchantController {
     {
         $this->v->set_tplname('mod_order_index');
         $this->setPageLeftMenu('order', 'list');
+        $this->setSystemNavigate('order');
         $response->send($this->v);
     }
     

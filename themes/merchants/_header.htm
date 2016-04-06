@@ -1,39 +1,23 @@
-<div class="header">
-  <div class="headRt">
-    <a href="">浏览店铺</a>
-    <a href="/logout">admin </a>
-  </div>
-  <div class="headLogo"><a href="/">商家后台</a></div>
-  <ul class="headNav">
-    <li class="navit on"><a href="/home" class="blka">首页</a></li>
-    <li class="navit"><a href="/shop/" class="blka">商城</a></li>
-    <li class="navit"><a href="/goods/" class="blka">商品</a></li>
-    <li class="navit"><a href="/order/" class="blka">订单</a></li>
-    <li class="navit"><a href="/market/" class="blka">营销</a></li>
-  </ul>
-</div>
-<!-- <div id="login_new_header">
-	<div id="header_center">
-		<div id="common_header_left">
-			<img src="./img/logo.png">
-			益多米
-		</div>
-		<div id="common_list">
-			<ul> 
-				<li><a href="/home" class="blka">首页</a></li>
-				<li><a href="/shop/" class="blka">商城</a></li>
-				<li><a href="/goods/" class="blka">商品</a></li>
-				<li class="common_on"><a href="/order/" class="blka">订单</a></li>
-				<li><a href="/market/" class="blka">营销</a></li>
-				<li>平台</li>
-			</ul>
-		</div>
-		<div id="common_right">
-			<button id="common_btn" class="common_shop">浏览店铺</button>
-			<button id="common_btn" class="common_name">90年代</button>
-		</div>
+<div id="header_center">
+	<div id="common_header_left">
+		<img src="/themes/merchants/img/logo.png">
+		益多米
 	</div>
-</div> -->
+	<div id="common_list">
+		<ul> 
+			<li onclick="navigateShow('/');" <!--{if $s_module == "index"}-->class="common_on"<!--{/if}-->>首页</a></li>
+			<li <!--{if $s_module == "shop"}-->class="common_on"<!--{/if}-->>商城</a></li>
+			<li onclick="navigateShow('/goods');" <!--{if $s_module == "goods"}-->class="common_on"<!--{/if}-->>商品</a></li>
+			<li onclick="navigateShow('/order');" <!--{if $s_module == "order"}-->class="common_on"<!--{/if}-->>订单</li>
+			<li <!--{if $s_module == "sale"}-->class="common_on"<!--{/if}-->>营销</li>
+			<li <!--{if $s_module == "platform"}-->class="common_on"<!--{/if}-->>平台</li>
+		</ul>
+	</div>
+	<div id="common_right">
+		<button id="common_btn" class="common_shop">浏览店铺</button>
+		<button id="common_btn" class="common_name">90年代</button>
+	</div>
+</div>
 <!-- <div id="topLoading"><b></b><span>数据加载中...</span></div>
 <div id="mainMsgBox"><span class="msg msg-error">数据保存中...</span></div> -->
 <script>
@@ -41,5 +25,8 @@ function clear_cache(){
   F.clearCacheAll();
   showTopPrompt('缓存已清除', 'ok');
 	return false;
+}
+function navigateShow(url){
+	window.location.href = url;
 }
 </script>

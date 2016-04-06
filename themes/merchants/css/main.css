@@ -232,15 +232,37 @@ i.desc {background-position: 0 -23px;display: inline-block;}
 html,body { height: auto;min-height: 100%; }
 body { line-height: 1.6;font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","\9ED1\4F53",Arial,sans-serif;color: #222;font-size: 14px; }
 body { min-width: 1200px;}
-.ifr-head { background: #f26427;height:58px;position: -webkit-sticky;position: -moz-sticky;position: -ms-sticky;position: sticky;top: 0;left: 0; }
-.ifr-head .header { width: 1200px;height: 100%;margin: 0 auto; }
-.ifr-head .headRt { float: right;height: 100%; }
-.ifr-head .headLogo { float: left;margin-right: 50px;height: 100%; }
-.ifr-head .headNav { float: left;height: 100%; }
-.ifr-head .navit { float: left;height: 100%;width: 100px; }
-.ifr-head a { color: #fff; }
-.ifr-head .navit a { display: block;height: 100%;line-height: 58px;text-align: center;}
-.ifr-head .navit.on a { background: #de461f; }
+/*页面Header*/
+#login_new_header{
+	width:100%;
+	background:#323a4d;
+	height:60px;
+}
+#header_center{
+	width:1200px;
+	margin:0 auto;
+}
+#login_header_left img{
+  	margin-top:9px;
+	padding-right:10px;
+}
+#login_header_left{
+  	vertical-align: top;	
+	line-height:60px;
+	color:#fff;
+	font-size:16px;
+	float:left;
+}
+#login_header_right{
+	float:right;
+}
+#login_header_right li{	
+	font-size:16px;
+	color:#fff;
+	float:left;
+	line-height:60px;
+	padding-left:50px;
+}
 
 .ifr-body { width: 1200px;margin: 0px auto; }
 .ifr-body .blk { background: #fff;padding: 10px;margin-bottom: 10px; }

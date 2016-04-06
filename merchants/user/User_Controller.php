@@ -19,6 +19,7 @@ class User_Controller extends MerchantController
     {
         if (Merchant::is_logined()) {
             $this->v->set_tplname('mod_user_index');
+            $this->setSystemNavigate('index');
             $response->send($this->v);
         } else {
             $response->redirect('/login');

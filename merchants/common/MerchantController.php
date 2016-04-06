@@ -58,6 +58,14 @@ class MerchantController extends Controller {
 	    $this->v->assign("left_item", $item);
 	}
 	
+	/**
+	 * 设置当前系统菜单显示
+	 * @param unknown $module
+	 */
+	public function setSystemNavigate($module){
+	    $this->v->assign("s_module", $module);
+	}
+	
 }
 
 /*----- END FILE: MerchantController.php -----*/

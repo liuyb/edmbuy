@@ -38,6 +38,7 @@ class Goods_Controller extends MerchantController
     {
         $this->v->set_tplname('mod_goods_index');
         $this->v->assign("goods_sale", '1111');
+        $this->setSystemNavigate('goods');
         $this->setPageLeftMenu('goods', 'list');
         $response->send($this->v);
     }
