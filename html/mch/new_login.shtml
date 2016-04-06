@@ -40,7 +40,6 @@
 			    <div style="margin:0 40px;">
 			    	<a href="javascript:;" class="remember_me">记住我</a>
 			     	<a href="javascript:;" class="forget-pwd">忘记密码？</a>
-			     	<input type="checkbox">
 			    </div>
 			    <div style="margin:20px 40px 0;">
 			    	<input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录">
