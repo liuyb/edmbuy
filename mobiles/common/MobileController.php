@@ -35,12 +35,16 @@ class MobileController extends Controller {
 	 */
 	public function setPageView(Request $request, Response $response, $basetpl = '_page') {
 		$this->v = new PageView('', $basetpl);
+		$sys_css = '';
 		if ($basetpl=='_page_mpa') {
 			if ($request->isIOS()) {
-				$this->extra_css = 'iOS';
+				$sys_css = 'iOS';
 			}
 		}
-		$this->v->add_render_filter(function(View $v){
+		$this->v->add_render_filter(function(View $v) use ($sys_css){
+			if (''!=$sys_css) {
+				$this->extra_css = $sys_css . (''==$this->extra_css?'':' ') . $this->extra_css;
+			}
 			$v->assign('nav_no',  $this->nav_no)
 			->assign('topnav_no',  $this->topnav_no)
 			->assign('nav_flag1',  $this->nav_flag1)
