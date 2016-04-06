@@ -1096,7 +1096,7 @@ a.h_btn{
   z-index: 111; 
 }
 .p_detail_back{
-  position: absolute;  
+  position: fixed;  
   display: inline-block;  
   left: 10px;
   top: 7px;
@@ -1107,7 +1107,7 @@ a.h_btn{
   z-index: 111;
 }
 .p_detail_more{
-  position: absolute;  
+  position: fixed;  
   display: inline-block;  
   right: 10px;
   top: 7px;
@@ -1118,7 +1118,7 @@ a.h_btn{
   z-index: 111;
 }
 .p_detail_jian{
-  position: absolute;  
+  position: fixed;  
   right: 19px;
   top: 39px;
   width: 13px;
@@ -1128,7 +1128,7 @@ a.h_btn{
   z-index: 111; 
 }
 .p_detail_menu{
-  position: absolute;  
+  position: fixed;  
   right: 4px;
   top: 45px;
   width: 125px;
