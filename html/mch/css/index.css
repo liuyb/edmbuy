@@ -247,6 +247,10 @@
 	height:40px;
 	padding-left:10px;	
 }
+.remember_me_on{
+	background: url(../img/xz.png) no-repeat left !important;	
+	padding-left:25px;	
+}
 .remember_me{
 	display:inline-block;
 	background: url(../img/ask03.png) no-repeat left;	
