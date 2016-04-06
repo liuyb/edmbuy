@@ -54,9 +54,11 @@
 				<button id="send_goods_s" class="q_send_btn" onclick="gotoshipping('edit');">修改发货</button>
 				<!--{/if}-->
 				<!--{/if}-->
+				<!--{if $order.order_status neq 2 and $order.order_status neq 3}-->
 				<!-- 未发货时才能修改发货信息 -->
 				<!--{if $order.shipping_status eq 0 or $order.shipping_status eq 3 or $order.shipping_status eq 5}-->
 				<button id="update_order" class="commondity_btn">修改</button>
+				<!--{/if}-->
 				<!--{/if}-->
 			</div>
 			<div id="infos_googs_n">

@@ -133,10 +133,10 @@ class Upload
 
     private function generateNewImage($oripath, $destpath, $destwidth, $imgtype, $width, $height, $ratio)
     {
-        $oripath = SIMPHP_ROOT . $oripath;
         if ($width <= $destwidth) { // 只有宽度大于$destwidth才需要生成缩略图，否则直接用原图做缩略图
             return $oripath;
         }
+        $oripath = SIMPHP_ROOT . $oripath;
         
         $img = FALSE;
         if (is_string($oripath)) {

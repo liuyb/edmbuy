@@ -134,7 +134,7 @@ function costructRowData(result){
 }
 
 function canOrderShip(result){
-	return (result.pay_status == 2 && result.order_status != 2);
+	return (result.pay_status == 2 && result.order_status != 2 && result.order_status != 3);
 }
 
 function showOrderDetail(obj){

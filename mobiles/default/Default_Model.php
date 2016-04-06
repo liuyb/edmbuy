@@ -18,7 +18,7 @@ class Default_Model extends Model {
         self::CATEGORY_EAT => '37,51',
         self::CATEGORY_DRINK => '36,56',
         self::CATEGORY_WEAR => '52',
-        self::CATEGORY_USE => '57,59,60'
+        self::CATEGORY_USE => '50,57,59,60'
     );
     
     /**
