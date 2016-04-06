@@ -247,10 +247,12 @@ function deleteGoods(obj){
 		layer.msg('还没有选择商品！');
 		return;
 	}
-	var data = {goods_ids : goods_id};
-	F.postWithLoading('/goods/delete', data, function(data){
-		layer.msg('操作成功');
-		loadTableContent(1, true);
+	showConfirm('确定要删除选中的商品吗？',function(){
+		var data = {goods_ids : goods_id};
+		F.postWithLoading('/goods/delete', data, function(data){
+			layer.msg('操作成功');
+			loadTableContent(1, true);
+		});
 	});
 }
 function updateGoodsStatus(obj, statusVal){

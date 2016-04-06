@@ -177,6 +177,20 @@ function showMsg(msg){
 	layer.msg(msg);
 }
 /**
+ * confirm提示
+ * @param msg
+ * @param handler
+ */
+function showConfirm(msg, handler){
+	layer.confirm(msg, {
+	  btn: ['确定','取消'] //按钮
+	}, function(){
+		handler.apply(this,arguments);
+	}, function(){
+	   layer.closeAll();
+	});
+}
+/**
  * 页面table 的复选框事件监听
  * @returns
  */
