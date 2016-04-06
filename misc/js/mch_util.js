@@ -185,6 +185,7 @@ function showConfirm(msg, handler){
 	layer.confirm(msg, {
 	  btn: ['确定','取消'] //按钮
 	}, function(){
+		layer.closeAll();
 		handler.apply(this,arguments);
 	}, function(){
 	   layer.closeAll();
