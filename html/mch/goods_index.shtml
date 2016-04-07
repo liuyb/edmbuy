@@ -19,12 +19,7 @@
 </head>
 <body>
 
-<style>
-
-</style>
-
-
-<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+<div id="head" class="ifr-head"><!--#include file="login_new_header.html"--></div>
 
 <div id="body" class="ifr-body">
 	<!--#include file="goods_left_common.html"-->
