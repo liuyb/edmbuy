@@ -56,8 +56,8 @@ class Default_Controller extends MobileController {
     
     //分享信息
     $share_info = [
-    		'title' => '难得的好商城，值得关注！',
-    		'desc'  => '消费购物，推广锁粉，疯狂赚钱统统不耽误',
+    		'title' => '收藏了很久的特价商城，各种超划算！',
+    		'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
     		'link'  => U('', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
