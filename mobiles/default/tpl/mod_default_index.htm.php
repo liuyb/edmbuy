@@ -49,7 +49,7 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/s400.png"></a></p><p><a href='/item/pref/show?type=rice'><img src="/themes/mobiles/img/s500.png"></a></p>
+		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/s400.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
 		<div class="line1"></div>
 	</div>
 
@@ -201,7 +201,7 @@ window.location.reload();
 			TR += "<tr data-goodid='"+good.goods_id+"'><td style=\"width:95px;\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+goodimg+"')\"></td><td>";
 			TR += "<p class=\"tab_t_f\">"+good.goods_name+"</p><p class=\"tab_t_i\">"+good.goods_brief+"</p><p class=\"tab_t_price\">";
 			TR += "<span>特价：￥"+good.shop_price+"</span></p>";
-			TR += "<p class=\"tab_t_type\"><span class=\"type_l_css\">比网上省</span><span class=\"type_r_css\">"+spread+"元</span></p>";
+			TR += "<p class=\"tab_t_type\"><span class=\"type_l_css\">比原价省</span><span class=\"type_r_css\">"+spread+"元</span></p>";
 			TR += "<button class=\"jx_btn_new\">立即购买</button></td></tr>";
 		}
 		handleGoodsListAppend(TR);

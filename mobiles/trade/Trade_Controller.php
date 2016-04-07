@@ -34,6 +34,7 @@ class Trade_Controller extends MobileController {
       'trade/cart/delete'    => 'cart_delete',
       'trade/cart/chgnum'    => 'cart_chgnum',
       'trade/order/confirm'  => 'order_confirm',
+      'trade/order/confirm_sysbuy'  => 'order_confirm_sysbuy',
       'trade/order/submit'   => 'order_submit',
       'trade/order/upaddress'=> 'order_upaddress',
       'trade/order/cancel'   => 'order_cancel',
@@ -364,6 +365,25 @@ class Trade_Controller extends MobileController {
     else {
 
     }
+    
+    throw new ViewResponse($this->v);
+  }
+  
+  /**
+   * 确认系统购买订单
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function order_confirm_sysbuy(Request $request, Response $response)
+  {
+  	$this->setPageView($request, $response, '_page_mpa');
+    $this->v->set_tplname('mod_trade_order_confirm_sysbuy');
+    $this->nav_flag1 = 'order';
+    $this->nav_flag2 = 'order_confirm_sysbuy';
+    $this->nav_no    = 0;
+    //$this->extra_css = 'greybg';
+    
     
     throw new ViewResponse($this->v);
   }

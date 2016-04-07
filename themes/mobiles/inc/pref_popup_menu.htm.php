@@ -28,6 +28,9 @@
 <?php if(isset($category) && 'rice' != $category): ?>
 <li><a href="/item/pref/show?type=rice">精选好米</a></li>
 <?php endif; ?>
+<?php if(isset($category) && 'moml' != $category): ?>
+<li><a href="/item/pref/show?type=moml">清真专区</a></li>
+<?php endif; ?>
 <?php if(isset($category) && '98' != $category): ?>
 <li><a href="/item/pref/show?type=98">98专区</a></li>
 <?php endif; ?>

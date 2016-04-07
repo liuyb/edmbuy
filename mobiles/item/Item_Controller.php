@@ -215,7 +215,7 @@ class Item_Controller extends MobileController {
 	    }
 	    //分享信息
 	    $share_info = [
-	        'title' => '难得的好商城，值得关注！',
+	        'title' => '收藏了很久的特价商城，超划算！',
 	        'desc'  => Item_Model::$prefe_share_title[$type],
 	        'link'  => U('/item/pref/show?type='.$type, 'spm='.Spm::user_spm(), true),
 	        'pic'   => U(Item_Model::$prefe_share_pic[$type],'',true),
