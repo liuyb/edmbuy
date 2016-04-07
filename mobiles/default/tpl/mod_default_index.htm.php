@@ -2,7 +2,8 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li style="display:block"><a href="<?php echo U('zt/newtea')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/2016newtea.png"></a></li>
+    <li style="display:block"><a href=""><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/dijiahuodong.png"></a></li>
+    <li><a href="<?php echo U('zt/newtea')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/2016newtea.png"></a></li>
     <li><a href='<?php echo U('item/1093')?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/homepage_ad_1.jpg"></a></li>
     <li><a href="<?php echo U('item/1045')?>"><img src="/themes/mobiles/img/banner02.png"></a></li>
     <li><a href="<?php echo U('item/1016')?>"><img src="/themes/mobiles/img/banner03.png"></a></li>
@@ -12,6 +13,7 @@
     <a href="javascript:void(0);" class="">2</a>
     <a href="javascript:void(0);" class="">3</a>
     <a href="javascript:void(0);" class="">4</a>
+    <a href="javascript:void(0);" class="">5</a>
      </div>
   </div>
 </div>
@@ -49,12 +51,12 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/s400.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
+		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/zq/98.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
 		<div class="line1"></div>
 	</div>
 
 	<div class="sp_ls">
-		<p><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/s600.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/s100.png"></a></p><p><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/s200.png"></a></p><p><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/s300.png"></a></p>
+		<p><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/zq/teawine.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/zq/fruit.png"></a></p><p><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/zq/food.png"></a></p><p><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/zq/cloth.png"></a></p>
 		<div class="line2"></div>
 		<div class="line3"></div>
 		<div class="line4"></div>
@@ -67,10 +69,14 @@ window.location.reload();
 <?php if(isset($limit_goods) && count($limit_goods) > 0):?>
 <div class="time_buy">
 	<div class="time_b_tit">
+	<!-- 
 		<div class="b_tit_l">限时抢购</div>
 		<div class="b_tit_r">
 			<span class="r_f">距离结束</span><span id="t_h"></span> : <span id="t_m"></span> : <span id="t_s"></span>
 		</div>
+	 -->
+	 <img src="/themes/mobiles/img/home/homep_xsqg.png" />
+	 <p><span id="t_h"></span> : <span id="t_m"></span> : <span id="t_s"></span></p>
 	</div>
 	<div class="time_b_info">
 		<table cellspacing="0" cellpadding="0" class="time_b_tab">	
@@ -90,7 +96,7 @@ window.location.reload();
 
 <div class="fk_buy">
 	<div class="fk_b_tit">
-		<img src="/themes/mobiles/img/ttfq00.png">
+		<img src="/themes/mobiles/img/home/homep_ttfq.png">
 	</div>
 	<div class="fk_b_list">
 		<ul>

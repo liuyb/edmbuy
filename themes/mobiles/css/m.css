@@ -3574,10 +3574,13 @@ td.cash_td2 img {
 	margin-top:5px;
 }
 .time_b_tit{
-	height:40px;
+	/*height:40px;
 	line-height:40px;
-	border-bottom:1px solid #eee;
+	border-bottom:1px solid #eee;*/
+	position: relative;
 }
+.time_b_tit img { width: 100%; }
+.time_b_tit p { position: absolute;width:100%;height:20px;left:0;bottom:15px;text-align:center;color:#fff; }
 .b_tit_l{
 	background: url(../img/time00.png) no-repeat left;
   	background-size: 16px;
@@ -3592,8 +3595,8 @@ td.cash_td2 img {
 	margin-right:10px;
 }
 #t_h,#t_m,#t_s{
-	background:#444;
-	color:#fff;
+	background:#fff;
+	color:#dc2d2e;
 	font-size:12px;
   	padding: 4px;
   	border-radius: 4px;	
@@ -3660,14 +3663,15 @@ td.cash_td2 img {
 	background:#fff;
 	margin-top:10px;
 }
-.fk_b_tit{
+.fk_b_tit{/*
 	height:40px;
-	border-bottom:1px solid #eee;
+	border-bottom:1px solid #eee;*/
 }
-.fk_b_tit img{
+.fk_b_tit img{/*
 	width:84px;
 	height:23px;  
-	margin: 8px 10px;
+	margin: 8px 10px;*/
+	width: 100%;
 }
 .click_more{
 	font-size:12px;
