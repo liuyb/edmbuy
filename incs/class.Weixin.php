@@ -431,7 +431,12 @@ class Weixin {
     $keyword      = trim($postObj->Content);
     $openid       = $fromUserName;
     $reqtime      = intval($postObj->CreateTime);
-    //trace_debug('weixin_reply_'.($is_voice?'voice':'text'), $keyword);
+    
+    if (0&&('odyFWsxLsxs9U2P6Z3sV4S7O7D5I'==$openid || 'odyFWs99rfRCGphSTMTXczAP4wno'==$openid)) {
+    	trace_debug('weixin_reply_'.($is_voice?'voice':'text'), $keyword);
+    	$responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $this->helper->about(1)));
+    	return $responseText;
+    }
     
     $responseText = '';
     $queryResult  = $this->helper->onTextQuery($keyword, $result_type);
@@ -1638,9 +1643,19 @@ class WeixinHelper {
    * @return string
    */
   public function about($type = 0) {
-    //$text = "益多米是新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
-    $text  = "益多米作为新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
-    $text .= "\n\n快去分享底部推广二维码、米商计划和常见问题至朋友圈，提前推广锁粉吧！益多米上线后，下级用户购物，上级都是可以拿到购物佣金的哦！";
+  	$type = 1;
+  	if (!$type) {
+  		$text  = "益多米作为新型社交电商购物平台，为广大消费者提供琳琅满目的优质商品，满足大家消费需求的同时，采用三级分销的模式，让消费者转变为消费商，通过分销商品赚取佣金。";
+  		$text .= "\n\n快去分享底部推广二维码、米商计划和常见问题至朋友圈，提前推广锁粉吧！益多米上线后，下级用户购物，上级都是可以拿到购物佣金的哦！";
+  	}
+    else {
+    	$text  = "终于等到你！/:hug/:hug/:hug\n\n";
+    	$text .= "【恭喜】你已成为益多米的会员，we are 伐木累！/::*/::*/::*\n\n";
+    	$text .= "益多米作为良心平台，专为“米粉们”提供超值特惠的商品，从此不用“剁手”也可以买到称心如意的商品啦！\n\n";
+    	$text .= "益多米，你生活中的省钱利器！\n\n";
+    	$text .= "快带领你的小伙伴们一起进入多米商城选购心仪的商品吧！/::$\n\n";
+    	$text .= "/::B/::B/::B另外，邀请他人购物还有惊喜哟！";    	
+    }
     return $text;
   }
   

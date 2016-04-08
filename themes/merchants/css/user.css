@@ -59,7 +59,7 @@
 #login form .loginbtn {float: right;margin-right: 5px;}
 
 
-/*Íü¼ÇÃÜÂë*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 #login_new_header{
     width:100%;
@@ -158,6 +158,7 @@
     font-size:14px;
     color:#999;
     padding:10px 0 0 240px;
+    display: none;
 }
 #next_one{
     margin-top:50px;
@@ -202,7 +203,7 @@
     /*display:none;*/
 /*}*/
 
-/* Íü¼ÇÃÜÂë  s */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  s */
 .login{
     background:url(../img/bj.png) no-repeat center;
     height:600px;
@@ -254,6 +255,10 @@
     padding-left:25px;
     font-size:14px;
     color:#666;
+}
+.remember_me_on{
+    background: url(../img/xz.png) no-repeat left !important;
+    padding-left:25px;
 }
 .forget-pwd{
     display:inline-block;

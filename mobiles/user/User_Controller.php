@@ -26,7 +26,13 @@ class User_Controller extends MobileController
             'user/mobile/update' => 'update_mobile',
             'user/oauth/%s' => 'oauth',
             'user/commission' => 'commission',
-            'user/nickname/update'=>'update_nickname',
+            'user/nickname/update' => 'update_nickname',
+            'user/merchant/checkin' => 'merchant_checkIn',
+            'user/merchant/payment' => 'merchant_payment',
+            'user/merchant/register' => 'merchant_register',
+            'user/merchant/getcode' => 'merchant_getcode',
+            'user/merchant/savereg' => 'merchant_savereg',
+            'user/merchant/regsuc' => 'merchantRegSuc',
         ];
     }
 
@@ -51,7 +57,7 @@ class User_Controller extends MobileController
      */
     public function index(Request $request, Response $response)
     {
-    	$this->setPageView($request, $response, '_page_mpa');
+        $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_index');
         if ($request->is_hashreq()) {
             //$this->showUserBaseInfo();
@@ -80,7 +86,7 @@ class User_Controller extends MobileController
      */
     public function user_setting(Request $request, Response $response)
     {
-    	$this->setPageView($request, $response, '_page_mpa');
+        $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_setting');
         $this->topnav_no = 1;
         if ($request->is_hashreq()) {
@@ -105,10 +111,10 @@ class User_Controller extends MobileController
 
     public function show_wxqr(Request $request, Response $response)
     {
-    	$this->setPageView($request, $response, '_page_mpa');
+        $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_wxqr');
         $this->topnav_no = 1;
-        if (1||$request->is_hashreq()) {
+        if (1 || $request->is_hashreq()) {
             $user = $this->showUserBaseInfo();
         }
         throw new ViewResponse($this->v);
@@ -139,26 +145,26 @@ class User_Controller extends MobileController
 
     public function show_mobile(Request $request, Response $response)
     {
-    	$this->setPageView($request, $response, '_page_mpa');
+        $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_mobile');
         $this->topnav_no = 1;
-        if (1||$request->is_hashreq()) {
-            $mobile=$request->get('mobile','');
-            $nickname=$request->get('nickname','');
-            $this->v->assign('ismoblie',false);
-            if(is_numeric($mobile)){
-                $this->v->assign('ismoblie',true);
+        if (1 || $request->is_hashreq()) {
+            $mobile = $request->get('mobile', '');
+            $nickname = $request->get('nickname', '');
+            $this->v->assign('ismoblie', false);
+            if (is_numeric($mobile)) {
+                $this->v->assign('ismoblie', true);
             }
-            $this->v->assign('nickname',$nickname);
-            $this->v->assign('mobile',$mobile);
+            $this->v->assign('nickname', $nickname);
+            $this->v->assign('mobile', $mobile);
         }
-             throw new ViewResponse($this->v);
+        throw new ViewResponse($this->v);
     }
 
     public function update_mobile(Request $request, Response $response)
     {
         if ($request->is_post()) {
-            $mobile = isset($_POST['mobile'])?$_POST['mobile']:'';
+            $mobile = isset($_POST['mobile']) ? $_POST['mobile'] : '';
             global $user;
             if ($user->mobilephone == $mobile) {
                 return;
@@ -622,33 +628,192 @@ class User_Controller extends MobileController
             $this->v->assign('commision',$data['commision']);
         }
         else {
-        	//分享信息
-        	$share_info = [
-        			'title' => '收藏了很久的特价商城，超划算！',
-        			'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
-        			'link'  => U('/user/commission', 'order_id='.$order_id."&level=".$level."&user_id=".$user_id.'&spm='.Spm::user_spm(), true),
-        			'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
-        	];
-        	$this->v->assign('share_info', $share_info);
+            //分享信息
+            $share_info = [
+                'title' => '收藏了很久的特价商城，超划算！',
+                'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
+                'link'  => U('/user/commission', 'order_id='.$order_id."&level=".$level."&user_id=".$user_id.'&spm='.Spm::user_spm(), true),
+                'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+            ];
+            $this->v->assign('share_info', $share_info);
         }
-             throw new ViewResponse($this->v);
+        throw new ViewResponse($this->v);
     }
-    public function update_nickname(Request $request, Response $response){
+
+    public function update_nickname(Request $request, Response $response)
+    {
         if ($request->is_post()) {
-            $nickname = isset($_POST['nickname'])?$_POST['nickname']:'';
+            $nickname = isset($_POST['nickname']) ? $_POST['nickname'] : '';
             global $user;
-            if($user->nickname == $nickname){
+            if ($user->nickname == $nickname) {
                 return;
             }
             $nuser = Users::load_by_nickname($nickname);
             if ($nuser && !empty($nuser->uid)) {
-                $ret = ['result' => 'FAIL', 'msg' => '昵称'.$nickname.'已经在系统存在！'];
+                $ret = ['result' => 'FAIL', 'msg' => '昵称' . $nickname . '已经在系统存在！'];
                 $response->sendJSON($ret);
             }
             User_Model::updateUserInfo(array('nickname' => $nickname));
             $ret = ['result' => 'SUC', 'msg' => '修改成功'];
-                $response->sendJSON($ret);
+            $response->sendJSON($ret);
         }
+    }
+
+    /**
+     * 商家入驻
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_checkIn(Request $request, Response $response)
+    {
+        $this->v->set_tplname('mod_user_checkin');
+        $this->nav_no = 0;
+        $response->send($this->v);
+    }
+
+    /**
+     * 商家支付
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_payment(Request $request, Response $response)
+    {
+        $this->v->set_tplname('mod_user_merpayment');
+        $this->nav_no = 0;
+        $response->send($this->v);
+    }
+
+    /**
+     * 商家注册
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_register(Request $request, Response $response)
+    {
+        $this->v->set_tplname('mod_user_merreg');
+        $this->nav_no = 0;
+        $response->send($this->v);
+    }
+
+    /**
+     * 获取注册验证码
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_getcode(Request $request, Response $response)
+    {
+        //step1验证手机号
+        $phone = $request->post("mobile");
+        $result = User_Model::ckeckMobile($phone); //检验米商手机号是否被注册
+        if ($result) {
+            $ret['retmsg'] = "此手机号已注册";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        //todo
+        //$result = Sms::sendSms($phone, "merchant_reg",false);
+        if (true) {
+            $ret['retmsg'] = "发送验证码成功";
+            $ret['status'] = 1;
+            $response->sendJSON($ret);
+        }
+    }
+
+    /**
+     * 保存用户的注册信息
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_savereg(Request $request, Response $response)
+    {
+        $mobile = $request->post("mobile");
+        $mobileCode = $request->post("mobile_code");
+        $email = $request->post("email");
+        $inviteCode = $request->post("invite_code");
+//        $read = $request->post("read");
+        if (empty($mobileCode)) {
+            $ret['retmsg'] = "参数不能为空！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        } elseif (!verify_phone($mobile)) {
+            $ret['retmsg'] = "手机号码格式不正确！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        } elseif (!verify_email($email)) {
+            $ret['retmsg'] = "邮箱格式不正确！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        } elseif ($mobileCode != $_SESSION['merchant_reg']) {
+            $ret['retmsg'] = "验证码不匹配！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        //验证邮箱是否已经被使用
+        $res = User_Model::checkMerchantEmeil($email);
+        if ($res) {
+            $ret['retmsg'] = "此邮箱已被注册！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        //检验米商手机号是否被注册
+        $result = User_Model::ckeckMobile($mobile);
+        if ($result) {
+            $ret['retmsg'] = "此手机号已注册";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        //保存商家信息发送短信
+        $password = rand_code();
+        $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
+        if ($res !== false) {
+            //todo
+            //Sms::sendSms($mobile, 'reg_success', false);
+            $this->sendEmail($email, $mobile, $password);
+            $ret['retmsg'] = "注册成功！";
+            $ret['status'] = 1;
+            $ret['pwd'] = $password;
+            $response->sendJSON($ret);
+        }
+    }
+
+    /**
+     * 发送邮件
+     * @param $email
+     * @param $mobile
+     * @param $password
+     */
+    private function sendEmail($email, $mobile, $password)
+    {
+        $title = "注册益多米商家帐号成功！";
+        $contentArr = C("msg.stmp");
+        $content = $contentArr['merchant_reg'];
+        $urlarr = C("storage.cookie.mch");
+        $url = $urlarr["domain"];
+        $content = sprintf($content, $url, $mobile, $password);
+        $from = C("port.stmp.user");
+        $to = $email;
+        $charset = 'utf-8';
+        $attachment = '';
+        Mail::send_mail($title, $content, $from, $to, $charset, $attachment);
+    }
+
+    /**
+     * 商家成功注册
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchantRegSuc(Request $request, Response $response)
+    {
+        $this->v->set_tplname('mod_user_regsuc');
+        $this->nav_no = 0;
+        $urlarr = C("storage.cookie.mch");
+        $url = $urlarr["domain"];
+        $mobile = $request->get("mobile");
+        $pwd = $request->get("pwd");
+        $this->v->assign("mobile", $mobile);
+        $this->v->assign("pwd", $pwd);
+        $this->v->assign("url", $url);
+        $response->send($this->v);
     }
 
 }

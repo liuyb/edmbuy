@@ -565,7 +565,7 @@ class Goods_Controller extends MerchantController
             }
             foreach ($attrData as $val2) {
                 //编辑上移或者下移动改变short_order
-                Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order']);
+                Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order'],$val2[1]);
             }
             $str = "";
             foreach ($attr_ids as $ids) {

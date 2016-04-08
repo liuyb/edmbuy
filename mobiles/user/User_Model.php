@@ -106,7 +106,7 @@ class User_Model extends Model
      * @param $user_id
      * @param $order_sn
      */
-    static function getOrderInfo($order_id,$user_id)
+    static function getOrderInfo($order_id, $user_id)
     {
         $result = [];
         $dbDrver = D();
@@ -125,7 +125,7 @@ class User_Model extends Model
         /**
          * 获取用户的佣金
          */
-        $commision =self::getUserCommision($order_id,$user_id);
+        $commision = self::getUserCommision($order_id, $user_id);
         $result['goodsInfo'] = $goodsInfo;
         $result['ismBusiness'] = $ismBusiness;
         $result['commision'] = $commision;
@@ -135,11 +135,13 @@ class User_Model extends Model
     /**
      * 获得用户的金额
      */
-        static function getUserCommision($order_id,$user_id){
-            $sql="select commision  from shp_user_commision where user_id={$user_id} and order_id = {$order_id}";
-            $commsion=D()->query($sql)->result();
-            return $commsion;
-        }
+    static function getUserCommision($order_id, $user_id)
+    {
+        $sql = "select commision  from shp_user_commision where user_id={$user_id} and order_id = {$order_id}";
+        $commsion = D()->query($sql)->result();
+        return $commsion;
+    }
+
     /**
      * 获取订单商品列表
      * @auth hc_adm
@@ -178,7 +180,7 @@ class User_Model extends Model
         }
         foreach ($goodInfo AS &$g) {
             $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'],$g['pay_status'],$g['shipping_status'], $g['shipping_confirm_time']);
+            $g['shipping_status'] = self::CheckOrderStatus($g['order_status'], $g['pay_status'], $g['shipping_status'], $g['shipping_confirm_time']);
         }
         return $goodInfo;
     }
@@ -192,30 +194,26 @@ class User_Model extends Model
     {
         $msg = "";
         if ($pay_status == PS_PAYED) {
-        	if ($shipping_status==SS_RECEIVED) {
-        		$nowDateTime = simphp_gmtime();
-        		$days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
-        		if($days>7){
-        			$msg="佣金已生效";
-        		}else{
-        			$msg = "已签收" . $days . "天";
-        		}
-        	}
-        	elseif (in_array($shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART])) {
-        		$msg = "已发货";
-        	}
-        	else{
-        		$msg = "未发货";
-        	}
-        }
-        else {
-        	$msg = "未支付";
-        	if ($order_status==OS_CANCELED) {
-        		$msg = "已取消";
-        	}
-        	elseif (in_array($order_status,[OS_REFUND,OS_REFUND_PART])) {
-        		$msg = "已退款";
-        	}
+            if ($shipping_status == SS_RECEIVED) {
+                $nowDateTime = simphp_gmtime();
+                $days = ceil(($nowDateTime - $shipping_confirm_time) / 3600 / 24);
+                if ($days > 7) {
+                    $msg = "佣金已生效";
+                } else {
+                    $msg = "已签收" . $days . "天";
+                }
+            } elseif (in_array($shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART])) {
+                $msg = "已发货";
+            } else {
+                $msg = "未发货";
+            }
+        } else {
+            $msg = "未支付";
+            if ($order_status == OS_CANCELED) {
+                $msg = "已取消";
+            } elseif (in_array($order_status, [OS_REFUND, OS_REFUND_PART])) {
+                $msg = "已退款";
+            }
         }
         return $msg;
     }
@@ -239,4 +237,67 @@ class User_Model extends Model
             return "差" . $result . "元成为米商";
         }
     }
+
+    /**
+     * 检查商家入驻的手机号和邮箱
+     * @param $mobile
+     * @return mixed
+     */
+    static function ckeckMobile($mobile)
+    {
+        $sql = "select mobile  from shp_merchant where mobile ='%s' ";
+        return D()->query($sql, $mobile)->result();
+    }
+
+    /**
+     * 检查商家入驻的邮箱
+     * @param $mobile
+     * @return mixed
+     */
+    static function checkMerchantEmeil($mobile)
+    {
+        $sql = "select email from shp_merchant where email ='%s'";
+        return D()->query($sql, $mobile)->result();
+    }
+
+    /**
+     * 保存商家的注册信息
+     * @param $mobile
+     * @param $email
+     * @param $inviteCode
+     */
+    static function saveMerchantInfo($mobile, $email, $inviteCode,$password)
+    {
+        //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
+        $tablename = "`shp_merchant`";
+        $insertarr['merchant_id'] = self::gen_merchant_id();
+
+        $salt = self::gen_salt();
+        $password_enc = self::gen_password($password, $salt);
+
+        $insertarr['password'] = $password_enc;
+        $insertarr['salt'] = $salt;
+        $insertarr['mobile'] = $mobile;
+        $insertarr['invite_code'] = $inviteCode;
+        $insertarr['email'] = $email;
+        $insertarr['password'] = $password_enc;
+        return D()->insert($tablename, $insertarr);
+    }
+
+    static function gen_merchant_id()
+    {
+        return 'mc_' . uniqid();
+    }
+
+    static function gen_salt()
+    {
+        return substr(uniqid(), -6);
+    }
+
+    static function gen_password($raw_passwd, $salt = NULL)
+    {
+        if (!isset($salt)) $salt = gen_salt();
+        return md5(md5($raw_passwd) . $salt);
+    }
+
 }

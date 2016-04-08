@@ -3574,10 +3574,13 @@ td.cash_td2 img {
 	margin-top:5px;
 }
 .time_b_tit{
-	height:40px;
+	/*height:40px;
 	line-height:40px;
-	border-bottom:1px solid #eee;
+	border-bottom:1px solid #eee;*/
+	position: relative;
 }
+.time_b_tit img { width: 100%; }
+.time_b_tit p { position: absolute;width:100%;height:20px;left:0;bottom:15px;text-align:center;color:#fff; }
 .b_tit_l{
 	background: url(../img/time00.png) no-repeat left;
   	background-size: 16px;
@@ -3592,8 +3595,8 @@ td.cash_td2 img {
 	margin-right:10px;
 }
 #t_h,#t_m,#t_s{
-	background:#444;
-	color:#fff;
+	background:#fff;
+	color:#dc2d2e;
 	font-size:12px;
   	padding: 4px;
   	border-radius: 4px;	
@@ -3660,14 +3663,15 @@ td.cash_td2 img {
 	background:#fff;
 	margin-top:10px;
 }
-.fk_b_tit{
+.fk_b_tit{/*
 	height:40px;
-	border-bottom:1px solid #eee;
+	border-bottom:1px solid #eee;*/
 }
-.fk_b_tit img{
+.fk_b_tit img{/*
 	width:84px;
 	height:23px;  
-	margin: 8px 10px;
+	margin: 8px 10px;*/
+	width: 100%;
 }
 .click_more{
 	font-size:12px;
@@ -4573,3 +4577,191 @@ td.cash_td2 img {
   text-align: left;
 }
 /*2106-3-18 e*/
+
+
+/*2106-4-5 s*/
+#gains_top img{
+  width:100%;
+  height:100%;
+}
+#gains_list{
+  margin:0 10px;
+}
+#gains_list li{
+  background:url(../img/back.png) no-repeat right;
+  background-size:18px;
+  border-bottom:1px solid #eee;
+  height:70px;
+  line-height:70px;
+}
+#gains_list li img{
+  height:50px;
+  vertical-align: middle;
+}
+#gains_list span{
+  margin-left:20px;
+  font-size:14px;
+  color:#333;
+}
+#gains_enter{
+  width:100%;
+  background:#f65d00;
+  height:45px;
+  line-height:45px;
+  margin:40px 0;
+  border-radius:4px;
+  font-size:14px;
+  color:#fff;
+}
+#pay_top{
+  height:136px;
+  background:#f1f1f1;
+  text-align:center;
+}
+#pay_top img{
+  width:120px;
+  height:100px;
+  margin-top:18px;
+}
+.pay_tab{
+  width:100%;
+}
+.pay_tab td{
+  background:url(../img/ty1.png) no-repeat 10px;
+  padding-left:30px;
+  background-size:16px;
+  height:44px;
+  line-height:44px;
+  font-size:14px;
+  color:#333;
+  border-bottom:1px solid #eee;
+}
+.pay_right_line{
+  border-left:1px solid #eee;
+}
+#how_much{
+  padding-left:10px;
+  font-size:14px;
+  color:#333;
+  height:43px;
+  line-height:44px;
+  border-bottom:1px solid #eee;
+}
+#how_much b{
+  font-size:18px;
+  color:#ff6d14;
+  margin-right:40px;
+}
+#how_much i{
+  text-decoration: line-through;
+}
+#wx_success_pay{
+  margin:0 10px;
+}
+#wx_success_pay button{
+  width:100%;
+  background: #f65d00;
+  height: 45px;
+  line-height: 45px;
+  margin: 15px 0 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+}
+#red_deal{
+  background: url(../img/gx.png) no-repeat left;
+  background-size:14px;
+  padding-left:20px;
+  font-size:12px;
+  color:#666;
+}
+/*2106-4-5 e*/
+
+/*2106-4-6 s*/
+#sus_money{
+  background:#eee;
+  text-align:center;
+}
+#sus_money img{
+  height:70px;
+  width:70px;
+  margin:25px 0 15px;
+}
+#sus_tit{
+  font-size:18px;
+  color:#45c019;
+}
+#sus_flow{
+  width:100%;
+  border-bottom:1px solid #eee;
+}
+#sus_flow li{
+  display:inline-block;
+  width:32%;
+  text-align:center;
+  height:44px;
+  line-height:44px;
+}
+.li_cs{
+  background:url(../img/back.png) no-repeat right;
+  background-size:16px;
+}
+.li_co{
+  color:#f65d00;
+}
+#sus_info{
+  margin:0 10px;
+}
+#sus_info li{
+  height:45px;
+  line-height:45px;
+  border-bottom:1px solid #eee;
+}
+.ps_common{
+  margin-left:20px;
+}
+.common_red_x{
+  float: right;
+  color:red;
+}
+.i_common{
+  padding:0 4px;
+}
+#auth_code{
+  width:90px;
+}
+#ps_btn{
+  float:right;
+  background:#f65d00;
+  height:35px;
+  color:#fff;
+  font-size:14px;
+  margin-top:5px;
+  border-radius:4px;
+  width:90px;
+}
+#inviter{
+  width:200px;
+}
+
+#act_infos{
+  margin:0 10px;
+}
+.act_tit{
+  font-size:16px;
+  color:#333;
+  height:42px;
+  line-height:43px;
+  border-bottom:1px solid #ff6d14;
+}
+#login_address{
+  height:63px;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+  color:#333;
+}
+.comp_address{
+  font-size:14px;
+  color:#ff6d14;
+}
+/*2106-4-6 e*/
