@@ -19,9 +19,9 @@
 </div>
 <script>
     $(function () {
-        loadTableContent(1, true,1);
+        loadTableContent(1,1);
     });
-    function loadTableContent(curpage, isinit, param) {
+    function loadTableContent(curpage,param) {
 
         var container = $("#resultList");
         container.find("tr:gt(0)").remove();
@@ -33,8 +33,6 @@
         }
         F.get('/goods/ajaxGetCommentList', data, function (ret) {
                 $(".common_go .search_result").html(ret);
-
-
         },"HTML");
     }
 </script>
@@ -56,7 +54,7 @@
 
         $(_li).addClass("li_on");
         //$(_list).show();
-        loadTableContent(1, true,a);
+        loadTableContent(1, a);
     }
 
 //    $(document).on('blur','.nums_px',function(){

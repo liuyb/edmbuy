@@ -10,7 +10,7 @@
         </td>
         <td class="attr_rel">
             <span class="move_up">上移</span>
-            <span class="shift_down">下移1</span>
+            <span class="shift_down">下移</span>
             <span class="attr_del">删除</span>
         </td>
     </tr>
@@ -28,8 +28,6 @@
             var _nexthtml = _tr.prev().html();
             _tr.html(_nexthtml);
             _tr.prev().html(_trhtml);
-        } else {
-            alert("到头了");
         }
     })
 
@@ -44,19 +42,12 @@
             var _nexthtml = _tr.next().html();
             _tr.html(_nexthtml);
             _tr.next().html(_trhtml);
-        } else {
-            alert("到底了");
         }
     })
 
     //删除
     $("#edit_type_tab").on("click", ".attr_del", function () {
         $(this).parent().parent("tr").remove();
-    })
-
-    $(".add_attr_sx").on("click", function () {
-        var _trs = '<tr><td><input type="text" value="" name="attr_name" attr_id="" required></td><td class="attr_rel"><span class="move_up">上移</span><span class="shift_down">下移3</span><span class="attr_del">删除</span></td></tr>'
-        $("#edit_type_tab").append(_trs);
     })
 
     $("#but_sub").click(function () {
@@ -87,5 +78,5 @@
                  showMsg(ret.retmsg);
             }
         });
-    })
+    });
 </script>

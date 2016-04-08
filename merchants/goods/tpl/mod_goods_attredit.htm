@@ -50,4 +50,8 @@
                 var cat_id = $(this).val()
                 getAttr(cat_id)
         })
+    $(document).on("click",".add_attr_sx",function () {
+        var _trs = '<tr><td><input type="text" value="" name="attr_name" attr_id="" required></td><td class="attr_rel"><span class="move_up">上移</span><span class="shift_down">下移3</span><span class="attr_del">删除</span></td></tr>'
+        $("#edit_type_tab").append(_trs);
+    })
 </script>
