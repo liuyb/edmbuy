@@ -559,9 +559,9 @@ class Goods_Model extends Model
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
-        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.is_reply = 0";
+        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply is null";
         $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
-              comment.id_value as id_value ,comment.is_reply as is_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
+              comment.id_value as id_value ,comment.comment_reply as comment_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
               LEFT JOIN shp_goods goods on comment.id_value=goods.goods_id where {$where}
               order by add_time DESC limit {$limit}";
@@ -579,8 +579,7 @@ class Goods_Model extends Model
         $merchant_id = $GLOBALS['user']->uid;
 //        public function update($tablename, Array $setarr, $wherearr, $flag = '')
         $table = "`shp_comment`";
-        $setArr['merchart_content'] = $merchart_content;
-        $setArr['is_reply'] = 1;
+        $setArr['comment_reply'] = $merchart_content;
         $whereArr['comment_id'] = $comment_id;
         D()->update($table, $setArr, $whereArr);
     }
@@ -591,7 +590,7 @@ class Goods_Model extends Model
      */
     static function viewComment($comment_id)
     {
-        $sql = "select content,merchart_content from shp_comment where comment_id = %d";
+        $sql = "select content,comment_reply from shp_comment where comment_id = %d";
        return D()->query($sql, $comment_id)->get_one();
     }
 
@@ -673,11 +672,12 @@ class Goods_Model extends Model
      * 改变商品的short_order
      * @param $attr_id
      */
-    static function updateGoodsShortOrder($attr_id, $sort_order)
+    static function updateGoodsShortOrder($attr_id, $sort_order,$attr_name)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_attribute`";
         $setarr['sort_order'] = $sort_order;
+        $setarr['attr_name'] = $attr_name;
         $wherearr['attr_id'] = $attr_id;
         D()->update($tablename, $setarr, $wherearr);
     }

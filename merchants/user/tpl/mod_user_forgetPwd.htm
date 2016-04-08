@@ -131,6 +131,7 @@
             showMsg(ret.retmsg)
             if(ret.status==1){
                 refresh();
+                $(".code_ts").css("display","block");
                 time = setInterval("refresh();", 1000);
                 $("#getCode").attr("disabled","disabled").css("background","grey");
             }
@@ -153,6 +154,7 @@
             num = count;
             $("#getCode").removeAttr("disabled").css("background","#f69267");
             $("#getCode").removeClass("sending").html("重新获取");
+            $(".code_ts").css("display","none");
             clearInterval(time);
             return false;
         }

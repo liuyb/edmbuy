@@ -33,28 +33,33 @@ class User_Controller extends MerchantController
      */
     public function login(Request $request, Response $response)
     {
-
+        $cooies = Cookie::get("member_me");
+        if (!empty($cooies)) {
+            $cMerchantUser = new Merchant($cooies);
+            $cMerchantUser->set_logined_status();
+            $response->redirect('/home');
+        }
         $show_page = true;
         $retmsg = '';
         $retuname = '';
         $retupass = '';
-        if (isset($_POST['loginname']) && isset($_POST['password'])) {
+        $_SESSION['erro'] = 0;
+        if (isset($_POST['loginname']) && isset($_POST['password']) && isset($_POST['erro'])) {
             $loginname = trim($_POST['loginname']);
             $password = trim($_POST['password']);
+            $erro = trim($_POST['erro']);
             $verifycode = isset($_POST['verifycode']) ? trim($_POST['verifycode']) : '';
-            unset($_POST['loginname'], $_POST['password'], $_POST['verifycode']);
+            unset($_POST['loginname'], $_POST['password'], $_POST['verifycode'], $_POST['erro']);
             $retuname = $loginname;
             $retupass = $password;
-
             if ('' == $loginname) {
                 $retmsg = '请输入用户名';
             } elseif ('' == $password) {
                 $retmsg = '请输入密码';
-//            } elseif ('' == $verifycode) {
-//                $retmsg = '请输入验证码';
-
-// elseif (0 && $verifycode != $_SESSION['verifycode']) {
-//                $retmsg = '请输入正确的验证码';
+            } elseif ('' == $verifycode && $erro == 1) {
+                $retmsg = '请输入验证码';
+            } elseif ($verifycode != $_SESSION['verifycode'] && $erro == 1) {
+                $retmsg = '请输入正确的验证码';
             } else {
                 $check = User_Model::check_logined($loginname, $password, $login_uinfo);
                 if ($check < 0) {
@@ -63,6 +68,10 @@ class User_Controller extends MerchantController
                     $retmsg = '密码错误！';
                 } else { //Final Login Success
                     $retmsg = '登录成功！';
+                    if (isset($_POST['member_me'])) {
+                        Cookie::set('member_me', $login_uinfo['merchant_id'], 3600 * 24 * 7);
+                    }
+                    unset($_SESSION['erro']);
                     unset($_SESSION['verifycode']);
                     $cMerchantUser = new Merchant($login_uinfo['merchant_id']);
                     $cMerchantUser->set_logined_status();
@@ -70,13 +79,14 @@ class User_Controller extends MerchantController
                     $response->redirect('/home');
                 }
             }
+            $_SESSION['erro'] = 1;
         }
-
         if ($show_page) {
             $v = new PageView('mod_user_login', '_page_box');
             $v->assign('retmsg', $retmsg)
                 ->assign('retuname', $retuname)
                 ->assign('retupass', $retupass);
+            $v->assign('erro', $_SESSION['erro']);
             $response->send($v);
         }
     }
@@ -89,9 +99,11 @@ class User_Controller extends MerchantController
     public function logout(Request $request, Response $response)
     {
         // Unset all of the session variables.
+        if(!empty(Cookie::get("member_me"))){
+            Cookie::remove("member_me");//清除
+        }
         session_destroy();
         $_SESSION = array();
-
         // If it's desired to kill the session, also delete the session cookie.
         // Note: This will destroy the session, and not just the session data!
         if (isset($_COOKIE[session_name()])) {
@@ -118,7 +130,7 @@ class User_Controller extends MerchantController
 //           $_SESSION['step']=2;
 //           $_SESSION['phone']=15728743912;
 //        $_SESSION['phone']=18124682152;
-        if(!empty($GLOBALS['user']->uid)){
+        if (!empty($GLOBALS['user']->uid)) {
             $response->redirect("/home");
         }
         $show_page = true;
@@ -130,7 +142,7 @@ class User_Controller extends MerchantController
                 unset($_SESSION['step']);
             } elseif ($step == 1 && $_SESSION['step'] == 2) {
                 unset($_SESSION['step']);
-                unset( $_SESSION['forgetPwd']);
+                unset($_SESSION['forgetPwd']);
                 $this->v->assign('step', $step);
             } elseif ($step == 3 && $_SESSION['step'] == 2) {
                 $this->v->assign('step', 2);//只有2不unset
@@ -178,12 +190,12 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-//        $result = Sms::sendSms($phone, $type = "forgetPwd");
+//      $result = Sms::sendSms($phone, $type = "forgetPwd");
         $result = "888888";
         $_SESSION['forgetPwd'] = "888888";
         if ($result) {
             $_SESSION['phone'] = $phone;
-            Cookie::set("forgetPwd",$_SESSION['forgetPwd'],60 * 5);//验证码5分钟过后过期
+            Cookie::set("forgetPwd", $_SESSION['forgetPwd'], 60 * 5);//验证码5分钟过后过期
             $data['retmsg'] = "发送验证码成功！";
             $data['status'] = 1;
             $response->sendJSON($data);
@@ -209,7 +221,7 @@ class User_Controller extends MerchantController
         $phone = htmlspecialchars($phone);
         $chkcode = htmlspecialchars($phoneCode);
         if ($imgCode != $_SESSION ['verifycode']) {
-            $data['retmsg'] = "验证码不正确！";
+            $data['retmsg'] = "图形验证码不正确！";
             $data['status'] = '0';
             $response->sendJSON($data);
         }
@@ -250,8 +262,8 @@ class User_Controller extends MerchantController
      */
     public function forgotSavePwd(Request $request, Response $response)
     {
-      $cookiePhone=Cookie::get("forgetPwd");
-        if(empty($cookiePhone)){
+        $cookiePhone = Cookie::get("forgetPwd");
+        if (empty($cookiePhone)) {
             unset($_SESSION['step']);
             $data['retmsg'] = "手机验证码已过期！";
             $data['status'] = -1;
@@ -283,7 +295,7 @@ class User_Controller extends MerchantController
         }
 
         if (strlen($password) < 6 || strlen($password) > 12) {
-            $data['retmsg'] = "密码格式错误";
+            $data['retmsg'] = "密码不能小于6位数或大于12位数！";
             $data['status'] = 0;
             $response->sendJSON($data);
         }

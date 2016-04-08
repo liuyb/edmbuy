@@ -64,7 +64,7 @@
             <td><!--{$val.comment_rank}--></td>
             <td><!--{$val.user_name}--></td>
             <td><!--{$val.add_time|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
-            <!--{if $val.is_reply==1}-->
+            <!--{if !empty($val.comment_reply)}-->
             <td>已回复</td>
             <td style="color: red" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
             <div class="rplay-hidden-view" id="common<!--{$val.comment_id}-->">
@@ -93,13 +93,13 @@
         var curpage=<!--{$page.curpage}-->
         var maxpage =<!--{$page.maxpage}-->
         var totalnum =<!--{$page.totalnum}-->
-        var current=<!--{$current}-->
+        var currentType =<!--{$current}-->
     $(function(){
-        generatePage(curpage, maxpage, totalnum ,current);
+        generatePage(curpage, maxpage, totalnum ,currentType);
     })
-    function generatePage(pageNo, totalPage, totalRecords,current) {
+    function generatePage(pageNo, totalPage, totalRecords,currentType) {
         //生成分页
-       kkpager.pagerid ="kkpager"+current;
+       kkpager.pagerid ="kkpager"+currentType;
         kkpager.generPageHtml({
             pno: pageNo,
             //总页码
@@ -123,7 +123,7 @@
             if(ret.status==1){
                      var commonList=ret.common
                 $("#view-rplay"+comment_id).val(commonList.content)
-                $("#mechart-rplay"+comment_id).val(commonList.merchart_content)
+                $("#mechart-rplay"+comment_id).val(commonList.comment_reply)
             }
         })
     }
