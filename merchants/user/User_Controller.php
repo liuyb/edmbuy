@@ -51,14 +51,17 @@ class User_Controller extends MerchantController
             unset($_POST['loginname'], $_POST['password'], $_POST['verifycode'], $_POST['erro']);
             $retuname = $loginname;
             $retupass = $password;
+            if ($erro == 1) {
+                if ('' == $verifycode) {
+                    $retmsg = '请输入验证码';
+                }elseif ($verifycode != $_SESSION['verifycode']) {
+                    $retmsg = '请输入正确的验证码';
+                }
+            }
             if ('' == $loginname) {
                 $retmsg = '请输入用户名';
             } elseif ('' == $password) {
                 $retmsg = '请输入密码';
-            } elseif ('' == $verifycode && $erro == 1) {
-                $retmsg = '请输入验证码';
-            } elseif ($verifycode != $_SESSION['verifycode'] && $erro == 1) {
-                $retmsg = '请输入正确的验证码';
             } else {
                 $check = User_Model::check_logined($loginname, $password, $login_uinfo);
                 if ($check < 0) {
@@ -98,8 +101,8 @@ class User_Controller extends MerchantController
     public function logout(Request $request, Response $response)
     {
         // Unset all of the session variables.
-        $cookie=Cookie::get("member_me");
-        if(!empty($cookie)){
+        $cookie = Cookie::get("member_me");
+        if (!empty($cookie)) {
             Cookie::remove("member_me");//清除
         }
         session_destroy();

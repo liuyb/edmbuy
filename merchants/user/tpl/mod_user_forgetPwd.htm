@@ -11,7 +11,7 @@
 
 <div id="forget_bg">
     <div id="find_word_tit">找回密码</div>
-        <!--{if $step==1}-->
+    <!--{if $step==1}-->
     <div id="find_word_one" class="find_one">
         <div class="one_password">
             <img src="/themes/merchants/img/yzsf2.png"><img src="/themes/merchants/img/szmm2.png"><img src="/themes/merchants/img/wc2.png">
@@ -41,71 +41,71 @@
         <div id="next_one">
             <button id="next_step" class="one_submit">下一步</button>
         </div>
+    </div>
+    <!--{/if}-->
+
+    <!--{if $step==2}-->
+    <div id="find_word_one" class="find_two">
+        <div class="one_password">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img src="/themes/merchants/img/wc2.png">
         </div>
-        <!--{/if}-->
+        <div class="one_flow">
+            <ul>
+                <li class="flow_on">验证身份</li>
+                <li class="flow_on">设置新密码</li>
+                <li>完成</li>
+            </ul>
+        </div>
 
-        <!--{if $step==2}-->
-        <div id="find_word_one" class="find_two">
-            <div class="one_password">
-                <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img src="/themes/merchants/img/wc2.png">
-            </div>
-            <div class="one_flow">
-                <ul>
-                    <li class="flow_on">验证身份</li>
-                    <li class="flow_on">设置新密码</li>
-                    <li>完成</li>
-                </ul>
+        <div class="one_verify">
+            <div class="phone_id">新登录密码：<input type="password" value="" class="verify_phone"  class="new_password" placeholder="请输入6-12位的新登录密码" name="pwd"></div>
+            <div class="phone_id">确认新密码：<input type="password" value="" id="verify_phone" class="ok_new_password" placeholder="请再次输入密码" name="confirmpwd"></div>
+            <input type="hidden" name="phone" value="<!--{$phone}-->"/>
+        </div>
+        <div id="next_one">
+            <button id="next_step" class="two_submit">提交</button>
+        </div>
+    </div>
+    <!--{/if}-->
+
+    <!--{if $step==3}-->
+    <div id="find_word_one" class="find_three">
+        <div class="one_password">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm1.png"><img src="/themes/merchants/img/wc1.png">
+        </div>
+        <div class="one_flow">
+            <ul>
+                <li class="flow_on">验证身份</li>
+                <li class="flow_on">设置新密码</li>
+                <li>完成</li>
+            </ul>
+        </div>
+
+        <div class="three_infos">
+            <div class="success_img">
+                <img src="/themes/merchants/img/cg.png">
             </div>
 
-            <div class="one_verify">
-                <div class="phone_id">新登录密码：<input type="password" value="" class="verify_phone"  class="new_password" placeholder="请输入6-12位的新登录密码" name="pwd"></div>
-                <div class="phone_id">确认新密码：<input type="password" value="" id="verify_phone" class="ok_new_password" placeholder="请再次输入密码" name="confirmpwd"></div>
-                <input type="hidden" name="phone" value="<!--{$phone}-->"/>
-            </div>
-            <div id="next_one">
-                <button id="next_step" class="two_submit">提交</button>
+            <div class="success_ts">
+                <p class="ts_tit">新密码设置成功！</p>
+                <p class="ts_password">请牢记您新设置的密码。<a href="/login">返回重新登录</a></p>
             </div>
         </div>
-        <!--{/if}-->
-
-        <!--{if $step==3}-->
-        <div id="find_word_one" class="find_three">
-            <div class="one_password">
-                <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm1.png"><img src="/themes/merchants/img/wc1.png">
-            </div>
-            <div class="one_flow">
-                <ul>
-                    <li class="flow_on">验证身份</li>
-                    <li class="flow_on">设置新密码</li>
-                    <li>完成</li>
-                </ul>
-            </div>
-
-            <div class="three_infos">
-                <div class="success_img">
-                    <img src="/themes/merchants/img/cg.png">
-                </div>
-
-                <div class="success_ts">
-                    <p class="ts_tit">新密码设置成功！</p>
-                    <p class="ts_password">请牢记您新设置的密码。<a href="/login">返回重新登录</a></p>
-                </div>
-            </div>
-        </div>
+    </div>
     <!--{/if}-->
 </div>
 
 <script>
-//    $(".one_submit").on("click",function(){
-//        $(".find_one").hide();
-//        $(".find_two").show();
-//    })
+    //    $(".one_submit").on("click",function(){
+    //        $(".find_one").hide();
+    //        $(".find_two").show();
+    //    })
 
-//    $(".two_submit").on("click",function(){
-//        $(".find_one").hide();
-//        $(".find_two").hide();
-//        $(".find_three").show();
-//    })
+    //    $(".two_submit").on("click",function(){
+    //        $(".find_one").hide();
+    //        $(".find_two").hide();
+    //        $(".find_three").show();
+    //    })
 
 
 
@@ -124,9 +124,9 @@
         }
 
 
-         url="/user/getPhoneCodeAjax";
-            var phone=$("input[name=phone]").val()
-            var  data ={"phone":phone};
+        url="/user/getPhoneCodeAjax";
+        var phone=$("input[name=phone]").val()
+        var  data ={"phone":phone};
         F.postWithLoading(url,data,function(ret){
             showMsg(ret.retmsg)
             if(ret.status==1){
@@ -172,7 +172,7 @@
         var data ={'phone':phone,'imgCode':imgCode,"phoneCode":phoneCode};
         F.postWithLoading(url,data,function(ret){
             if(ret.status==0){
-               showMsg(ret.retmsg);
+                showMsg(ret.retmsg);
             }else{
                 window.location.href="/forgetPwd?step=2";
             }
@@ -180,7 +180,7 @@
     })
     var phone =<!--$phone-->;
     $(".two_submit").click(function(){
-       var pwd=$("input[name=pwd]").val();
+        var pwd=$("input[name=pwd]").val();
         var confirmpwd=$("input[name=confirmpwd]").val();
         if(pwd==""||confirmpwd==""||pwd!=confirmpwd){
             showMsg("参数错误!");
