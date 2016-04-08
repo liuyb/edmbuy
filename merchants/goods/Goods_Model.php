@@ -261,11 +261,12 @@ class Goods_Model extends Model
 
     static function batchUpdateGoods(array $goods_ids, $field, $val)
     {
+        $merchant_id = $GLOBALS['user']->uid;
         if (empty($goods_ids)) {
             return 0;
         }
         $goods_ids = implode(',', $goods_ids);
-        $sql = "update shp_goods set $field = $val where goods_id in ($goods_ids) ";
+        $sql = "update shp_goods set $field = $val where goods_id in ($goods_ids) and merchant_id = '$merchant_id' ";
         D()->query($sql);
         return D()->affected_rows();
     }

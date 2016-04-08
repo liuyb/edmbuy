@@ -1,0 +1,69 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+
+<!--{include file="inc/left_common.htm"}-->
+<div id="order_list_right">
+	<div id="order_type">
+		<ul>	
+			<a href="javascript:void(0);"><li class="order_type_on">管理</li></a>
+			<a href="/order/shipment/info"><li>新增</li></a>
+		</ul>
+	</div>
+	<!--{if isset($result) && $result}-->
+	<!--{foreach from=$result item=ret}-->
+	<div id="commodity_list" class="shipmentDIV" style="margin-top:0;padding-bottom:20px;">
+		<div id="commodity_name" style="border:0">
+			<p><!--{$ret.tpl_name}--></p>
+			<button id="fre_update" class="commondity_btn ship_edit" data-id='<!--{$ret.sp_id}-->'>修改</button>
+			<button id="fre_del" class="commondity_btn ship_delete" data-id='<!--{$ret.sp_id}-->'>删除</button>
+			<span id="late_time">最后编辑时间：<i><!--{$ret.last_time}--></i></span>
+		</div>
+		<div id="fre_common">
+			<table cellspacing="0" cellpadding="0" id="pre_tab">
+				<tr>
+					<th width="500px" style="text-align:left;padding-left:20px;">可配送至</th>
+					<th width="160px">首件(个)</th>
+					<th width="160px">运费(元)</th>
+					<th width="160px">续件(个)</th>
+					<th width="160px">运费(元)</th>
+				</tr>
+				<!--{foreach from=$ret.items item=tpl}-->
+				<tr>
+					<td id="ps_address"><!--{$tpl.regions_name}--></td>
+					<td><!--{$tpl.n_num}--></td>
+					<td><!--{$tpl.n_fee}--></td>
+					<td><!--{$tpl.m_num}--></td>
+					<td><!--{$tpl.m_fee}--></td>
+				</tr>
+				<!--{/foreach}-->
+			</table>
+		</div>
+	</div>
+	<!--{/foreach}-->
+	<!--{else}-->
+	<div id="commodity_list" class="shipmentDIV" style="margin-top:0;padding:20px;">你还没有添加运费模板~~</div>
+	<!--{/if}-->
+</div>
+<script>
+$(function(){
+	$("#order_list_right").on('click', '.ship_delete', function(){
+		var obj = $(this);
+		showConfirm('确定要删除当前运费模板吗？', function(){
+			var sp_id = obj.data("id");
+			F.post('/order/shipment/away', {sp_id : sp_id}, function(ret){
+				showMsg(ret.retmsg);
+				if(ret.status){
+					obj.closest(".shipmentDIV").first().remove();
+					if(!$(".shipmentDIV").length){
+						window.location.reload();
+					}
+				}
+			});
+		});
+	});
+	$("#order_list_right").on('click', '.ship_edit', function(){
+		var obj = $(this);
+		var sp_id = obj.data("id");
+		window.location.href="/order/shipment/info?sp_id="+sp_id;
+	});
+});
+</script>

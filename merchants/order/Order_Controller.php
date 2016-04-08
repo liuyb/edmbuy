@@ -18,7 +18,11 @@ class Order_Controller extends MerchantController {
             'order/price'    => 'update_order_price',
             'order/consignee'    => 'update_order_consignee',
             'order/shipping/form' => 'goto_shipping',
-            'order/shipping'    => 'update_shipping'
+            'order/shipping'    => 'update_shipping',
+            'order/shipment/list' => 'shipment_list',
+            'order/shipment/info' => 'shipment_info',
+            'order/shipment/away' => 'shipment_delete',
+            'order/shipment' => 'shipment_save'
         ];
     }
     
@@ -262,7 +266,118 @@ class Order_Controller extends MerchantController {
         }
         $response->sendJSON($ret);
     }
+    
+    /**
+     * 运费模板列表页面
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shipment_list(Request $request, Response $response){
+        $this->v->set_tplname('mod_order_shipment');
+        $this->setPageLeftMenu('order', 'shipment');
+        $ret = Shipment_Model::getShipmentTpl();
+        $this->v->assign('result', $ret);
+        $response->send($this->v);
+    }
+    
+    /**
+     * 跳转到新增修改运费模板页面
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shipment_info(Request $request, Response $response){
+        $this->v->set_tplname('mod_order_shipinfo');
+        $this->setPageLeftMenu('order', 'shipment');
+        $sp_id = $request->get('sp_id', 0);
+        $tpl_name = "";
+        if($sp_id && $sp_id > 0){
+            $ret = Shipment_Model::getShipmentTpl($sp_id);
+            if($ret && count($ret) > 0){
+                $ret = $ret[0];
+            }else{
+                Fn::show_pcerror_message('模板数据不存在！');
+            }
+            $tpl_name = $ret['tpl_name'];
+            $this->v->assign('result', $ret['items']);
+        }
+        $this->v->assign('sp_id', $sp_id);
+        $this->v->assign('tpl_name', $tpl_name);
+        $region_list = Order::get_regions(1, 1);
+        $this->v->assign('region_list', $region_list);
+        $response->send($this->v);
+    }
+    
+    /**
+     * 删除运费模板
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shipment_delete(Request $request, Response $response){
+        if($request->is_post()){
+            $sp_id = $request->post('sp_id', -1);
+            $result = Shipment_Model::deleteShipment($sp_id);
+        }
+        if ($result) {
+            $data['status'] = 1;
+            $data['retmsg'] = "删除模板成功！";
+        } else {
+            $data['status'] = 0;
+            $data['retmsg'] = "删除模板失败！";
+        }
+        $response->sendJSON($data);
+    }
 	
+    /**
+     * 新增修改运费模板
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shipment_save(Request $request, Response $response){
+        $ret = false;
+        $retmsg = "非法的提交请求！";
+        if($request->is_post()){
+            $sp_id = $request->post('sp_id', 0);
+            $tpl_name = $request->post('tpl_name','');
+            $regions = $request->post('regions','');
+            $region_json = $request->post('region_json','');
+            $n_num = $request->post('n_num',0);
+            $n_fee = $request->post('n_fee',0);
+            $m_num = $request->post('m_num',0);
+            $m_fee = $request->post('m_fee',0);
+            if($tpl_name && $regions){
+                if(Shipment_Model::isShipTplNameExists($sp_id, $tpl_name)){
+                    $retmsg = "模板名称重复！";
+                }else{
+                    $params['tpl_name'] = $tpl_name;
+                    $params['template'] = [];
+                    if(is_array($regions)){
+                        for($i = 0,$len = count($regions); $i < $len; $i++){
+                            $rg = $region_json[$i];
+                            if($rg){
+                                $rg = strtr($rg, array('{' => '【', '}' => '】'));
+                            }
+                            array_push($params['template'], array("regions" => $regions[$i], "region_json" => htmlentities($rg),"n_num" => $n_num[$i],"n_fee" => $n_fee[$i],
+                                "m_num" => $m_num[$i],"m_fee" => $m_fee[$i]
+                            ));
+                        }
+                    }else{
+                        if($region_json){
+                            $region_json = strtr($region_json, array('{' => '【', '}' => '】'));
+                        }
+                        array_push($params['template'], array("regions" => $regions, "region_json" => htmlentities($region_json), "n_num" => $n_num,"n_fee" => $n_fee,
+                            "m_num" => $m_num,"m_fee" => $m_fee
+                        ));
+                    }
+                    $ret = Shipment_Model::addOrUpdateShipmentTpl($sp_id, $params);
+                    $retmsg = $ret ? '操作成功' : '操作失败！';
+                }
+            }
+        }
+        $data['ret'] = $ret;
+        $data['retmsg'] = $retmsg;
+        $response->sendJSON($data);
+    }
+    
 }
 
 /*----- END FILE: Order_Controller.php -----*/
