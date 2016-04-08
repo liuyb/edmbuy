@@ -30,6 +30,8 @@ class Upload
     
     public $standardwidth = 640;
     
+    public $standardheight;
+    
     // 是否生成缩略图
     public $has_thumb = false;
     
@@ -101,11 +103,12 @@ class Upload
         $oripath = $this->writeImgData($oripath, $file_data);
         if ($thumbpath) {
             // thumb版本
-            $thumbpath = $this->generateNewImage($oripath, $thumbpath, $this->thumbwidth, $imgtype, $width, $height, $ratio);
+            $thumbpath = $this->generateNewImage($oripath, $thumbpath, $this->thumbwidth, $imgtype, $width, $height, intval($this->thumbwidth / $ratio));
         }
         if ($stardardpath) {
             // 标准版本
-            $stardardpath = $this->generateNewImage($oripath, $stardardpath, $this->standardwidth, $imgtype, $width, $height, $ratio);
+            $destheight = $this->standardheight ? $this->standardheight : intval($this->standardwidth / $ratio);
+            $stardardpath = $this->generateNewImage($oripath, $stardardpath, $this->standardwidth, $imgtype, $width, $height, $destheight);
         }
         if (! $oripath || empty($oripath)) {
             return UPload::FILE_UPLOAD_ERROR;
@@ -131,7 +134,7 @@ class Upload
         return '';
     }
 
-    private function generateNewImage($oripath, $destpath, $destwidth, $imgtype, $width, $height, $ratio)
+    private function generateNewImage($oripath, $destpath, $destwidth, $imgtype, $width, $height, $destheight)
     {
         if ($width <= $destwidth) { // 只有宽度大于$destwidth才需要生成缩略图，否则直接用原图做缩略图
             return $oripath;
@@ -156,7 +159,7 @@ class Upload
             
             if (is_resource($img)) {
               
-                $rv = $this->writeImgFile($img, SIMPHP_ROOT . $destpath, $imgtype, $width, $height, $destwidth, intval($destwidth / $ratio));
+                $rv = $this->writeImgFile($img, SIMPHP_ROOT . $destpath, $imgtype, $width, $height, $destwidth, $destheight);
                 if ($rv) {
                     return preg_replace("/^" . preg_quote(SIMPHP_ROOT, '/') . "/", '', $destpath);
                 }

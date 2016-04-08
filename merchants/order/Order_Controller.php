@@ -201,11 +201,12 @@ class Order_Controller extends MerchantController {
      * 去发货
      */
     public function goto_shipping(Request $request, Response $response){
+        $muid = $GLOBALS['user']->uid;
         $this->v->set_tplname('mod_order_shipping');
         $order_ids = $request->get('order_ids',0);
         $act = $request->get('act','');
         $fromOrder = $request->get('fromOrder',0);
-        $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and order_id ".Fn::db_create_in($order_ids);
+        $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and merchant_ids='$muid' and order_id ".Fn::db_create_in($order_ids);
         $result = D()->query($sql)->fetch_array_all();
         $shipment_label = "批量发货";
         foreach ($result as &$order){

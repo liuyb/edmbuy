@@ -59,8 +59,13 @@ class Order_Model extends Model {
      * @param unknown $order_id
      */
     static function getOrderDetail($order_id){
-        $sql = "SELECT o.*, IFNULL(u.nick_name,'') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.order_id=$order_id ";
+        $muid = $GLOBALS['user']->uid;
+        $sql = "SELECT o.*, IFNULL(u.nick_name,'') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id 
+                where o.order_id=$order_id and merchant_ids = '$muid' ";
         $order = D()->query($sql)->fetch_array();
+        if(!$order || count($order) == 0){
+            Fn::show_pcerror_message();
+        }
         self::rebuild_order_info($order);
         return $order;
     }

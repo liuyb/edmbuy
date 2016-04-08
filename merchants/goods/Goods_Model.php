@@ -249,10 +249,12 @@ class Goods_Model extends Model
         $goods_ids = implode(',', $goods_ids);
         D()->beginTransaction();
         try {
-            Goods_Atomic::batch_delete_goods($goods_ids);
-            Goods_Atomic::batch_delete_goods_cat($goods_ids);
-            Goods_Atomic::batch_delete_goods_attr($goods_ids);
-            Goods_Atomic::batch_delete_goods_gallery($goods_ids);
+            $affected = Goods_Atomic::batch_delete_goods($goods_ids);
+            if($affected){
+                Goods_Atomic::batch_delete_goods_cat($goods_ids);
+                Goods_Atomic::batch_delete_goods_attr($goods_ids);
+                Goods_Atomic::batch_delete_goods_gallery($goods_ids);
+            }
         } catch (Exception $e) {
             D()->rollback();
         }

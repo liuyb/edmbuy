@@ -78,6 +78,7 @@ class Goods_Controller extends MerchantController
         $selectedCat = 0;
         $options = Goods_Common::cat_list(0);
         if ($goods_id) {
+            Goods_Atomic::check_goods_valid($goods_id);
             $goods = Items::load($goods_id);
             $selectedCat = $goods->cat_id;
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
