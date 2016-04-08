@@ -99,7 +99,8 @@ class User_Controller extends MerchantController
     public function logout(Request $request, Response $response)
     {
         // Unset all of the session variables.
-        if(!empty(Cookie::get("member_me"))){
+        $cookie=Cookie::get("member_me");
+        if(!empty($cookie)){
             Cookie::remove("member_me");//清除
         }
         session_destroy();
