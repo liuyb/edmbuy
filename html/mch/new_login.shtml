@@ -21,7 +21,14 @@
 <!--#include file="login_new_header.html"-->
 
 <style>
-
+::-ms-clear,::-ms-reveal{display:none;}
+#verifycode{
+	width: 200px;
+  	border: 1px solid #e9e9e9;
+  	margin: 15px 40px;
+  	height: 40px;
+  	padding-left: 10px;
+}
 </style>
 
 <div class="login">	
@@ -31,11 +38,9 @@
 			<form name="loginForm" id="loginForm" method="POST" action="/login">
 				<input type="text" name="loginname" id="loginname" class="input" value="" maxlength="20" placeholder="请输入注册时的手机号码">
 			    <input type="password" name="password" id="password" class="input" value="" maxlength="20" placeholder="请输入登录密码">
-			
-			    <!-- <p class="submit">
-			      <input type="text" name="verifycode" id="verifycode" class="input input-short" value="" maxlength="4">
-			      <img id="verifyimg" src="/vc_mch.php" onclick="" alt="验证码" title="点击刷新验证码">
-			    </p> -->
+				<input type="text" name="verifycode" id="verifycode" class="input input-short" value="" maxlength="4">
+			    <img id="verifyimg" src="/vc_mch.php" onclick="" alt="验证码" title="点击刷新验证码">
+			    
 			    
 			    <div style="margin:0 40px;">
 			    	<a href="javascript:;" class="remember_me">记住我</a>

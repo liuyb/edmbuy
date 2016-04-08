@@ -524,13 +524,19 @@
 	padding:0 20px;
 }
 #left_check_prov li,#right_check_city li{ 
+	height:40px;
+	line-height:40px;
+	padding:0 20px;
+}
+#left_check_prov span,#right_check_city span{ 
+	float:right;
 	background: url(../img/xk1.png) no-repeat 95% ;
 	height:40px;
 	line-height:40px;
 	padding:0 20px;
 }
 .check_prov_on{
-	background: url(../img/xz.png) no-repeat 95% !important;
+	background: url(../img/xz.png) no-repeat 97% !important;
 }
 #right_city{
 	background:#f7f7f7;
@@ -559,10 +565,10 @@
   	border-radius: 4px;	
 }
 .mouse_on{
-	background:#eee url(../img/xk1.png) no-repeat 95% !important;
+	background:#eee url(../img/xk1.png) no-repeat 91% !important;
 }
 .mouse_sure_on{
-	background:#eee url(../img/xz.png) no-repeat 95% !important;
+	background:#eee url(../img/xz.png) no-repeat 91% !important;
 }
 #left_check_prov,#right_check_city{
 	height:240px;

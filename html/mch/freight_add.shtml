@@ -19,6 +19,12 @@
 </head>
 <body id="bg_common"> 
 <style>
+::-webkit-scrollbar  
+{  
+    width: 16px;  
+    height: 16px;  
+    background-color: #fff;  
+}  
 </style>
 
 
@@ -88,15 +94,15 @@
 		<div id="left_prov">省份</div>
 		<div id="left_check_prov">
 			<ul>
-				<li>广东省</li>
-				<li>北京市</li>
-				<li>湖北省</li>
-				<li>河南省</li>
-				<li>湖南省</li>
-				<li>四川省</li>
-				<li>河南省</li>
-				<li>湖南省</li>
-				<li>四川省</li>
+				<li>广东省<span></span></li>
+				<li>北京市<span></span></li>
+				<li>湖北省<span></span></li>
+				<li>河南省<span></span></li>
+				<li>湖南省<span></span></li>
+				<li>四川省<span></span></li>
+				<li>河南省<span></span></li>
+				<li>湖南省<span></span></li>
+				<li>四川省<span></span></li>
 			</ul>
 		</div>
 	</div>
@@ -104,14 +110,15 @@
 		<div id="right_city">城市<span class="city_all">全选</span></div>
 		<div id="right_check_city">
 			<ul>
-				<li>广东省</li>
-				<li>北京市</li>
-				<li>湖北省</li>
-				<li>河南省</li>
-				<li>湖南省</li>
-				<li>四川省</li>
-				<li>湖南省</li>
-				<li>四川省</li>
+				<li>广东省<span></span></li>
+				<li>北京市<span></span></li>
+				<li>湖北省<span></span></li>
+				<li>河南省<span></span></li>
+				<li>湖南省<span></span></li>
+				<li>四川省<span></span></li>
+				<li>河南省<span></span></li>
+				<li>湖南省<span></span></li>
+				<li>四川省<span></span></li>
 			</ul>
 		</div>
 	</div>
@@ -143,7 +150,19 @@ $("#close_add").on("click",function(){
 })
 
 //选择省市
-$("#left_check_prov li,#right_check_city li").on("click",function(){
+$("#right_check_city li").on("click",function(){
+	if($(this).hasClass("check_prov_on")){
+		$(this).removeClass("mouse_sure_on"); 
+		$(this).removeClass("check_prov_on");
+	}else{
+		$(this).removeClass("mouse_on"); 
+		$(this).addClass("check_prov_on");
+	}
+	
+	cartSelectAll();
+})
+
+$("#left_check_prov span").on("click",function(){
 	if($(this).hasClass("check_prov_on")){
 		$(this).removeClass("mouse_sure_on"); 
 		$(this).removeClass("check_prov_on");
