@@ -11,53 +11,51 @@
 }
 </style>
 <!--[/HEAD_CSS]-->
-<div id="body" class="ifr-body">
-	<!--{include file="inc/left_common.htm"}-->
-	<div id="order_list_right">
-		<div id="order_type">
-			<ul>	
-				<li class="order_type_on">所有订单</li>
-				<li data-type='100'>待付款</li>
-				<li data-type='105'>备货中</li>
-				<li data-type='101'>待发货</li>
-				<li data-type='103'>待收货</li>
-				<li data-type='102'>交易完成</li>
-				<li data-type='104'>交易关闭</li>
-			</ul>
-		</div>
+<!--{include file="inc/left_common.htm"}-->
+<div id="order_list_right">
+	<div id="order_type">
+		<ul>	
+			<li class="order_type_on">所有订单</li>
+			<li data-type='100'>待付款</li>
+			<li data-type='105'>备货中</li>
+			<li data-type='101'>待发货</li>
+			<li data-type='103'>待收货</li>
+			<li data-type='102'>交易完成</li>
+			<li data-type='104'>交易关闭</li>
+		</ul>
+	</div>
+	
+	<div id="choose_condition">
+		<input type="input" id="start_date" readonly class="form_datetime check_time_left"/>
+		<!-- <div class="check_time_left" id="time_left">
+		</div> --> 
+		<span style="padding-left:15px;">至</span>
+		<input type="input" id="end_date" readonly class="form_datetime check_time_left"/>
+		<input class="check_time_left" contenteditable id="order_num" placeholder="订单号">
+		<input class="check_time_left" contenteditable id="buyer"  placeholder="买家">
+		<button id="search_type_infos">搜索</button>
+	</div>
+	
+	<div id="type_infos">
+		<table cellspacing="0" cellpadding="0" id="type_table_list">
+			<tr>
+				<th>选择</th>
+				<th>订单号</th>
+				<th>买家</th>
+				<th>下单时间</th>
+				<th>订单总额</th>
+				<th>订单状态</th>
+				<th>支付方式</th>
+				<th width="100px;">操作</th>
+			</tr>
+			<tbody class="body-data"></tbody>
+		</table>
+	</div>
 		
-		<div id="choose_condition">
-			<input type="input" id="start_date" readonly class="form_datetime check_time_left"/>
-			<!-- <div class="check_time_left" id="time_left">
-			</div> --> 
-			<span style="padding-left:15px;">至</span>
-			<input type="input" id="end_date" readonly class="form_datetime check_time_left"/>
-			<input class="check_time_left" contenteditable id="order_num" placeholder="订单号">
-			<input class="check_time_left" contenteditable id="buyer"  placeholder="买家">
-			<button id="search_type_infos">搜索</button>
-		</div>
-		
-		<div id="type_infos">
-			<table cellspacing="0" cellpadding="0" id="type_table_list">
-				<tr>
-					<th>选择</th>
-					<th>订单号</th>
-					<th>买家</th>
-					<th>下单时间</th>
-					<th>订单总额</th>
-					<th>订单状态</th>
-					<th>支付方式</th>
-					<th width="100px;">操作</th>
-				</tr>
-				<tbody class="body-data"></tbody>
-			</table>
-		</div>
-			
-		<div id="list_type_foot">
-			<span id="all_check"></span>
-			<button id="batch_send" onclick="deliveryOrderGoods(null, 'ship');">批量发货</button>
-			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
-		</div>
+	<div id="list_type_foot">
+		<span id="all_check"></span>
+		<button id="batch_send" onclick="deliveryOrderGoods(null, 'ship');">批量发货</button>
+		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
 <script>

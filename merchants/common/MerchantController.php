@@ -31,6 +31,14 @@ class MerchantController extends Controller {
 	public function init($action, Request $request, Response $response)
 	{
 		$this->setPageView($request, $response);
+		//拦截处理页面头部菜单高亮显示
+		$q = $request->q();
+		$q = explode('/', $q);
+		if($q && count($q) > 0){
+    		$this->setSystemNavigate($q[0]);
+		}else{
+		    $this->setSystemNavigate('index');
+		}
 	}
 	
 	/**

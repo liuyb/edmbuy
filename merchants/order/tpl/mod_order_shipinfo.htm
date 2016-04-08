@@ -1,0 +1,402 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+
+<!--{include file="inc/left_common.htm"}-->
+<div id="order_list_right">
+	<div id="order_type">
+		<ul>	
+			<a href="/order/shipment/list"><li>管理</li></a>
+			<a href="javascript:void(0)"><li class="order_type_on"><!--{if isset($tpl_name) && $tpl_name }-->修改<!--{else}-->新增<!--{/if}--></li></a>
+		</ul>
+	</div>
+	<form id="shipmentForm" onsubmit="return submitShipment();">
+	<input type='hidden' name='sp_id' value="<!--{$sp_id}-->"/>
+	<div id="commodity_list" style="margin-top:0;padding-bottom:20px;">
+		<div id="name_fre">运费模板名称：<input type="text" value="<!--{$tpl_name}-->" name="tpl_name" maxlength="50" required></div>
+		
+		<div style="padding:0 20px 5px;font-size:12px;color:#7d7d7d;">运送方式：</div>
+		<div id="fre_common">
+			<table cellspacing="0" cellpadding="0" id="pre_tab">
+				<tr>
+					<th width="580px">可配送至</th>
+					<th width="140px">首件(个)</th>
+					<th width="140px">运费(元)</th>
+					<th width="140px">续件(个)</th>
+					<th width="140px">运费(元)</th>
+				</tr>
+				<tbody id="shipmentBody">
+				<!--{if isset($result) && $result}-->
+				<!--{foreach from=$result item=sp}-->
+				<tr>
+					<td id="ps_address">
+						<input type='hidden' name='regions' value="<!--{$sp.regions}-->"/>
+						<input type='hidden' name='region_json' value="<!--{$sp.region_json}-->" />
+						<p id="fre_address_infos"><!--{$sp.regions_name}--></p>
+						<p id="fre_handle"><a href="javascript:void(0);" class="shipedit">编辑</a><a href="javascript:void(0);" class="shipdelete">删除</a></p>
+					</td>
+					<td><input class="pre_tab_input" name="n_num" type="text" value="<!--{$sp.n_num}-->"></td>
+					<td><input class="pre_tab_input" name="n_fee" type="text" value="<!--{$sp.n_fee}-->"></td>
+					<td><input class="pre_tab_input" name="m_num" type="text" value="<!--{$sp.m_num}-->"></td>
+					<td><input class="pre_tab_input" name="m_fee" type="text" value="<!--{$sp.m_fee}-->"></td>
+				</tr>
+				<!--{/foreach}-->
+				<!--{/if}-->
+				</tbody>
+				<tr>
+					<td colspan="5" id="add_area"><button type='button'>添加配送区域</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div style="margin:20px -20px;">
+		<button type="submit" id="shipmentSaveBtn" class="private_btn" style="width:120px;">保存</button>
+	</div>
+	</form>
+</div>
+
+<div class="mask"></div>
+
+<div id="address_fixed">
+	<div id="af_tit">
+		<span style="margin-left:20px;">可配送区域设置</span>
+		<a href="javascript:;"><span id="close_add"><img src="/themes/merchants/img/bg_close.png"></span></a>
+	</div>
+	<div style="font-size:12px;color:#7d7d7d;margin:10px 20px 5px;">选择支持配送地区</div>
+	<div id="check_city_left">
+		<div id="left_prov">省份</div>
+		<div id="left_check_prov">
+			<ul>
+				<!--{foreach from=$region_list item=region}-->
+				<li data-id="<!--{$region.region_id}-->"><!--{$region.region_name}--><span></span></li>
+				<!--{/foreach}-->
+			</ul>
+		</div>
+	</div>
+	<div id="check_city_right">
+		<div id="right_city">城市<span class="city_all">全选</span></div>
+		<div id="right_check_city">
+			<ul>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="clear"></div>
+	<div style="margin:30px 0;">
+		<button id="cacel_btn">取消</button>
+		<button id="sure_check" class="private_btn">确定</button>
+	</div>
+</div>
+<script>
+//当前选中的省市ID缓存 
+var regions_selected = {};
+
+function submitShipment(){
+	if(!$("#shipmentForm").formValid()){
+		return false;
+	}
+	var selectRegion = $("#shipmentBody").find("tr").length;
+	if(selectRegion == 0){
+		showMsg('至少要有一个配送区域！');
+		return false;
+	}
+	var data = $("#shipmentForm").serializeJson();
+	$("#shipmentSaveBtn").css('opacity',0.2).attr("disabled");
+	F.post('/order/shipment', data, function(rt){
+		showMsg(rt.retmsg);
+		if(rt && rt.ret){
+			window.location.href='/order/shipment/list';
+		}else{
+			$("#shipmentSaveBtn").css('opacity',1).removeAttr("disabled");
+		} 
+	});
+	return false;
+}
+
+$(function(){
+	//弹出层开启
+	$("#add_area").on("click", 'button', function(){
+		openDialog();
+	})
+	//弹出层关闭
+	$("#close_add, #cacel_btn").on("click",function(){
+		closeDialog();
+	})
+
+	$("#left_check_prov span").on("click",function(e){
+		e.stopPropagation();
+		var obj = $(this);
+		var liobj = obj.closest("li").first();
+		if(obj.hasClass("check_prov_on")){
+			liobj.removeClass("left_mouse_sure_on");
+			obj.removeClass("check_prov_on");
+		}else{
+			liobj.addClass("left_mouse_sure_on");
+			obj.addClass("check_prov_on");
+		}
+		getRightRegions(liobj);
+	})
+	
+	$("#left_check_prov li").on("click",function(){
+		getRightRegions($(this));
+	})
+
+	$("#address_fixed").on("click",'#right_check_city li',function(){
+		if($(this).hasClass("check_prov_on")){
+			$(this).removeClass("right_mouse_sure_on");
+			$(this).removeClass("check_prov_on");
+		}else{
+			$(this).addClass("right_mouse_sure_on");
+			$(this).addClass("check_prov_on");
+		}
+		cartSelectAll();
+		leftCheckChange();
+		addRegionCache();
+	});
+
+	$("#address_fixed").on("mouseover",'#left_check_prov li',function(){
+		if($(this).find("span").hasClass("check_prov_on")){
+			$(this).addClass("left_mouse_sure_on");
+		}
+		else{
+			$(this).addClass("left_mouse_on");
+		}
+	});
+	
+	$("#address_fixed").on("mouseover",'#right_check_city li',function(){
+		if($(this).hasClass("check_prov_on")){
+			$(this).addClass("right_mouse_sure_on");
+		}
+		else{
+			$(this).addClass("right_mouse_on");
+		}
+	});
+
+	$("#address_fixed").on("mouseout",'#left_check_prov li',function(){
+		$(this).removeClass("left_mouse_on");
+		$(this).removeClass("left_mouse_sure_on");
+	});
+	
+	$("#address_fixed").on("mouseout",'#right_check_city li',function(){
+		$(this).removeClass("right_mouse_on");
+		$(this).removeClass("right_mouse_sure_on");
+	});
+
+	//全选
+	$(".city_all").on("click",function(){
+		if($(this).hasClass("city_all_sure")){
+			$(this).removeClass("city_all_sure");
+			$("#right_check_city li").removeClass("check_prov_on");
+		}else{
+			$(this).addClass("city_all_sure");
+			$("#right_check_city li").addClass("check_prov_on");
+		}
+		leftCheckChange();
+		addRegionCache();
+	})
+	
+	$("#sure_check").on('click',function(){
+		if(!regions_selected || $.isEmptyObject(regions_selected)){
+			showMsg("请选择支持配送的地区");
+			return;
+		}
+		var body = constructShipBody();
+		//修改则替换
+		if(editObj){
+			var trObj = editObj.closest("tr").first();
+			trObj.replaceWith(body);
+		}else{
+			$("#shipmentBody").append(body);
+		}
+		closeDialog();
+	});
+	
+	$("#shipmentBody").on('click', '.shipdelete', function(){
+		$(this).closest("tr").first().remove();
+	});
+	
+	$("#shipmentBody").on('click', '.shipedit', function(){
+		var parent = $(this).closest("td").first();
+		openDialog(parent);
+	});
+});
+
+//点击左侧省份 显示右侧城市数据
+function getRightRegions(obj){
+	var region_id = obj.data('id');
+	var right = $("#right_check_city ul");
+	right.data('pid',region_id);
+	right.data('ptext',obj.text());
+	var spanObj = obj.find("span");
+	F.get('/order/region',{type : 2, region : region_id},function(ret){
+		var html = "";
+		if(ret && ret.length){
+			ret.forEach(function(item){
+				html += "<li data-id="+item.region_id+">"+item.region_name+"</li>";	
+			});
+		}
+		right.html(html);
+		if(spanObj.hasClass("check_prov_on")){
+			var rightLi = right.find("li");
+			//根据当前缓存的数据做是否勾选判断
+			var currentRegionData = regions_selected[region_id];
+			//缓存不存在做全选处理
+			if($.isEmptyObject(currentRegionData)){
+				rightLi.addClass("check_prov_on");
+			}else{
+				var selectIds = currentRegionData['regions_id'];
+				//缓存记录的为市级全选
+				if(selectIds == region_id){
+					rightLi.addClass("check_prov_on");
+				}else{
+					//缓存的是当前省级下的多个市
+					var regionMap = {};
+					selectIds.forEach(function(item){
+						regionMap[item] = 1;
+					});
+					rightLi.each(function(){
+						var liObj = $(this);
+						var dataId = liObj.data("id");
+						if(regionMap[dataId]){
+							liObj.addClass("check_prov_on");
+						}
+					});
+				}
+			}
+		}
+		cartSelectAll();
+		addRegionCache();
+	});
+}
+
+//是否符合全选
+function cartSelectAll(){
+	if(isRightSelectAll()){
+		$(".city_all").addClass("city_all_sure");
+	}else{
+		$(".city_all").removeClass("city_all_sure");
+	}
+}
+//根据右边选择状态判断左边是否选中
+function leftCheckChange(){
+	var _li_on = $("#right_check_city .check_prov_on").length;
+	var right = $("#right_check_city ul");
+	var region_id = right.data("pid");
+	var left = $("#left_check_prov").find("li[data-id="+region_id+"]").find("span");
+	if(!left){
+		return;
+	}
+	if(!_li_on){
+		left.removeClass("check_prov_on");
+	}else{
+		if(!left.hasClass("check_prov_on")){
+			left.addClass("check_prov_on");
+		}
+	}
+}
+/**
+ * 左侧选中状态变更时做一次缓存操作
+      缓存为 
+      如果市全选
+      	省级ID ： {省级ID , 省级名称}
+      如果市未全选
+      	省级ID ： {多市级ID , 多市级名称}   	
+ */
+function addRegionCache(){
+	var right = $("#right_check_city ul");
+	var region_id = right.data("pid");
+	var region_name = right.data("ptext");
+	if(!region_id || !region_name){
+		return;
+	}
+	if(isRightSelectAll()){
+		regions_selected[region_id] = {regions_id : region_id, regions_name : region_name};
+	}else{
+		var selectedRg = $("#right_check_city").find("li.check_prov_on")
+		selectedRg_id = selectedRg.map(function(){
+			return $(this).data("id")
+		}).toArray();
+		selectedRg_name = selectedRg.map(function(){
+			return $(this).text();
+		}).toArray();
+		if(!selectedRg_id || selectedRg_id.length == 0){
+			delete regions_selected[region_id];
+		}else{
+			selectedRg_name = region_name+"("+selectedRg_name.join("、")+")";
+			regions_selected[region_id] = {regions_id : selectedRg_id, regions_name : selectedRg_name};
+		}
+	}
+}
+//清除缓存
+function clearRegionCache(){
+	regions_selected = {};
+	$("#left_check_prov li").removeClass("left_mouse_sure_on");
+	$("#left_check_prov span").removeClass("check_prov_on");
+	$("#right_check_city ul").replaceWith("<ul></ul>");
+	$(".city_all").removeClass("city_all_sure");
+}
+
+//判断是否全选
+function isRightSelectAll(){
+	var _li = $("#right_check_city li").length;
+	var _li_on = $("#right_check_city .check_prov_on").length;
+	if(_li_on == _li){
+		return true;
+	}else{
+		return false;;
+	}
+}
+
+function constructShipBody(){
+	var html = "";
+	var region_ids = [];
+	var region_names = [];
+	for(var key in regions_selected){
+		var obj = regions_selected[key];
+		region_ids = region_ids.concat(obj.regions_id);
+		region_names.push(obj.regions_name); 
+	}
+	region_ids = region_ids.join(",");
+	if(region_ids){
+		region_ids += ",";//方便sql like 操作
+	}
+	region_names = region_names.join(";");
+	var region_json = JSON.stringify(regions_selected);
+	html += "<tr><td id=\"ps_address\">";
+	html += "<input type='hidden' name='regions' value='"+region_ids+"'/><input type='hidden' name='region_json' value='"+region_json+"' />";
+	html += "<p id=\"fre_address_infos\">"+region_names+"</p>";
+	html += "<p id=\"fre_handle\"><a href=\"javascript:void(0);\" class='shipedit'\">编辑</a><a href=\"javascript:void(0);\" class='shipdelete'>删除</a></p></td>";
+	html += "<td><input class=\"pre_tab_input\" name='n_num' type=\"text\" value=0 data-type='positive'></td>";
+	html += "<td><input class=\"pre_tab_input\" name='n_fee' type=\"text\" value=0.00 data-type='money'></td>";
+	html += "<td><input class=\"pre_tab_input\" name='m_num' type=\"text\" value=0 data-type='positive'></td>";
+	html += "<td><input class=\"pre_tab_input\" name='m_fee' type=\"text\" value=0.00 data-type='money'></td></tr>";
+	return html;
+}
+
+var editObj;
+//打开编辑时需要判断勾选状态,记得关闭时清除对应缓存
+function openDialog(obj){
+	editObj = obj;
+	if(obj){
+		var regions = obj.find("input[name='regions']").val();
+		var region_json = obj.find("input[name='region_json']").val();//湖南;江西(xx、bb)
+		if(region_json){
+			regions_selected = $.parseJSON(region_json);
+			$("#left_check_prov li").each(function(){
+				var liobj = $(this);
+				if(regions_selected[liobj.data("id")]){
+					liobj.find("span").addClass("check_prov_on");
+				}
+			});
+		}
+	}
+	$(".mask").show();
+	$("#address_fixed").show();
+}
+
+function closeDialog(){
+	$(".mask").hide();
+	$("#address_fixed").hide();
+	editObj = null;
+	clearRegionCache();
+}
+
+</script>

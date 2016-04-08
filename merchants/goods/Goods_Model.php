@@ -261,11 +261,12 @@ class Goods_Model extends Model
 
     static function batchUpdateGoods(array $goods_ids, $field, $val)
     {
+        $merchant_id = $GLOBALS['user']->uid;
         if (empty($goods_ids)) {
             return 0;
         }
         $goods_ids = implode(',', $goods_ids);
-        $sql = "update shp_goods set $field = $val where goods_id in ($goods_ids) ";
+        $sql = "update shp_goods set $field = $val where goods_id in ($goods_ids) and merchant_id = '$merchant_id' ";
         D()->query($sql);
         return D()->affected_rows();
     }
@@ -555,7 +556,7 @@ class Goods_Model extends Model
     {
         //comment_id ,id_value,content,comment_rank,user_name,add_time,status
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select count(1) from shp_comment where merchant_id=%d";
+        $sql = "select count(1) from shp_comment where merchant_id='%s'";
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
@@ -574,7 +575,7 @@ class Goods_Model extends Model
      * 商家回复
      * @param $merchart_content 回复类容
      */
-    static function merchantRely($comment_id,$merchart_content)
+    static function merchantRely($comment_id, $merchart_content)
     {
         $merchant_id = $GLOBALS['user']->uid;
 //        public function update($tablename, Array $setarr, $wherearr, $flag = '')
@@ -591,7 +592,7 @@ class Goods_Model extends Model
     static function viewComment($comment_id)
     {
         $sql = "select content,comment_reply from shp_comment where comment_id = %d";
-       return D()->query($sql, $comment_id)->get_one();
+        return D()->query($sql, $comment_id)->get_one();
     }
 
     /**
@@ -672,7 +673,7 @@ class Goods_Model extends Model
      * 改变商品的short_order
      * @param $attr_id
      */
-    static function updateGoodsShortOrder($attr_id, $sort_order,$attr_name)
+    static function updateGoodsShortOrder($attr_id, $sort_order, $attr_name)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_attribute`";
@@ -697,11 +698,11 @@ class Goods_Model extends Model
      */
     static function delGoodsAttr($attr_id)
     {
-            $where = "attr_id in ({$attr_id})";
+        $where = "attr_id in ({$attr_id})";
         if (strlen($attr_id) == 1) {
             $where = "attr_id ={$attr_id}";
         }
-            $tablename="`shp_attribute`";
-            D()->delete($tablename,$where);
+        $tablename = "`shp_attribute`";
+        D()->delete($tablename, $where);
     }
 }

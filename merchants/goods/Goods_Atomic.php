@@ -86,7 +86,8 @@ class Goods_Atomic{
      * @param unknown $goods_ids
      */
     public static function batch_delete_goods($goods_ids){
-        $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) ";
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) and merchant_id = '$merchant_id' ";
         D()->query($sql);
     }
     
