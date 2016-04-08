@@ -72,7 +72,7 @@
         var url = "/user/merchant/getcode";
         var mobile = $("#phone_nums_p").val();
         var data = {"mobile": mobile};
-        F.post(url, data,null,null,function (ret) {
+        $.post(url, data,function (ret) {
             myAlert(ret.retmsg);
             if(ret.status==1){
                 refresh();
@@ -89,7 +89,8 @@
         var inviter =$("#inviter").val();
         var url ="/user/merchant/savereg";
         var data ={"mobile":mobile,"mobile_code":auth_code,"email":email,"invite_code":inviter};
-        F.post(url,data,null,null,function(ret){
+        $.post(url,data,function(ret){
+            myAlert(ret.retmsg);
             if(ret.status==1){
                 var password = ret.pwd;
                 window.location.href="/user/merchant/regsuc?mobile="+mobile+"& pwd="+password;

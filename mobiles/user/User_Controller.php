@@ -709,10 +709,16 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "此手机号已注册";
             $ret['status'] = 0;
             $response->sendJSON($ret);
+        }elseif (!verify_phone($phone)) {
+            $ret['retmsg'] = "手机号码格式不正确！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
         }
         //todo
         //$result = Sms::sendSms($phone, "merchant_reg",false);
         if (true) {
+            $_SESSION['merchant_reg']=8888;
+            $_SESSION['moblie']=$phone;
             $ret['retmsg'] = "发送验证码成功";
             $ret['status'] = 1;
             $response->sendJSON($ret);
@@ -747,6 +753,10 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "验证码不匹配！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
+        }elseif($_SESSION['moblie']!=$mobile){
+            $ret['retmsg'] = "手机号码有误！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
         }
         //验证邮箱是否已经被使用
         $res = User_Model::checkMerchantEmeil($email);
@@ -766,13 +776,17 @@ class User_Controller extends MobileController
         $password = rand_code();
         $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
         if ($res !== false) {
+            unset($_SESSION['mobile']);
+            unset($_SESSION['merchant_reg']);
             //todo
             //Sms::sendSms($mobile, 'reg_success', false);
-            $this->sendEmail($email, $mobile, $password);
-            $ret['retmsg'] = "注册成功！";
-            $ret['status'] = 1;
-            $ret['pwd'] = $password;
-            $response->sendJSON($ret);
+           $res = $this->sendEmail($email, $mobile, $password);
+            if($res && true){
+                $ret['retmsg'] = "注册成功！";
+                $ret['status'] = 1;
+                $ret['pwd'] = $password;
+                $response->sendJSON($ret);
+            }
         }
     }
 
@@ -794,7 +808,7 @@ class User_Controller extends MobileController
         $to = $email;
         $charset = 'utf-8';
         $attachment = '';
-        Mail::send_mail($title, $content, $from, $to, $charset, $attachment);
+        return   Mail::send_mail($title, $content, $from, $to, $charset, $attachment);
     }
 
     /**
