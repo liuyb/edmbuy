@@ -39,10 +39,9 @@
         </div>
         <div style="margin:20px 40px 0;">
           <input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录">
-          <p id="retcode"><!--{$retmsg}--></p>
         </div>
         <div>
-          <a class="apply_for" href="javascript:;" class="remember_me">没有账号？申请入驻</a>
+          <p><a class="apply_for" href="javascript:;" class="remember_me">没有账号？申请入驻</a></p>
         </div>
       </form>
     </div>
@@ -66,8 +65,12 @@
 </div>
 
 <script>
-    var erro = <!--{$erro}-->
+    var erro = <!--{$erro}-->;
+    var retmsg="<!--{$retmsg}-->";
 $(function(){
+  if(erro==1 &&retmsg!=""){
+    showMsg(retmsg);
+  }
   var $loginname = $('#loginname');
   var $password = $('#password');
   if ($loginname.val().trim()=='') $loginname.val('').focus();
@@ -75,15 +78,16 @@ $(function(){
     if(erro==1) $('#verifycode').focus();
 //  else $('#verifycode').focus();
 });
+    $(".remember_me").on("click",function(){
+      if($(this).hasClass("remember_me_on")){
+        $(this).removeClass("remember_me_on");
+        $(this).parent().find("input").val(0);
+      }else{
+        $(this).addClass("remember_me_on");
+        $(this).parent().find("input").val(1);
+      }
+    })
+
+
 </script>
-<script>
-  $(".remember_me").on("click",function(){
-    if($(this).hasClass("remember_me_on")){
-      $(this).removeClass("remember_me_on");
-      $(this).parent().find("input").val(0);
-    }else{
-      $(this).addClass("remember_me_on");
-      $(this).parent().find("input").val(1);
-    }
-  })
-</script>
+
