@@ -393,6 +393,54 @@ class Func extends CStatic {
       $content .= "?>";
       file_put_contents($cache_file_path, $content, LOCK_EX);
   }
+  
+  /**
+   * get 查询时过滤
+   * @param unknown $str
+   */
+  public static function search_check($str) {
+      $str = str_replace ( "_", "\_", $str );
+      //把"_"过滤掉
+      $str = str_replace ( "%", "\%", $str );
+      //把"%"过滤掉
+      $str = htmlspecialchars($str, ENT_QUOTES);
+      //转换html
+      return $str;
+  }
+  
+  /**
+   * post 提交请求时过滤
+   * @param unknown $text
+   * @param unknown $tags
+   */
+  public static function post_check($text, $tags = null) {
+      $text = trim($text);
+      $text = preg_replace("/<!--?.*-->/", "", $text);
+      $text = preg_replace("/<!--?.*-->/", "", $text);
+      $text = preg_replace("/<\\?|\\?>/", "", $text);
+      $text = preg_replace("/<script?.*\\/script>/", "", $text);
+      $text = preg_replace("/\\r?\\n/", "", $text);
+      $text = preg_replace("/<br(\\s\\/)?>/i", "[br]", $text);
+      $text = preg_replace("/(\\[br\\]\\s*){10,}/i", "[br]", $text);
+      while (preg_match("/(<[^><]+) (lang|on|action|background|codebase|dynsrc|lowsrc)[^><]+/i", $text, $mat)) {
+          $text = str_replace($mat[0], $mat[1], $text);
+      }
+      while (preg_match("/(<[^><]+)(window\\.|javascript:|js:|about:|file:|document\\.|vbs:|cookie)([^><]*)/i", $text, $mat)) {
+          $text = str_replace($mat[0], $mat[1] . $mat[3], $text);
+      }
+      /* if (empty($tags)) {
+          $tags = "table|tbody|td|th|tr|i|b|u|strong|img|p|br|div|span|em|ul|ol|li|dl|dd|dt|a|alt|h[1-9]?";
+          $tags .= "|object|param|embed";
+      }
+      $text = preg_replace("/<(\\(?:" . $tags . "))( [^><\\[\\]]*)?>/i", "[\\1\\2]", $text);
+      $text = preg_replace("/<\\(html|head|meta|link|base|basefont|body|bgsound|title|style|script|form|iframe|frame|frameset|applet|id|ilayer|layer|name|style|xml)[^><]*>/i", "", $text); */
+      while (preg_match("/<([a-z]+)[^><\\[\\]]*>[^><]*<\\/\\1>/i", $text, $mat)) {
+          $text = str_replace($mat[0], str_replace(">", "]", str_replace("<", "[", $mat[0])), $text);
+      }
+      while (preg_match("/(\\[[^\\[\\]]*=\\s*)(\\\"|')([^\\2\\[\\]]+)\\2([^\\[\\]]*\\])/i", $text, $mat)) {
+          $text = str_replace($mat[0], $mat[1] . "|" . $mat[3] . "|" . $mat[4], $text);
+      }
+      $text = htmlspecialchars($text, ENT_QUOTES);
+      return $text;
+  }
 }
- 
-/*----- END FILE: class.Func.php -----*/

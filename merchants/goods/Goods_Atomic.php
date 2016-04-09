@@ -6,16 +6,6 @@
  */
 class Goods_Atomic{
     
-    public static function check_goods_valid($goods_id){
-        $merchant_id = $GLOBALS['user']->uid;
-        $sql = "SELECT count(1) FROM shp_goods WHERE goods_id = '$goods_id' and merchant_id = '$merchant_id' ";
-        $result = D()->query($sql)->result();
-        if(!$result){
-            Fn::show_pcerror_message();
-        }
-        return $result;
-    }
-    
     /**
      * 查询现有的扩展分类
      * @param unknown $goods_id

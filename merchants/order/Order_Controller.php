@@ -139,8 +139,8 @@ class Order_Controller extends MerchantController {
      */
     public function update_order_price(Request $request, Response $response){
         if($request->is_post()){
-            $order_id  = $request->post('order_id', 0);
-            $discount = $request->post('discount', 0);
+            $order_id  = intval($request->post('order_id', 0));
+            $discount = doubleval($request->post('discount', 0));
             $order = Order::load($order_id);
             if($order->pay_status == PS_PAYED){
                 $ret = ['result' => 'FAIL', 'msg' => '只有在未付款状态才能修改价格！'];
@@ -176,7 +176,7 @@ class Order_Controller extends MerchantController {
     public function update_order_consignee(Request $request, Response $response){
         $ret = ['result' => 'FAIL'];
         if($request->is_post()){
-            $order_id  = $request->post('order_id', 0);
+            $order_id  = intval($request->post('order_id', 0));
             $province = $request->post('province', 0);
             $city = $request->post('city', 0);
             $district = $request->post('district', 0);
@@ -247,11 +247,11 @@ class Order_Controller extends MerchantController {
             $ship_ids = !is_array($ship_ids) ? [$ship_ids] : $ship_ids;
             $invoice_nos = !is_array($invoice_nos) ? [$invoice_nos] : $invoice_nos;
             for($i = 0,$len = count($order_ids); $i < $len; $i++){
-                $order_id = isset($order_ids[$i]) ? $order_ids[$i] : 0;
+                $order_id = intval(isset($order_ids[$i]) ? $order_ids[$i] : 0);
                 if(!$order_id){
                     continue;
                 }
-                $ship_id = isset($ship_ids[$i]) ? $ship_ids[$i] : 0;
+                $ship_id = intval(isset($ship_ids[$i]) ? $ship_ids[$i] : 0);
                 $ship_name = isset($ship_names[$i]) ? $ship_names[$i] : '';
                 $invoice_no = isset($invoice_nos[$i]) ? $invoice_nos[$i] : '';
                 $order = new Order();
@@ -316,7 +316,7 @@ class Order_Controller extends MerchantController {
     public function shipment_delete(Request $request, Response $response){
         if($request->is_post()){
             $sp_id = $request->post('sp_id', -1);
-            $result = Shipment_Model::deleteShipment($sp_id);
+            $result = Shipment_Model::deleteShipment(intval($sp_id));
         }
         if ($result) {
             $data['status'] = 1;
@@ -340,7 +340,7 @@ class Order_Controller extends MerchantController {
             $sp_id = $request->post('sp_id', 0);
             $tpl_name = $request->post('tpl_name','');
             $regions = $request->post('regions','');
-            $region_json = $request->post('region_json','');
+            $region_json = $_POST('region_json','');
             $n_num = $request->post('n_num',0);
             $n_fee = $request->post('n_fee',0);
             $m_num = $request->post('m_num',0);
@@ -357,16 +357,16 @@ class Order_Controller extends MerchantController {
                             if($rg){
                                 $rg = strtr($rg, array('{' => '【', '}' => '】'));
                             }
-                            array_push($params['template'], array("regions" => $regions[$i], "region_json" => htmlentities($rg),"n_num" => $n_num[$i],"n_fee" => $n_fee[$i],
-                                "m_num" => $m_num[$i],"m_fee" => $m_fee[$i]
+                            array_push($params['template'], array("regions" => $regions[$i], "region_json" => htmlentities($rg),"n_num" => intval($n_num[$i]),
+                                "n_fee" => doubleval($n_fee[$i]),"m_num" => intval($m_num[$i]),"m_fee" => doubleval($m_fee[$i])
                             ));
                         }
                     }else{
                         if($region_json){
                             $region_json = strtr($region_json, array('{' => '【', '}' => '】'));
                         }
-                        array_push($params['template'], array("regions" => $regions, "region_json" => htmlentities($region_json), "n_num" => $n_num,"n_fee" => $n_fee,
-                            "m_num" => $m_num,"m_fee" => $m_fee
+                        array_push($params['template'], array("regions" => $regions, "region_json" => htmlentities($region_json), "n_num" => intval($n_num),
+                            "n_fee" => doubleval($n_fee),"m_num" => intval($m_num),"m_fee" => doubleval($m_fee)
                         ));
                     }
                     $ret = Shipment_Model::addOrUpdateShipmentTpl($sp_id, $params);

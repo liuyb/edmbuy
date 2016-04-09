@@ -172,7 +172,6 @@ class User_Controller extends MerchantController
     public function getPhoneCodeAjax(Request $request, Response $response)
     {
         $phone = $request->post('phone', '');
-        $phone = htmlspecialchars($phone);
 
         //验证用户是否1分钟以内是否已经发过短信
         if (!verify_phone($phone)) {
@@ -219,10 +218,8 @@ class User_Controller extends MerchantController
     public function checkSmsCode(Request $request, Response $response)
     {
         $phone = $request->post("phone");
-        $phoneCode = $request->post("phoneCode");
+        $chkcode = $request->post("phoneCode");
         $imgCode = $request->post("imgCode");
-        $phone = htmlspecialchars($phone);
-        $chkcode = htmlspecialchars($phoneCode);
         if ($imgCode != $_SESSION ['verifycode']) {
             $data['retmsg'] = "图形验证码不正确！";
             $data['status'] = '0';

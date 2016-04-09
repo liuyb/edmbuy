@@ -78,8 +78,11 @@ class Goods_Controller extends MerchantController
         $selectedCat = 0;
         $options = Goods_Common::cat_list(0);
         if ($goods_id) {
-            Goods_Atomic::check_goods_valid($goods_id);
             $goods = Items::load($goods_id);
+            $merchant_id = $GLOBALS['user']->uid;
+            if(!$goods || $goods->merchant_id != $merchant_id){
+                Fn::show_pcerror_message();
+            }
             $selectedCat = $goods->cat_id;
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
@@ -116,45 +119,49 @@ class Goods_Controller extends MerchantController
      */
     public function goods_publish(Request $request, Response $response)
     {
-        /* 处理商品数据 */
-        $goods_id = $request->post('goods_id', 0);
-        $goods_name = htmlspecialchars($request->post('goods_name', ''));
-        $market_price = $request->post('market_price', 0);
-        $cost_price = $request->post('cost_price', 0);
-        $shop_price = $request->post('shop_price', 0);
-        $income_price = $request->post('income_price', 0);
-        $commision = $shop_price > $income_price ? ($shop_price - $income_price) : 0;
-        $goods_number = $request->post('goods_number', 0);
-        $per_limit_buy = $request->post('per_limit_buy', 0);
-        $catgory_id = $request->post('cat_id', 0);
-        $goods_thumb = $request->post('goods_thumb', '');
-        $goods_img = $request->post('goods_img', '');
-        $original_img = $request->post('original_img', '');
-        $shipping_fee = $request->post('shipping_fee', 0);
-        $goods_desc = $request->post('goods_desc', '');
-
-        $goods = new Items();
-        $goods->item_id = $goods_id;
-        $goods->cat_id = $catgory_id;
-        $goods->item_name = $goods_name;
-        $goods->item_number = $goods_number;
-        $goods->market_price = $market_price;
-        $goods->shop_price = $shop_price;
-        $goods->income_price = $income_price;
-        $goods->commision = $commision;
-        $goods->cost_price = $cost_price;
-        $goods->item_desc = $goods_desc;
-        $goods->item_thumb = $goods_thumb;
-        $goods->item_img = $goods_img;
-        $goods->original_img = $original_img;
-        $goods->per_limit_buy = $per_limit_buy;
-        $goods->shipping_fee = $shipping_fee;
-
-        $ret = false;
-        if ($request->is_post() && $goods_name) {
-            $ret = Goods_Model::insertOrUpdateGoods($goods);
+        if($request->is_post()){
+            /* 处理商品数据 */
+            $goods_id = $request->post('goods_id', 0);
+            $goods_name = $request->post('goods_name', '');
+            $market_price = $request->post('market_price', 0);
+            $cost_price = $request->post('cost_price', 0);
+            $shop_price = $request->post('shop_price', 0);
+            $income_price = $request->post('income_price', 0);
+            $commision = $shop_price > $income_price ? ($shop_price - $income_price) : 0;
+            $goods_number = $request->post('goods_number', 0);
+            $per_limit_buy = $request->post('per_limit_buy', 0);
+            $catgory_id = $request->post('cat_id', 0);
+            $goods_thumb = $request->post('goods_thumb', '');
+            $goods_img = $request->post('goods_img', '');
+            $original_img = $request->post('original_img', '');
+            $shipping_fee = $request->post('shipping_fee', 0);
+            $goods_desc = $_POST['goods_desc'];
+    
+            $goods = new Items();
+            $goods->item_id = $goods_id;
+            $goods->cat_id = $catgory_id;
+            $goods->item_name = $goods_name;
+            $goods->item_number = intval($goods_number);
+            $goods->market_price = doubleval($market_price);
+            $goods->shop_price = doubleval($shop_price);
+            $goods->income_price = doubleval($income_price);
+            $goods->commision = doubleval($commision);
+            $goods->cost_price = doubleval($cost_price);
+            $goods->item_desc = $goods_desc;
+            $goods->item_thumb = $goods_thumb;
+            $goods->item_img = $goods_img;
+            $goods->original_img = $original_img;
+            $goods->per_limit_buy = intval($per_limit_buy);
+            $goods->shipping_fee = doubleval($shipping_fee);
+    
+            $ret = false;
+            if ($goods_name) {
+                $ret = Goods_Model::insertOrUpdateGoods($request, $goods);
+            }
+            $response->sendJSON(["result" => $ret ? 'SUCC' : 'FAIL']);
+        }else{
+            Fn::show_pcerror_message();
         }
-        $response->sendJSON(["result" => $ret ? 'SUCC' : 'FAIL']);
     }
 
     /**

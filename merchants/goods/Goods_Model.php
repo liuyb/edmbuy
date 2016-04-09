@@ -13,7 +13,7 @@ class Goods_Model extends Model
      * 新增OR修改商品
      * @param Items $goods
      */
-    static function insertOrUpdateGoods(Items $goods)
+    static function insertOrUpdateGoods(Request $request,Items $goods)
     {
         $ret = true;
         D()->beginTransaction();
@@ -27,17 +27,13 @@ class Goods_Model extends Model
         try {
             $goods->save(($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE));
             $goods_id = $is_insert ? D()->insert_id() : $goods->item_id;
-            $other_cat = isset($_POST['other_cat']) ? $_POST['other_cat'] : [];
+            $other_cat = $request->post('other_cat', []);
             $other_cat = is_array($other_cat) ? $other_cat : [$other_cat];
             self::handle_other_cat($is_insert, $goods_id, $goods->cat_id, array_unique($other_cat));
 
-            if (isset($_POST['gallery_list'])) {
-                self::handle_goods_gallery($is_insert, $goods_id, $_POST['gallery_list']);
-            }
+            self::handle_goods_gallery($is_insert, $goods_id, $request->post('gallery_list', []));
 
-            if (isset($_POST['attribute_list'])) {
-                self::handle_goods_attribute($is_insert, $goods_id, $_POST['attribute_list']);
-            }
+            self::handle_goods_attribute($is_insert, $goods_id, $request->post('attribute_list', []));
 
         } catch (Exception $e) {
             D()->rollback();
@@ -246,6 +242,9 @@ class Goods_Model extends Model
         if (empty($goods_ids)) {
             return;
         }
+        foreach ($goods_ids as &$gid){
+            $gid = intval($gid);
+        }
         $goods_ids = implode(',', $goods_ids);
         D()->beginTransaction();
         try {
@@ -284,7 +283,7 @@ class Goods_Model extends Model
         $where = "";
         $orderby = "";
         if ($options['goods_name']) {
-            $where .= " and g.goods_name like '%" . htmlspecialchars($options['goods_name']) . "%' ";
+            $where .= " and g.goods_name like '%" . $options['goods_name'] . "%' ";
         }
         if ($options['start_date']) {
             $starttime = simphp_gmtime(strtotime($options['start_date'] . DAY_BEGIN));

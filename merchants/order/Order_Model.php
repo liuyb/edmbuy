@@ -19,7 +19,7 @@ class Order_Model extends Model {
         $where = "";
         $orderby = "";
         if($options['order_sn']){
-            $where .= " and o.order_sn like '%".htmlspecialchars($options['order_sn'])."%' ";
+            $where .= " and o.order_sn like '%".$options['order_sn']."%' ";
         }
         if($options['start_date']){
             $starttime = simphp_gmtime(strtotime($options['start_date'].DAY_BEGIN));
@@ -30,7 +30,7 @@ class Order_Model extends Model {
             $where .= " and o.add_time <= $endtime ";
         }
         if($options['buyer']){
-            $where .= " and u.nick_name like '%".htmlspecialchars($options['buyer'])."%' ";
+            $where .= " and o.consignee like '%".$options['buyer']."%' ";
         }
         if($options['status']){
             $statusSql = Order::build_order_status_sql($options['status'], 'o');
@@ -46,7 +46,7 @@ class Order_Model extends Model {
         $sql = "SELECT count(1) FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where merchant_ids='".$muid."' and is_separate = 0 $where ";
         $count = D()->query($sql)->result();
         $pager->setTotalNum($count);
-        $sql = "SELECT o.*, IFNULL(u.nick_name,o.consignee) as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='".$muid."' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "SELECT o.*, o.consignee as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='".$muid."' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $orders = D()->query($sql)->fetch_array_all();
         foreach ($orders as &$order){
             self::rebuild_order_info($order);

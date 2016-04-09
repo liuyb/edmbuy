@@ -345,6 +345,9 @@ class Request {
 	  if (isset($field) && isset($default) && ''===$fv) {
 	    $fv = $default;
 	  }
+	  if($fv && is_string($fv)){
+	      $fv = Func::search_check($fv);
+	  }
 	  return $fv;
 	}
 	
@@ -358,6 +361,15 @@ class Request {
 	  $fv = !isset($field) ? $_POST : (isset($_POST[$field]) ? (is_array($_POST[$field]) ? $_POST[$field] : trim($_POST[$field])) : '');
 	  if (isset($field) && isset($default) && ''===$fv) {
 	    $fv = $default;
+	  }
+	  if($fv && is_string($fv)){
+	      $fv = Func::post_check($fv);
+	  }else if($fv && is_array($fv)){
+	      foreach ($fv as &$vv){
+	          if(is_string($vv)){
+	              $vv = Func::post_check($vv);
+	          }
+	      }
 	  }
 	  return $fv;
 	}
