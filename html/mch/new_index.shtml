@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script> 
+</head>
+<body id="bg_common"> 
+
+<style>
+#common_header_left{
+	background:#323a4d !important;
+}
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div id="business_tem">
+	<div id="tem_top"><p>业务模板</p></div>
+	
+	<div id="tem_infos">
+		<table cellspacing="0" cellpadding="0" id="tem_tab">
+			<tr>
+				<td id="tem_tit">待处理订单信息：</td>
+				<td>未付款订单<span>（8）</span></td>
+				<td>代发货订单<span>（8）</span></td>
+				<td>未退款订单<span>（8）</span></td>
+				<td></td>
+				<td><button class="tem_btn_common">管理订单</button></td>
+			</tr>
+			<tr>
+				<td id="tem_tit">商品信息：</td>
+				<td>商品总数<span>（8）</span></td>
+				<td>未上架商品总数<span>（8）</span></td>
+				<td>可发布平台商品总数<span>（8）</span</td>
+				<td>库存预警（3）</td>
+				<td><button class="tem_btn_common">维护商品</button></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div id="business_tem">
+	<div id="tem_top"><p>店铺信息</p></div>
+	
+	<div id="tem_infos">
+		<div id="store_left"><img src="../mch/img/01_ba.png"></div>
+		<div id="store_right">
+			<p>
+				<span class="right_tit">店铺名称：益多米</span>
+				<span>总销售额：<i class="common_money">8888.00元</i></span>
+				<button class="detail_btn">交易明细</button>
+			</p>
+			<p>
+				<span class="right_tit">到期日期：2015-5-5</span>
+				<span>可提现金额：<i class="common_money">8888.00元</i></span>
+				<button class="tem_btn_common">我要提现</button><button class="detail_btn">提现记录</button>
+			</p>
+		</div>
+		<div><button class="tem_btn_common">进入店铺</button></div>
+	</div>
+</div>
+
+<div id="business_tem">
+	<div id="tem_top"><p>商家运营情况</p></div>
+	
+	<div id="tem_infos">
+		<table cellspacing="0" cellpadding="0" id="run_case_tab">
+			<tr>
+				<th>时间</th>
+				<th>新增订单金额</th>
+				<th>净收入</th>
+				<th>新增访问量（次）</th>
+				<th>新增订单数量（个）</th>
+			</tr>
+			<tr>
+				<td>昨日</td>
+				<td>￥1500.00</td>
+				<td>￥666.00</td>
+				<td>545</td>
+				<td>44</td>
+			</tr>
+			<tr>
+				<td>昨日</td>
+				<td>￥1500.00</td>
+				<td>￥666.00</td>
+				<td>545</td>
+				<td>44</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<script>
+$("#sy").addClass("common_on")
+</script>
+ 
