@@ -278,7 +278,7 @@ class User_Model extends Model
         $insertarr['password'] = $password_enc;
         $insertarr['salt'] = $salt;
         $insertarr['mobile'] = $mobile;
-        $insertarr['invite_code'] = $inviteCode;
+        $insertarr['invite_code'] = $inviteCode?$inviteCode:0;
         $insertarr['email'] = $email;
         $insertarr['password'] = $password_enc;
         return D()->insert($tablename, $insertarr);
@@ -299,5 +299,15 @@ class User_Model extends Model
         if (!isset($salt)) $salt = gen_salt();
         return md5(md5($raw_passwd) . $salt);
     }
+
+    /**
+     * 校验邀请码
+     * @param $inviteCode
+     */
+    static function checkInviteCode($inviteCode){
+            $sql="select user_id from shp_user where user_id = {$inviteCode}";
+            return D()->query($sql)->result();
+    }
+
 
 }

@@ -11,6 +11,11 @@
 		<a href="#"><li id="tkcl" <!--{if $left_item == "refund"}-->class="item_on"<!--{/if}-->>退款处理</li></a>
 		<a href="#"><li id="thcl" <!--{if $left_item == "returned"}-->class="item_on"<!--{/if}-->>退货处理</li></a>
 		<a href="#"><li id="yfmbgl" <!--{if $left_item == "shipment"}-->class="item_on"<!--{/if}-->>运费模板管理</li></a>
+		<!--{elseif $left_module == "shop"}-->
+		<a href="/shop"><li id="ddgl" <!--{if $left_item == "list"}-->class="item_on"<!--{/if}-->>店铺装修</li></a>
+		<a href="#"><li id="tkcl" <!--{if $left_item == "refund"}-->class="item_on"<!--{/if}-->>店铺资料</li></a>
+		<a href="#"><li id="thcl" <!--{if $left_item == "returned"}-->class="item_on"<!--{/if}-->>客服管理</li></a>
+		<a href="#"><li id="yfmbgl" <!--{if $left_item == "shipment"}-->class="item_on"<!--{/if}-->>结算管理</li></a>
 		<!--{/if}-->
 	</ul>
 </div>

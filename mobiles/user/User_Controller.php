@@ -772,6 +772,15 @@ class User_Controller extends MobileController
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
+        if(!empty($inviteCode)){
+            //校验邀请码
+           $result = User_Model::checkInviteCode($inviteCode);
+            if(!$result){
+                $ret['retmsg'] = "邀请人多米号不存在！";
+                $ret['status'] = 0;
+                $response->sendJSON($ret);
+            }
+        }
         //保存商家信息发送短信
         $password = rand_code();
         $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
