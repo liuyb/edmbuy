@@ -41,6 +41,9 @@ html, body{
 </div>
 
 <script>
+$(function(){
+	$("#put_person").focus();
+});
 var order_id=<!--{$order->order_id}-->;
 function submitConsignee(){
 	if(!$("#consigneeForm").formValid()){

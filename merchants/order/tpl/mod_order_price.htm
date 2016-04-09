@@ -18,6 +18,9 @@ html, body{
 	<button class="up_btn_ok" id="up_ok_btn" onclick="submitOrderPrice();">确认修改</button>
 </div>
 <script>
+$(function(){
+	$("#orderDiscount").focus();
+});
 var order_id = <!--{$order->order_id}-->;
 function submitOrderPrice(){
 	var orderDiscount = $("#orderDiscount").val();

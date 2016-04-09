@@ -63,6 +63,7 @@
 </div>
 
 <script>
+var site = "<!--{$msite}-->";
 $(function(){
 	loadTableContent(1, true);
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
@@ -112,8 +113,8 @@ function getConditions(){
 }
 function costructHtml(result){
 	var TR = "";
-	TR+= "<tr data-id="+result.goods_id+"><td class=\"check_go\"></td><td><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
-	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></td>";
+	TR+= "<tr data-id="+result.goods_id+"><td class=\"check_go\"></td><td><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
+	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></a></td>";
 	TR+= "<td>"+(result.cat_name ? result.cat_name : '')+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
 	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
 	TR+= "<td class=\"goods_edit\">编辑<div class=\"edit_info\"><ul><li><a href=\"javascript:;\" data-type='edit'>编辑</a></li><li>";
@@ -262,10 +263,19 @@ function updateGoodsStatus(obj, statusVal){
 		return;
 	}
 	var data = {status : 'sale', goods_ids : goods_id, statusVal : statusVal};
-	F.postWithLoading('/goods/status', data, function(data){
-		layer.msg('操作成功');
-		loadTableContent(1, true);
-	});
+	if(statusVal != 1){
+		showConfirm('确定要下架选中的商品吗？',function(){
+			F.postWithLoading('/goods/status', data, function(data){
+				layer.msg('操作成功');
+				loadTableContent(1, true);
+			});
+		});
+	}else{
+		F.postWithLoading('/goods/status', data, function(data){
+			layer.msg('操作成功');
+			loadTableContent(1, true);
+		});
+	}
 }
 function editGoods(obj){
 	var goods_id = obj.attr("data-id");

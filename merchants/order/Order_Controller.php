@@ -218,7 +218,7 @@ class Order_Controller extends MerchantController {
             if('edit' == $act){
                 $order = $result[0];
                 $ship_select = Order_Model::buildShippingDropdown($order['shipping_id']);
-                $shipment_label = "发货";
+                $shipment_label = "保存";
             }else{
                 $ship_select = Order_Model::buildShippingDropdown();
             }

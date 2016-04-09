@@ -24,7 +24,7 @@
 					<label class="control-label"><span class="fill_red">*</span>商品名称：</label>
 				</div>
 				<div class="type_right font_common">
-					<input type="text" maxlength="120" value="<!--{$goodsinfo->item_name}-->" class="write_common" name="goods_name" required >
+					<input type="text" maxlength="120" id="goods_name" value="<!--{$goodsinfo->item_name}-->" class="write_common" name="goods_name" required >
 				</div>
 			</div>
 			
@@ -238,6 +238,7 @@
 
 <script>
 $(function(){
+	$("#goods_name").focus();
 	initCategoryEvent();
 	UE.getEditor('editor');
 	//判断ueditor 编辑器是否创建成功

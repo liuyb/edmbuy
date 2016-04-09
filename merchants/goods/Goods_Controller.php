@@ -38,6 +38,7 @@ class Goods_Controller extends MerchantController
     {
         $this->v->set_tplname('mod_goods_index');
         $this->setPageLeftMenu('goods', 'list');
+        $this->v->assign('msite', C('env.site.mobile'));
         $response->send($this->v);
     }
 

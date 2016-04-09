@@ -73,6 +73,12 @@ $(function(){
 		obj.siblings().removeClass("order_type_on");
 		obj.addClass("order_type_on");
 		loadPageDataTable(1, true, tableOptions);
+		var type = obj.data('type');
+		if(type == 100 || type == 102 || type == 104){
+			canBatchShip(false);
+		}else{
+			canBatchShip(true);
+		}
 	});
 	$("#search_type_infos").on('click',function(){
 		loadPageDataTable(1, true, tableOptions);
@@ -116,14 +122,14 @@ function pageQueryCondtion(){
 	return data;
 }
 function costructRowData(result){
-	var cls="";
+	var cls="common_check";
 	var ship_st = result.shipping_status;
 	var shipping = "";
 	if(canOrderShip(result) && (ship_st == 0 || ship_st == 3 || ship_st == 5)){//未发货
-		cls = "common_check";
+		//cls = "common_check";
 		shipping = "<span class=\"order_send_goods shipping\">发货</span>";
 	}else{
-		cls = "common_check_disabled";
+		//cls = "common_check_disabled";
 		/* if(ship_st != 2 && canOrderShip(result)){//已收货不能修改 已取消 不显示
 			shipping = "<span class=\"order_send_goods shippingedit\">修改</span>";
 		} */
@@ -163,6 +169,16 @@ function deliveryOrderGoods(obj, act){
 	}
 	order_ids = order_ids.join(",");
 	window.location.href = '/order/shipping/form?act='+act+'&order_ids='+order_ids;
+}
+
+function canBatchShip(flag){
+	if(flag){
+		$("#all_check").show();
+		$("#batch_send").show();
+	}else{
+		$("#all_check").hide();
+		$("#batch_send").hide();
+	}
 }
 
 </script>

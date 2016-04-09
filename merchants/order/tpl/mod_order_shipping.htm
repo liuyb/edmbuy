@@ -90,7 +90,7 @@ function submitShip(){
 	console.log(data);
 	F.postWithLoading('/order/shipping', data, function(ret){
 		if(ret && ret.result == "SUCC"){
-			showMsg('发货成功！');
+			showMsg('操作成功！');
 			var url = "";
 			if(fromOrder){
 				url = "/order/detail?order_id="+fromOrder;
