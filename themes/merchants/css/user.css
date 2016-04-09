@@ -70,13 +70,11 @@
     width:1200px;
     margin:0 auto;
 }
-#login_header_left img{
-    margin-top:9px;
-    padding-right:10px;
-}
+
 #login_header_left{
     vertical-align: top;
-    line-height:60px;
+    line-height:57px;
+    height:57px;
     color:#fff;
     font-size:16px;
     float:left;

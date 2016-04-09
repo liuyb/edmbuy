@@ -242,10 +242,6 @@ body { min-width: 1200px;}
 	width:1200px;
 	margin:0 auto;
 }
-#login_header_left img{
-  	margin-top:9px;
-	padding-right:10px;
-}
 #login_header_left{
   	vertical-align: top;	
 	line-height:60px;
@@ -369,7 +365,10 @@ div .alert {
 	border-bottom:1px solid #f23427 !important;
 }
 
-
+#login_header_left img{
+	vertical-align: middle;
+	margin-right: 10px;
+}
 
 
 
