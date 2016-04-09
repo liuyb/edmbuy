@@ -305,7 +305,7 @@ class User_Model extends Model
      * @param $inviteCode
      */
     static function checkInviteCode($inviteCode){
-            $sql="select user_id from shp_user where user_id = {$inviteCode}";
+            $sql="select user_id from shp_users where user_id = {$inviteCode}";
             return D()->query($sql)->result();
     }
 

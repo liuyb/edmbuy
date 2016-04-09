@@ -811,7 +811,7 @@ class User_Controller extends MobileController
         $contentArr = C("msg.stmp");
         $content = $contentArr['merchant_reg'];
         $urlarr = C("storage.cookie.mch");
-        $url = $urlarr["domain"];
+        $url = "http://".$urlarr["domain"];
         $content = sprintf($content, $url, $mobile, $password);
         $from = C("port.stmp.user");
         $to = $email;
