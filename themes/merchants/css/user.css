@@ -299,7 +299,7 @@
     padding-top:70px;
 }
 .enter_reason img{
-    margin:0 75px 100px;
+    margin:0 5% 100px;
 }
 .enter_flow{
     background:#f6fcff;
@@ -309,7 +309,7 @@
     background:#fff;
     height:500px;
 }
-.contact_us img{
+.contact_us img{ 
     width:270px;
     height:270px;
 }

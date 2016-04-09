@@ -141,7 +141,7 @@
 </div>
 
 <script>
-$("#yfmbgl").addClass("order_left_common");
+$("#yfmbgl").addClass("item_on");
 
 $(".commondity_btn").on("click",function(){
 	$(this).parent().parent().remove();
