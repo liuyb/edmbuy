@@ -66,6 +66,20 @@ function submitShip(){
 	if(!$("#shipForm").formValid()){
 		return false;
 	}
+	var valid = true;
+	var ship_order_num = $(".ship_order_num");
+	ship_order_num.each(function(){
+		var item = $(this).val();
+		if(!item || item.length < 6 || item.length > 20){
+			showMsg("请输入正确的快递单号");
+			$(this).focus();
+			valid = false;
+			return false;
+		}
+	});
+	if(!valid){
+		return false;
+	}
 	var data = $("#shipForm").serializeJson();
 	var ship_names = [];
 	$(".ship_select").each(function(){

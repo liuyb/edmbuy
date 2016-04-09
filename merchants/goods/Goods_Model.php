@@ -411,7 +411,7 @@ class Goods_Model extends Model
             $insertarr['parent_id'] = $cat_id;
         }
         $insertarr['cat_name'] = $cateArr['cat_name'];
-        $sql = "select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s'";
+        $sql = "select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s' and is_delete = 0 ";
         $cat_name = D()->query($sql, $insertarr['cat_name'], $merchant_id)->result();
         if ($cat_name && !$cateArr['edit']) {
             return "分类名已存在！";

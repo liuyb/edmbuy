@@ -198,11 +198,11 @@ function showConfirm(msg, handler){
 function tableCheckBoxEvent(){
 	$("#all_check").on('click',function(){
 		var THIS = $(this);
-		if(THIS.hasClass("common_check_on")){
-			THIS.removeClass("common_check_on");
+		if(THIS.hasClass("all_check_on")){
+			THIS.removeClass("all_check_on");
 			$(".common_check").removeClass("common_check_on");
 		}else{
-			THIS.addClass("common_check_on");
+			THIS.addClass("all_check_on");
 			$(".common_check").addClass("common_check_on");
 		}
 	});
@@ -221,9 +221,9 @@ function handleSelectAll(){
 	var item_num = $(".common_check").length;
 	var select_num = $(".common_check_on").length;
 	if(item_num == select_num){
-		$("#all_check").addClass("common_check_on");
+		$("#all_check").addClass("all_check_on");
 	}else{
-		$("#all_check").removeClass("common_check_on");
+		$("#all_check").removeClass("all_check_on");
 	}
 }
 //根据选中状态拿到当前ID

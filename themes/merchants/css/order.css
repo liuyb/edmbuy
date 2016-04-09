@@ -70,6 +70,10 @@
  	background: url(../img/xz.png) no-repeat center !important;
 	cursor:pointer;
 }
+.all_check_on{
+ 	background: url(../img/xz.png) no-repeat center !important;
+	cursor:pointer;
+}
 .common_check_disabled{
 	background: url(../img/xk.png) no-repeat center;
 }

@@ -399,8 +399,6 @@ class Func extends CStatic {
    * @param unknown $str
    */
   public static function search_check($str) {
-      $str = str_replace ( "_", "\_", $str );
-      //把"_"过滤掉
       $str = str_replace ( "%", "\%", $str );
       //把"%"过滤掉
       $str = htmlspecialchars($str, ENT_QUOTES);

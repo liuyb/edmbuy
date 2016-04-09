@@ -274,7 +274,7 @@
         //      {tag:'span',name:'im', label:'', style:'font-style:italic;font-weight:bold'},
         //      {tag:'span',name:'hi', label:'', style:'font-style:italic;font-weight:bold;color:rgb(51, 153, 204)'}
         //  ]
-
+    	,contextMenu:[]
         //右键菜单的内容，可以参考plugins/contextmenu.js里边的默认菜单的例子，label留空支持国际化，否则以此配置为准
 //        ,contextMenu:[
 //            {

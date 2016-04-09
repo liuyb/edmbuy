@@ -340,7 +340,7 @@ class Order_Controller extends MerchantController {
             $sp_id = $request->post('sp_id', 0);
             $tpl_name = $request->post('tpl_name','');
             $regions = $request->post('regions','');
-            $region_json = $_POST('region_json','');
+            $region_json = isset($_POST['region_json']) ? $_POST['region_json'] : '';
             $n_num = $request->post('n_num',0);
             $n_fee = $request->post('n_fee',0);
             $m_num = $request->post('m_num',0);
