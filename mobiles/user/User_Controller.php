@@ -734,8 +734,10 @@ class User_Controller extends MobileController
     {
         $mobile = $request->post("mobile");
         $mobileCode = $request->post("mobile_code");
+        $mobileCode=intval($mobileCode);
         $email = $request->post("email");
         $inviteCode = $request->post("invite_code");
+        $inviteCode=intval($inviteCode);
 //        $read = $request->post("read");
         if (empty($mobileCode)) {
             $ret['retmsg'] = "参数不能为空！";
@@ -753,8 +755,12 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "验证码不匹配！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        }elseif($_SESSION['moblie']!=$mobile){
+        }elseif($_SESSION['moblie']!=$mobile && !empty($_SESSION['moblie'])){
             $ret['retmsg'] = "手机号码有误！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }elseif(empty($email)){
+            $ret['retmsg'] = "邮箱不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
