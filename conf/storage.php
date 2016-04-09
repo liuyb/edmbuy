@@ -2,7 +2,7 @@
 /**
  * 存储(数据库、memcache等)配置
  *
- * @author Gavin<laigw.vip@gmail.com>
+ * @author root<laigw.vip@gmail.com>
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
@@ -11,8 +11,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> 'gavin@asdf',
+      'user'		=> 'root',
+      'pass'		=> '123',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -22,8 +22,8 @@ return [
     [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
-      'user'		=> 'gavin',
-      'pass'		=> 'gavin@asdf',
+      'user'		=> 'root',
+      'pass'		=> '123',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
