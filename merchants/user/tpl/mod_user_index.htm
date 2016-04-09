@@ -1,10 +1,82 @@
 <!--{add_css file="user.css" scope="module" mod="user"}-->
-<section class="blk">
-  <h1>业务提醒</h1>
-</section>
-<section class="blk">
-  <h1>店铺信息</h1>
-</section>
-<section class="blk">
-  <h1>商家运营情况</h1>
-</section>
+<!--[HEAD_CSS]-->
+<style>
+#common_header_left{
+  background:#323a4d !important;
+}
+</style>
+<!--[/HEAD_CSS]-->
+<div id="business_tem_1" class="business_tem">
+  <div id="tem_top"><p>业务模板</p></div>
+  <div id="tem_infos">
+    <table cellspacing="0" cellpadding="0" id="tem_tab">
+      <tr>
+        <td id="tem_tit">待处理订单信息：</td>
+        <td>未付款订单<span>（8）</span></td>
+        <td>代发货订单<span>（8）</span></td>
+        <td>未退款订单<span>（8）</span></td>
+        <td></td>
+        <td><button class="tem_btn_common">管理订单</button></td>
+      </tr>
+      <tr>
+        <td id="tem_tit">商品信息：</td>
+        <td>商品总数<span>（8）</span></td>
+        <td>未上架商品总数<span>（8）</span></td>
+        <td>可发布平台商品总数<span>（8）</span</td>
+        <td>库存预警（3）</td>
+        <td><button class="tem_btn_common">维护商品</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div id="business_tem_2" class="business_tem">
+  <div id="tem_top"><p>店铺信息</p></div>
+  
+  <div id="tem_infos">
+    <div id="store_left"><img src="http://merchant.edmbuy.com/images/201604/goods_img/1128_P_1460003883987.jpg" alt=""/></div>
+    <div id="store_right">
+      <p>
+        <span class="right_tit">店铺名称：益多米</span>
+        <span>总销售额：<i class="common_money">8888.00元</i></span>
+        <button class="detail_btn">交易明细</button>
+      </p>
+      <p>
+        <span class="right_tit">到期日期：2015-5-5</span>
+        <span>可提现金额：<i class="common_money">8888.00元</i></span>
+        <button class="tem_btn_common">我要提现</button><button class="detail_btn">提现记录</button>
+      </p>
+    </div>
+    <div><button class="tem_btn_common">进入店铺</button></div>
+  </div>
+</div>
+
+<div id="business_tem_3" class="business_tem last">
+  <div id="tem_top"><p>商家运营情况</p></div>
+  
+  <div id="tem_infos">
+    <table cellspacing="0" cellpadding="0" id="run_case_tab">
+      <tr>
+        <th>时间</th>
+        <th>新增订单金额</th>
+        <th>净收入</th>
+        <th>新增访问量（次）</th>
+        <th>新增订单数量（个）</th>
+      </tr>
+      <tr>
+        <td>昨日</td>
+        <td>￥1500.00</td>
+        <td>￥666.00</td>
+        <td>545</td>
+        <td>44</td>
+      </tr>
+      <tr>
+        <td>昨日</td>
+        <td>￥1500.00</td>
+        <td>￥666.00</td>
+        <td>545</td>
+        <td>44</td>
+      </tr>
+    </table>
+  </div>
+</div>
