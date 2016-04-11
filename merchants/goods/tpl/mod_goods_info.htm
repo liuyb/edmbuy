@@ -45,7 +45,7 @@
 				<input type="text" value="<!--{$goodsinfo->cost_price}-->" class="write_short" name="cost_price" data-type='money'>
 			</div>
 			
-			<p id="sr_ts" style="margin-left:747px;">净毛利统计时会使用，买家不可见</p>
+			<p id="sr_ts" style="margin-left:740px;">净毛利统计时会使用，买家不可见</p>
 		</div>
 		
 		<div class="issue_gods_i">
@@ -64,7 +64,7 @@
 				<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->per_limit_buy}-->" class="write_short" name="per_limit_buy" >
 			</div>
 			<p id="sr_ts" style="margin-left:100px;display: inline-block;">给到平台的价格，用来计算佣金，买家不可见</p>
-			<p id="sr_ts" style="margin-left:382px;display: inline-block">0代表不限购</p>
+			<p id="sr_ts" style="margin-left:393px;display: inline-block">0代表不限购</p>
 		</div>
 		
 		<div class="issue_gods_i">
@@ -125,8 +125,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- <button class="add_common del_check" style="margin-top:10px;">删除</button> -->
-				<span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span>
+				<button onclick="deleteSpecif(this);" class='deletelink'>删除</button>
+				<!-- <span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span> -->
 				<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 				<div class="common_a_tow">
 		 			<div class="result_d">
@@ -151,15 +151,15 @@
 						</div>
 					</div>
 				</div>
-				<span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span>
-				<!-- <button class="add_common del_check" style="margin-top:10px;">删除</button> -->
+				<!-- <span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span> -->
+				<button onclick="deleteSpecif(this);" class='deletelink'>删除</button>
 				<div style="height:40px;" class="add_del_y">
 				<!--{foreach from=$type.display_attrs item=attr}-->
 				<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
 				<!--{/foreach}-->
 				<span class="add_common_a">+添加</span></div>
 				<div class="common_a_tow">
-		 			<div class="result_d">
+		 			<div class="result_d"> 
 		 				<div  class="common_a_li" style="display:none;">
 	 						<ul>
 							 </ul>
@@ -189,11 +189,14 @@
 	<div class="goods_right">
 		<div id="issue_gods"><p>物流信息</p></div>
 		<div class="issue_gods_i">
-			<div class="issue_gods_left">统一邮费：</div>
+			<label for="lf"></label><div id="lf" class="issue_gods_left check_yf">统一邮费：</div>
 			<div class="issue_gods_right" style="line-height:40px">
 				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'> 元
 			</div>
-			<div class="issue_gods_right" style="margin-left:100px;">
+		</div>
+		<div class="issue_gods_i">
+			<label for="lff"></label><div id="lff" class="issue_gods_left check_yf_on">邮费模板：</div>
+			<div class="issue_gods_right">
 				<select class="selcet_c_ok">
 					<option value ="1">选择运费模板</option>
  					<!--{$ship_list}-->

@@ -781,7 +781,16 @@
   	cursor: pointer;
 }
 
-
+.check_yf{
+	background: url(../img/xk.png) no-repeat left !important;
+	padding-left:30px;
+  	cursor: pointer;
+}
+.check_yf_on{
+	background: url(../img/xz.png) no-repeat left !important;
+	padding-left:30px;
+  	cursor: pointer;
+}
 
 
 

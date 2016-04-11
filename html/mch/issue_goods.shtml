@@ -272,11 +272,14 @@
 	<div class="goods_right">
 		<div id="issue_gods"><p>商品规格</p></div>
 		<div class="issue_gods_i">
-			<div class="issue_gods_left">统一邮费：</div>
+			<label for="lf"></label><div id="lf" class="issue_gods_left check_yf">统一邮费：</div>
 			<div class="issue_gods_right" style="line-height:40px">
 				<input type="text" val="" class="write_short" style="margin-right:10px;">元
 			</div>
-			<div class="issue_gods_right" style="margin-left:100px;">
+		</div>
+		<div class="issue_gods_i">
+			<label for="lff"></label><div id="lff" class="issue_gods_left check_yf_on">邮费模板：</div>
+			<div class="issue_gods_right">
 				<select class="selcet_c_ok">
 					<option value ="1">选择运费模板</option>
  					<option value ="2">衣服</option>
