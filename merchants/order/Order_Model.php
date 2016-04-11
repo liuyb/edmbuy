@@ -19,7 +19,7 @@ class Order_Model extends Model {
         $where = "";
         $orderby = "";
         if($options['order_sn']){
-            $where .= " and o.order_sn like '%".$options['order_sn']."%' ";
+            $where .= " and o.order_sn like '%".trim($options['order_sn'])."%' ";
         }
         if($options['start_date']){
             $starttime = simphp_gmtime(strtotime($options['start_date'].DAY_BEGIN));
@@ -30,7 +30,7 @@ class Order_Model extends Model {
             $where .= " and o.add_time <= $endtime ";
         }
         if($options['buyer']){
-            $where .= " and o.consignee like '%".$options['buyer']."%' ";
+            $where .= " and o.consignee like '%".trim($options['buyer'])."%' ";
         }
         if($options['status']){
             $statusSql = Order::build_order_status_sql($options['status'], 'o');

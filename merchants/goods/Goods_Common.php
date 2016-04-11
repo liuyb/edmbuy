@@ -82,7 +82,11 @@ class Goods_Common {
         }
         return $options;
     }
-    
+    /**
+     * 构建分类下拉列表
+     * @param unknown $options
+     * @param number $selected
+     */
     static function build_options($options, $selected = 0){
         if(!$options || count($options) == 0){
             return '';
@@ -98,6 +102,27 @@ class Goods_Common {
                 $select .= str_repeat('&nbsp;', $var['level'] * 4);
             }
             $select .= htmlspecialchars(addslashes($var['cat_name']), ENT_QUOTES) . '</option>';
+        }
+        return $select;
+    }
+    
+    /**
+     * 构建运费下拉列表
+     * @param unknown $options
+     * @param number $selected
+     * @return string
+     */
+    static function build_ship_options($options, $selected = 0){
+        if(!$options || count($options) == 0){
+            return '';
+        }
+        $select = '';
+        foreach ($options AS $var)
+        {
+            $select .= '<option value="' . $var['sp_id'] . '" ';
+            $select .= ($selected == $var['sp_id']) ? "selected='ture'" : '';
+            $select .= '>';
+            $select .= htmlspecialchars(addslashes($var['tpl_name']), ENT_QUOTES) . '</option>';
         }
         return $select;
     }

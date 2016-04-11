@@ -78,7 +78,9 @@ class Goods_Controller extends MerchantController
         $this->v->set_tplname('mod_goods_info');
         $goods_id = $request->get('goods_id', 0);
         $selectedCat = 0;
+        $selectedShip = 0;
         $options = Goods_Common::cat_list(0);
+        $shipmentOps = Shipment_Model::getShipTemplateKV();
         if ($goods_id) {
             $goods = Items::load($goods_id);
             $merchant_id = $GLOBALS['user']->uid;
@@ -86,6 +88,11 @@ class Goods_Controller extends MerchantController
                 Fn::show_pcerror_message();
             }
             $selectedCat = $goods->cat_id;
+            //邮件模板
+            if($goods->fee_or_template == 2){
+                $selectedShip = $goods->fee_or_template;
+                $goods->shipping_fee = 0; 
+            }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
             $goods->item_desc = json_encode($goods->item_desc);
@@ -109,7 +116,9 @@ class Goods_Controller extends MerchantController
         }
         $this->v->assign('goods_type', Goods_Common::generateSpecifiDropdown(Goods_Atomic::get_goods_type()));
         $cat_list = Goods_Common::build_options($options, $selectedCat);
+        $ship_list = Goods_Common::build_ship_options($options, $selectedShip);
         $this->v->assign('cat_list', $cat_list);
+        $this->v->assign('ship_list', $ship_list);
         $this->setPageLeftMenu('goods', 'list');
         $response->send($this->v);
     }

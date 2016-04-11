@@ -62,21 +62,6 @@
 	font-size:12px;
 	color:#7d7d7d;
 }
-.common_check{
- 	background: url(../img/check_true.png) no-repeat center;
-	cursor:pointer;
-}
-.common_check_on{
- 	background: url(../img/xz.png) no-repeat center !important;
-	cursor:pointer;
-}
-.all_check_on{
- 	background: url(../img/xz.png) no-repeat center !important;
-	cursor:pointer;
-}
-.common_check_disabled{
-	background: url(../img/xk.png) no-repeat center;
-}
 .order_look_up{
 	position: absolute;
 	background: url(../img/check_order.png) no-repeat center;
@@ -93,18 +78,6 @@
 	top: 10px;
 	left: 55px;
 }
-#all_check{
- 	background: url(../img/check_true.png) no-repeat center;
-	cursor:pointer;	
-	padding-left:53px;
-}
-#list_type_foot{
-	background:#fff;
-	height:60px;
-	padding: 16px 5px 0px 0px;
-  	border-bottom-left-radius: 2px;	
-  	border-bottom-right-radius: 2px;	
-}
 #batch_send{
 	border:1px solid #e9e9e9;
 	background:#fff;
@@ -112,31 +85,6 @@
 	height:30px;
 	color:#7d7d7d;
 	font-size:12px;
-	border-radius:4px;
-}
-#choose_condition{
-	height:70px;
-	background:#e9e9e9;
-}
-.check_time_left{
-	line-height:40px;
-	padding-left:5px;
-	width:200px;
-	background:#fff;
-	height:40px;
-	display:inline-block;
-	margin:15px 0 0 15px;
-	border-radius:4px;
-	border:0;
-}
-#search_type_infos{
-	width:80px;
-	height:40px;
-	background:#f26427;
-	color:#fff;
-	font-size:13px;
-	border:0;
-	margin-left:20px;
 	border-radius:4px;
 }
 #time_left,#time_right{

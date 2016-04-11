@@ -69,7 +69,8 @@ class Items extends StorageNode {
 					'is_check'        => 'is_check',
 				    'per_limit_buy'   => 'per_limit_buy',
 				    'shipping_fee'    => 'shipping_fee',
-				    'shipping_template' => 'shipping_template'
+				    'shipping_template' => 'shipping_template',
+				    'fee_or_template' => 'fee_or_template'
 				)
 		);
 	}

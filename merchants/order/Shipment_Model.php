@@ -39,8 +39,8 @@ class Shipment_Model{
      */
     static function addShipment(array $params){
         $muid = $GLOBALS['user']->uid;
-        $sql = "insert into shp_shipment(merchant_id,tpl_name,type,last_time) values('$muid','$params[tpl_name]',1,".time().")";
-        D()->query($sql);
+        $sql = "insert into shp_shipment(merchant_id,tpl_name,type,last_time) values('%s','%s',1,".time().")";
+        D()->query($sql, $muid, $params['tpl_name']);
         return D()->insert_id();
     }
     /**
@@ -99,10 +99,10 @@ class Shipment_Model{
         $muid = $GLOBALS['user']->uid;
         $where = '';
         if($sp_id){
-            $where .= " and sp_id <> $sp_id ";
+            $where .= " and sp_id <> '".intval($sp_id)."' ";
         }
-        $sql = "select count(1) from shp_shipment where merchant_id = '$muid' and tpl_name = '$tpl_name' $where ";
-        $result = D()->query($sql)->result();
+        $sql = "select count(1) from shp_shipment where merchant_id = '%s' and tpl_name = '%s' $where ";
+        $result = D()->query($sql, $muid, $tpl_name)->result();
         return $result ? true : false;
     }
     
@@ -114,11 +114,11 @@ class Shipment_Model{
         $muid = $GLOBALS['user']->uid;
         $where = '';
         if($sp_id){
-            $where .= " and ss.sp_id=$sp_id ";
+            $where .= " and ss.sp_id='".intval($sp_id)."' ";
         }
         $sql = "SELECT * FROM shp_shipment ss,shp_shipment_tpl stp
-        where ss.sp_id=stp.sp_id and ss.merchant_id='$muid' $where order by ss.last_time desc ";
-        $result = D()->query($sql)->fetch_array_all();
+        where ss.sp_id=stp.sp_id and ss.merchant_id='%s' $where order by ss.last_time desc ";
+        $result = D()->query($sql, $muid)->fetch_array_all();
         if(!$result || count($result) == 0){
             return [];
         }
@@ -166,24 +166,32 @@ class Shipment_Model{
     
     private static function updateShipmentAtomic($sp_id, array $params){
         $muid = $GLOBALS['user']->uid;
-        $sql = "update shp_shipment set tpl_name='$params[tpl_name]',last_time=".time()." where sp_id=$sp_id and merchant_id='$muid' ";
-        D()->query($sql);
+        $sql = "update shp_shipment set tpl_name='%s',last_time=".time()." where sp_id='%d' and merchant_id='%s' ";
+        D()->query($sql, $params['tpl_name'], $sp_id, $muid);
     }
     
     private static function deleteShipmentAtomic($sp_id){
         $muid = $GLOBALS['user']->uid;
-        $sql = "delete from shp_shipment where sp_id=$sp_id and merchant_id='$muid' ";
-        D()->query($sql);
+        $sql = "delete from shp_shipment where sp_id='%d' and merchant_id='%s' ";
+        D()->query($sql, $sp_id, $muid);
         return D()->affected_rows();
     }
     
     private  static function deleteShipmentTemplateAtomic($sp_id){
         $muid = $GLOBALS['user']->uid;
-        $sql = "delete from shp_shipment_tpl where sp_id=$sp_id ";
-        D()->query($sql);
+        $sql = "delete from shp_shipment_tpl where sp_id='%d' ";
+        D()->query($sql, $sp_id);
         return D()->affected_rows();
     }
     
+    /**
+     * 获取键值对的运费模板列表
+     */
+    public static function getShipTemplateKV(){
+        $sql = "SELECT sp_id, tpl_name FROM shp_shipment where merchant_id='%s' order by last_time desc";
+        $result = D()->query($sql, $GLOBALS['user']->uid)->fetch_array_all();
+        return $result;
+    }
 }
 
 ?>

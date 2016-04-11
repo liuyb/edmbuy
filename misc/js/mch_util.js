@@ -50,8 +50,9 @@
 	    	}
 	    }
     }, '.body-data tr');
-    
-    $("#all_check").on('click',function(){
+})(jQuery);
+$(function(){
+	$("#all_check").on('click',function(){
 		var THIS = $(this);
 		if(THIS.hasClass("all_check_on")){
 			THIS.removeClass("all_check_on");
@@ -61,8 +62,7 @@
 			$(".common_check").addClass("common_check_on");
 		}
 	});
-})(jQuery);
-
+});
 //复选框全选事件
 function handleSelectAll(){
 	var item_num = $(".common_check").length;
@@ -291,11 +291,9 @@ function loadPageDataTable(curpage, isinit, options){
 			generatePager(ret.curpage, ret.maxpage, ret.totalnum, options);
 		}
 		//全选框选中时去除全选框
-		if($('#all_check') && $('#all_check').hasClass("common_check_on")){
-			$('#all_check').removeClass("common_check_on");
-		}
+		$('#all_check').removeClass("all_check_on");
 		if(typeof(afterLoadRender) != 'undefined' && typeof(afterLoadRender) == 'function'){
-    		afterLoadRender.call(this, ret);
+    		afterLoadRender.call(this, ret, data);
     	}
 	});
 }

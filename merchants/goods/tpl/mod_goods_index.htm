@@ -5,58 +5,49 @@
 <!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
 <div id="body" class="ifr-body">
 	<!--{include file="inc/left_common.htm"}-->
-	<div class="goods_right">
-		<div class="goods_nums">
-			<ul>
-				<li id="li1" onclick="list_switch(1)" data-sale='2' class="li_on">销售中<span id="on_sale"></span></li>
-				<li id="li2" onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
+	<div id="new_common">
+		<div id="order_type">
+			<ul>	
+				<li id="li1"  class="new_common_on" onclick="list_switch(1)" data-sale='2'>销售中<span id="on_sale"></span></li>
+				<li id="li2"  onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
 			</ul>
 		</div>
-		<div class="goods_search">
-			<div class="hand_input">商品名称：<input id="goods_name" type="text" val=""></div>
-			<div class="check_input">
-				<!-- <select class="check_s">
-					<option value ="all">全部类型</option>
-  					<option value ="bargain">特价商品</option>
-  					<option value ="flash">限时抢购商品</option>
-  					<option value ="remm">推荐至益多米平台</option>
-				</select> -->
-				<input type="input" id="start_date" readonly class="form_datetime"/>
-				至
-				<input type="input" id="end_date" readonly class="form_datetime"/>
-				<button class="search_button" onclick="loadTableContent(1, true);">搜索</button>
-			</div>
+		
+		<div id="choose_condition">
+			<input type="input" id="start_date" readonly class="form_datetime check_time_left"/>
+			<span style="padding-left:15px;">至</span>
+			<input type="input" id="end_date" readonly class="form_datetime check_time_left"/>
+			<!-- <input class="check_time_left" contenteditable id="buyer"  placeholder="全部类型"> -->
+			<input class="check_time_left" id="goods_name" placeholder="商品名称">
+			<button id="search_type_infos">搜索</button>
 		</div>
-		<div class="clear"></div>
 		
 		<div class="common_go" id="list1">
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
 					<tr class="header">	
 						<th>选择</th>
-						<th>商品名称</th>
+						<th width="200px">商品名称</th>
 						<th>商品分类</th>
 						<th>售价</th>
 						<th>供货价</th>
-						<th>佣金</th>
-						<th onclick="sort_click(this);" data-field='paid_goods_number'><a href="javascript:void(0);">销量</a></th>
-						<th>访问量(次)</th>
-						<th>库存</th>
+						<th onclick="sort_click(this);"><span data-field='commision'><a href="javascript:void(0);">佣金</a></span></th>
+						<th onclick="sort_click(this);"><span data-field='paid_goods_number'><a href="javascript:void(0);">销量</a></span></th>
+						<th onclick="sort_click(this);"><span data-field='click_count'><a href="javascript:void(0);">访问量</a></span></th>
+						<th onclick="sort_click(this);"><span data-field='goods_number'><a href="javascript:void(0);">库存</a></span></th>
 						<!-- <th>商品类型</th> -->
-						<th width="60">操作</th>
+						<th width="200px">操作</th>
 					</tr>
 					<tbody class="body-data"></tbody>
 				</table>
 			</div>
 		</div>
 		
-		<div class="batch_week" style="padding-bottom:30px;">
-			<div class="batch_l">
-				<span class="all_check"></span>
-				<button class="btn_common batch_del" onclick="deleteGoods();">批量删除</button>
-				<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
-				<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
-			</div>
+		<div id="list_type_foot">
+			<span id="all_check"></span>
+			<button class="btn_common" onclick="deleteGoods();">批量删除</button>
+			<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
+			<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
 			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 		</div>
 	</div>
@@ -64,45 +55,25 @@
 
 <script>
 var site = "<!--{$msite}-->";
+var tableOptions = {id : 'resultList',url : '/goods/list',colspan : 10};
 $(function(){
-	loadTableContent(1, true);
+	loadPageDataTable(1, true, tableOptions);
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
 	$("#goods_name").enterEvent(function(){
-		loadTableContent(1, true);
+		loadPageDataTable(1, true, tableOptions);
 	});
+	$("#search_type_infos").on('click',function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+	DOMEventBind();
 });
-function loadTableContent(curpage, isinit, param){
-	var container = $("#resultList");
-	//container.find("tr:gt(0)").remove();
-	var data = getConditions();
-	if(param){
-		$.extend(data, param);
-	}
-	data.curpage = curpage ? curpage : 1;
-	F.get('/goods/list', data, function(ret){
-		var TR = "";
-		if(!ret || !ret.result || !ret.result.length){
-			TR = "<tr><td colspan='10' style='text-align:center;'>没有符合条件的数据!</td></tr>";
-		}else{
-			var result = ret.result;
-			result.forEach(function(item){
-				TR += costructHtml(item);
-			});
-		}
-		container.find("tbody.body-data").html($(TR));
-		if(isinit){
-			generatePage(ret.curpage, ret.maxpage, ret.totalnum);
-		}
-		displaySaleNotSaleNum(ret);
-	});
-	refreshAfterRender(data);
-}
+
 //获取当前页面条件
-function getConditions(){
+function pageQueryCondtion(){
 	var is_sale = 1;
-	$(".goods_nums").find("li").each(function(){
+	$("#order_type").find("li").each(function(){
 		var THIS = $(this);
-		if(THIS.hasClass("li_on")){
+		if(THIS.hasClass("new_common_on")){
 			is_sale = THIS.attr("data-sale");
 		}
 	});
@@ -114,40 +85,24 @@ function getConditions(){
 	getSortCondition(data);
 	return data;
 }
-function costructHtml(result){
+function costructRowData(result){
 	var TR = "";
-	TR+= "<tr data-id="+result.goods_id+"><td class=\"check_go\"></td><td><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
+	TR+= "<tr data-id="+result.goods_id+"><td class=\"common_check\"></td><td><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
 	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></a></td>";
 	TR+= "<td>"+(result.cat_name ? result.cat_name : '')+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
 	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
-	TR+= "<td class=\"goods_edit\">编辑<div class=\"edit_info\"><ul><li><a href=\"javascript:;\" data-type='edit'>编辑</a></li><li>";
+	TR+= "<td class=\"goods_edit_col\"><span class=\"goods_edit\" data-type='edit'>编辑</span>";
 	var saleDOM = "";
 	if(result.is_on_sale == 1){
-		saleDOM = "<a href=\"javascript:;\" data-type='sale'>下架</a></li>";
+		saleDOM = "<span class='goods_sold_out' data-type='sale'>下架</span>";
 	}else{
-		saleDOM = "<a href=\"javascript:;\" data-type='nosale'>上架</a></li>";
+		saleDOM = "<span class='goods_sold_out' data-type='nosale'>上架</span>";
 	}
 	TR+= saleDOM;
-	TR+= "<li><a href=\"javascript:;\" data-type='delete'>删除</a></li><li><a href=\"javascript:;\" data-type='share'>分享</a></li></ul></div></td>";
+	TR+= "<span data-type='delete' class='goods_del'>删除</span></td>";//<span class='goods_look_up' date-type='share'>分享</span>
 	TR+= "</tr>";
 	return TR;
 }
-function generatePage(pageNo, totalPage, totalRecords){
-	//生成分页
-	kkpager.generPageHtml({
-		pno : pageNo,
-		//总页码
-		total : totalPage,
-		//总数据条数
-		totalRecords : totalRecords,
-		isGoPage : false,
-		mode : 'click',
-		click : function(n){
-			this.selectPage(n);
-			loadTableContent(n, false);
-		}
-	}, true);
-};
 function displaySaleNotSaleNum(ret){
 	var sale = 0;
 	var notsale = 0;
@@ -165,48 +120,31 @@ function displaySaleNotSaleNum(ret){
 }
 function list_switch(a){
 	var _li = "#li" + a ;
-	if($(_li).hasClass("li_on")){
-		return;
-	}
-	var _list = "#list" + a;
-	$(".goods_nums li").removeClass("li_on");
-	$(_li).addClass("li_on");
-	loadTableContent(1, true);
+	$(_li).addClass("new_common_on");
+	$(_li).siblings().removeClass("new_common_on");
+	clearQueryCondtion();
+	loadPageDataTable(1, true, tableOptions);
 }
-$(function(){
-	DOMEventBind();
-});
+//清空当前页面条件
+function clearQueryCondtion(){
+	$("#goods_name").val("");
+	$("#start_date").val("");
+	$("#end_date").val("");
+}
+//表格重新渲染后的刷新
+function afterLoadRender(data, params){
+	displaySaleNotSaleNum(data);
+	if(params && params.is_sale == 1){
+		$("#goodsNotSale").hide();
+		$("#goodsOnSale").show();
+	}else{
+		$("#goodsNotSale").show();
+		$("#goodsOnSale").hide();
+	}
+}
 function DOMEventBind(){
-	//全选
-	$(".all_check").on('click',function(){
-		var THIS = $(this);
-		if(THIS.hasClass("all_on")){
-			THIS.removeClass("all_on");
-			$(".check_go").removeClass("go_on");
-		}else{
-			THIS.addClass("all_on");
-			$(".check_go").addClass("go_on");
-		}
-	});
-	//单选
-	$("#list1").on('click','.check_go',function(){
-		var THIS = $(this);
-		if(THIS.hasClass("go_on")){
-			THIS.removeClass("go_on");
-		}else{
-			THIS.addClass("go_on");
-		}
-		cartSelectAll();
-	});
-	$("#list1").on('click','.goods_edit',function(){
-		var THIS = $(this);
-		if(THIS.find(".edit_info").is(":visible")){
-			THIS.find(".edit_info").fadeOut();
-		}else{
-			THIS.find(".edit_info").fadeIn();
-		}
-	});
-	$("#list1").on('click','.edit_info a', function(){
+	$("#resultList").on('click','.goods_edit_col span', function(e){
+		e.stopPropagation();
 		var THIS = $(this);
 		var type = THIS.attr("data-type");
 		var obj = THIS.closest("tr").first();
@@ -221,30 +159,7 @@ function DOMEventBind(){
 		}
 	});
 }
-//表格重新渲染后的刷新
-function refreshAfterRender(data){
-	if($('.all_check').hasClass("all_on")){
-		$('.all_check').removeClass("all_on");
-	}
-	if(data && data.is_sale == 1){
-		$("#goodsNotSale").hide();
-		$("#goodsOnSale").show();
-	}else{
-		$("#goodsNotSale").show();
-		$("#goodsOnSale").hide();
-	}
-}
 
-//是否符合全选
-function cartSelectAll(){
-	var item_num = $(".check_go").length;
-	var select_num = $(".go_on").length;
-	if(item_num == select_num){
-		$(".all_check").addClass("all_on");
-	}else{
-		$(".all_check").removeClass("all_on");
-	}
-}
 function deleteGoods(obj){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
@@ -255,7 +170,7 @@ function deleteGoods(obj){
 		var data = {goods_ids : goods_id};
 		F.postWithLoading('/goods/delete', data, function(data){
 			layer.msg('操作成功');
-			loadTableContent(1, true);
+			loadPageDataTable(1, true, tableOptions);
 		});
 	});
 }
@@ -270,13 +185,13 @@ function updateGoodsStatus(obj, statusVal){
 		showConfirm('确定要下架选中的商品吗？',function(){
 			F.postWithLoading('/goods/status', data, function(data){
 				layer.msg('操作成功');
-				loadTableContent(1, true);
+				loadPageDataTable(1, true, tableOptions);
 			});
 		});
 	}else{
 		F.postWithLoading('/goods/status', data, function(data){
 			layer.msg('操作成功');
-			loadTableContent(1, true);
+			loadPageDataTable(1, true, tableOptions);
 		});
 	}
 }
@@ -289,8 +204,8 @@ function batchHandleData(obj){
 	if(obj){
 		goods_id.push(obj.attr("data-id"));
 	}else{
-		$(".check_go").each(function(){
-			if($(this).hasClass("go_on")){
+		$(".common_check").each(function(){
+			if($(this).hasClass("common_check_on")){
 				goods_id.push($(this).closest("tr").first().attr("data-id"));
 			}
 		});
@@ -298,28 +213,26 @@ function batchHandleData(obj){
 	return goods_id;
 }
 function sort_click(obj, field){
-	obj = $(obj);
+	obj = $(obj).find("span");
 	var orderby = '';
 	var objcls = '';
 	if(obj.hasClass("sort_down")){
 		orderby = 'asc';
 		objcls = 'sort_up';
-		//obj.removeClass('sort_down').addClass('sort_up');
 	}else{
 		orderby = 'desc';
 		objcls = 'sort_down';
-		//obj.removeClass('sort_up').addClass('sort_down');
 	}
-	var tableHeader= obj.closest("tr").first().find("th");
+	var tableHeader= obj.closest("tr").first().find("th span");
 	tableHeader.removeClass("sort_down").removeClass("sort_up");
 	obj.addClass(objcls);
-	loadTableContent(kkpager._getCurrentPagerNo(), false);
+	loadPageDataTable(kkpager._getCurrentPagerNo(), false, tableOptions);
 }
 //获取当前排序的字段 作为查询条件
 function getSortCondition(data){
 	var orderby = '';
 	var order_field = '';
-	$("#resultList").find("tr.header").find("th").each(function(){
+	$("#resultList").find("tr.header").find("th span").each(function(){
 		var obj = $(this);
 		if(obj.hasClass("sort_up")){
 			orderby = 'asc';
