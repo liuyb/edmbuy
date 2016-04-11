@@ -581,6 +581,7 @@
   	background: #ecf1f5;
  	border: 0;
   	border-radius: 4px;	
+	padding-left: 10px;
 }
 .close_img_d{
 	position: absolute !important;

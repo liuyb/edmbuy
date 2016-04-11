@@ -62,6 +62,29 @@ $(function(){
 			$(".common_check").addClass("common_check_on");
 		}
 	});
+	//监听页面input元素
+	$(document).on('blur', 'input', function(){
+		var input = $(this);
+		var val = input.val();
+		var type = input.data("type");
+		if(val && type){
+			if(type == 'money'){
+				if(!isMoney(val)){
+					input.val("");
+					showMsg("请输入正确的金额！");
+					input.focus();
+				}else{
+					input.val(parseFloat(val).toFixed(2));
+				}
+			}else if(type == 'positive'){
+				if(!isPositiveNum(val)){
+					input.val("");
+					showMsg("请输入正整数！");
+					input.focus();
+				}
+			}
+		}
+	});
 });
 //复选框全选事件
 function handleSelectAll(){

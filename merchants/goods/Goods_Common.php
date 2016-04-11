@@ -151,13 +151,13 @@ class Goods_Common {
         $count = 0;
         foreach ($specifis as $item){
             $count ++;
-            $TR_HD .= "<td data-cat=".$item['cat_id'].">".$item['cat_name']."</td>";
+            $TR_HD .= "<th data-cat=".$item['cat_id'].">".$item['cat_name']."</th>";
         }
-        $TR_HD .= "<td>市场价</td>";
-        $TR_HD .= "<td>售价</td>";
-        $TR_HD .= "<td>供货价</td>";
-        $TR_HD .= "<td>成本价</td>";
-        $TR_HD .= "<td>库存</td></tr>";
+        $TR_HD .= "<th>市场价</th>";
+        $TR_HD .= "<th>售价</th>";
+        $TR_HD .= "<th>供货价</th>";
+        $TR_HD .= "<th>成本价</th>";
+        $TR_HD .= "<th>库存</th></tr>";
         foreach ($specifis[0]['attrs'] as $attr){
             $TR_HD .= "<tr class='attr_data'>";
             for($i = 1; $i <= $count; $i++){

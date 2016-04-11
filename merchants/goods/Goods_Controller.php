@@ -80,7 +80,7 @@ class Goods_Controller extends MerchantController
         $selectedCat = 0;
         $selectedShip = 0;
         $options = Goods_Common::cat_list(0);
-        $shipmentOps = Shipment_Model::getShipTemplateKV();
+        $shipmentOps = Goods_Atomic::getShipTemplateKV();
         if ($goods_id) {
             $goods = Items::load($goods_id);
             $merchant_id = $GLOBALS['user']->uid;
@@ -116,7 +116,7 @@ class Goods_Controller extends MerchantController
         }
         $this->v->assign('goods_type', Goods_Common::generateSpecifiDropdown(Goods_Atomic::get_goods_type()));
         $cat_list = Goods_Common::build_options($options, $selectedCat);
-        $ship_list = Goods_Common::build_ship_options($options, $selectedShip);
+        $ship_list = Goods_Common::build_ship_options($shipmentOps, $selectedShip);
         $this->v->assign('cat_list', $cat_list);
         $this->v->assign('ship_list', $ship_list);
         $this->setPageLeftMenu('goods', 'list');

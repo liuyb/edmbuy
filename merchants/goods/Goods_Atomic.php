@@ -118,6 +118,15 @@ class Goods_Atomic{
         $sql = "DELETE FROM shp_goods_gallery WHERE goods_id in ($goods_ids) ";
             D()->query($sql);
     }
+    
+    /**
+     * 获取键值对的运费模板列表
+     */
+    public static function getShipTemplateKV(){
+        $sql = "SELECT sp_id, tpl_name FROM shp_shipment where merchant_id='%s' order by last_time desc";
+        $result = D()->query($sql, $GLOBALS['user']->uid)->fetch_array_all();
+        return $result;
+    }
 }
 
 ?>

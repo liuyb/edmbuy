@@ -125,7 +125,8 @@
 						</div>
 					</div>
 				</div>
-				<button class="add_common del_check" style="margin-top:10px;">删除</button>
+				<!-- <button class="add_common del_check" style="margin-top:10px;">删除</button> -->
+				<span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span>
 				<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 				<div class="common_a_tow">
 		 			<div class="result_d">
@@ -150,7 +151,8 @@
 						</div>
 					</div>
 				</div>
-				<button class="add_common del_check">删除</button>
+				<span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span>
+				<!-- <button class="add_common del_check" style="margin-top:10px;">删除</button> -->
 				<div style="height:40px;" class="add_del_y">
 				<!--{foreach from=$type.display_attrs item=attr}-->
 				<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
@@ -189,16 +191,14 @@
 		<div class="issue_gods_i">
 			<div class="issue_gods_left">统一邮费：</div>
 			<div class="issue_gods_right" style="line-height:40px">
-				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'>元
+				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'> 元
 			</div>
 			<div class="issue_gods_right" style="margin-left:100px;">
 				<select class="selcet_c_ok">
 					<option value ="1">选择运费模板</option>
- 					<option value ="2">衣服</option>
- 					<option value ="3">食品饮料饮料</option>
- 					<option value ="4">饮料</option>
+ 					<!--{$ship_list}-->
 				</select>
-				<button class="more_type">新增运费模板</button>
+				<!-- <button class="more_type">新增运费模板</button> -->
 			</div>
 		</div>
 	</div>
@@ -496,7 +496,7 @@ function goodsSpecifiEvent(){
 		container.find(".z_in_height").hide();
 		isSpecifSelected(container);
 		generateSpecifTable();
-		
+		$(".deletelink").show();
 	})
 	//点击添加属性
 	$(document).on("click",'.add_common_a',function(){
@@ -568,23 +568,29 @@ function goodsSpecifiEvent(){
 	$(document).on("mouseout",'.yjtj',function(){
 		$(this).find("img").hide();
 	})
-	$(document).on("mouseover",'.standFlag',function(){
+	/* $(document).on("mouseover",'.standFlag',function(){
 		$(this).find(".del_check").show();
 	});
 	$(document).on("mouseout",'.standFlag',function(){
 		$(this).find(".del_check").hide();
-	});
+	}); */
 	//删除规格
-	$(document).on("click",'.del_check',function(){
+	/* $(document).on("click",'.del_check',function(){
 		getContainer(this).remove();
 		generateSpecifTable();
 		add_s_project_display();
-	});
+	}); */
 	//mask 处理
 	$(".mask_bg").on('click',function(){
 		$(".z_in_height").hide();
 		$(this).hide();
 	});
+}
+//删除规格
+function deleteSpecif(obj){
+	getContainer(obj).remove();
+	generateSpecifTable();
+	add_s_project_display();
 }
 //判断添加规格按钮是否能可以显示出来
 function add_s_project_display(){
@@ -747,7 +753,7 @@ function buildGoodsSpecif(data){
 		obj.find(".attrcls").each(function(){
 			var obj = $(this);
 			var index = obj.closest("tr").first().find("td").index(obj);
-			var th = $(".goods_stocks").find("tr.firsttr").find("td:eq("+index+")");
+			var th = $(".goods_stocks").find("tr.firsttr").find("th:eq("+index+")");
 			attr['attr_id'+at_count] = obj.data("attr");
 			attr['attr_value'+at_count] = obj.text();
 			attr['cat_id'+at_count] = th.data("cat");
