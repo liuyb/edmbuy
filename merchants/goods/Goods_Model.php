@@ -602,8 +602,8 @@ class Goods_Model extends Model
     static function getGoodsAttrList()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select ty.cat_id ,ty.cat_name from shp_goods_type ty RIGHT JOIN
-                shp_attribute attr on attr.cat_id = ty.cat_id where merchant_id = '%s'";
+        $sql = "select ty.cat_id ,ty.cat_name from shp_attribute attr  LEFT JOIN
+                shp_goods_type ty on attr.cat_id = ty.cat_id where merchant_id = '%s'";
         $result = D()->query($sql, $merchant_id)->fetch_array_all();
         if (empty($result)) {
             return [];
