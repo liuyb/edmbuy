@@ -68,7 +68,8 @@ class Goods_Atomic{
      */
     public static function add_goods_gallery($goods_id, $gallery){
         $sql = "INSERT INTO shp_goods_gallery(goods_id, img_url, img_desc, thumb_url, img_original) " .
-            "VALUES ('$goods_id', '$gallery[gallery_img]', '', '$gallery[gallery_thumb]', '$gallery[origin_img]')";
+            "VALUES ('$goods_id', '".D()->escape_string($gallery['gallery_img'])."', '', '".D()->escape_string($gallery['gallery_thumb'])."',
+                     '".D()->escape_string($gallery['origin_img'])."')";
         D()->query($sql);
     }
     
@@ -87,7 +88,7 @@ class Goods_Atomic{
      */
     public static function batch_delete_goods($goods_ids){
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) and merchant_id = '%s' ";
+        $sql = "DELETE FROM shp_goods where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' ";
         D()->query($sql,$merchant_id);
         return D()->affected_rows();
     }
@@ -97,7 +98,7 @@ class Goods_Atomic{
      * @param unknown $goods_ids
      */
     public static function batch_delete_goods_cat($goods_ids){
-        $sql = "DELETE FROM shp_goods_cat WHERE goods_id in ($goods_ids) ";
+        $sql = "DELETE FROM shp_goods_cat WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
     }
     
@@ -106,7 +107,7 @@ class Goods_Atomic{
      * @param unknown $goods_ids
      */
     public static function batch_delete_goods_attr($goods_ids){
-        $sql = "DELETE FROM shp_goods_attr WHERE goods_id in ($goods_ids) ";
+        $sql = "DELETE FROM shp_goods_attr WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
     }
     
@@ -115,7 +116,7 @@ class Goods_Atomic{
      * @param unknown $goods_ids
      */
     public static function batch_delete_goods_gallery($goods_ids){
-        $sql = "DELETE FROM shp_goods_gallery WHERE goods_id in ($goods_ids) ";
+        $sql = "DELETE FROM shp_goods_gallery WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
     }
     

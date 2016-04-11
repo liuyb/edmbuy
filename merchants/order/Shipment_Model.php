@@ -4,7 +4,7 @@
  * @author Jean
  *
  */
-class Shipment_Model{
+class Shipment_Model extends Model{
     
     /**
      * 添加或修改运费模板
@@ -57,7 +57,8 @@ class Shipment_Model{
         $batchs = [];
         foreach ($template as $tmp){
             $region_json = $tmp['region_json'];
-            array_push($batchs, "($sp_id, '$tmp[regions]', '$region_json', '$tmp[n_num]', '$tmp[n_fee]','$tmp[m_num]','$tmp[m_fee]')");
+            array_push($batchs, "(".intval($sp_id).", '".self::escape($tmp['regions'])."', '".$region_json."',
+                        '".intval($tmp['n_num'])."', '".doubleval($tmp['n_fee'])."','".intval($tmp['m_num'])."','".doubleval($tmp['m_fee'])."')");
         }
         $batchs = implode(',', $batchs);
         $sql .= $batchs;
@@ -184,14 +185,6 @@ class Shipment_Model{
         return D()->affected_rows();
     }
     
-    /**
-     * 获取键值对的运费模板列表
-     */
-    public static function getShipTemplateKV(){
-        $sql = "SELECT sp_id, tpl_name FROM shp_shipment where merchant_id='%s' order by last_time desc";
-        $result = D()->query($sql, $GLOBALS['user']->uid)->fetch_array_all();
-        return $result;
-    }
 }
 
 ?>

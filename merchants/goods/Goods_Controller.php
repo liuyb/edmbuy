@@ -98,7 +98,7 @@ class Goods_Controller extends MerchantController
             }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
-            $goods->item_desc = json_encode($goods->item_desc);
+            $goods->item_desc = json_encode(htmlspecialchars_decode($goods->item_desc));
             $goods->other_cat = $other_cat;
             $other_cat_list = [];
             foreach ($other_cat AS $cat_id) {
@@ -152,11 +152,11 @@ class Goods_Controller extends MerchantController
             $shipping_fee = $request->post('shipping_fee', 0);
             $shipping_template = $request->post('shipping_template', 0);
             $fee_or_template = $request->post('fee_or_temp', 1);
-            $goods_desc = $_POST['goods_desc'];
+            $goods_desc = htmlspecialchars($_POST['goods_desc']);
 
             $goods = new Items();
-            $goods->item_id = $goods_id;
-            $goods->cat_id = $catgory_id;
+            $goods->item_id = intval($goods_id);
+            $goods->cat_id = intval($catgory_id);
             $goods->item_name = $goods_name;
             $goods->item_brief = $item_brief;
             $goods->item_number = intval($goods_number);

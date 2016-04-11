@@ -111,7 +111,8 @@ class Goods_Model extends Model
             if (!$gallery || !$gallery['gallery_img']) {
                 continue;
             }
-            array_push($batchs, "('$goods_id', '$gallery[gallery_img]', '', '$gallery[gallery_thumb]', '$gallery[origin_img]')");
+            array_push($batchs, "('$goods_id', '".D()->escape_string($gallery['gallery_img'])."', '', '".D()->escape_string($gallery['gallery_thumb'])."',
+                                '".D()->escape_string($gallery['origin_img'])."')");
         }
         if (count($batchs) > 0) {
             $batchs = implode(',', $batchs);
@@ -138,7 +139,8 @@ class Goods_Model extends Model
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id1', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'attr_value1', '') . "',
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id2', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value2', '') . "',
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id3', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value3', '') . "',
-                        $attr[market_price],$attr[shop_price],$attr[income_price],$attr[cost_price],$attr[goods_number])";
+                        ".doubleval($attr['market_price']).",".doubleval($attr['shop_price']).",
+                        ".doubleval($attr['income_price']).",".doubleval($attr['cost_price']).",".intval($attr['goods_number']).")";
             D()->query($sql);
         }
     }
@@ -147,7 +149,7 @@ class Goods_Model extends Model
     {
         if ($arr && $key) {
             if (isset($arr[$key])) {
-                return $arr[$key];
+                return D()->escape_string($arr[$key]);
             }
         }
         return $default;
@@ -247,10 +249,6 @@ class Goods_Model extends Model
         if (empty($goods_ids)) {
             return;
         }
-        foreach ($goods_ids as &$gid) {
-            $gid = intval($gid);
-        }
-        $goods_ids = implode(',', $goods_ids);
         D()->beginTransaction();
         try {
             $affected = Goods_Atomic::batch_delete_goods($goods_ids);
@@ -265,15 +263,21 @@ class Goods_Model extends Model
         D()->commit();
     }
 
+    /**
+     * 修改商品字段
+     * @param array $goods_ids
+     * @param unknown $field
+     * @param unknown $val
+     */
     static function batchUpdateGoods(array $goods_ids, $field, $val)
     {
         $merchant_id = $GLOBALS['user']->uid;
         if (empty($goods_ids)) {
             return 0;
         }
-        $goods_ids = implode(',', $goods_ids);
-        $sql = "update shp_goods set $field = $val where goods_id in ($goods_ids) and merchant_id = '$merchant_id' ";
-        D()->query($sql);
+        $sql = "update shp_goods set ".D()->escape_string($field)." = ".D()->escape_string($val)." where goods_id ".Fn::db_create_in($goods_ids)." 
+                and merchant_id = '%s' ";
+        D()->query($sql, $merchant_id);
         return D()->affected_rows();
     }
 
@@ -288,7 +292,7 @@ class Goods_Model extends Model
         $where = "";
         $orderby = "";
         if ($options['goods_name']) {
-            $where .= " and g.goods_name like '%" . trim($options['goods_name']) . "%' ";
+            $where .= " and g.goods_name like '%%" . D()->escape_string(trim($options['goods_name'])) . "%%' ";
         }
         if ($options['start_date']) {
             $starttime = simphp_gmtime(strtotime($options['start_date'] . DAY_BEGIN));
@@ -303,15 +307,17 @@ class Goods_Model extends Model
             $where .= " and g.is_on_sale = " . (intval($options['is_sale']) - 1);
         }
         if ($options['orderby'] && $options['order_field']) {
-            $orderby .= " order by $options[order_field] $options[orderby],g.last_update $options[orderby] ";
+            $od_field = D()->escape_string($options['order_field']);
+            $od_by = D()->escape_string($options['orderby']);
+            $orderby .= " order by $od_field $od_by,g.last_update $od_by ";
         } else {
             $orderby .= " order by g.last_update desc ";
         }
-        $sql = "select count(*) from shp_goods g where merchant_id='" . $muid . "' $where ";
-        $count = D()->query($sql)->result();
+        $sql = "select count(*) from shp_goods g where merchant_id='%s' $where ";
+        $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='" . $muid . "' $where $orderby  limit {$pager->start},{$pager->pagesize}";
-        $goods = D()->query($sql)->fetch_array_all();
+        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $goods = D()->query($sql, $muid)->fetch_array_all();
         $goods = self::buildGoodsImg($goods);
         $pager->setResult($goods);
         $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='%s' $groupbyWhere group by is_on_sale";
@@ -350,12 +356,12 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select count(1) from shp_category where merchant_id='{$merchant_id}' and parent_id = 0 and is_delete =0";
-        $totalCount = D()->query($sql)->result();
+        $sql = "select count(1) from shp_category where merchant_id='%s' and parent_id = 0 and is_delete =0";
+        $totalCount = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($totalCount);
         $limit = $pager->start . "," . $pager->pagesize;
-        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category where merchant_id ='{$merchant_id}' and parent_id = 0 and is_delete =0  limit {$limit}";
-        $list = D()->query($sql)->fetch_array_all();
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category where merchant_id ='%s' and parent_id = 0 and is_delete =0  limit {$limit}";
+        $list = D()->query($sql, $merchant_id)->fetch_array_all();
         $data = self::getChirlList($merchant_id);
         $p = 0;
         for ($i = 0; $i < count($list); $i++) {
@@ -378,8 +384,8 @@ class Goods_Model extends Model
      */
     static function getChirlList($merchant_id)
     {
-        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category WHERE parent_id > 0 and merchant_id='{$merchant_id}' and is_delete = 0";
-        $result = D()->query($sql)->fetch_array_all();
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category WHERE parent_id > 0 and merchant_id='%s' and is_delete = 0";
+        $result = D()->query($sql, $merchant_id)->fetch_array_all();
         return $result;
     }
 

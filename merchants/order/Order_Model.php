@@ -19,7 +19,7 @@ class Order_Model extends Model {
         $where = "";
         $orderby = "";
         if($options['order_sn']){
-            $where .= " and o.order_sn like '%".trim($options['order_sn'])."%' ";
+            $where .= " and o.order_sn like '%%".D()->escape_string(trim($options['order_sn']))."%%' ";
         }
         if($options['start_date']){
             $starttime = simphp_gmtime(strtotime($options['start_date'].DAY_BEGIN));
@@ -30,24 +30,24 @@ class Order_Model extends Model {
             $where .= " and o.add_time <= $endtime ";
         }
         if($options['buyer']){
-            $where .= " and o.consignee like '%".trim($options['buyer'])."%' ";
+            $where .= " and o.consignee like '%%".D()->escape_string(trim($options['buyer']))."%%' ";
         }
         if($options['status']){
-            $statusSql = Order::build_order_status_sql($options['status'], 'o');
+            $statusSql = Order::build_order_status_sql(intval($options['status']), 'o');
             if($statusSql){
                 $where .= $statusSql;
             }
         }
         if($options['orderby'] && $options['order_field']){
-            $orderby .= " order by $options[order_field] $options[orderby] ";
+            $orderby .= " order by ".D()->escape_string($options['order_field'])." ".D()->escape_string($options['orderby'])." ";
         }else{
             $orderby .= " order by o.add_time desc ";
         }
-        $sql = "SELECT count(1) FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where merchant_ids='".$muid."' and is_separate = 0 $where ";
-        $count = D()->query($sql)->result();
+        $sql = "SELECT count(1) FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where merchant_ids='%s' and is_separate = 0 $where ";
+        $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "SELECT o.*, o.consignee as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='".$muid."' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
-        $orders = D()->query($sql)->fetch_array_all();
+        $sql = "SELECT o.*, o.consignee as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='%s' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $orders = D()->query($sql, $muid)->fetch_array_all();
         foreach ($orders as &$order){
             self::rebuild_order_info($order);
         }
@@ -61,8 +61,8 @@ class Order_Model extends Model {
     static function getOrderDetail($order_id){
         $muid = $GLOBALS['user']->uid;
         $sql = "SELECT o.*, IFNULL(u.nick_name,'') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id 
-                where o.order_id=$order_id and merchant_ids = '$muid' ";
-        $order = D()->query($sql)->fetch_array();
+                where o.order_id=$order_id and merchant_ids = '%s' ";
+        $order = D()->query($sql, $muid)->fetch_array();
         if(!$order || count($order) == 0){
             Fn::show_pcerror_message();
         }
@@ -104,8 +104,7 @@ class Order_Model extends Model {
         if(!$regionIds || count($regionIds) == 0){
             return '';
         }
-        $regionIds = join(',', $regionIds);
-        $sql = "select region_name from shp_region where region_id in ($regionIds) order by region_id";
+        $sql = "select region_name from shp_region where region_id ".Fn::db_create_in($regionIds)." order by region_id";
         $arr = D()->query($sql)->fetch_array_all();
         $region = "";
         foreach ($arr as $item){

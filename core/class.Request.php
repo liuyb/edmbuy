@@ -345,9 +345,6 @@ class Request {
 	  if (isset($field) && isset($default) && ''===$fv) {
 	    $fv = $default;
 	  }
-	  if($fv && is_string($fv)){
-	      $fv = Func::search_check($fv);
-	  }
 	  return $fv;
 	}
 	
@@ -363,11 +360,11 @@ class Request {
 	    $fv = $default;
 	  }
 	  if($fv && is_string($fv)){
-	      $fv = Func::post_check($fv);
+	      $fv = Func::remove_xss($fv);
 	  }else if($fv && is_array($fv)){
 	      foreach ($fv as &$vv){
 	          if(is_string($vv)){
-	              $vv = Func::post_check($vv);
+	              $vv = Func::remove_xss($vv);
 	          }
 	      }
 	  }
