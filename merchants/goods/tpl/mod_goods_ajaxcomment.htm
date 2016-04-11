@@ -4,11 +4,6 @@
         color: red;
         cursor: pointer;
     }
-    .reply_mana{
-        margin-top: 10px;
-    }
-    #common{
-    }
 </style>
 <!--[/HEAD_CSS]-->
 <table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
@@ -35,7 +30,7 @@
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看</td>
+        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看回复</td>
 
         <!--{else}-->
         <td>未回复</td>
