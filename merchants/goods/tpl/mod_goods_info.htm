@@ -24,7 +24,7 @@
 		<div class="issue_gods_i">
 			<div class="issue_gods_left" style="vertical-align: top;"><span class="fill_red">*</span>广<i class="i_length"></i>告<i class="i_length"></i>词：</div>
 			<div class="issue_gods_right">
-				<textarea class="textarea_c" maxlength="240" value="<!--{$goodsinfo->item_brief}-->" name="item_brief" required ></textarea>
+				<textarea class="textarea_c" maxlength="240" name="goods_brief" required ><!--{$goodsinfo->item_brief}--></textarea>
 			</div>
 			<p id="sr_ts">最多可输入240字</p>
 		</div>
@@ -85,12 +85,23 @@
 			</span>
 		</div>
 		<div style="margin:10px 105px;" id="othercat_area">
+	  	<!--{foreach from=$goodsinfo->other_cat item=cat_id}-->
+        <select name="other_cat" class="selcet_c_ok"><option value="">请选择</option><!--{$other_cat_list.$cat_id}--></select>
+        <!--{/foreach}-->
 		<button class="more_type" onclick="relateMoreCat(this);" type="button">关联更多分类</button>
 		<!-- <p id="sr_ts" style="margin-left:11px;">可将商品关联到多个分类下</p> -->
 		</div>
 		<div class="issue_gods_i">
 			<div class="issue_gods_left"><span class="fill_red">*</span>商品图片：</div>
 			<div class="issue_gods_right">
+				 <!--{if isset($gallery) }-->
+			  	 <!--{foreach from=$gallery item=g}-->
+				 <div class="add_img goods_gallery">
+				 <img src="<!--{$g->thumb_url}-->" data-ori="<!--{$g->img_original}-->" data-std="<!--{$g->img_url}-->" onclick="galleryPicSelect(this)" class="<!--{if $g->thumb_url == $goodsinfo->item_thumb }-->add_img_selected<!--{/if}-->">
+				 <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">
+				 </div>
+				 <!--{/foreach}-->
+              	 <!--{/if}-->
 				<div class="add_img publish_img">	
 					<img src="/themes/merchants/img/editor_plus.png">			
 					<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload(event, this)">	
@@ -163,6 +174,13 @@
 			</div>
 		</div>
 		<div id="issue_gods"><p>商品库存</p></div>
+		<div class="type_right font_common" style="margin-top:20px;">
+			<table cellspacing="0" cellpadding="0" class="goods_stocks">
+				<!--{if isset($goods_attr_html)}-->
+					<!--{$goods_attr_html}-->
+				<!--{/if}-->
+			</table>
+		</div>
 	</div>
 	
 	<div class="goods_right">
@@ -296,7 +314,7 @@ function addCatCancel(){
 function relateMoreCat(obj){
 	var cat_select = $("#cat_id");
 	var new_cat_select = cat_select.clone();
-	$(new_cat_select).removeAttr("required").removeAttr("id","cat_id").attr("name","other_cat");
+	$(new_cat_select).removeAttr("required").removeAttr("id","cat_id").attr("name","other_cat").val("");
 	var span = $("<span class='othercat_span'></span>");
 	span.append(new_cat_select);
 	span.append("<img src=\"/themes/merchants/img/close_11.png\">");

@@ -437,6 +437,7 @@
 	height:30px;
 	margin-left:20px;
 	width:200px;
+	padding-left: 4px!important;
 }
 .add_name_ts{
 	font-size:14px;

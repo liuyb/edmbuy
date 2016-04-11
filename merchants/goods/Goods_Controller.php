@@ -125,6 +125,7 @@ class Goods_Controller extends MerchantController
             /* 处理商品数据 */
             $goods_id = $request->post('goods_id', 0);
             $goods_name = $request->post('goods_name', '');
+            $item_brief = $request->post('goods_brief', '');
             $market_price = $request->post('market_price', 0);
             $cost_price = $request->post('cost_price', 0);
             $shop_price = $request->post('shop_price', 0);
@@ -143,6 +144,7 @@ class Goods_Controller extends MerchantController
             $goods->item_id = $goods_id;
             $goods->cat_id = $catgory_id;
             $goods->item_name = $goods_name;
+            $goods->item_brief = $item_brief;
             $goods->item_number = intval($goods_number);
             $goods->market_price = doubleval($market_price);
             $goods->shop_price = doubleval($shop_price);
@@ -439,7 +441,7 @@ class Goods_Controller extends MerchantController
         $list = Goods_Model::getCommentList($pager, $current);//获取分页列表
         $this->v->assign('commentList', $list);
         $ret = $pager->outputPageJson();
-        $this->setPageView($request, $response, '_page_box');
+        $this->setPageView($request, $response, '_page_index');
         $this->v->set_tplname('mod_goods_ajaxcomment');
         $this->v->assign('page', $ret);
         $this->v->assign('current', $current);
@@ -476,9 +478,12 @@ class Goods_Controller extends MerchantController
     {
         $common_id = $request->post("common_id");
         $list = Goods_Model::viewComment($common_id);
-        $ret['status'] = 1;
-        $ret['common'] = $list;
-        $response->sendJSON($ret);
+        $show_page = true;
+        if ($show_page) {
+            $v = new PageView('mod_user_ajaxviewcomment', '_page_box');
+            $v->assign('ret', $list);
+            $response->send($v);
+        }
     }
 
     /**

@@ -1,8 +1,105 @@
+<!--{add_css file="shop.css" scope="global"}-->
 <div id="body" class="ifr-body">
     <!--{include file="inc/left_common.htm"}-->
+    <div id="store_right_finish">
+        <div id="store_type">
+            <ul>
+                <li>当前使用模板</li>
+                <li  class="store_type_on">首页轮播图</li>
+            </ul>
+        </div>
+
+        <div id="store_infos">
+            <table cellspacing="0" cellpadding="0" id="store_table_list">
+                <tr>
+                    <th>排序</th>
+                    <th width="350">图片地址</th>
+                    <th width="350">链接地址</th>
+                    <th width="150">操作</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        <div id="browse">
+                            浏览
+                            <img src="/themes/merchants/img/editor_plus.png">
+                            <input type="file" id="file" name="file" class="dj_fil" onchange="fileupload(event, this)">
+                        </div>
+                             <div id="file_save">
+                            </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input id="link_address"  class="link_address_on" type="text" value="www.baidu.com"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>
+                        <div id="browse">
+                            浏览
+                            <input type="file" id="file" name="file" class="store_file" onchange="">
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>
+                        <div id="browse">
+                            浏览
+                            <input type="file" id="file" name="file" class="store_file" onchange="">
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+            </table>
+            <button id="store_btn">继续添加</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    $(function(){
+    $("#dpzx").addClass("order_left_common");
+
+    $(".store_edit").on("click",function(){
+        var _tex = $(this).text();
+        if(_tex == "编辑"){
+            $(this).text("保存");
+            $(this).parent().parent().find("#link_address").removeClass("link_address_on");
+        }
+        if(_tex == "保存"){
+            $(this).text("编辑");
+            $(this).parent().parent().find("#link_address").addClass("link_address_on");
+        }
     })
+
+    function fileupload(e, obj){
+        var url = '/goods/gallery';
+//        var galleryCount = $(".goods_gallery").length;
+        var selectedCls = "";
+//        if(galleryCount < 1){
+//            selectedCls = "add_img_selected";
+//        }
+        image_upload(url, e, obj, function(ret){
+            var thumb = ret.thumb;
+            var html =   '	<div class="add_img goods_gallery">'
+                    +'		<img src="'+thumb+'" class="'+selectedCls+'" data-ori="'+ret.result+'" data-std="'+ret.stdpath+'" onclick="galleryPicSelect(this)">	'
+                    +'      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
+                    +'	</div>';
+            $(".publish_img").before(html);
+        });
+    }
 </script>
