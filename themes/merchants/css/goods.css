@@ -219,8 +219,7 @@
 	padding: 0 5px;
 }
 .type_right{
-
-	margin-left:10px;
+	margin:0 20px 20px 20px !important;
 }
 .write_short{
 	border: 1px solid #ddd;
@@ -237,12 +236,15 @@
 	padding-left:10px;
 }
 .add_common{
-	background: #eee;
+	background: #fff;
 	border: 1px solid #eee;
 	vertical-align: top;
 	border-radius: 4px;
-	height: 29px;
+	height: 42px;
+	width:120px;
 	cursor:pointer;
+	font-size:12px;
+	color:#7d7d7d;
 }
 .add_input{
 	width: 120px;
@@ -262,16 +264,20 @@
 	border:2px solid #F26427 !important;
 }
 .stand_check{
-	background: url(../img/2.png) no-repeat  95% center;
-	width:100px;
-	padding-left: 5px;
-	height:27px;
+	background: url(../img/f26427.png) no-repeat  90% center;
+	width:120px;
+	height:40px;
+	line-height:40px;
+	padding-left: 10px;
+	font-size:12px;
+	color:#7d7d7d;
 }
 .stand_check_top{
 	position: relative;
 	border: 1px solid #ddd;
-	width:105px;
 	display: inline-block;
+  	margin: 10px 10px 0;
+  	border-radius: 4px;	
 }
 .check_list_info{
 	padding:5px 0 10px 5px;
@@ -295,52 +301,58 @@
 }
 .z_in_height{
 	background: #fff;
-	width: 105px;
+	width: 122px;
 	border: 1px solid #ddd;
 	left:-1px;
 	position: absolute;
 	z-index:2222;
 }
 .check_list_info li{
-	padding-left: 8px;
+	padding-left: 5px;
+	line-height:30px;
 	cursor:pointer;
+	font-size:12px;
+	color:#7d7d7d;
 }
 .li_on1{
 	background: #f46427;
 	color: #fff;
 }
 .add_common_a{
-	font-size: 14px;
-	color: #0085d7;
-	position: relative;
-	cursor:pointer;
-	line-height:40px;
+  	font-size: 14px;
+  	color: #7d7d7d;
+  	position: relative;
+  	cursor: pointer;
+  	line-height: 40px;	
 }
 .common_a_li{
-	top: 27px;
+	top: 40px;
 	position: absolute;
-	border: 1px solid #ddd;
-	width: 242px;
+	border: 1px solid #eee;
+	min-width:300px;
 	left: -1px;
 	background:#fff;
 	z-index:1222;
+	line-height:40px;
 }
 .common_a_li li{
 	padding: 0 10px;
+	font-size:12px;
+	color:#7d7d7d;
 }
 .common_a_tow{
 	position: absolute;
-	width: 349px;
-	margin-left: -88px;
+	width: auto;
+	margin-left: 10px;
 	background: #fff;
 	display:none;
 	z-index:1111;
 }
 .result_d{
-	width: 242px;
+	min-width: 300px;
 	display: inline-block;
-	border: 1px solid #ddd;
-	height: 27px;
+	border: 1px solid #eee;
+	height: 42px;
 	position: relative;
 }
 .ok_one{
@@ -364,26 +376,32 @@
 	color:#0085d7;
 }
 .jt_g{
-	background: #ddd url(../img/close.png) no-repeat 83%;
-	padding: 0px 40px;
-	width: 45px;
-	height: 20px;
-	margin: 4px;
-	line-height: 20px;
-	padding-left: 5px;
-	border-radius: 2px;
-	cursor: pointer;
+	background: #fff url(../img/close.png) no-repeat 83%;
+	border: 1px solid #eee;
+  	padding: 0px 40px;
+  	width: 45px;
+  	height: 20px;
+  	margin: 4px;
+  	padding: 4px 30px 4px 4px;
+  	border-radius: 2px;
+  	cursor: pointer;
+  	line-height: 43px;
+	font-size:12px;
+	color:#7d7d7d;
 }
 .yjtj{
-	background: #ddd;
-	padding: 5px 30px;
-	line-height: 60px;
-	border-radius: 2px;
-	position: relative;
-	color:#333;
-	margin-right: 10px;
-	display:none;
-	cursor: pointer;
+  	font-size: 12px;
+  	border: 1px solid #eee;
+  	line-height: 40px;
+  	background: #fff;
+  	border-radius: 4px;
+  	position: relative;
+  	color: #333;
+  	margin-right: 10px;
+  	display: none;
+  	cursor: pointer;
+  	color: #7d7d7d;
+  	padding: 10px 20px;	
 }
 .dj_fil{
 	position: absolute;
@@ -573,17 +591,24 @@
 	width: 70px;
 }
 .goods_stocks{
-	width:72%;
+	width:100%;
 }
 .goods_stocks td{
-	width:12%;
-	text-align:center;
-	border: 1px solid #ddd;
-	height:30px;
+  	font-size: 12px;
+  	width: 12%;
+  	text-align: center;
+  	border: 1px solid #ddd;
+  	height: 60px;
+  	line-height: 60px;
+  	color: #7d7d7d;	
 }
 .goods_stocks input{
-	width: 60px;
-	margin: 5px;
+  	height: 40px;
+  	width: 120px;
+  	line-height: 40px;
+  	background: #ecf1f5;
+ 	border: 0;
+  	border-radius: 4px;	
 }
 .close_img_d{
 	position: absolute !important;
@@ -620,7 +645,8 @@
 	top: 6px;
 }
 .add_del_y{
-	margin-bottom:15px;
+  	height: 40px;
+  	margin: 10px;
 }
 .yjtj img{
 	position: absolute;
@@ -948,5 +974,12 @@
     top: -17px;
     right: -7px;
     display: none;
+}
+.goods_stocks th{
+  	text-align: center;
+  	font-size: 12px;
+  	color: #333;	
+	height: 40px;
+ 	line-height: 40px;
 }
 /*20160401*/

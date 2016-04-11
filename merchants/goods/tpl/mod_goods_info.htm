@@ -125,7 +125,7 @@
 						</div>
 					</div>
 				</div>
-				<button class="add_common del_check">删除</button>
+				<button class="add_common del_check" style="margin-top:10px;">删除</button>
 				<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 				<div class="common_a_tow">
 		 			<div class="result_d">
@@ -170,9 +170,10 @@
 			<!--{/if}-->
 			
 			<div class="add_stand" <!--{if isset($count_goods_attributes) && $count_goods_attributes >= 3}--> style="display:none;" <!--{/if}-->>
-				<button type="button" class="add_common add_s_projcet">添加规格项目</button>
+				<button type="button" class="add_common add_s_projcet" style="margin:10px 10px 0">添加规格项目</button>
 			</div>
 		</div>
+		<div class="clear"></div>
 		<div id="issue_gods"><p>商品库存</p></div>
 		<div class="type_right font_common" style="margin-top:20px;">
 			<table cellspacing="0" cellpadding="0" class="goods_stocks">
@@ -702,7 +703,7 @@ function generateSpecifTable(){
 	var attr_as = [];
 	for(var i = 0,len=arr.length; i < len; i++){
 		var spe = arr[i];
-		TR_HD += "<td data-cat="+spe.cat_id+">"+spe.cat_name+"</td>";
+		TR_HD += "<th data-cat="+spe.cat_id+">"+spe.cat_name+"</th>";
 		attr_as.push(spe.attrs);
 	}
 	if(!arr.length || !attr_as.length){
@@ -712,11 +713,11 @@ function generateSpecifTable(){
 	}
 	var result =  [];
 	dke_Array(0,null, attr_as, result);
-	TR_HD += "<td>市场价</td>";
-	TR_HD += "<td>售价</td>";
-	TR_HD += "<td>供货价</td>";
-	TR_HD += "<td>成本价</td>";
-	TR_HD += "<td>库存</td></tr>";
+	TR_HD += "<th>市场价</th>";
+	TR_HD += "<th>售价</th>";
+	TR_HD += "<th>供货价</th>";
+	TR_HD += "<th>成本价</th>";
+	TR_HD += "<th>库存</th></tr>";
 	result.forEach(function(item){
 		if(item.length){
 			TR_HD += "<tr class='attr_data'>";
