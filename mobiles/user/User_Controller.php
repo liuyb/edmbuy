@@ -837,6 +837,7 @@ class User_Controller extends MobileController
         $this->nav_no = 0;
         $urlarr = C("storage.cookie.mch");
         $url = $urlarr["domain"];
+        $url = "http://".$urlarr["domain"];
         $mobile = $request->get("mobile");
         $pwd = $request->get("pwd");
         $this->v->assign("mobile", $mobile);

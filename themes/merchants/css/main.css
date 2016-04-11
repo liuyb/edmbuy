@@ -421,20 +421,30 @@ div .alert {
 }
 .common_check{
  	background: url(../img/check_true.png) no-repeat center;
+	background-size:16px;
 	cursor:pointer;
 }
 .common_check_on{
  	background: url(../img/xz.png) no-repeat center !important;
+	background-size:16px;
 	cursor:pointer;
 }
 #all_check{
  	background: url(../img/check_true.png) no-repeat center;
+	background-size:16px;
 	cursor:pointer;	
-	padding-left:47px;
+	padding-left:60px;  
+	display: inline-block;
+  	height: 16px;
+  	width: 16px
 }
 .all_check_on{
  	background: url(../img/xz.png) no-repeat center !important;
+	background-size:16px;
 	cursor:pointer;
+	display: inline-block;
+  	height: 16px;
+  	width: 16px	
 }
 #list_type_foot{
 	background:#fff;

@@ -266,22 +266,55 @@ class User_Model extends Model
      * @param $email
      * @param $inviteCode
      */
-    static function saveMerchantInfo($mobile, $email, $inviteCode,$password)
+    static function saveMerchantInfo($mobile, $email, $inviteCode, $password)
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
-        $tablename = "`shp_merchant`";
-        $insertarr['merchant_id'] = self::gen_merchant_id();
 
+        $add_time = gmtime();
+        $role_id = 1;
+        $sql = "SELECT action_list FROM shp_role WHERE role_id ={$role_id}";
+        $row = D()->query($sql)->get_one();
+        $action_list = $row['action_list'];
+
+        $sql = "SELECT nav_list FROM shp_admin_user WHERE action_list = 'all'";
+        $row = D()->query($sql)->get_one();
+        $nav_list = $row['nav_list'];
+
+        $data_admin = array(
+            'user_name' => $mobile,
+            'email' => $email,
+            'password' => '',
+            'ec_salt' => '',
+            'add_time' => $add_time,
+            'action_list' => $action_list,
+            'nav_list' => $nav_list,
+            'role_id' => $role_id,
+        );
+
+        $tablename = "`shp_merchant`";
+        $table_admin="`shp_admin_user`";
+        $insertarr['merchant_id'] = self::gen_merchant_id();
         $salt = self::gen_salt();
         $password_enc = self::gen_password($password, $salt);
-
+        $data_admin['password'] = $password_enc;
+        $data_admin['ec_salt'] = $salt;
         $insertarr['password'] = $password_enc;
         $insertarr['salt'] = $salt;
         $insertarr['mobile'] = $mobile;
-        $insertarr['invite_code'] = $inviteCode?$inviteCode:"";
+        $insertarr['invite_code'] = $inviteCode ? $inviteCode : "";
         $insertarr['email'] = $email;
         $insertarr['password'] = $password_enc;
-        return D()->insert($tablename, $insertarr);
+        $admin_uid = D()->insert($table_admin, $insertarr);
+        if($admin_uid){
+            $data_merchant['admin_uid'] = $admin_uid;
+            $effnum = D()->insert($tablename, $insertarr);
+            if ($effnum) {
+               $result= D()->update($table_admin, array('merchant_id'=>$data_merchant['merchant_id']), array('user_id'=>$admin_uid)); //更新merchant_id
+                    return $result;
+            }
+                return false;
+        }
+             return false;
     }
 
     static function gen_merchant_id()
@@ -304,9 +337,10 @@ class User_Model extends Model
      * 校验邀请码
      * @param $inviteCode
      */
-    static function checkInviteCode($inviteCode){
-            $sql="select user_id from shp_users where user_id = {$inviteCode}";
-            return D()->query($sql)->result();
+    static function checkInviteCode($inviteCode)
+    {
+        $sql = "select user_id from shp_users where user_id = {$inviteCode}";
+        return D()->query($sql)->result();
     }
 
 
