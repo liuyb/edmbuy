@@ -4,10 +4,10 @@
 <!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
 <div id="body" class="ifr-body">
     <!--{include file="inc/left_common.htm"}-->
-    <div class="goods_right">
-        <div class="goods_nums">
+    <div id="new_common">
+        <div id="order_type">
             <ul>
-                <li id="li1" onclick="f(1)" class="li_on">全部</li>
+                <li  class="new_common_on" id="li1" onclick="f(1)" >全部</li>
                 <li id="li2" onclick="f(2)">未处理</li>
             </ul>
         </div>
@@ -49,10 +49,10 @@
         var _li = "#li" + a;
         var _list = "#list" + a;
 
-        $(".goods_nums li").removeClass("li_on");
+        $("#order_type li").removeClass("new_common_on");
        // $(".common_go").hide();
 
-        $(_li).addClass("li_on");
+        $(_li).addClass("new_common_on");
         //$(_list).show();
         loadTableContent(1, a);
     }

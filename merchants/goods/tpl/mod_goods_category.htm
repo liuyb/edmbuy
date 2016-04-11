@@ -1,16 +1,33 @@
 <!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
 <!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
 <!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
-
-<div id="body" class="ifr-body">
+<!--[HEAD_CSS]-->
+<style>
+    .cate-edit{
+        display: inline-block;
+        margin-left: -52px;
+    }
+    .cate-del{
+        display: inline-block;
+        position: absolute;
+        left: 935px;
+    }
+    .catory-common{
+        position: relative;
+    }
+</style>
+<!--[/HEAD_CSS]-->
+<div id="body" class="ifr-body catory-common">
     <!--{include file="inc/left_common.htm"}-->
-    <div class="goods_right">
-        <div class="goods_nums">
+    <div id="new_common">
+        <div id="order_type">
             <ul>
-                <li id="li1" onclick="f(1)" class="li_on">管理</li>
+                <li id="li1" onclick="f(1)" class="new_common_on">管理</li>
                 <li id="li2" onclick="addGoodsCatery('new')">新增</li>
             </ul>
         </div>
+
+
 
         <div class="common_go" id="list1">
             <div class="search_result">
@@ -72,9 +89,9 @@
             }
         }
         TR += "</div></td><td>" +
-                "<input class='nums_px' data-id="+item.cat_id+" value="+item.sort_order+" style='text-align: center;' /></td><td>";
+                item.sort_order+"</td><td>";
 
-        TR += "<div style='padding:10px 0;'><a href='javascript:;'onclick='addGoodsCatery(" + item.cat_id + ")'  class='new_adds'>新增下级</a>" +
+        TR += "<div style='padding:10px 0 0;'><a href='javascript:;'onclick='addGoodsCatery(" + item.cat_id + ")'  class='new_adds'>新增下级</a>" +
                 "<a href='javaScript:;' onclick='editGoodsCatery(" + item.cat_id + ")' class='edit_type'>编辑</a>" +
                 "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ")' class='del_cla'>删除</a></div>";
         if (item.flat) {
@@ -82,8 +99,8 @@
             for (var i = 0; i < cate.length; i++) {
                 TR+="<div class='f_y_fe' data-type=" + item.cat_id + ">"+
                         "<a href='javascript:;' class='new_adds'></a>" +
-                        "<a href='javaScript:;' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' class='edit_type'>编辑</a>" +
-                        "<a href='javascript:;'   onclick='delCategory(" +cate[i]['cat_id'] + ")' class='del_cla'>删除</a></div>";
+                        "<a href='javaScript:;' class='cate-edit' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' >编辑</a>" +
+                        "<a href='javascript:;' class='cate-del'  onclick='delCategory(" +cate[i]['cat_id'] + ")' >删除</a></div>";
 
             }
         } else {
@@ -178,10 +195,10 @@
         var _li = "#li" + a;
         var _list = "#list" + a;
 
-        $(".goods_nums li").removeClass("li_on");
-        $(".common_go").hide();
+        $("#order_type li").removeClass("new_common_on");
+//        $(".common_go").hide();
 
-        $(_li).addClass("li_on");
+        $(_li).addClass("new_common_on");
         $(_list).show();
     }
 

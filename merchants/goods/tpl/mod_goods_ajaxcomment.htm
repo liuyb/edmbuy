@@ -23,18 +23,18 @@
             <div class="goods_name"><!--{$val.goods_name}--></div>
         </td>
         <td>
-            <div class="manage_goods_name"><!--{$val.content}--></div>
+            <p class="manage_goods_name"><!--{$val.content}--></p>
         </td>
         <td><!--{$val.comment_rank}--></td>
         <td><!--{$val.user_name}--></td>
-        <td><!--{$val.add_time|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
+        <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
+        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看回复</td>
 
         <!--{else}-->
         <td>未回复</td>
-        <td style="color: red" onclick="relayCommon( <!--{$val.comment_id}-->)">回复</td>
+        <td onclick="viewCommon( <!--{$val.comment_id}-->,'rplay')"  class="reply_mana">回复</td>
         <!--{/if}-->
     </tr>
     <!--{foreachelse}-->
@@ -43,7 +43,7 @@
     </tr>
     <!--{/foreach}-->
 </table>
-<div id="kkpager<!--{$current}-->" class="kkpager" style="float:right;clear:none;padding:0px;"></div>
+<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:0px;margin-top: 10px;"></div>
 <script>
     var curpage =<!--{$page.curpage}-->
     var maxpage =<!--{$page.maxpage}-->
@@ -86,18 +86,21 @@
             $(".common_go .search_result").html(ret);
         },"HTML");
     }
-    function viewCommon(comment_id) {
-        var id = "#common" + comment_id
-        $(id).removeClass("hidden").addClass("rlay-show");
+    function viewCommon(comment_id,type) {
+        if(type=='view'){
+            var title='查看评论';
+        }else{
+            var title='回复评论';
+        }
         var url = "/goods/viewrplay";
         var data = {"common_id": comment_id};
         layer.open({
             type: 2,
-            title: '查看评论',
+            title:title,
             shadeClose: true,
-            shade: 0,
+            shade: 0.01,
             area: ['400px', '400px'],
-            content: '/goods/viewrplay?common_id=' + comment_id
+            content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
         });
 
 //        F.postWithLoading(url, data, function (ret) {
@@ -112,23 +115,11 @@
     function relayCommon(comment_id) {
         var id = "#rplay-common" + comment_id
         $(id).removeClass("hidden").addClass("rlay-show");
-
     }
     function getMousePos(event) {
         var e = event || window.event;
         return [e.screenX, e.screenY]
     }
-    $(".div-button").click(function () {
-        var url = "/goods/rplayCommone";
-        var common_id = $("#comment_id").val()
-        var content = $("#content").val()
-        var data = {"common_id": common_id, "content": content}
-        F.postWithLoading(url, data, function (ret) {
-            if (ret.status == 1) {
-                showMsg(ret.retmsg);
-            }
-        })
-    })
     $("#button-view").click(function () {
         $(this).parents().removeClass("rlay-show");
     })

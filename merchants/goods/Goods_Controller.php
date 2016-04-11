@@ -25,6 +25,7 @@ class Goods_Controller extends MerchantController
             'goods/update/shortorder' => 'updateShortOrder',
             'goods/simply/category' => 'doAddCategory',
             'goods/comment' => 'goodsComment',
+            'goods/comment/view' => 'viewrplay',
             'goods/attribute/list' => 'goodsAttributeList',
             'goods/attribute/delete' => 'goodsAttributeDel'
         ];
@@ -485,12 +486,14 @@ class Goods_Controller extends MerchantController
      */
     public function viewrplay(Request $request, Response $response)
     {
-        $common_id = $request->post("common_id");
+        $common_id = $request->get("common_id");
+        $type = $request->get("type");
         $list = Goods_Model::viewComment($common_id);
         $show_page = true;
         if ($show_page) {
-            $v = new PageView('mod_user_ajaxviewcomment', '_page_box');
+            $v = new PageView('mod_goods_ajaxviewcomment', '_page_box');
             $v->assign('ret', $list);
+            $v->assign('type', $type);
             $response->send($v);
         }
     }
@@ -560,11 +563,6 @@ class Goods_Controller extends MerchantController
             $cat_id = $request->post("cat_id");
             $attrData = $request->post("attrDate");//前台的二维数组数据
             $sort_order = 1;
-            if(count($attrData)>3){
-                $ret['status'] =0;
-                $ret['retmsg'] = "最多只能添加三个属性值！";
-                $response->sendJSON($ret);
-            }
             $attr_names = [];
             foreach ($attrData as $val3) {
                 if (empty($val3[0])) {
