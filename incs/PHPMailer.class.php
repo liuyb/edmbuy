@@ -221,7 +221,7 @@ class PHPMailer {
    * This function will not work with the win32 version.
    * @var int
    */
-  public $Timeout       = 10;
+  public $Timeout       = 60;
 
   /**
    * Sets SMTP class debugging on or off.
@@ -315,7 +315,7 @@ class PHPMailer {
    * @return void
    */
   public function IsSMTP() {
-    $this->Mailer = 'smtp';
+    $this->Mailer = 'SMTP';
   }
 
   /**
@@ -323,7 +323,7 @@ class PHPMailer {
    * @return void
    */
   public function IsMail() {
-    $this->Mailer = 'mail';
+    $this->Mailer = 'MAIL';
   }
 
   /**
@@ -512,9 +512,9 @@ class PHPMailer {
       switch($this->Mailer) {
         case 'sendmail':
           return $this->SendmailSend($header, $body);
-        case 'smtp':
+        case 'SMTP':
           return $this->SmtpSend($header, $body);
-        case 'mail':
+        case 'MAIL':
         default:
           return $this->MailSend($header, $body);
       }
@@ -1054,7 +1054,7 @@ class PHPMailer {
         break;
     }
 
-    if($this->Mailer != 'mail') {
+    if($this->Mailer != 'MAIL') {
       $result .= $this->LE.$this->LE;
     }
 

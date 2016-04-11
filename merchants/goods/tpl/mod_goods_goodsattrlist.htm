@@ -2,11 +2,26 @@
 <!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
 <!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module"}-->
 <!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
+<!--[HEAD_CSS]-->
+<style>
+    #attr_top {
+         margin-top: 0px!important;
+    }
+    #attrib_tab {
+        width: 100%!important;
+    }
+    #attrib_tab th {
+         background: #fff!important;
+    }
+</style>
+
+<!--[/HEAD_CSS]-->
+<div id="body" class="ifr-body">
     <!--{include file="inc/left_common.htm"}-->
-    <div id="order_list_right">
-        <div class="goods_nums">
+    <div id="new_common">
+        <div id="order_type">
             <ul>
-                <li id="li1" onclick="f(1)" class="li_on">管理</li>
+                <li id="li1" onclick="f(1)" class="new_common_on">管理</li>
                 <li id="li2" onclick="editAttr('new')">新增</li>
             </ul>
         </div>

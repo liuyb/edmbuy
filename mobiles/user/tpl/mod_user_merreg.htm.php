@@ -71,6 +71,10 @@
 
         var url = "/user/merchant/getcode";
         var mobile = $("#phone_nums_p").val();
+        if(mobile == ""){
+            myAlert("手机号不能为空！");
+        };
+        isphone(mobile);
         var data = {"mobile": mobile};
         $.post(url, data,function (ret) {
             myAlert(ret.retmsg);
@@ -88,6 +92,18 @@
         var email =$("#ps_email").val();
         var inviter =$("#inviter").val();
         var url ="/user/merchant/savereg";
+        if(mobile == ""){
+            myAlert("手机号不能为空！");return;
+        };
+        if(auth_code == ""){
+            myAlert("验证码不能为空！");return;
+        };
+        if(email == ""){
+            myAlert("邮箱不能为空！");return;
+        };
+        checkEmail(email);
+        isphone(mobile);
+
         var data ={"mobile":mobile,"mobile_code":auth_code,"email":email,"invite_code":inviter};
         $.post(url,data,function(ret){
             myAlert(ret.retmsg);
@@ -100,8 +116,25 @@
     $(function () {
         $("#sus_money").parent().css("background", "#fff");
     });
+    /**
+     * 校验邮箱
+     * @param str
+     */
+    function checkEmail(str){
+        var re = /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+        if(!re.test(str)){
+            myAlert("邮箱格式不正确！");return;
+        }
+    }
 
-
+    //电话号码验证
+    function isphone(phone) {
+        var reg = /^1[0-9]{10}/;
+        if (!reg.test(phone)) {
+            myAlert("手机号码格式不正确！");
+            return;
+        }
+    }
     function refresh(){
 
         num = num - 1;
