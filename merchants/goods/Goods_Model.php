@@ -557,7 +557,14 @@ class Goods_Model extends Model
     {
         //comment_id ,id_value,content,comment_rank,user_name,add_time,status
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select count(1) from shp_comment where merchant_id='%s'";
+        $where="merchant_id='%s' ";
+        $sql = "select count(1) from shp_comment where ";
+        if($current==2){
+            $where .="and comment_reply is null";
+            $sql .=$where;
+        }else{
+            $sql .=$where;
+        }
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
@@ -602,14 +609,20 @@ class Goods_Model extends Model
     static function getGoodsAttrList()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select ty.cat_id ,ty.cat_name from shp_attribute attr  LEFT JOIN
-                shp_goods_type ty on attr.cat_id = ty.cat_id where merchant_id = '%s'";
-        $result = D()->query($sql, $merchant_id)->fetch_array_all();
+        $sql="select cat_id from shp_attribute where merchant_id ='%s' limit 1";
+        $result=D()->query($sql,$merchant_id)->result();
         if (empty($result)) {
             return [];
         }
-        foreach ($result as &$val) {
-            $val['attr_name'] = self::getAttrName($val['cat_id']);
+        $sql = "select distinct(ty.cat_id) ,ty.cat_name from shp_attribute attr  LEFT JOIN
+                shp_goods_type ty on attr.cat_id = ty.cat_id where merchant_id = '%s'";
+        $result = D()->query($sql, $merchant_id)->fetch_array_all();
+        foreach ($result as $key =>$val) {
+            if(!empty($val['cat_id'])){
+                $result[$key]['attr_name'] = self::getAttrName($val['cat_id']);
+            }else{
+                unset($result[$key]);
+            }
         }
         return $result;
     }
@@ -641,7 +654,7 @@ class Goods_Model extends Model
         if ($attrId != "new") {
             $sql = "select attr.attr_id as attr_id ,attr.attr_name as attr_name ,attr.sort_order as sort_order ,ty.cat_id as cat_id ,ty.cat_name as cat_name
                 from shp_attribute  as attr  LEFT JOIN  shp_goods_type as ty on ty.cat_id = attr.cat_id  where
-                attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order ASC";
+                attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order DESC";
             $result = D()->query($sql, $merchant_id, $attrId)->fetch_array_all();
             $list['attr'] = $result;
         }

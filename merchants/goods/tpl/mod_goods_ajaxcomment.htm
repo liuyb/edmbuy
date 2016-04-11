@@ -1,52 +1,8 @@
 <!--[HEAD_CSS]-->
 <style>
-    .view-hidden {
-        border: 1px solid red;
-        width: 20%;
-        height: 50px;
-        padding: 30px;
-    }
-
-    .rplay-hidden {
-        display: none;
-        border: 1px solid red;
-        width: 30%;
-        height: 150px;
-        text-align: center;
-        overflow: hidden;
-        /*position: absolute;*/
-    }
-
-    .rplay-hidden-view {
-        display: none;
-        border: 1px solid red;
-        width: 30%;
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .rplay-hidden span {
-        margin-left: -82px;
-    }
-
-    .rlay-show {
-        display: block;
-    }
-
-    .div-button, .div-button-view {
-        width: 50px;
-        height: 20px;
-        background-color: blue;
-        border-radius: 5px;
-        text-align: center;
-        line-height: 20px;
-        color: white;
-        float: right;
-        margin-right: 20px;
-    }
-
-    #common {
-        position: relative;
+    .view-common{
+        color: red;
+        cursor: pointer;
     }
 </style>
 <!--[/HEAD_CSS]-->
@@ -74,27 +30,11 @@
         <td><!--{$val.add_time|date_format:"%Y-%m-%d %H:%M:%S"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
-        <div class="rplay-hidden-view" id="common<!--{$val.comment_id}-->">
-            <span>评论内容： </span><textarea name="rplay" id="view-rplay<!--{$val.comment_id}-->" cols="30" rows="3"
-                                         readonly>
-                                        </textarea>
+        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->)">查看回复</td>
 
-            <span>回复内容： </span><textarea name="rplay" id="mechart-rplay<!--{$val.comment_id}-->" cols="30" rows="3"
-                                         readonly>
-                                        </textarea>
-
-            <div class="div-button-view" id="button-view">确定</div>
-        </div>
         <!--{else}-->
         <td>未回复</td>
         <td style="color: red" onclick="relayCommon( <!--{$val.comment_id}-->)">回复</td>
-        <div class="rplay-hidden" id="rplay-common<!--{$val.comment_id}-->">
-            <span>请输入回复类容： </span><textarea name="rplay" id="content" cols="30" rows="3">
-                    </textarea>
-            <input type="hidden" value="<!--{$val.comment_id}-->" id="comment_id"/>
-            <div class="div-button">确定</div>
-        </div>
         <!--{/if}-->
     </tr>
     <!--{foreachelse}-->
@@ -108,6 +48,7 @@
     var curpage =<!--{$page.curpage}-->
     var maxpage =<!--{$page.maxpage}-->
     var totalnum =<!--{$page.totalnum}-->
+    var current =<!--{$current}-->
     var currentType = <!--{$current}-->
             $(function () {
                 if (totalnum > 0) {
@@ -127,23 +68,45 @@
             mode: 'click',
             click: function (n) {
                 this.selectPage(n);
-                loadTableContent(n, false);
+                gethtml(n, current);
             }
         }, true);
+    };
+    function gethtml(curpage,current) {
+
+        var container = $("#resultList");
+        container.find("tr:gt(0)").remove();
+        curpage = curpage ? curpage : 1;
+        if(current==1){
+            var data = {"current_page": curpage,'current':"1"}
+        }else{
+            var data = {"current_page": curpage,'current':"2"}
+        }
+        F.get('/goods/ajaxGetCommentList', data, function (ret) {
+            $(".common_go .search_result").html(ret);
+        },"HTML");
     }
-    ;
     function viewCommon(comment_id) {
         var id = "#common" + comment_id
         $(id).removeClass("hidden").addClass("rlay-show");
         var url = "/goods/viewrplay";
         var data = {"common_id": comment_id};
-        F.postWithLoading(url, data, function (ret) {
-            if (ret.status == 1) {
-                var commonList = ret.common
-                $("#view-rplay" + comment_id).val(commonList.content)
-                $("#mechart-rplay" + comment_id).val(commonList.comment_reply)
-            }
-        })
+        layer.open({
+            type: 2,
+            title: '查看评论',
+            shadeClose: true,
+            shade: 0,
+            area: ['400px', '400px'],
+            content: '/goods/viewrplay?common_id=' + comment_id
+        });
+
+//        F.postWithLoading(url, data, function (ret) {
+//            if (ret.status == 1) {
+//                var commonList = ret.common
+//                $("#view-rplay" + comment_id).val(commonList.content)
+//                $("#mechart-rplay" + comment_id).val(commonList.comment_reply)
+//            }
+//        })
     }
 
     function relayCommon(comment_id) {
