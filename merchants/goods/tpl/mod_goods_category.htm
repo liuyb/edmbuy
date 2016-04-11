@@ -77,13 +77,13 @@
     function costructHtml(item) {
 
         var TR = "";
-        TR += "<tr><td><div class='f_type_name ' data-type=" + item.cat_id + ">" + item.cat_name + "</div>" +
-                "<div class='f_y_fe' data-type=" + item.cat_id + ">"
+        TR += "<tr><td><div class='f_type_name ' data-type=" + item.cat_id + ">" + item.cat_name + "</div>" ;
+                
         if (item.flat) {
             // console.log(item.childs);
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
-                TR += "<p style='margin:0;margin-left:-57px;'>" + cate[i]['cat_name'] + "</p>";
+                TR += "<div class='f_y_fe' data-type=" + item.cat_id + "><p style='margin:0;margin-left:-57px;height:36px;'>" + cate[i]['cat_name'] + "</p></div>";
             }
         }
         TR += "</div></td><td>" +
