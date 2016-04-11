@@ -15,51 +15,48 @@
 <link rel="stylesheet" href="../mch/css/index.css" />
 <link rel="stylesheet" href="../mch/css/main.css" />
 <link rel="stylesheet" href="../mch/css/goods.css" />
+<link rel="stylesheet" href="../mch/css/order.css" />
 <script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
 </head>
 <body>
 
-<div id="head" class="ifr-head"><!--#include file="login_new_header.html"--></div>
+<!--#include file="header_commen.html"-->
 
 <div id="body" class="ifr-body">
 	<!--#include file="goods_left_common.html"-->
 	
-	<div class="goods_right">
-		<div class="goods_nums">
-			<ul>
-				<li id="li1" onclick="f(1)" class="li_on">销售中(100)</li>
-				<li id="li2" onclick="f(2)">已下架(100)</li>
+	<div id="new_common">
+		<div id="order_type">
+			<ul>	
+				<li class="new_common_on">销售中（100）</li>
+				<li>已下架（30）</li>
 			</ul>
 		</div>
-		<div class="goods_search">
-			<div class="hand_input">商品名称：<input type="text" val=""></div>
-			<div class="check_input">
-				<select class="check_s">
-					<option value ="all">全部类型</option>
-  					<option value ="bargain">特价商品</option>
-  					<option value ="flash">限时抢购商品</option>
-  					<option value ="remm">推荐至益多米平台</option>
-				</select>
-				<button class="search_button">搜索</button>
-			</div>
+		
+		<div id="choose_condition">
+			<input class="check_time_left" contenteditable id="order_num" placeholder="商品名称">
+			<input class="check_time_left" contenteditable id="buyer"  placeholder="全部类型">
+			<div class="check_time_left" id="time_left">dd</div> 
+			<span style="padding-left:15px;">至</span>
+			<div class="check_time_left" id="time_right">dd</div>
+			<button id="search_type_infos">搜索</button>
 		</div>
-		<div class="clear"></div>
 		
 		<div class="common_go" id="list1">
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab">
 					<tr>	
 						<th>选择</th>
-						<th>商品名称</th>
+						<th width="200px">商品名称</th>
 						<th>商品分类</th>
 						<th>售价</th>
 						<th>供货价</th>
-						<th>佣金</th>
-						<th class="slaes_among">销量</th>
-						<th>访问量(次)</th>
-						<th>库存</th>
+						<th><span class="slaes_among">佣金</span></th>
+						<th><span class="slaes_among">销量</span></th>
+						<th><span class="slaes_among">访问量</span></th>
+						<th><span class="slaes_among">库存</span></th>
 						<th>商品类型</th>
-						<th width="60">操作</th>
+						<th width="200px">操作</th>
 					</tr>
 					<tr>
 						<td class="check_go"></td>
@@ -75,16 +72,11 @@
 						<td>777</td>
 						<td>100</td>
 						<td>限时抢购</td>
-						<td class="goods_edit">
-							编辑
-							<div class="edit_info">
-								<ul>
-									<li><a href="javascript:;">编辑</a></li>
-									<li><a href="javascript:;">下架</a></li>
-									<li><a href="javascript:;">删除</a></li>
-									<li><a href="javascript:;">分享</a></li>
-								</ul>
-							</div>
+						<td>
+							<span class="goods_edit">编辑</span>
+							<span class="goods_sold_out">下架</span>
+							<span class="goods_del">删除</span>
+							<span class="goods_look_up">查看</span>
 						</td>
 					</tr>
 					<tr>
@@ -101,16 +93,11 @@
 						<td>777</td>
 						<td>100</td>
 						<td>限时抢购</td>
-						<td class="goods_edit">
-							编辑
-							<div class="edit_info">
-								<ul>
-									<li><a href="javascript:;">编辑</a></li>
-									<li><a href="javascript:;">下架</a></li>
-									<li><a href="javascript:;">删除</a></li>
-									<li><a href="javascript:;">分享</a></li>
-								</ul>
-							</div>
+						<td>
+							<span class="goods_edit">编辑</span>
+							<span class="goods_sold_out">下架</span>
+							<span class="goods_del">删除</span>
+							<span class="goods_look_up">查看</span>
 						</td>
 					</tr>
 				</table>
@@ -213,7 +200,7 @@
 				</table>
 			</div>
 		</div>
-		
+
 		<div class="batch_week">
 			<div class="batch_l">
 				<span class="all_check">全选</span>
@@ -224,6 +211,7 @@
 				<span>共20条数据</span>
 				<span class="disabled">上一页</span><span class="current f_on">1</span><span class="current">2</span><span class="disabled">下一页</span>
 			</div>
+			<div class="clear"></div>
 		</div>
 	</div>
 </div>

@@ -22,16 +22,16 @@
 <style>
 </style>
 
-
-<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+<!--#include file="header_commen.html"-->
 
 <div id="body" class="ifr-body">
 	<!--#include file="goods_left_common.html"-->
-	<div class="goods_right">
-		<div class="goods_nums">
-			<ul>
-				<li id="li1" onclick="f(1)" class="li_on">全部</li>
-				<li id="li2" onclick="f(2)">未处理</li>
+	
+	<div id="new_common">
+		<div id="order_type">
+			<ul>	
+				<li class="new_common_on" id="li1" onClick="f(1)">全部</li>
+				<li id="li2"  onClick="f(2)">未处理</li>
 			</ul>
 		</div>
 		
@@ -39,8 +39,8 @@
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab">
 					<tr>	
-						<th>评价商品</th>
-						<th>评价内容</th>
+						<th width="200px">评价商品</th>
+						<th width="300px">评价内容</th>
 						<th>商品评分</th>
 						<th>评价人</th>
 						<th>日期</th>
@@ -57,7 +57,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+						<td><span class="reply_mana">回复</span></td>
 					</tr>
 					<tr>
 						<td>
@@ -69,7 +69,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+						<td><span class="reply_mana">回复</span></td>
 					</tr>
 					<tr>
 						<td>
@@ -81,7 +81,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+						<td><span class="reply_mana">回复</span></td>
 					</tr>
 				</table>
 			</div>
@@ -91,8 +91,8 @@
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab">
 					<tr>	
-						<th>评价商品</th>
-						<th>评价内容</th>
+						<th width="200px">评价商品</th>
+						<th width="300px">评价内容</th>
 						<th>商品评分</th>
 						<th>评价人</th>
 						<th>日期</th>
@@ -109,7 +109,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+						<td><span class="reply_mana">回复</span></td>
 					</tr>
 					<tr>
 						<td>
@@ -121,7 +121,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><a href="javascript:;" style="color:#0085d7;">回复</a></td>
+						<td><span class="reply_mana">回复</span></td>
 					</tr>
 				</table>
 			</div>
@@ -145,10 +145,10 @@ function f(a){
 	var _li = "#li" + a ;
 	var _list = "#list" + a;
 	
-	$(".goods_nums li").removeClass("li_on");
+	$("#order_type li").removeClass("new_common_on");
 	$(".common_go").hide();
 	
-	$(_li).addClass("li_on");
+	$(_li).addClass("new_common_on");
 	$(_list).show();
 }
 </script>

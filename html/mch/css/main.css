@@ -425,3 +425,26 @@ body { min-width: 1200px;}
 	text-align:center;
 }
 /*2016-4-9 e 首页*/
+#new_common {
+  margin: 20px 0 0 20px;
+  width: 1040px;
+  float: left;
+  min-height: 880px;
+}
+
+#new_common li {
+  width: 100px;
+  height: 40px;
+  font-size: 14px;
+  color: #fff;
+  background: #bcbac2;
+  display: inline-block;
+  border-radius: 2px;
+  line-height: 40px;
+  text-align: center;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.new_common_on {
+  background: #f26427 !important;
+}
