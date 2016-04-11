@@ -82,7 +82,9 @@ class Goods_Controller extends MerchantController
         $selectedShip = 0;
         $options = Goods_Common::cat_list(0);
         $shipmentOps = Goods_Atomic::getShipTemplateKV();
+        $menu = 'publish';
         if ($goods_id) {
+            $menu = 'list';
             $goods = Items::load($goods_id);
             $merchant_id = $GLOBALS['user']->uid;
             if (!$goods || $goods->merchant_id != $merchant_id) {
@@ -90,8 +92,8 @@ class Goods_Controller extends MerchantController
             }
             $selectedCat = $goods->cat_id;
             //邮件模板
-            if($goods->fee_or_template == 2){
-                $selectedShip = $goods->fee_or_template;
+            if($goods->fee_or_template == Goods_Model::$SHIPPING_TEMPLATE){
+                $selectedShip = $goods->shipping_template;
                 $goods->shipping_fee = 0; 
             }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
@@ -120,7 +122,7 @@ class Goods_Controller extends MerchantController
         $ship_list = Goods_Common::build_ship_options($shipmentOps, $selectedShip);
         $this->v->assign('cat_list', $cat_list);
         $this->v->assign('ship_list', $ship_list);
-        $this->setPageLeftMenu('goods', 'list');
+        $this->setPageLeftMenu('goods', $menu);
         $response->send($this->v);
     }
 
@@ -148,6 +150,8 @@ class Goods_Controller extends MerchantController
             $goods_img = $request->post('goods_img', '');
             $original_img = $request->post('original_img', '');
             $shipping_fee = $request->post('shipping_fee', 0);
+            $shipping_template = $request->post('shipping_template', 0);
+            $fee_or_template = $request->post('fee_or_temp', 1);
             $goods_desc = $_POST['goods_desc'];
 
             $goods = new Items();
@@ -166,8 +170,12 @@ class Goods_Controller extends MerchantController
             $goods->item_img = $goods_img;
             $goods->original_img = $original_img;
             $goods->per_limit_buy = intval($per_limit_buy);
-            $goods->shipping_fee = doubleval($shipping_fee);
-
+            $goods->fee_or_template = intval($fee_or_template);
+            if($fee_or_template == Goods_Model::$SHIPPING_FEE){
+                $goods->shipping_fee = doubleval($shipping_fee);
+            }else if($fee_or_template == Goods_Model::$SHIPPING_TEMPLATE){
+                $goods->shipping_template = intval($shipping_template);
+            }
             $ret = false;
             if ($goods_name) {
                 $ret = Goods_Model::insertOrUpdateGoods($request, $goods);

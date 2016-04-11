@@ -37,7 +37,7 @@
 			
 			<div class="issue_gods_left" style="margin-left:110px"><span class="fill_red">*</span>供<i class="i_length"></i>货<i class="i_length"></i>价：</div>
 			<div class="issue_gods_right">
-				<input type="text" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" data-type='money' required >
+				<input type="text" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" id="income_price" data-type='money' required >
 			</div>
 			
 			<div class="issue_gods_left" style="margin-left:110px">成<i class="i_length"></i>本<i class="i_length"></i>价：</div>
@@ -51,7 +51,7 @@
 		<div class="issue_gods_i">
 			<div class="issue_gods_left"><span class="fill_red">*</span>售<i class="i_length"></i><i class="i_length"></i><i class="i_length"></i>&nbsp;价：</div>
 			<div class="issue_gods_right">
-				<input type="text" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" data-type='money' required >
+				<input type="text" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" id="shop_price" data-type='money' required >
 			</div>
 			
 			<div class="issue_gods_left" style="margin-left:113px"><span class="fill_red">*</span>库<i class="i_length"></i><i class="i_length"></i><i class="i_length"></i>&nbsp;存：</div>
@@ -189,16 +189,16 @@
 	<div class="goods_right">
 		<div id="issue_gods"><p>物流信息</p></div>
 		<div class="issue_gods_i">
-			<label for="lf"></label><div id="lf" class="issue_gods_left check_yf">统一邮费：</div>
+			<label for="lf"></label><div id="lf" class="issue_gods_left check_yf <!--{if $goodsinfo->fee_or_template != 2}-->check_yf_on<!--{/if}-->" data-val="1">统一邮费：</div>
 			<div class="issue_gods_right" style="line-height:40px">
 				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'> 元
 			</div>
 		</div>
 		<div class="issue_gods_i">
-			<label for="lff"></label><div id="lff" class="issue_gods_left check_yf_on">邮费模板：</div>
+			<label for="lff"></label><div id="lff" class="issue_gods_left check_yf <!--{if $goodsinfo->fee_or_template == 2}-->check_yf_on<!--{/if}-->" data-val="2">邮费模板：</div>
 			<div class="issue_gods_right">
-				<select class="selcet_c_ok">
-					<option value ="1">选择运费模板</option>
+				<select class="selcet_c_ok" name="shipping_template" id="shipping_template">
+					<option value="">选择运费模板</option>
  					<!--{$ship_list}-->
 				</select>
 				<!-- <button class="more_type">新增运费模板</button> -->
@@ -263,6 +263,24 @@ function goods_submit(){
 		layer.msg('请点击商品图片选择预览图片');
 		return false;
 	}
+	var fee_or_temp = 0;
+	$(".check_yf").each(function(){
+		if($(this).hasClass("check_yf_on")){
+			fee_or_temp = $(this).data("val");	
+		}
+	});
+	if(!fee_or_temp){
+		showMsg('请选择物流方式！');
+		return false;
+	}else{
+		if(fee_or_temp == 2){
+			if(!$("#shipping_template").val()){
+				showMsg('请选择运费模板！');
+				return false;
+			}
+		}
+	}
+	data.fee_or_temp = fee_or_temp;
 	var goods_desc = UE.getEditor('editor').getContent();
 	if(!goods_desc || !goods_desc.length){
 		layer.msg('还没有填写商品描述！');
@@ -428,6 +446,12 @@ $(function(){
 	
 	goodsSpecifiEvent();
 	highlightSpecifi();
+	
+	//物流信息事件
+	$(".check_yf").on('click', function(){
+		$(".check_yf").removeClass("check_yf_on");
+		$(this).addClass("check_yf_on");
+	});
 });
 
 function galleryPicSelect(obj){

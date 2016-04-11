@@ -133,7 +133,7 @@ class Goods_Common {
     static function generateSpecifiDropdown($specifis){
         $html = "";
         foreach ($specifis as $cat){
-            $html .= "<li data-cat='$cat[cat_id]'>$cat[cat_name]</li>";
+            $html .= "<li data-cat='$cat[cat_id]'>".htmlspecialchars($cat['cat_name'])."</li>";
         }
         return $html;
     }
@@ -151,7 +151,7 @@ class Goods_Common {
         $count = 0;
         foreach ($specifis as $item){
             $count ++;
-            $TR_HD .= "<th data-cat=".$item['cat_id'].">".$item['cat_name']."</th>";
+            $TR_HD .= "<th data-cat=".$item['cat_id'].">".htmlspecialchars($item['cat_name'])."</th>";
         }
         $TR_HD .= "<th>市场价</th>";
         $TR_HD .= "<th>售价</th>";
@@ -161,7 +161,7 @@ class Goods_Common {
         foreach ($specifis[0]['attrs'] as $attr){
             $TR_HD .= "<tr class='attr_data'>";
             for($i = 1; $i <= $count; $i++){
-                $TR_HD .= "<td class='attrcls' data-attr='".$attr['attr'.$i.'_id']."'>".$attr['attr'.$i.'_value']."</td>";
+                $TR_HD .= "<td class='attrcls' data-attr='".$attr['attr'.$i.'_id']."'>".htmlspecialchars($attr['attr'.$i.'_value'])."</td>";
             }
             $TR_HD .= "<td><input type='text' class='attr_market_price' data-type='money' value='$attr[market_price]' required ></td>";
             $TR_HD .= "<td><input type='text' class='attr_shop_price' data-type='money' value='$attr[shop_price]' required ></td>";
