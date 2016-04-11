@@ -1,0 +1,68 @@
+    <!--{foreach from=$ret.result item=val}-->
+        <tr>
+            <td>
+                <div class='f_type_name' data-type=<!--{$val.cat_id}-->><!--{$val.cat_name}--></div>
+                <div class='f_y_fe' data-type=<!--{$val.cat_id}-->>
+                    <!--{if isset($val.flat)}-->
+                        <!--{foreach from=$val.childs item=chl}-->
+                        <p style='margin:0;margin-left:-57px;'><!--{$chl.cat_name}--></p>
+                        <!--{/foreach}-->
+                    <!--{/if}-->
+                </div>
+            </td>
+            <td>
+                <input class='nums_px' data-id="<!--{$val.cat_id}-->" value="<!--{$val.sort_order}-->" style='text-align: center;' />
+            </td>
+            <td>
+                <div style='padding:10px 0;'>
+                    <a href='javascript:;'onclick='addGoodsCatery(<!--{$val.cat_id}-->)'  class='new_adds'>
+                        新增下级
+                    </a>
+                    <a href='javaScript:;' onclick='editGoodsCatery(<!--{$val.cat_id}-->)' class='edit_type'>
+                        编辑
+                    </a>
+                    <a href='javascript:;'   onclick='delCategory(<!--{$val.cat_id}-->)' class='del_cla'>
+                        删除
+                    </a>
+                </div>
+                    <!--{if isset($val.flat)}-->
+                        <!--{foreach from=$val.childs item=chl2}-->
+                <div class='f_y_fe' data-type="<!--{$val.cat_id}-->">
+                    <a href='javascript:;' class='new_adds'></a>
+                    <a href='javaScript:;' onclick='editGoodsCatery(<!--{$chl2.cat_id}-->)' class='edit_type'>编辑</a>
+                    <a href='javascript:;' onclick='delCategory(<!--{$chl2.cat_id}-->)' class='del_cla'>删除</a>
+                </div>
+                        <!--{/foreach}-->
+                    <!--{/if}-->
+            </td>
+        </tr>
+        <!--{foreachelse}-->
+        <!--{/foreach}-->
+    <div id="kkpager" style="float:right;clear:none;padding:0px; margin-top: 10px;"></div>
+
+<script>
+        var curpage ="<!--{$ret.curpage}-->"
+        var maxpage = "<!--{$ret.maxpage}-->"
+        var totalnum = "<!--{$ret.totalnum}-->"
+    $(function(){
+        if(totalnum > 0){
+            generatePage(curpage, maxpage, totalnum);
+        }
+    });
+    function generatePage(pageNo, totalPage, totalRecords) {
+        //生成分页
+        kkpager.generPageHtml({
+            pno: pageNo,
+            //总页码
+            total: totalPage,
+            //总数据条数
+            totalRecords: totalRecords,
+            isGoPage: false,
+            mode: 'click',
+            click: function (n) {
+                this.selectPage(n);
+                loadTableContent(n, false);
+            }
+        }, true);
+    };
+</script>

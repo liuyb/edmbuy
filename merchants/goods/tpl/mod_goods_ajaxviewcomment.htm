@@ -1,0 +1,57 @@
+<style>
+    .view-hidden {
+        border: 1px solid red;
+        width: 20%;
+        height: 50px;
+        padding: 30px;
+    }
+
+    .rplay-hidden {
+        display: none;
+        border: 1px solid red;
+        width: 30%;
+        height: 150px;
+        text-align: center;
+        overflow: hidden;
+        /*position: absolute;*/
+    }
+
+    .rplay-hidden-view {
+        display: none;
+        border: 1px solid red;
+        width: 30%;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .rplay-hidden span {
+        margin-left: -82px;
+    }
+
+    .rlay-show {
+        display: block;
+    }
+
+    .div-button, .div-button-view {
+        width: 50px;
+        height: 20px;
+        background-color: blue;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+        float: right;
+        margin-right: 20px;
+    }
+
+    #common {
+        position: relative;
+    }
+</style>
+<div class="rplay-hidden" id="rplay-common<!--{$ret.comment_id}-->">
+    <span>请输入回复类容： </span>
+                    <textarea name="rplay" id="content" cols="30" rows="3">
+                    </textarea>
+    <input type="hidden" value="<!--{$ret.comment_id}-->" id="comment_id"/>
+    <div class="div-button">确定</div>
+</div>
