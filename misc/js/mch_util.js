@@ -28,15 +28,65 @@
         });  
     };  
 })(jQuery);
+//复选框勾选封装
 (function($){  
-    $.fn.enterEvent=function(callback){  
-        $(this).bind('keyup', function(e){
-        	if(e.keyCode == 13){
-        		callback.apply(this, arguments);
-        	}
-        });  
-    };  
+    $(document).on({
+    	mouseenter: function () {
+	    	//$(this).addClass('rb-hover');
+	    },
+	    mouseleave: function () {
+	    	//$(this).removeClass('rb-hover');
+	    },
+	    click: function (e) {
+	    	var $target = $(e.target);
+	    	var checkCol = $(this).find(".common_check");
+	    	if(!$target.hasClass("undocheck")){
+	    		if(checkCol.hasClass("common_check_on")){
+	    			checkCol.removeClass("common_check_on");
+	    		}else{
+	    			checkCol.addClass("common_check_on");
+	    		}
+	    		handleSelectAll();
+	    	}
+	    }
+    }, '.body-data tr');
+    
+    $("#all_check").on('click',function(){
+		var THIS = $(this);
+		if(THIS.hasClass("all_check_on")){
+			THIS.removeClass("all_check_on");
+			$(".common_check").removeClass("common_check_on");
+		}else{
+			THIS.addClass("all_check_on");
+			$(".common_check").addClass("common_check_on");
+		}
+	});
 })(jQuery);
+
+//复选框全选事件
+function handleSelectAll(){
+	var item_num = $(".common_check").length;
+	var select_num = $(".common_check_on").length;
+	if(item_num == select_num){
+		$("#all_check").addClass("all_check_on");
+	}else{
+		$("#all_check").removeClass("all_check_on");
+	}
+}
+//根据选中状态拿到当前ID
+function getSelectIds(obj){
+	var ids = [];
+	if(obj){
+		ids.push(obj.attr("data-id"));
+	}else{
+		$(".common_check").each(function(){
+			if($(this).hasClass("common_check_on")){
+				ids.push($(this).closest("tr").first().attr("data-id"));
+			}
+		});
+	}
+	return ids;
+}
 /*function showSucc(text){
 	showBootstrapAlert('alert-success', text);
 }
@@ -210,56 +260,6 @@ function showConfirm(msg, handler){
 	   layer.closeAll();
 	});
 }
-/**
- * 页面table 的复选框事件监听
- * @returns
- */
-function tableCheckBoxEvent(){
-	$("#all_check").on('click',function(){
-		var THIS = $(this);
-		if(THIS.hasClass("all_check_on")){
-			THIS.removeClass("all_check_on");
-			$(".common_check").removeClass("common_check_on");
-		}else{
-			THIS.addClass("all_check_on");
-			$(".common_check").addClass("common_check_on");
-		}
-	});
-	$(document).on('click','.common_check',function(){
-		var THIS = $(this);
-		if(THIS.hasClass("common_check_on")){
-			THIS.removeClass("common_check_on");
-		}else{
-			THIS.addClass("common_check_on");
-		}
-		handleSelectAll();
-	});
-}
-//复选框全选事件
-function handleSelectAll(){
-	var item_num = $(".common_check").length;
-	var select_num = $(".common_check_on").length;
-	if(item_num == select_num){
-		$("#all_check").addClass("all_check_on");
-	}else{
-		$("#all_check").removeClass("all_check_on");
-	}
-}
-//根据选中状态拿到当前ID
-function getSelectIds(obj){
-	var ids = [];
-	if(obj){
-		ids.push(obj.attr("data-id"));
-	}else{
-		$(".common_check").each(function(){
-			if($(this).hasClass("common_check_on")){
-				ids.push($(this).closest("tr").first().attr("data-id"));
-			}
-		});
-	}
-	return ids;
-}
-
 /**
  * 页面数据table处理
  * @param curpage

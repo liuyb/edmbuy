@@ -11,8 +11,8 @@ class Goods_Atomic{
      * @param unknown $goods_id
      */
     public static function get_goods_ext_category($goods_id){
-        $sql = "SELECT cat_id FROM shp_goods_cat WHERE goods_id = '$goods_id' and is_main = 0 ";
-        $exist_list = D()->query($sql)->fetch_column();
+        $sql = "SELECT cat_id FROM shp_goods_cat WHERE goods_id = '%d' and is_main = 0 ";
+        $exist_list = D()->query($sql, $goods_id)->fetch_column();
         return $exist_list;
     }
     /**
@@ -20,8 +20,8 @@ class Goods_Atomic{
      * @param unknown $goods_id
      */
     public static function get_goods_attribute($goods_id){
-        $sql = "SELECT * FROM shp_goods_attr WHERE goods_id = '$goods_id' ";
-        $result = D()->query($sql)->fetch_array_all();
+        $sql = "SELECT * FROM shp_goods_attr WHERE goods_id = '%d' ";
+        $result = D()->query($sql, $goods_id)->fetch_array_all();
         return $result;
     }
     
@@ -47,8 +47,8 @@ class Goods_Atomic{
      */
     public static function get_merchant_attribute($cat_id){
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "SELECT attr_id,attr_name FROM shp_attribute where merchant_id = '$merchant_id' and cat_id=$cat_id order by sort_order asc ";
-        return D()->query($sql)->fetch_array_all();
+        $sql = "SELECT attr_id,attr_name FROM shp_attribute where merchant_id = '%s' and cat_id='%d' order by sort_order asc ";
+        return D()->query($sql,$merchant_id,$cat_id)->fetch_array_all();
     }
     
     /**
@@ -56,8 +56,8 @@ class Goods_Atomic{
      * @param unknown $goods_id
      */
     public static function delete_goods_gallery($goods_id){
-        $sql = "DELETE FROM shp_goods_gallery WHERE goods_id = '$goods_id' ";
-        D()->query($sql);
+        $sql = "DELETE FROM shp_goods_gallery WHERE goods_id = '%d' ";
+        D()->query($sql,$goods_id);
         return D()->affected_rows();
     }
     
@@ -77,8 +77,8 @@ class Goods_Atomic{
      * @param unknown $goods_id
      */
     public static function delete_goods_attr($goods_id){
-        $sql = "DELETE FROM shp_goods_attr WHERE goods_id = '$goods_id' ";
-        D()->query($sql);
+        $sql = "DELETE FROM shp_goods_attr WHERE goods_id = '%d' ";
+        D()->query($sql,$goods_id);
     }
     
     /**
@@ -87,8 +87,8 @@ class Goods_Atomic{
      */
     public static function batch_delete_goods($goods_ids){
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) and merchant_id = '$merchant_id' ";
-        D()->query($sql);
+        $sql = "DELETE FROM shp_goods where goods_id in ($goods_ids) and merchant_id = '%s' ";
+        D()->query($sql,$merchant_id);
         return D()->affected_rows();
     }
     

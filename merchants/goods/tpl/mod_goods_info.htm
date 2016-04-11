@@ -10,230 +10,190 @@
 <!--[/HEAD_CSS]-->
 <div id="body" class="ifr-body">
 	<!--{include file="inc/left_common.htm"}-->
-	<form id="defaultForm" method="post" action="" onsubmit="return goods_submit();">
+<form id="defaultForm" method="post" action="" onsubmit="return goods_submit();">
 	<div class="goods_right">
-		<div class="goods_nums">
-			<ul>
-				<li id="li1"  class="li_on"><!--{if $goodsinfo->item_id }-->修改商品<!--{else}-->发布商品<!--{/if}--></li>
-			</ul>
+		<div id="issue_gods"><p><!--{if $goodsinfo->item_id }-->修改商品<!--{else}-->发布商品<!--{/if}--></p></div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品名称：</div>
+			<div class="issue_gods_right">
+				<input type="text" value="<!--{$goodsinfo->item_name}-->" name="goods_name" maxlength="50" class="write_common" required >
+			</div>
+			<p id="sr_ts">最多可输入50字</p>
 		</div>
-		<div>
-			<div class="iss_infos font_common">商品信息</div>
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品名称：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" maxlength="120" id="goods_name" value="<!--{$goodsinfo->item_name}-->" class="write_common" name="goods_name" required >
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>市场价：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" value="<!--{$goodsinfo->market_price}-->" class="write_short" name="market_price" data-type='money' required > 元
-					
-					<label class="control-short" style="padding-left:47px;">成本价：</label>
-					<input type="text" value="<!--{$goodsinfo->cost_price}-->" class="write_short" name="cost_price" data-type='money'> 元<span class="prompt_common">净毛利统计时会使用到，买家不可见</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>售价：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" oninput="commissionCalc()" onpropertychange="commissionCalc()" id="shop_price" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" data-type='money' required > 元
-					
-					<label class="control-short"><span class="fill_red">*</span>供货价：</label>
-					<input type="text" oninput="commissionCalc()" onpropertychange="commissionCalc()" id="income_price" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" data-type='money' required > 元<span id="commissionTxt" class="prompt_common">佣金<i>0.00</i>元 给到平台的价格，用来计算佣金 ，买家不可见</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>库存：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->item_number}-->" class="write_short" name="goods_number" required >
-					
-					<label class="control-short" style="padding-left:35px;"><span class="fill_red"></span>每人限购：</label>
-					<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->per_limit_buy}-->" class="write_short" name="per_limit_buy" ><span class="prompt_common">0代表不限购</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品分类：</label>
-				</div>
-				<div class="type_right font_common">
-					<select class="check_s c_goods_type" name="cat_id" id="cat_id" onchange="hideCatDiv()" required >
-						<option value="">请选择...</option>
-  						<!--{$cat_list}-->
-					</select>
-					<button type="button" class="add_common add_type">添加分类</button> 
-					<label class="add_type_hide">
-						<input type="text" val="" maxlength="20" class="add_input category_val"><button type="button" class="add_common add_category">确定</button>
-						<button class="add_common cancel_s hide_category"> << </button>
-					</label>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label">扩展分类：</label>
-				</div>
-				<div class="type_right font_common">
-				  <button type="button" class="add_common add_other_type">新增分类</button>
-				  <!--{if isset($goodsinfo) }-->
-				  <!--{foreach from=$goodsinfo->other_cat item=cat_id}-->
-	              <select name="other_cat"><option value="">请选择</option><!--{$other_cat_list.$cat_id}--></select>
-	              <!--{/foreach}-->
-	              <!--{/if}-->
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品图片：</label>
-				</div>
-				<div class="type_right font_common">
-					<!--{if isset($gallery) }-->
-				  	<!--{foreach from=$gallery item=g}-->
-					<div class="add_img goods_gallery">
-					<img src="<!--{$g->thumb_url}-->" data-ori="<!--{$g->img_original}-->" data-std="<!--{$g->img_url}-->" onclick="galleryPicSelect(this)" class="<!--{if $g->thumb_url == $goodsinfo->item_thumb }-->add_img_selected<!--{/if}-->">
-					<img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">
-					</div>
-					<!--{/foreach}-->
-	              	<!--{/if}-->
-					<div class="add_img publish_img">	
-						<img src="/themes/merchants/img/editor_plus.png">			
-						<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload(event, this)">	
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="clear"></div>
 		
-		<div>
-			<div class="iss_infos font_common">规格/库存</div>
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label">商品规格：</label>
-				</div>
-				
-				<div class="type_right font_common" style="float:left;">
-					<div class="stand1">		
-						<div class="stand_check_top">
-							<div class="stand_check"></div>
-						 	<div class="z_in_height">
-								<div class="check_list_info">
-									<ul>
-									<!--{$goods_type}-->
-							 		</ul>
-								</div>
-							</div>
-						</div>
-						<button class="add_common del_check">删除</button>
-						<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
-						<div class="common_a_tow">
-				 			<div class="result_d">
-				 				<div  class="common_a_li" style="display:none;">
-			 						<ul>
-									 </ul>
-								</div>
-			 				</div>
-			 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
-						</div>
-					</div>
-					<!--{if isset($goods_attributes)}-->
-					<!--{foreach from=$goods_attributes item=type}-->
-						<div class="standFlag">		
-						<div class="stand_check_top">
-							<div class="stand_check" data-cat='<!--{$type.cat_id}-->'><!--{$type.cat_name}--></div>
-						 	<div class="z_in_height" style="display:none;">
-								<div class="check_list_info">
-									<ul>
-									<!--{$goods_type}-->
-							 		</ul>
-								</div>
-							</div>
-						</div>
-						<button class="add_common del_check">删除</button>
-						<div style="height:40px;" class="add_del_y">
-						<!--{foreach from=$type.display_attrs item=attr}-->
-						<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
-						<!--{/foreach}-->
-						<span class="add_common_a">+添加</span></div>
-						<div class="common_a_tow">
-				 			<div class="result_d">
-				 				<div  class="common_a_li" style="display:none;">
-			 						<ul>
-									 </ul>
-								</div>
-			 				</div>
-			 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
-						</div>
-						</div>
-					<!--{/foreach}-->
-					<!--{/if}-->
-					
-					<div class="add_stand" <!--{if isset($count_goods_attributes) && $count_goods_attributes >= 3}--> style="display:none;" <!--{/if}-->>
-						<button type="button" class="add_common add_s_projcet">添加规格项目</button>
-					</div>
-				</div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left" style="vertical-align: top;"><span class="fill_red">*</span>广<i class="i_length"></i>告<i class="i_length"></i>词：</div>
+			<div class="issue_gods_right">
+				<textarea class="textarea_c" maxlength="240" value="<!--{$goodsinfo->item_brief}-->" name="item_brief" required ></textarea>
 			</div>
-			<div class="clear"></div>
+			<p id="sr_ts">最多可输入240字</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>市<i class="i_length"></i>场<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" value="<!--{$goodsinfo->market_price}-->" class="write_short" name="market_price" data-type='money' required >
+			</div>
 			
+			<div class="issue_gods_left" style="margin-left:110px"><span class="fill_red">*</span>供<i class="i_length"></i>货<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" value="<!--{$goodsinfo->income_price}-->" class="write_short" name="income_price" data-type='money' required >
+			</div>
 			
-			<div class="infos_go goods_stockDIV" <!--{if isset($count_goods_attributes) && $count_goods_attributes > 0}-->style=""<!--{else}-->style="display:none;"<!--{/if}-->>
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品库存：</label>
-				</div>
-				<div class="type_right font_common" style="margin-top:20px;">
-					<table cellspacing="0" cellpadding="0" class="goods_stocks">
-						<!--{if isset($goods_attr_html)}-->
-							<!--{$goods_attr_html}-->
-						<!--{/if}-->
-					</table>
+			<div class="issue_gods_left" style="margin-left:110px">成<i class="i_length"></i>本<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" value="<!--{$goodsinfo->cost_price}-->" class="write_short" name="cost_price" data-type='money'>
+			</div>
+			
+			<p id="sr_ts" style="margin-left:747px;">净毛利统计时会使用，买家不可见</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>售<i class="i_length"></i><i class="i_length"></i><i class="i_length"></i>&nbsp;价：</div>
+			<div class="issue_gods_right">
+				<input type="text" value="<!--{$goodsinfo->shop_price}-->" class="write_short" name="shop_price" data-type='money' required >
+			</div>
+			
+			<div class="issue_gods_left" style="margin-left:113px"><span class="fill_red">*</span>库<i class="i_length"></i><i class="i_length"></i><i class="i_length"></i>&nbsp;存：</div>
+			<div class="issue_gods_right">
+				<input type="text"maxlength="6" data-type='positive' value="<!--{$goodsinfo->item_number}-->" class="write_short" name="goods_number" required >
+			</div>
+			
+			<div class="issue_gods_left" style="margin-left:112px">每人限购：</div>
+			<div class="issue_gods_right">
+				<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->per_limit_buy}-->" class="write_short" name="per_limit_buy" >
+			</div>
+			<p id="sr_ts" style="margin-left:100px;display: inline-block;">给到平台的价格，用来计算佣金，买家不可见</p>
+			<p id="sr_ts" style="margin-left:382px;display: inline-block">0代表不限购</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品分类：</div>
+			<div class="issue_gods_right">
+				<select class="selcet_c_ok cat_select" name="cat_id" id="cat_id" required>
+					<option value="">请选择...</option>
+  					<!--{$cat_list}-->
+				</select>
+			</div>
+			<!-- <button class="more_type" onclick="relateMoreCat();" type="button">关联更多分类</button>-->
+			<!-- <p id="sr_ts">可将商品关联到多个分类下</p>  -->
+			<span style="margin:0px 5px;" id="newCatBtn"><button class="gods_ok" onclick="addCatShow();" type="button">新增分类</button></span>
+			<span style="margin:0px 5px;display:none;" id="newCatInput">
+				<input type="text" val="" id="category_val" class="write_short" placeholder="请输入类别" style="margin-top:2px;">
+				<button class="gods_ok" onclick="addCatOk();" type="button">确定</button>
+				<button class="gods_cancel" onclick="addCatCancel();" type="button">取消</button>
+			</span>
+		</div>
+		<div style="margin:10px 105px;" id="othercat_area">
+		<button class="more_type" onclick="relateMoreCat(this);" type="button">关联更多分类</button>
+		<!-- <p id="sr_ts" style="margin-left:11px;">可将商品关联到多个分类下</p> -->
+		</div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品图片：</div>
+			<div class="issue_gods_right">
+				<div class="add_img publish_img">	
+					<img src="/themes/merchants/img/editor_plus.png">			
+					<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload(event, this)">	
 				</div>
 			</div>
+			<p id="sr_ts">上传图片尽量保持正方形（建议尺寸640*640px），默认第一张为商品预览图（必填）</p>
+		</div>
+	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>商品规格</p></div>
+		<div class="type_right font_common" style="float:left;">
+			<div class="stand1">		
+				<div class="stand_check_top">
+					<div class="stand_check"></div>
+				 	<div class="z_in_height">
+						<div class="check_list_info">
+							<ul>
+							<!--{$goods_type}-->
+					 		</ul>
+						</div>
+					</div>
+				</div>
+				<button class="add_common del_check">删除</button>
+				<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
+				<div class="common_a_tow">
+		 			<div class="result_d">
+		 				<div  class="common_a_li" style="display:none;">
+	 						<ul>
+							 </ul>
+						</div>
+	 				</div>
+	 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
+				</div>
 			</div>
-			<div>
-				<div class="iss_infos font_common">物流信息</div>
-					<div class="infos_go">
-					<div class="goods_type font_common">
-						<label class="control-label"><span class="fill_red">*</span>运费：</label>
+			<!--{if isset($goods_attributes)}-->
+			<!--{foreach from=$goods_attributes item=type}-->
+				<div class="standFlag">		
+				<div class="stand_check_top">
+					<div class="stand_check" data-cat='<!--{$type.cat_id}-->'><!--{$type.cat_name}--></div>
+				 	<div class="z_in_height" style="display:none;">
+						<div class="check_list_info">
+							<ul>
+							<!--{$goods_type}-->
+					 		</ul>
+						</div>
 					</div>
-					<div class="type_right font_common" style="float:left;">
-						<p class="freight fre_on">统一运费   <input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="frei_money" data-type='money'> 元</p>
-						<!-- <p class="freight">运费模板   
-							<select class="check_s c_goods_type">
-								<option value ="1">酒</option>
-		  						<option value ="2">衣服</option>
-		  						<option value ="3">食品饮料饮料</option>
-		  						<option value ="4">饮料</option>
-							</select>
-							<span class="frei_color">新增运费模板</span>
-						</p> -->
-					</div>
-					<div class="clear"></div>
-					
-					<div class="infos_go">
-					<div class="goods_type font_common">
-						<label class="control-label"><span class="fill_red">*</span>商品描述</label>
-					</div>
-					</div>
-					<script id="editor" name="goods_desc" type="text/plain" style="width:90%;height:200px;margin:35px 0px 0px 55px;"></script>
-					<div><button type="submit" id="submitBtn" class="btn btn-lg btn-default">提交</button></div>
+				</div>
+				<button class="add_common del_check">删除</button>
+				<div style="height:40px;" class="add_del_y">
+				<!--{foreach from=$type.display_attrs item=attr}-->
+				<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
+				<!--{/foreach}-->
+				<span class="add_common_a">+添加</span></div>
+				<div class="common_a_tow">
+		 			<div class="result_d">
+		 				<div  class="common_a_li" style="display:none;">
+	 						<ul>
+							 </ul>
+						</div>
+	 				</div>
+	 				<button type="button" class="add_common ok_one">确定</button><button type="button" class="add_common cancel_one">取消</button>
+				</div>
+				</div>
+			<!--{/foreach}-->
+			<!--{/if}-->
+			
+			<div class="add_stand" <!--{if isset($count_goods_attributes) && $count_goods_attributes >= 3}--> style="display:none;" <!--{/if}-->>
+				<button type="button" class="add_common add_s_projcet">添加规格项目</button>
+			</div>
+		</div>
+		<div id="issue_gods"><p>商品库存</p></div>
+	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>物流信息</p></div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left">统一邮费：</div>
+			<div class="issue_gods_right" style="line-height:40px">
+				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'>元
+			</div>
+			<div class="issue_gods_right" style="margin-left:100px;">
+				<select class="selcet_c_ok">
+					<option value ="1">选择运费模板</option>
+ 					<option value ="2">衣服</option>
+ 					<option value ="3">食品饮料饮料</option>
+ 					<option value ="4">饮料</option>
+				</select>
+				<button class="more_type">新增运费模板</button>
 			</div>
 		</div>
 	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>商品描述</p></div>
+		<script id="editor" name="goods_desc" type="text/plain" style="width:90%;height:200px;margin:15px 0px 0px 25px;"></script>
+		
+		<button class="gods_ok" type="submit" style="margin: 20px 0px 10px 25px;">保存</button>
+	</div>
+	
 </div>
-	<input type="hidden" value="<!--{$goodsinfo->item_id}-->" name="goods_id"/>
-	</form>
+<input type="hidden" value="<!--{$goodsinfo->item_id}-->" name="goods_id"/>
+</form>
 <div class="mask_bg"></div>
 
 <script>
@@ -320,54 +280,61 @@ function commissionCalc(){
 	}
 	$("#commissionTxt i").text(commission.toFixed(2));
 }
-//隐藏添加分类区
-function hideCatDiv(){
-	if($(".add_type_hide").is(":visible")){
-		$(".add_type_hide").hide();
-	}
+
+function addCatShow(){
+	$("#newCatBtn").hide();
+	$("#category_val").focus();
+	$("#newCatInput").show();
+}
+
+function addCatCancel(){
+	$("#newCatBtn").show();
+	$("#category_val").focus();
+	$("#newCatInput").hide();
+}
+
+function relateMoreCat(obj){
+	var cat_select = $("#cat_id");
+	var new_cat_select = cat_select.clone();
+	$(new_cat_select).removeAttr("required").removeAttr("id","cat_id").attr("name","other_cat");
+	var span = $("<span class='othercat_span'></span>");
+	span.append(new_cat_select);
+	span.append("<img src=\"/themes/merchants/img/close_11.png\">");
+	$(obj).before(span);
 }
 
 function initCategoryEvent(){
-	//显示添加分类
-	$(".add_type").on("click",function(event){
-		$(".add_type_hide").show();
-		event.preventDefault();
+	$(document).on({
+		mouseenter : function(){
+			$(this).find("img").show();
+		},
+		mouseleave : function(){
+			$(this).find("img").hide();
+		}
+	}, '.othercat_span');
+	$(document).on('click', '.othercat_span img', function(){
+		$(this).closest("span").first().remove();
 	});
-	$(".hide_category").on("click",function(event){
-		$(".add_type_hide").hide();
-		event.preventDefault();
-	});
-	//确定添加分类
-	$(".add_category").on("click",function(e){
-      	var cat = $(".category_val").val();
-      	if(!cat || cat.replace(/^\s+|\s+$/g, '') == '')
-      	{
-          	layer.msg('分类不能为空！');
-          	return;
-      	}
-		var parent_id = $("#cat_id").val();
-      	var params = {cat_id : parent_id,id : parent_id, cat_name : cat};
-      	F.postWithLoading('/goods/simply/category', params, function(ret){
-      		if(!ret.status){
-      			layer.msg(ret.retmsg);
-      			return;
-      		}else{
-	      		addCatResponse(ret.result, parent_id, cat);
-	      		$(".category_val").val("");
-	      		$(".add_type_hide").hide();
-      		}
-      	});
-	});
+}
 
-	//添加一个分类
-	$(".add_other_type").on("click",function(){
-		var _select = $("#cat_id").clone();
-		$(_select).removeAttr("id");
-		$(_select).removeAttr("required");
-		$(_select).attr("name","other_cat");
-		$(this).parent().append(_select);
-		event.preventDefault();
-	});
+function addCatOk(){
+	var cat = $("#category_val").val();
+  	if(!cat || cat.replace(/^\s+|\s+$/g, '') == '')
+  	{
+      	showMsg('分类不能为空！');
+      	return;
+  	}
+	var parent_id = $("#cat_id").val();
+  	var params = {cat_id : parent_id,id : parent_id, cat_name : cat};
+  	F.postWithLoading('/goods/simply/category', params, function(ret){
+  		if(!ret.status){
+  			layer.msg(ret.retmsg);
+  			return;
+  		}else{
+      		addCatResponse(ret.result, parent_id, cat);
+      		addCatCancel();
+  		}
+  	});
 }
 
 function addCatResponse(cat_id, parent_id, cat_name){

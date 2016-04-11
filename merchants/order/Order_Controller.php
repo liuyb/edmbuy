@@ -206,19 +206,24 @@ class Order_Controller extends MerchantController {
         $order_ids = $request->get('order_ids',0);
         $act = $request->get('act','');
         $fromOrder = $request->get('fromOrder',0);
-        $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status in (0,3,5) and order_status not in (2,3) 
-                and merchant_ids='$muid' and order_id ".Fn::db_create_in($order_ids);
-        $result = D()->query($sql)->fetch_array_all();
-        $shipment_label = "批量发货";
-        $shipment_btn = "批量发货";
+        $sql = "";
+        if('edit' == $act){
+            //只要未收货还能修改物流信息
+            $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status <> 2 and order_status not in (2,3)
+                and merchant_ids='%s' and order_id ".Fn::db_create_in($order_ids);
+            $shipment_label = "修改发货信息";
+            $shipment_btn = "保存";
+        }else{
+            $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status in (0,3,5) and order_status not in (2,3)
+                and merchant_ids='%s' and order_id ".Fn::db_create_in($order_ids);
+            $shipment_label = "批量发货";
+            $shipment_btn = "批量发货";
+        }
+        $result = D()->query($sql, $muid)->fetch_array_all();
         foreach ($result as &$order){
             $regionIds = [$order['province'], $order['city'], $order['district']];
             $order_region = Order_Model::getOrderRegion($regionIds);
             $order['order_region'] = $order_region;
-        }
-        if('edit' == $act){
-            $shipment_label = "修改发货信息";
-            $shipment_btn = "保存";
         }
         if($result && count($result) > 0){
             if('edit' == $act){

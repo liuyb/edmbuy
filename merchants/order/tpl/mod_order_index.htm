@@ -62,7 +62,6 @@
 var tableOptions = {id : 'type_table_list',url : '/order/list',colspan : 8};
 $(function(){
 	loadPageDataTable(1, true, tableOptions);
-	tableCheckBoxEvent();
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
 	$("#order_type").on('click','li',function(){
 		var obj = $(this);
@@ -148,7 +147,7 @@ function costructRowData(result){
 	TR += "<td>￥"+result.actual_order_amount+"</td>";
 	TR += "<td>"+result.order_status_text+"</td>";
 	TR += "<td>"+result.pay_name+"</td>";
-	TR += "<td class=\"attr_rel\"><span class=\"order_look_up\">查看</span>"+shipping+"</td></tr>";
+	TR += "<td class=\"attr_rel undocheck\"><span class=\"order_look_up\">查看</span>"+shipping+"</td></tr>";
 	return TR;
 }
 
