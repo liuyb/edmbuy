@@ -1,14 +1,21 @@
 <!--{add_css file="goods.css" scope="global"}-->
 
 <!--{add_js file="/themes/merchants/js/layer.js" pos="foot"}-->
-
-
-    <div class="add_fix">
-        <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name"></div>
+<!--[HEAD_CSS]-->
+<style>
+    body{
+        min-width: 0px !important;
+    }
+</style>
+<!--[/HEAD_CSS]-->
+    <div class="add_fix" id="add_fix">
+        <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name" required><span style="margin-left: 5px;color red;">*</span></div>
         <div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
         <div class="add_super_go">上级分类：
             <select class="check_s c_goods_type" name="cat_id">
+                <!--{if $edit==0}-->
                 <option value ="new">请选择</option>
+                <!--{/if}-->
                 <!--{foreach from=$goodsList item=val}-->
                 <option  <!--{if $val.cat_id==$cat_id || $val.cat_id == $catgory.parent_id }-->selected<!--{/if}-->  <!--{if $parent_id==0 && $edit}--> disabled
                 <!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
@@ -31,11 +38,15 @@
             <p>图片支持格式：jpg,png</p>
             <p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
         </div>
-        <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value="<!--{$catgory.sort_order}-->"></div>
+        <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value="<!--{$catgory.sort_order}-->" ></div>
         <div class="btn_save">保存</div>
     </div>
 
 <script>
+    var edit =<!--{$edit}-->;
+    $(function(){
+        $("input[name=cat_name]").focus();
+    });
     function fileupload(e, obj){
         var url = '/goods/upload_goods_categroy';
         var galleryCount = $(".goods_gallery").length;
@@ -50,6 +61,24 @@
         });
     }
     $(".btn_save").click(function(){
+        if(!$("#add_fix").formValid()){
+            return false;
+        }
+        var cat_url =$("input[name=cat_url]").val();
+        var sort_order =$("input[name=sort_order]").val();
+        var edit =<!--{$edit}-->;
+        if(cat_url=="" && edit ==0){
+            showMsg("请上传分类图片！");
+            return;
+        }
+        if(sort_order){
+            var r=/^\+?[0-9][0-9]*$/;
+           var res= r.test(sort_order);
+            if(!res){
+                showMsg("请输入正整数！");
+                return;
+            }
+        }
             this.ding=0;
         if(this.dong==1){
                 return;
@@ -57,19 +86,16 @@
         var edit="<!--{$edit}-->";
         var  url='/goods/doAddCategory'
         var cat_name =$("input[name=cat_name]").val()
-        var cat_url =$("input[name=cat_url]").val()
-        var sort_order =$("input[name=sort_order]").val()
         var id =$("input[name=id]").val();
         var parent_id =$(".check_s").val();
         var data={"cat_name":cat_name,"parent_id":parent_id,'cate_thums':cat_url,'sort_order':sort_order,'edit':edit,'cat_id':id};
-        $.post(url,data,function(ret){
+        F.post(url,data,function(ret){
+              layer.msg(ret.retmsg);
             if(ret.status==1){
-                        layer.closeAll();
-                        layer.msg(ret.retmsg);
-
-            }
-            if(ret.status==0){
-                        layer.msg(ret.retmsg);
+                setTimeout(function(){
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                },1500);
             }
 
        })

@@ -13,7 +13,7 @@ class Goods_Model extends Model
      * 新增OR修改商品
      * @param Items $goods
      */
-    static function insertOrUpdateGoods(Request $request,Items $goods)
+    static function insertOrUpdateGoods(Request $request, Items $goods)
     {
         $ret = true;
         D()->beginTransaction();
@@ -242,14 +242,14 @@ class Goods_Model extends Model
         if (empty($goods_ids)) {
             return;
         }
-        foreach ($goods_ids as &$gid){
+        foreach ($goods_ids as &$gid) {
             $gid = intval($gid);
         }
         $goods_ids = implode(',', $goods_ids);
         D()->beginTransaction();
         try {
             $affected = Goods_Atomic::batch_delete_goods($goods_ids);
-            if($affected){
+            if ($affected) {
                 Goods_Atomic::batch_delete_goods_cat($goods_ids);
                 Goods_Atomic::batch_delete_goods_attr($goods_ids);
                 Goods_Atomic::batch_delete_goods_gallery($goods_ids);
@@ -389,7 +389,7 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select cat_name ,cat_id ,cat_thumb from shp_category where merchant_id ='%s' and parent_id=0";
+        $sql = "select cat_name ,cat_id ,cat_thumb from shp_category where merchant_id ='%s' and parent_id=0 and is_delete=0";
         $list = D()->query($sql, $merchant_id)->fetch_array_all();
         return $list;
     }
@@ -601,8 +601,13 @@ class Goods_Model extends Model
      */
     static function getGoodsAttrList()
     {
-        $sql = "select cat_id ,cat_name from shp_goods_type";
-        $result = D()->query($sql)->fetch_array_all();
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select ty.cat_id ,ty.cat_name from shp_goods_type ty RIGHT JOIN
+                shp_attribute attr on attr.cat_id = ty.cat_id where merchant_id = '%s'";
+        $result = D()->query($sql, $merchant_id)->fetch_array_all();
+        if (empty($result)) {
+            return [];
+        }
         foreach ($result as &$val) {
             $val['attr_name'] = self::getAttrName($val['cat_id']);
         }
@@ -632,11 +637,14 @@ class Goods_Model extends Model
     static function getGoodsAttr($attrId)
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select attr.attr_id as attr_id ,attr.attr_name as attr_name ,attr.sort_order as sort_order ,ty.cat_id as cat_id ,ty.cat_name as cat_name
+        $list['attr'] = [];
+        if ($attrId != "new") {
+            $sql = "select attr.attr_id as attr_id ,attr.attr_name as attr_name ,attr.sort_order as sort_order ,ty.cat_id as cat_id ,ty.cat_name as cat_name
                 from shp_attribute  as attr  LEFT JOIN  shp_goods_type as ty on ty.cat_id = attr.cat_id  where
                 attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order ASC";
-        $result = D()->query($sql, $merchant_id, $attrId)->fetch_array_all();
-        $list['attr'] = $result;
+            $result = D()->query($sql, $merchant_id, $attrId)->fetch_array_all();
+            $list['attr'] = $result;
+        }
         $sql = "select cat_name , cat_id from shp_goods_type";
         $goods_type = D()->query($sql)->fetch_array_all();
         $list["type"] = $goods_type;
@@ -705,5 +713,28 @@ class Goods_Model extends Model
         }
         $tablename = "`shp_attribute`";
         D()->delete($tablename, $where);
+    }
+
+    /**
+     * 检查是否可以删除
+     * @param $cat_id
+     */
+    static function ckeckDelAttr($attr_id)
+    {
+        $sql = "select count(1) from shp_goods_attr where attr1_id = %d or attr2_id = %d or attr3_id =%d";
+        return D()->query($sql, $attr_id,$attr_id,$attr_id)->result();
+    }
+
+    /**
+     *删除属性
+     */
+    static function delAttr($cat_id)
+    {
+//        delete($tablename, $wherearr)
+        $merchant_id = $GLOBALS['user']->uid;
+        $tablename = "`shp_attribute`";
+        $wherearr['cat_id'] = $cat_id;
+        $wherearr['merchant_id'] = $merchant_id;
+        D()->delete($tablename, $wherearr);
     }
 }

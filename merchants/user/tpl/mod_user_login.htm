@@ -22,7 +22,7 @@
   <div class="lg_in">
     <div class="login_ins">
       <p class="ins_l">店铺管理<i class="ins_b">(使用已注册的会员账号)</i></p>
-      <form name="loginForm" id="loginForm" method="POST" action="/login">
+      <form name="loginForm" id="loginForm" method="POST" action="" onsubmit="return checkFrom();" >
         <input type="text" name="loginname" id="loginname" class="input" value="<!--{$retuname}-->" maxlength="20" placeholder="请输入注册时的手机号码">
         <input type="password" name="password" id="password" class="input" value="<!--{$retupass}-->" maxlength="20" placeholder="请输入登录密码">
         <!--{if $erro==1}-->
@@ -86,8 +86,19 @@ $(function(){
         $(this).addClass("remember_me_on");
         $(this).parent().find("input").val(1);
       }
-    })
-
+    });
+    function checkFrom(){
+      if($("#loginname").val()==""){
+        showMsg("用户名不能为空!");  return false;
+      }else if($("#password").val()==""){
+        showMsg("密码不能为空!");  return false;
+      }else if(erro==1 &&$("#verifycode").val()==""){
+        showMsg("验证码不能为空!");  return false;
+      }else{
+        $("form").action="/login";
+        $("form").submit();
+      }
+    }
 
 </script>
 

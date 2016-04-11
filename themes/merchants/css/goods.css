@@ -481,7 +481,7 @@
 .add_name_ts{
 	font-size:14px;
 	color:#aaa;
-	margin: -20px 0 20px 120px;
+	margin: -27px 0 14px 124px;
 }
 .add_super_go{
 	margin-left:30px;
@@ -510,7 +510,7 @@
 .file_sca_img{
 	font-size:14px;
 	color:#aaa;
-	margin-left:135px;
+	margin-left:122px;
 }
 .btn_save {
 	background: #f26427;
@@ -522,7 +522,7 @@
 	color: #fff;
 	text-align: center;
 	font-size: 17px;
-	border-radius: 2px;
+	border-radius: 5px;
 }
 .nums_px{
 	display: inline-block;
@@ -617,33 +617,39 @@
 	height:40px;
 	border-radius:4px;
 	border:1px solid #e9e9e9;
+	padding-left: 10px;
 }
 
 #order_list_right {
-	margin: 20px 0 0 20px;
+	margin: 0px 0 0 20px;
 	width: 1040px;
 	float: left;
 	min-height: 880px;
+	background: white;
 }
 #attr_top{
 	background:#fff;
-	padding-bottom:100px;
+	margin-top: 30px;
+	/*padding-bottom:100px;*/
 }
 #attrib_tab{
 	width:96%;
 	margin:0 auto;
+	border: 1px solid #eee;
 }
 #attrib_tab th{
 	height:40px;
 	line-height:40px;
 	font-size:12px;
-	text-align:left;
+	text-align:center;
 	padding-left:40px;
 	border-bottom:1px solid #e9e9e9;
+	background: #eee;
 }
 #attrib_tab td{
 	padding-left:40px;
-	height:60px;
+	text-align: center;
+	/*height:60px;*/
 	line-height:60px;
 	font-size:12px;
 	color:#7d7d7d;
@@ -656,6 +662,7 @@
 	background-position: 5px 5px;
 	position: absolute;
 	top: 10px;
+	right: 110px;
 	cursor:pointer;
 }
 .attr_rel{
@@ -700,7 +707,7 @@
 	border:1px solid #e9e9e9;
 }
 #edit_type_tab td{
-	height:60px;
+	/*height:60px;*/
 	line-height:60px;
 	text-align:center;
 	border:1px solid #e9e9e9;
@@ -736,10 +743,12 @@
 }
 #edit_type_tab input{
 	height:40px;
-	line-hegiht:40px;
+	line-height:40px !important;
 	border:0;
 	background:#e9e9e9;
 	padding-left:10px;
 	border-radius:4px;
+	/*margin-top: 20px;*/
+	/*vertical-align:middle;*/
 }
 /*2016-3-30 e */

@@ -21,7 +21,7 @@
                         <th>操作</th>
                     </tr>
                 </table>
-                <div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+                <div id="kkpager" style="float:right;clear:none;padding:0px;margin-top: 10px;"></div>
             </div>
         </div>
     </div>
@@ -43,6 +43,9 @@
                 TR = "<tr><td colspan='4' style='text-align:center;'>还没有数据~</td></tr>";
             } else {
                 var result = ret.result;
+                    if(ret.totalnum >0 ){
+                        isinit=true;
+                    }
                 result.forEach(function (item) {
                     TR += costructHtml(item);
                 });
@@ -101,7 +104,7 @@
             title: '新增分类',
             shadeClose: true,
             shade: 0.8,
-            area: ['470px', '510px'],
+            area: ['470px', '495px'],
             content: '/goods/catetory?cat_id=' + cat_id//iframe的url
         });
     }
@@ -112,7 +115,7 @@
             title: '编辑分类',
             shadeClose: true,
             shade: 0.8,
-            area: ['470px', '510px'],
+            area: ['470px', '495px'],
             content: '/goods/catetory?cat_id=' + cat_id+"&edit=1"//iframe的url
         });
     }

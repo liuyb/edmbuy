@@ -50,38 +50,41 @@ class User_Controller extends MerchantController
             unset($_POST['loginname'], $_POST['password'], $_POST['verifycode'], $_POST['erro']);
             $retuname = $loginname;
             $retupass = $password;
-            if ($erro == 1) {
-                if ('' == $verifycode) {
-                    $retmsg = '请输入验证码';
-                } elseif ($verifycode != $_SESSION['verifycode']) {
-                    $retmsg = '请输入正确的验证码';
-                } elseif ('' == $loginname) {
-                    $retmsg = '请输入用户名';
-                } elseif ('' == $password) {
-                    $retmsg = '请输入密码';
-                }
-            }elseif ('' == $loginname) {
+            if ('' == $loginname) {
                 $retmsg = '请输入用户名';
             } elseif ('' == $password) {
                 $retmsg = '请输入密码';
             } else {
-                $check = User_Model::check_logined($loginname, $password, $login_uinfo);
-                if ($check < 0) {
-                    $retmsg = '不存在该用户';
-                } elseif (0 === $check) {
-                    $retmsg = '密码错误！';
-                    $_SESSION['erro'] = 1;
-                } else { //Final Login Success
-                    $retmsg = '登录成功！';
-                    if (isset($_POST['member_me'])) {
-                        Cookie::set('member_me', $login_uinfo['merchant_id'], 3600 * 24 * 7);
+                if ($erro == 1) {
+                    if ('' == $verifycode) {
+                        $retmsg = '请输入验证码';
+                    } elseif ($verifycode != $_SESSION['verifycode']) {
+                        $retmsg = '请输入正确的验证码';
+                    } elseif ('' == $loginname) {
+                        $retmsg = '请输入用户名';
+                    } elseif ('' == $password) {
+                        $retmsg = '请输入密码';
                     }
-                    unset($_SESSION['erro']);
-                    unset($_SESSION['verifycode']);
-                    $cMerchantUser = new Merchant($login_uinfo['merchant_id']);
-                    $cMerchantUser->set_logined_status();
+                }
+                if($retmsg==""){
+                    $check = User_Model::check_logined($loginname, $password, $login_uinfo);
+                    if ($check < 0) {
+                        $retmsg = '不存在该用户';
+                    } elseif (0 === $check) {
+                        $retmsg = '密码错误！';
+                        $_SESSION['erro'] = 1;
+                    } else { //Final Login Success
+                        $retmsg = '登录成功！';
+                        if (isset($_POST['member_me'])) {
+                            Cookie::set('member_me', $login_uinfo['merchant_id'], 3600 * 24 * 7);
+                        }
+                        unset($_SESSION['erro']);
+                        unset($_SESSION['verifycode']);
+                        $cMerchantUser = new Merchant($login_uinfo['merchant_id']);
+                        $cMerchantUser->set_logined_status();
 
-                    $response->redirect('/home');
+                        $response->redirect('/home');
+                    }
                 }
             }
             $_SESSION['erro'] = 1;
@@ -92,9 +95,9 @@ class User_Controller extends MerchantController
                 ->assign('retuname', $retuname)
                 ->assign('retupass', $retupass);
             if(!empty($_SESSION['erro'])){
-                $v->assign('erro', 1);
+               $v->assign('erro', 1);
             }else{
-                $v->assign('erro', 0);
+               $v->assign('erro', 0);
             }
             $response->send($v);
         }

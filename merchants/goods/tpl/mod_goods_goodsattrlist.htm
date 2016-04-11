@@ -4,6 +4,12 @@
 <!--{add_js file="/themes/merchants/js/layer.js" scope="module"}-->
     <!--{include file="inc/left_common.htm"}-->
     <div id="order_list_right">
+        <div class="goods_nums">
+            <ul>
+                <li id="li1" onclick="f(1)" class="li_on">管理</li>
+                <li id="li2" onclick="editAttr('new')">新增</li>
+            </ul>
+        </div>
         <div id="attr_top">
             <table cellspacing="0" cellpadding="0" id="attrib_tab">
                 <tr>
@@ -15,8 +21,13 @@
                 <tr>
                     <td><!--{$val.cat_name}--></td>
                     <td><!--{$val.attr_name}--></td>
-                    <td class="attr_rel"  ><span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span></td>
+                    <td class="attr_rel"  >
+                        <span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span>
+                        <span style="margin-left:23px;" class="attr_del" onclick="delAttr( <!--{$val.cat_id}-->)">删除</span>
+                    </td>
                 </tr>
+                <!--{foreachelse}-->
+                <td colspan='3' style='text-align:center;'>还没有数据~</td>
                 <!--{/foreach}-->
             </table>
         </div>
@@ -26,11 +37,20 @@
     function editAttr(val){
                 layer.open({
                     type: 2,
-                    title: '新增分类',
+                    title: '属性管理',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['600px', '600px'],
                     content: '/goods/editGoodsAttr?cat_id=' + val//iframe的url
                 });
+    }
+    function delAttr(val){
+        showConfirm('确定要删除该商品属性吗？',function(){
+            var data = {cat_id : val};
+            F.postWithLoading('/goods/attribute/delete', data, function(data){
+                layer.msg('操作成功');
+                loadTableContent(1, true);
+            });
+        });
     }
 </script>

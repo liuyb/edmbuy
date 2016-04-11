@@ -25,7 +25,8 @@ class Goods_Controller extends MerchantController
             'goods/update/shortorder' => 'updateShortOrder',
             'goods/simply/category' => 'doAddCategory',
             'goods/comment' => 'goodsComment',
-            'goods/attribute/list' => 'goodsAttributeList'
+            'goods/attribute/list' => 'goodsAttributeList',
+            'goods/attribute/delete' => 'goodsAttributeDel'
         ];
     }
 
@@ -81,7 +82,7 @@ class Goods_Controller extends MerchantController
         if ($goods_id) {
             $goods = Items::load($goods_id);
             $merchant_id = $GLOBALS['user']->uid;
-            if(!$goods || $goods->merchant_id != $merchant_id){
+            if (!$goods || $goods->merchant_id != $merchant_id) {
                 Fn::show_pcerror_message();
             }
             $selectedCat = $goods->cat_id;
@@ -120,7 +121,7 @@ class Goods_Controller extends MerchantController
      */
     public function goods_publish(Request $request, Response $response)
     {
-        if($request->is_post()){
+        if ($request->is_post()) {
             /* 处理商品数据 */
             $goods_id = $request->post('goods_id', 0);
             $goods_name = $request->post('goods_name', '');
@@ -137,7 +138,7 @@ class Goods_Controller extends MerchantController
             $original_img = $request->post('original_img', '');
             $shipping_fee = $request->post('shipping_fee', 0);
             $goods_desc = $_POST['goods_desc'];
-    
+
             $goods = new Items();
             $goods->item_id = $goods_id;
             $goods->cat_id = $catgory_id;
@@ -154,13 +155,13 @@ class Goods_Controller extends MerchantController
             $goods->original_img = $original_img;
             $goods->per_limit_buy = intval($per_limit_buy);
             $goods->shipping_fee = doubleval($shipping_fee);
-    
+
             $ret = false;
             if ($goods_name) {
                 $ret = Goods_Model::insertOrUpdateGoods($request, $goods);
             }
             $response->sendJSON(["result" => $ret ? 'SUCC' : 'FAIL']);
-        }else{
+        } else {
             Fn::show_pcerror_message();
         }
     }
@@ -258,7 +259,7 @@ class Goods_Controller extends MerchantController
     {
         $curpage = $request->get('current_page', 1);
         $this->setPageLeftMenu('goods', 'category');
-        $pager = new Pager($curpage, 4);
+        $pager = new Pager($curpage, 2);
         $options['merchant_id'] = $GLOBALS['user']->uid;
         Goods_Model::getCatePageList($pager, $options);
         $ret = $pager->outputPageJson();
@@ -286,7 +287,7 @@ class Goods_Controller extends MerchantController
         $this->v->assign('edit', 0);
         if ($show_page) {
             $catgory['cat_name'] = "";
-            $catgory['sort_order'] = "";
+            $catgory['sort_order'] =0;
             $catgory['cat_url'] = "";
             $catgory['parent_id'] = 0;
             $this->v->assign('catgory', $catgory);
@@ -451,17 +452,18 @@ class Goods_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function rplayCommone(Request $request, Response $response){
-        $common_id=$request->post("common_id");
-        $comtent=$request->post("content");
-        if(strlen($comtent)>200){
-            $ret['retmsg']="字数超出限制！";
-            $ret['status']=1;
+    public function rplayCommone(Request $request, Response $response)
+    {
+        $common_id = $request->post("common_id");
+        $comtent = $request->post("content");
+        if (strlen($comtent) > 200) {
+            $ret['retmsg'] = "字数超出限制！";
+            $ret['status'] = 1;
             $response->sendJSON($ret);
         }
-        Goods_Model::merchantRely($common_id,$comtent);
-        $ret['retmsg']="回复成功！";
-        $ret['status']=1;
+        Goods_Model::merchantRely($common_id, $comtent);
+        $ret['retmsg'] = "回复成功！";
+        $ret['status'] = 1;
         $response->sendJSON($ret);
     }
 
@@ -470,13 +472,15 @@ class Goods_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function viewrplay(Request $request, Response $response){
-        $common_id=$request->post("common_id");
-        $list=Goods_Model::viewComment($common_id);
-        $ret['status']=1;
-        $ret['common']=$list;
-            $response->sendJSON($ret);
+    public function viewrplay(Request $request, Response $response)
+    {
+        $common_id = $request->post("common_id");
+        $list = Goods_Model::viewComment($common_id);
+        $ret['status'] = 1;
+        $ret['common'] = $list;
+        $response->sendJSON($ret);
     }
+
     /**
      * 商品的属性列表管理
      * @param Request $request
@@ -517,17 +521,18 @@ class Goods_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function ajaxGetAttr(Request $request, Response $response){
-            $this->setPageView($request, $response, "_page_box");
-            $this->v->set_tplname("mod_goods_ajaxattr");
-            $attrId = $request->post("cat_id");
-            $show_page = true;
-            if ($show_page) {
-                $goodsAttr = Goods_Model::getGoodsAttr($attrId);
-                $this->v->assign('goodAttr', $goodsAttr);
-                $this->v->assign('cat_id', $attrId);
-                $response->send($this->v);
-            }
+    public function ajaxGetAttr(Request $request, Response $response)
+    {
+        $this->setPageView($request, $response, "_page_box");
+        $this->v->set_tplname("mod_goods_ajaxattr");
+        $attrId = $request->post("cat_id");
+        $show_page = true;
+        if ($show_page) {
+            $goodsAttr = Goods_Model::getGoodsAttr($attrId);
+            $this->v->assign('goodAttr', $goodsAttr);
+            $this->v->assign('cat_id', $attrId);
+            $response->send($this->v);
+        }
     }
 
     /**
@@ -537,10 +542,15 @@ class Goods_Controller extends MerchantController
      */
     public function saveGoodsAttr(Request $request, Response $response)
     {
-        if($request->is_post()){
+        if ($request->is_post()) {
             $cat_id = $request->post("cat_id");
             $attrData = $request->post("attrDate");//前台的二维数组数据
             $sort_order = 1;
+            if(count($attrData)>3){
+                $ret['status'] =0;
+                $ret['retmsg'] = "最多只能添加三个属性值！";
+                $response->sendJSON($ret);
+            }
             $attr_names = [];
             foreach ($attrData as $val3) {
                 if (empty($val3[0])) {
@@ -574,7 +584,7 @@ class Goods_Controller extends MerchantController
             }
             foreach ($attrData as $val2) {
                 //编辑上移或者下移动改变short_order
-                Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order'],$val2[1]);
+                Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order'], $val2[1]);
             }
             $str = "";
             foreach ($attr_ids as $ids) {
@@ -584,6 +594,12 @@ class Goods_Controller extends MerchantController
             }
             $str = rtrim($str, ",");
             if (!empty($str)) {
+              $result = Goods_Model::ckeckDelAttr($str);
+                if($result){
+                    $ret['msg'] = "此属性有商品正在使用不可删除!";
+                    $ret['status'] = 0;
+                    $response->sendJSON($ret);
+                }
                 Goods_Model::delGoodsAttr($str);
             }
             $view = true;
@@ -593,7 +609,26 @@ class Goods_Controller extends MerchantController
             }
             $response->sendJSON($ret);
         }
+    }
 
+    /**
+     * 删除商品的属性
+     * @param Request $request
+     * @param Response $response
+     */
+    public function goodsAttributeDel(Request $request, Response $response)
+    {
+        $cat_id = $request->post("cat_id");
+        $result = Goods_Model::ckeckDelAttr($cat_id);
+        if ($result) {
+            $ret['msg'] = "此属性有商品正在使用不可删除!";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        Goods_Model::delAttr($cat_id);
+        $ret['msg'] = "删除成功!";
+        $ret['status'] = 1;
+        $response->sendJSON($ret);
     }
 
 }
