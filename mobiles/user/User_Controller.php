@@ -740,7 +740,7 @@ class User_Controller extends MobileController
         $inviteCode=intval($inviteCode);
 //        $read = $request->post("read");
         if (empty($mobileCode)) {
-            $ret['retmsg'] = "参数不能为空！";
+            $ret['retmsg'] = "手机验证码不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         } elseif (!verify_phone($mobile)) {

@@ -560,7 +560,7 @@ class Goods_Model extends Model
         $where="merchant_id='%s' ";
         $sql = "select count(1) from shp_comment where ";
         if($current==2){
-            $where .="and comment_reply is null";
+            $where .="and comment_reply=''";
             $sql .=$where;
         }else{
             $sql .=$where;
@@ -568,7 +568,7 @@ class Goods_Model extends Model
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
-        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply is null";
+        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply=''";
         $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
               comment.id_value as id_value ,comment.comment_reply as comment_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
@@ -576,6 +576,7 @@ class Goods_Model extends Model
               order by add_time DESC limit {$limit}";
         $result = D()->query($sql)->fetch_array_all();
         $pager->result = $result;
+           $sql="select comment_reply from shp_comment where merchant_id='{$merchant_id}'";
         return $result;
     }
 
@@ -615,7 +616,7 @@ class Goods_Model extends Model
             return [];
         }
         $sql = "select distinct(ty.cat_id) ,ty.cat_name from shp_attribute attr  LEFT JOIN
-                shp_goods_type ty on attr.cat_id = ty.cat_id where merchant_id = '%s'";
+                shp_goods_type ty on attr.cat_id = ty.cat_id where merchant_id = '%s' ";
         $result = D()->query($sql, $merchant_id)->fetch_array_all();
         foreach ($result as $key =>$val) {
             if(!empty($val['cat_id'])){
@@ -634,7 +635,7 @@ class Goods_Model extends Model
     static function getAttrName($cat_id)
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select attr_name from shp_attribute where cat_id ={$cat_id} and merchant_id = '{$merchant_id}'";
+        $sql = "select attr_name from shp_attribute where cat_id ={$cat_id} and merchant_id = '{$merchant_id}' ORDER by sort_order ASC ";
         $result = D()->query($sql)->fetch_array_all();
         $str = "";
         foreach ($result as $val) {
@@ -654,7 +655,7 @@ class Goods_Model extends Model
         if ($attrId != "new") {
             $sql = "select attr.attr_id as attr_id ,attr.attr_name as attr_name ,attr.sort_order as sort_order ,ty.cat_id as cat_id ,ty.cat_name as cat_name
                 from shp_attribute  as attr  LEFT JOIN  shp_goods_type as ty on ty.cat_id = attr.cat_id  where
-                attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order DESC";
+                attr.merchant_id = '%s' and ty.cat_id=%d ORDER by attr.sort_order ASC";
             $result = D()->query($sql, $merchant_id, $attrId)->fetch_array_all();
             $list['attr'] = $result;
         }

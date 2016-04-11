@@ -278,7 +278,7 @@ class User_Model extends Model
         $insertarr['password'] = $password_enc;
         $insertarr['salt'] = $salt;
         $insertarr['mobile'] = $mobile;
-        $insertarr['invite_code'] = $inviteCode?$inviteCode:0;
+        $insertarr['invite_code'] = $inviteCode?$inviteCode:"";
         $insertarr['email'] = $email;
         $insertarr['password'] = $password_enc;
         return D()->insert($tablename, $insertarr);

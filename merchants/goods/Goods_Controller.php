@@ -261,7 +261,7 @@ class Goods_Controller extends MerchantController
     {
         $curpage = $request->get('current_page', 1);
         $this->setPageLeftMenu('goods', 'category');
-        $pager = new Pager($curpage, 2);
+        $pager = new Pager($curpage, 4);
         $options['merchant_id'] = $GLOBALS['user']->uid;
         Goods_Model::getCatePageList($pager, $options);
         $ret = $pager->outputPageJson();
