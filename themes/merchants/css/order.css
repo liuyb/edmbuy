@@ -544,6 +544,7 @@
 	height:40px;
 	line-height:40px;
 	padding:0 20px;
+	cursor: pointer;
 }
 #right_check_city li{ 
 	background: url(../img/xk1.png) no-repeat 95% ;
@@ -594,12 +595,12 @@
   	margin-left: 20px;
   	border-radius: 4px;	
 }
-.left_mouse_on{
+/* .left_mouse_on{
 	background:#eee url(../img/xk1.png) no-repeat 90% !important;
 }
 .left_mouse_sure_on{
 	background:#eee url(../img/xz.png) no-repeat 90% !important;
-}
+} */
 .right_mouse_on{
 	background:#eee url(../img/xk1.png) no-repeat 95% !important;
 }

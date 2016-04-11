@@ -206,27 +206,39 @@ class Order_Controller extends MerchantController {
         $order_ids = $request->get('order_ids',0);
         $act = $request->get('act','');
         $fromOrder = $request->get('fromOrder',0);
-        $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and merchant_ids='$muid' and order_id ".Fn::db_create_in($order_ids);
+        $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status in (0,3,5) and order_status not in (2,3) 
+                and merchant_ids='$muid' and order_id ".Fn::db_create_in($order_ids);
         $result = D()->query($sql)->fetch_array_all();
         $shipment_label = "批量发货";
+        $shipment_btn = "批量发货";
         foreach ($result as &$order){
             $regionIds = [$order['province'], $order['city'], $order['district']];
             $order_region = Order_Model::getOrderRegion($regionIds);
             $order['order_region'] = $order_region;
         }
+        if('edit' == $act){
+            $shipment_label = "修改发货信息";
+            $shipment_btn = "保存";
+        }
         if($result && count($result) > 0){
             if('edit' == $act){
                 $order = $result[0];
                 $ship_select = Order_Model::buildShippingDropdown($order['shipping_id']);
-                $shipment_label = "保存";
             }else{
                 $ship_select = Order_Model::buildShippingDropdown();
             }
             $this->v->assign('ship_select', $ship_select);
         }
+        if($result && count($result) == 1){
+            $shipment_label = "发货";
+            $shipment_btn = "发货";
+        }
         $this->v->assign('order_list', $result);
         $this->v->assign('fromOrder', $fromOrder);
         $this->v->assign('shipment_label', $shipment_label);
+        if($result && count($result) > 0){
+            $this->v->assign('shipment_btn', $shipment_btn);
+        }
         $this->setPageLeftMenu('order', 'list');
         $response->send($this->v);
     } 

@@ -67,6 +67,9 @@ var site = "<!--{$msite}-->";
 $(function(){
 	loadTableContent(1, true);
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
+	$("#goods_name").enterEvent(function(){
+		loadTableContent(1, true);
+	});
 });
 function loadTableContent(curpage, isinit, param){
 	var container = $("#resultList");

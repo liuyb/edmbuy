@@ -94,6 +94,13 @@ $(function(){
 	}); */
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,
 		minView:2,language:'zh-CN',clearBtn:true});
+	
+	$("#order_num").enterEvent(function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+	$("#buyer").enterEvent(function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
 });
 
 //清空当前页面条件

@@ -37,12 +37,15 @@
 					</tr>
 					<!--{/foreach}-->
 					<!--{else}-->
-					<tr colspan="5" style="text-align:center;">当前所选订单还不能发货！</tr>
+					<tr colspan="5" style="text-align:center;"><td>当前所选订单还不能发货！</td></tr>
 					<!--{/if}-->
 					</tbody>
 				</table>
-				
-				<button id="all_shipments"><!--{$shipment_label}--></button>
+				<!--{if isset($shipment_btn) and $shipment_btn}-->
+					<button id="all_shipments"><!--{$shipment_btn}--></button>
+				<!--{else}-->
+				<div style="margin:10px 0px;height:10px;"></div>	
+				<!--{/if}-->
 			</div>
 			</form>
 		</div>

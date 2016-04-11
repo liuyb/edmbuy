@@ -109,7 +109,7 @@ class Goods_Controller extends MerchantController
         $this->v->assign('goods_type', Goods_Common::generateSpecifiDropdown(Goods_Atomic::get_goods_type()));
         $cat_list = Goods_Common::build_options($options, $selectedCat);
         $this->v->assign('cat_list', $cat_list);
-        $this->setPageLeftMenu('goods', 'publish');
+        $this->setPageLeftMenu('goods', 'list');
         $response->send($this->v);
     }
 

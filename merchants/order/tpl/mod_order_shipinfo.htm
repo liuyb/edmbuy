@@ -33,10 +33,10 @@
 						<p id="fre_address_infos"><!--{$sp.regions_name}--></p>
 						<p id="fre_handle"><a href="javascript:void(0);" class="shipedit">编辑</a><a href="javascript:void(0);" class="shipdelete">删除</a></p>
 					</td>
-					<td><input class="pre_tab_input" name="n_num" type="text" value="<!--{$sp.n_num}-->"></td>
-					<td><input class="pre_tab_input" name="n_fee" type="text" value="<!--{$sp.n_fee}-->"></td>
-					<td><input class="pre_tab_input" name="m_num" type="text" value="<!--{$sp.m_num}-->"></td>
-					<td><input class="pre_tab_input" name="m_fee" type="text" value="<!--{$sp.m_fee}-->"></td>
+					<td><input class="pre_tab_input" name="n_num" type="text" value="<!--{$sp.n_num}-->" data-type='positive'></td>
+					<td><input class="pre_tab_input" name="n_fee" type="text" value="<!--{$sp.n_fee}-->" data-type='money'></td>
+					<td><input class="pre_tab_input" name="m_num" type="text" value="<!--{$sp.m_num}-->" data-type='positive'></td>
+					<td><input class="pre_tab_input" name="m_fee" type="text" value="<!--{$sp.m_fee}-->" data-type='money'></td>
 				</tr>
 				<!--{/foreach}-->
 				<!--{/if}-->
@@ -154,6 +154,9 @@ $(function(){
 	});
 
 	$("#address_fixed").on("mouseover",'#left_check_prov li',function(){
+		if($(this).hasClass("locked")){
+			return;
+		}
 		if($(this).find("span").hasClass("check_prov_on")){
 			$(this).addClass("left_mouse_sure_on");
 		}
@@ -225,6 +228,7 @@ $(function(){
 
 //点击左侧省份 显示右侧城市数据
 function getRightRegions(obj){
+	leftLiSelected(obj);
 	var region_id = obj.data('id');
 	var right = $("#right_check_city ul");
 	right.data('pid',region_id);
@@ -269,6 +273,17 @@ function getRightRegions(obj){
 		cartSelectAll();
 		addRegionCache();
 	});
+}
+//左侧选中时的状态处理
+function leftLiSelected(obj, isClear){
+	if(isClear){
+		$("#left_check_prov li").each(function(){
+			$(this).css("background-color","#fff").removeClass("locked");
+		});
+	}else{
+		obj.css("background-color","#eee").addClass("locked");
+		obj.siblings().css("background-color","#fff").removeClass("locked");
+	}
 }
 
 //是否符合全选
@@ -336,6 +351,7 @@ function clearRegionCache(){
 	$("#left_check_prov span").removeClass("check_prov_on");
 	$("#right_check_city ul").replaceWith("<ul></ul>");
 	$(".city_all").removeClass("city_all_sure");
+	leftLiSelected(null, true);
 }
 
 //判断是否全选

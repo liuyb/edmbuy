@@ -18,6 +18,25 @@
         return serializeObj;  
     };  
 })(jQuery); 
+//监听对象回车事件
+(function($){  
+    $.fn.enterEvent=function(callback){  
+        $(this).bind('keyup', function(e){
+        	if(e.keyCode == 13){
+        		callback.apply(this, arguments);
+        	}
+        });  
+    };  
+})(jQuery);
+(function($){  
+    $.fn.enterEvent=function(callback){  
+        $(this).bind('keyup', function(e){
+        	if(e.keyCode == 13){
+        		callback.apply(this, arguments);
+        	}
+        });  
+    };  
+})(jQuery);
 /*function showSucc(text){
 	showBootstrapAlert('alert-success', text);
 }
