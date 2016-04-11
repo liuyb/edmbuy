@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://D:/BaiduYunDownload/darren" />
+    <content url="file://F:/BaiduYunDownload/web" />
+    <content url="file://$MODULE_DIR$/../PHPEmailSender-master" />
+    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../edmshop" />
+    <content url="file://$MODULE_DIR$/../phpmail" />
+    <content url="file://F:/zhoubin" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
