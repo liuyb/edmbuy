@@ -30,13 +30,6 @@
 	background:#f26427;
 	color:#fff;
 }
-.goods_right{
-	float:left;
-	width:920px;
-  	margin:0 20px;	
-  	min-height: 900px;	
-	background:#fff;	
-}
 .goods_nums{
 	height:60px;
 	border-bottom:1px solid #eee;
@@ -216,13 +209,7 @@
 .iss_infos{
 	margin:20px;
 }
-.infos_go{
-	
-}
-.font_common{
-	font-size:16px; 
-	color:#333;	
-}
+
 .goods_type{
 	width:130px;
 	text-align:right;
@@ -237,20 +224,11 @@
 	
 	margin-left:10px;
 }
-.write_common{
-  	border: 1px solid #ddd;
-  	height: 28px;
-  	vertical-align: top;
-  	width: 40%;	
-}
 .write_short{
 	border: 1px solid #ddd;
   	height: 28px;
   	vertical-align: top;
   	width: 15%;	
-}
-.infos_go{
-	margin-bottom:20px;
 }
 .control-short{
 	padding-left:30px;
@@ -282,29 +260,7 @@
 .other_type{
 	margin-right:10px;
 }
-.add_img{
-  	float: left;
-  	width: 100px;
-  	height: 100px;
-  	position: relative;
- 	text-align: center;	
-	margin-left:20px;
-}
-.add_img img{
-	width: 100px;
-  	height: 100px;  
-  	border-radius: 0;
-  	border: 0;
-	position: relative;
-} 
-.dj_file{
-  	position: absolute;
-  	width: 100%;
-  	height: 100%;
-  	left: 0;
-  	top: 0;
-  	opacity: 0;
-}
+
 .stand_check{
   	background: url(../img/2.png) no-repeat  95% center;
 	width:100px;

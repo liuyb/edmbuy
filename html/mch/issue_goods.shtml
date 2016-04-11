@@ -27,230 +27,275 @@
 .stand1,.stand2{
 	display:none;
 }
+.goods_right{
+  	margin: 20px 0 0 20px;
+ 	width: 1040px;
+  	float: right;
+	background:#fff;
+}
+#issue_gods{
+  	margin: 0 20px;
+  	height: 40px;
+  	border-bottom: 1px solid #e9e9e9;	
+}
+#issue_gods p{
+  	height: 39px;
+  	border-bottom: 1px solid #f26427;
+  	display: inline-block;
+  	line-height: 39px;
+  	font-size: 12px;
+  	color: #f26427;	
+}
+.issue_gods_i{
+	margin:20px;
+}
+.issue_gods_left{
+	display:inline-block;
+	font-size:12px;
+	color:#7d7d7d;
+}
+.issue_gods_right{
+	display:inline-block;	
+	vertical-align: middle;	
+  	position: relative;	
+}
+.issue_gods_right img{
+  	position: absolute;
+  	top: -8px;
+  	right: -8px;	
+}
+.write_common{
+  	border:0;
+  	height: 40px;
+	line-height:40px;
+	padding-left:10px;
+  	width: 618px;	
+	background:#ecf1f5;
+	border-radius:4px;
+	margin-left:10px;
+}
+#sr_ts{
+  	margin-left: 95px;
+  	font-size: 10px;
+  	color: #ddd;
+  	margin-top: 5px;	
+}
+.textarea_c{
+	overflow:hidden; 
+	resize:none;
+	padding-left:10px;
+  	width: 614px;	
+	background:#ecf1f5;	
+	border:0;
+	margin-left:10px;
+	height:80px;
+}
+.i_length{
+	padding:0 4px;
+}
+.write_short{
+  	border:0;
+  	height: 40px;
+	line-height:40px;
+	padding-left:10px;
+  	width: 120px;	
+	background:#ecf1f5;
+	border-radius:4px;
+	margin-left:10px;	
+}
+.selcet_c_ok{
+	background:#fff url(../mch/img/f26427.png) no-repeat scroll 93% center;
+	width:132px;
+	height:40px;
+	margin-left: 10px;
+	border:1px solid #dcdfe2;
+	border-radius:5px;
+	font-size:12px;
+	color:#7d7d7d;
+}
+.more_type{
+	width:120px;
+	height:40px;
+	background:#fff;
+	border-radius:5px;
+	font-size:12px;
+	color:#7d7d7d;
+	border:1px solid #dcdfe2;
+	margin-left:10px;
+}
+.gods_ok{
+	width:80px;
+	height:40px;
+	line-height:40px;
+	background:#f26427;
+	font-size:12px;
+	color:#fff;
+	border-radius:4px;
+	border:0;
+	margin:0 15px;
+}
+.gods_cancel{
+	width:78px;
+	height:42px;
+	line-height:42px;
+	background:#fff;
+	font-size:12px;
+	color:#7d7d7d;
+	border-radius:4px;	
+	border:1px solid #ddd;
+}
+.add_img{
+  	float: left;
+  	width: 100px;
+  	height: 100px;
+  	position: relative;
+ 	text-align: center;	
+	margin-left:10px;
+}
+.add_img img{
+	width: 100px;
+  	height: 100px;  
+  	border-radius: 0;
+  	border: 0;
+	position: relative;
+	border-radius:5px;
+} 
+.dj_file{
+  	position: absolute;
+  	width: 100%;
+  	height: 100%;
+  	left: 0;
+  	top: 0;
+  	opacity: 0;
+}
 </style>
 
 
-<div id="head" class="ifr-head"><!--#include file="_header.html"--></div>
+<!--#include file="header_commen.html"-->
 
 <div id="body" class="ifr-body">
 	<!--#include file="goods_left_common.html"-->
+	
 	<div class="goods_right">
-		<div class="goods_nums">
-			<ul>
-				<li id="li1"  class="li_on">发布商品</li>
-			</ul>
+		<div id="issue_gods"><p>发布商品</p></div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品名称：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_common">
+			</div>
+			<p id="sr_ts">最多可输入50字</p>
 		</div>
-		<div>
-			<div class="iss_infos font_common">商品信息</div>
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品名称：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" val="" class="write_common">
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>市场价：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" val="" class="write_short"> 元
-					
-					<label class="control-short" style="padding-left:47px;">成本价：</label>
-					<input type="text" val="" class="write_short"> 元<span class="prompt_common">净毛利统计时会使用到，买家不可见</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>售价：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" val="" class="write_short"> 元
-					
-					<label class="control-short"><span class="fill_red">*</span>供货价：</label>
-					<input type="text" val="" class="write_short"> 元<span class="prompt_common">佣金<i>0.00</i>元 给到平台的价格，用来计算佣金 ，买家不可见</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>库存：</label>
-				</div>
-				<div class="type_right font_common">
-					<input type="text" val="" class="write_short">
-					
-					<label class="control-short" style="padding-left:35px;"><span class="fill_red">*</span>每日限购：</label>
-					<input type="text" val="" class="write_short"> 元<span class="prompt_common">0代表不限购</span>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label"><span class="fill_red">*</span>商品分类：</label>
-				</div>
-				<div class="type_right font_common">
-					<select class="check_s c_goods_type">
-						<option value ="1">酒</option>
-  						<option value ="2">衣服</option>
-  						<option value ="3">食品饮料饮料</option>
-  						<option value ="4">饮料</option>
-					</select>
-					<button class="add_common add_type">添加分类</button> 
-					<label class="add_type_hide">
-						<input type="text" val="" class="add_input"><button class="add_common add_ok">确定</button>
-					</label>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label">扩展分类：</label>
-				</div>
-				<div class="type_right font_common">
-					<button class="add_common add_other_type">新增分类</button>
-				</div>
-			</div>
-			
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label">商品图片：</label>
-				</div>
-				<div class="type_right font_common">
-					<div class="add_img">	
-						<img src="../mch/img/editor_plus.png">			
-						<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload1(this)">	
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="clear"></div>
 		
-		<div>
-			<div class="iss_infos font_common">规格/库存</div>
-			<div class="infos_go">
-				<div class="goods_type font_common">
-					<label class="control-label">商品规格：</label>
-				</div>
-				
-				<div class="type_right font_common" style="float:left;">
-					<!--  <div class="stand1" data-standard="1">		
-						<div class="stand_check_top" data-id="a1">
-							<div class="stand_check"></div>
-						 	<div class="z_in_height">
-								<div class="check_list_info">
-									<ul>
-							 			<li>酒1</li>
-										<li>酒2</li>
-										<li>酒3</li>
-										<li>酒4</li>
-							 		</ul>
-								</div>
-							</div>
-						</div>
-						
-						<div style="height:40px;" class="add_del_y"><span class="add_common_a">+添加</span></div>
-						<div class="common_a_tow">
-				 			<div class="result_d">
-				 				<div  class="common_a_li" style="display:none;">
-			 						<ul>
-										<li data-num="1" id="1">1</li>
-									 	<li data-num="2" id="2">2</li>
-									 	<li data-num="3" id="3">3</li>
-									 </ul>
-								</div>
-			 				</div>
-			 				<button class="add_common ok_one">确定</button><button class="add_common cancel_one">取消</button>
-						</div>
-					</div>-->
-					
-					<div class="select_check">
-						<select id="first-disabled" class="selectpicker" data-hide-disabled="true" data-live-search="true">
-						    <optgroup disabled="disabled" label="disabled">
-						      <option>Hidden</option>
-						    </optgroup>
-						    <optgroup label="">
-						    	<option>Apple</option>
-						      	<option>Orange</option>
-						      	<option>Apple</option>
-						      	<option>Orange</option>
-						      	<option>Apple</option>
-						      	<option>Orange</option>
-						    </optgroup>
-						</select>
-						<button class="add_common del_check" style="display:none;">删除</button>
-					</div>
-					
-					<div style="height:60px;" class="add_del_y">
-						<span class="yjtj" data-id=''>25<img src="../mch/img/close_gire.png"></span>
-						<span class="add_common_a">+添加</span>
-					</div>
-					
-					<div class="chile_select">
-						<select id="first-disabled2" class="selectpicker" multiple data-hide-disabled="true" data-size="5">
-						    <option>Apple</option>
-						    <option>Banana</option>
-						    <option>Orange</option>
-						    <option>Pineapple</option>
-						    <option>Apple2</option>
-						    <option>Banana2</option>
-						    <option>Orange2</option>
-						    <option>Pineapple2</option>
-						    <option>Apple2</option>
-						    <option>Banana2</option>
-						    <option>Orange2</option>
-						    <option>Pineapple2</option>
-						</select>
-						<button id="special" class="btn btn-default">确定</button>
-						<button id="special2" class="btn btn-default">取消</button>
-					</div>
-					
-					<div class="add_stand">
-						<button class="add_common add_s_projcet">添加规格项目</button>
-					</div>
-				</div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left" style="vertical-align: top;"><span class="fill_red">*</span>广<i class="i_length"></i>告<i class="i_length"></i>词：</div>
+			<div class="issue_gods_right">
+				<textarea class="textarea_c"></textarea>
 			</div>
-			<div class="clear"></div>
+			<p id="sr_ts">最多可输入240字</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>市<i class="i_length"></i>场<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
 			
-			<div>
-				<div class="iss_infos font_common">物流信息</div>
-					<div class="infos_go">
-					<div class="goods_type font_common">
-						<label class="control-label"><span class="fill_red">*</span>运费：</label>
-					</div>
-					<div class="type_right font_common" style="float:left;">
-						<p class="freight fre_on">统一运费   <input type="text" val="" class="frei_money"> 元</p>
-						<p class="freight">运费模板   
-							<select class="check_s c_goods_type">
-								<option value ="1">酒</option>
-		  						<option value ="2">衣服</option>
-		  						<option value ="3">食品饮料饮料</option>
-		  						<option value ="4">饮料</option>
-							</select>
-							<span class="frei_color">新增运费模板</span>
-						</p>
-					</div>
-					<div class="clear"></div>
-					
-					<div class="infos_go">
-					<div class="goods_type font_common">
-						<label class="control-label"><span class="fill_red">*</span>商品描述：</label>
-					</div>
-					<div class="type_right font_common"style="height:600px;">
-						
-					</div>
-				</div>
+			<div class="issue_gods_left" style="margin-left:110px">成<i class="i_length"></i>本<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
+			
+			<div class="issue_gods_left" style="margin-left:110px"><span class="fill_red">*</span>供<i class="i_length"></i>货<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
+			<p id="sr_ts" style="margin-left:426px;">净毛利统计时会使用，买家不可见</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>市<i class="i_length"></i>场<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
+			
+			<div class="issue_gods_left" style="margin-left:110px">成<i class="i_length"></i>本<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
+			
+			<div class="issue_gods_left" style="margin-left:110px"><span class="fill_red">*</span>供<i class="i_length"></i>货<i class="i_length"></i>价：</div>
+			<div class="issue_gods_right">
+				<input type="text" val="" class="write_short">
+			</div>
+			<p id="sr_ts" style="margin-left:100px;display: inline-block;">给到平台的价格，用来计算佣金，买家不可见</p>
+			<p id="sr_ts" style="margin-left:400px;display: inline-block">0代表不限购</p>
+		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品分类：</div>
+			<div class="issue_gods_right">
+				<select class="selcet_c_ok">
+					<option value ="1">酒</option>
+ 					<option value ="2">衣服</option>
+ 					<option value ="3">食品饮料饮料</option>
+ 					<option value ="4">饮料</option>
+				</select>
+ 				<img src="../mch/img/close_11.png">
+			</div>
+			<button class="more_type">关联更多分类</button>
+			<p id="sr_ts">可将商品关联多个下</p>
+			<div style="margin:10px 87px;">
+				<input type="text" val="" class="write_short" placeholder="请输入类别">
+				<button class="gods_ok">确定</button>
+				<button class="gods_cancel">取消</button>
 			</div>
 		</div>
+		
+		<div class="issue_gods_i">
+			<div class="issue_gods_left"><span class="fill_red">*</span>商品分类：</div>
+			<div class="issue_gods_right">
+				<div class="add_img">	
+					<img src="../mch/img/editor_plus.png">			
+					<input type="file" id="file" name="file" class="dj_fil" onchange="fileupload1(this)">	
+				</div>
+			</div>
+			<p id="sr_ts">上传图片尽量保持正方形（建议尺寸640*640px），默认第一张为商品预览图（必填）</p>
+		</div>
+	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>商品规格</p></div>
+		
+		<div id="issue_gods"><p>商品库存</p></div>
+	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>商品规格</p></div>
+		<div class="issue_gods_i">
+			<div class="issue_gods_left">统一邮费：</div>
+			<div class="issue_gods_right" style="line-height:40px">
+				<input type="text" val="" class="write_short" style="margin-right:10px;">元
+			</div>
+			<div class="issue_gods_right" style="margin-left:100px;">
+				<select class="selcet_c_ok">
+					<option value ="1">选择运费模板</option>
+ 					<option value ="2">衣服</option>
+ 					<option value ="3">食品饮料饮料</option>
+ 					<option value ="4">饮料</option>
+				</select>
+				<button class="more_type">新增运费模板</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="goods_right">
+		<div id="issue_gods"><p>商品描述</p></div>
+		
 	</div>
 </div>
 
 <div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
-
-<div class="mask"></div>
-
+	
 <script>
 $("#fbsp").addClass("goods_on");
 

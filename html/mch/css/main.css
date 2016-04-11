@@ -261,7 +261,7 @@ body { min-width: 1200px;}
 	vertical-align: top;
 }
 #common_header_left img{
-	margin:9px 0 9px 20px;
+	vertical-align: middle;	
 }
 .common_on{
 	color:#f26427 !important;
