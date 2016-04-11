@@ -106,7 +106,7 @@ $(function(){
     </ul>
     <div id="slinav" class="slinav clearfix">
     <?php for ($i=0; $i<$gallerynum; $i++):?>
-    <a href="javascript:void(0);" class="hwspeed <?php if(0==$i):?>active<?php endif;?>">1</a>
+    <a href="javascript:void(0);" class="<?php if(0==$i):?>active<?php endif;?>">1</a>
     <?php endfor;?>
      </div>
   </div>

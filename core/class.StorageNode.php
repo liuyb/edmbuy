@@ -90,7 +90,7 @@ abstract class StorageNode extends Model {
 	/**
 	 * Find nodes
 	 * @param BaseQuery $query
-	 * @param array $option contains "from"(string),"size"(string),"sort"(array),"forupdate"(boolean)
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array),Storage::SELECT_FOR_UPDATE(boolean)
 	 * @return array StorageNode list
 	 */
 	final public static function find(BaseQuery $query = null, $option = []) {
@@ -100,7 +100,7 @@ abstract class StorageNode extends Model {
 	/**
 	 * Find one node
 	 * @param BaseQuery $query
-	 * @param array $option contains "from"(string),"size"(string),"sort"(array),"forupdate"(boolean)
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array),Storage::SELECT_FOR_UPDATE(boolean)
 	 * @return StorageNode
 	 */
 	final public static function find_one(BaseQuery $query = null, $option = []) {
@@ -111,7 +111,7 @@ abstract class StorageNode extends Model {
 	/**
 	 * Find nodes ids
 	 * @param BaseQuery $query
-	 * @param array $option contains "from"(string),"size"(string),"sort"(array),"forupdate"(boolean)
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array),Storage::SELECT_FOR_UPDATE(boolean)
 	 * @return array id list
 	 */
 	final public static function find_ids(BaseQuery $query = null, $option = []) {
@@ -122,7 +122,7 @@ abstract class StorageNode extends Model {
 	 * Find DISTINCT a field as a unique column 
 	 * @param string $field
 	 * @param BaseQuery $query
-	 * @param array $option contains "from"(string),"size"(string),"sort"(array),"forupdate"(boolean)
+	 * @param array $option contains "from"(string),"size"(string),"sort"(array),Storage::SELECT_FOR_UPDATE(boolean)
 	 * @return array id list
 	 */
 	final public static function find_unique_ids($field, BaseQuery $query = null, $option = []) {

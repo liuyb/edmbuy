@@ -44,7 +44,13 @@ class StorageDb extends Storage {
 	public function find(BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$field = $this->column($this->key);
-		$forup = isset($opts['forupdate']) && $opts['forupdate'] ? ' FOR UPDATE' : '';
+		$forup = '';
+		if (isset($opts[Storage::SELECT_FOR_UPDATE]) && $opts[Storage::SELECT_FOR_UPDATE]) {
+			$forup = ' FOR UPDATE';
+		}
+		elseif (isset($opts[Storage::SELECT_LOCK_IN_SHARE]) && $opts[Storage::SELECT_LOCK_IN_SHARE]) {
+			$forup = ' LOCK IN SHARE MODE';
+		}
 		$sql = "SELECT `{$field}` AS `id` " .
 		       "FROM {$this->table} {$where} {$order} {$limit}{$forup}";
 		$ids = D()->query($sql)->fetch_column('id');
@@ -62,7 +68,13 @@ class StorageDb extends Storage {
 	public function findUnique($field, BaseQuery $query, Array $opts = []) {
 		list($where, $order, $limit) = $this->cause($query, $opts);
 		$field = $this->column($field);
-		$forup = isset($opts['forupdate']) && $opts['forupdate'] ? ' FOR UPDATE' : '';
+		$forup = '';
+		if (isset($opts[Storage::SELECT_FOR_UPDATE]) && $opts[Storage::SELECT_FOR_UPDATE]) {
+			$forup = ' FOR UPDATE';
+		}
+		elseif (isset($opts[Storage::SELECT_LOCK_IN_SHARE]) && $opts[Storage::SELECT_LOCK_IN_SHARE]) {
+			$forup = ' LOCK IN SHARE MODE';
+		}
 		$sql = "SELECT DISTINCT `{$field}` AS `id` " .
 		       "FROM {$this->table} {$where} {$order} {$limit}{$forup}";
 		$ids = D()->query($sql)->fetch_column('id');

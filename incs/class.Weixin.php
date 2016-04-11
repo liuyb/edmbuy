@@ -390,7 +390,8 @@ class Weixin {
             return $responseText;
             break;
           case '300': //官方客服
-            $contentText = '点击左下角键盘图标，切换到交互模式可联系官方客服。';
+            //$contentText = '点击左下角键盘图标，切换到交互模式可联系官方客服。';
+            $contentText = '客服微信: edmbuykf1001';
             break;
           case '301': //联系小蜜
             $contentText = $this->helper->contact();
@@ -1654,7 +1655,8 @@ class WeixinHelper {
     	$text .= "益多米作为良心平台，专为“米粉们”提供超值特惠的商品，从此不用“剁手”也可以买到称心如意的商品啦！\n\n";
     	$text .= "益多米，你生活中的省钱利器！\n\n";
     	$text .= "快带领你的小伙伴们一起进入多米商城选购心仪的商品吧！/::$\n\n";
-    	$text .= "/::B/::B/::B另外，邀请他人购物还有惊喜哟！";    	
+    	$text .= "/::B/::B/::B另外，邀请他人购物还有惊喜哟！\n\n";
+    	$text .= "客服微信: edmbuykf1001";
     }
     return $text;
   }

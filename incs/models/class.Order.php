@@ -643,6 +643,23 @@ class Order extends StorageNode{
         $result = D()->query($sql)->fetch_array_all();
         return $result;
     }
+    
+    /**
+     * 订单金额计算公式
+     * @param double $goods_amount   商品总金额
+     * @param double $discount       折扣
+     * @param double $shipping_fee   配送费用
+     * @param double $pay_fee        支付费用
+     * @param double $insure_fee     保价费用
+     * @param double $pack_fee       包装费用
+     * @param double $card_fee       贺卡费用
+     * @param double $tax            发票税额
+     * @return double
+     */
+    static function calc_order_amount($goods_amount, $discount = 0, $shipping_fee = 0, $pay_fee = 0, $insure_fee = 0, $pack_fee = 0, $card_fee = 0, $tax = 0)
+    {
+    	return $goods_amount - $discount + $shipping_fee + $pay_fee + $insure_fee + $pack_fee + $card_fee + $tax;
+    }
 }
 
 ?>

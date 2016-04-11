@@ -870,6 +870,27 @@ HEREDOC;
 }
 
 /**
+ * form order sn script
+ * @param string $id
+ */
+function form_ordersn_script($id = 'frm_order_sn') {
+	static $idx = array();
+	if (!isset($idx[$id])) {
+		$idx[$id] = 0;
+	}
+	$dom_id = $id;
+	if ($idx[$id] > 0) {
+		$dom_id .= '_'.$idx[$id];
+	}
+	$idx[$id]++;
+  $order_sn = Fn::gen_order_no();
+  $html =<<<HEREDOC
+<input type="hidden" name="order_sn" value="{$order_sn}" class="inp_order_sn" id="{$dom_id}" />
+HEREDOC;
+  echo $html;
+}
+
+/**
  * require scroll to old position
  */
 function require_scroll2old() {
