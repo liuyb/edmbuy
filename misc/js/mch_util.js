@@ -69,13 +69,7 @@ $(function(){
 		var type = input.data("type");
 		if(val && type){
 			if(type == 'money'){
-				if(!isMoney(val)){
-					input.val("");
-					showMsg("请输入正确的金额！");
-					input.focus();
-				}else{
-					input.val(parseFloat(val).toFixed(2));
-				}
+				checkInputIsMoney(input);
 			}else if(type == 'positive'){
 				if(!isPositiveNum(val)){
 					input.val("");
@@ -86,6 +80,18 @@ $(function(){
 		}
 	});
 });
+function checkInputIsMoney(input){
+	var val = input.val();
+	if(!isMoney(val) || val < 0){
+		input.val("");
+		showMsg("请输入正确的金额！");
+		input.focus();
+	}else{
+		if(val){
+			input.val(parseFloat(val).toFixed(2));
+		}
+	}
+}
 //复选框全选事件
 function handleSelectAll(){
 	var item_num = $(".common_check").length;
@@ -173,7 +179,7 @@ function topCenterDOM(obj){
         	}
         	var type = OBJ.attr("data-type");
         	if(type && "money" == type){
-        		if(!isMoney(val)){
+        		if(!isMoney(val) || val < 0){
         			layer.msg('请输入正确的金额！');
         			OBJ.focus();
         			valid = false;

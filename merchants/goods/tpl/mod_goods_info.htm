@@ -191,7 +191,7 @@
 		<div class="issue_gods_i">
 			<label for="lf"></label><div id="lf" class="issue_gods_left check_yf <!--{if $goodsinfo->fee_or_template != 2}-->check_yf_on<!--{/if}-->" data-val="1">统一邮费：</div>
 			<div class="issue_gods_right" style="line-height:40px">
-				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" class="write_short" data-type='money'> 元
+				<input type="text" value="<!--{$goodsinfo->shipping_fee}-->" name="shipping_fee" id="shipping_fee" class="write_short"> 元
 			</div>
 		</div>
 		<div class="issue_gods_i">
@@ -228,6 +228,9 @@ $(function(){
 	    // editor准备好之后才可以使用
 	    UE.getEditor('editor').setContent(<!--{$goodsinfo->item_desc}-->);
     });
+	$("#shipping_fee").on('blur', function(){
+		checkInputIsMoney($(this));
+	});
 });
 function goods_submit(){
 	if(!$("#defaultForm").formValid()){
@@ -238,6 +241,7 @@ function goods_submit(){
 	var commission = parseFloat(shop_price) - parseFloat(income_price);
 	if(commission < 0){
 		layer.msg('售价不能小于供货价！');
+		$("#shop_price").focus();
 		return false;
 	}
 	var gallerys = $(".goods_gallery");
@@ -276,6 +280,13 @@ function goods_submit(){
 		if(fee_or_temp == 2){
 			if(!$("#shipping_template").val()){
 				showMsg('请选择运费模板！');
+				return false;
+			}
+		}else if(fee_or_temp == 1){
+			var fee = $("#shipping_fee").val();
+			if(!isMoney(fee) || fee < 0){
+				showMsg('请输入正确的金额！');
+				$("#shipping_fee").focus();
 				return false;
 			}
 		}

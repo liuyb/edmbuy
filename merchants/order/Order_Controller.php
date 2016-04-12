@@ -211,12 +211,10 @@ class Order_Controller extends MerchantController {
             //只要未收货还能修改物流信息
             $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status <> 2 and order_status not in (2,3)
                 and merchant_ids='%s' and order_id ".Fn::db_create_in($order_ids);
-            $shipment_label = "修改发货信息";
             $shipment_btn = "保存";
         }else{
             $sql = "select * from shp_order_info where pay_status = ".PS_PAYED." and shipping_status in (0,3,5) and order_status not in (2,3)
                 and merchant_ids='%s' and order_id ".Fn::db_create_in($order_ids);
-            $shipment_label = "批量发货";
             $shipment_btn = "批量发货";
         }
         $result = D()->query($sql, $muid)->fetch_array_all();
@@ -234,13 +232,11 @@ class Order_Controller extends MerchantController {
             }
             $this->v->assign('ship_select', $ship_select);
         }
-        if($result && count($result) == 1){
-            $shipment_label = "发货";
+        if('edit' != $act && count($result) == 1){
             $shipment_btn = "发货";
         }
         $this->v->assign('order_list', $result);
         $this->v->assign('fromOrder', $fromOrder);
-        $this->v->assign('shipment_label', $shipment_label);
         if($result && count($result) > 0){
             $this->v->assign('shipment_btn', $shipment_btn);
         }

@@ -82,10 +82,12 @@ $(function(){
 	$("#search_type_infos").on('click',function(){
 		loadPageDataTable(1, true, tableOptions);
 	});
-	$("#type_table_list").on('click', '.order_look_up', function(){
+	$("#type_table_list").on('click', '.order_look_up', function(e){
+		e.stopPropagation();
 		showOrderDetail(this);
 	});
-	$("#type_table_list").on('click', '.shipping', function(){
+	$("#type_table_list").on('click', '.shipping', function(e){
+		e.stopPropagation();
 		deliveryOrderGoods(this, 'ship');
 	});
 	/* $("#type_table_list").on('click', '.shippingedit', function(){
