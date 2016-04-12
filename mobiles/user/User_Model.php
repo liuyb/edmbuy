@@ -270,7 +270,7 @@ class User_Model extends Model
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
 
-        $add_time = gmtime();
+        $add_time =time() - date('Z');
         $role_id = 1;
         $sql = "SELECT action_list FROM shp_role WHERE role_id ={$role_id}";
         $row = D()->query($sql)->get_one();
@@ -304,12 +304,13 @@ class User_Model extends Model
         $insertarr['invite_code'] = $inviteCode ? $inviteCode : "";
         $insertarr['email'] = $email;
         $insertarr['password'] = $password_enc;
-        $admin_uid = D()->insert($table_admin, $insertarr);
-        if($admin_uid){
-            $data_merchant['admin_uid'] = $admin_uid;
+        $insertarr['role_id'] = $role_id;
+        $admin_uid = D()->insert($table_admin, $data_admin);
+        if($admin_uid!==false){
+            $insertarr['admin_uid'] = $admin_uid;
             $effnum = D()->insert($tablename, $insertarr);
-            if ($effnum) {
-               $result= D()->update($table_admin, array('merchant_id'=>$data_merchant['merchant_id']), array('user_id'=>$admin_uid)); //更新merchant_id
+            if ($effnum!==false) {
+               $result= D()->update($table_admin, array('merchant_id'=>$insertarr['merchant_id']), array('user_id'=>$admin_uid)); //更新merchant_id
                     return $result;
             }
                 return false;

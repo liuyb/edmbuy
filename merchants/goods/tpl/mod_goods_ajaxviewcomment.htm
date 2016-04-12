@@ -1,28 +1,113 @@
+<!--[HEAD_CSS]-->
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    body,html{
+        min-width: 300px !important;
+        background-color: white !important;
+    }
+
+    #common_repaly {
+        margin: 0px 29px;
+        margin-top: 20px;
+        position: relative;
+    }
+
+    .merchant-content{
+        padding-left: 4px;
+        /*padding-top: 4px;*/
+        margin-top: 95px;
+        border: 1px solid #ddd;
+        width: 200px;
+        height: 100px;
+        border-radius: 5px;
+        position: absolute;
+        top:64px;
+        left:72px;
+    }
+    .content {
+        border: 1px solid #ddd;
+        width: 200px;
+        height: 100px;
+        border-radius: 5px;
+        /*display: inline-block;*/
+        position: absolute;
+        top:47px;
+        left:72px;
+        padding-left: 4px;
+    }
+    .content-title-2{
+        /*display:inline-block;*/
+        margin-top: 90px;
+    }
+    .content-title{
+        /*display:inline-block;*/
+        margin-top: 21px;
+    }
+    .div-button,.div-close{
+        background: #f26427;
+        width: 120px;
+        margin-top: 100px;
+        margin-left: 153px;
+        height: 40px;
+        line-height: 40px;
+        /* margin-top: 50px; */
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 5px;
+        border: 0;
+    }
+    .moddle{
+        margin: 0 auto;
+    }
+</style>
+<!--[/HEAD_CSS]-->
 <!--{if $type=="view"}-->
-<div id="common_view">
-    <div>商品名称：<!--{$ret.goods_name}--></div>
-    <div>评价类容：<!--{$ret.content}--></div>
-    <div>回复类容：<!--{$ret.comment_reply}--></div>
+<div class="moddle">
+    <div id="common_repaly">
+        <div>商品名称：<!--{$ret.goods_name}--></div>
+        <div class="content-title">评价类容： </div>
+        <div class="content"><!--{$ret.content}--></div>
+        <div class="content-title-2" >回复类容：</div>
+        <div class="merchant-content" ><!--{$ret.comment_reply}--></div>
+        <button class="div-close">确定</button>
+    </div>
 </div>
 <!--{else}-->
+<div class="moddle">
 <div id="common_repaly">
     <div>商品名称：<!--{$ret.goods_name}--></div>
-    <div>评价类容：<!--{$ret.content}--></div>
-    <div>回复类容：</div>
-    <button class="div-button" ></button>
+    <div class="content-title">评价类容： </div>
+    <div class="content"><!--{$ret.content}--></div>
+    <div class="content-title-2" >回复类容：</div>
+    <div class="merchant-content" contenteditable="true" id="content"></div>
+    <button class="div-button">保存</button>
+</div>
 </div>
 <!--{/if}-->
-
+<input type="hidden" id="comment_id" value="<!--{$common_id}-->"/>
 <script>
     $(".div-button").click(function () {
         var url = "/goods/rplayCommone";
         var common_id = $("#comment_id").val()
-        var content = $("#content").val()
+        var content = $("#content").text();
         var data = {"common_id": common_id, "content": content}
         F.postWithLoading(url, data, function (ret) {
             if (ret.status == 1) {
                 showMsg(ret.retmsg);
+                setTimeout(function(){
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                },1500);
+
             }
         })
+    });
+    $(".div-close").click(function(){
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index);
     })
 </script>
