@@ -5,13 +5,15 @@
 <style>
     .cate-edit{
         display: inline-block;
-        position: relative;
         margin-left: -52px;
     }
     .cate-del{
         display: inline-block;
         position: absolute;
-        right: 115px;
+        left: 935px;
+    }
+    #body{
+        position: relative;
     }
 </style>
 <!--[/HEAD_CSS]-->
@@ -91,14 +93,14 @@
 
         TR += "<div style='padding:10px 0 0;'><a href='javascript:;'onclick='addGoodsCatery(" + item.cat_id + ")'  class='new_adds'>新增下级</a>" +
                 "<a href='javaScript:;' onclick='editGoodsCatery(" + item.cat_id + ")' class='edit_type'>编辑</a>" +
-                "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ")' class='del_cla'>删除</a></div>";
+                "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ",1)' class='del_cla'>删除</a></div>";
         if (item.flat) {
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
                 TR+="<div class='f_y_fe' data-type=" + item.cat_id + ">"+
                         "<a href='javascript:;' class='new_adds'></a>" +
                         "<a href='javaScript:;' class='cate-edit' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' >编辑</a>" +
-                        "<a href='javascript:;' class='cate-del'  onclick='delCategory(" +cate[i]['cat_id'] + ")' >删除</a></div>";
+                        "<a href='javascript:;' class='cate-del'  onclick='delCategory(" +cate[i]['cat_id'] + ",2)' >删除</a></div>";
 
             }
         } else {
@@ -137,8 +139,13 @@
     /**
      *删除一个分类
      */
-    function delCategory(cat_id) {
-        layer.confirm('删除该分类会同时删除该分类下的子分类,您确定删除吗？', {
+    function delCategory(cat_id,n) {
+        if(n==1){
+            var title='删除该分类会同时删除该分类下的子分类,您确定删除吗？';
+        }else{
+            title='您确定要删除此分类吗？';
+        }
+        layer.confirm(title, {
             btn: ['确定', '取消'] //按钮
         }, function () {
             var data = {"cat_id": cat_id}
