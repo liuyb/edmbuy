@@ -135,7 +135,7 @@ function costructRowData(result){
 	var shipping = "";
 	if(canOrderShip(result) && (ship_st == 0 || ship_st == 3 || ship_st == 5)){//未发货
 		//cls = "common_check";
-		shipping = "<span class=\"order_send_goods shipping\">发货</span>";
+		shipping = "<a href=\"javascript:;\" class=\"order_send_goods shipping\"><img src=\"/themes/merchants/img/check_order.png\"><br>发货</a>";
 	}else{
 		//cls = "common_check_disabled";
 		/* if(ship_st != 2 && canOrderShip(result)){//已收货不能修改 已取消 不显示
@@ -149,7 +149,7 @@ function costructRowData(result){
 	TR += "<td>￥"+result.actual_order_amount+"</td>";
 	TR += "<td>"+result.order_status_text+"</td>";
 	TR += "<td>"+result.pay_name+"</td>";
-	TR += "<td class=\"attr_rel undocheck\"><span class=\"order_look_up\">查看</span>"+shipping+"</td></tr>";
+	TR += "<td class=\"attr_rel undocheck\"><a href=\"javascript:;\" class=\"order_look_up\"><img src=\"/themes/merchants/img/check_order.png\"><br>查看</a>"+shipping+"</td></tr>";
 	return TR;
 }
 

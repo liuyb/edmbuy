@@ -57,20 +57,12 @@
 	color:#1f1f1f;
 	border-bottom:1px solid #e9e9e9;
 	text-align:center;
-	height:60px;
-	line-height:60px;
+	height:59px;
+	/*line-height:60px;*/
 	font-size:12px;
 	color:#7d7d7d;
-}
-.order_look_up{
-  	background: url(../img/check_order.png) no-repeat center;
-  	background-position: 4px 0;
-  	height: 49px;
-  	line-height: 56px;
-  	display: inline-block;
-  	vertical-align: -webkit-baseline-middle;
-  	cursor: pointer;
-  	margin: 0 5px;	
+	vertical-align: middle;
+	
 }
 .order_send_goods{  
   	background: url(../img/check_send.png) no-repeat center;
@@ -565,3 +557,12 @@
 	width:254px;
 }
 /*-- 16-4-7 e */
+
+.attr_rel img{
+	height:12px;
+	width:16px;
+}
+.attr_rel a{
+	color:#7d7d7d;
+	display:inline-block;
+}
