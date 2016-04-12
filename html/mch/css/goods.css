@@ -105,7 +105,6 @@
 }
 .search_result_tab td{
 	height:59px;
-	line-height:60px;
 	text-align:center;
 	border-bottom:1px solid #eee;
 	vertical-align: middle;	
@@ -115,7 +114,7 @@
 .search_result_tab img{
 	width:40px;
 	height:40px;
-	vertical-align: middle;	
+	margin-top:10px;
 }
 .goods_name{
   	margin-top: 10px;
@@ -540,8 +539,8 @@
 	float:left;
 }
 .img_go_ds{
-	margin-top:25px;
-	margin-left:20px;
+	margin-top:25px !important;
+	margin-left:20px !important;
 }
 .dj_fil{
   	width: 100px;
@@ -792,5 +791,8 @@
   	cursor: pointer;
 }
 
-
+.new_operate img{
+	width:16px;
+	height:16px;
+}
 

@@ -72,11 +72,11 @@
 						<td>777</td>
 						<td>100</td>
 						<td>限时抢购</td>
-						<td>
-							<span class="goods_edit">编辑</span>
-							<span class="goods_sold_out">下架</span>
-							<span class="goods_del">删除</span>
-							<span class="goods_look_up">查看</span>
+						<td onclick="" class="new_operate" valign="middle">
+							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
+							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
+							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
+							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
 						</td>
 					</tr>
 					<tr>

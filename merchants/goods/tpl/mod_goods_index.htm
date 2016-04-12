@@ -91,15 +91,15 @@ function costructRowData(result){
 	TR+= "<div class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></a></td>";
 	TR+= "<td>"+(result.cat_name ? result.cat_name : '')+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
 	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
-	TR+= "<td class=\"goods_edit_col\"><span class=\"goods_edit\" data-type='edit'>编辑</span>";
-	var saleDOM = "";
+	TR+= "<td class=\"goods_edit_col\"><a href=\"javascript:;\" data-type='edit'><img src=\"/themes/merchants/img/edit_11.png\"><br>编辑</a>";
+	var saleDOM = "";                 
 	if(result.is_on_sale == 1){
-		saleDOM = "<span class='goods_sold_out' data-type='sale'>下架</span>";
-	}else{
-		saleDOM = "<span class='goods_sold_out' data-type='nosale'>上架</span>";
+		saleDOM = "<a href=\"javascript:;\" data-type='sale'><img src=\"/themes/merchants/img/xiajia.png\"><br>下架</a>";
+	}else{ 
+		saleDOM = "<a href=\"javascript:;\" data-type='nosale'><img src=\"/themes/merchants/img/xiajia.png\"><br>上架</a>";
 	}
 	TR+= saleDOM;
-	TR+= "<span data-type='delete' class='goods_del'>删除</span></td>";//<span class='goods_look_up' date-type='share'>分享</span>
+	TR+= "<a href=\"javascript:;\" data-type='delete'><img src=\"/themes/merchants/img/sc.png\"><br>删除</a></td>";//<span class='goods_look_up' date-type='share'>分享</span>
 	TR+= "</tr>";
 	return TR;
 }
@@ -144,7 +144,7 @@ function afterLoadRender(data, params){
 	}
 }
 function DOMEventBind(){
-	$("#resultList").on('click','.goods_edit_col span', function(e){
+	$("#resultList").on('click','.goods_edit_col a', function(e){
 		e.stopPropagation();
 		var THIS = $(this);
 		var type = THIS.attr("data-type");
