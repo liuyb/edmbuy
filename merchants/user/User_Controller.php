@@ -314,6 +314,9 @@ class User_Controller extends MerchantController
             $_SESSION["phone"] = null;
             $_SESSION["forgetPwd"] = null;
             $_SESSION["step"] = 3;
+            if(!empty($_SESSION['erro'])){
+                unset($_SESSION['erro']);
+            }
             $data['retmsg'] = "重置密码成功!";
             $data['status'] = 1;
             $response->sendJSON($data);

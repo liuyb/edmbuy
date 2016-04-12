@@ -148,6 +148,8 @@
                 $(".code_ts").css("display","block");
                 time = setInterval("refresh();", 1000);
                 $("#getCode").attr("disabled","disabled").css("background","grey");
+                $("input[name=phoneCode]").focus();
+
             }
         });
 //        if(dat=="timeLimit"){
@@ -174,15 +176,28 @@
         }
     }
     $(".one_submit").click(function(){
-        var phone=$("input[name=phone]").val()
+        var phone=$("input[name=phone]").val();
         var  data ={"phone":phone};
-        if(phone==""||data==""){
-            showMsg("参数不能为空！")
+        if(phone==""){
+            showMsg("手机号码不能为空！");
+            $("input[name=phone]").focus();
             return;
         }
+        isphone(phone);
+
         url="/checkSmsCode"
-        var phoneCode=$("input[name=phoneCode]").val()
-        var imgCode=$("input[name=imgCode]").val()
+        var phoneCode=$("input[name=phoneCode]").val();
+        var imgCode=$("input[name=imgCode]").val();
+        if(phoneCode==""){
+            showMsg("手机验证码不能为空！");
+            $("input[name=phoneCode]").focus();
+                return;
+        }
+        if(imgCode==""){
+            showMsg("验证码不能为空！");
+            $("input[name=imgCode]").focus();
+            return;
+        }
         var data ={'phone':phone,'imgCode':imgCode,"phoneCode":phoneCode};
         F.postWithLoading(url,data,function(ret){
             if(ret.status==0){
@@ -210,4 +225,16 @@
             }
         })
     });
+    /**
+     * 校验待封装
+     * @param phone
+     */
+    //电话号码验证
+    function isphone(phone) {
+        var reg = /^1[0-9]{10}/;
+        if (!reg.test(phone)) {
+            showMsg("手机号码格式不正确！");
+            return;
+        }
+    }
 </script>

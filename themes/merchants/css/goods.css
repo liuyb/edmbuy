@@ -63,7 +63,6 @@
 }
 .search_result_tab td{
 	height:59px;
-	line-height:60px;
 	text-align:center;
 	border-bottom:1px solid #eee;
 	vertical-align: middle;
@@ -73,7 +72,7 @@
 .search_result_tab img{
 	width:40px;
 	height:40px;
-	vertical-align: middle;
+	margin-top:9px;
 }
 .slaes_among{
     background: url(../img/f26427.png) no-repeat right !important;
@@ -531,8 +530,8 @@
 	float:left;
 }
 .img_go_ds{
-	margin-top:25px;
-	margin-left:20px;
+	margin-top:25px !important;
+	margin-left:20px !important;
 }
 .dj_fil{
 	width: 100px;
@@ -980,4 +979,13 @@
 	font-size:13px;
 	color:#7d7d7d;
 	cursor:pointer;
+}
+.goods_edit_col img{
+	width:16px;
+	height:16px;
+}
+.goods_edit_col a{
+	display:inline-block;
+	color:#7d7d7d;
+	margin:0 5px;
 }
