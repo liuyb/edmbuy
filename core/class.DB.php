@@ -697,10 +697,11 @@ class DB {
   
   /**
    * sql FOR UPDATE part
+   * @param bool $do
    * @return DB
    */
-  public function for_update() {
-  	$this->_sql .= " FOR UPDATE";
+  public function for_update($do = TRUE) {
+  	$this->_sql .= $do ? " FOR UPDATE" : "";
   	return $this;
   }
   

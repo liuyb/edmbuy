@@ -283,13 +283,15 @@ class Order extends StorageNode{
      * 关联订单和商家
      * @param integer $order_id
      * @param integer $merchant_uid
+     * @param string  $merchant_id
      * @return number
      */
-    static function relateMerchant($order_id, $merchant_uid) {
+    static function relateMerchant($order_id, $merchant_uid, $merchant_id = '') {
     	$order  = Order::load($order_id);
     	$admUsr = AdminUser::load($merchant_uid);
     	if ( $order->is_exist() && $admUsr->is_exist() ) {
-    		D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`) VALUES(%d, %d)", $order_id, $merchant_uid);
+    		if (!$merchant_id) $merchant_id = $admUsr->merchant_id;
+    		D()->query("INSERT IGNORE INTO `shp_order_merchant`(`order_id`,`merchant_uid`,`merchant_id`) VALUES(%d, %d, '%s')", $order_id, $merchant_uid, $merchant_id);
     		
     		$old_merchant_ids = $order->merchant_ids;//$merchant_uid
     		$new_merchant_ids = $old_merchant_ids;
@@ -660,6 +662,7 @@ class Order extends StorageNode{
     {
     	return $goods_amount - $discount + $shipping_fee + $pay_fee + $insure_fee + $pack_fee + $card_fee + $tax;
     }
+    
 }
 
-?>
+/*----- END FILE: class.Order.php -----*/

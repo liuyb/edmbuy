@@ -14,7 +14,7 @@ abstract class Storage implements ReadableStorage, WritableStorage {
 	const SELECT_FOR_UPDATE    = 'forupdate';
 	const SELECT_LOCK_IN_SHARE = 'lockinsharemode';
 	
-	abstract public function load(Array $ids);
+	abstract public function load(Array $ids, $flag = NULL);
 	
 	abstract public function find(BaseQuery $query, Array $opts = []);
 	

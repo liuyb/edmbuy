@@ -385,7 +385,7 @@ class Trade_Controller extends MobileController {
     $this->nav_no    = 0;
     //$this->extra_css = 'greybg';
     
-    $item_id = 1162;
+    $item_id = 1272;
     $this->v->assign('item_id', $item_id);
     
     throw new ViewResponse($this->v);
@@ -405,10 +405,11 @@ class Trade_Controller extends MobileController {
       
       $user_id = $GLOBALS['user']->uid;
       if (!$user_id) {
-        $ret['msg'] = '未登录, 请登录';
+        $ret['msg'] = '未登录, 请先登录';
         $response->sendJSON($ret);
       }
       
+      $order_sn   = $request->post('order_sn', '');
       $item_id    = $request->post('item_id', 0);
       $item_number= $request->post('item_number', 1);
       $address_id = $request->post('address_id', 0);
@@ -419,31 +420,16 @@ class Trade_Controller extends MobileController {
       $item_id    = intval($item_id);
       
       //~ 检查数据
+      if (!Fn::check_order_sn($order_sn)) {
+      	$ret['msg'] = '订单号不合法';
+      	$response->sendJSON($ret);
+      }
       if (!$item_id) {
       	$ret['msg'] = '商品ID不能为空';
       	$response->sendJSON($ret);
       }
-      if (!$item_number) {
+      if ($item_number <= 0) {
       	$ret['msg'] = '购买商品数量不能为空';
-      	$response->sendJSON($ret);
-      }
-      if (!$address_id) {
-        $ret['msg'] = '请填写收货地址';
-        $response->sendJSON($ret);
-      }
-      
-      // 单品信息
-      $cItem = Items::load($item_id);
-      if (!$cItem->is_exist()) {
-      	$ret['msg'] = '商品ID不存在';
-      	$response->sendJSON($ret);
-      }
-      elseif (!$cItem->is_on_sale) {
-      	$ret['msg'] = '该商品已下架';
-      	$response->sendJSON($ret);
-      }
-      elseif ($item_number > $cItem->item_number) {
-      	$ret['msg'] = '商品库存不足，无法下单';
       	$response->sendJSON($ret);
       }
       
@@ -453,9 +439,28 @@ class Trade_Controller extends MobileController {
       	$ret['msg'] = '该支付方式暂不可用，请重新选择';
       	$response->sendJSON($ret);
       }
+      $pay_mode = $exPay->pay_code;
+      
+      // 单品信息
+      D()->beginTransaction();
+      $cItem = Items::load($item_id, Storage::SELECT_FOR_UPDATE);
+      if (!$cItem->is_exist()) {
+      	D()->commit();
+      	$ret['msg'] = '商品不存在';
+      	$response->sendJSON($ret);
+      }
+      elseif (!$cItem->is_on_sale) {
+      	D()->commit();
+      	$ret['msg'] = '该商品已下架，不能购买';
+      	$response->sendJSON($ret);
+      }
+      if ($item_number > $cItem->item_number) {
+      	D()->commit();
+      	$ret['msg'] = '商品库存不足，无法下单';
+      	$response->sendJSON($ret);
+      }
       
       // 生成订单信息
-      $order_sn = Fn::gen_order_no();
       $newOrder = new Order();
       $newOrder->order_sn     = $order_sn;
       $newOrder->pay_trade_no = '';
@@ -467,17 +472,15 @@ class Trade_Controller extends MobileController {
       if ($cItem->is_real) { //实物产品(需物流动作)
 
       	// 收货地址
-      	$exAddr = UserAddress::load($address_id);
-      	if (!$exAddr->is_exist()) {
-      		$ret['msg'] = '收货地址无效，请重新填写';
+      	if (!$address_id) {
+      		D()->commit();
+      		$ret['msg'] = '请填写收货地址';
       		$response->sendJSON($ret);
       	}
-      	
-      	// 配送信息
-      	$shipping_id = 1; //TODO 先不管配送方式，默认1先
-      	$exShip = Shipping::load($shipping_id);
-      	if (!$exShip->is_exist()) {
-      		$ret['msg'] = '该配送方式暂不可用，请重新选择';
+      	$exAddr = UserAddress::load($address_id);
+      	if (!$exAddr->is_exist()) {
+      		D()->commit();
+      		$ret['msg'] = '收货地址无效，请重新填写';
       		$response->sendJSON($ret);
       	}
       	
@@ -494,12 +497,12 @@ class Trade_Controller extends MobileController {
       	$newOrder->email        = $exAddr->email;
       	$newOrder->best_time    = $exAddr->best_time;
       	$newOrder->sign_building= $exAddr->sign_building;
-      	$newOrder->shipping_id  = $exShip->shipping_id;
-      	$newOrder->shipping_name = $exShip->shipping_name;
+      	$newOrder->shipping_id  = 0;
+      	$newOrder->shipping_name = '';
       	$newOrder->how_oos      = Fn::oos_status(OOS_WAIT);
       }
       else { //虚拟产品(无需物流动作)
-      	
+      	$newOrder->how_oos      = Fn::oos_status(OOS_CONSULT);
       }
       
       $newOrder->pay_id       = $exPay->pay_id;
@@ -507,22 +510,22 @@ class Trade_Controller extends MobileController {
       $newOrder->postscript   = $order_msg;
       $newOrder->how_surplus  = '';
       //...
-      $newOrder->goods_amount = $total_price;
-      $newOrder->tax          = 0;
+      $newOrder->goods_amount = $cItem->shop_price * $item_number;
       $newOrder->shipping_fee = 0;
       $newOrder->insure_fee   = 0;
       $newOrder->pay_fee      = 0;
       $newOrder->pack_fee     = 0;
       $newOrder->card_fee     = 0;
+      $newOrder->tax          = 0;
       $newOrder->discount     = 0;
       $newOrder->order_amount = Order::calc_order_amount($newOrder->goods_amount, $newOrder->discount, $newOrder->shipping_fee, $newOrder->pay_fee, $newOrder->insure_fee, $newOrder->pack_fee, $newOrder->card_fee, $newOrder->tax);
-      $newOrder->commision    = 0;
+      $newOrder->commision    = $cItem->commision * $item_number;
       //...
-      $newOrder->referer      = '本站';
+      $newOrder->referer      = isset($_GET['refer']) && !empty($_GET['refer']) ? $_GET['refer'] : '本站';
       $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
       //...
       
-      $newOrder->save(Storage::SAVE_INSERT);
+      $newOrder->save(Storage::SAVE_INSERT_IGNORE);
       $order_id = 0;
       if ($newOrder->id) { //订单表生成成功
       	
@@ -548,38 +551,45 @@ class Trade_Controller extends MobileController {
         $newOI->parent_id   = 0;
         $newOI->is_gift     = 0;
         $newOI->goods_attr_id = 0;
-        $newOI->save(Storage::SAVE_INSERT);
+        $newOI->save(Storage::SAVE_INSERT_IGNORE);
         
         $order_update = [];
         if ($newOI->id) {
-        	$order_update['commision'] = $cItem->commision *$item_number; //订单总佣金
-        	D()->update(Order::table(), $order_update, ['order_id'=>$order_id]);
         
         	//关联订单与商家
-        	Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
-        	if (!in_array($cItem->merchant_uid, $rel_merchants)) {
-        		array_push($rel_merchants, $cItem->merchant_uid);
-        	}
+        	Order::relateMerchant($order_id, $cItem->merchant_uid, $cItem->merchant_id);
 
         	// 生成表 pay_log 记录
-        	PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
+        	PayLog::insert($order_id, $order_sn, $newOrder->order_amount, PAY_ORDER);
         	
-        	$ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$true_amount];
+        	// 提交事务
+        	D()->commit();
+        	
+        	// 提交到微信支付
+        	$exOrder = Order::load($order_id);
+        	$exOrder->order_goods = Order::getItems($exOrder->id);
+        	if (empty($exOrder->order_goods)) {
+        		$ret['msg'] = '订单提交失败(没有对应商品)';
+        		$response->sendJSON($ret);
+        	}
+        	$order_info  = $exOrder->to_array(true);
+        	$jsApiParams = '';
+        	if ('wxpay'==$pay_mode) {
+        		$jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
+        	}
+        	
+        	$ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'js_api_params'=>json_decode($jsApiParams)];
         	$response->sendJSON($ret);
         }
         else {
-        	Items::changeStock($cItemId, $true_goods_number); //立即恢复刚才冻结的商品库存
-        	
-        	$order_update['order_status'] = OS_INVALID;
-        	$order_update['commision']    = 0;
-        	D()->update(Order::table(), $order_update, ['order_id'=>$order_id]);
-        	
+        	D()->rollback();
         	$ret['msg'] = '订单提交失败';
         	$response->sendJSON($ret);
         }
         
-      }
+      } // END if ($newOrder->id)
       else {
+      	D()->rollback();
         $ret['msg'] = '订单生成失败';
         $response->sendJSON($ret);
       }

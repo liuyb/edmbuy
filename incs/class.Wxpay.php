@@ -95,6 +95,9 @@ class Wxpay {
       $input->SetTrade_type(self::TRADE_TYPE_JSAPI);
       $input->SetOpenid($openId);
       
+      $order_table = Order::table();
+      D()->update($order_table, ['pay_status'=>PS_PAYING], ['order_id'=>$order['order_id']]); //支付中
+      
       $order_wx = WxPayApi::unifiedOrder($input);
       
       if ('SUCCESS'==$order_wx['return_code'] && 'SUCCESS'==$order_wx['result_code']) { //保存信息以防再次重复提交
@@ -107,7 +110,10 @@ class Wxpay {
         if (isset($order_wx['code_url'])) {
           $wxpay_data['code_url'] = $order_wx['code_url'];
         }
-        D()->update(Order::table(), ['pay_status'=>PS_PAYING,'pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]);
+        D()->update($order_table, ['pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]); //成功支付，但暂不变更状态
+      }
+      else {
+      	D()->update($order_table, ['pay_status'=>PS_FAIL,'pay_data1'=>json_encode($order_wx)], ['order_id'=>$order['order_id']]); //支付失败
       }
     }
     else {

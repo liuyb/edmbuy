@@ -65,7 +65,7 @@ abstract class StorageNode extends Model {
 		}
 		
 		$cached_data  = self::getStaticCache($ids);
-		$storage_data = self::storage()->load(array_diff_key($ids, $cached_data));
+		$storage_data = self::storage()->load(array_diff_key($ids, $cached_data), (is_string($refresh) ? $refresh : NULL));
 		$caching_data = $return = [];
 		foreach ($ids as $_id) {
 			if (isset($cached_data[$_id])) {

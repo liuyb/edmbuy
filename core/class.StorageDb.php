@@ -20,12 +20,13 @@ class StorageDb extends Storage {
 	 * Load node from db
 	 * 
 	 * @param array $ids
+	 * @param string $flag
 	 * @return array
 	 * @see Storage::load()
 	 */
-	public function load(Array $ids) {
+	public function load(Array $ids, $flag = NULL) {
 		if (empty($ids)) return [];
-		$res = D()->from($this->table)->where(D()->in($this->column($this->key), $ids))->select($this->getColumnAlias())->fetch_assoc_all();
+		$res = D()->from($this->table)->where(D()->in($this->column($this->key), $ids))->for_update($flag===Storage::SELECT_FOR_UPDATE)->select($this->getColumnAlias())->fetch_assoc_all();
 		$ret = [];
 		foreach ($res AS $row) {
 			$ret[$row[$this->key]] = $row;

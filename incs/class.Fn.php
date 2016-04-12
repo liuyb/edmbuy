@@ -85,6 +85,17 @@ class Fn extends Func {
   }
   
   /**
+   * 检查order sn格式是否合法
+   * @return boolean
+   */
+  static function check_order_sn($order_sn) {
+  	if (!empty($order_sn) && preg_match('/^E\d{19}$/', $order_sn)) {
+  		return true;
+  	}
+  	return false;
+  }
+  
+  /**
    * 生成订单号
    * @return string
    */

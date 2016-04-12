@@ -870,10 +870,10 @@ HEREDOC;
 }
 
 /**
- * form order sn script
+ * form order script
  * @param string $id
  */
-function form_ordersn_script($id = 'frm_order_sn') {
+function form_order_script($id = 'frm_order_sn') {
 	static $idx = array();
 	if (!isset($idx[$id])) {
 		$idx[$id] = 0;
@@ -884,8 +884,33 @@ function form_ordersn_script($id = 'frm_order_sn') {
 	}
 	$idx[$id]++;
   $order_sn = Fn::gen_order_no();
+  $chstatus_uri    = U('trade/order/chpaystatus');
+  $ps_cancel       = PS_UNPAYED;
+  $ps_fail         = PS_FAIL;
   $html =<<<HEREDOC
 <input type="hidden" name="order_sn" value="{$order_sn}" class="inp_order_sn" id="{$dom_id}" />
+<script type="text/javascript">
+  function wxpayJsApiCall(jsApiParams, order_id, callback)
+  {
+  	WeixinJSBridge.invoke(
+  		'getBrandWCPayRequest',
+  		jsApiParams,
+  		function (res){
+  	  	if ("get_brand_wcpay_request:ok" == res.err_msg) {
+  	  	  callback('OK');
+  	  	}
+  	  	else if ("get_brand_wcpay_request:cancel" == res.err_msg) {
+  	  	  F.post('{$chstatus_uri}',{"order_id":order_id,"status_to":{$ps_cancel}},function(){});
+  	  	  callback('CANCEL');
+  	  	}
+  	  	else {
+  	  	  F.post('{$chstatus_uri}',{"order_id":order_id,"status_to":{$ps_fail}},function(){});
+  	  	  callback('FAIL');
+  	  	}
+  		}
+  	);
+  }
+</script>
 HEREDOC;
   echo $html;
 }
