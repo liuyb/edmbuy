@@ -237,9 +237,18 @@ function getRightRegions(obj){
 	F.get('/order/region',{type : 2, region : region_id},function(ret){
 		var html = "";
 		if(ret && ret.length){
-			ret.forEach(function(item){
+			right.data('lilen', ret.length);
+			for(var i = 0,len = ret.length; i < len; i++){
+				var item = ret[i];
+				//统一模板已选中过，不再显示
+				if(curSelectedRegions && curSelectedRegions[region_id]){
+					var map = curSelectedRegions[region_id].regions_id;
+					if(map[item.region_id]){
+						continue;
+					}
+				}
 				html += "<li data-id="+item.region_id+">"+item.region_name+"</li>";	
-			});
+			}
 		}
 		right.html(html);
 		if(spanObj.hasClass("check_prov_on")){
@@ -312,9 +321,9 @@ function leftCheckChange(){
 	}
 }
 /**
- * 左侧选中状态变更时做一次缓存操作
+ * 左右侧选中状态变更时做一次缓存操作 (左侧点击，右侧选中，全选)
       缓存为 
-      如果市全选
+      如果市全选 -> 跟实际数据一致，部分隐藏时全选不算。
       	省级ID ： {省级ID , 省级名称}
       如果市未全选
       	省级ID ： {多市级ID , 多市级名称}   	
@@ -326,10 +335,13 @@ function addRegionCache(){
 	if(!region_id || !region_name){
 		return;
 	}
-	if(isRightSelectAll()){
+	var lilen = right.data("lilen");
+	var selectedRg = $("#right_check_city .check_prov_on");
+	//if(isRightSelectAll()){
+	if(selectedRg.length == lilen){
 		regions_selected[region_id] = {regions_id : region_id, regions_name : region_name};
 	}else{
-		var selectedRg = $("#right_check_city").find("li.check_prov_on")
+		//var selectedRg = $("#right_check_city").find("li.check_prov_on")
 		selectedRg_id = selectedRg.map(function(){
 			return $(this).data("id")
 		}).toArray();
@@ -390,11 +402,14 @@ function constructShipBody(){
 	html += "<td><input class=\"pre_tab_input\" name='m_fee' type=\"text\" value=0.00 data-type='money'></td></tr>";
 	return html;
 }
-
+//当前编辑的列对象
 var editObj;
+//当前选中的省市区，用来过滤同一模板已经选择的不再显示。
+var curSelectedRegions = {};
 //打开编辑时需要判断勾选状态,记得关闭时清除对应缓存
 function openDialog(obj){
 	editObj = obj;
+	var regionJsons;
 	if(obj){
 		var regions = obj.find("input[name='regions']").val();
 		var region_json = obj.find("input[name='region_json']").val();//湖南;江西(xx、bb)
@@ -407,7 +422,42 @@ function openDialog(obj){
 				}
 			});
 		}
+		regionJsons = obj.closest("tr").first().siblings().find("input[name='region_json']");
+	}else{
+		regionJsons = $("#shipmentBody").find("input[name='region_json']");
 	}
+	if(regionJsons){
+		regionJsons.each(function(){
+			var rgjson =  $.parseJSON($(this).val());
+			for(var k in rgjson){
+				var regs = rgjson[k];
+				if(curSelectedRegions[k]){
+					curSelectedRegions[k].regions_id = curSelectedRegions[k].regions_id.concat(regs.regions_id);
+				}else{
+					curSelectedRegions[k] = regs;
+				}
+			}
+			//$.extend(curSelectedRegions, rgjson);
+		});
+	}
+	
+	for(var k in curSelectedRegions){
+		//已经选中的省份不再显示
+		if(k == curSelectedRegions[k].regions_id){
+			$("#left_check_prov").find("li[data-id="+k+"]").hide();
+			curSelectedRegions[k] = null;
+			delete curSelectedRegions[k];
+		}else{
+			//已经选择的市转换成hash方式，方便后面判断
+			var regs = curSelectedRegions[k].regions_id;
+			var map = {};
+			regs.forEach(function(item){
+				map[item] = 1;
+			});
+			curSelectedRegions[k].regions_id = map;
+		}
+	}
+	console.log(curSelectedRegions);
 	$(".mask").show();
 	$("#address_fixed").show();
 }
@@ -417,6 +467,8 @@ function closeDialog(){
 	$("#address_fixed").hide();
 	editObj = null;
 	clearRegionCache();
+	curSelectedRegions = {};
+	$("#left_check_prov li").show();
 }
 
 </script>
