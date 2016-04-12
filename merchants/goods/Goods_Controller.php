@@ -501,6 +501,7 @@ class Goods_Controller extends MerchantController
         if ($show_page) {
             $v = new PageView('mod_goods_ajaxviewcomment', '_page_box');
             $v->assign('ret', $list);
+            $v->assign('common_id', $common_id);
             $v->assign('type', $type);
             $response->send($v);
         }
