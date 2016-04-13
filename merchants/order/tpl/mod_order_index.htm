@@ -15,7 +15,7 @@
 <div id="order_list_right">
 	<div id="order_type">
 		<ul>	
-			<li class="order_type_on">所有订单</li>
+			<li data-type='0'>所有订单</li>
 			<li data-type='100'>待付款</li>
 			<li data-type='105'>备货中</li>
 			<li data-type='101'>待发货</li>
@@ -60,10 +60,14 @@
 </div>
 <script>
 var tableOptions = {id : 'type_table_list',url : '/order/list',colspan : 8};
+var $order_type_li;
+var _cur_ordertype = 0;
 $(function(){
+	$order_type_li = $("#order_type");
+	orderTypeHighlight();
 	loadPageDataTable(1, true, tableOptions);
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
-	$("#order_type").on('click','li',function(){
+	$order_type_li.on('click','li',function(){
 		var obj = $(this);
 		/* if(obj.hasClass("order_type_on")){
 			return;
@@ -73,21 +77,24 @@ $(function(){
 		obj.addClass("order_type_on");
 		loadPageDataTable(1, true, tableOptions);
 		var type = obj.data('type');
-		if(type == 100 || type == 102 || type == 104){
-			canBatchShip(false);
-		}else{
-			canBatchShip(true);
-		}
+		canShipByType(type);
+		_cur_ordertype = type;
 	});
 	$("#search_type_infos").on('click',function(){
 		loadPageDataTable(1, true, tableOptions);
 	});
 	$("#type_table_list").on('click', '.order_look_up', function(e){
 		e.stopPropagation();
+		if(_cur_ordertype){
+			Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+		}
 		showOrderDetail(this);
 	});
 	$("#type_table_list").on('click', '.shipping', function(e){
 		e.stopPropagation();
+		if(_cur_ordertype){
+			Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+		}
 		deliveryOrderGoods(this, 'ship');
 	});
 	/* $("#type_table_list").on('click', '.shippingedit', function(){
@@ -103,6 +110,21 @@ $(function(){
 		loadPageDataTable(1, true, tableOptions);
 	});
 });
+/**
+ * 判断当前cookie里面是否有选中的项，没有就用默认的
+ */
+function orderTypeHighlight(){
+	var order_type = Cookies.get('mch_order_type');
+	if(order_type){
+		$order_type_li.find("li[data-type="+order_type+"]").addClass("order_type_on");
+		//清除cookie
+		Cookies.set('mch_order_type','', -1);
+		_cur_ordertype = order_type;
+	}else{
+		$order_type_li.find("li[data-type=0]").addClass("order_type_on");
+	}
+	canShipByType(_cur_ordertype);
+}
 
 //清空当前页面条件
 function clearQueryCondtion(){
@@ -177,6 +199,14 @@ function deliveryOrderGoods(obj, act){
 	}
 	order_ids = order_ids.join(",");
 	window.location.href = '/order/shipping/form?act='+act+'&order_ids='+order_ids;
+}
+
+function canShipByType(type){
+	if(type == 100 || type == 102 || type == 104){
+		canBatchShip(false);
+	}else{
+		canBatchShip(true);
+	}
 }
 
 function canBatchShip(flag){

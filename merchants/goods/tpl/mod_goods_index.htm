@@ -8,7 +8,7 @@
 	<div id="new_common">
 		<div id="order_type">
 			<ul>	
-				<li id="li1"  class="new_common_on" onclick="list_switch(1)" data-sale='2'>销售中<span id="on_sale"></span></li>
+				<li id="li1"  onclick="list_switch(1)" data-sale='2'>销售中<span id="on_sale"></span></li>
 				<li id="li2"  onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
 			</ul>
 		</div>
@@ -56,7 +56,9 @@
 <script>
 var site = "<!--{$msite}-->";
 var tableOptions = {id : 'resultList',url : '/goods/list',colspan : 10};
+var _cur_goodstype = 2;
 $(function(){
+	goodsTypeHighlight();
 	loadPageDataTable(1, true, tableOptions);
 	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
 	$("#goods_name").enterEvent(function(){
@@ -67,6 +69,23 @@ $(function(){
 	});
 	DOMEventBind();
 });
+
+/**
+ * 判断当前cookie里面是否有选中的项，没有就用默认的
+ */
+function goodsTypeHighlight(){
+	var $order_type_li = $("#order_type");
+	var goods_type = Cookies.get('mch_goods_type');
+	if(goods_type){
+		$order_type_li.find("li[data-sale="+goods_type+"]").addClass("new_common_on");
+		//清除cookie
+		Cookies.set('mch_goods_type','', -1);
+		_cur_goodstype = order_type;
+	}else{
+		$order_type_li.find("li[data-sale=2]").addClass("new_common_on");
+		_cur_goodstype = 2;
+	}
+}
 
 //获取当前页面条件
 function pageQueryCondtion(){
@@ -120,9 +139,11 @@ function displaySaleNotSaleNum(ret){
 }
 function list_switch(a){
 	var _li = "#li" + a ;
-	$(_li).addClass("new_common_on");
-	$(_li).siblings().removeClass("new_common_on");
+	var $li = $(_li);
+	$li.addClass("new_common_on");
+	$li.siblings().removeClass("new_common_on");
 	clearQueryCondtion();
+	_cur_goodstype = $li.data('sale');
 	loadPageDataTable(1, true, tableOptions);
 }
 //清空当前页面条件
@@ -156,6 +177,9 @@ function DOMEventBind(){
 		}else if(type == "delete"){
 			deleteGoods(obj);
 		}else if(type == "edit"){
+			if(_cur_goodstype){
+				Cookies.set('mch_goods_type',_cur_goodstype,{path:'/'});
+			}
 			editGoods(obj);
 		}
 	});
