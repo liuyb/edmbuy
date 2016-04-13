@@ -1,4 +1,40 @@
 <!--{add_css file="shop.css" scope="global"}-->
+<!--[HEAD_CSS]-->
+<style>
+
+    #body{
+        position: relative;
+    }
+    .browse {
+        width: 280px;
+        height: 40px;
+        line-height: 40px;
+        background: #ecf1f5;
+        display: inline-block;
+        margin: 10px 0 0;
+        padding-right: 20px;
+        border-radius: 4px;
+        position: relative;
+        text-align: center;
+        cursor: pointer;
+    }
+    .file_save img {
+        vertical-align: middle;
+        width: 300px;
+        height: 118px;
+        margin-top: 10px;
+    }
+    .link_address {
+        width: 300px;
+        height: 40px;
+        line-height: 40px;
+        background: #ecf1f5;
+        border: 0;
+        border-radius: 4px;
+        text-align: center;
+    }
+</style>
+<!--[/HEAD_CSS]-->
 <div id="body" class="ifr-body">
     <!--{include file="inc/left_common.htm"}-->
     <div id="store_right_finish">
@@ -18,53 +54,57 @@
                     <th width="150">操作</th>
                 </tr>
                 <tr>
-                    <td>1</td>
+                <td>1</td>
+                <td>
+                    <div class="browse"  >
+                        浏览
+                        <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
+                    </div>
+                    <div class="file_save">
+                    </div>
+                    <div class="offer_size">建议尺寸640*250px</div>
+                </td>
+                <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
+                <td>
+                    <span class="store_edit">编辑</span>
+                    <span class="store_del">删除</span>
+                </td>
+            </tr>
+                <tr>
+                    <td>2</td>
                     <td>
-                        <div id="browse">
+                        <div class="browse"  >
                             浏览
-                            <img src="/themes/merchants/img/editor_plus.png">
-                            <input type="file" id="file" name="file" class="dj_fil" onchange="fileupload(event, this)">
+                            <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
                         </div>
-                             <div id="file_save">
-                            </div>
+                        <div class="file_save">
+                        </div>
                         <div class="offer_size">建议尺寸640*250px</div>
                     </td>
-                    <td><input id="link_address"  class="link_address_on" type="text" value="www.baidu.com"></td>
+                    <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
                     <td>
                         <span class="store_edit">编辑</span>
                         <span class="store_del">删除</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>2</td>
+                    <td>3</td>
                     <td>
-                        <div id="browse">
+                        <div class="browse"  >
                             浏览
-                            <input type="file" id="file" name="file" class="store_file" onchange="">
+                            <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
+                        </div>
+                        <div class="file_save">
                         </div>
                         <div class="offer_size">建议尺寸640*250px</div>
                     </td>
-                    <td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
+                    <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
                     <td>
                         <span class="store_edit">编辑</span>
                         <span class="store_del">删除</span>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>
-                        <div id="browse">
-                            浏览
-                            <input type="file" id="file" name="file" class="store_file" onchange="">
-                        </div>
-                        <div class="offer_size">建议尺寸640*250px</div>
-                    </td>
-                    <td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
-                    <td>
-                        <span class="store_edit">编辑</span>
-                        <span class="store_del">删除</span>
-                    </td>
-                </tr>
+
             </table>
             <button id="store_btn">继续添加</button>
         </div>
@@ -74,32 +114,35 @@
 <script>
     $("#dpzx").addClass("order_left_common");
 
-    $(".store_edit").on("click",function(){
+    $(".store_edit").on("click", function () {
         var _tex = $(this).text();
-        if(_tex == "编辑"){
+        if (_tex == "编辑") {
             $(this).text("保存");
-            $(this).parent().parent().find("#link_address").removeClass("link_address_on");
+            $(this).parent().parent().find(".link_address").removeClass("link_address_on");
         }
-        if(_tex == "保存"){
+        if (_tex == "保存") {
             $(this).text("编辑");
-            $(this).parent().parent().find("#link_address").addClass("link_address_on");
+            $(this).parent().parent().find(".link_address").addClass("link_address_on");
         }
     })
 
-    function fileupload(e, obj){
-        var url = '/goods/gallery';
+    function fileupload(e, obj) {
+        $obj=$(obj)
+//        console.log($obj);
+        var url = '/shop/carousel';
 //        var galleryCount = $(".goods_gallery").length;
-        var selectedCls = "";
+//        var selectedCls = "";
 //        if(galleryCount < 1){
 //            selectedCls = "add_img_selected";
 //        }
-        image_upload(url, e, obj, function(ret){
+        image_upload(url, e, obj, function (ret) {
             var thumb = ret.thumb;
-            var html =   '	<div class="add_img goods_gallery">'
-                    +'		<img src="'+thumb+'" class="'+selectedCls+'" data-ori="'+ret.result+'" data-std="'+ret.stdpath+'" onclick="galleryPicSelect(this)">	'
-                    +'      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
-                    +'	</div>';
-            $(".publish_img").before(html);
+            var html = '	<div class="add_img goods_gallery">'
+                    + '		<img src="' + thumb + '"  data-ori="' + ret.result + '" data-std="' + ret.stdpath + '"/>	'
+                    + '      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
+                    + '	</div>';
+            $obj.parent().parent().find(".file_save").html(html);
+
         });
     }
 </script>

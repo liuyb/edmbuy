@@ -611,7 +611,7 @@ class Goods_Model extends Model
      */
     static function viewComment($comment_id)
     {
-        $sql = "select goods.goods_name as goods_name,comm.content as content,comm.comment_reply as comment_reply
+        $sql = "select goods.goods_name as goods_name,comm.comment_rank as comment_rank ,comm.content as content,comm.comment_reply as comment_reply
               from shp_comment comm left join shp_goods goods on comm.id_value=goods.goods_id
               where comm.comment_id = %d and comment_type=0";
         return D()->query($sql, $comment_id)->get_one();

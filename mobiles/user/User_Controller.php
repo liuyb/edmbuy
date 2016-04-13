@@ -801,6 +801,10 @@ class User_Controller extends MobileController
                 $ret['status'] = 1;
                 $ret['pwd'] = $password;
                 $response->sendJSON($ret);
+            }else{
+                $ret['retmsg'] = "邮箱号不存在！";
+                $ret['status'] = 0;
+                $response->sendJSON($ret);
             }
         }
     }
