@@ -113,7 +113,7 @@ class Wxpay {
         D()->update($order_table, ['pay_data1'=>json_encode($wxpay_data)], ['order_id'=>$order['order_id']]); //成功支付，但暂不变更状态
       }
       else {
-      	D()->query("UPDATE {$order_table} SET pay_status=%d,pay_data1='%s' WHERE order_id=%d AND pay_status<>%d", PS_FAIL, json_encode($order_wx), $order['order_id'], PS_PAYED);//支付失败(需检查是否“已支付”)
+      	//D()->query("UPDATE {$order_table} SET pay_status=%d,pay_data1='%s' WHERE order_id=%d AND pay_status<>%d", PS_FAIL, json_encode($order_wx), $order['order_id'], PS_PAYED);//支付失败(需检查是否“已支付”)
       }
     }
     else {
