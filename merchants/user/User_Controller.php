@@ -42,6 +42,7 @@ class User_Controller extends MerchantController
         $retmsg = '';
         $retuname = '';
         $retupass = '';
+        $status ="-1";
         if (isset($_POST['loginname']) && isset($_POST['password']) && isset($_POST['erro'])) {
             $loginname = trim($_POST['loginname']);
             $password = trim($_POST['password']);
@@ -60,6 +61,7 @@ class User_Controller extends MerchantController
                         $retmsg = '请输入验证码';
                     } elseif ($verifycode != $_SESSION['verifycode']) {
                         $retmsg = '请输入正确的验证码';
+                        $status = 2;
                     } elseif ('' == $loginname) {
                         $retmsg = '请输入用户名';
                     } elseif ('' == $password) {
@@ -70,8 +72,10 @@ class User_Controller extends MerchantController
                     $check = User_Model::check_logined($loginname, $password, $login_uinfo);
                     if ($check < 0) {
                         $retmsg = '不存在该用户';
+                        $status = 0;
                     } elseif (0 === $check) {
                         $retmsg = '密码错误！';
+                        $status =1;
                         $_SESSION['erro'] = 1;
                     } else { //Final Login Success
                         $retmsg = '登录成功！';
@@ -99,6 +103,7 @@ class User_Controller extends MerchantController
             }else{
                $v->assign('erro', 0);
             }
+            $v->assign('status',$status);
             $response->send($v);
         }
     }

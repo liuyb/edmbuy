@@ -11,7 +11,7 @@ class Shop_Controller extends MerchantController {
 	public function menu()
 	{
 		return [
-
+			'shop/carousel'=>'carousel_upload'
 		];
 	}
 	/**
@@ -33,8 +33,19 @@ class Shop_Controller extends MerchantController {
 	 * @param Request $request
 	 * @param Response $response
 	 */
-	public function headerPic(Request $request, Response $response){
-
+	public function carousel_upload(Request $request, Response $response){
+		$ret = [
+			'flag' => 'FAIL',
+			'errMsg' => '上传失败，请稍后重试！'
+		];
+		if ($request->is_post()) {
+			$imgDIR = "/a/mch/shop/";
+			$img = $_POST["img"];
+			$upload = new Upload($img, $imgDIR);
+			$result = $upload->saveImgData();
+			$ret = $upload->buildUploadResult($result);
+		}
+		$response->sendJSON($ret);
 	}
 }
  
