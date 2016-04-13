@@ -42,10 +42,20 @@ class Shop_Controller extends MerchantController {
 			$imgDIR = "/a/mch/shop/";
 			$img = $_POST["img"];
 			$upload = new Upload($img, $imgDIR);
+			$upload->standardheight = 250;
 			$result = $upload->saveImgData();
 			$ret = $upload->buildUploadResult($result);
 		}
-		$response->sendJSON($ret);
+			$response->sendJSON($ret);
+	}
+
+	/**
+	 * 处理首页轮播图删除
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function carousel_del (Request $request, Response $response){
+
 	}
 }
  
