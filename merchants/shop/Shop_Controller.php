@@ -6,18 +6,20 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class Shop_Controller extends MerchantController
-{
+class Shop_Controller extends MerchantController {
 
-    public function menu()
-    {
-        return [
-            'shop/carousel' => 'carousel_upload',
-            '/shop/carousel/add' => '/shop/carousel_add'
-        ];
-    }
-
-    /**
+	public function menu()
+	{
+		return [
+			'shop/carousel' => 'carousel_upload',
+            'shop/carousel/add' => '/shop/carousel_add',
+		    'shop/settlement/manager' => 'settlement_manager',
+		    'shop/settlement/order/manager' => 'settlement_order_manager',
+		    'shop/settlement/list' => 'settlement_list',
+		    'shop/settlement/order' => 'settlement_orders'
+		];
+	}
+	/**
      * default action 'index'
      * @param Request $request
      * @param Response $response
@@ -98,6 +100,50 @@ class Shop_Controller extends MerchantController
 
 
     }
+	
+	public function settlement_manager(Request $request, Response $response){
+	    $this->v->set_tplname('mod_shop_settlement');
+	    $this->setPageLeftMenu('shop', 'settlement');
+	    $response->send($this->v);
+	}
+	
+	public function settlement_order_manager(Request $request, Response $response){
+	    $this->v->set_tplname('mod_shop_settlement_order');
+	    $this->setPageLeftMenu('shop', 'settlement_order');
+	    $settle_id = $request->get('settle_id', 0);
+	    $this->v->assign('settle_id', $settle_id);
+	    $response->send($this->v);
+	}
+	
+	/**
+	 * 结算管理列表
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function settlement_list(Request $request, Response $response){
+	    $curpage = $request->get('curpage', 1);
+	    $status = $request->get('status', 1);
+	    $options = array("status" => $status);
+	    $pager = new Pager($curpage, 8);
+	    Settlement_Model::getSettlementList($pager, $options);
+	    $ret = $pager->outputPageJson();
+	    $response->sendJSON($ret);
+	}
+	
+	/**
+	 * 结算订单列表
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function settlement_orders(Request $request, Response $response){
+	    $curpage = $request->get('curpage', 1);
+	    $settle_id = $request->get('settle_id', 0);
+	    $start_date = $request->get('start_date', '');
+	    $end_date = $request->get('end_date', '');
+	    $options = array("start_date" => $start_date, "end_date" => $end_date);
+	    $pager = new Pager($curpage, 8);
+	    Settlement_Model::getSettlementDetail($pager, $settle_id, $options);
+	    $ret = $pager->outputPageJson();
+	    $response->sendJSON($ret);
+	}
 }
-
-/*----- END FILE: Shop_Controller.php -----*/

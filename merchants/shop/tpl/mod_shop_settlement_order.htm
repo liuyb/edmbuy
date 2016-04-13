@@ -1,0 +1,77 @@
+<!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/shop.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/bootstrap-datetimepicker.min.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
+<!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
+<div id="body" class="ifr-body">
+	<!--{include file="inc/left_common.htm"}-->
+	<div class='detail_info_top' onclick="javascript:location.href='/shop/settlement/manager';">明细</div>
+	<div id="new_common">
+		<div id="choose_condition">
+			<input type="input" id="start_date" readonly class="form_datetime check_time_left" placeholder="请选择开始日期"/>
+			<span style="padding-left:15px;">至</span>
+			<input type="input" id="end_date" readonly class="form_datetime check_time_left" placeholder="请选择结束日期"/>
+			<button id="search_type_infos">搜索</button>
+		</div>
+		<div class="common_go" id="list1">
+			<div class="search_result">
+				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
+					<tr class="header">	
+						<th>订单编号</th>
+						<th>商品实付总额</th>
+						<th>佣金</th>
+						<th>运费</th>
+						<th>优惠金额</th>
+						<th>本期应结</th>
+						<th>下单日期</th>
+					</tr>
+					<tbody class="body-data"></tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div id="list_type_foot">
+			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+var tableOptions = {id : 'resultList',url : '/shop/settlement/order?settle_id=<!--{$settle_id}-->',colspan : 7};
+$(function(){
+	loadPageDataTable(1, true, tableOptions);
+	DOMEventBind();
+	$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',autoclose: true,todayBtn: true,minView:2});
+});
+
+//获取当前页面条件
+function pageQueryCondtion(){
+	var start_date = $("#start_date").val();
+	var end_date = $("#end_date").val();
+	var data = {start_date : start_date, end_date : end_date};
+	return data;
+}
+function costructRowData(result){
+	var money_paid = result.money_paid;
+	var shipping_fee = result.shipping_fee;
+	var discount = result.discount;
+	var commision = result.commision;
+	var settlement = (money_paid - commision - discount);
+	if(settlement){
+		settlement = parseFloat(settlement).toFixed(2);
+	}
+	var TR = "";
+	TR+= "<tr><td>"+result.order_sn+"</td>";
+	TR+= "<td>"+money_paid+"</td><td>"+commision+"</td><td>"+shipping_fee+"</td><td>"+discount+"</td>";
+	TR+= "<td>"+settlement+"</td><td>"+result.add_time+"</td>";
+	TR+= "</tr>";
+	return TR;
+}
+
+function DOMEventBind(){
+	$("#search_type_infos").on('click', function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+}
+</script>

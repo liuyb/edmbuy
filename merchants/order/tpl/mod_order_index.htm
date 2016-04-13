@@ -118,7 +118,7 @@ function orderTypeHighlight(){
 	if(order_type){
 		$order_type_li.find("li[data-type="+order_type+"]").addClass("order_type_on");
 		//清除cookie
-		Cookies.set('mch_order_type','', -1);
+		Cookies.set('mch_order_type','', {path:'/'});
 		_cur_ordertype = order_type;
 	}else{
 		$order_type_li.find("li[data-type=0]").addClass("order_type_on");

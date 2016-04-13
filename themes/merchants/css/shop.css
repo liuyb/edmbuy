@@ -130,3 +130,10 @@
 	border:0;
 	margin:20px 0;
 }
+.detail_info_top{
+	background:url(../img/left_l.png) no-repeat left;
+	padding-left:15px;	
+	font-size:12px;
+	color:#333;
+	cursor: pointer;
+}
