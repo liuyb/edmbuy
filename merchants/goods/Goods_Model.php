@@ -720,8 +720,8 @@ class Goods_Model extends Model
     }
 
     /**
-     * 得到cat_id
-     * @param $cat_id
+     * attr_id
+     * @param $attr_id
      */
     static function getAttrIds($cat_id)
     {
@@ -739,7 +739,7 @@ class Goods_Model extends Model
             $where = "attr_id ={$attr_id}";
         }
         $tablename = "`shp_attribute`";
-        D()->delete($tablename, $where);
+       return D()->delete($tablename, $where);
     }
 
     /**
@@ -748,8 +748,13 @@ class Goods_Model extends Model
      */
     static function ckeckDelAttr($attr_id)
     {
-        $sql = "select count(1) from shp_goods_attr where attr1_id = %d or attr2_id = %d or attr3_id =%d";
-        return D()->query($sql, $attr_id, $attr_id, $attr_id)->result();
+        if(strpos($attr_id,",")){
+            $where = "in({$attr_id})";
+        }else{
+            $where ="={$attr_id}";
+        }
+        $sql = "select count(1) from shp_goods_attr where attr1_id {$where} or attr2_id {$where} or attr3_id {$where}";
+        return D()->query($sql)->result();
     }
 
     /**

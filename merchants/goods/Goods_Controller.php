@@ -571,6 +571,26 @@ class Goods_Controller extends MerchantController
         if ($request->is_post()) {
             $cat_id = $request->post("cat_id");
             $attrData = $request->post("attrDate");//前台的二维数组数据
+            if(empty($attrData)){
+                $arrt_ids=Goods_Model::getAttrIds($cat_id);
+                    $ids="";
+                foreach($arrt_ids as $id){
+                        $ids .=$id['attr_id'].",";
+                }
+                $ids = rtrim($ids,",");
+                $result = Goods_Model::ckeckDelAttr($ids);
+                if($result){
+                    $ret['msg'] = "此属性有商品正在使用不可删除!";
+                    $ret['status'] = 0;
+                    $response->sendJSON($ret);
+                }
+               $result = Goods_Model::delGoodsAttr($ids);
+                if($result!==false){
+                    $ret['status'] = 1;
+                    $ret['retmsg'] = "保存成功！";
+                    $response->sendJSON($ret);
+                }
+            }
             $sort_order = 1;
             $attr_names = [];
             foreach ($attrData as $val3) {
@@ -598,7 +618,7 @@ class Goods_Controller extends MerchantController
                 }
                 if (empty($val1[0])) {
                     $attr_id = Goods_Model::addGoodsAttr($val1[1], $cat_id);//新增
-                    $val[0] = $attr_id;
+                    $val1[0] = $attr_id;
                 }
                 $val1['sort_order'] = $sort_order;
                 $sort_order++;
