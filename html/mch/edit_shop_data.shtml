@@ -20,28 +20,25 @@
 <body id="bg_common"> 
 <style>
 #common_header_left{
-	background:#323a4d !important;
+	background:#323a4d !important; 
+}
+.edit_tab_width table{
+	width:100% !important;
 }
 </style>
 
 <!--#include file="header_commen.html"-->
 
-<div class="one_password" style="margin-bottom:80px;">
-	<img src="../mch/img/yzsf2.png"><img src="../mch/img/szmm2.png"><img src="../mch/img/wc2.png">
-</div>
+<div id="body" class="ifr-body">
+	<!--#include file="store_left_common.html"-->
 	
-<div id="store_infos" style="width:1200px; margin:0 auto;padding:40px 0;">
-	<!--#include file="shop_data_common.html"-->
+	<div id="store_right_finish">
+		<div id="store_infos" class="edit_tab_width" style="padding:20px;">
+			<!--#include file="shop_data_common.html"-->
+		</div>
+	</div>
 </div>	
 <script>
-$("#dpzx").addClass("order_left_common");
-
-$("#flow_business li").on("click",function(){
-	if($(this).hasClass("business_on")){
-		$(this).removeClass("business_on"); 
-	}else{
-		$(this).addClass("business_on");
-	}
-})
+$("#dpzl").addClass("order_left_common");
 </script>
  
