@@ -12,10 +12,44 @@ class Shop_Controller extends MerchantController
     public function menu()
     {
         return [
-            'shop/carousel' => 'carousel_upload',
+            'shop/template/use' => 'template_ajax',
+            'shop/carousel/upload' => 'carousel_upload',
+            'shop/carousel/list' => 'carousel_index',
             'shop/carousel/add' => 'carousel_add',
-            'shop/carousel/del' => 'carousel_del'
+            'shop/carousel/del' => 'carousel_del',
+            'shop/settlement/manager' => 'settlement_manager',
+            'shop/settlement/order/manager' => 'settlement_order_manager',
+            'shop/settlement/list' => 'settlement_list',
+            'shop/settlement/order' => 'settlement_orders'
         ];
+    }
+    /**
+     * 使用模板
+     * @param Request $request
+     * @param Response $response
+     */
+    public function index(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_index');
+        $this->setSystemNavigate('shop');
+        $this->setPageLeftMenu('shop', 'list');
+        $response->send($this->v);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
+    public function template_ajax(Request $request, Response $response){
+        $show_page = true;
+        $type = $request->get("type");
+        if ($show_page) {
+            $v = new PageView('mod_shop_ajaxtep', '_page_box');
+            if($type=="carousel"){
+            }else{
+                $response->send($v);
+            }
+
+        }
     }
 
     /**
@@ -23,12 +57,10 @@ class Shop_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function index(Request $request, Response $response)
+    public function carousel_index(Request $request, Response $response)
     {
-        $this->v->set_tplname('mod_shop_index');
-        $this->setSystemNavigate('shop');
-        $this->setPageLeftMenu('shop', 'list');
         //查出用户所有的轮播图
+        $this->v->set_tplname("mod_shop_carousel");
         $carousel = Shop_Model::selCarousel();
         $this->v->assign("carousel", $carousel);
         $response->send($this->v);
@@ -113,9 +145,55 @@ class Shop_Controller extends MerchantController
         $res['retmsg']="操作成功!";
         $res['status']=1;
         $response->sendJSON($res);
-
-
     }
+    
+public function settlement_manager(Request $request, Response $response){
+	    $this->v->set_tplname('mod_shop_settlement');
+	    $this->setPageLeftMenu('shop', 'settlement');
+	    $response->send($this->v);
+	}
+	
+	public function settlement_order_manager(Request $request, Response $response){
+	    $this->v->set_tplname('mod_shop_settlement_order');
+	    $this->setPageLeftMenu('shop', 'settlement_order');
+	    $settle_id = $request->get('settle_id', 0);
+	    $this->v->assign('settle_id', $settle_id);
+	    $this->v->assign('settle', Settlement_Model::getSettlement($settle_id));
+	    $response->send($this->v);
+	}
+	
+	/**
+	 * 结算管理列表
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function settlement_list(Request $request, Response $response){
+	    $curpage = $request->get('curpage', 1);
+	    $status = $request->get('status', 1);
+	    $options = array("status" => $status);
+	    $pager = new Pager($curpage, 8);
+	    Settlement_Model::getSettlementList($pager, $options);
+	    $ret = $pager->outputPageJson();
+	    $response->sendJSON($ret);
+	}
+	
+	/**
+	 * 结算订单列表
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function settlement_orders(Request $request, Response $response){
+	    $curpage = $request->get('curpage', 1);
+	    $settle_id = $request->get('settle_id', 0);
+	    $start_date = $request->get('start_date', '');
+	    $end_date = $request->get('end_date', '');
+	    $options = array("start_date" => $start_date, "end_date" => $end_date);
+	    $pager = new Pager($curpage, 8);
+	    Settlement_Model::getSettlementDetail($pager, $settle_id, $options);
+	    $ret = $pager->outputPageJson();
+	    $response->sendJSON($ret);
+	}
+
 }
 
 /*----- END FILE: Shop_Controller.php -----*/

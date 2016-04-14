@@ -30,6 +30,18 @@ class Settlement_Model extends Model{
         $pager->setResult($result);
     }
     
+    public static function getSettlement($settle_id){
+        $sql = "SELECT * FROM shp_settlement where merchant_id='%s' and stmt_id = '%d' ";
+        $result = D()->query($sql, $GLOBALS['user']->uid, $settle_id)->get_one();
+        if(!$result || empty($result)){
+            Fn::show_error_message("数据不存在！");
+        }
+        $sdate = date('Y/m/d', $result['start_time']);
+        $edate = date('Y/m/d', $result['end_time']);
+        $result['date_range'] = $sdate .'--'. $edate;
+        return $result;
+    }
+    
     /**
      * 获取结算订单列表
      * @param Pager $pager
@@ -54,10 +66,10 @@ class Settlement_Model extends Model{
         $pager->setTotalNum($count);
         $sql = "select * from shp_order_info od, shp_order_settlement stmt 
                 where	od.order_id = stmt.order_id	
-                and		stmt.stmt_id = '%d' and merchant_ids = '%s' $where order by od.add_time desc limit {$pager->start},{$pager->pagesize}";
+                and		stmt.stmt_id = '%d' and merchant_ids = '%s' $where order by od.pay_time desc limit {$pager->start},{$pager->pagesize}";
         $result = D()->query($sql, $settle_id, $muid)->fetch_array_all();
         foreach ($result as &$item){
-            $item['add_time'] = date('Y/m/d H:i:s', simphp_gmtime2std($item['add_time']));
+            $item['pay_time'] = date('Y/m/d H:i:s', simphp_gmtime2std($item['pay_time']));
         }
         $pager->setResult($result);
     }

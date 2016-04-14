@@ -14,6 +14,9 @@
 			<input type="input" id="end_date" readonly class="form_datetime check_time_left" placeholder="请选择结束日期"/>
 			<button id="search_type_infos">搜索</button>
 		</div>
+		<div>
+		本期应结：¥<!--{$settle.stmt_amount}--> （<!--{$settle.date_range}-->）
+		</div>
 		<div class="common_go" id="list1">
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
@@ -24,7 +27,7 @@
 						<th>运费</th>
 						<th>优惠金额</th>
 						<th>本期应结</th>
-						<th>下单日期</th>
+						<th>订单支付时间</th>
 					</tr>
 					<tbody class="body-data"></tbody>
 				</table>
@@ -64,7 +67,7 @@ function costructRowData(result){
 	var TR = "";
 	TR+= "<tr><td>"+result.order_sn+"</td>";
 	TR+= "<td>"+money_paid+"</td><td>"+commision+"</td><td>"+shipping_fee+"</td><td>"+discount+"</td>";
-	TR+= "<td>"+settlement+"</td><td>"+result.add_time+"</td>";
+	TR+= "<td>"+settlement+"</td><td>"+result.pay_time+"</td>";
 	TR+= "</tr>";
 	return TR;
 }
