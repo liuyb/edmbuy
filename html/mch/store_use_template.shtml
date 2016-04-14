@@ -44,12 +44,18 @@
 		
 		<div id="store_infos" style="margin:20px 0;">
 			<div id="store_pore"><p>可选用模板</p></div>
-			<table cellspacing="0" cellpadding="0" id="store_repo_tab">
-				<tr>
-					<td><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using using_on">已启用</button></p></td>
-					<td><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button><p></td>
-				</tr>
-			</table>
+			<div class="pore_use_check">
+				<ul>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using using_on">已启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+					<li><p style="margin:10px 0">通用模板</p><img src="../mch/img/repo.png"><p><button class="repo_start_using">启用</button></p></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>

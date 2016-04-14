@@ -359,4 +359,13 @@
   vertical-align: sub;
   padding: 0 5px;
 }
+.pore_use_check li{
+	display:inline-block;
+	text-align:center;	
+	margin:0 23px;
+}
+.pore_use_check img{
+	width:200px;
+	height:358px;	
+}
 /*2016 4-14 e*/
