@@ -12,10 +12,40 @@ class Shop_Controller extends MerchantController
     public function menu()
     {
         return [
-            'shop/carousel' => 'carousel_upload',
+            'shop/template/use' => 'template_ajax',
+            'shop/carousel/upload' => 'carousel_upload',
+            'shop/carousel/list' => 'carousel_index',
             'shop/carousel/add' => 'carousel_add',
-            'shop/carousel/del' => 'carousel_del'
+            'shop/carousel/del' => 'carousel_del',
         ];
+    }
+    /**
+     * 使用模板
+     * @param Request $request
+     * @param Response $response
+     */
+    public function index(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_index');
+        $this->setSystemNavigate('shop');
+        $this->setPageLeftMenu('shop', 'list');
+        $response->send($this->v);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
+    public function template_ajax(Request $request, Response $response){
+        $show_page = true;
+        $type = $request->get("type");
+        if ($show_page) {
+            $v = new PageView('mod_shop_ajaxtep', '_page_box');
+            if($type=="carousel"){
+            }else{
+                $response->send($v);
+            }
+
+        }
     }
 
     /**
@@ -23,12 +53,10 @@ class Shop_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function index(Request $request, Response $response)
+    public function carousel_index(Request $request, Response $response)
     {
-        $this->v->set_tplname('mod_shop_index');
-        $this->setSystemNavigate('shop');
-        $this->setPageLeftMenu('shop', 'list');
         //查出用户所有的轮播图
+        $this->v->set_tplname("mod_shop_carousel");
         $carousel = Shop_Model::selCarousel();
         $this->v->assign("carousel", $carousel);
         $response->send($this->v);
@@ -113,9 +141,8 @@ class Shop_Controller extends MerchantController
         $res['retmsg']="操作成功!";
         $res['status']=1;
         $response->sendJSON($res);
-
-
     }
+
 }
 
 /*----- END FILE: Shop_Controller.php -----*/

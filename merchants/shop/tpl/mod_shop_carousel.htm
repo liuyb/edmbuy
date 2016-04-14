@@ -1,0 +1,255 @@
+ <div id="store_infos">
+            <table cellspacing="0" cellpadding="0" id="store_table_list">
+                <tr>
+                    <th>排序</th>
+                    <th width="350">图片地址</th>
+                    <th width="350">链接地址</th>
+                    <th width="150">操作</th>
+                </tr>
+
+                <!--{foreach from=$carousel item=val}-->
+                <tr>
+                    <td >
+                        <input class="link_id link_address_on" type="text" value="<!--{$val.sort}-->" disabled="true">
+                    </td>
+                    <td>
+                        <div class="browse">
+                            浏览
+                            <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
+                        </div>
+                        <input type="hidden" class="img" value="<!--{$val.carousel_img}-->"/>
+                        <input type="hidden" class="carousel" value="<!--{$val.carousel_id}-->"/>
+                        <div class="file_save">
+                            <!--{if $val.link_url}-->
+                            <div class="add_img">
+                                <img src="<!--{$val.carousel_img}-->" />
+                            </div>
+                            <!--{/if}-->
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input class="link_address link_address_on"  type="text"
+                               value="<!--{$val.link_url}-->" disabled="true" placeholder="请输入链接地址"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <!--{foreachelse}-->
+                <tr>
+                    <td >
+                        <input class="link_id link_address_on" type="text" value="2" disabled="true" >
+                    </td>
+                    <td>
+                        <div class="browse">
+                            浏览
+                            <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
+                        </div>
+                        <input type="hidden" class="img" value=""/>
+                        <input type="hidden" class="carousel" value="0"/>
+                        <div class="file_save">
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input class="link_address link_address_on"  type="text"
+                               value="" disabled="true" placeholder="请输入链接地址"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td >
+                        <input class="link_id link_address_on" type="text" value="2" disabled="true" >
+                    </td>
+                    <td>
+                        <div class="browse">
+                            浏览
+                            <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
+                        </div>
+                        <input type="hidden" class="img" value=""/>
+                        <input type="hidden" class="carousel" value="0"/>
+                        <div class="file_save">
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input class="link_address link_address_on"  type="text"
+                               value="" disabled="true" placeholder="请输入链接地址"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="link_id link_address_on" type="text" value="3" disabled="true">
+                    </td>
+                    <td>
+                        <div class="browse">
+                            浏览
+                            <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
+                        </div>
+                        <input type="hidden" class="img" value=""/>
+                        <input type="hidden" class="carousel" value="0"/>
+                        <div class="file_save">
+                        </div>
+                        <div class="offer_size">建议尺寸640*250px</div>
+                    </td>
+                    <td><input class="link_address link_address_on"  type="text"
+                               value="" disabled="true" placeholder="请输入链接地址"></td>
+                    <td>
+                        <span class="store_edit">编辑</span>
+                        <span class="store_del">删除</span>
+                    </td>
+                </tr>
+                <!--{/foreach}-->
+            </table>
+
+            <button id="store_btn">继续添加</button>
+            <button id="save_btn">保存</button>
+        </div>
+
+<script>
+    $("#dpzx").addClass("order_left_common");
+
+    $(".store_edit").on("click", function () {
+        var _tex = $(this).text();
+        if (_tex == "编辑") {
+            $(this).parent().parent().find(".link_address").removeClass("link_address_on").removeAttr("disabled");
+            $(this).parent().parent().find(".link_id").removeClass("link_address_on").removeAttr("disabled");
+            $(this).parent().parent().find("input[name='file']").removeAttr("disabled");
+        }
+    });
+    $("#store_btn").click(function () {
+        var total = $("#store_table_list tr").length;
+        if(total==6){
+            showMsg("您最多只能添加五张轮播图！");
+            return;
+        }
+        var html = "<tr><td><input class='link_id'  type='text' value='"+total+"'></td>" +
+                "<td><div class='browse'>"+
+                "浏览" +
+                "<input type='file'  name='file' class='store_file' onchange='fileupload(event,this)'>" +
+                "</div>" +
+                "<div class='file_save'>" +
+                "</div>" +
+                "<div class='offer_size'>建议尺寸640*250px</div>" +
+                "</td>" +
+                "<td><input class='link_address '   type='text' value=''placeholder='请输入链接地址'></td>" +
+                "<td>" +
+                "<span class='store_edit'>编辑</span>" +
+                "<span class='store_del'>删除</span>" +
+                "</td>" + +"</tr>";
+        $("#store_table_list").append(html);
+    });
+
+    function fileupload(e, obj) {
+        $obj = $(obj)
+//        console.log($obj);
+        var url = '/shop/carousel/upload';
+//        var galleryCount = $(".goods_gallery").length;
+//        var selectedCls = "";
+//        if(galleryCount < 1){
+//            selectedCls = "add_img_selected";
+//        }
+        image_upload(url, e, obj, function (ret) {
+            var thumb = ret.thumb;
+            var html = '	<div class="add_img goods_gallery">'
+                    + '		<img src="' + thumb + '"  data-ori="' + ret.result + '" data-std="' + ret.stdpath + '"/>	'
+                    + '      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
+                    + '	</div>';
+            $obj.parent().parent().find(".file_save").html(html);
+            var path=ret.stdpath;
+            $obj.parent().parent().find(".img").val(path);
+
+        });
+    }
+    $(document).on('click','.store_del',function() {
+//        var total = $("#store_table_list tr").length - 1;
+//        if (total - 1 <3) {
+//            showMsg("您不能这样做!");
+//            return;
+//        }
+        var $tr=$(this).parent().parent();
+        var carousel =$tr.find(".carousel").val();
+        showConfirm('确定要删除选中的商品吗？',function(){
+            if(carousel==0){
+                $tr.remove();
+            }else if(carousel > 0){
+                var data = {"carousel_id" : carousel};
+                F.postWithLoading('shop/carousel/del', data, function(data){
+                    layer.msg(data.retmsg);
+                    location.reload();
+                });
+            }
+
+        });
+
+
+    } );
+    $(document).on('click','#save_btn',function(){
+        var total = $("#store_table_list tr").length - 1;
+        var imgArr =[];
+        var erro=0;
+        $("#store_table_list tr").each(function(){
+            var $tr=$(this);
+            var sort=$tr.find(".link_id").val();
+            if(typeof sort!="undefined") {
+                var sort = $tr.find(".link_id").val();
+                var link_address = $tr.find(".link_address").val();
+                var img_url = $tr.find(".img").val();
+                var carousel_id =$tr.find(".carousel").val();
+                if (sort == '') {
+                    showMsg("排序不能为空!");
+                    erro=1;
+                    return;
+                }
+                else if (link_address == '') {
+                    showMsg("链接地址不能为空!");
+                    erro=1;
+                    return;
+                }
+                else if (img_url=="") {
+                    showMsg("请上传图片!");
+                    erro=1;
+                    return;
+                }
+                regNum(sort);
+                checkeURL(link_address);
+                var arr =new Array();
+                arr[0]=carousel_id;
+                arr[1]=sort;
+                arr[2]=img_url;
+                arr[3]=link_address;
+                imgArr.push(arr);
+            }
+        });
+        if(erro==0){
+            var url ="/shop/carousel/add";
+            var data={"imgArr":imgArr};
+            F.postWithLoading(url,data,function(ret){
+                showMsg(ret.retmsg);
+                if(ret.status==1){
+//                location.reload();
+                }
+            })
+        }
+
+    })
+
+    function regNum(str){
+        var tset = /^[-+]?\d*$/;
+        if(!tset.test(str)){
+            showMsg("请输入整数！");return;
+        }
+    }
+    function checkeURL(URL){
+        var str=URL;
+        var Expression=/([\w-]+\.)+[\w-]+(\/[\w-] .\/?%&=]*)?/;
+        var objExp=new RegExp(Expression);
+        if(!objExp.test(str)==true){
+            showMsg("请输入正确的网址!");return;
+        }
+    }
+
+</script>
