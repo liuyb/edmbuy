@@ -1,13 +1,4 @@
-<!--[HEAD_CSS]-->
-<style>
-    .view-common{
-        color: red;
-        cursor: pointer;
-        background: url("/themes/merchants/img/check_order.png") no-repeat top;
-        background-position:10px 8px ;
-    }
-</style>
-<!--[/HEAD_CSS]-->
+
 <table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
     <tr>
         <th>评价商品</th>
@@ -32,11 +23,18 @@
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看</td>
-
+		<td>
+        	<a href="javascript:;"  onclick="viewCommon( <!--{$val.comment_id}-->,'view')" class="reply_mana">
+        		<img src="/themes/merchants/img/check_order.png" alt="" ><br>查看
+        	</a>
+        </td>
         <!--{else}-->
         <td>未回复</td>
-        <td onclick="viewCommon( <!--{$val.comment_id}-->,'rplay')"  class="reply_mana">回复</td>
+        <td>
+        	<a href="javascript:;" onclick="viewCommon( <!--{$val.comment_id}-->,'rplay')" class="reply_mana">
+        		<img src="/themes/merchants/img/edit_11.png" alt="" ><br>回复
+        	</a>
+        </td>
         <!--{/if}-->
     </tr>
     <!--{foreachelse}-->
@@ -45,7 +43,8 @@
     </tr>
     <!--{/foreach}-->
 </table>
-<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:0px;margin-top: 10px;"></div>
+<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:10px;"></div>
+<div class="clear"></div>
 <script>
     var curpage =<!--{$page.curpage}-->
     var maxpage =<!--{$page.maxpage}-->

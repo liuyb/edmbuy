@@ -235,4 +235,25 @@
 	color:#fff;
 }
 
+.three_img_left{
+	display:inline-block;
+}
+.three_img_left img{
+	vertical-align:middle;
+}
+.three_text_right{
+	display:inline-block;
+  	vertical-align: middle;	
+	text-align:left;
+	margin-left:30px;
+}
+.back_home{
+	height:30px;
+	line-height:30px;
+	border:0;
+	border-radius:4px;
+	background:#f26427;
+	width:80px;
+	color:#fff;
+}
 /*2016 4-13 e*/

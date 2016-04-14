@@ -770,14 +770,13 @@
 }
 /*2016-3-30 e */
 
-.reply_mana {
-  	background: url(../img/edit_11.png) no-repeat top;
-  	background-position: 4px 0;
-  	height: 49px;
-	line-height: 56px;
-	display: inline-block;
-  	vertical-align: -webkit-baseline-middle;
-  	cursor: pointer;
+.reply_mana img{
+	height:16px;
+	width:16px;
+}
+.reply_mana{
+	font-size:13px;
+	color:#7d7d7d;
 }
 
 .check_yf{

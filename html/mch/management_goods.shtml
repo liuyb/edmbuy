@@ -58,7 +58,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><span class="reply_mana">回复</span></td>
+						<td><a href="javascript:;" class="reply_mana"><img src="../mch/img/edit_11.png" alt="" ><br>回复</a></td>
 					</tr>
 					<tr>
 						<td>
@@ -70,7 +70,7 @@
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><span class="reply_mana">回复</span></td>
+						<td></td>
 					</tr>
 					<tr>
 						<td>
