@@ -6,35 +6,39 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class Shop_Model extends Model {
+class Shop_Model extends Model
+{
 
     /**
      * 查询用户所有的轮播图
      */
-    static function selCarousel(){
-        $merchant_id=$GLOBALS['user']->uid;
-        $sql="select carousel_id,link_url,carousel_img,sort from shp_carousel where merchant_id = '%s'";
-        return D()->query($sql,$merchant_id)->fetch_array_all();
+    static function selCarousel()
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select carousel_id,link_url,carousel_img,sort from shp_shop_carousel where merchant_id = '%s'";
+        return D()->query($sql, $merchant_id)->fetch_array_all();
     }
 
     /**
      * 得到carousel_id
      */
-    static function getCarouselId(){
-        $merchant_id=$GLOBALS['user']->uid;
-        $sql="select carousel_id from shp_carousel where merchant_id = '%s'";
-        return D()->query($sql,$merchant_id)->fetch_array_all();
+    static function getCarouselId()
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select carousel_id from shp_shop_carousel where merchant_id = '%s'";
+        return D()->query($sql, $merchant_id)->fetch_array_all();
     }
 
     /**
      * 删除轮播图
      * @param $carousel_id
      */
-    static function delCarouse($carousel_id){
+    static function delCarouse($carousel_id)
+    {
 //        delete($tablename, $wherearr)
-        $tablename="`shp_carousel`";
-        $wherearr['carousel_id']=$carousel_id;
-        D()->delete($tablename,$wherearr);
+        $tablename = "`shp_shop_carousel`";
+        $wherearr['carousel_id'] = $carousel_id;
+        D()->delete($tablename, $wherearr);
     }
 
     /**
@@ -44,14 +48,15 @@ class Shop_Model extends Model {
      * @param $linkurl
      * @return false|int
      */
-    static function  addCarouse($shor,$imgurl,$linkurl){
+    static function  addCarouse($shor, $imgurl, $linkurl)
+    {
 //        insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
-        $tablename="`shp_carousel`";
-        $insertarr['sort']=$shor;
-        $insertarr['carousel_img']=$imgurl;
-        $insertarr['link_url']=$linkurl;
-        $insertarr['merchant_id']=$GLOBALS['user']->uid;
-        return  D()->insert($tablename,$insertarr);
+        $tablename = "`shp_shop_carousel`";
+        $insertarr['sort'] = $shor;
+        $insertarr['carousel_img'] = $imgurl;
+        $insertarr['link_url'] = $linkurl;
+        $insertarr['merchant_id'] = $GLOBALS['user']->uid;
+        return D()->insert($tablename, $insertarr);
     }
 
     /**
@@ -61,15 +66,47 @@ class Shop_Model extends Model {
      * @param $imgurl
      * @param $linkurl
      */
-    static function updCarouse($carousel_id,$shor,$imgurl,$linkurl){
+    static function updCarouse($carousel_id, $shor, $imgurl, $linkurl)
+    {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
-        $tablename="`shp_carousel`";
-        $setarr['sort']=$shor;
-        $setarr['carousel_img']=$imgurl;
-        $setarr['link_url']=$linkurl;
-        $wherearr['carousel_id'] =$carousel_id;
-        return D()->update($tablename,$setarr,$wherearr);
+        $tablename = "`shp_shop_carousel`";
+        $setarr['sort'] = $shor;
+        $setarr['carousel_img'] = $imgurl;
+        $setarr['link_url'] = $linkurl;
+        $wherearr['carousel_id'] = $carousel_id;
+        return D()->update($tablename, $setarr, $wherearr);
     }
+
+    /**
+     * 得到模版
+     */
+    static function getMchTpl()
+    {
+        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template  order BY enabled DESC";
+        return D()->query($sql)->fetch_array_all();
+    }
+
+    /**
+     * 得到已经开启的模版id
+     * @return mixed
+     */
+    static function getCurentTpl()
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        //先判断用户有没有配置店铺信息
+        $sql = "select tpl.tpl_id ,info.shop_qrcode as shop_qrcode from shp_shop_template as tpl LEFT join shp_shop_info info on tpl.tpl_id = info.shop_template  where info.merchant_id= '%s' and tpl.enabled = 1";
+        $qrcode=D()->query($sql,$merchant_id)->get_one();
+        if($qrcode){
+            $qrcode['is_use']=true;
+            return $qrcode;
+        }
+        //todo 默认模板
+        $sql="select tpl_id ,tpl_image from shp_shop_template where defa =1";
+        $qrcode = D()->query($sql)->get_one();
+        $qrcode['is_use'] =false;
+        return $qrcode;
+    }
+
 }
 
 /*----- END FILE: Shop_Model.php -----*/
