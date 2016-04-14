@@ -3,8 +3,6 @@
     .view-common{
         color: red;
         cursor: pointer;
-        background: url("/themes/merchants/img/check_order.png") no-repeat top;
-        background-position:10px 8px ;
     }
 </style>
 <!--[/HEAD_CSS]-->
@@ -32,7 +30,7 @@
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看</td>
+        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看回复</td>
 
         <!--{else}-->
         <td>未回复</td>

@@ -61,9 +61,6 @@
     var count = num;
     var time;
 
-    $("#ps_email").focus(function(){
-       $("#sus_money").fadeOut("slow");
-    });
     $("#ps_btn").click(function () {
         _this = $(this);
 
@@ -112,7 +109,7 @@
             myAlert(ret.retmsg);
             if(ret.status==1){
                 var password = ret.pwd;
-//                window.location.href="/user/merchant/regsuc?mobile="+mobile+"& pwd="+password;
+                window.location.href="/user/merchant/regsuc?mobile="+mobile+"& pwd="+password;
             }
         })
     });

@@ -98,7 +98,7 @@ class Upload
             $stardardpath = $img_dir . Upload::FOLDER_STANDARD . '/' . date('Ym') . '/'. $filecode . $extpart; 
             $thumbpath = $img_dir . Upload::FOLDER_THUMB . '/' . date('Ym') . '/'. $filecode . $extpart;
         }
-
+        
         // 写ori版本
         $oripath = $this->writeImgData($oripath, $file_data);
         if ($thumbpath) {

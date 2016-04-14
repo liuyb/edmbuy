@@ -686,8 +686,7 @@ class Goods_Model extends Model
     {
         $merchant_id = $GLOBALS['user']->uid;
         $tablename = "`shp_attribute`";
-
-        $insertarr['attr_name'] = trim($attr_name);
+        $insertarr['attr_name'] = $attr_name;
         $insertarr['merchant_id'] = $merchant_id;
         $insertarr['cat_id'] = $cat_id;
 
@@ -701,10 +700,7 @@ class Goods_Model extends Model
      */
     static function checkAttrName($cat_id, $attr_name)
     {
-        $where ="attr_name ={$attr_name}";
-        if(strpos($attr_name,",")){
-            $where = "attr_name in({$attr_name})";
-        };
+        $where = "attr_name in({$attr_name})";
         $sql = "select attr_name from shp_attribute where cat_id = {$cat_id} and $where";
         return D()->query($sql)->result();
     }
@@ -718,7 +714,7 @@ class Goods_Model extends Model
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_attribute`";
         $setarr['sort_order'] = $sort_order;
-        $setarr['attr_name'] = trim($attr_name);
+        $setarr['attr_name'] = $attr_name;
         $wherearr['attr_id'] = $attr_id;
         D()->update($tablename, $setarr, $wherearr);
     }
