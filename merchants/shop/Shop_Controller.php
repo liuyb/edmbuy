@@ -6,20 +6,19 @@
  */
 defined('IN_SIMPHP') or die('Access Denied');
 
-class Shop_Controller extends MerchantController {
+class Shop_Controller extends MerchantController
+{
 
-	public function menu()
-	{
-		return [
-			'shop/carousel' => 'carousel_upload',
-            'shop/carousel/add' => '/shop/carousel_add',
-		    'shop/settlement/manager' => 'settlement_manager',
-		    'shop/settlement/order/manager' => 'settlement_order_manager',
-		    'shop/settlement/list' => 'settlement_list',
-		    'shop/settlement/order' => 'settlement_orders'
-		];
-	}
-	/**
+    public function menu()
+    {
+        return [
+            'shop/carousel' => 'carousel_upload',
+            'shop/carousel/add' => 'carousel_add',
+            'shop/carousel/del' => 'carousel_del'
+        ];
+    }
+
+    /**
      * default action 'index'
      * @param Request $request
      * @param Response $response
@@ -65,7 +64,11 @@ class Shop_Controller extends MerchantController {
      */
     public function carousel_del(Request $request, Response $response)
     {
-
+        $carousel_id=$request->post("carousel_id");
+        Shop_Model::delCarouse($carousel_id);
+        $ret['retmsg']="删除成功!";
+        $ret['status']=1;
+        $response->sendJSON($ret);
     }
 
     /**
@@ -86,64 +89,33 @@ class Shop_Controller extends MerchantController {
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
+        $newid=[];
+        foreach ($Arraydata as $val) {
 
-        foreach ($Arraydata as &$val) {
-            if ($val['carousel_id'] > 0 && !in_array($val['carousel_id'], $ids)) {
+            if ($val[0] > 0) {
                 //删除轮播
-                Shop_Model::delCarouse($val['carousel_id']);
-            } elseif ($val['carousel_id'] == 0) {
-                    //处理新增
+                array_push($newid,$val[0]);
+            } elseif($val[0] > 0 && in_array($val[0], $ids)){
 
-                Shop_Model::Carouse();
+                Shop_Model::updCarouse($val[0],$val[1],$val[2],$val[3]);
+            }
+            if($val[0] == 0) {
+                //处理新增
+               Shop_Model::addCarouse($val[1],$val[2],$val[3]);
             }
         }
+            foreach($ids as $id){
+                if(!in_array($id['carousel_id'],$newid)){
+                    Shop_Model::delCarouse($val[0]);
+                }
+
+            }
+            $res['retmsg']="操作成功!";
+            $res['status']=1;
+            $response->sendJSON($res);
 
 
     }
-	
-	public function settlement_manager(Request $request, Response $response){
-	    $this->v->set_tplname('mod_shop_settlement');
-	    $this->setPageLeftMenu('shop', 'settlement');
-	    $response->send($this->v);
-	}
-	
-	public function settlement_order_manager(Request $request, Response $response){
-	    $this->v->set_tplname('mod_shop_settlement_order');
-	    $this->setPageLeftMenu('shop', 'settlement_order');
-	    $settle_id = $request->get('settle_id', 0);
-	    $this->v->assign('settle_id', $settle_id);
-	    $response->send($this->v);
-	}
-	
-	/**
-	 * 结算管理列表
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public function settlement_list(Request $request, Response $response){
-	    $curpage = $request->get('curpage', 1);
-	    $status = $request->get('status', 1);
-	    $options = array("status" => $status);
-	    $pager = new Pager($curpage, 8);
-	    Settlement_Model::getSettlementList($pager, $options);
-	    $ret = $pager->outputPageJson();
-	    $response->sendJSON($ret);
-	}
-	
-	/**
-	 * 结算订单列表
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public function settlement_orders(Request $request, Response $response){
-	    $curpage = $request->get('curpage', 1);
-	    $settle_id = $request->get('settle_id', 0);
-	    $start_date = $request->get('start_date', '');
-	    $end_date = $request->get('end_date', '');
-	    $options = array("start_date" => $start_date, "end_date" => $end_date);
-	    $pager = new Pager($curpage, 8);
-	    Settlement_Model::getSettlementDetail($pager, $settle_id, $options);
-	    $ret = $pager->outputPageJson();
-	    $response->sendJSON($ret);
-	}
 }
+
+/*----- END FILE: Shop_Controller.php -----*/

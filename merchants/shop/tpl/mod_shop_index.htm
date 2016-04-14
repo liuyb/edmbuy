@@ -87,12 +87,12 @@
                             浏览
                             <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
                         </div>
-                        <input type="hidden" class="img" value=""/>
+                        <input type="hidden" class="img" value="<!--{$val.carousel_img}-->"/>
                         <input type="hidden" class="carousel" value="<!--{$val.carousel_id}-->"/>
                         <div class="file_save">
                             <!--{if $val.link_url}-->
                                 <div class="add_img">
-                                    <img src="<!--{$val.link_url}-->" />
+                                    <img src="<!--{$val.carousel_img}-->" />
                                 </div>
                             <!--{/if}-->
                         </div>
@@ -160,6 +160,7 @@
                             <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
                         </div>
                         <input type="hidden" class="img" value=""/>
+                        <input type="hidden" class="carousel" value="0"/>
                         <div class="file_save">
                         </div>
                         <div class="offer_size">建议尺寸640*250px</div>
@@ -241,13 +242,29 @@
 //            showMsg("您不能这样做!");
 //            return;
 //        }
-        $(this).parent().parent().remove();
+        var $tr=$(this).parent().parent();
+        var carousel =$tr.find(".carousel").val();
+        showConfirm('确定要删除选中的商品吗？',function(){
+            if(carousel==0){
+                $tr.remove();
+            }else if(carousel > 0){
+                var data = {"carousel_id" : carousel};
+                F.postWithLoading('shop/carousel/del', data, function(data){
+                    layer.msg(data.retmsg);
+                     location.reload();
+                });
+            }
+
+        });
+
+
     } );
     $(document).on('click','#save_btn',function(){
         var total = $("#store_table_list tr").length - 1;
         var imgArr =[];
+        var erro=0;
         $("#store_table_list tr").each(function(){
-                        $tr=$(this);
+                        var $tr=$(this);
                         var sort=$tr.find(".link_id").val();
                         if(typeof sort!="undefined") {
                             var sort = $tr.find(".link_id").val();
@@ -256,14 +273,17 @@
                             var carousel_id =$tr.find(".carousel").val();
                             if (sort == '') {
                                 showMsg("排序不能为空!");
+                                erro=1;
                                 return;
                             }
                             else if (link_address == '') {
                                 showMsg("链接地址不能为空!");
+                                erro=1;
                                 return;
                             }
                             else if (img_url=="") {
                                 showMsg("请上传图片!");
+                                erro=1;
                                 return;
                             }
                             regNum(sort);
@@ -276,10 +296,16 @@
                             imgArr.push(arr);
                         }
         });
-        var url ="/shop/carousel/add";
-        var data={"imgArr":imgArr};
-        F.postWithLoading(url,data,function(ret){
-        })
+        if(erro==0){
+            var url ="/shop/carousel/add";
+            var data={"imgArr":imgArr};
+            F.postWithLoading(url,data,function(ret){
+                showMsg(ret.retmsg);
+                if(ret.status==1){
+//                location.reload();
+                }
+            })
+        }
 
     })
 
