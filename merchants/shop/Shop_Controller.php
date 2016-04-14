@@ -13,7 +13,8 @@ class Shop_Controller extends MerchantController
     {
         return [
             'shop/carousel' => 'carousel_upload',
-            '/shop/carousel/add' => '/shop/carousel_add'
+            'shop/carousel/add' => 'carousel_add',
+            'shop/carousel/del' => 'carousel_del'
         ];
     }
 
@@ -63,7 +64,11 @@ class Shop_Controller extends MerchantController
      */
     public function carousel_del(Request $request, Response $response)
     {
-
+        $carousel_id=$request->post("carousel_id");
+        Shop_Model::delCarouse($carousel_id);
+        $ret['retmsg']="删除成功!";
+        $ret['status']=1;
+        $response->sendJSON($ret);
     }
 
     /**
@@ -84,17 +89,30 @@ class Shop_Controller extends MerchantController
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
+        $newid=[];
+        foreach ($Arraydata as $val) {
 
-        foreach ($Arraydata as &$val) {
-            if ($val['carousel_id'] > 0 && !in_array($val['carousel_id'], $ids)) {
+            if ($val[0] > 0) {
                 //删除轮播
-                Shop_Model::delCarouse($val['carousel_id']);
-            } elseif ($val['carousel_id'] == 0) {
-                    //处理新增
+                array_push($newid,$val[0]);
+            } elseif($val[0] > 0 && in_array($val[0], $ids)){
 
-                Shop_Model::Carouse();
+                Shop_Model::updCarouse($val[0],$val[1],$val[2],$val[3]);
+            }
+            if($val[0] == 0) {
+                //处理新增
+                Shop_Model::addCarouse($val[1],$val[2],$val[3]);
             }
         }
+        foreach($ids as $id){
+            if(!in_array($id['carousel_id'],$newid)){
+                Shop_Model::delCarouse($val[0]);
+            }
+
+        }
+        $res['retmsg']="操作成功!";
+        $res['status']=1;
+        $response->sendJSON($res);
 
 
     }

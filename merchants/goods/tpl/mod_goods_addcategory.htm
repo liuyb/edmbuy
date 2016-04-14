@@ -7,43 +7,43 @@
         min-width: 0px !important;
     }
     .add_name_go input {
-      padding-left: 4px !important;
+        padding-left: 4px !important;
     }
 </style>
 <!--[/HEAD_CSS]-->
-    <div class="add_fix" id="add_fix">
-        <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name" required><span style="margin-left: 5px;color red;">*</span></div>
-        <div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
-        <div class="add_super_go">上级分类：
-            <select class="check_s c_goods_type" name="cat_id">
-                <!--{if $edit==0}-->
-                <option value ="new">请选择</option>
-                <!--{/if}-->
-                <!--{foreach from=$goodsList item=val}-->
-                <option  <!--{if $val.cat_id==$cat_id || $val.cat_id == $catgory.parent_id }-->selected<!--{/if}-->  <!--{if $parent_id==0 && $edit}--> disabled
-                <!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
-                <!--{/foreach}-->
-            </select>
-        </div>
-        <div class="add_img_go">分类图标：</div>
-        <div class="add_img img_go_ds">
+<div class="add_fix" id="add_fix">
+    <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name" required><span style="margin-left: 5px;color:red;">*</span></div>
+    <div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
+    <div class="add_super_go">上级分类：
+        <select class="check_s c_goods_type" name="cat_id">
             <!--{if $edit==0}-->
-            <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();" id="file">
-            <!--{elseif $edit==1}-->
-            <img src="<!--{$catgory.cat_thumb}--> " onclick="fileupload();" id="file">
+            <option value ="new">请选择</option>
             <!--{/if}-->
-            <input type="file" name="file" class="dj_fil" onchange="fileupload(event)"/>
-            <input type="hidden" name="cat_url" value="" />
-            <input type="hidden" name="id" value="<!--{$cat_id}-->" />
-        </div>
-        <div class="clear"></div>
-        <div class="file_sca_img">
-            <p>图片支持格式：jpg,png</p>
-            <p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
-        </div>
-        <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value="<!--{$catgory.sort_order}-->" ></div>
-        <div class="btn_save">保存</div>
+            <!--{foreach from=$goodsList item=val}-->
+            <option  <!--{if $val.cat_id==$cat_id || $val.cat_id == $catgory.parent_id }-->selected<!--{/if}-->  <!--{if $parent_id==0 && $edit}--> disabled
+            <!--{/if}--> value ="<!--{$val.cat_id}-->"  ><!--{$val.cat_name}--></option>
+            <!--{/foreach}-->
+        </select>
     </div>
+    <div class="add_img_go">分类图标：</div>
+    <div class="add_img img_go_ds">
+        <!--{if $edit==0}-->
+        <img src="/themes/merchants/img/editor_plus.png" onclick="fileupload();" id="file">
+        <!--{elseif $edit==1}-->
+        <img src="<!--{$catgory.cat_thumb}--> " onclick="fileupload();" id="file">
+        <!--{/if}-->
+        <input type="file" name="file" class="dj_fil" onchange="fileupload(event)"/>
+        <input type="hidden" name="cat_url" value="" />
+        <input type="hidden" name="id" value="<!--{$cat_id}-->" />
+    </div>
+    <div class="clear"></div>
+    <div class="file_sca_img">
+        <p>图片支持格式：jpg,png</p>
+        <p>请上传尺寸为240*240，文件大小不超过300k的图片</p>
+    </div>
+    <div class="add_name_go"> 分类排序：<input type="text" name="sort_order" value="<!--{$catgory.sort_order}-->" ></div>
+    <div class="btn_save">保存</div>
+</div>
 
 <script>
     var edit =<!--{$edit}-->;
@@ -76,15 +76,15 @@
         }
         if(sort_order){
             var r=/^\+?[0-9][0-9]*$/;
-           var res= r.test(sort_order);
+            var res= r.test(sort_order);
             if(!res){
                 showMsg("请输入正整数！");
                 return;
             }
         }
-            this.ding=0;
+        this.ding=0;
         if(this.dong==1){
-                return;
+            return;
         }
         var edit="<!--{$edit}-->";
         var  url='/goods/doAddCategory'
@@ -93,15 +93,21 @@
         var parent_id =$(".check_s").val();
         var data={"cat_name":cat_name,"parent_id":parent_id,'cate_thums':cat_url,'sort_order':sort_order,'edit':edit,'cat_id':id};
         F.post(url,data,function(ret){
-              layer.msg(ret.retmsg);
             if(ret.status==1){
+                if(edit==0){
+                    showMsg("新增成功！");
+                }else{
+                    showMsg("编辑成功！");
+                }
                 setTimeout(function(){
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                     parent.layer.close(index);
                 },1500);
                 window.parent.document.location.reload();
+            }else{
+                showMsg(ret.retmsg);
             }
 
-       })
+        })
     })
 </script>

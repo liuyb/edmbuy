@@ -60,9 +60,9 @@
                 TR = "<tr><td colspan='4' style='text-align:center;'>还没有数据~</td></tr>";
             } else {
                 var result = ret.result;
-                    if(ret.totalnum >0 ){
-                        isinit=true;
-                    }
+                if(ret.totalnum >0 ){
+                    isinit=true;
+                }
                 result.forEach(function (item) {
                     TR += costructHtml(item);
                 });
@@ -80,12 +80,12 @@
 
         var TR = "";
         TR += "<tr><td><div class='f_type_name ' data-type=" + item.cat_id + ">" + item.cat_name + "</div>" ;
-                
+
         if (item.flat) {
             // console.log(item.childs);
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
-                TR += "<div class='f_y_fe' data-type=" + item.cat_id + "><p style='margin:0;margin-left:-57px;height:36px;'>" + cate[i]['cat_name'] + "</p></div>";
+                TR += "<div class='f_y_fe'  id=" + item.cat_id + " data-type=" + item.cat_id + "><p style='margin:0;margin-left:-57px;height:36px;'>" + cate[i]['cat_name'] + "</p></div>";
             }
         }
         TR += "</div></td><td>" +
@@ -93,14 +93,14 @@
 
         TR += "<div style='padding:10px 0 0;'><a href='javascript:;'onclick='addGoodsCatery(" + item.cat_id + ")'  class='new_adds'>新增下级</a>" +
                 "<a href='javaScript:;' onclick='editGoodsCatery(" + item.cat_id + ")' class='edit_type'>编辑</a>" +
-                "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ",1)' class='del_cla'>删除</a></div>";
+                "<a href='javascript:;'   onclick='delCategory(" + item.cat_id + ",1,this)' class='del_cla'>删除</a></div>";
         if (item.flat) {
             var cate = item.childs
             for (var i = 0; i < cate.length; i++) {
                 TR+="<div class='f_y_fe' data-type=" + item.cat_id + ">"+
                         "<a href='javascript:;' class='new_adds'></a>" +
                         "<a href='javaScript:;' class='cate-edit' onclick='editGoodsCatery(" +cate[i]['cat_id']+ ")' >编辑</a>" +
-                        "<a href='javascript:;' class='cate-del'  onclick='delCategory(" +cate[i]['cat_id'] + ",2)' >删除</a></div>";
+                        "<a href='javascript:;' class='cate-del'  onclick='delCategory(" +cate[i]['cat_id'] + ",2,this)' >删除</a></div>";
 
             }
         } else {
@@ -139,7 +139,8 @@
     /**
      *删除一个分类
      */
-    function delCategory(cat_id,n) {
+    function delCategory(cat_id,n,obj) {
+        var $obj=$(obj);
         if(n==1){
             var title='删除该分类会同时删除该分类下的子分类,您确定删除吗？';
         }else{
@@ -150,10 +151,17 @@
         }, function () {
             var data = {"cat_id": cat_id}
             $.post("/goods/delcatery", data, function (ret) {
-                layer.msg(ret.retmsg)
-                setTimeout(function(){
-                    window.location.reload()
-                },1500);
+                layer.msg(ret.retmsg);
+                if(n==1){
+                    $obj.parent().parent().parent().remove();
+                }else{
+                    $obj.parent().remove();
+                    var n =$obj.parent().attr("data-type");
+                    $("#"+n).remove();
+                }
+//                setTimeout(function(){
+//                    window.location.reload()
+//                },1500);
             })
         });
     }
@@ -207,12 +215,12 @@
         $(_list).show();
     }
 
-   $(document).on('blur','.nums_px',function(){
-       var cat_id=$(this).attr("data-id")
-       var short_order=$(this).val();
+    $(document).on('blur','.nums_px',function(){
+        var cat_id=$(this).attr("data-id")
+        var short_order=$(this).val();
         var data={'cat_id':cat_id,'short_order':short_order};
-       $.get('/goods/updateShortOrder',data,function(){
-       });
-   })
+        $.get('/goods/updateShortOrder',data,function(){
+        });
+    })
 
 </script>
