@@ -20,7 +20,12 @@ class Shop_Controller extends MerchantController
             'shop/settlement/manager' => 'settlement_manager',
             'shop/settlement/order/manager' => 'settlement_order_manager',
             'shop/settlement/list' => 'settlement_list',
-            'shop/settlement/order' => 'settlement_orders'
+            'shop/settlement/order' => 'settlement_orders',
+            'shop/start' => 'shop_start',
+            'shop/info' => 'shop_info',
+            'shop/logo' => 'shop_logo_upload',
+            'shop/qrcode' => 'shop_qrcode_upload',
+            'shop/setup' => 'shop_info_save'
         ];
     }
 
@@ -176,15 +181,13 @@ class Shop_Controller extends MerchantController
         $response->sendJSON($res);
     }
 
-    public function settlement_manager(Request $request, Response $response)
-    {
+    public function settlement_manager(Request $request, Response $response){
         $this->v->set_tplname('mod_shop_settlement');
         $this->setPageLeftMenu('shop', 'settlement');
         $response->send($this->v);
     }
-
-    public function settlement_order_manager(Request $request, Response $response)
-    {
+    
+    public function settlement_order_manager(Request $request, Response $response){
         $this->v->set_tplname('mod_shop_settlement_order');
         $this->setPageLeftMenu('shop', 'settlement_order');
         $settle_id = $request->get('settle_id', 0);
@@ -192,14 +195,13 @@ class Shop_Controller extends MerchantController
         $this->v->assign('settle', Settlement_Model::getSettlement($settle_id));
         $response->send($this->v);
     }
-
+    
     /**
      * 结算管理列表
      * @param Request $request
      * @param Response $response
      */
-    public function settlement_list(Request $request, Response $response)
-    {
+    public function settlement_list(Request $request, Response $response){
         $curpage = $request->get('curpage', 1);
         $status = $request->get('status', 1);
         $options = array("status" => $status);
@@ -208,14 +210,13 @@ class Shop_Controller extends MerchantController
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
     }
-
+    
     /**
      * 结算订单列表
      * @param Request $request
      * @param Response $response
      */
-    public function settlement_orders(Request $request, Response $response)
-    {
+    public function settlement_orders(Request $request, Response $response){
         $curpage = $request->get('curpage', 1);
         $settle_id = $request->get('settle_id', 0);
         $start_date = $request->get('start_date', '');
@@ -226,7 +227,126 @@ class Shop_Controller extends MerchantController
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
     }
-
+    
+    public function shop_start(Request $request, Response $response){
+        $shop = Shop_Model::getShopByMerchantId();
+        if($shop && $shop['shop_id']){
+            //店铺已经存在，则跳转到店铺资料页面
+            $response->redirect('/aa');
+        }
+        $this->v->set_tplname('mod_shop_start');
+        $business_scope = Shop::getBusinessScope();
+        $this->v->assign('busi_scope', $business_scope);
+        $this->v->assign('province_list', Order::get_regions(1, 1));
+        $shop = new Shop();
+        $this->v->assign('shop', $shop);
+        $response->send($this->v);
+    }
+    
+    public function shop_info(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_start');
+        $shop_id = $request->get('shop_id', 0);
+        $shop = Shop::load($shop_id);
+        $merchant_id = $GLOBALS['user']->uid;
+        if (!$shop || $shop->merchant_id != $merchant_id) {
+            Fn::show_pcerror_message();
+        }
+        $business_scope = Shop::getBusinessScope();
+        if($shop->business_scope){
+            foreach ($business_scope as $scope){
+                if(strpos(",".$scope['cat_id'].",", $shop->business_scope) > 0){
+                    $scope['selected'] = 1;
+                }
+            }
+        }
+        $this->v->assign('busi_scope', $business_scope);
+        $this->v->assign('province_list', Order::get_regions(1, 1));
+        $this->v->assign('shop', $shop);
+        $response->send($this->v);
+    }
+    /**
+     * 商家LOGO上传
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shop_logo_upload(Request $request, Response $response){
+        if($request->is_post()){
+            $imgDIR = "/a/mch/shoplogo/";
+            $img = $_REQUEST["img"];
+            $upload = new Upload($img, $imgDIR);
+            $result = $upload->saveImgData();
+            $ret = $upload->buildUploadResult($result);
+            $response->sendJSON($ret);
+        }
+    }
+    /**
+     * 商家公众号二维码上传
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shop_qrcode_upload(Request $request, Response $response){
+        if($request->is_post()){
+            $imgDIR = "/a/mch/shopqrcode/";
+            $img = $_REQUEST["img"];
+            $upload = new Upload($img, $imgDIR);
+            $result = $upload->saveImgData();
+            $ret = $upload->buildUploadResult($result);
+            $response->sendJSON($ret);
+        }
+    }
+    /**
+     * 创建商铺
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shop_info_save(Request $request, Response $response){
+        if($request->is_post()){
+            $shop_id = $request->post('shop_id', 0);
+            $shop_name = $request->post('shop_name', '');
+            $shop_logo = $request->post('shop_logo', '');
+            $tel = $request->post('tel', '');
+            $province = $request->post('province', 0);
+            $city = $request->post('city', 0);
+            $district = $request->post('district', 0);
+            $address = $request->post('address', '');
+            $shop_desc = $request->post('shop_desc', '');
+            $business_scope = $request->post('business_scope', '');
+            //$shop_sign = $request->post('shop_sign');
+            $shop_qrcode = $request->post('shop_qrcode', '');
+            $shop_template = $request->post('shop_template', 0);
+            if(Shop_Model::isShopNameExists($shop_id, $shop_name)){
+                $ret = [
+                    'result' => 'FAIL',
+                    'msg' => '店铺名称已经存在！'
+                ];
+            }else{
+                $shop = new Shop();
+                $shop->shop_id = $shop_id;
+                $shop->shop_name = $shop_name;
+                $shop->shop_logo = $shop_logo;
+                $shop->tel = $tel;
+                $shop->province = $province;
+                $shop->city = $city;
+                $shop->district = $district;
+                $shop->address = $address;
+                $shop->shop_desc = $shop_desc;
+                $shop->business_scope = $business_scope;
+                $shop->shop_qrcode = $shop_qrcode;
+                $shop->shop_template = $shop_template;
+                $flag = Shop_Model::insertOrUpdateShopinfo($shop);
+                if($flag){
+                    $ret = [
+                        'result' => 'SUCC',
+                        'msg' => '创建成功'
+                    ];
+                }else{
+                    $ret = [
+                        'result' => 'FAIL',
+                        'msg' => '创建失败，请稍后重试！'
+                    ];
+                }
+            }
+            $response->sendJSON($ret);
+        }
+    }
 }
-
-/*----- END FILE: Shop_Controller.php -----*/
