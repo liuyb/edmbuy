@@ -16,6 +16,7 @@
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
 					<tr class="header">	
+						<th>结算单号</th>
 						<th>时间段</th>
 						<th>商品实付总额</th>
 						<th>佣金</th>
@@ -78,7 +79,7 @@ function pageQueryCondtion(){
 }
 function costructRowData(result){
 	var TR = "";
-	TR+= "<tr data-id="+result.stmt_id+"><td>"+result.date_range+"</td>";
+	TR+= "<tr data-id="+result.stmt_id+"><td>"+result.stmt_sn+"</td><td>"+result.date_range+"</td>";
 	TR+= "<td>"+result.money_paid+"</td><td>"+result.commision+"</td><td>"+result.income_money+"</td><td>"+result.shipping_fee+"</td><td>"+result.discount+"</td>";
 	TR+= "<td>"+result.stmt_amount+"</td>";
 	TR+= "<td class=\"goods_edit_col\"><a href=\"javascript:;\" data-type='view'><img src=\"/themes/merchants/img/check_order.png\"><br>明细</a>";

@@ -80,7 +80,7 @@ function goodsTypeHighlight(){
 		$order_type_li.find("li[data-sale="+goods_type+"]").addClass("new_common_on");
 		//清除cookie
 		Cookies.set('mch_goods_type','', {path:'/'});
-		_cur_goodstype = order_type;
+		_cur_goodstype = goods_type;
 	}else{
 		$order_type_li.find("li[data-sale=2]").addClass("new_common_on");
 		_cur_goodstype = 2;
