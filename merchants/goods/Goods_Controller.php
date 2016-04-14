@@ -94,7 +94,7 @@ class Goods_Controller extends MerchantController
             //邮件模板
             if($goods->fee_or_template == Goods_Model::$SHIPPING_TEMPLATE){
                 $selectedShip = $goods->shipping_template;
-                $goods->shipping_fee = 0; 
+                $goods->shipping_fee = 0;
             }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
@@ -573,9 +573,9 @@ class Goods_Controller extends MerchantController
             $attrData = $request->post("attrDate");//前台的二维数组数据
             if(empty($attrData)){
                 $arrt_ids=Goods_Model::getAttrIds($cat_id);
-                    $ids="";
+                $ids="";
                 foreach($arrt_ids as $id){
-                        $ids .=$id['attr_id'].",";
+                    $ids .=$id['attr_id'].",";
                 }
                 $ids = rtrim($ids,",");
                 $result = Goods_Model::ckeckDelAttr($ids);
@@ -584,7 +584,7 @@ class Goods_Controller extends MerchantController
                     $ret['status'] = 0;
                     $response->sendJSON($ret);
                 }
-               $result = Goods_Model::delGoodsAttr($ids);
+                $result = Goods_Model::delGoodsAttr($ids);
                 if($result!==false){
                     $ret['status'] = 1;
                     $ret['retmsg'] = "保存成功！";
@@ -635,7 +635,7 @@ class Goods_Controller extends MerchantController
             }
             $str = rtrim($str, ",");
             if (!empty($str)) {
-              $result = Goods_Model::ckeckDelAttr($str);
+                $result = Goods_Model::ckeckDelAttr($str);
                 if($result){
                     $ret['msg'] = "此属性有商品正在使用不可删除!";
                     $ret['status'] = 0;

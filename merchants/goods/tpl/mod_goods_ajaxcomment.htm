@@ -89,21 +89,21 @@
         },"HTML");
     }
     function viewCommon(comment_id,type) {
-            if(type=='view'){
-                var title='查看评论';
-            }else{
-                var title='回复评论';
-            }
-            var url = "/goods/viewrplay";
-            var data = {"common_id": comment_id};
-            layer.open({
-                type: 2,
-                title:title,
-                shadeClose: true,
-                shade: 0.01,
-                area: ['450px', '450px'],
-                content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
-            });
+        if(type=='view'){
+            var title='查看评论';
+        }else{
+            var title='回复评论';
+        }
+        var url = "/goods/viewrplay";
+        var data = {"common_id": comment_id};
+        layer.open({
+            type: 2,
+            title:title,
+            shadeClose: true,
+            shade: 0.01,
+            area: ['450px', '450px'],
+            content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
+        });
 
 //        F.postWithLoading(url, data, function (ret) {
 //            if (ret.status == 1) {

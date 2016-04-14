@@ -13,7 +13,7 @@ class Goods_Model extends Model
     static $SHIPPING_FEE = 1;
     //运费模板
     static $SHIPPING_TEMPLATE = 2;
-    
+
     /**
      * 新增OR修改商品
      * @param Items $goods
@@ -743,7 +743,7 @@ class Goods_Model extends Model
             $where = "attr_id ={$attr_id}";
         }
         $tablename = "`shp_attribute`";
-       return D()->delete($tablename, $where);
+        return D()->delete($tablename, $where);
     }
 
     /**
