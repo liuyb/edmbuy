@@ -319,4 +319,44 @@
 	height:150px;
 	border-radius:5px;	
 }
+.edit_tab_width table{
+	width:100% !important;
+}
+.serice_mana_list{
+	background:#fff;
+}
+#service_mana_tab{
+	width:100%;
+}
+#service_mana_tab th{
+	font-size:13px;
+	color:#333;
+	height:39px;
+	line-height:40px;
+	border-bottom:1px solid #eee;
+}
+#service_mana_tab td{
+	text-align:center;
+	height:59px;
+	border-bottom:1px solid #eee;
+	vertical-align:middle;
+	font-size:13px;
+	color:#7d7d7d;	
+}
+.service_preo a{
+	display:inline-block;
+	font-size:13px;
+	color:#7d7d7d;
+	margin:5px;
+}
+.service_preo img{
+	width:16px;
+	height:16px;
+	vertical-align: middle;
+}
+.fill_red {
+  color: red;
+  vertical-align: sub;
+  padding: 0 5px;
+}
 /*2016 4-14 e*/
