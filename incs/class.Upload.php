@@ -91,7 +91,9 @@ class Upload
         if ($this->fixed_id) {
             $filecode = $this->fixed_id;
             $dstpath = File::gen_unique_dir('id', $this->fixed_id, $img_dir);
-            $oripath = $dstpath . $filecode . $extpart;
+            $oripath = $dstpath . Upload::FOLDER_ORI . '/' . $filecode . $extpart;
+            $stardardpath = $dstpath . Upload::FOLDER_STANDARD . '/' . $filecode . $extpart;
+            $thumbpath = $dstpath . Upload::FOLDER_THUMB . '/' . $filecode . $extpart;
         } else {
             $filecode = date('d_His') . '_' . randstr();
             $oripath = $img_dir . Upload::FOLDER_ORI . '/' . date('Ym') . '/'. $filecode . $extpart;

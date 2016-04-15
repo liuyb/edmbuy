@@ -100,15 +100,15 @@ class Order_Controller extends MerchantController {
             $this->v->set_tplname('mod_order_consignee');
             if ($order){
                 /* 取得省份 */
-                $this->v->assign('province_list', order::get_regions(1, 1));//$order->country 这里默认是中国 不动态取
+                $this->v->assign('province_list', Order::get_regions(1, 1));//$order->country 这里默认是中国 不动态取
                 if ($order->province > 0)
                 {
                     /* 取得城市 */
-                    $this->v->assign('city_list', order::get_regions(2, $order->province));
+                    $this->v->assign('city_list', Order::get_regions(2, $order->province));
                     if ($order->city > 0)
                     {
                         /* 取得区域 */
-                        $this->v->assign('district_list', order::get_regions(3, $order->city));
+                        $this->v->assign('district_list', Order::get_regions(3, $order->city));
                     }
                 }
             }

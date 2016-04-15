@@ -382,3 +382,123 @@
 	color:#fff;
 }
 /*2016 4-13 e*/
+/*2016 4-14 s*/
+.store_pay_name{
+	font-size:13px;
+	color:#7d7d7d;
+}
+.store_right_f{
+	font-size:13px;
+	color:#f15e24;
+}
+.store_data_btn{
+	width:84px;
+	height:28px;
+	border:1px solid #dcdfe2;
+	font-size:13px;
+	color:#7d7d7d;
+	margin-left:50px;
+	border-radius:4px;
+	background:#fff;
+}
+.data_due{
+	margin-left:30px;
+}
+.data_btn_edit{  
+	width: 80px;
+  	height: 30px;
+  	line-height: 30px;
+  	float: right;
+  	border: 0;
+  	border-radius: 4px;
+  	background: #f26427;
+  	font-size: 13px;
+  	color: #fff;
+  	margin-top: 5px;
+}
+.data_tab_left{
+	font-size:13px;
+	color:#7d7d7d;
+}
+.data_tab_right{
+	font-size:13px;
+	color:#1f1f1f;	
+}
+#shop_data_tab td{
+	padding:10px 0;
+	vertical-align: middle;
+}
+#data_logo_file img{
+	width:60px;
+	height:60px;
+	vertical-align: middle;
+}
+.sign_d img{
+	width:500px;
+	height:150px;
+	border-radius:5px;
+}
+.sign_code img{
+	width:150px;
+	height:150px;
+	border-radius:5px;	
+}
+.edit_tab_width table{
+	width:100% !important;
+}
+.serice_mana_list{
+	background:#fff;
+}
+#service_mana_tab{
+	width:100%;
+}
+#service_mana_tab th{
+	font-size:13px;
+	color:#333;
+	height:39px;
+	line-height:40px;
+	border-bottom:1px solid #eee;
+}
+#service_mana_tab td{
+	text-align:center;
+	height:59px;
+	border-bottom:1px solid #eee;
+	vertical-align:middle;
+	font-size:13px;
+	color:#7d7d7d;	
+}
+.service_preo a{
+	display:inline-block;
+	font-size:13px;
+	color:#7d7d7d;
+	margin:5px;
+}
+.service_preo img{
+	width:16px;
+	height:16px;
+	vertical-align: middle;
+}
+.fill_red {
+  color: red;
+  vertical-align: sub;
+  padding: 0 5px;
+}
+.pore_use_check li{
+	display:inline-block;
+	text-align:center;	
+	margin:0 23px;
+}
+.pore_use_check img{
+	width:200px;
+	height:358px;	
+}
+/*2016 4-14 e*/
+
+.detail_info_top{
+ 	background: url(../img/left_l.png) no-repeat left;
+  	padding-left: 15px;
+  	font-size: 14px;
+  	color: #333;
+  	cursor: pointer;
+	line-height:40px
+}

@@ -106,7 +106,57 @@ class Shop_Model extends Model
         $qrcode['is_use'] =false;
         return $qrcode;
     }
+    
+    /**
+     * 增加或修改店铺信息
+     * @param Shop $shop
+     */
+    static function insertOrUpdateShopinfo(Shop $shop){
+        $is_insert = $shop->shop_id ? false : true;
+        $shop->merchant_id = $GLOBALS['user']->uid;
+        if ($is_insert){
+            $shop->add_time = time();
+            $defaultTmp = self::getDefaultTemplate();
+            $shop->shop_template = $defaultTmp ? $defaultTmp : 0;
+        }
+        $shop->update_time = time();
+        $shop->save($is_insert ? Storage::SAVE_INSERT :Storage::UPDATE);
+        return D()->affected_rows();
+    }
+    
+    /**
+     * 店铺名是否已经存在
+     * @param unknown $shop_id
+     * @param unknown $shop_name
+     * @return boolean
+     */
+    static function isShopNameExists($shop_id, $shop_name){
+        $where = '';
+        if($shop_id){
+            $where .= " and shop_id <> $shop_id ";
+        }
+        $sql = "select count(1) from shp_shop_info where shop_name = '%s' $where ";
+        $result = D()->query($sql, $shop_name)->result();
+        return $result > 0;
+    }
+    
+    /**
+     * 根据商家ID得到当前店铺
+     */
+    static function getShopByMerchantId(){
+        $sql = "select * from shp_shop_info where merchant_id = '%s' ";
+        $result = D()->query($sql, $GLOBALS['user']->uid)->get_one();
+        return $result;
+    }
+    
+    /**
+     * 拿系统默认模板
+     * @return mixed
+     */
+    static function getDefaultTemplate(){
+        $sql = "select tpl_id from shp_shop_template where is_default = 1 ";
+        $result = D()->query($sql)->result();
+        return $result;
+    }
 
 }
-
-/*----- END FILE: Shop_Model.php -----*/

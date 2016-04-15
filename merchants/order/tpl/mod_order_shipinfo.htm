@@ -388,7 +388,7 @@ function constructShipBody(){
 	}
 	region_ids = region_ids.join(",");
 	if(region_ids){
-		region_ids += ",";//方便sql like 操作
+		region_ids = ","+region_ids+",";//方便sql like 操作
 	}
 	region_names = region_names.join(";");
 	var region_json = JSON.stringify(regions_selected);

@@ -26,10 +26,30 @@ class Shop extends StorageNode{
                 'shop_sign'   => 'shop_sign',
                 'shop_qrcode'    => 'shop_qrcode',
                 'shop_template' => 'shop_template',
-                'merchant_id' => 'merchant_id'
+                'merchant_id' => 'merchant_id',
+                'add_time' => 'add_time',
+                'update_time' => 'update_time'
             )
         );
     }
     
+    /**
+     * 经营范围列表 固定数据，采用静态缓存
+     */
+    static function getBusinessScope(){
+        
+        $data = Fn::read_static_cache('business_category_data');
+        if ($data === false){
+            $sql = "select cat_id,cat_name from shp_business_category order by sort_order desc ";
+            $res = D()->query($sql)->fetch_array_all();
+            //如果数组过大，不采用静态缓存方式
+            if (count($res) <= 1000){
+                Fn::write_static_cache('business_category_data', $res);
+            }
+        }else{
+            $res = $data;
+        }
+        return $res;
+    }
 }
 
