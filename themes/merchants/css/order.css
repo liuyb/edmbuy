@@ -98,7 +98,7 @@
 	border-bottom:1px solid #e9e9e9;
 }
 #commodity_name p{
-	height:39px;
+	height:41px;
 	border-bottom:1px solid #f26427;
 	display:inline-block;
 	line-height:39px;
@@ -552,7 +552,7 @@
 /*-- 16-4-7 e */
 
 .attr_rel img{
-	height:12px;
+	height:14px;
 	width:16px;
 }
 .attr_rel a{
