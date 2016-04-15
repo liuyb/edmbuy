@@ -62,7 +62,7 @@ class Goods_Controller extends MerchantController
             "start_date" => $start_date, "end_date" => $end_date,
             "orderby" => $orderby, "order_field" => $order_field
         );
-        $pager = new Pager($curpage, 8);
+        $pager = new Pager($curpage, $this->getPageSize());
         Goods_Model::getPagedGoods($pager, $options);
         $ret = $pager->outputPageJson();
         $ret['otherResult'] = $pager->otherMap;
@@ -279,7 +279,7 @@ class Goods_Controller extends MerchantController
     {
         $curpage = $request->get('current_page', 1);
         $this->setPageLeftMenu('goods', 'category');
-        $pager = new Pager($curpage, 4);
+        $pager = new Pager($curpage, $this->getPageSize());
         $options['merchant_id'] = $GLOBALS['user']->uid;
         Goods_Model::getCatePageList($pager, $options);
         $ret = $pager->outputPageJson();
@@ -454,7 +454,7 @@ class Goods_Controller extends MerchantController
     public function ajaxGetCommentList(Request $request, Response $response)
     {
         $currentPage = $request->get('current_page', 1);
-        $pager = new Pager($currentPage, 4);
+        $pager = new Pager($currentPage, $this->getPageSize());
         $current = $request->get("current");
         $list = Goods_Model::getCommentList($pager, $current);//获取分页列表
         $this->v->assign('commentList', $list);

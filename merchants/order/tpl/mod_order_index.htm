@@ -17,7 +17,7 @@
 		<ul>	
 			<li data-type='0'>所有订单</li>
 			<li data-type='100'>待付款</li>
-			<li data-type='105'>备货中</li>
+			<!-- <li data-type='105'>备货中</li> -->
 			<li data-type='101'>待发货</li>
 			<li data-type='103'>待收货</li>
 			<li data-type='102'>交易完成</li>
@@ -54,7 +54,8 @@
 		
 	<div id="list_type_foot">
 		<span id="all_check" style="padding-left: 50px;"></span>
-		<button id="batch_send" onclick="deliveryOrderGoods(null, 'ship');">批量发货</button>
+		<button id="batch_sendready" class="batch_send" onclick="preparedOrders();">备货</button>
+		<button id="batch_send" class="batch_send" onclick="deliveryOrderGoods(null, 'ship');">批量发货</button>
 		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
@@ -83,18 +84,24 @@ $(function(){
 	$("#search_type_infos").on('click',function(){
 		loadPageDataTable(1, true, tableOptions);
 	});
-	$("#type_table_list").on('click', '.order_look_up', function(e){
+	$("#type_table_list").on('click', '.operation', function(e){
 		e.stopPropagation();
-		if(_cur_ordertype){
-			Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+		var $op = $(this);
+		var $tr = $op.closest("tr").first();
+		var order_id = $tr.data("id");
+		if($op.hasClass("removeod")){
+			F.postWithLoading('/order/away', {"order_ids" : [order_id]}, function(){
+				$tr.remove();
+			});
+		}else if($op.hasClass("order_look_up")){
+			if(_cur_ordertype){
+				Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+			}
+			showOrderDetail(order_id);
 		}
-		showOrderDetail(this);
 	});
 	$("#type_table_list").on('click', '.shipping', function(e){
 		e.stopPropagation();
-		if(_cur_ordertype){
-			Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
-		}
 		deliveryOrderGoods(this, 'ship');
 	});
 	/* $("#type_table_list").on('click', '.shippingedit', function(){
@@ -153,16 +160,16 @@ function pageQueryCondtion(){
 }
 function costructRowData(result){
 	var cls="common_check";
-	var ship_st = result.shipping_status;
+	var ship_st = parseInt(result.shipping_status);
+	var order_st = parseInt(result.order_status);
+	var pay_st = parseInt(result.pay_status);
 	var shipping = "";
-	if(canOrderShip(result) && (ship_st == 0 || ship_st == 3 || ship_st == 5)){//未发货
-		//cls = "common_check";
+	//if(canOrderShip(result) && $.inArray(ship_st, [0, 3, 5]) >= 0){//未发货
+	if(_cur_ordertype == 101){
 		shipping = "<a href=\"javascript:;\" class=\"order_send_goods shipping\"><img src=\"/themes/merchants/img/yfmb.png\"><br>发货</a>";
-	}else{
-		//cls = "common_check_disabled";
-		/* if(ship_st != 2 && canOrderShip(result)){//已收货不能修改 已取消 不显示
-			shipping = "<span class=\"order_send_goods shippingedit\">修改</span>";
-		} */
+	//}else if(_cur_ordertype == 104 && ($.inArray(pay_st, [4, 5]) >=0 || $.inArray(order_st, [2, 3, 4, 7]) >=0)){
+	}else if(_cur_ordertype == 104){	
+		shipping = "<a href=\"javascript:;\" class=\"operation removeod\"><img src=\"/themes/merchants/img/sc.png\"><br>移除</a>";
 	}
 	var TR = "<tr data-id="+result.order_id+"><td class=\""+cls+"\"></td>";
 	TR += "<td>"+result.order_sn+"</td>";
@@ -171,7 +178,7 @@ function costructRowData(result){
 	TR += "<td>￥"+result.actual_order_amount+"</td>";
 	TR += "<td>"+result.order_status_text+"</td>";
 	TR += "<td>"+result.pay_name+"</td>";
-	TR += "<td class=\"attr_rel undocheck\"><a href=\"javascript:;\" class=\"order_look_up\"><img src=\"/themes/merchants/img/check_order.png\"><br>查看</a>"+shipping+"</td></tr>";
+	TR += "<td class=\"attr_rel undocheck\"><a href=\"javascript:;\" class=\"operation order_look_up\"><img src=\"/themes/merchants/img/check_order.png\"><br>查看</a>"+shipping+"</td></tr>";
 	return TR;
 }
 
@@ -179,8 +186,7 @@ function canOrderShip(result){
 	return (result.pay_status == 2 && result.order_status != 2 && result.order_status != 3);
 }
 
-function showOrderDetail(obj){
-	var order_id = $(obj).closest("tr").first().data("id");
+function showOrderDetail(order_id){
 	if(order_id){
 		window.location.href="/order/detail?order_id="+order_id;
 	}
@@ -197,15 +203,33 @@ function deliveryOrderGoods(obj, act){
 		showMsg('请选择要发货的订单！');
 		return;
 	}
+	if(_cur_ordertype){
+		Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+	}
 	order_ids = order_ids.join(",");
 	window.location.href = '/order/shipping/form?act='+act+'&order_ids='+order_ids;
 }
 
+function preparedOrders(){
+	var order_ids = getSelectIds();
+	if(!order_ids || !order_ids.length){
+		showMsg('请选择要备货的订单！');
+		return;
+	}
+	if(_cur_ordertype){
+		Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+	}
+	F.postWithLoading('/order/prepared', {order_ids : order_ids}, function(){
+		showMsg("订单备货完成");
+		window.location.reload();
+	});
+}
+
 function canShipByType(type){
-	if(type == 100 || type == 102 || type == 104){
-		canBatchShip(false);
-	}else{
+	if(type == 101){
 		canBatchShip(true);
+	}else{
+		canBatchShip(false);
 	}
 }
 
@@ -213,9 +237,11 @@ function canBatchShip(flag){
 	if(flag){
 		$("#all_check").show();
 		$("#batch_send").show();
+		$("#batch_sendready").show();
 	}else{
 		$("#all_check").hide();
 		$("#batch_send").hide();
+		$("#batch_sendready").hide();
 	}
 }
 

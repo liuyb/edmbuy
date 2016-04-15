@@ -124,7 +124,7 @@ function submitForm(){
 		return false;
 	}
 	var data = $("#shopForm").serializeJson();
-	data.business_scope = ','+cat_id.join(",")+',';//方便sql like 操作
+	data.business_scope = cat_id.join(",");
 	data.shop_logo = $("#shop_logo").attr("src");
 	data.shop_qrcode = $("#shop_qrcode").attr("src");
 	console.log(data);

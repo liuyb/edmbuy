@@ -232,7 +232,7 @@ class Shop_Controller extends MerchantController
         $curpage = $request->get('curpage', 1);
         $status = $request->get('status', 1);
         $options = array("status" => $status);
-        $pager = new Pager($curpage, 8);
+        $pager = new Pager($curpage, $this->getPageSize());
         Settlement_Model::getSettlementList($pager, $options);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
@@ -250,7 +250,7 @@ class Shop_Controller extends MerchantController
         $start_date = $request->get('start_date', '');
         $end_date = $request->get('end_date', '');
         $options = array("start_date" => $start_date, "end_date" => $end_date);
-        $pager = new Pager($curpage, 8);
+        $pager = new Pager($curpage, $this->getPageSize());
         Settlement_Model::getSettlementDetail($pager, $settle_id, $options);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);

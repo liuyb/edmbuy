@@ -32,14 +32,17 @@
 (function($){  
     $(document).on({
     	mouseenter: function () {
-	    	//$(this).addClass('rb-hover');
+	    	$(this).css('background-color', '#fff6f2');
 	    },
 	    mouseleave: function () {
-	    	//$(this).removeClass('rb-hover');
+	    	$(this).css('background-color', '#fff');
 	    },
 	    click: function (e) {
 	    	var $target = $(e.target);
 	    	var checkCol = $(this).find(".common_check");
+	    	if(!checkCol || !checkCol.length){
+	    		return;
+	    	}
 	    	if(!$target.hasClass("undocheck")){
 	    		if(checkCol.hasClass("common_check_on")){
 	    			checkCol.removeClass("common_check_on");

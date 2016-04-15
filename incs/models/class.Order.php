@@ -80,7 +80,8 @@ class Order extends StorageNode{
                 'discount'           => 'discount',
                 'merchant_ids'       => 'merchant_ids',
                 'pay_data1'          => 'pay_data1',
-                'pay_data2'          => 'pay_data2'
+                'pay_data2'          => 'pay_data2',
+                'is_delete'          => 'is_delete'   
             ));
     }
     

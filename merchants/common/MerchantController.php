@@ -21,6 +21,8 @@ class MerchantController extends Controller {
 	 */
 	protected $v;
 	
+	protected $page_size = 10;
+	
 	/**
 	 * hook init
 	 *
@@ -72,6 +74,23 @@ class MerchantController extends Controller {
 	 */
 	public function setSystemNavigate($module){
 	    $this->v->assign("s_module", $module);
+	}
+	
+	/**
+	 * 当前用户是否是本人鉴权
+	 * @param unknown $merchant_id
+	 */
+	public function checkPermission($merchant_id){
+	    if($merchant_id != $GLOBALS['user']->uid){
+	        Fn::show_pcerror_message();
+	    }
+	}
+	
+	/**
+	 * Merchant 默认的pagesize
+	 */
+	public function getPageSize(){
+	    return $this->page_size;
 	}
 	
 }
