@@ -258,17 +258,20 @@ class Shop_Controller extends MerchantController
 
     public function shop_start(Request $request, Response $response)
     {
-        $shop = Shop_Model::getShopByMerchantId();
-        if ($shop && $shop['shop_id']) {
+        $shop = Merchant::load($GLOBALS['user']->uid);
+        if(!$shop || !$shop->uid){
+            Fn::show_pcerror_message("数据不存在！");
+        }
+        if ($shop->is_completed) {
             //店铺已经存在，则跳转到店铺资料页面
-            $response->redirect('/shop');
+            $response->redirect('/shop/details');
         }
         $this->v->set_tplname('mod_shop_start');
-        $business_scope = Shop::getBusinessScope();
+        $business_scope = Merchant::getBusinessScope();
         $this->v->assign('busi_scope', $business_scope);
         $this->v->assign('province_list', Order::get_regions(1, 1));
-        $shop = new Shop();
         $this->v->assign('shop', $shop);
+        $this->v->assign('act', 'complete');
         $response->send($this->v);
     }
 
@@ -287,13 +290,11 @@ class Shop_Controller extends MerchantController
     public function shop_info(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_shop_start');
-        $shop_id = $request->get('shop_id', 0);
-        $shop = Shop::load($shop_id);
-        $merchant_id = $GLOBALS['user']->uid;
-        if (!$shop || $shop->merchant_id != $merchant_id) {
-            Fn::show_pcerror_message();
+        $shop = Merchant::load($GLOBALS['user']->uid);
+        if(!$shop->is_completed){
+            $response->redirect('/shop/start');
         }
-        $business_scope = Shop::getBusinessScope();
+        $business_scope = Merchant::getBusinessScope();
         if ($shop->business_scope) {
             foreach ($business_scope as &$scope) {
                 $needle = "," . $scope['cat_id'] . ",";
@@ -305,8 +306,8 @@ class Shop_Controller extends MerchantController
         }
         Func::assign_regions($this->v, $shop->province, $shop->city);
         $this->v->assign('busi_scope', $business_scope);
-        //$this->v->assign('province_list', Order::get_regions(1, 1));
         $this->v->assign('shop', $shop);
+        $this->v->assign('act', 'edit');
         $response->send($this->v);
     }
 
@@ -352,7 +353,6 @@ class Shop_Controller extends MerchantController
     public function shop_info_save(Request $request, Response $response)
     {
         if ($request->is_post()) {
-            $shop_id = $request->post('shop_id', 0);
             $shop_name = $request->post('shop_name', '');
             $shop_logo = $request->post('shop_logo', '');
             $tel = $request->post('tel', '');
@@ -365,30 +365,33 @@ class Shop_Controller extends MerchantController
             //$shop_sign = $request->post('shop_sign');
             $shop_qrcode = $request->post('shop_qrcode', '');
             $shop_template = $request->post('shop_template', 0);
-            if (Shop_Model::isShopNameExists($shop_id, $shop_name)) {
+            $act = $request->post('act', '');
+            if (Shop_Model::isShopNameExists($shop_name)) {
                 $ret = [
                     'result' => 'FAIL',
                     'msg' => '店铺名称已经存在！'
                 ];
             } else {
-                $shop = new Shop();
-                $shop->shop_id = $shop_id;
-                $shop->shop_name = $shop_name;
-                $shop->shop_logo = $shop_logo;
-                $shop->tel = $tel;
+                $shop = new Merchant();
+                $shop->uid = $GLOBALS['user']->uid;
+                $shop->facename = $shop_name;
+                $shop->logo = $shop_logo;
+                $shop->telphone = $tel;
                 $shop->province = $province;
                 $shop->city = $city;
                 $shop->district = $district;
                 $shop->address = $address;
                 $shop->shop_desc = $shop_desc;
                 $shop->business_scope = $business_scope;
-                $shop->shop_qrcode = $shop_qrcode;
+                $shop->wxqr = $shop_qrcode;
                 $shop->shop_template = $shop_template;
-                $flag = Shop_Model::insertOrUpdateShopinfo($shop);
+                $shop->is_completed = 1;
+                $shop->save(Storage::SAVE_UPDATE);
+                $flag = D()->affected_rows();
                 if ($flag) {
                     $ret = [
                         'result' => 'SUCC',
-                        'msg' => $shop_id ? 'UPDATE' : 'CREATE'
+                        'msg' => ($act == 'edit') ? 'UPDATE' : 'COMPLETE'
                     ];
                 } else {
                     $ret = [
@@ -412,6 +415,9 @@ class Shop_Controller extends MerchantController
         $this->setPageLeftMenu('shop', 'details');
         //查出店铺所有信息
         $result = Shop_Model::getShopByMerchantId();
+        if(!$result || empty($result)){
+            Fn::show_pcerror_message("数据不存在！");
+        }
         $this->v->assign('shop_info',$result);
         $response->send($this->v);
     }

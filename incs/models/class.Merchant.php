@@ -38,6 +38,10 @@ class Merchant extends StorageNode {
 					'created'     => 'created',
 					'changed'     => 'changed',
 					'admin_uid'   => 'admin_uid',
+				    'shop_desc' => 'shop_desc',
+				    'business_scope' => 'business_scope',
+				    'shop_template' => 'shop_template',
+				    'is_completed' => 'is_completed'
 				)
 		);
 	}
@@ -50,6 +54,25 @@ class Merchant extends StorageNode {
 	static function getMidByAdminUid($admin_uid) {
 		$ret = D()->from(self::table())->where("admin_uid=%d", $admin_uid)->select("merchant_id")->result();
 		return $ret;
+	}
+	
+	/**
+	 * 经营范围列表 固定数据，采用静态缓存
+	 */
+	static function getBusinessScope(){
+	
+	    $data = Fn::read_static_cache('business_category_data');
+	    if ($data === false){
+	        $sql = "select cat_id,cat_name from shp_business_category order by sort_order desc ";
+	        $res = D()->query($sql)->fetch_array_all();
+	        //如果数组过大，不采用静态缓存方式
+	        if (count($res) <= 1000){
+	            Fn::write_static_cache('business_category_data', $res);
+	        }
+	    }else{
+	        $res = $data;
+	    }
+	    return $res;
 	}
 	
 	/**

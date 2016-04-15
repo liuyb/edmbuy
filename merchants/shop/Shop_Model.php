@@ -134,37 +134,16 @@ class Shop_Model extends Model
 
 
     /**
-     * 增加或修改店铺信息
-     * @param Shop $shop
-     */
-    static function insertOrUpdateShopinfo(Shop $shop)
-    {
-        $is_insert = $shop->shop_id ? false : true;
-        $shop->merchant_id = $GLOBALS['user']->uid;
-        if ($is_insert) {
-            $shop->add_time = time();
-            $defaultTmp = self::getDefaultTemplate();
-            $shop->shop_template = $defaultTmp ? $defaultTmp : 0;
-        }
-        $shop->update_time = time();
-        $shop->save($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE);
-        return D()->affected_rows();
-    }
-
-    /**
      * 店铺名是否已经存在
      * @param unknown $shop_id
      * @param unknown $shop_name
      * @return boolean
      */
-    static function isShopNameExists($shop_id, $shop_name)
+    static function isShopNameExists($shop_name)
     {
-        $where = '';
-        if ($shop_id) {
-            $where .= " and shop_id <> $shop_id ";
-        }
-        $sql = "select count(1) from shp_shop_info where shop_name = '%s' $where ";
-        $result = D()->query($sql, $shop_name)->result();
+        $muid = $GLOBALS['user']->uid;
+        $sql = "select count(1) from shp_merchant where facename = '%s' and merchant_id <> '%s' ";
+        $result = D()->query($sql, $shop_name, $muid)->result();
         return $result > 0;
     }
 
@@ -173,7 +152,7 @@ class Shop_Model extends Model
      */
     static function getShopByMerchantId()
     {
-        $sql = "select * from shp_shop_info where merchant_id = '%s' ";
+        $sql = "select * from shp_merchant where merchant_id = '%s' ";
         $result = D()->query($sql, $GLOBALS['user']->uid)->get_one();
         return $result;
     }

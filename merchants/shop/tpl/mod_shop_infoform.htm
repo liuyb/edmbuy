@@ -3,21 +3,25 @@
 	<table cellspacing="0" cellpadding="0" id="store_flow_tab">
 		<tr>
 			<td class="flow_one_left"><span class="fill_red">*</span>店铺名称：</td>
-			<td class="flow_one_right"><input type="text" maxlength="60" value="<!--{$shop->shop_name}-->" name="shop_name" class="right_input_c" required ></td>
+			<td class="flow_one_right"><input type="text" maxlength="60" value="<!--{$shop->facename}-->" name="shop_name" class="right_input_c" required ></td>
 		</tr>
 		<tr>
 			<td class="flow_one_left">店铺logo：</td>
 			<td class="flow_one_right">
 				<div id="logo_file">
-					<img src="<!--{if $shop->shop_logo}--><!--{$shop->shop_logo}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" style="width:60px;height:60px;" id="shop_logo">
+					<img src="<!--{if $shop->logo}--><!--{$shop->logo}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" style="width:60px;height:60px;" id="shop_logo">
 					<input type="file" id="file" name="file" class="store_logo_file" onchange="logoUpload(event);">	
 				</div>
 				<div style="font-size:13px;color:#ccc;margin-top:5px">logo尺寸标准为320*320</div>
 			</td>
 		</tr>
 		<tr>
+			<td class="flow_one_left">手机号码：</td>
+			<td class="flow_one_right"><input type="text" readonly value="<!--{$shop->mobile}-->" class="right_input_c"></td>
+		</tr>
+		<tr>
 			<td class="flow_one_left"><span class="fill_red">*</span>联系电话：</td>
-			<td class="flow_one_right"><input type="text" maxlength="20" value="<!--{$shop->tel}-->" name="tel" class="right_input_c" required></td>
+			<td class="flow_one_right"><input type="text" maxlength="15" value="<!--{$shop->telphone}-->" name="tel" class="right_input_c" required></td>
 		</tr>
 		<tr>
 			<td class="flow_one_left"><span class="fill_red">*</span>联系地址：</td>
@@ -75,7 +79,7 @@
 			<td class="flow_one_left">公众号二维码：</td>
 			<td class="flow_one_right">
 				<div id="logo_file_code">
-					<img src="<!--{if $shop->shop_qrcode}--><!--{$shop->shop_qrcode}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" id="shop_qrcode">
+					<img src="<!--{if $shop->wxqr}--><!--{$shop->wxqr}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" id="shop_qrcode">
 					<input type="file" id="file" name="file" class="logo_file_code" onchange="qrcodeUpload(event);">	
 				</div>
 				<!-- <button class="feil_code_btn">上传二维码</button> -->
@@ -84,9 +88,9 @@
 		<tr>
 			<td class="flow_one_left"></td>
 			<td class="flow_one_right">
-				<!--{if $shop->shop_id}-->
+				<!--{if isset($act) && $act == 'edit'}-->
 				<button class="next_btn" type="submit">保存</button>
-				<input type="hidden" name="shop_id" value="<!--{$shop->shop_id}-->" id="shop_id"/>
+				<input type="hidden" name="act" value="<!--{$shop->act}-->"/>
 				<!--{else}-->
 				<button class="next_btn" type="submit">下一步</button>
 				<!--{/if}-->
@@ -124,7 +128,7 @@ function submitForm(){
 		return false;
 	}
 	var data = $("#shopForm").serializeJson();
-	data.business_scope = cat_id.join(",");
+	data.business_scope = ','+cat_id.join(",")+',';//方便like操作
 	data.shop_logo = $("#shop_logo").attr("src");
 	data.shop_qrcode = $("#shop_qrcode").attr("src");
 	console.log(data);
