@@ -253,9 +253,11 @@ body.MPA.iOS { height: 100%;overflow: hidden; }
 .MPA.iOS #Mbody { position: absolute;top: 0;bottom: 0;width:100%;-webkit-overflow-scrolling: touch;overflow-y:scroll; }
 .MPA #Mbody.useTopNav-1 { margin-top: 45px; }
 .MPA #Mbody.useNav-1 { margin-bottom: 50px; }
+.MPA #Mbody.useNav-2 { margin-bottom: 100px; }
 .MPA #Mbody .pageBg { position:absolute;left:0;top:20px;width:100%;text-align:center; }
 .MPA.iOS #Mbody.useTopNav-1 { top: 45px;margin: 0; }
 .MPA.iOS #Mbody.useNav-1 { bottom: 50px;margin: 0; }
+.MPA.iOS #Mbody.useNav-2 { bottom: 100px;margin: 0; }
 
 /*PC下的样式*/
 @media only screen and (min-width: 1025px){
