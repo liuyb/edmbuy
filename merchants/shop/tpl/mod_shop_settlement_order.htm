@@ -14,8 +14,8 @@
 			<input type="input" id="end_date" readonly class="form_datetime check_time_left" placeholder="请选择结束日期"/>
 			<button id="search_type_infos">搜索</button>
 		</div>
-		<div>
-		本期应结：¥<!--{$settle.stmt_amount}--> （<!--{$settle.date_range}-->）
+		<div class="current_pay">
+		本期应结：<span style="color:#f26427;">¥<!--{$settle.stmt_amount}--></span> （<!--{$settle.date_range}-->）
 		</div>
 		<div class="common_go" id="list1">
 			<div class="search_result">

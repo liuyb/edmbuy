@@ -19,31 +19,6 @@
 </head>
 <body id="bg_common"> 
 <style>
-#refund_info{
-	width:1040px;
-	background:#fff;
-}	
-#refund_tab_list{
-	width:100%;
-}
-#refund_tab_list th{
-	height:45px;
-	font-size:12px;
-	color:#333;
-	line-height:46px;
-	border-bottom:1px solid #eee;
-}
-#refund_tab_list td{
-	text-align:center;
-	height:59px;
-	line-height:60px;
-	border-bottom:1px solid #eee;	
-	font-size:12px;
-	color:#7d7d7d;
-}
-#refund_tab_list a{
-	color:#7d7d7d;	
-}
 </style>
 
 
@@ -84,10 +59,10 @@
 					<td>2016-1-2</td>
 					<td>￥4504,99</td>
 					<td>退款成功</td>
-					<td>
-						<a href="javascript:;">查看</a>
-						<a href="javascript:;">同意</a>
-						<a href="javascript:;">拒绝</a>
+					<td class="order_pero_common">
+						<a href=""><img src="../mch/img/check_order.png"><br>查看</a>
+						<a href=""><img src="../mch/img/tongyi.png"><br>同意</a>
+						<a href=""><img src="../mch/img/sc.png"><br>拒绝</a>
 					</td>
 				</tr>
 				<tr>
@@ -97,10 +72,10 @@
 					<td>2016-1-2</td>
 					<td>￥4504,99</td>
 					<td>退款成功</td>
-					<td>
-						<a href="javascript:;">查看</a>
-						<a href="javascript:;">同意</a>
-						<a href="javascript:;">拒绝</a>
+					<td class="order_pero_common">
+						<a href=""><img src="../mch/img/check_order.png"><br>查看</a>
+						<a href=""><img src="../mch/img/tongyi.png"><br>同意</a>
+						<a href=""><img src="../mch/img/sc.png"><br>拒绝</a>
 					</td>
 				</tr>
 				<tr>
@@ -110,10 +85,10 @@
 					<td>2016-1-2</td>
 					<td>￥4504,99</td>
 					<td>退款成功</td>
-					<td>
-						<a href="javascript:;">查看</a>
-						<a href="javascript:;">同意</a>
-						<a href="javascript:;">拒绝</a>
+					<td class="order_pero_common">
+						<a href=""><img src="../mch/img/check_order.png"><br>查看</a>
+						<a href=""><img src="../mch/img/edit_11.png"><br>同意</a>
+						<a href=""><img src="../mch/img/sc.png"><br>拒绝</a>
 					</td>
 				</tr>
 			</table>
