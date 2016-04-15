@@ -9,7 +9,7 @@
 			<td class="flow_one_left">店铺logo：</td>
 			<td class="flow_one_right">
 				<div id="logo_file">
-					<img src="<!--{if $shop->shop_logo}--><!--{$shop->shop_logo}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="margin:7px;" id="shop_logo">
+					<img src="<!--{if $shop->shop_logo}--><!--{$shop->shop_logo}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="width:60px;height:60px;" id="shop_logo">
 					<input type="file" id="file" name="file" class="store_logo_file" onchange="logoUpload(event);">	
 				</div>
 				<div style="font-size:13px;color:#ccc;margin-top:5px">logo尺寸标准为320*320</div>
@@ -75,7 +75,7 @@
 			<td class="flow_one_left">公众号二维码：</td>
 			<td class="flow_one_right">
 				<div id="logo_file_code">
-					<img src="<!--{if $shop->shop_qrcode}--><!--{$shop->shop_qrcode}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="margin:51px;" id="shop_qrcode">
+					<img src="<!--{if $shop->shop_qrcode}--><!--{$shop->shop_qrcode}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="width:150px;height:150px;" id="shop_qrcode">
 					<input type="file" id="file" name="file" class="logo_file_code" onchange="qrcodeUpload(event);">	
 				</div>
 				<!-- <button class="feil_code_btn">上传二维码</button> -->
