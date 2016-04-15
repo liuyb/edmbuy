@@ -16,7 +16,7 @@ class Order_Model extends Model {
      */
     static function getPagedOrders(Pager $pager, array $options){
         $muid = $GLOBALS['user']->uid;
-        $where = "";
+        $where = " and is_delete = 0 ";
         $orderby = "";
         if($options['order_sn']){
             $where .= " and o.order_sn like '%%".D()->escape_string(trim($options['order_sn']))."%%' ";
@@ -141,7 +141,6 @@ class Order_Model extends Model {
     static function isOrderValid($order_status){
         return !($order_status == OS_CANCELED || $order_status == OS_INVALID);
     }
-    
 }
 
 /*----- END FILE: Order_Model.php -----*/
