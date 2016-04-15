@@ -56,6 +56,7 @@
 		<span id="all_check" style="padding-left: 50px;"></span>
 		<button id="batch_sendready" class="batch_send" onclick="preparedOrders();">备货</button>
 		<button id="batch_send" class="batch_send" onclick="deliveryOrderGoods(null, 'ship');">批量发货</button>
+		<button id="batch_remove" class="batch_send" onclick="removeOrders();">移除</button>
 		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
@@ -90,9 +91,7 @@ $(function(){
 		var $tr = $op.closest("tr").first();
 		var order_id = $tr.data("id");
 		if($op.hasClass("removeod")){
-			F.postWithLoading('/order/away', {"order_ids" : [order_id]}, function(){
-				$tr.remove();
-			});
+			doOrderRemove([order_id]);
 		}else if($op.hasClass("order_look_up")){
 			if(_cur_ordertype){
 				Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
@@ -225,21 +224,45 @@ function preparedOrders(){
 	});
 }
 
+function removeOrders(){
+	var order_ids = getSelectIds();
+	doOrderRemove(order_ids);
+}
+
+function doOrderRemove(order_ids){
+	if(!order_ids || !order_ids.length){
+		showMsg('请选择要移除的订单！');
+		return;
+	}
+	if(_cur_ordertype){
+		Cookies.set('mch_order_type',_cur_ordertype,{path:'/'});
+	}
+	showConfirm('确定移除当前订单？', function(){
+		F.postWithLoading('/order/away', {"order_ids" : order_ids}, function(){
+			showMsg('操作成功');
+			window.location.reload();
+		});
+	});
+}
+
 function canShipByType(type){
 	if(type == 101){
-		canBatchShip(true);
+		canBatchSendShip(true);
+		$("#batch_remove").hide();
+	}else if(type == 104){
+		$("#batch_remove").show();
+		canBatchSendShip(false);
 	}else{
-		canBatchShip(false);
+		canBatchSendShip(false);
+		$("#batch_remove").hide();
 	}
 }
 
-function canBatchShip(flag){
+function canBatchSendShip(flag){
 	if(flag){
-		$("#all_check").show();
 		$("#batch_send").show();
 		$("#batch_sendready").show();
 	}else{
-		$("#all_check").hide();
 		$("#batch_send").hide();
 		$("#batch_sendready").hide();
 	}
