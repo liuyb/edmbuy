@@ -32,14 +32,17 @@
 (function($){  
     $(document).on({
     	mouseenter: function () {
-	    	//$(this).addClass('rb-hover');
+	    	$(this).css('background-color', '#fff6f2');
 	    },
 	    mouseleave: function () {
-	    	//$(this).removeClass('rb-hover');
+	    	$(this).css('background-color', '#fff');
 	    },
 	    click: function (e) {
 	    	var $target = $(e.target);
 	    	var checkCol = $(this).find(".common_check");
+	    	if(!checkCol || !checkCol.length){
+	    		return;
+	    	}
 	    	if(!$target.hasClass("undocheck")){
 	    		if(checkCol.hasClass("common_check_on")){
 	    			checkCol.removeClass("common_check_on");
@@ -287,6 +290,38 @@ function showConfirm(msg, handler){
 		handler.apply(this,arguments);
 	}, function(){
 	   layer.closeAll();
+	});
+}
+
+/**
+ * 省市区关联公共函数
+ * @param obj
+ * @param type
+ * @param selDom
+ */
+function regionChange(obj, type, selDom){
+	var selectVal = $(obj).val();
+	F.get('/order/region', {type : type, region : selectVal}, function(ret){
+		var selectObj = $("#"+selDom);
+		var html = "<option value=\"\">请选择...</option>";
+		var selectedVal = "";
+		if(ret && ret.length){
+			for(var i = 0,len=ret.length; i < len; i++){
+				var op = ret[i];
+				if(i == 0){
+					selectedVal = op.region_id;
+				}
+				html += "<option value=\""+op.region_id+"\">"+op.region_name+"</option>";
+			}
+		}
+		selectObj.html($(html));
+		if(selectedVal){
+			selectObj.val(selectedVal);
+			selectObj.trigger('change');
+		}else{
+			var childId = $(obj).data("child");
+			$("#"+childId).html($("<option value=\"\">请选择...</option>"));
+		}
 	});
 }
 /**

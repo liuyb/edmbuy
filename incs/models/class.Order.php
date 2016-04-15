@@ -80,7 +80,8 @@ class Order extends StorageNode{
                 'discount'           => 'discount',
                 'merchant_ids'       => 'merchant_ids',
                 'pay_data1'          => 'pay_data1',
-                'pay_data2'          => 'pay_data2'
+                'pay_data2'          => 'pay_data2',
+                'is_delete'          => 'is_delete'   
             ));
     }
     
@@ -663,6 +664,22 @@ class Order extends StorageNode{
     	return $goods_amount - $discount + $shipping_fee + $pay_fee + $insure_fee + $pack_fee + $card_fee + $tax;
     }
     
+    /**
+     * 根据传入进来的省市区 regionid 返回 省市区 字符串
+     * @param array $regionIds
+     */
+    static function getOrderRegion(array $regionIds) {
+        if(!$regionIds || count($regionIds) == 0){
+            return '';
+        }
+        $sql = "select region_name from shp_region where region_id ".Fn::db_create_in($regionIds)." order by region_id";
+        $arr = D()->query($sql)->fetch_array_all();
+        $region = "";
+        foreach ($arr as $item){
+            $region .= $item['region_name'];
+        }
+        return $region;
+    }
 }
 
 /*----- END FILE: class.Order.php -----*/

@@ -133,6 +133,15 @@
 	border:0;
 	margin:20px 0;
 }
+.store_operate a{
+	color:#7d7d7d;
+	display:inline-block;
+	vertical-align: middle
+}
+.store_operate img{
+	height:16px;
+	width:16px;
+}
 </style>
 
 <!--#include file="header_commen.html"-->
@@ -168,9 +177,9 @@
 						<div class="offer_size">建议尺寸640*250px</div>
 					</td>
 					<td><input id="link_address"  class="link_address_on" type="text" value="www.baidu.com"></td>
-					<td>
-						<span class="store_edit">编辑</span>
-						<span class="store_del">删除</span>
+					<td class="store_operate">
+						<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>编辑</a>
+						<a href=""><img src="../mch/img/sc.png" alt="" ><br>删除</a>
 					</td>
 				</tr>
 				<tr>
@@ -183,9 +192,9 @@
 						<div class="offer_size">建议尺寸640*250px</div>
 					</td>
 					<td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
-					<td>
-						<span class="store_edit">编辑</span>
-						<span class="store_del">删除</span>
+					<td class="store_operate">
+						<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>编辑</a>
+						<a href=""><img src="../mch/img/sc.png" alt="" ><br>删除</a>
 					</td>
 				</tr>
 					<tr>
@@ -198,9 +207,9 @@
 						<div class="offer_size">建议尺寸640*250px</div>
 					</td>
 					<td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
-					<td>
-						<span class="store_edit">编辑</span>
-						<span class="store_del">删除</span>
+					<td class="store_operate">
+						<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>编辑</a>
+						<a href=""><img src="../mch/img/sc.png" alt="" ><br>删除</a>
 					</td>
 				</tr>
 			</table>

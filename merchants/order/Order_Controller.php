@@ -22,7 +22,9 @@ class Order_Controller extends MerchantController {
             'order/shipment/list' => 'shipment_list',
             'order/shipment/info' => 'shipment_info',
             'order/shipment/away' => 'shipment_delete',
-            'order/shipment' => 'shipment_save'
+            'order/shipment' => 'shipment_save',
+            'order/prepared' => 'batch_order_prepared',
+            'order/away' => 'batch_order_removed'
         ];
     }
     
@@ -56,10 +58,66 @@ class Order_Controller extends MerchantController {
             "start_date" => $start_date, "end_date" => $end_date,"status"=>$status,
             "orderby"  => $orderby, "order_field" => $order_field
         );
-        $pager = new Pager($curpage, 8);
+        $pager = new Pager($curpage, $this->getPageSize());
         Order_Model::getPagedOrders($pager, $options);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
+    }
+    
+    /**
+     * 订单状态批量修改成备货状态 -只有代发货状态才能操作
+     * @param Request $request
+     * @param Response $response
+     */
+    public function batch_order_prepared(Request $request, Response $response){
+        if($request->is_post()){
+            $order_ids = $request->post('order_ids');
+            //待发货状态-不是待发货状态的不处理。
+            $wait_ship_status = Fn::get_order_status(CS_AWAIT_SHIP);
+            $paid_status = $wait_ship_status['pay_status'];
+            $paid_status = is_array($paid_status) ? $paid_status : array($paid_status);
+            $ship_status = $wait_ship_status['shipping_status'];
+            foreach ($order_ids as $id){
+                $order = Order::load($id);
+                $this->checkPermission($order->merchant_ids);
+                if(!Order_Model::isOrderValid($order->order_status)){
+                    continue;
+                }
+                if(!in_array($order->pay_status, $paid_status) || !in_array($order->shipping_status, $ship_status)){
+                    continue;
+                }
+                if($order->shipping_status != SS_PREPARING){
+                    $order->shipping_status = SS_PREPARING;
+                    $order->save(Storage::SAVE_UPDATE);
+                }
+            }
+            $response->sendJSON("");
+        }
+    }
+    
+    /**
+     * 订单移除 --只有关闭订单状态才能操作
+     * @param Request $request
+     * @param Response $response
+     */
+    public function batch_order_removed(Request $request, Response $response){
+        if($request->is_post()){
+            $order_ids = $request->post('order_ids');
+            $colsed_status = Fn::get_order_status(CS_CLOSED);
+            $paid_status = $colsed_status['pay_status'];
+            $paid_status = is_array($paid_status) ? $paid_status : array($paid_status);
+            $order_status = $colsed_status['order_status'];
+            foreach ($order_ids as $id){
+                $order = Order::load($id);
+                $this->checkPermission($order->merchant_ids);
+                if(!in_array($order->pay_status, $paid_status) || !in_array($order->order_status, $order_status)){
+                    continue;
+                }
+                $order->is_delete = 1;
+                $order->save(Storage::SAVE_UPDATE);
+            }
+            $response->sendJSON("");
+        }
     }
     
     /**
@@ -99,18 +157,7 @@ class Order_Controller extends MerchantController {
         }else if("consignee" == $step){//修改收货地址
             $this->v->set_tplname('mod_order_consignee');
             if ($order){
-                /* 取得省份 */
-                $this->v->assign('province_list', order::get_regions(1, 1));//$order->country 这里默认是中国 不动态取
-                if ($order->province > 0)
-                {
-                    /* 取得城市 */
-                    $this->v->assign('city_list', order::get_regions(2, $order->province));
-                    if ($order->city > 0)
-                    {
-                        /* 取得区域 */
-                        $this->v->assign('district_list', order::get_regions(3, $order->city));
-                    }
-                }
+                Func::assign_regions($this->v, $order->province, $order->city);
             }
         }
         $this->v->assign("order", $order);

@@ -1,148 +1,38 @@
 <!--{add_css file="shop.css" scope="global"}-->
-<!--[HEAD_CSS]-->
-<style>
-
-    #body{
-        position: relative;
-    }
-    .browse {
-        width: 280px;
-        height: 40px;
-        line-height: 40px;
-        background: #ecf1f5;
-        display: inline-block;
-        margin: 10px 0 0;
-        padding-right: 20px;
-        border-radius: 4px;
-        position: relative;
-        text-align: center;
-        cursor: pointer;
-    }
-    .file_save img {
-        vertical-align: middle;
-        width: 300px;
-        height: 118px;
-        margin-top: 10px;
-    }
-    .link_address {
-        width: 300px;
-        height: 40px;
-        line-height: 40px;
-        background: #ecf1f5;
-        border: 0;
-        border-radius: 4px;
-        text-align: center;
-    }
-</style>
-<!--[/HEAD_CSS]-->
 <div id="body" class="ifr-body">
     <!--{include file="inc/left_common.htm"}-->
     <div id="store_right_finish">
         <div id="store_type">
             <ul>
-                <li>当前使用模板</li>
-                <li  class="store_type_on">首页轮播图</li>
+
+                <li  class='store_type_on'  data-type='template'>当前使用模板</li>
+                <li    data-type="carousel">首页轮播图</li>
             </ul>
         </div>
+        <div id="inner_data">
 
-        <div id="store_infos">
-            <table cellspacing="0" cellpadding="0" id="store_table_list">
-                <tr>
-                    <th>排序</th>
-                    <th width="350">图片地址</th>
-                    <th width="350">链接地址</th>
-                    <th width="150">操作</th>
-                </tr>
-                <tr>
-                <td>1</td>
-                <td>
-                    <div class="browse"  >
-                        浏览
-                        <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
-                    </div>
-                    <div class="file_save">
-                    </div>
-                    <div class="offer_size">建议尺寸640*250px</div>
-                </td>
-                <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
-                <td>
-                    <span class="store_edit">编辑</span>
-                    <span class="store_del">删除</span>
-                </td>
-            </tr>
-                <tr>
-                    <td>2</td>
-                    <td>
-                        <div class="browse"  >
-                            浏览
-                            <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
-                        </div>
-                        <div class="file_save">
-                        </div>
-                        <div class="offer_size">建议尺寸640*250px</div>
-                    </td>
-                    <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
-                    <td>
-                        <span class="store_edit">编辑</span>
-                        <span class="store_del">删除</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>
-                        <div class="browse"  >
-                            浏览
-                            <input type="file" id="file" name="file" class="store_file" onchange="fileupload(event,this)">
-                        </div>
-                        <div class="file_save">
-                        </div>
-                        <div class="offer_size">建议尺寸640*250px</div>
-                    </td>
-                    <td><input class="link_address link_address_on"  class="link_address_on" type="text" value="www.baidu.com"></td>
-                    <td>
-                        <span class="store_edit">编辑</span>
-                        <span class="store_del">删除</span>
-                    </td>
-                </tr>
-
-            </table>
-            <button id="store_btn">继续添加</button>
         </div>
     </div>
 </div>
 
-<script>
-    $("#dpzx").addClass("order_left_common");
 
-    $(".store_edit").on("click", function () {
-        var _tex = $(this).text();
-        if (_tex == "编辑") {
-            $(this).text("保存");
-            $(this).parent().parent().find(".link_address").removeClass("link_address_on");
-        }
-        if (_tex == "保存") {
-            $(this).text("编辑");
-            $(this).parent().parent().find(".link_address").addClass("link_address_on");
+<script>
+    $(function(){
+        getHtml();
+    })
+    $("#dpzx").addClass("order_left_common");
+    $(document).on('click','#store_type li',function(){
+        var $obj = $(this);
+        if(!$obj.hasClass("store_type_on")){
+            $obj.addClass("store_type_on").siblings().removeClass("store_type_on");
+            var type= $obj.attr("data-type");
+            var data ={"type":type};
+            getHtml(data);
         }
     })
-
-    function fileupload(e, obj) {
-        $obj=$(obj)
-//        console.log($obj);
-        var url = '/shop/carousel';
-//        var galleryCount = $(".goods_gallery").length;
-//        var selectedCls = "";
-//        if(galleryCount < 1){
-//            selectedCls = "add_img_selected";
-//        }
-        image_upload(url, e, obj, function (ret) {
-            var thumb = ret.thumb;
-            var html = '	<div class="add_img goods_gallery">'
-                    + '		<img src="' + thumb + '"  data-ori="' + ret.result + '" data-std="' + ret.stdpath + '"/>	'
-                    + '      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" onclick="deleteGallery(this)">'
-                    + '	</div>';
-            $obj.parent().parent().find(".file_save").html(html);
-
-        });
+    function getHtml(data){
+        F.get('shop/template/use', data, function(ret){
+            $("#inner_data").html(ret);
+        },"HTML");
     }
 </script>

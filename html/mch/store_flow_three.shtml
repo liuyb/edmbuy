@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/store.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+<style>
+#common_header_left{
+	background:#323a4d !important;
+}
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div class="one_password" style="margin-bottom:80px;">
+	<img src="../mch/img/yzsf1.png"><img src="../mch/img/szmm1.png"><img src="../mch/img/wc1.png">
+</div>
+	
+<div id="store_infos" style="width:1160px; margin:0 auto;padding:230px 0;">
+	<div style="text-align:center;">
+		<div class="three_img_left"><img src="../mch/img/cg.png"></div>
+		<div class="three_text_right">
+			<p style="font-size:24px;color:#1f1f1f;">恭喜您，已经成功完成 开店</p>
+			<p><button class="back_home">返回首页</button></p>
+		</div>
+	</div>
+</div>
+
+<script>
+$("#dpzx").addClass("order_left_common");
+</script>

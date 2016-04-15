@@ -18,7 +18,8 @@ return [
             'server'=>'smtp.163.com',
             'user'=>'15728743912@163.com',
             'pass'=>'asd123456',
-    ]
+    ],
+    'merchant_url'=>"http://edmmch.fxmapp.com/home"
 ];
 
 /*----- END FILE: port.php -----*/

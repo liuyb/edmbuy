@@ -396,6 +396,27 @@ class Func extends CStatic {
   }
   
   /**
+   * 返回区域选择列表数据
+   * @param unknown $objView
+   * @param unknown $province
+   * @param unknown $city
+   */
+  public static function assign_regions($objView, $province, $city){
+      /* 取得省份 */
+      $objView->assign('province_list', Order::get_regions(1, 1));//$order->country 这里默认是中国 不动态取
+      if ($province > 0)
+      {
+          /* 取得城市 */
+          $objView->assign('city_list', Order::get_regions(2, $province));
+          if ($city > 0)
+          {
+              /* 取得区域 */
+              $objView->assign('district_list', Order::get_regions(3, $city));
+          }
+      }
+  }
+  
+  /**
    * @from extend.php
    * 过滤xss攻击
    * @param str $val
@@ -405,8 +426,8 @@ class Func extends CStatic {
       // remove all non-printable characters. CR(0a) and LF(0b) and TAB(9) are allowed
       // this prevents some character re-spacing such as <java\0script>
       // note that you have to handle splits with \n, \r, and \t later since they *are* allowed in some inputs
-      $val = preg_replace('/([\x00-\x08,\x0b-\x0c,\x0e-\x19])/', '', $val);
-  
+      //$val = preg_replace('/([\x00-\x08,\x0b-\x0c,\x0e-\x19])/', '', $val);
+      $val = preg_replace('/([\x00-\x08])/', '', $val);//不能过滤逗号
       // straight replacements, the user should never need these since they're normal characters
       // this prevents like <IMG SRC=@avascript:alert('XSS')>
       $search = 'abcdefghijklmnopqrstuvwxyz';
@@ -422,7 +443,6 @@ class Func extends CStatic {
           // @ @ 0{0,7} matches '0' zero to seven times
           $val = preg_replace('/(&#0{0,8}'.ord($search[$i]).';?)/', $search[$i], $val); // with a ;
       }
-  
       // now the only remaining whitespace attacks are \t, \n, and \r
       $ra1 = array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'style', 'script',
           'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base');

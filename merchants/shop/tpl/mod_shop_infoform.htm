@@ -1,0 +1,206 @@
+<!--{add_css file="/themes/merchants/css/shop.css" scope="module"}-->
+
+<div id="body" class="ifr-body">
+    <!--{if $shop->is_completed}-->
+        <!--{include file="inc/left_common.htm"}-->
+    <!--{/if}-->
+    <div id="store_right_finish">
+        <div id="store_infos" style=" margin:0 auto;padding:40px 0;">
+            <form id="shopForm" onsubmit="return submitForm();">
+                <table cellspacing="0" cellpadding="0" id="store_flow_tab">
+                    <tr>
+                        <td class="flow_one_left"><span class="fill_red">*</span>店铺名称：</td>
+                        <td class="flow_one_right"><input type="text" maxlength="60" value="<!--{$shop->facename}-->"
+                                                          name="shop_name" class="right_input_c" required></td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left">店铺logo：</td>
+                        <td class="flow_one_right">
+                            <div id="logo_file">
+                                <img src="<!--{if $shop->logo}--><!--{$shop->logo}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->"
+                                     style="width:60px;height:60px;" id="shop_logo">
+                                <input type="file" id="file" name="file" class="store_logo_file"
+                                       onchange="logoUpload(event);">
+                            </div>
+                            <div style="font-size:13px;color:#ccc;margin-top:5px">logo尺寸标准为320*320</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left">手机号码：</td>
+                        <td class="flow_one_right">
+                            <!--{$shop->mobile}-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left"><span class="fill_red">*</span>联系电话：</td>
+                        <td class="flow_one_right"><input type="text" maxlength="15" value="<!--{$shop->telphone}-->"
+                                                          name="tel" class="right_input_c" required></td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left"><span class="fill_red">*</span>联系地址：</td>
+                        <td>
+                            <select onchange="regionChange(this,2,'selCity');" class="oper_province" name="province"
+                                    required>
+                                <option value="">请选择...</option>
+                                <!--{foreach from=$province_list item=province}-->
+                                <option value="<!--{$province.region_id}-->"
+                                <!--{if $shop->province eq $province.region_id}-->selected<!--{/if}-->>
+                                <!--{$province.region_name}--></option>
+                                <!--{/foreach}-->
+                            </select>
+                            <select id="selCity" class="oper_city" onchange="regionChange(this,3,'selDistrict');"
+                                    data-child="selDistrict" name="city" required>
+                                <option value="">请选择...</option>
+                                <!--{foreach from=$city_list item=city}-->
+                                <option value="<!--{$city.region_id}-->"
+                                <!--{if $shop->city eq $city.region_id}-->selected<!--{/if}-->>
+                                <!--{$city.region_name}--></option>
+                                <!--{/foreach}-->
+                            </select>
+                            <select id="selDistrict" class="oper_area" name="district" required>
+                                <option value="">请选择...</option>
+                                <!--{foreach from=$district_list item=district}-->
+                                <option value="<!--{$district.region_id}-->"
+                                <!--{if $shop->district eq $district.region_id}-->selected<!--{/if}-->>
+                                <!--{$district.region_name}--></option>
+                                <!--{/foreach}-->
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left"></td>
+                        <td class="flow_one_right"><input type="text" maxlength="255" value="<!--{$shop->address}-->"
+                                                          name="address" class="right_input_c" placeholder="请输入店铺详细地址"
+                                                          required></td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left">店铺描述：</td>
+                        <td class="flow_one_right"><textarea class="oper_textarea" name="shop_desc"><!--{$shop->shop_desc}--></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left"><span class="fill_red">*</span>经营范围：</td>
+                        <td class="flow_one_right">
+                            <div id="flow_business">
+                                <ul>
+                                    <!--{foreach from=$busi_scope item=cat}-->
+                                    <li data-id="<!--{$cat.cat_id}-->"
+                                    <!--{if isset($cat.selected) && $cat.selected }-->class="business_on"<!--{/if}-->>
+                                    <!--{$cat.cat_name}--></li>
+                                    <!--{/foreach}-->
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="flow_one_left">店铺招牌：</td>
+                        <td class="flow_one_right">
+                            <div id="logo_file_sign">
+                                <input type="file" id="file" name="file" class="logo_file_sign_z" onchange="">
+                            </div>
+                            <div style="font-size:13px;color:#ccc;margin-top:5px">建议尺寸300*500</div>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td class="flow_one_left">公众号二维码：</td>
+                        <td class="flow_one_right">
+                            <div id="logo_file_code">
+                                <img src="<!--{if $shop->wxqr}--><!--{$shop->wxqr}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->"
+                                     id="shop_qrcode">
+                                <input type="file" id="file" name="file" class="logo_file_code"
+                                       onchange="qrcodeUpload(event);">
+                            </div>
+                            <!-- <button class="feil_code_btn">上传二维码</button> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flow_one_left"></td>
+                        <td class="flow_one_right">
+                            <!--{if isset($act) && $act == 'edit'}-->
+                            <button class="next_btn" type="submit">保存</button>
+                            <input type="hidden" name="act" value="<!--{$shop->act}-->"/>
+                            <!--{else}-->
+                            <button class="next_btn" type="submit">下一步</button>
+                            <!--{/if}-->
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $business_sco = $("#flow_business");
+    $(function () {
+        <!--{if !$shop->is_completed}-->
+            $("#store_infos").css("width","1200px");
+        <!--{/if}-->
+        $business_sco.on("click", "li", function () {
+            if ($(this).hasClass("business_on")) {
+                $(this).removeClass("business_on");
+            } else {
+                $(this).addClass("business_on");
+            }
+        });
+    });
+
+    function submitForm() {
+        if (!$("#shopForm").formValid()) {
+            return false;
+        }
+        var cat_id = [];
+        $business_sco.find("li").each(function () {
+            var $li = $(this);
+            if ($li.hasClass("business_on")) {
+                cat_id.push($li.data("id"));
+            }
+        });
+        if (!cat_id.length) {
+            showMsg("请选择经营范围！");
+            return false;
+        }
+        var data = $("#shopForm").serializeJson();
+        data.business_scope = ',' + cat_id.join(",") + ',';//方便like操作
+        data.shop_logo = $("#shop_logo").attr("src");
+        data.shop_qrcode = $("#shop_qrcode").attr("src");
+        console.log(data);
+        var smtBtn = $(".next_btn");
+        smtBtn.css("opacity", 0.2).attr("disabled");
+        F.postWithLoading('/shop/setup', data, function (ret) {
+            if (ret.result == 'SUCC') {
+                //showMsg(ret.msg);
+                if (ret.msg == 'UPDATE') {
+//				alert('to detail');
+                    showMsg("修改成功！");
+                    setTimeout(function () {
+                        window.location.href = '/shop/details'
+                    }, "2000");
+
+                } else {
+                    window.location.href = '/shop/step/template'
+                }
+            } else {
+                showMsg(ret.msg);
+                smtBtn.css("opacity", 1).removeAttr("disabled");
+            }
+        });
+        return false;
+    }
+
+    function logoUpload(e) {
+        var url = '/shop/logo';
+        image_upload(url, e, null, function (ret) {
+            var stdpath = ret.stdpath;
+            $("#shop_logo").attr("src", stdpath);
+        });
+    }
+
+    function qrcodeUpload(e) {
+        var url = '/shop/qrcode';
+        image_upload(url, e, null, function (ret) {
+            var stdpath = ret.stdpath;
+            $("#shop_qrcode").attr("src", stdpath);
+        });
+    }
+</script>

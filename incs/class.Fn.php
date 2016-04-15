@@ -106,6 +106,15 @@ class Fn extends Func {
   }
   
   /**
+   * 生成一个唯一编号
+   */
+  static function gen_unique_code($prefix) {
+      /* 选择一个随机的方案 */
+      mt_srand((double) microtime() * 1000000);
+      return $prefix.date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
+  }
+  
+  /**
    * 根据输入id生成二维码目录
    * 
    * @param integer $id
@@ -272,14 +281,14 @@ class Fn extends Func {
               $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING));
               break;
           //备货中
-          case CS_STOCKING :
+          /* case CS_STOCKING :
               $ret = array("pay_status" => PS_PAYED,
               "shipping_status" => array(SS_PREPARING, SS_SHIPPED_ING));
-              break;
+              break; */
           //待发货
           case CS_AWAIT_SHIP : 
               $ret = array("pay_status" => PS_PAYED,
-                           "shipping_status" => array(SS_UNSHIPPED));
+                           "shipping_status" => array(SS_UNSHIPPED,SS_PREPARING, SS_SHIPPED_ING));
               break;
           //待收货
           case CS_AWAIT_RECEIVE : 

@@ -16,7 +16,7 @@ class Order_Model extends Model {
      */
     static function getPagedOrders(Pager $pager, array $options){
         $muid = $GLOBALS['user']->uid;
-        $where = "";
+        $where = " and is_delete = 0 ";
         $orderby = "";
         if($options['order_sn']){
             $where .= " and o.order_sn like '%%".D()->escape_string(trim($options['order_sn']))."%%' ";
@@ -101,16 +101,7 @@ class Order_Model extends Model {
      * @param unknown $order_id
      */
     static function getOrderRegion(array $regionIds) {
-        if(!$regionIds || count($regionIds) == 0){
-            return '';
-        }
-        $sql = "select region_name from shp_region where region_id ".Fn::db_create_in($regionIds)." order by region_id";
-        $arr = D()->query($sql)->fetch_array_all();
-        $region = "";
-        foreach ($arr as $item){
-            $region .= $item['region_name'];
-        }
-        return $region;
+        return Order::getOrderRegion($regionIds);
     }
     
     /**
@@ -141,7 +132,6 @@ class Order_Model extends Model {
     static function isOrderValid($order_status){
         return !($order_status == OS_CANCELED || $order_status == OS_INVALID);
     }
-    
 }
 
 /*----- END FILE: Order_Model.php -----*/

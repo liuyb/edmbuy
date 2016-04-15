@@ -20,31 +20,41 @@
         /*padding-top: 4px;*/
         margin-top: 95px;
         border: 1px solid #ddd;
-        width: 200px;
+        width: 320px;
         height: 100px;
         border-radius: 5px;
         position: absolute;
-        top:92px;
+        top:114px;
         left:72px;
+    	font-size:13px;
+    	color:#333;    	 
+    	padding: 5px 10px;
     }
     .content {
         border: 1px solid #ddd;
-        width: 200px;
+        width: 320px;
         height: 100px;
         border-radius: 5px;
         /*display: inline-block;*/
         position: absolute;
-        top:75px;
+        top:97px;
         left:72px;
         padding-left: 4px;
+    	font-size:13px;
+    	color:#333;  
+    	padding: 5px 10px;
     }
     .content-title-2{
         /*display:inline-block;*/
         margin-top: 90px;
+    	font-size:13px;
+    	color:#7d7d7d;    	
     }
     .content-title{
         /*display:inline-block;*/
-        margin-top: 10px;
+        margin-top: 38px;
+    	font-size:13px;
+    	color:#7d7d7d;
     }
     .div-button,.div-close{
         background: #f26427;
@@ -73,9 +83,9 @@
 <!--{if $type=="view"}-->
 <div class="moddle">
     <div id="common_repaly">
-        <div>商品名称：<!--{$ret.goods_name}--></div>
+        <div style="font-size:13px;color:#7d7d7d;">商品名称：<span style="font-size:13px;color:#333;"><!--{$ret.goods_name}--></span></div>
         <hr/>
-        <div>商品星级：<!--{$ret.comment_rank}-->星</div>
+        <div style="font-size:13px;color:#7d7d7d;">商品星级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_rank}-->星</span></div>
         <hr/>
         <div class="content-title">评价类容： </div>
         <div class="content"><!--{$ret.content}--></div>
@@ -86,17 +96,17 @@
 </div>
 <!--{else}-->
 <div class="moddle">
-<div id="common_repaly">
-    <div>商品名称：<!--{$ret.goods_name}--></div>
-    <hr/>
-    <div>商品星级：<!--{$ret.comment_rank}-->星</div>
-    <hr/>
-    <div class="content-title">评价类容： </div>
-    <div class="content"><!--{$ret.content}--></div>
-    <div class="content-title-2" >回复类容：</div>
-    <div class="merchant-content" contenteditable="true" id="content"></div>
-    <button class="div-button">保存</button>
-</div>
+    <div id="common_repaly">
+        <div style="font-size:13px;color:#7d7d7d;">商品名称：<span style="font-size:13px;color:#333;"><!--{$ret.goods_name}--></span></div>
+        <hr/>
+        <div style="font-size:13px;color:#7d7d7d;">商品星级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_rank}-->星</span></div>
+        <hr/>
+        <div class="content-title">评价类容： </div>
+        <div class="content"><!--{$ret.content}--></div>
+        <div class="content-title-2" >回复类容：</div>
+        <div class="merchant-content" contenteditable="true" id="content"></div>
+        <button class="div-button">保存</button>
+    </div>
 </div>
 <!--{/if}-->
 <input type="hidden" id="comment_id" value="<!--{$common_id}-->"/>

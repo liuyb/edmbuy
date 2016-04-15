@@ -1,20 +1,13 @@
-<!--[HEAD_CSS]-->
-<style>
-    .view-common{
-        color: red;
-        cursor: pointer;
-    }
-</style>
-<!--[/HEAD_CSS]-->
+
 <table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
     <tr>
-        <th>评价商品</th>
-        <th>评价内容</th>
+        <th width="280px">评价商品</th>
+		<th width="280px">评价内容</th>
         <th>商品评分</th>
         <th>评价人</th>
         <th>日期</th>
         <th>状态</th>
-        <th>操作</th>
+        <th width="80px">操作</th>
     </tr>
     <!--{foreach from=$commentList item=val}-->
     <tr>
@@ -30,11 +23,18 @@
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if !empty($val.comment_reply)}-->
         <td>已回复</td>
-        <td style="color: red" class="view-common" onclick="viewCommon( <!--{$val.comment_id}-->,'view')">查看回复</td>
-
+		<td>
+        	<a href="javascript:;"  onclick="viewCommon( <!--{$val.comment_id}-->,'view')" class="reply_mana">
+        		<img src="/themes/merchants/img/check_order.png" alt="" ><br>查看
+        	</a>
+        </td>
         <!--{else}-->
         <td>未回复</td>
-        <td onclick="viewCommon( <!--{$val.comment_id}-->,'rplay')"  class="reply_mana">回复</td>
+        <td>
+        	<a href="javascript:;" onclick="viewCommon( <!--{$val.comment_id}-->,'rplay')" class="reply_mana">
+        		<img src="/themes/merchants/img/edit_11.png" alt="" ><br>回复
+        	</a>
+        </td>
         <!--{/if}-->
     </tr>
     <!--{foreachelse}-->
@@ -43,7 +43,8 @@
     </tr>
     <!--{/foreach}-->
 </table>
-<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:0px;margin-top: 10px;"></div>
+<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:20px 10px;"></div>
+<div class="clear"></div>
 <script>
     var curpage =<!--{$page.curpage}-->
     var maxpage =<!--{$page.maxpage}-->
@@ -87,21 +88,21 @@
         },"HTML");
     }
     function viewCommon(comment_id,type) {
-            if(type=='view'){
-                var title='查看评论';
-            }else{
-                var title='回复评论';
-            }
-            var url = "/goods/viewrplay";
-            var data = {"common_id": comment_id};
-            layer.open({
-                type: 2,
-                title:title,
-                shadeClose: true,
-                shade: 0.01,
-                area: ['350px', '450px'],
-                content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
-            });
+        if(type=='view'){
+            var title='查看评论';
+        }else{
+            var title='回复评论';
+        }
+        var url = "/goods/viewrplay";
+        var data = {"common_id": comment_id};
+        layer.open({
+            type: 2,
+            title:title,
+            shadeClose: true,
+            shade: 0.01,
+            area: ['450px', '450px'],
+            content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
+        });
 
 //        F.postWithLoading(url, data, function (ret) {
 //            if (ret.status == 1) {

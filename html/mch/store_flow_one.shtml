@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/store.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+<style>
+#common_header_left{
+	background:#323a4d !important;
+}
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div class="one_password" style="margin-bottom:80px;">
+	<img src="../mch/img/yzsf2.png"><img src="../mch/img/szmm2.png"><img src="../mch/img/wc2.png">
+</div>
+	
+<div id="store_infos" style="width:1200px; margin:0 auto;padding:40px 0;">
+	<!--#include file="shop_data_common.html"-->
+</div>	
+<script>
+$("#dpzx").addClass("order_left_common");
+
+$("#flow_business li").on("click",function(){
+	if($(this).hasClass("business_on")){
+		$(this).removeClass("business_on"); 
+	}else{
+		$(this).addClass("business_on");
+	}
+})
+</script>
+ 

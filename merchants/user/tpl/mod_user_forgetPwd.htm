@@ -1,11 +1,11 @@
 <!--{add_css file="user.css" scope="global"}-->
 <style>
-    .verify_phone{
-        margin-left:10px;
-        width:360px;
-        border:1px solid #ddd;
-        height:30px;
-        padding-left:5px;
+    .verify_phone {
+        margin-left: 10px;
+        width: 360px;
+        border: 1px solid #ddd;
+        height: 30px;
+        padding-left: 5px;
     }
 </style>
 <div id="login_new_header">
@@ -28,7 +28,8 @@
     <!--{if $step==1}-->
     <div id="find_word_one" class="find_one">
         <div class="one_password">
-            <img src="/themes/merchants/img/yzsf2.png"><img src="/themes/merchants/img/szmm2.png"><img src="/themes/merchants/img/wc2.png">
+            <img src="/themes/merchants/img/yzsf2.png"><img src="/themes/merchants/img/szmm2.png"><img
+                src="/themes/merchants/img/wc2.png">
         </div>
         <div class="one_flow">
             <ul>
@@ -38,7 +39,8 @@
             </ul>
         </div>
         <div class="one_verify">
-            <div class="phone_id">手机号码：<input type="text" value="" id="verify_phone" class="phone_nums" name="phone"></div>
+            <div class="phone_id">手机号码：<input type="text" value="" id="verify_phone" class="phone_nums" name="phone">
+            </div>
             <div>
                 验证码：
                 <input type="text" value="" class="auth_code" name="phoneCode"/>
@@ -46,8 +48,9 @@
             </div>
             <div style="margin-left:-100px;">
                 图形验证码：
-                <input type="text"  value="" class="auth_code" name="imgCode" />
-                <img id="verifyimg" src="/vc_mch.php" onclick="this.src='/vc_mch.php?_='+Math.random()*100000;" alt="验证码" title="点击刷新验证码"/>
+                <input type="text" value="" class="auth_code" name="imgCode"/>
+                <img id="verifyimg" src="/vc_mch.php" onclick="this.src='/vc_mch.php?_='+Math.random()*100000;"
+                     alt="验证码" title="点击刷新验证码"/>
             </div>
             <div class="code_ts">验证码已发出，请注意查收短信，如果没有收到，你可以在60秒后要求系统重新发送</div>
         </div>
@@ -61,7 +64,8 @@
     <!--{if $step==2}-->
     <div id="find_word_one" class="find_two">
         <div class="one_password">
-            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img src="/themes/merchants/img/wc2.png">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img
+                src="/themes/merchants/img/wc2.png">
         </div>
         <div class="one_flow">
             <ul>
@@ -72,8 +76,10 @@
         </div>
 
         <div class="one_verify">
-            <div class="phone_id">新登录密码：<input type="password" value="" class="verify_phone"  class="new_password" placeholder="请输入6-12位的新登录密码" name="pwd"></div>
-            <div class="phone_id">确认新密码：<input type="password" value="" id="verify_phone" class="ok_new_password" placeholder="请再次输入密码" name="confirmpwd"></div>
+            <div class="phone_id">新登录密码：<input type="password" value="" class="verify_phone" class="new_password"
+                                               placeholder="请输入6-12位的新登录密码" name="pwd"></div>
+            <div class="phone_id">确认新密码：<input type="password" value="" id="verify_phone" class="ok_new_password"
+                                               placeholder="请再次输入密码" name="confirmpwd"></div>
             <input type="hidden" name="phone" value="<!--{$phone}-->"/>
         </div>
         <div id="next_one">
@@ -85,7 +91,8 @@
     <!--{if $step==3}-->
     <div id="find_word_one" class="find_three">
         <div class="one_password">
-            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm1.png"><img src="/themes/merchants/img/wc1.png">
+            <img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm1.png"><img
+                src="/themes/merchants/img/wc1.png">
         </div>
         <div class="one_flow">
             <ul>
@@ -102,6 +109,7 @@
 
             <div class="success_ts">
                 <p class="ts_tit">新密码设置成功！</p>
+
                 <p class="ts_password">请牢记您新设置的密码。<a href="/login">返回重新登录</a></p>
             </div>
         </div>
@@ -122,32 +130,31 @@
     //    })
 
 
-
     var num = 60;
     var count = num;
     var time;
 
     //发送验证码
-    $("#getCode").on("click", function(){
+    $("#getCode").on("click", function () {
 
         _this = $(this);
 
         //仍在倒数中
-        if(_this.hasClass("sending")){
+        if (_this.hasClass("sending")) {
             return false;
         }
 
 
-        url="/user/getPhoneCodeAjax";
-        var phone=$("input[name=phone]").val()
-        var  data ={"phone":phone};
-        F.postWithLoading(url,data,function(ret){
+        url = "/user/getPhoneCodeAjax";
+        var phone = $("input[name=phone]").val()
+        var data = {"phone": phone};
+        F.postWithLoading(url, data, function (ret) {
             showMsg(ret.retmsg)
-            if(ret.status==1){
+            if (ret.status == 1) {
                 refresh();
-                $(".code_ts").css("display","block");
+                $(".code_ts").css("display", "block");
                 time = setInterval("refresh();", 1000);
-                $("#getCode").attr("disabled","disabled").css("background","grey");
+                $("#getCode").attr("disabled", "disabled").css("background", "grey");
                 $("input[name=phoneCode]").focus();
 
             }
@@ -159,68 +166,78 @@
 //        }
     });
 
-    function refresh(){
+    function refresh() {
 
         num = num - 1;
         var msg = num + "秒";
 
         $("#getCode").html(msg);
 
-        if(num == 0){
+        if (num == 0) {
             num = count;
-            $("#getCode").removeAttr("disabled").css("background","#f69267");
+            $("#getCode").removeAttr("disabled").css("background", "#f69267");
             $("#getCode").removeClass("sending").html("重新获取");
-            $(".code_ts").css("display","none");
+            $(".code_ts").css("display", "none");
             clearInterval(time);
             return false;
         }
     }
-    $(".one_submit").click(function(){
-        var phone=$("input[name=phone]").val();
-        var  data ={"phone":phone};
-        if(phone==""){
+    $(".one_submit").click(function () {
+        var phone = $("input[name=phone]").val();
+        var data = {"phone": phone};
+        if (phone == "") {
             showMsg("手机号码不能为空！");
             $("input[name=phone]").focus();
             return;
         }
         isphone(phone);
 
-        url="/checkSmsCode"
-        var phoneCode=$("input[name=phoneCode]").val();
-        var imgCode=$("input[name=imgCode]").val();
-        if(phoneCode==""){
+        url = "/checkSmsCode"
+        var phoneCode = $("input[name=phoneCode]").val();
+        var imgCode = $("input[name=imgCode]").val();
+        if (phoneCode == "") {
             showMsg("手机验证码不能为空！");
             $("input[name=phoneCode]").focus();
-                return;
+            return;
         }
-        if(imgCode==""){
+        if (imgCode == "") {
             showMsg("验证码不能为空！");
             $("input[name=imgCode]").focus();
             return;
         }
-        var data ={'phone':phone,'imgCode':imgCode,"phoneCode":phoneCode};
-        F.postWithLoading(url,data,function(ret){
-            if(ret.status==0){
+        var data = {'phone': phone, 'imgCode': imgCode, "phoneCode": phoneCode};
+        F.postWithLoading(url, data, function (ret) {
+            if (ret.status == 0) {
                 showMsg(ret.retmsg);
-            }else{
-                window.location.href="/forgetPwd?step=2";
+            } else {
+                window.location.href = "/forgetPwd?step=2";
             }
-        },"JSON")
+        }, "JSON")
     })
     var phone =<!--$phone-->;
-    $(".two_submit").click(function(){
-        var pwd=$("input[name=pwd]").val();
-        var confirmpwd=$("input[name=confirmpwd]").val();
-        if(pwd==""||confirmpwd==""||pwd!=confirmpwd){
-            showMsg("参数错误!");
+    $(".two_submit").click(function () {
+        var pwd = $("input[name=pwd]").val();
+        var confirmpwd = $("input[name=confirmpwd]").val();
+        if (pwd == "") {
+            showMsg("密码不能为空!");
+            return;
+        } else if (confirmpwd == "") {
+            showMsg("确认新密码不能为空!");
+            return;
+        } else if (pwd != confirmpwd) {
+            showMsg("输入的密码不一致!");
+            return;
+        } else if (pwd.length < 6 || pwd.length > 12) {
+            showMsg("输入6到12位的登录密码!");
+            return;
         }
-        url="/user/forgotSavePwd";
-        var phone =$("input[name=phone]").val()
-        var data={"pwd":pwd,"confirmpwd":confirmpwd,"phone":phone};
-        $.post(url,data,function(ret){
-            if(ret.status==1){
-                window.location.href="/forgetPwd?step=3";
-            }else{
+        url = "/user/forgotSavePwd";
+        var phone = $("input[name=phone]").val()
+        var data = {"pwd": pwd, "confirmpwd": confirmpwd, "phone": phone};
+        $.post(url, data, function (ret) {
+            if (ret.status == 1) {
+                window.location.href = "/forgetPwd?step=3";
+            } else {
                 showMsg(ret.retmsg)
             }
         })

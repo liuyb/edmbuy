@@ -39,38 +39,37 @@
 			<div class="search_result">
 				<table cellspacing="0" cellpadding="0" class="search_result_tab">
 					<tr>	
-						<th width="200px">评价商品</th>
+						<th width="280px">评价商品</th>
 						<th width="300px">评价内容</th>
 						<th>商品评分</th>
 						<th>评价人</th>
 						<th>日期</th>
 						<th>状态</th>
-
-						<th>操作</th>
+						<th width="80px">操作</th>
 					</tr>
 					<tr>
 						<td>
 							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
-							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+							<div class="goods_name">测试商品测试商试商品测试商品测试商品试商品测试商品测试商品试商品测试商品测试商品试商品测试商品测试商品品测试商品测试商品</div>
 						</td>
-						<td><p class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</p></td>
+						<td><p class="manage_goods_name">测试商品测试</p></td>
 						<td>5</td>
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><span class="reply_mana">回复</span></td>
+						<td><a href="javascript:;" class="reply_mana"><img src="../mch/img/edit_11.png" alt="" ><br>回复</a></td>
 					</tr>
 					<tr>
 						<td>
 							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
-							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+							<div class="goods_name">测试商品测试商品测试商品测试商品试商品测试商品测试商品试商品测试商品测试商品试商品测试商品测试商品</div>
 						</td>
 						<td><div class="manage_goods_name">测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品</div></td>
 						<td>5</td>
 						<td>昂等非</td>
 						<td>2016-6-6</td>
 						<td>未回复</td>
-						<td><span class="reply_mana">回复</span></td>
+						<td></td>
 					</tr>
 					<tr>
 						<td>

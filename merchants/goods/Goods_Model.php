@@ -13,7 +13,7 @@ class Goods_Model extends Model
     static $SHIPPING_FEE = 1;
     //运费模板
     static $SHIPPING_TEMPLATE = 2;
-    
+
     /**
      * 新增OR修改商品
      * @param Items $goods
@@ -580,14 +580,14 @@ class Goods_Model extends Model
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
         $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply = ''";
-        $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,comment.comment_id as comment_id,
+        $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,goods.goods_img as goods_img ,comment.comment_id as comment_id,
               comment.id_value as id_value ,comment.comment_reply as comment_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
               LEFT JOIN shp_goods goods on comment.id_value=goods.goods_id where {$where}
               order by add_time DESC limit {$limit}";
         $result = D()->query($sql)->fetch_array_all();
+        $result = self::buildGoodsImg($result);
         $pager->result = $result;
-        $sql = "select comment_reply from shp_comment where merchant_id='{$merchant_id}'";
         return $result;
     }
 
@@ -686,7 +686,8 @@ class Goods_Model extends Model
     {
         $merchant_id = $GLOBALS['user']->uid;
         $tablename = "`shp_attribute`";
-        $insertarr['attr_name'] = $attr_name;
+
+        $insertarr['attr_name'] = trim($attr_name);
         $insertarr['merchant_id'] = $merchant_id;
         $insertarr['cat_id'] = $cat_id;
 
@@ -700,7 +701,10 @@ class Goods_Model extends Model
      */
     static function checkAttrName($cat_id, $attr_name)
     {
-        $where = "attr_name in({$attr_name})";
+        $where ="attr_name ={$attr_name}";
+        if(strpos($attr_name,",")){
+            $where = "attr_name in({$attr_name})";
+        };
         $sql = "select attr_name from shp_attribute where cat_id = {$cat_id} and $where";
         return D()->query($sql)->result();
     }
@@ -714,7 +718,7 @@ class Goods_Model extends Model
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_attribute`";
         $setarr['sort_order'] = $sort_order;
-        $setarr['attr_name'] = $attr_name;
+        $setarr['attr_name'] = trim($attr_name);
         $wherearr['attr_id'] = $attr_id;
         D()->update($tablename, $setarr, $wherearr);
     }
@@ -739,7 +743,7 @@ class Goods_Model extends Model
             $where = "attr_id ={$attr_id}";
         }
         $tablename = "`shp_attribute`";
-       return D()->delete($tablename, $where);
+        return D()->delete($tablename, $where);
     }
 
     /**
