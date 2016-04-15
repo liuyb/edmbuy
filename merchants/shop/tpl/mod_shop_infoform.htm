@@ -134,7 +134,12 @@ function submitForm(){
 		if(ret.result == 'SUCC'){
 			//showMsg(ret.msg);
 			if(ret.msg == 'UPDATE'){
-				alert('to detail');
+//				alert('to detail');
+				showMsg("修改成功！");
+				setTimeout(function(){
+					window.location.href='/shop/step/detail'
+				},"2000");
+
 			}else{
 				window.location.href='/shop/step/template'
 			}

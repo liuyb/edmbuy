@@ -5,8 +5,8 @@
         <div id="store_type">
             <ul>
 
-                <li  <!--{if $shop_type=='template'}-->class='store_type_on'<!--{/if}-->  data-type='template'>当前使用模板</li>
-                <li  <!--{if $shop_type=='carousel'}-->class='store_type_on'<!--{/if}-->  data-type="carousel">首页轮播图</li>
+                <li  class='store_type_on'  data-type='template'>当前使用模板</li>
+                <li    data-type="carousel">首页轮播图</li>
             </ul>
         </div>
         <div id="inner_data">
@@ -17,10 +17,8 @@
 
 
 <script>
-    var shop_type="<!--{$shop_type}-->";
     $(function(){
-        var data ={"type":shop_type}
-        getHtml(data);
+        getHtml();
     })
     $("#dpzx").addClass("order_left_common");
     $(document).on('click','#store_type li',function(){

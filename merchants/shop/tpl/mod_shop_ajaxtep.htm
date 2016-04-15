@@ -13,10 +13,10 @@
 <!--[/HEAD_CSS]-->
 <div id="store_infos">
     <div class="repo_check">
-        <!--{if empty($tpl_image)}-->
+        <!--{if empty($current_tpl.tpl_image)}-->
         <img src="" id="tpl_image">
             <!--{else}-->
-        <img src="<!--{$tpl_image}-->" id="tpl_image">
+        <img src="<!--{$current_tpl.tpl_image}-->" id="tpl_image">
         <!--{/if}-->
     </div>
     <div class="repo_er">
@@ -31,7 +31,7 @@
     <div class="pore_use_check">
         <ul id="tpl_use">
             <!--{foreach from=$tpl item=val}-->
-            <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using <!--{if $val.enabled==1}-->using_on<!--{/if}--> " data-type="<!--{$val.tpl_id}-->"><!--{if $val.enabled==1}-->已启用 <!--{else}-->未启用<!--{/if}--></button></p></li>
+            <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using <!--{if $val.tpl_id==$current_tpl.tpl_id}-->using_on<!--{/if}--> " data-type="<!--{$val.tpl_id}-->"><!--{if $val.enabled==1}-->已启用 <!--{else}-->未启用<!--{/if}--></button></p></li>
             <!--{/foreach}-->
         </ul>
     </div>

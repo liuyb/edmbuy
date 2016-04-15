@@ -1,0 +1,75 @@
+<!--{add_css file="shop.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div id="store_right_finish">
+        <div id="store_infos">
+            <div id="store_pore"><p>店铺付费信息</p></div>
+
+            <div style="padding:20px 0">
+                <span class="store_pay_name">付款金额：</span><span class="store_right_f">699元</span>
+                <button class="store_data_btn">申请退款</button>
+            </div>
+
+            <div style="padding:0 0 20px;">
+                <span class="store_pay_name">激活日期：<i class="store_right_f">2016.3.3</i></span>
+                <span class="store_pay_name data_due">到期日期：<i class="store_right_f">2016.3.3</i></span>
+            </div>
+            <div style="padding:0 0 20px;">
+                <span class="store_pay_name">使用期限：<i class="store_right_f">1年</i></span>
+            </div>
+        </div>
+
+        <div id="store_infos" style="margin-top:20px;">
+            <div id="store_pore"><p>店铺付费信息</p>
+                <button class="data_btn_edit" id="edit_detail">编辑</button>
+            </div>
+
+            <table cellspacing="0" cellpadding="0" id="shop_data_tab">
+                <tr>
+                    <td class="data_tab_left">店铺名称：</td>
+                    <td class="data_tab_right"><!--{$shop_info.shop_name}--></td>
+                </tr>
+                <tr>
+                    <td class="data_tab_left">店铺logo：</td>
+                    <td class="data_tab_right">
+                        <div id="data_logo_file">
+                            <img src="<!--{$shop_info.shop_logo}-->">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="data_tab_left">联系电话：</td>
+                    <td class="data_tab_right"><!--{$shop_info.tel}--></td>
+                </tr>
+                <tr>
+                    <td class="data_tab_left">联系地址：</td>
+                    <td class="data_tab_right"><!--{$shop_info.address}--></td>
+                </tr>
+                <tr>
+                    <td class="data_tab_left">经营范围：</td>
+                    <td class="data_tab_right"><!--{$shop_info.business_scope}--></td>
+                </tr>
+                <tr>
+                    <td class="data_tab_left">店铺描述：</td>
+                    <td class="data_tab_right"><!--{$shop_info.shop_desc}--></td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class="data_tab_left">店铺招牌：</td>-->
+                    <!--<td class="data_tab_right sign_d"><img src="/themes/merchants/img/01_ba.png"></td>-->
+                <!--</tr>-->
+                <tr>
+                    <td class="data_tab_left">公众号二维码：</td>
+                    <td class="data_tab_right sign_code"><img src="<!--{$shop_info.shop_qrcode}-->"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#edit_detail").click(function(){
+        var shop_id =<!--{$shop_info.shop_id}-->;
+        var data ={"shop_id":shop_id};
+        window.location.href="/shop/info?shop_id="+shop_id;
+    })
+</script>

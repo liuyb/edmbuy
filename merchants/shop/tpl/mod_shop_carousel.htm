@@ -1,9 +1,10 @@
 <!--{add_css file="shop.css" scope="global"}-->
 <!--[HEAD_CSS]-->
 <style>
-    input{
+    input {
         padding-left: 4px !important;
     }
+
     #body {
         position: relative;
     }
@@ -188,11 +189,12 @@
         });
     }
     $(document).on('click', '.store_del', function () {
-//        var total = $("#store_table_list tr").length - 1;
-//        if (total - 1 <3) {
-//            showMsg("您不能这样做!");
-//            return;
-//        }
+        var total = $("#store_table_list tr").length - 1;
+        if (total - 1 <= 1
+        ) {
+            showMsg("不能删除!");
+            return;
+        }
         var $tr = $(this).parent().parent();
         var carousel = $tr.find(".carousel").val();
         showConfirm('确定要删除选中的轮播图吗？', function () {
@@ -202,7 +204,8 @@
                 var data = {"carousel_id": carousel};
                 F.postWithLoading('shop/carousel/del', data, function (data) {
                     layer.msg(data.retmsg);
-                    location.reload();
+                    $tr.remove();
+//                    location.reload();
                 });
             }
 
@@ -277,11 +280,12 @@
         }
     }
     $(".link_address").focus(
-            function(){
-                var obj =$(this);
+            function () {
+                var obj = $(this);
 
-                obj.attr("placeholder","");
-                obj.css("text-align","left");
+                obj.attr("placeholder", "");
+                obj.css("text-align", "left");
             }
     );
+
 </script>

@@ -13,29 +13,33 @@ class Shop_Model extends Model
      * 根据tpl_id拿到原图
      * @param $tpl_id
      */
-    static function getImg($tpl_id){
-        $sql ="select tpl_image from shp_shop_template where tpl_id = %d";
-        return D()->query($sql ,$tpl_id)->result();
+    static function getImg($tpl_id)
+    {
+        $sql = "select tpl_image from shp_shop_template where tpl_id = %d";
+        return D()->query($sql, $tpl_id)->result();
     }
+
     /**
      * 更新店铺的信息
      * @param $tpl_id
      */
-    static function updShopInformation($tpl_id){
+    static function updShopInformation($tpl_id)
+    {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
-        $tablename = "`shp_shop_template`";
-        $whereArr['merchant_id'] =$GLOBALS['user']->uid;
-        $setArr['shop_template'] =$tpl_id;
-        D()->update($tablename,$setArr,$whereArr);
+        $tablename = "`shp_shop_info`";
+        $whereArr['merchant_id'] = $GLOBALS['user']->uid;
+        $setArr['shop_template'] = $tpl_id;
+        return D()->update($tablename, $setArr, $whereArr);
     }
 
     /**
      * 判断用户是否配置了店铺信息
      */
-    static function checkShopStatus(){
-        $merchant_id =$GLOBALS['user']->uid;
-        $sql="select count(1) from shp_shop_info where merchant_id = '%s'";
-        return D()->query($sql,$merchant_id)->result();
+    static function checkShopStatus()
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select count(1) from shp_shop_info where merchant_id = '%s'";
+        return D()->query($sql, $merchant_id)->result();
     }
 
     /**
@@ -111,7 +115,7 @@ class Shop_Model extends Model
      */
     static function getMchTpl()
     {
-        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template where enabled = 1 order BY is_default DESC";
+        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template where enabled = 1 ";//order BY is_default DESC
         return D()->query($sql)->fetch_array_all();
     }
 
@@ -123,16 +127,9 @@ class Shop_Model extends Model
     {
         $merchant_id = $GLOBALS['user']->uid;
         //先判断用户有没有配置店铺信息
-        $sql = "select tpl.tpl_id ,info.shop_qrcode as shop_qrcode from shp_shop_template as tpl LEFT join shp_shop_info info on tpl.tpl_id = info.shop_template  where info.merchant_id= '%s' and tpl.enabled = 1";
-        $qrcode = D()->query($sql, $merchant_id)->get_one();
-        if ($qrcode) {
-            $qrcode['is_use'] = true;
-            return $qrcode;
-        }
-        $sql = "select tpl_id ,tpl_image from shp_shop_template where is_default =1";
-        $qrcode = D()->query($sql)->get_one();
-        $qrcode['is_use'] = false;
-        return $qrcode;
+        $sql = "select tpl.tpl_id  as tpl_id ,tpl.tpl_image as tpl_image from shp_shop_info info  LEFT join shp_shop_template as tpl on  info.shop_template = tpl.tpl_id  where info.merchant_id= '%s'";
+        return D()->query($sql, $merchant_id)->get_one();
+
     }
 
 
@@ -150,7 +147,7 @@ class Shop_Model extends Model
             $shop->shop_template = $defaultTmp ? $defaultTmp : 0;
         }
         $shop->update_time = time();
-        $shop->save($is_insert ? Storage::SAVE_INSERT :Storage::SAVE_UPDATE);
+        $shop->save($is_insert ? Storage::SAVE_INSERT : Storage::SAVE_UPDATE);
         return D()->affected_rows();
     }
 

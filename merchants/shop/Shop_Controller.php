@@ -13,6 +13,7 @@ class Shop_Controller extends MerchantController
     {
         return [
             'shop/template/use' => 'template_ajax',
+            'shop/details' => 'shop_details',
             'shop/template/getimg' => 'template_getimg',
             'shop/carousel/upload' => 'carousel_upload',
             'shop/carousel/list' => 'carousel_index',
@@ -47,7 +48,7 @@ class Shop_Controller extends MerchantController
         $this->v->set_tplname('mod_shop_index');
         if (!empty($_SESSION['shop_type'])) {
             $this->v->assign("shop_type", $_SESSION['shop_type']);
-        }else{
+        } else {
             $this->v->assign("shop_type", 'template');
         }
         $this->setSystemNavigate('shop');
@@ -65,8 +66,6 @@ class Shop_Controller extends MerchantController
         $show_page = true;
         $type = $request->get("type");
         $v = new PageView('mod_shop_ajaxtep', '_page_box');
-        $_SESSION['shop_type'] = $type;
-        $v->assign("shop_type", $type);
         if ($show_page) {
             if ($type == "carousel") {
                 $this->carousel_ajax($request, $response);
@@ -74,22 +73,16 @@ class Shop_Controller extends MerchantController
                 //查询出用户当前正在使用的模板
                 $tpl = Shop_Model::getMchTpl();
                 $isusetpl = Shop_Model::getCurentTpl();
-                if (!$isusetpl['is_use']) {
+                $dir = Fn::gen_qrcode_dir($isusetpl['tpl_id'], 'shop', true);
+                $locfile = $dir . $isusetpl['tpl_id'] . '.png';
+                if (!file_exists($locfile)) {
+                    mkdirs($dir);
                     $qrinfo = C("port.merchant_url");
-                    $dir = Fn::gen_qrcode_dir($isusetpl['tpl_id'], 'shop', true);
-                    $locfile = $dir . $isusetpl['tpl_id'] . '.png';
-                    if (!file_exists($locfile)) {
-                        if (mkdirs($dir)) ;
-                    }
                     include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
                     QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
-                } else {
-                    $locfile = $isusetpl['shop_qrcode'];
                 }
-                if (file_exists($locfile)) {
-                    $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
-                }
-                $v->assign("tpl_image", $isusetpl['tpl_image']);
+                $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+                $v->assign("current_tpl", $isusetpl);
                 $v->assign("tpl", $tpl);
                 $v->assign("dir", $qrcode);
                 $response->send($v);
@@ -108,11 +101,13 @@ class Shop_Controller extends MerchantController
         //得到img
         $img = Shop_Model::getImg($tpl_id);
         //更新店铺信息
-        Shop_Model::updShopInformation($tpl_id);
-        $res['retmsg'] = "启用模板成功！";
-        $res['status'] = 1;
-        $res['img'] = $img;
-        $response->sendJSON($res);
+        $result = Shop_Model::updShopInformation($tpl_id);
+        if ($result !== false) {
+            $res['retmsg'] = "启用模板成功！";
+            $res['status'] = 1;
+            $res['img'] = $img;
+            $response->sendJSON($res);
+        }
     }
 
     /**
@@ -189,12 +184,9 @@ class Shop_Controller extends MerchantController
         }
         $newid = [];
         foreach ($Arraydata as $val) {
-
             if ($val[0] > 0) {
                 //删除轮播
                 array_push($newid, $val[0]);
-            } elseif ($val[0] > 0 && in_array($val[0], $ids)) {
-
                 Shop_Model::updCarouse($val[0], $val[1], $val[2], $val[3]);
             }
             if ($val[0] == 0) {
@@ -206,12 +198,12 @@ class Shop_Controller extends MerchantController
             if (!in_array($id['carousel_id'], $newid)) {
                 Shop_Model::delCarouse($val[0]);
             }
-
         }
         $res['retmsg'] = "操作成功!";
         $res['status'] = 1;
         $response->sendJSON($res);
     }
+
 
     public function settlement_manager(Request $request, Response $response)
     {
@@ -269,7 +261,7 @@ class Shop_Controller extends MerchantController
         $shop = Shop_Model::getShopByMerchantId();
         if ($shop && $shop['shop_id']) {
             //店铺已经存在，则跳转到店铺资料页面
-            $response->redirect('/aa');
+            $response->redirect('/shop');
         }
         $this->v->set_tplname('mod_shop_start');
         $business_scope = Shop::getBusinessScope();
@@ -280,16 +272,18 @@ class Shop_Controller extends MerchantController
         $response->send($this->v);
     }
 
-    public function shop_template_step(Request $request, Response $response){
+    public function shop_template_step(Request $request, Response $response)
+    {
         $this->v->set_tplname('mod_shop_template');
         $response->send($this->v);
     }
-    
-    public function shop_finished_step(Request $request, Response $response){
+
+    public function shop_finished_step(Request $request, Response $response)
+    {
         $this->v->set_tplname('mod_shop_finished');
         $response->send($this->v);
     }
-    
+
     public function shop_info(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_shop_start');
@@ -300,11 +294,11 @@ class Shop_Controller extends MerchantController
             Fn::show_pcerror_message();
         }
         $business_scope = Shop::getBusinessScope();
-        if($shop->business_scope){
-            foreach ($business_scope as &$scope){
-                $needle = ",".$scope['cat_id'].","; 
+        if ($shop->business_scope) {
+            foreach ($business_scope as &$scope) {
+                $needle = "," . $scope['cat_id'] . ",";
                 $isSelected = strpos($shop->business_scope, $needle);
-                if(is_numeric($isSelected)){
+                if (is_numeric($isSelected)) {
                     $scope['selected'] = 1;
                 }
             }
@@ -405,8 +399,20 @@ class Shop_Controller extends MerchantController
             }
             $response->sendJSON($ret);
         }
-
-
     }
 
+    /**
+     * 店铺资料
+     * @param Request $request
+     * @param Response $response
+     */
+    public function shop_details(Request $request, Response $response)
+    {
+        $this->v->set_tplname("mod_shop_details");
+        $this->setPageLeftMenu('shop', 'details');
+        //查出店铺所有信息
+        $result = Shop_Model::getShopByMerchantId();
+        $this->v->assign('shop_info',$result);
+        $response->send($this->v);
+    }
 }
