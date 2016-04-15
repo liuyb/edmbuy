@@ -1,0 +1,49 @@
+<!--[HEAD_CSS]-->
+<style>
+    .pore_use_check li{
+        display:inline-block;
+        text-align:center;
+        margin:0 23px;
+    }
+    .pore_use_check img{
+        width:200px;
+        height:358px;
+    }
+</style>
+<!--[/HEAD_CSS]-->
+<div id="store_infos">
+    <div class="repo_check"><img src="<!--{$tpl_image}-->" id="tpl_image"></div>
+    <div class="repo_er">
+        <p><img src="<!--{$dir}-->"></p>
+
+        <p style="color:#999;font-size:13px;margin-left:-15px;">手机扫描此二维码，可直接在手机上访问商城</p>
+    </div>
+    <div class="clear"></div>
+</div>
+<div id="store_infos" style="margin:20px 0;">
+    <div id="store_pore"><p>可选用模板</p></div>
+    <div class="pore_use_check">
+        <ul id="tpl_use">
+            <!--{foreach from=$tpl item=val}-->
+            <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using <!--{if $val.enabled==1}-->using_on<!--{/if}--> " data-type="<!--{$val.tpl_id}-->"><!--{if $val.enabled==1}-->已启用 <!--{else}-->未启用<!--{/if}--></button></p></li>
+            <!--{/foreach}-->
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(".repo_start_using").click(function () {
+        var obj = $(this);
+        if (!obj.hasClass("using_on")) {
+            $("#tpl_use").find(".using_on").removeClass("using_on").html("未启用");
+            obj.addClass("using_on");
+            obj.html("已启用");
+            var tpl_id = obj.attr("data-type");
+            var data = {"tpl_id":tpl_id};
+            F.postWithLoading('shop/template/getimg', data, function (data) {
+                showMsg(data.retmsg);
+                $("#tpl_image").attr("src", data.img);
+            });
+        }
+    })
+</script>
