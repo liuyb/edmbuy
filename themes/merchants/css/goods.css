@@ -72,26 +72,20 @@
 .search_result_tab img{
 	width:40px;
 	height:40px;
-	margin-top:9px;
 }
 .slaes_among{
 	background: url(../img/f26427.png) no-repeat right !important;
 	padding-right:20px;
 }
 .goods_name{
-	margin-top: 10px;
-	height: 40px;
-	float: left;
-	width: 120px;
-	line-height: 20px;
-	-webkit-line-clamp: 2;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	overflow:hidden;
+  	text-align: left;
+  	margin: 6px 0;
+  	float: left;
+  	width: 200px;	
 }
 .goods_img{
 	float:left;
-	margin:-1px 10px 0 10px;
+	margin:10px;
 }
 .goods_edit{
 	background: url(../img/edit_11.png) no-repeat top;
@@ -384,14 +378,9 @@
 	top:0;
 }
 .manage_goods_name{
-	height: 42px;
-	float: left;
-	width: 300px;
-	line-height: 20px;
-	-webkit-line-clamp: 2;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	overflow:hidden;
+  	float: left;
+  	width: 300px;
+  	margin: 10px;	
 }
 .f_type_name {
 	background: url(../img/jiantou1.png) no-repeat 30%;

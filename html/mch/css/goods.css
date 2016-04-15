@@ -114,32 +114,22 @@
 .search_result_tab img{
 	width:40px;
 	height:40px;
-	margin-top:10px;
 }
 .goods_name{
-  	margin-top: 10px;
-  	height: 40px;
+  	text-align: left;
+  	margin: 6px 0;
+  	/* height: 40px; */
   	float: left;
-  	width: 120px;
-  	line-height: 20px;	
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;	
-	overflow:hidden;	
+  	width: 240px;	
 }
 .manage_goods_name{
-  	height: 42px;
   	float: left;
   	width: 300px;
-  	line-height: 20px;	
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;	
-	overflow:hidden;	
+ 	margin: 10px;	
 }
 .goods_img{
 	float:left;
-	margin:-1px 10px 0 10px;
+	margin:10px;
 }
 .goods_edit{
   	background: url(../img/edit_11.png) no-repeat top;

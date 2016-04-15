@@ -1,13 +1,13 @@
 
 <table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
     <tr>
-        <th>评价商品</th>
-        <th>评价内容</th>
+        <th width="280px">评价商品</th>
+		<th width="280px">评价内容</th>
         <th>商品评分</th>
         <th>评价人</th>
         <th>日期</th>
         <th>状态</th>
-        <th>操作</th>
+        <th width="80px">操作</th>
     </tr>
     <!--{foreach from=$commentList item=val}-->
     <tr>
@@ -43,7 +43,7 @@
     </tr>
     <!--{/foreach}-->
 </table>
-<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:10px;"></div>
+<div id="kkpager<!--{$current}-->" class="kkpager"  style="float:right;clear:none;padding:20px 10px;"></div>
 <div class="clear"></div>
 <script>
     var curpage =<!--{$page.curpage}-->
