@@ -396,6 +396,27 @@ class Func extends CStatic {
   }
   
   /**
+   * 返回区域选择列表数据
+   * @param unknown $objView
+   * @param unknown $province
+   * @param unknown $city
+   */
+  public static function assign_regions($objView, $province, $city){
+      /* 取得省份 */
+      $objView->assign('province_list', Order::get_regions(1, 1));//$order->country 这里默认是中国 不动态取
+      if ($province > 0)
+      {
+          /* 取得城市 */
+          $objView->assign('city_list', Order::get_regions(2, $province));
+          if ($city > 0)
+          {
+              /* 取得区域 */
+              $objView->assign('district_list', Order::get_regions(3, $city));
+          }
+      }
+  }
+  
+  /**
    * @from extend.php
    * 过滤xss攻击
    * @param str $val

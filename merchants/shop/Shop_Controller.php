@@ -23,6 +23,8 @@ class Shop_Controller extends MerchantController
             'shop/settlement/list' => 'settlement_list',
             'shop/settlement/order' => 'settlement_orders',
             'shop/start' => 'shop_start',
+            'shop/step/template' => 'shop_template_step',
+            'shop/step/finish' => 'shop_finished_step',
             'shop/info' => 'shop_info',
             'shop/logo' => 'shop_logo_upload',
             'shop/qrcode' => 'shop_qrcode_upload',
@@ -45,6 +47,8 @@ class Shop_Controller extends MerchantController
         $this->v->set_tplname('mod_shop_index');
         if (!empty($_SESSION['shop_type'])) {
             $this->v->assign("shop_type", $_SESSION['shop_type']);
+        }else{
+            $this->v->assign("shop_type", 'template');
         }
         $this->setSystemNavigate('shop');
         $this->setPageLeftMenu('shop', 'list');
@@ -276,6 +280,16 @@ class Shop_Controller extends MerchantController
         $response->send($this->v);
     }
 
+    public function shop_template_step(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_template');
+        $response->send($this->v);
+    }
+    
+    public function shop_finished_step(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_finished');
+        $response->send($this->v);
+    }
+    
     public function shop_info(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_shop_start');
@@ -286,15 +300,18 @@ class Shop_Controller extends MerchantController
             Fn::show_pcerror_message();
         }
         $business_scope = Shop::getBusinessScope();
-        if ($shop->business_scope) {
-            foreach ($business_scope as $scope) {
-                if (strpos("," . $scope['cat_id'] . ",", $shop->business_scope) > 0) {
+        if($shop->business_scope){
+            foreach ($business_scope as &$scope){
+                $needle = ",".$scope['cat_id'].","; 
+                $isSelected = strpos($shop->business_scope, $needle);
+                if(is_numeric($isSelected)){
                     $scope['selected'] = 1;
                 }
             }
         }
+        Func::assign_regions($this->v, $shop->province, $shop->city);
         $this->v->assign('busi_scope', $business_scope);
-        $this->v->assign('province_list', Order::get_regions(1, 1));
+        //$this->v->assign('province_list', Order::get_regions(1, 1));
         $this->v->assign('shop', $shop);
         $response->send($this->v);
     }
@@ -377,7 +394,7 @@ class Shop_Controller extends MerchantController
                 if ($flag) {
                     $ret = [
                         'result' => 'SUCC',
-                        'msg' => '创建成功'
+                        'msg' => $shop_id ? 'UPDATE' : 'CREATE'
                     ];
                 } else {
                     $ret = [

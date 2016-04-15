@@ -1,0 +1,22 @@
+<!--{add_css file="/themes/merchants/css/shop.css" scope="module"}-->
+<div class="one_password" style="margin-bottom:80px;">
+	<img src="/themes/merchants/img/yzsf1.png"><img src="/themes/merchants/img/szmm3.png"><img src="/themes/merchants/img/wc2.png">
+</div>
+
+<div id="inner_data"></div>
+
+<div style="text-align:center;margin-bottom:40px;">
+	<button class="next_btn" onclick="nextTemplate();">下一步</button>
+</div>
+
+<script>
+$(function(){
+	F.get('/shop/template/use', {}, function(ret){
+        $("#inner_data").html(ret);
+    },"HTML");
+});
+
+function nextTemplate(){
+	window.location.href = '/shop/step/finish';
+}
+</script>

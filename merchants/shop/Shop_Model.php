@@ -111,7 +111,7 @@ class Shop_Model extends Model
      */
     static function getMchTpl()
     {
-        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template  order BY enabled DESC";
+        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template where enabled = 1 order BY is_default DESC";
         return D()->query($sql)->fetch_array_all();
     }
 
@@ -150,7 +150,7 @@ class Shop_Model extends Model
             $shop->shop_template = $defaultTmp ? $defaultTmp : 0;
         }
         $shop->update_time = time();
-        $shop->save($is_insert ? Storage::SAVE_INSERT : Storage::UPDATE);
+        $shop->save($is_insert ? Storage::SAVE_INSERT :Storage::SAVE_UPDATE);
         return D()->affected_rows();
     }
 

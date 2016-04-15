@@ -9,7 +9,7 @@
 			<td class="flow_one_left">店铺logo：</td>
 			<td class="flow_one_right">
 				<div id="logo_file">
-					<img src="/themes/merchants/img/3.png" style="margin:7px;" id="shop_logo">
+					<img src="<!--{if $shop->shop_logo}--><!--{$shop->shop_logo}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="margin:7px;" id="shop_logo">
 					<input type="file" id="file" name="file" class="store_logo_file" onchange="logoUpload(event);">	
 				</div>
 				<div style="font-size:13px;color:#ccc;margin-top:5px">logo尺寸标准为320*320</div>
@@ -75,7 +75,7 @@
 			<td class="flow_one_left">公众号二维码：</td>
 			<td class="flow_one_right">
 				<div id="logo_file_code">
-					<img src="/themes/merchants/img/3.png" style="margin:51px;" id="shop_qrcode">
+					<img src="<!--{if $shop->shop_qrcode}--><!--{$shop->shop_qrcode}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="margin:51px;" id="shop_qrcode">
 					<input type="file" id="file" name="file" class="logo_file_code" onchange="qrcodeUpload(event);">	
 				</div>
 				<!-- <button class="feil_code_btn">上传二维码</button> -->
@@ -84,7 +84,12 @@
 		<tr>
 			<td class="flow_one_left"></td>
 			<td class="flow_one_right">
+				<!--{if $shop->shop_id}-->
+				<button class="next_btn" type="submit">保存</button>
+				<input type="hidden" name="shop_id" value="<!--{$shop->shop_id}-->" id="shop_id"/>
+				<!--{else}-->
 				<button class="next_btn" type="submit">下一步</button>
+				<!--{/if}-->
 			</td>
 		</tr>
 	</table>
@@ -127,7 +132,12 @@ function submitForm(){
 	smtBtn.css("opacity", 0.2).attr("disabled");
 	F.postWithLoading('/shop/setup', data, function(ret){
 		if(ret.result == 'SUCC'){
-			showMsg(ret.msg);
+			//showMsg(ret.msg);
+			if(ret.msg == 'UPDATE'){
+				alert('to detail');
+			}else{
+				window.location.href='/shop/step/template'
+			}
 		}else{
 			showMsg(ret.msg);
 			smtBtn.css("opacity", 1).removeAttr("disabled");
