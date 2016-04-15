@@ -122,52 +122,6 @@
                 <span class="store_del">删除</span>
             </td>
         </tr>
-        <tr>
-            <td>
-                <input class="link_id link_address_on" type="text" value="2" disabled="true">
-            </td>
-            <td>
-                <div class="browse">
-                    浏览
-                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
-                </div>
-                <input type="hidden" class="img" value=""/>
-                <input type="hidden" class="carousel" value="0"/>
-
-                <div class="file_save">
-                </div>
-                <div class="offer_size">建议尺寸640*250px</div>
-            </td>
-            <td><input class="link_address link_address_on" type="text"
-                       value="" disabled="true" placeholder="请输入链接地址"></td>
-            <td>
-                <span class="store_edit">编辑</span>
-                <span class="store_del">删除</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input class="link_id link_address_on" type="text" value="3" disabled="true">
-            </td>
-            <td>
-                <div class="browse">
-                    浏览
-                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
-                </div>
-                <input type="hidden" class="img" value=""/>
-                <input type="hidden" class="carousel" value="0"/>
-
-                <div class="file_save">
-                </div>
-                <div class="offer_size">建议尺寸640*250px</div>
-            </td>
-            <td><input class="link_address link_address_on" type="text"
-                       value="" disabled="true" placeholder="请输入链接地址"></td>
-            <td>
-                <span class="store_edit">编辑</span>
-                <span class="store_del">删除</span>
-            </td>
-        </tr>
         <!--{/foreach}-->
     </table>
 
@@ -239,7 +193,7 @@
 //        }
         var $tr = $(this).parent().parent();
         var carousel = $tr.find(".carousel").val();
-        showConfirm('确定要删除选中的商品吗？', function () {
+        showConfirm('确定要删除选中的轮播图吗？', function () {
             if (carousel == 0) {
                 $tr.remove();
             } else if (carousel > 0) {
