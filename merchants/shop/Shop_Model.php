@@ -167,6 +167,8 @@ class Shop_Model extends Model
         $list = D()->query($sql)->fetch_column();
         if (count($list) > 0) {
             $result["business_scope"] = implode(",", $list);
+        }else{
+            $result["business_scope"] = "";
         }
         $regionIds = [$result['province'], $result['city'], $result['district']];
         $adrrstr = Order::getOrderRegion($regionIds);
