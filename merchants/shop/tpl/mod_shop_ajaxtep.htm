@@ -20,8 +20,11 @@
         <!--{/if}-->
     </div>
     <div class="repo_er">
+            <!--{if $dir}-->
         <p><img src="<!--{$dir}-->"></p>
-
+             <!--{else}-->
+        <p><img src=""></p>
+            <!--{/if}-->
         <p style="color:#999;font-size:13px;margin-left:-15px;">手机扫描此二维码，可直接在手机上访问商城</p>
     </div>
     <div class="clear"></div>
@@ -30,25 +33,34 @@
     <div id="store_pore"><p>可选用模板</p></div>
     <div class="pore_use_check">
         <ul id="tpl_use">
+            <li id="current_tpl"><p style="margin:10px 0"><!--{$current_tpl.tpl_name}--></p><img src="<!--{$current_tpl.tpl_thumb}-->"><p><button class="repo_start_using using_on" data-type="<!--{$current_tpl.tpl_id}-->">已启用</button></p></li>
             <!--{foreach from=$tpl item=val}-->
-            <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using <!--{if $val.tpl_id==$current_tpl.tpl_id}-->using_on<!--{/if}--> " data-type="<!--{$val.tpl_id}-->"><!--{if  $val.tpl_id==$current_tpl.tpl_id}-->已启用 <!--{else}-->未启用<!--{/if}--></button></p></li>
+                <!--{if  $val.tpl_id!=$current_tpl.tpl_id}-->
+            <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using" data-type="<!--{$val.tpl_id}-->">未启用</button></p></li>
+                 <!--{/if}-->
             <!--{/foreach}-->
         </ul>
     </div>
 </div>
 
 <script>
-    $(".repo_start_using").click(function () {
+    $(document).on('click','.repo_start_using',function () {
         var obj = $(this);
+        var $_li= $(this).parent().parent();
         if (!obj.hasClass("using_on")) {
             $("#tpl_use").find(".using_on").removeClass("using_on").html("未启用");
             obj.addClass("using_on");
             obj.html("已启用");
             var tpl_id = obj.attr("data-type");
             var data = {"tpl_id":tpl_id};
-            F.postWithLoading('shop/template/getimg', data, function (data) {
-                showMsg(data.retmsg);
+            F.postWithLoading('/shop/template/getimg', data, function (data) {
                 $("#tpl_image").attr("src", data.img);
+                var html=$("#current_tpl").html();
+                var current = $_li.html();
+                $("#current_tpl").html(current);
+                $_li.html(html);
+                showMsg(data.retmsg);
+
             });
         }
     })

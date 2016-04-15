@@ -38,7 +38,7 @@ class Shop_Model extends Model
     static function checkShopStatus()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select count(1) from shp_shop_info where merchant_id = '%s'";
+        $sql = "select count(1) from shp_merchant where merchant_id = '%s' and is_completed = 1";
         return D()->query($sql, $merchant_id)->result();
     }
 
@@ -115,7 +115,7 @@ class Shop_Model extends Model
      */
     static function getMchTpl()
     {
-        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order from shp_shop_template where enabled = 1 ";//order BY is_default DESC
+        $sql = "select tpl_id ,tpl_name,tpl_thumb,tpl_image, enabled,sort_order  from shp_shop_template where enabled = 1 ";//
         return D()->query($sql)->fetch_array_all();
     }
 
@@ -127,7 +127,7 @@ class Shop_Model extends Model
     {
         $merchant_id = $GLOBALS['user']->uid;
         //先判断用户有没有配置店铺信息
-        $sql = "select tpl.tpl_id  as tpl_id ,tpl.tpl_image as tpl_image from shp_shop_info info  LEFT join shp_shop_template as tpl on  info.shop_template = tpl.tpl_id  where info.merchant_id= '%s'";
+        $sql = "select tpl.tpl_id  as tpl_id ,tpl.tpl_image as tpl_image,tpl.tpl_name as tpl_name ,tpl.tpl_thumb as tpl_thumb from shp_shop_info info  LEFT join shp_shop_template as tpl on  info.shop_template = tpl.tpl_id  where info.merchant_id= '%s'";
         return D()->query($sql, $merchant_id)->get_one();
 
     }
@@ -154,7 +154,25 @@ class Shop_Model extends Model
     {
         $sql = "select * from shp_merchant where merchant_id = '%s' ";
         $result = D()->query($sql, $GLOBALS['user']->uid)->get_one();
+        if ($result) {
+            $business_scope = $result['business_scope'];
+            $business_scope = rtrim($business_scope, ",");
+            $business_scope = ltrim($business_scope, ",");
+            $where = "cat_id = {$business_scope}";
+            if (strpos($business_scope, ",")) {
+                $where = "cat_id in ({$business_scope})";
+            };
+        }
+        $sql = "select cat_name from shp_business_category where  {$where}";
+        $list = D()->query($sql)->fetch_column();
+        if (count($list) > 0) {
+            $result["business_scope"] = implode(",", $list);
+        }
+        $regionIds = [$result['province'], $result['city'], $result['district']];
+        $adrrstr = Order::getOrderRegion($regionIds);
+        $result['address'] = $adrrstr . $result['address'];
         return $result;
+
     }
 
     /**

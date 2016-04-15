@@ -46,11 +46,6 @@ class Shop_Controller extends MerchantController
             $response->redirect("/shop/start");
         }
         $this->v->set_tplname('mod_shop_index');
-        if (!empty($_SESSION['shop_type'])) {
-            $this->v->assign("shop_type", $_SESSION['shop_type']);
-        } else {
-            $this->v->assign("shop_type", 'template');
-        }
         $this->setSystemNavigate('shop');
         $this->setPageLeftMenu('shop', 'list');
         $response->send($this->v);
@@ -73,15 +68,19 @@ class Shop_Controller extends MerchantController
                 //查询出用户当前正在使用的模板
                 $tpl = Shop_Model::getMchTpl();
                 $isusetpl = Shop_Model::getCurentTpl();
-                $dir = Fn::gen_qrcode_dir($isusetpl['tpl_id'], 'shop', true);
-                $locfile = $dir . $isusetpl['tpl_id'] . '.png';
-                if (!file_exists($locfile)) {
-                    mkdirs($dir);
-                    $qrinfo = C("port.merchant_url");
-                    include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
-                    QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+                if ($isusetpl['tpl_id']) {
+                    $dir = Fn::gen_qrcode_dir($isusetpl['tpl_id'], 'shop', true);
+                    $locfile = $dir . $isusetpl['tpl_id'] . '.png';
+                    if (!file_exists($locfile)) {
+                        mkdirs($dir);
+                        $qrinfo = C("port.merchant_url");
+                        include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+                        QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+                    }
+                      $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+                } else {
+                    $qrcode = "";
                 }
-                $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
                 $v->assign("current_tpl", $isusetpl);
                 $v->assign("tpl", $tpl);
                 $v->assign("dir", $qrcode);
@@ -289,7 +288,8 @@ class Shop_Controller extends MerchantController
 
     public function shop_info(Request $request, Response $response)
     {
-        $this->v->set_tplname('mod_shop_start');
+        $this->v->set_tplname('mod_shop_infoform');
+        $this->setPageLeftMenu('shop', 'details');
         $shop = Merchant::load($GLOBALS['user']->uid);
         if(!$shop->is_completed){
             $response->redirect('/shop/start');
@@ -364,7 +364,6 @@ class Shop_Controller extends MerchantController
             $business_scope = $request->post('business_scope', '');
             //$shop_sign = $request->post('shop_sign');
             $shop_qrcode = $request->post('shop_qrcode', '');
-            $shop_template = $request->post('shop_template', 0);
             $act = $request->post('act', '');
             if (Shop_Model::isShopNameExists($shop_name)) {
                 $ret = [
@@ -384,8 +383,10 @@ class Shop_Controller extends MerchantController
                 $shop->shop_desc = $shop_desc;
                 $shop->business_scope = $business_scope;
                 $shop->wxqr = $shop_qrcode;
-                $shop->shop_template = $shop_template;
                 $shop->is_completed = 1;
+                if(!$shop->shop_template){
+                    $shop->shop_template = Shop_Model::getDefaultTemplate();
+                }
                 $shop->save(Storage::SAVE_UPDATE);
                 $flag = D()->affected_rows();
                 if ($flag) {
