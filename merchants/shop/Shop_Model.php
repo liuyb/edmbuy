@@ -10,6 +10,35 @@ class Shop_Model extends Model
 {
 
     /**
+     * 根据tpl_id拿到原图
+     * @param $tpl_id
+     */
+    static function getImg($tpl_id){
+        $sql ="select tpl_image from shp_shop_template where tpl_id = %d";
+        return D()->query($sql ,$tpl_id)->result();
+    }
+    /**
+     * 更新店铺的信息
+     * @param $tpl_id
+     */
+    static function updShopInformation($tpl_id){
+//        update($tablename, Array $setarr, $wherearr, $flag = '')
+        $tablename = "`shp_shop_template`";
+        $whereArr['merchant_id'] =$GLOBALS['user']->uid;
+        $setArr['shop_template'] =$tpl_id;
+        D()->update($tablename,$setArr,$whereArr);
+    }
+
+    /**
+     * 判断用户是否配置了店铺信息
+     */
+    static function checkShopStatus(){
+        $merchant_id =$GLOBALS['user']->uid;
+        $sql="select count(1) from shp_shop_info where merchant_id = '%s'";
+        return D()->query($sql,$merchant_id)->result();
+    }
+
+    /**
      * 查询用户所有的轮播图
      */
     static function selCarousel()

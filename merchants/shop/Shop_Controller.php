@@ -13,6 +13,7 @@ class Shop_Controller extends MerchantController
     {
         return [
             'shop/template/use' => 'template_ajax',
+            'shop/template/getimg' => 'template_getimg',
             'shop/carousel/upload' => 'carousel_upload',
             'shop/carousel/list' => 'carousel_index',
             'shop/carousel/add' => 'carousel_add',
@@ -27,6 +28,7 @@ class Shop_Controller extends MerchantController
             'shop/qrcode' => 'shop_qrcode_upload',
             'shop/setup' => 'shop_info_save'
         ];
+
     }
 
     /**
@@ -38,7 +40,7 @@ class Shop_Controller extends MerchantController
     {
         $result = Shop_Model::checkShopStatus();
         if (!$result) {
-            $this->redirect("/manager");
+            $response->redirect("/shop/start");
         }
         $this->v->set_tplname('mod_shop_index');
         if (!empty($_SESSION['shop_type'])) {
