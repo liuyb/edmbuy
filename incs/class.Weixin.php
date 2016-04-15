@@ -914,7 +914,7 @@ class WeixinJSSDK {
    * 
    * @var string
    */
-  private static $sdkFile = 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js';
+  private static $sdkFile = 'http://res.wx.qq.com/open/js/jweixin-1.1.0.js'; //旧版本是: jweixin-1.0.0.js
   
   /**
    * Weixin Object

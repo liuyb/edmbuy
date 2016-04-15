@@ -209,6 +209,29 @@ class Tpl extends TplBase {
     return $result;
   }
   
+  /**
+   * 图片延迟加载函数标签
+   * @param array  $params
+   * @param string $tpl
+   * @return string
+   */
+  static function imglazyload($params, $tpl = NULL) {
+  	$src = isset($params['src']) ? trim($params['src']) : '';
+  	$default_src = isset($params['default_src']) ? trim($params['default_src']) : '';
+  	return imglazyload($src, $default_src);
+  }
+  
+  /**
+   * 图片队列加载函数标签
+   * @param array  $params
+   * @param string $tpl
+   * @return string
+   */
+  static function imgqueueload($params, $tpl = NULL) {
+  	$src = isset($params['src']) ? trim($params['src']) : '';
+  	$default_src = isset($params['default_src']) ? trim($params['default_src']) : '';
+  	return imgqueueload($src, $default_src);
+  }
 }
  
 /*----- END FILE: class.Tpl.php -----*/

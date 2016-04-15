@@ -90,6 +90,19 @@ class Item_Controller extends MobileController {
 								$item->item_desc = str_replace('src="'.$psrc.'"', 'src="'.$src_parsed.'"', $item->item_desc);
 							}
 						}
+						$default_src = emptyimg();
+						$extra_js =<<<HEREDOC
+<script type="text/javascript">
+$(function(){
+	$('#list1 .product_detail img').each(function(){
+		var _orisrc = $(this).attr('src');
+		$(this).attr('data-loaded','0').attr('src','{$default_src}');
+		imgQueueLoad(this,_orisrc);
+	});
+});
+</script>
+HEREDOC;
+						$item->item_desc .= $extra_js;
 					}
 				}
 				

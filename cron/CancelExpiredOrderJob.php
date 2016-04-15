@@ -25,7 +25,7 @@ class CancelExpiredOrderJob extends CronJob {
     
     private function findAllExpiredOrders(){
     	  $sec = self::$ORDER_EXPIRED_TIME * 3600;
-        $sql = 'SELECT order_id FROM shp_order_info WHERE pay_status IN(0,1,6) AND is_separate = 0
+        $sql = 'SELECT order_id FROM shp_order_info WHERE pay_status IN(0,1,6) AND pay_time=0 AND is_separate = 0
                 AND add_time < (UNIX_TIMESTAMP(UTC_TIMESTAMP())-%d)';
         $reult = D()->query($sql, $sec)->fetch_array_all();
         return $reult;

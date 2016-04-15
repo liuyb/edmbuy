@@ -26,6 +26,68 @@
 	_img.src = thesrc;
 	return;
 }
+//img queueload
+function imgQueueLoad(img, thesrc) {
+	if (typeof(imgQueueLoad.queue)=='undefined') {
+		imgQueueLoad.queue = [];
+	}
+	if (typeof(img)=='undefined') { // No parameters input
+	    var nlist = document.querySelectorAll('img.imgQueueLoad');
+	    if (nlist && nlist.length>0) {
+	    	[].forEach.call(nlist, function(n) {
+	    	  thesrc = n.getAttribute('data-orisrc');
+	    	  if (thesrc) {
+	    		  imgQueueLoad.queue.push({img:n,src:thesrc}); // In queue
+	    	  }
+	    	});
+	    }
+	}
+	else {
+		imgQueueLoad.queue.push({img:img,src:thesrc}); // In queue
+	}
+	runImgQueue(); // Trigger queue
+}
+function runImgQueue() {
+	// Initialization
+	if (typeof(runImgQueue.loading)=='undefined') {
+		runImgQueue.loading = 0;
+	}
+	if (runImgQueue.loading) return; // When is loading, then return directly
+	
+	// Out queue
+	runImgQueue.loading = 1;
+	var q;
+	if (imgQueueLoad.queue.length>0) {
+		q = imgQueueLoad.queue.shift();
+	}
+	if (!q) {
+		runImgQueue.loading = 0;
+		return;
+	}
+	
+	// Set onload & onerror
+	q.img.onerror = q.img.onload = null;
+	var _img = new Image();
+	_img.onload = function() {
+		this.onload = null;
+		q.img.src = this.src;
+		imgLoaded(q.img);
+		runImgQueue.loading = 0;
+		runImgQueue(); // Next one in the queue
+	};
+	_img.onerror = function() {
+		this.onerror = null;
+		runImgQueue.loading = 0;
+		runImgQueue(); // Next one in the queue
+	}
+	
+	// Loading
+	_img.src = q.src;
+	return;
+}
+$(function(){
+	imgQueueLoad();
+});
 
 //Form checking
 ;function checkUsername(username){

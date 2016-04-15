@@ -130,6 +130,34 @@ function ploadingimg()
 }
 
 /**
+ * 延迟加载图片模板函数
+ * @param string $src
+ * @param string $default_src
+ * @return string
+ */
+function imglazyload($src, $default_src = '') {
+	if (!$default_src) {
+		$default_src = ploadingimg();
+	}
+	$html = '<img src="'.$default_src.'" data-loaded="0" data-orisrc="'.$src.'" onload="imgLazyLoad(this,\''.$src.'\')" alt="" />';
+	return $html;
+}
+
+/**
+ * 队列加载图片模板函数
+ * @param string $src
+ * @param string $default_src
+ * @return string
+ */
+function imgqueueload($src, $default_src = '') {
+	if (!$default_src) {
+		$default_src = ploadingimg();
+	}
+	$html = '<img src="'.$default_src.'" data-loaded="0" data-orisrc="'.$src.'" class="imgQueueLoad" alt="" />';
+	return $html;
+}
+
+/**
  * 跟踪调试，结果保存在数据库表: tb_debug
  * @param string $key
  * @param mixed $val

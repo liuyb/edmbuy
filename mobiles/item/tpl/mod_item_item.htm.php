@@ -101,7 +101,7 @@ $(function(){
   <div class="swipe">
     <ul id="slider" class="slider">
     <?php $i=0; foreach ($galleries AS $g):?>
-    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><img src="<?php echo ploadingimg()?>" data-loaded="0" data-orisrc="<?=$g->img_url?>" onload="imgLazyLoad(this,'<?=$g->img_url?>')" alt="" /></a></li>
+    <li <?php if($i++==0):?>style="display:block"<?php endif;?>><a href="javascript:;"><?php echo imgqueueload($g->img_url)?></a></li>
     <?php endforeach;?>
     </ul>
     <div id="slinav" class="slinav clearfix">
@@ -225,7 +225,7 @@ $(function(){
 </div>
 
 <script>
-$(document).ready(function(){
+$(function(){
 
 	//缓存对象
 	var $mask     = $("#bodymask");
