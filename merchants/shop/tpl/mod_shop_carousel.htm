@@ -1,7 +1,9 @@
 <!--{add_css file="shop.css" scope="global"}-->
 <!--[HEAD_CSS]-->
 <style>
-
+    input{
+        padding-left: 4px !important;
+    }
     #body {
         position: relative;
     }
@@ -157,7 +159,7 @@
                 "</div>" +
                 "<div class='offer_size'>建议尺寸640*250px</div>" +
                 "</td>" +
-                "<td><input class='link_address '   type='text' value=''placeholder='请输入链接地址'></td>" +
+                "<td><input class='link_address '   type='text' value='' placeholder='请输入链接地址'></td>" +
                 "<td>" +
                 "<span class='store_edit'>编辑</span>" +
                 "<span class='store_del'>删除</span>" +
@@ -274,5 +276,12 @@
             return;
         }
     }
+    $(".link_address").focus(
+            function(){
+                var obj =$(this);
 
+                obj.attr("placeholder","");
+                obj.css("text-align","left");
+            }
+    );
 </script>
