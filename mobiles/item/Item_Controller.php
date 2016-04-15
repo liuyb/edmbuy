@@ -111,7 +111,7 @@ HEREDOC;
 				$item->commision_show = $item->commision > 0 ? $item->commision : ($item->shop_price > $item->income_price ? $item->shop_price - $item->income_price : 0);
 				$item->commision_show = number_format($item->commision_show*(1-PLATFORM_COMMISION),2);
 				$this->v->assign('item', $item);
-				$this->v->assign('item_desc', json_encode($item->item_desc));
+				//$this->v->assign('item_desc', json_encode($item->item_desc));
 				
 				//商品规格、属性
 				$item_attrs = Items::attrs($item->id);

@@ -196,8 +196,7 @@ $(function(){
 		<div class="clear"></div> 
 	</div>
 	<div class="pro_comment" id="list1">
-		<div class="product_detail">
-		</div>
+		<div class="product_detail"><?=$item->item_desc?></div>
 	</div>
 	<div class="pro_comment pro_lsit_tab" id="list2" style="display:none">
 		<table cellspacing="0" cellpadding="0" class="pro_tab_evaluate">
@@ -528,12 +527,7 @@ function loadGoodsComment(curpage, isinit, category){
 }
 
 $(function(){
-	$("#activePage > .scrollArea").css('background','#fff');
-	setTimeout(function(){
-		$(".product_detail").html(<?=$item_desc ?>);
-		F.set_scroller(false, 100);
-	},0);
-
+	
 	//好评中评差评切换
 	$(".pro_tab_evaluate").find("div").on('click', function(){
 		var OBJ = $(this);
