@@ -26,7 +26,7 @@
 			<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
 				<tr class="header">	
 					<th>选择</th>
-					<th width="200px">商品名称</th>
+					<th width="280px">商品名称</th>
 					<th>商品分类</th>
 					<th>售价</th>
 					<th>供货价</th>
@@ -104,8 +104,8 @@ function pageQueryCondtion(){
 }
 function costructRowData(result){
 	var TR = "";
-	TR+= "<tr data-id="+result.goods_id+"><td class=\"common_check\"></td><td><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
-	TR+= "<div style=\"width:140px;\" class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"</div></a></td>";
+	TR+= "<tr data-id="+result.goods_id+"><td class=\"common_check\"></td><td style=\"position: relative;\"><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img goods_img_new\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
+	TR+= "<div style=\"width:200px;\" class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"<div class=\"see_all\"><img src=\"/themes/merchants/img/tj.png\"></div></div></a></td>";
 	TR+= "<td>"+(result.cat_name ? result.cat_name : '')+"</td><td>"+result.shop_price+"</td><td>"+result.income_price+"</td><td>"+result.commision+"</td><td>"+result.paid_goods_number+"</td>";
 	TR+= "<td>"+result.click_count+"</td><td>"+result.goods_number+"</td>";
 	TR+= "<td class=\"goods_edit_col\"><a href=\"javascript:;\" data-type='edit'><img src=\"/themes/merchants/img/edit_11.png\"><br>编辑</a>";
