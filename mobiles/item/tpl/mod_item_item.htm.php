@@ -477,7 +477,7 @@ function detailTabSwitch(a){
 			getMerchantRecommend(1, true);
 		}
 	}
-	F.set_scroller(false, 100);
+	//F.set_scroller(false, 100);
 }
 //加载商品评论列表
 function loadGoodsComment(curpage, isinit, category){
@@ -488,7 +488,7 @@ function loadGoodsComment(curpage, isinit, category){
 			$(".remm_more").attr("curpage",1).hide();
 			var _html = "<div style='margin:15px;text-align:center;'>还没有人评论哦~</div>";
 			commentDom.html(_html);
-			F.set_scroller(false, 100);
+			//F.set_scroller(false, 100);
 			return;
 		}
 		renderCommentNum(ret);
@@ -562,7 +562,7 @@ function renderCommentNum(ret){
 }
 //评论加载后回调
 function commentLoadedCallback(){
-	F.set_scroller(false, 100);
+	//F.set_scroller(false, 100);
     //weixin img click
     $('.idea_img img').on('click',function(){
     	var comment_currpic = '';
@@ -611,7 +611,7 @@ function getMerchantRecommend(curpage, isinit){
 			LI += "<p class=\"tea_info_price remm_p\"><span>￥"+good.shop_price+"</span><b>￥"+good.market_price+"</b></p></a></li>";
 		}
 		$(".shop_remm").find("ul").html($(LI));
-		F.set_scroller(false, 100);
+		//F.set_scroller(false, 100);
 	});
 }
 
