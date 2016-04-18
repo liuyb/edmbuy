@@ -432,7 +432,7 @@
 	margin-left:15px;
 	cursor:pointer;
 }
-.del_cla{
+.edit_type{
 	background: url(../img/edit_11.png) no-repeat top;
 	background-position: 4px 0;
 	height: 35px;
@@ -444,7 +444,7 @@
 	margin-left:15px;
 	cursor:pointer;
 }
-.edit_type{
+.del_cla{
 	background: url(../img/sc.png) no-repeat top;
 	background-position: 4px 0;
 	height: 35px;

@@ -75,7 +75,7 @@
         <!--{foreach from=$carousel item=val}-->
         <tr>
             <td>
-                <input class="link_id link_address_on" type="text" value="<!--{$val.sort}-->" disabled="true">
+                <input class="link_id link_address_on" type="text" data-type="positive" value="<!--{$val.sort}-->" disabled="true">
             </td>
             <td>
                 <div class="browse">
@@ -95,7 +95,7 @@
                 <div class="offer_size">建议尺寸640*250px</div>
             </td>
             <td><input class="link_address link_address_on" type="text"
-                       value="<!--{$val.link_url}-->" disabled="true" placeholder="请输入链接地址"></td>
+                       value="<!--{$val.link_url}-->" disabled="true"  data-type='url' placeholder="请输入链接地址"></td>
             <td>
                 <span class="store_edit">编辑</span>
                 <span class="store_del">删除</span>
@@ -104,7 +104,7 @@
         <!--{foreachelse}-->
         <tr>
             <td>
-                <input class="link_id link_address_on" type="text" value="2" disabled="true">
+                <input class="link_id link_address_on" type="text" data-type="positive" value="1" disabled="true">
             </td>
             <td>
                 <div class="browse">
@@ -119,7 +119,7 @@
                 <div class="offer_size">建议尺寸640*250px</div>
             </td>
             <td><input class="link_address link_address_on" type="text"
-                       value="" disabled="true" placeholder="请输入链接地址"></td>
+                       value="" disabled="true"  data-type='url'  placeholder="请输入链接地址"></td>
             <td>
                 <span class="store_edit">编辑</span>
                 <span class="store_del">删除</span>
@@ -149,7 +149,7 @@
             showMsg("您最多只能添加五张轮播图！");
             return;
         }
-        var html = "<tr><td><input class='link_id'  type='text' value='" + total + "'></td>" +
+        var html = "<tr><td><input class='link_id' data-type='positive'  type='text' value='" + total + "'></td>" +
                 "<td><div class='browse'>" +
                 "浏览" +
                 "<input type='file'  name='file' class='store_file' onchange='fileupload(event,this)'>" +
@@ -160,7 +160,7 @@
                 "</div>" +
                 "<div class='offer_size'>建议尺寸640*250px</div>" +
                 "</td>" +
-                "<td><input class='link_address '   type='text' value='' placeholder='请输入链接地址'></td>" +
+                "<td><input class='link_address '   type='text' value='' data-type='url' placeholder='请输入链接地址'></td>" +
                 "<td>" +
                 "<span class='store_edit'>编辑</span>" +
                 "<span class='store_del'>删除</span>" +
@@ -190,11 +190,6 @@
     }
     $(document).on('click', '.store_del', function () {
         var total = $("#store_table_list tr").length - 1;
-        if (total - 1 <= 1
-        ) {
-            showMsg("不能删除!");
-            return;
-        }
         var $tr = $(this).parent().parent();
         var carousel = $tr.find(".carousel").val();
         showConfirm('确定要删除选中的轮播图吗？', function () {
@@ -207,6 +202,9 @@
                     $tr.remove();
 //                    location.reload();
                 });
+            }
+            if(total-1==0){
+                location.reload();
             }
 
         });
@@ -270,8 +268,8 @@
             return;
         }
     }
-    function checkeURL(URL) {
-        var str = URL;
+    function checkeURL(url) {
+        var str = url;
         var Expression = /([\w-]+\.)+[\w-]+(\/[\w-] .\/?%&=]*)?/;
         var objExp = new RegExp(Expression);
         if (!objExp.test(str) == true) {
@@ -279,10 +277,8 @@
             return;
         }
     }
-    $(".link_address").focus(
-            function () {
+    $(document).on('focus','.link_address',function () {
                 var obj = $(this);
-
                 obj.attr("placeholder", "");
                 obj.css("text-align", "left");
             }

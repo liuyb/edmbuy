@@ -21,9 +21,9 @@
     </div>
     <div class="repo_er">
             <!--{if $dir}-->
-        <p><img src="<!--{$dir}-->"></p>
+        <p><img src="<!--{$dir}-->" id="qcode"></p>
              <!--{else}-->
-        <p><img src=""></p>
+        <p><img src="" id="qcode"></p>
             <!--{/if}-->
         <p style="color:#999;font-size:13px;margin-left:-15px;">手机扫描此二维码，可直接在手机上访问商城</p>
     </div>
@@ -55,6 +55,7 @@
             var data = {"tpl_id":tpl_id};
             F.postWithLoading('/shop/template/getimg', data, function (data) {
                 $("#tpl_image").attr("src", data.img);
+                $("#qcode").attr("qcode",data.qrimg);
                 var html=$("#current_tpl").html();
                 var current = $_li.html();
                 $("#current_tpl").html(current);

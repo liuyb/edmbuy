@@ -97,6 +97,16 @@ class Shop_Controller extends MerchantController
     public function template_getimg(Request $request, Response $response)
     {
         $tpl_id = $request->post("tpl_id");
+
+        $dir = Fn::gen_qrcode_dir($tpl_id, 'shop', true);
+        $locfile = $dir . $tpl_id . '.png';
+        if (!file_exists($locfile)) {
+            mkdirs($dir);
+            $qrinfo = C("port.merchant_url");
+            include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+            QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+        }
+        $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
         //得到img
         $img = Shop_Model::getImg($tpl_id);
         //更新店铺信息
@@ -105,6 +115,7 @@ class Shop_Controller extends MerchantController
             $res['retmsg'] = "启用模板成功！";
             $res['status'] = 1;
             $res['img'] = $img;
+            $res['qrimg'] = $qrcode;
             $response->sendJSON($res);
         }
     }

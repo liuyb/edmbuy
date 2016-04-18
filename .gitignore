@@ -1,6 +1,6 @@
 # App
 a/*
-var/
+var/run/
 conf-pro/
 conf-test/
 t.php
