@@ -111,16 +111,24 @@
 	font-size:12px;
 	color:#7d7d7d;
 }
-.search_result_tab img{
-	width:40px;
-	height:40px;
+.goods_img img{
+	width:60px;
+	height:60px;
 }
 .goods_name{
   	text-align: left;
-  	margin: 6px 0;
+  	margin: 10px 0;
   	/* height: 40px; */
   	float: left;
-  	width: 240px;	
+  	width: 180px;
+  	max-height: 40px;
+  	overflow: hidden;		
+}
+.see_all{
+	position:absolute;
+	top:50px;
+	width:14px !important;
+	height:14px !important;
 }
 .manage_goods_name{
   	float: left;

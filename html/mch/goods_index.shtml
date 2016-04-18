@@ -47,7 +47,7 @@
 				<table cellspacing="0" cellpadding="0" class="search_result_tab">
 					<tr>	
 						<th>选择</th>
-						<th width="200px">商品名称</th>
+						<th width="260px">商品名称</th>
 						<th>商品分类</th>
 						<th>售价</th>
 						<th>供货价</th>
@@ -60,9 +60,12 @@
 					</tr>
 					<tr>
 						<td class="check_go"></td>
-						<td>
+						<td style="position: relative;">
 							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
-							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+							<div class="goods_name" title="测试商品测试商品测试商品测试商品试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品">
+								测试商品测试商品测试商品测试商品试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品
+								<div class="see_all"><img src="../mch/img/tj.png"></div>
+							</div>
 						</td>
 						<td>3c数码</td>
 						<td>￥488.00</td>
@@ -72,18 +75,21 @@
 						<td>777</td>
 						<td>100</td>
 						<td>限时抢购</td>
-						<td onclick="" class="new_operate" valign="middle">
-							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
-							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
-							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
-							<a href=""><img src="../mch/img/edit_11.png" alt="" ><br>回复</a>
+						<td>
+							<span class="goods_edit">编辑</span>
+							<span class="goods_sold_out">下架</span>
+							<span class="goods_del">删除</span>
+							<span class="goods_look_up">查看</span>
 						</td>
 					</tr>
 					<tr>
 						<td class="check_go"></td>
-						<td>
+						<td style="position: relative;">
 							<div class="goods_img" style="float:left;"><img src="../mch/img/01_ba.png"></div>
-							<div class="goods_name">测试商品测试商品测试商品测试商品</div>
+							<div class="goods_name" title="测试商品测试商品测试商品测试商品试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品">
+								测试商品测试商品测试商品测试商品试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品
+								<div class="see_all"><img src="../mch/img/tj.png"></div>
+							</div>
 						</td>
 						<td>3c数码</td>
 						<td>￥488.00</td>
@@ -278,7 +284,7 @@ function f(a){
 	
 	$(_li).addClass("li_on");
 	$(_list).show();
-}
+}	  
 </script>
 
-
+  

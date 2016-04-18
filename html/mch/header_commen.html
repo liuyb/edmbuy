@@ -1,7 +1,36 @@
+<style>
+.set_pero{
+	width:120px;
+	background:#fff;
+	border:1px solid #eee;
+  	position: fixed;
+  	top: 60px;
+  	right: 125px;	
+}
+.jt_s{
+  	position: absolute;
+  	top: -7px;
+  	right: 8px;	
+}
+.use_id_set{
+	background: url(../mch/img/Setting.png) no-repeat 15px;
+	padding-left:40px;
+	height:39px;
+	line-height:40px;
+	border-bottom:1px solid #eee;
+}
+.log_out{
+	background: url(../mch/img/Logout.png) no-repeat 15px;
+	padding-left:40px;
+	height:39px;
+	line-height:40px;	
+}
+</style>
+
 <div id="login_new_header">
 	<div id="header_center">
 		<div id="common_header_left">
-			<img src="../mch/img/logo.png">
+			<img src="../mch/img/logo_new.png">
 			益多米
 		</div>
 		<div id="common_list">
@@ -16,7 +45,52 @@
 		</div>
 		<div id="common_right">
 			<button id="common_btn" class="common_shop">浏览店铺</button>
-			<button id="common_btn" class="common_name">90年代</button>
+			<button id="common_btn" class="common_name"  data-show="0";>90年代</button>
+			<div class="set_pero" style="display:none;">
+				<ul>
+					<li class="use_id_set">账号设置</li>
+					<li class="log_out">退出登录</li>
+				</ul>
+				<img src="../mch/img/sj.png" class="jt_s">
+			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+//菜单开启
+$(document.body).on("click", ".common_name", function(){
+	if($(this).attr('data-show')=='0') {
+		$(".set_pero").show();
+		$(this).attr('data-show','1');
+	}
+	else {
+		$(".set_pero").hide();
+		$(this).attr('data-show','0');
+	}
+});
+
+//菜单关闭
+$(document).on("click",function(e){
+	var firecls = 'common_name';
+	var canfire = true;
+	if ($(e.target).hasClass(firecls)) {
+		canfire = false;
+	}
+	else {
+		var $pn = $(e.target).parent();
+		while($pn.size()>0 && $pn.get(0).tagName!='body') {
+			if ($pn.hasClass(firecls)) {
+				canfire = false;
+				break;
+			}
+			$pn = $pn.parent();
+		}
+	}
+	
+	if (canfire) {
+		$(".set_pero").hide();
+		$("."+firecls).attr('data-show','0');
+	}
+});
+</script>
