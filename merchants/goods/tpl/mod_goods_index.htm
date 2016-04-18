@@ -3,53 +3,51 @@
 <!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
 <!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
 <!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
-<div id="body" class="ifr-body">
-	<!--{include file="inc/left_common.htm"}-->
-	<div id="new_common">
-		<div id="order_type">
-			<ul>	
-				<li id="li1"  onclick="list_switch(1)" data-sale='2'>销售中<span id="on_sale"></span></li>
-				<li id="li2"  onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
-			</ul>
+<!--{include file="inc/left_common.htm"}-->
+<div id="new_common">
+	<div id="order_type">
+		<ul>	
+			<li id="li1"  onclick="list_switch(1)" data-sale='2'>销售中<span id="on_sale"></span></li>
+			<li id="li2"  onclick="list_switch(2)" data-sale='1'>已下架<span id="not_sale"></span></li>
+		</ul>
+	</div>
+	
+	<div id="choose_condition">
+		<input type="input" id="start_date" readonly class="form_datetime check_time_left" placeholder="请选择开始日期"/>
+		<span style="padding-left:15px;">至</span>
+		<input type="input" id="end_date" readonly class="form_datetime check_time_left" placeholder="请选择结束日期"/>
+		<!-- <input class="check_time_left" contenteditable id="buyer"  placeholder="全部类型"> -->
+		<input class="check_time_left" id="goods_name" placeholder="商品名称">
+		<button id="search_type_infos">搜索</button>
+	</div>
+	
+	<div class="common_go" id="list1">
+		<div class="search_result">
+			<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
+				<tr class="header">	
+					<th>选择</th>
+					<th width="200px">商品名称</th>
+					<th>商品分类</th>
+					<th>售价</th>
+					<th>供货价</th>
+					<th onclick="sort_click(this);"><span data-field='commision'><a href="javascript:void(0);">佣金</a></span></th>
+					<th onclick="sort_click(this);"><span data-field='paid_goods_number'><a href="javascript:void(0);">销量</a></span></th>
+					<th onclick="sort_click(this);"><span data-field='click_count'><a href="javascript:void(0);">访问量</a></span></th>
+					<th onclick="sort_click(this);"><span data-field='goods_number'><a href="javascript:void(0);">库存</a></span></th>
+					<!-- <th>商品类型</th> -->
+					<th width="200px">操作</th>
+				</tr>
+				<tbody class="body-data"></tbody>
+			</table>
 		</div>
-		
-		<div id="choose_condition">
-			<input type="input" id="start_date" readonly class="form_datetime check_time_left" placeholder="请选择开始日期"/>
-			<span style="padding-left:15px;">至</span>
-			<input type="input" id="end_date" readonly class="form_datetime check_time_left" placeholder="请选择结束日期"/>
-			<!-- <input class="check_time_left" contenteditable id="buyer"  placeholder="全部类型"> -->
-			<input class="check_time_left" id="goods_name" placeholder="商品名称">
-			<button id="search_type_infos">搜索</button>
-		</div>
-		
-		<div class="common_go" id="list1">
-			<div class="search_result">
-				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
-					<tr class="header">	
-						<th>选择</th>
-						<th width="200px">商品名称</th>
-						<th>商品分类</th>
-						<th>售价</th>
-						<th>供货价</th>
-						<th onclick="sort_click(this);"><span data-field='commision'><a href="javascript:void(0);">佣金</a></span></th>
-						<th onclick="sort_click(this);"><span data-field='paid_goods_number'><a href="javascript:void(0);">销量</a></span></th>
-						<th onclick="sort_click(this);"><span data-field='click_count'><a href="javascript:void(0);">访问量</a></span></th>
-						<th onclick="sort_click(this);"><span data-field='goods_number'><a href="javascript:void(0);">库存</a></span></th>
-						<!-- <th>商品类型</th> -->
-						<th width="200px">操作</th>
-					</tr>
-					<tbody class="body-data"></tbody>
-				</table>
-			</div>
-		</div>
-		
-		<div id="list_type_foot">
-			<span id="all_check"></span>
-			<button class="btn_common" onclick="deleteGoods();">批量删除</button>
-			<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
-			<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
-			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
-		</div>
+	</div>
+	
+	<div id="list_type_foot">
+		<span id="all_check"></span>
+		<button class="btn_common" onclick="deleteGoods();">批量删除</button>
+		<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null, 0);">下架</button>
+		<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;' onclick="updateGoodsStatus(null, 1);">上架</button>
+		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
 

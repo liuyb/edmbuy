@@ -2,38 +2,36 @@
 <!--{add_css file="/themes/merchants/css/goods.css" scope="module"}-->
 <!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
 <!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
-<div id="body" class="ifr-body">
-	<!--{include file="inc/left_common.htm"}-->
-	<div id="new_common">
-		<div id="settlement_type">
-			<ul>	
-				<li data-type='1'>未结算</li>
-				<li data-type='2'>已结算</li>
-			</ul>
+<!--{include file="inc/left_common.htm"}-->
+<div id="new_common">
+	<div id="settlement_type">
+		<ul>	
+			<li data-type='1'>未结算</li>
+			<li data-type='2'>已结算</li>
+		</ul>
+	</div>
+	
+	<div class="common_go" id="list1">
+		<div class="search_result">
+			<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
+				<tr class="header">	
+					<th>结算单号</th>
+					<th>时间段</th>
+					<th>商品实付总额</th>
+					<th>佣金</th>
+					<th>供货总额</th>
+					<th>运费</th>
+					<th>优惠总额</th>
+					<th>本期应结</th>
+					<th>操作</th>
+				</tr>
+				<tbody class="body-data"></tbody>
+			</table>
 		</div>
-		
-		<div class="common_go" id="list1">
-			<div class="search_result">
-				<table cellspacing="0" cellpadding="0" class="search_result_tab" id="resultList">
-					<tr class="header">	
-						<th>结算单号</th>
-						<th>时间段</th>
-						<th>商品实付总额</th>
-						<th>佣金</th>
-						<th>供货总额</th>
-						<th>运费</th>
-						<th>优惠总额</th>
-						<th>本期应结</th>
-						<th>操作</th>
-					</tr>
-					<tbody class="body-data"></tbody>
-				</table>
-			</div>
-		</div>
-		
-		<div id="list_type_foot">
-			<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
-		</div>
+	</div>
+	
+	<div id="list_type_foot">
+		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
 

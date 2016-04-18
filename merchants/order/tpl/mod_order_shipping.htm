@@ -1,54 +1,52 @@
 <!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
-<div id="body" class="ifr-body">
-	<!--{include file="inc/left_common.htm"}-->
-	<div id="order_list_right">
-		<div id="orders_info_top" onclick="javascript:history.back(-1);">发货管理</div>
-		
-		<div id="commodity_list">
-			<div id="commodity_name">
-				<p>订单信息</p>
-			</div>
-			<form id="shipForm" onsubmit="return submitShip();">
-			<div id="commodity_infos">
-				<table cellspacing="0" cellpadding="0" id="commondity_tab" class="shipments_tab">
-					<tr>
-						<th width="160px">订单号</th>
-						<th width="110px">收货人</th>
-						<th width="400px">收货地址</th>
-						<th width="150px">快递</th>
-						<th width="150px">快递单号</th>
-					</tr>
-					<tbody id="shippingBody">
-					<!--{if $order_list}-->
-					<!--{foreach from=$order_list item=order}-->
-					<tr>
-						<td><!--{$order.order_sn}--> <input type='hidden' name="order_ids" value='<!--{$order.order_id}-->'/></td>
-						<td><!--{$order.consignee}--></td>
-						<td><!--{$order.order_region}--><!--{$order.address}--></td>
-						<td>
-							<select class="ship_select" onchange="shipSelect(this);" name="ship_ids" required >
-								<option value=''>请选择...</option>
-								<!--{$ship_select}-->
-							</select>
-						</td>
-						<td>
-							<input type="text" value="<!--{$order.invoice_no}-->" name="invoice_nos" class="ship_order_num" data-type='positive' required >
-						</td>
-					</tr>
-					<!--{/foreach}-->
-					<!--{else}-->
-					<tr colspan="5" style="text-align:center;"><td>当前所选订单还不能发货！</td></tr>
-					<!--{/if}-->
-					</tbody>
-				</table>
-				<!--{if isset($shipment_btn) and $shipment_btn}-->
-					<button id="all_shipments"><!--{$shipment_btn}--></button>
-				<!--{else}-->
-				<div style="margin:10px 0px;height:10px;"></div>	
-				<!--{/if}-->
-			</div>
-			</form>
+<!--{include file="inc/left_common.htm"}-->
+<div id="order_list_right">
+	<div id="orders_info_top" onclick="javascript:history.back(-1);">发货管理</div>
+	
+	<div id="commodity_list">
+		<div id="commodity_name">
+			<p>订单信息</p>
 		</div>
+		<form id="shipForm" onsubmit="return submitShip();">
+		<div id="commodity_infos">
+			<table cellspacing="0" cellpadding="0" id="commondity_tab" class="shipments_tab">
+				<tr>
+					<th width="160px">订单号</th>
+					<th width="110px">收货人</th>
+					<th width="400px">收货地址</th>
+					<th width="150px">快递</th>
+					<th width="150px">快递单号</th>
+				</tr>
+				<tbody id="shippingBody">
+				<!--{if $order_list}-->
+				<!--{foreach from=$order_list item=order}-->
+				<tr>
+					<td><!--{$order.order_sn}--> <input type='hidden' name="order_ids" value='<!--{$order.order_id}-->'/></td>
+					<td><!--{$order.consignee}--></td>
+					<td><!--{$order.order_region}--><!--{$order.address}--></td>
+					<td>
+						<select class="ship_select" onchange="shipSelect(this);" name="ship_ids" required >
+							<option value=''>请选择...</option>
+							<!--{$ship_select}-->
+						</select>
+					</td>
+					<td>
+						<input type="text" value="<!--{$order.invoice_no}-->" name="invoice_nos" class="ship_order_num" data-type='positive' required >
+					</td>
+				</tr>
+				<!--{/foreach}-->
+				<!--{else}-->
+				<tr colspan="5" style="text-align:center;"><td>当前所选订单还不能发货！</td></tr>
+				<!--{/if}-->
+				</tbody>
+			</table>
+			<!--{if isset($shipment_btn) and $shipment_btn}-->
+				<button id="all_shipments"><!--{$shipment_btn}--></button>
+			<!--{else}-->
+			<div style="margin:10px 0px;height:10px;"></div>	
+			<!--{/if}-->
+		</div>
+		</form>
 	</div>
 </div>
 <script>

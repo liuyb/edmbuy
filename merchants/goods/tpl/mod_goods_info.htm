@@ -8,8 +8,7 @@
 }
 </style>
 <!--[/HEAD_CSS]-->
-<div id="body" class="ifr-body">
-	<!--{include file="inc/left_common.htm"}-->
+<!--{include file="inc/left_common.htm"}-->
 <form id="defaultForm" method="post" action="" onsubmit="return goods_submit();">
 	<div class="goods_right">
 		<div id="issue_gods"><p><!--{if $goodsinfo->item_id }-->修改商品<!--{else}-->发布商品<!--{/if}--></p></div>
@@ -213,7 +212,6 @@
 		<button class="gods_ok" type="submit" style="margin: 20px 0px 10px 25px;">保存</button>
 	</div>
 	
-</div>
 <input type="hidden" value="<!--{$goodsinfo->item_id}-->" name="goods_id"/>
 </form>
 <div class="mask_bg"></div>
