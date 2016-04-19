@@ -191,6 +191,10 @@ class Order extends StorageNode{
     	D()->update(self::table(), $updata, $where);
     
     	if (D()->affected_rows()==1) {
+    		
+    		//写order_action的日志
+    		self::action_log($order_id, ['action_note'=>'改变支付状态']);
+    		
     		return true;
     	}
     	return false;
