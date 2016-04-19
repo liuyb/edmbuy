@@ -392,6 +392,10 @@ class Func extends CStatic {
       $content = "<?php\r\n";
       $content .= "\$data = " . var_export($caches, true) . ";\r\n";
       $content .= "?>";
+      $dir_file = dirname($cache_file_path);
+      if(!is_dir($dir_file)){
+          mkdirs($dir_file, 0777, TRUE);
+      }
       file_put_contents($cache_file_path, $content, LOCK_EX);
   }
   

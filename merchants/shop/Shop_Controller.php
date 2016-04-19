@@ -150,10 +150,8 @@ class Shop_Controller extends MerchantController
             'errMsg' => '上传失败，请稍后重试！'
         ];
         if ($request->is_post()) {
-            $imgDIR = "/a/mch/shop/";
             $img = $_POST["img"];
-            $upload = new Upload($img, $imgDIR);
-            $upload->standardheight = 250;
+            $upload = new AliyunUpload($img, 'carousel', '');
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
         }
@@ -330,9 +328,8 @@ class Shop_Controller extends MerchantController
     public function shop_logo_upload(Request $request, Response $response)
     {
         if ($request->is_post()) {
-            $imgDIR = "/a/mch/shoplogo/";
             $img = $_REQUEST["img"];
-            $upload = new Upload($img, $imgDIR);
+            $upload = new AliyunUpload($img, 'shoplogo', '', true, 320, 320);
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
             $response->sendJSON($ret);
@@ -347,9 +344,8 @@ class Shop_Controller extends MerchantController
     public function shop_qrcode_upload(Request $request, Response $response)
     {
         if ($request->is_post()) {
-            $imgDIR = "/a/mch/shopqrcode/";
             $img = $_REQUEST["img"];
-            $upload = new Upload($img, $imgDIR);
+            $upload = new AliyunUpload($img, 'shopqrcode', '');
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
             $response->sendJSON($ret);

@@ -40,6 +40,13 @@ return [
   	'shop' => 'http://m.ydmbuy.com',
     'merchant' => 'http://mch.ydmbuy.com'
   ],
+  //阿里云上的图片样式名称 名称为 prefix+'_std|thumb'.jpg
+  'picstyle' => [
+      'goods' => array('std' => 'gpic_std', 'thumb' => 'gpic_thumb'),//640*640
+      'category' => array('std' => 'category_std', 'thumb' => 'category_std'), //240*240
+      'shoplogo' => array('std' => 'shoplogo_std', 'thumb' => 'shoplogo_std'), //320*320
+      'carousel' => array('std' => 'carousel_std', 'thumb' => 'carousel_std') //640*250
+  ],
   //debug白名单uid
   //'debug_white_list' => ['10001','109','104'],
   'debug_white_list' => [],

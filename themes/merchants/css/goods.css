@@ -69,10 +69,9 @@
 	font-size:13px;
 	color:#7d7d7d;
 }
-.search_result_tab img{
+.goods_img img{
 	width:60px;
 	height:60px;
-  	vertical-align: middle;	
 }
 .goods_img_new img{
 	width:60px !important;
@@ -94,6 +93,8 @@
 .see_all{
 	position:absolute;
 	top:50px;
+	width:14px !important;
+	height:14px !important;
 }
 .see_all img{
 	width:14px !important;

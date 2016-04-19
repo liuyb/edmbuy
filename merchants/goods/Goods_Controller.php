@@ -198,9 +198,8 @@ class Goods_Controller extends MerchantController
             'errMsg' => '上传失败，请稍后重试！'
         ];
         if ($request->is_post()) {
-            $imgDIR = "/a/mch/goods/";
             $img = $_POST["img"];
-            $upload = new Upload($img, $imgDIR);
+            $upload = new AliyunUpload($img, 'goods', '', true, 750, 750);
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
         }
@@ -240,9 +239,7 @@ class Goods_Controller extends MerchantController
             if (!is_array($goods_ids)) {
                 $goods_ids = [$goods_ids];
             }
-            if ($status == 'sale') {
-                Goods_Model::batchUpdateGoods($goods_ids, 'is_on_sale', $statusVal);
-            }
+            Goods_Model::batchUpdateGoods($goods_ids, $status, $statusVal);
         }
         $response->sendJSON(['result' => 'SUCC']);
     }
@@ -405,11 +402,8 @@ class Goods_Controller extends MerchantController
      */
     public function upload_goods_categroy(Request $request, Response $response)
     {
-        $imgDIR = "/a/mch/goodcategory/";
         $img = $_REQUEST["img"];
-        $upload = new Upload($img, $imgDIR);
-        $upload->has_thumb = true;
-        $upload->thumbwidth = 200;
+        $upload = new AliyunUpload($img, 'category', '');
         $result = $upload->saveImgData();
         $ret = $upload->buildUploadResult($result);
         $response->sendJSON($ret);

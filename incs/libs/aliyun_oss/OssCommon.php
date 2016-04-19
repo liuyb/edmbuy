@@ -16,6 +16,7 @@ class OssCommon
     //Develop environment
     const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
     const endpoint_domain = 'edmdev.oss-cn-hangzhou.aliyuncs.com';
+    const endpoint_domain_image = 'edmdev.img-cn-hangzhou.aliyuncs.com';
     const endpoint        = 'oss-cn-hangzhou.aliyuncs.com';
     const bucket          = 'edmdev';
 	  
@@ -56,6 +57,10 @@ class OssCommon
     
     public static function getOssPath($oss_file) {
     	return "http://".self::endpoint_domain."/{$oss_file}";;
+    }
+    
+    public static function getOssImgPath($oss_file) {
+        return "http://".self::endpoint_domain_image."/{$oss_file}";;
     }
 
     /**
