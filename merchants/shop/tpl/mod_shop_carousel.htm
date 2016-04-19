@@ -94,7 +94,7 @@
                 </div>
                 <div class="offer_size">建议尺寸640*250px</div>
             </td>
-            <td><input class="link_address link_address_on" type="text"
+            <td><input class="link_address" type="text"
                        value="<!--{$val.link_url}-->" disabled="true"  data-type='url' placeholder="请输入链接地址"></td>
             <td>
                 <span class="store_edit">编辑</span>
@@ -104,12 +104,12 @@
         <!--{foreachelse}-->
         <tr>
             <td>
-                <input class="link_id link_address_on" type="text" data-type="positive" value="1" disabled="true">
+                <input class="link_id" type="text" data-type="positive" value="1" >
             </td>
             <td>
                 <div class="browse">
                     浏览
-                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" disabled="true">
+                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)">
                 </div>
                 <input type="hidden" class="img" value=""/>
                 <input type="hidden" class="carousel" value="0"/>
@@ -118,10 +118,9 @@
                 </div>
                 <div class="offer_size">建议尺寸640*250px</div>
             </td>
-            <td><input class="link_address link_address_on" type="text"
-                       value="" disabled="true"  data-type='url'  placeholder="请输入链接地址"></td>
+            <td><input class="link_address " type="text"
+                       value=""  data-type='url'  placeholder="请输入链接地址"></td>
             <td>
-                <span class="store_edit">编辑</span>
                 <span class="store_del">删除</span>
             </td>
         </tr>
@@ -143,13 +142,13 @@
             $(this).parent().parent().find("input[name='file']").removeAttr("disabled");
         }
     });
-    $("#store_btn").click(function () {
+    $(document).on('click','#store_btn',function () {
         var total = $("#store_table_list tr").length;
         if (total == 6) {
             showMsg("您最多只能添加五张轮播图！");
             return;
         }
-        var html = "<tr><td><input class='link_id' data-type='positive'  type='text' value='" + total + "'></td>" +
+        var html = "<tr><td><input class='link_id'  data-type='positive'  type='text' value='" + total + "'></td>" +
                 "<td><div class='browse'>" +
                 "浏览" +
                 "<input type='file'  name='file' class='store_file' onchange='fileupload(event,this)'>" +
@@ -162,7 +161,6 @@
                 "</td>" +
                 "<td><input class='link_address '   type='text' value='' data-type='url' placeholder='请输入链接地址'></td>" +
                 "<td>" +
-                "<span class='store_edit'>编辑</span>" +
                 "<span class='store_del'>删除</span>" +
                 "</td>" + +"</tr>";
         $("#store_table_list").append(html);
@@ -223,6 +221,10 @@
                 var link_address = $tr.find(".link_address").val();
                 var img_url = $tr.find(".img").val();
                 var carousel_id = $tr.find(".carousel").val();
+                if(!$("#store_table_list").formValid){
+                     erro = 1;
+                        return ;
+                }
                 if (sort == '') {
                     showMsg("排序不能为空!");
                     erro = 1;
@@ -238,8 +240,6 @@
                     erro = 1;
                     return;
                 }
-                regNum(sort);
-                checkeURL(link_address);
                 var arr = new Array();
                 arr[0] = carousel_id;
                 arr[1] = sort;

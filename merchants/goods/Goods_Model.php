@@ -568,8 +568,8 @@ class Goods_Model extends Model
     {
         //comment_id ,id_value,content,comment_rank,user_name,add_time,status
         $merchant_id = $GLOBALS['user']->uid;
-        $where = "merchant_id='%s' ";
-        $sql = "select count(1) from shp_comment where ";
+        $where = "and merchant_id='%s' ";
+        $sql = "select count(1) from shp_comment where content <> '' ";
         if($current==2){
             $where .= "and comment_reply=''";
             $sql .= $where;
@@ -579,7 +579,7 @@ class Goods_Model extends Model
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
-        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}'" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply = ''";
+        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}' and comment.content <> ''" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply = '' and comment.content  <> ''";
         $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,goods.goods_img as goods_img ,comment.comment_id as comment_id,
               comment.id_value as id_value ,comment.comment_reply as comment_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
               as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
@@ -611,10 +611,23 @@ class Goods_Model extends Model
      */
     static function viewComment($comment_id)
     {
-        $sql = "select goods.goods_name as goods_name,comm.comment_rank as comment_rank ,comm.content as content,comm.comment_reply as comment_reply
+        $sql = "select goods.goods_name as goods_name,comm.comment_level as comment_level ,
+              comm.service_level as service_level ,
+              comm.shipping_level,comm.comment_rank as comment_rank ,comm.content as content,comm.comment_reply as comment_reply
               from shp_comment comm left join shp_goods goods on comm.id_value=goods.goods_id
               where comm.comment_id = %d and comment_type=0";
-        return D()->query($sql, $comment_id)->get_one();
+        $result = D()->query($sql, $comment_id)->get_one();
+        switch($result['comment_level']){
+            case 1:
+                $result['comment_level'] ="好评";
+            case 2:
+                $result['comment_level'] ="中评";
+            case 3:
+                $result['comment_level'] ="差评";
+            default:
+                $result['comment_level'] ="好评";
+        }
+            return $result;
     }
 
     /**

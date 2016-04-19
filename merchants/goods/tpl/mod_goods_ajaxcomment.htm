@@ -1,5 +1,5 @@
 
-<table cellspacing="0" cellpadding="0" class="search_result_tab" id="common">
+<table cellspacing="0" cellpadding="0" class="search_result_tab body-data" id="common">
     <tr>
         <th width="280px">评价商品</th>
 		<th width="280px">评价内容</th>
@@ -10,7 +10,7 @@
         <th width="80px">操作</th>
     </tr>
     <!--{foreach from=$commentList item=val}-->
-    <tr>
+    <tr >
         <td>
             <div class="goods_img" style="float:left;"><img src="<!--{$val.goods_thumb}-->"></div>
             <div class="goods_name"><!--{$val.goods_name}--></div>
@@ -100,7 +100,7 @@
             title:title,
             shadeClose: true,
             shade: 0.01,
-            area: ['450px', '450px'],
+            area: ['450px', '500px'],
             content: '/goods/comment/view?common_id=' + comment_id+"&type="+type
         });
 

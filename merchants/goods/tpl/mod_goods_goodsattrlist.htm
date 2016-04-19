@@ -16,34 +16,36 @@
 </style>
 
 <!--[/HEAD_CSS]-->
-<!--{include file="inc/left_common.htm"}-->
-<div id="new_common">
-    <div id="order_type">
-        <ul>
-            <li id="li1" onclick="f(1)" class="new_common_on">管理</li>
-            <li id="li2" onclick="editAttr('new')">新增</li>
-        </ul>
-    </div>
-    <div id="attr_top">
-        <table cellspacing="0" cellpadding="0" id="attrib_tab">
-            <tr>
-                <th>属性名称</th>
-                <th>属性值列表</th>
-                <th>操作</th>
-            </tr>
-            <!--{foreach from=$goodsAttr item=val}-->
-            <tr>
-                <td><!--{$val.cat_name}--></td>
-                <td><!--{$val.attr_name}--></td>
-                <td class="attr_rel"  >
-                    <span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span>
-                    <span style="margin-left:23px;" class="attr_del" onclick="delAttr( <!--{$val.cat_id}-->)">删除</span>
-                </td>
-            </tr>
-            <!--{foreachelse}-->
-            <td colspan='3' style='text-align:center;'>还没有数据~</td>
-            <!--{/foreach}-->
-        </table>
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div id="new_common">
+        <div id="order_type">
+            <ul>
+                <li id="li1" onclick="f(1)" class="new_common_on">管理</li>
+                <li id="li2" onclick="editAttr('new')">新增</li>
+            </ul>
+        </div>
+        <div id="attr_top">
+            <table cellspacing="0" cellpadding="0" id="attrib_tab" class="body-data">
+                <tr>
+                    <th>属性名称</th>
+                    <th>属性值列表</th>
+                    <th>操作</th>
+                </tr>
+                <!--{foreach from=$goodsAttr item=val}-->
+                <tr>
+                    <td><!--{$val.cat_name}--></td>
+                    <td><!--{$val.attr_name}--></td>
+                    <td class="attr_rel"  >
+                        <span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span>
+                        <span style="margin-left:23px;" class="attr_del" onclick="delAttr( <!--{$val.cat_id}-->)">删除</span>
+                    </td>
+                </tr>
+                <!--{foreachelse}-->
+                <td colspan='3' style='text-align:center;'>还没有数据~</td>
+                <!--{/foreach}-->
+            </table>
+        </div>
     </div>
 </div>
 <script>
