@@ -229,7 +229,7 @@
 .ins_l{
     font-size:24px;
     color:#333;
-    margin:40px 40px 20px;
+    margin:20px 40px 20px;
 }
 .ins_b{
     font-size:14px;
@@ -280,7 +280,7 @@
     border:0;
 }
 .apply_for{
-    margin:0 40px;
+    margin:10px 40px 20px;
     font-size:14px;
     color:#666;
     float:right;

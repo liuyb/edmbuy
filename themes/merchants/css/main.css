@@ -330,6 +330,7 @@ div .alert {
 }
 #common_right{
 	float:right;
+  	position: relative;	
 }
 #common_btn{
 	width:94px;
@@ -464,9 +465,10 @@ div .alert {
 	width:120px;
 	background:#fff;
 	border:1px solid #eee;
-  	position: fixed;
+  	position: absolute;
   	top: 60px;
-  	right: 125px;	
+  	  left: 93px;
+	
 }
 .jt_s{
   	position: absolute;
