@@ -606,34 +606,33 @@ class User_Controller extends MobileController
     {
         $this->v->set_tplname('mod_user_commission');
         $this->nav_no = 0;
-        $user_id = $request->get("user_id",0);
-        $order_id = $request->get("order_id",0);
-        $level=$request->get('level',"1");
+        $user_id = $request->get("user_id", 0);
+        $order_id = $request->get("order_id", 0);
+        $level = $request->get('level', "1");
         $uid = $GLOBALS['user']->uid;
         if ($request->is_hashreq()) {
-            $flat=true;
+            $flat = true;
             //是否为其他人浏览
-            if($user_id!=$uid){
-                $flat=false;
+            if ($user_id != $uid) {
+                $flat = false;
             }
             $cUser = User_Model::findUserInfoById($user_id);
             //根据user_id获得用户的信息 获取每一个订单号下的商品
-            $data = User_Model::getOrderInfo($order_id,$user_id);
-            $this->v->assign('userInfo',$data['userInfo']);
-            $this->v->assign('goodsInfo',$data['goodsInfo']);
-            $this->v->assign('level',$level);
-            $this->v->assign("is_user",$flat);
-            $this->v->assign("cUser",$cUser);
-            $this->v->assign('ismBusiness',$data['ismBusiness']);
-            $this->v->assign('commision',$data['commision']);
-        }
-        else {
+            $data = User_Model::getOrderInfo($order_id, $user_id);
+            $this->v->assign('userInfo', $data['userInfo']);
+            $this->v->assign('goodsInfo', $data['goodsInfo']);
+            $this->v->assign('level', $level);
+            $this->v->assign("is_user", $flat);
+            $this->v->assign("cUser", $cUser);
+            $this->v->assign('ismBusiness', $data['ismBusiness']);
+            $this->v->assign('commision', $data['commision']);
+        } else {
             //分享信息
             $share_info = [
                 'title' => '收藏了很久的特价商城，超划算！',
-                'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
-                'link'  => U('/user/commission', 'order_id='.$order_id."&level=".$level."&user_id=".$user_id.'&spm='.Spm::user_spm(), true),
-                'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+                'desc' => '便宜又实惠，品质保证，生活中的省钱利器！',
+                'link' => U('/user/commission', 'order_id=' . $order_id . "&level=" . $level . "&user_id=" . $user_id . '&spm=' . Spm::user_spm(), true),
+                'pic' => U('misc/images/napp/touch-icon-144.png', '', true),
             ];
             $this->v->assign('share_info', $share_info);
         }
@@ -709,7 +708,7 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "此手机号已注册";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        }elseif (!verify_phone($phone)) {
+        } elseif (!verify_phone($phone)) {
             $ret['retmsg'] = "手机号码格式不正确！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
@@ -717,8 +716,8 @@ class User_Controller extends MobileController
         //todo
         //$result = Sms::sendSms($phone, "merchant_reg",false);
         if (true) {
-            $_SESSION['merchant_reg']=8888;
-            $_SESSION['moblie']=$phone;
+            $_SESSION['merchant_reg'] = 8888;
+            $_SESSION['moblie'] = $phone;
             $ret['retmsg'] = "发送验证码成功";
             $ret['status'] = 1;
             $response->sendJSON($ret);
@@ -734,25 +733,22 @@ class User_Controller extends MobileController
     {
         $mobile = $request->post("mobile");
         $mobileCode = $request->post("mobile_code");
-        $mobileCode=intval($mobileCode);
+        $mobileCode = intval($mobileCode);
         $email = $request->post("email");
         $inviteCode = $request->post("invite_code");
-        $inviteCode=intval($inviteCode);
-        $verifycode=$request->post("verifycode");
+        $inviteCode = intval($inviteCode);
+        $verifycode = $request->post("verifycode");
         $verifycode = intval($verifycode);
 //        $read = $request->post("read");
-        if(!empty($_SESSION['moblie'])){
-            unset($_SESSION['moblie']);
-        }
         if (empty($mobileCode)) {
             $ret['retmsg'] = "手机验证码不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        }elseif($_SESSION['verifycode']!=$verifycode){
+        } elseif ($_SESSION['verifycode'] != $verifycode) {
             $ret['retmsg'] = "图形验证码不正确！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        } elseif($verifycode==''){
+        } elseif ($verifycode == '') {
             $ret['retmsg'] = "图形验证码不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
@@ -764,6 +760,11 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "手机验证码不匹配！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
+        } elseif ($_SESSION['mobile'] != $mobile) {
+            unset($_SESSION['mobile']);
+            $ret['retmsg'] = "手机号码有误请重新获取验证码！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
         }
         //验证邮箱是否已经被使用
 //        $res = User_Model::checkMerchantEmeil($email);
@@ -773,6 +774,12 @@ class User_Controller extends MobileController
         if ($result) {
             $ret['retmsg'] = "此手机号已注册";
             $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        $show_page = true;
+        if ($show_page) {
+            $ret['retmsg'] = "校验成功";
+            $ret['status'] = 1;
             $response->sendJSON($ret);
         }
 //        if(!empty($inviteCode)){
@@ -811,10 +818,11 @@ class User_Controller extends MobileController
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_regstept(Request $request, Response $response){
-            $this->v->set_tplname("mod_user_setpassword");
-            $this->nav_no = 0;
-            $response->send($this->v);
+    public function merchant_regstept(Request $request, Response $response)
+    {
+        $this->v->set_tplname("mod_user_setpassword");
+        $this->nav_no = 0;
+        $response->send($this->v);
     }
 
 
@@ -823,9 +831,28 @@ class User_Controller extends MobileController
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_dosavereg(Request $request, Response $response){
-
+    public function merchant_dosavereg(Request $request, Response $response)
+    {
+        $password = $request->post("password");
+        $confirmpassword = $request->post("confirmpassword");
+        if ($password != $confirmpassword) {
+            $ret['retmsg'] = "密码不一致请重新输入!";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+        $mobile = $_SESSION['mobile'];
+        $res = User_Model::saveMerchantInfo($mobile, "", "", $password);
+        if($res!==false){
+//            $res=Sms::sendSms($mobile, 'reg_success');
+            if($res){
+                unset($_SESSION['mobile']);
+                $ret['retmsg'] = "注册成功!";
+                $ret['status'] = 1;
+                $response->sendJSON($ret);
+            }
+        }
     }
+
     /**
      * 商家成功注册
      * @param Request $request
@@ -837,7 +864,7 @@ class User_Controller extends MobileController
         $this->nav_no = 0;
         $urlarr = C("storage.cookie.mch");
         $url = $urlarr["domain"];
-        $url = "http://".$urlarr["domain"];
+        $url = "http://" . $urlarr["domain"];
         $mobile = $request->get("mobile");
         $pwd = $request->get("pwd");
         $this->v->assign("mobile", $mobile);
