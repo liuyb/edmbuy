@@ -13,8 +13,8 @@ class Shop_Controller extends MerchantController
     {
         return [
             'shop/template/use' => 'template_ajax',
-            'shop/details' => 'shop_details',
             'shop/template/getimg' => 'template_getimg',
+            'shop/template/index' => 'template_index',
             'shop/carousel/upload' => 'carousel_upload',
             'shop/carousel/list' => 'carousel_index',
             'shop/carousel/add' => 'carousel_add',
@@ -33,9 +33,8 @@ class Shop_Controller extends MerchantController
         ];
 
     }
-
     /**
-     * 使用模板
+     * 店铺资料
      * @param Request $request
      * @param Response $response
      */
@@ -45,10 +44,35 @@ class Shop_Controller extends MerchantController
         if (!$result) {
             $response->redirect("/shop/start");
         }
-        $this->v->set_tplname('mod_shop_index');
         $this->setSystemNavigate('shop');
-        $this->setPageLeftMenu('shop', 'list');
+        $this->v->set_tplname("mod_shop_details");
+        $this->setPageLeftMenu('shop', 'details');
+        //查出店铺所有信息
+        $result = Shop_Model::getShopByMerchantId();
+        if(!$result || empty($result)){
+            Fn::show_pcerror_message("数据不存在！");
+        }
+        $this->v->assign('shop_info',$result);
         $response->send($this->v);
+    }
+    /**
+     * 使用模板
+     * @param Request $request
+     * @param Response $response
+     */
+    public function template_index(Request $request, Response $response)
+    {
+        $result = Shop_Model::checkShopStatus();
+        if (!$result) {
+            $response->redirect("/shop/start");
+        }
+        $show_page = true;
+        if($show_page){
+            $this->v->set_tplname("mod_shop_index");
+            $this->setPageLeftMenu('shop', 'list');
+            $response->send($this->v);
+        }
+
     }
 
     /**
@@ -412,21 +436,4 @@ class Shop_Controller extends MerchantController
         }
     }
 
-    /**
-     * 店铺资料
-     * @param Request $request
-     * @param Response $response
-     */
-    public function shop_details(Request $request, Response $response)
-    {
-        $this->v->set_tplname("mod_shop_details");
-        $this->setPageLeftMenu('shop', 'details');
-        //查出店铺所有信息
-        $result = Shop_Model::getShopByMerchantId();
-        if(!$result || empty($result)){
-            Fn::show_pcerror_message("数据不存在！");
-        }
-        $this->v->assign('shop_info',$result);
-        $response->send($this->v);
-    }
 }

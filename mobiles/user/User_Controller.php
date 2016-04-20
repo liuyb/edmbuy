@@ -726,7 +726,7 @@ class User_Controller extends MobileController
     }
 
     /**
-     * 保存用户的注册信息
+     * 用户注册step1
      * @param Request $request
      * @param Response $response
      */
@@ -738,39 +738,36 @@ class User_Controller extends MobileController
         $email = $request->post("email");
         $inviteCode = $request->post("invite_code");
         $inviteCode=intval($inviteCode);
+        $verifycode=$request->post("verifycode");
+        $verifycode = intval($verifycode);
 //        $read = $request->post("read");
+        if(!empty($_SESSION['moblie'])){
+            unset($_SESSION['moblie']);
+        }
         if (empty($mobileCode)) {
             $ret['retmsg'] = "手机验证码不能为空！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }elseif($_SESSION['verifycode']!=$verifycode){
+            $ret['retmsg'] = "图形验证码不正确！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        } elseif($verifycode==''){
+            $ret['retmsg'] = "图形验证码不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         } elseif (!verify_phone($mobile)) {
             $ret['retmsg'] = "手机号码格式不正确！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        } elseif (!verify_email($email)) {
-            $ret['retmsg'] = "邮箱格式不正确！";
-            $ret['status'] = 0;
-            $response->sendJSON($ret);
         } elseif ($mobileCode != $_SESSION['merchant_reg']) {
-            $ret['retmsg'] = "验证码不匹配！";
-            $ret['status'] = 0;
-            $response->sendJSON($ret);
-        }elseif($_SESSION['moblie']!=$mobile && !empty($_SESSION['moblie'])){
-            $ret['retmsg'] = "手机号码有误！";
-            $ret['status'] = 0;
-            $response->sendJSON($ret);
-        }elseif(empty($email)){
-            $ret['retmsg'] = "邮箱不能为空！";
+            $ret['retmsg'] = "手机验证码不匹配！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
         //验证邮箱是否已经被使用
-        $res = User_Model::checkMerchantEmeil($email);
-        if ($res) {
-            $ret['retmsg'] = "此邮箱已被注册！";
-            $ret['status'] = 0;
-            $response->sendJSON($ret);
-        }
+//        $res = User_Model::checkMerchantEmeil($email);
+
         //检验米商手机号是否被注册
         $result = User_Model::ckeckMobile($mobile);
         if ($result) {
@@ -778,58 +775,57 @@ class User_Controller extends MobileController
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
-        if(!empty($inviteCode)){
-            //校验邀请码
-           $result = User_Model::checkInviteCode($inviteCode);
-            if(!$result){
-                $ret['retmsg'] = "邀请人多米号不存在！";
-                $ret['status'] = 0;
-                $response->sendJSON($ret);
-            }
-        }
-        //保存商家信息发送短信
-        $password = rand_code();
-        $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
-        if ($res !== false) {
-            unset($_SESSION['mobile']);
-            unset($_SESSION['merchant_reg']);
-            //todo
-            //Sms::sendSms($mobile, 'reg_success', false);
-            $res = $this->sendEmail($email, $mobile, $password);
-            if($res && true){
-                $ret['retmsg'] = "注册成功！";
-                $ret['status'] = 1;
-                $ret['pwd'] = $password;
-                $response->sendJSON($ret);
-            }else{
-                $ret['retmsg'] = "邮箱号不存在！";
-                $ret['status'] = 0;
-                $response->sendJSON($ret);
-            }
-        }
+//        if(!empty($inviteCode)){
+//            //校验邀请码
+//           $result = User_Model::checkInviteCode($inviteCode);
+//            if(!$result){
+//                $ret['retmsg'] = "邀请人多米号不存在！";
+//                $ret['status'] = 0;
+//                $response->sendJSON($ret);
+//            }
+//        }
+//        //保存商家信息发送短信
+//        $password = rand_code();
+//        $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
+//        if ($res !== false) {
+//            unset($_SESSION['mobile']);
+//            unset($_SESSION['merchant_reg']);
+//            //todo
+//            //Sms::sendSms($mobile, 'reg_success', false);
+//            $res = $this->sendEmail($email, $mobile, $password);
+//            if($res && true){
+//                $ret['retmsg'] = "注册成功！";
+//                $ret['status'] = 1;
+//                $ret['pwd'] = $password;
+//                $response->sendJSON($ret);
+//            }else{
+//                $ret['retmsg'] = "邮箱号不存在！";
+//                $ret['status'] = 0;
+//                $response->sendJSON($ret);
+//            }
+//        }
     }
 
     /**
-     * 发送邮件
-     * @param $email
-     * @param $mobile
-     * @param $password
+     * 商家注册第二步
+     * @param Request $request
+     * @param Response $response
      */
-    private function sendEmail($email, $mobile, $password)
-    {
-        $title = "注册益多米商家帐号成功！";
-        $contentArr = C("msg.stmp");
-        $content = $contentArr['merchant_reg'];
-        $urlarr = C("storage.cookie.mch");
-        $url = "http://".$urlarr["domain"];
-        $content = sprintf($content, $url, $mobile, $password);
-        $from = C("port.stmp.user");
-        $to = $email;
-        $charset = 'utf-8';
-        $attachment = '';
-        return   Mail::send_mail($title, $content, $from, $to, $charset, $attachment);
+    public function merchant_regstept(Request $request, Response $response){
+            $this->v->set_tplname("mod_user_setpassword");
+            $this->nav_no = 0;
+            $response->send($this->v);
     }
 
+
+    /***
+     * 保存用户的注册信息
+     * @param Request $request
+     * @param Response $response
+     */
+    public function merchant_dosavereg(Request $request, Response $response){
+
+    }
     /**
      * 商家成功注册
      * @param Request $request

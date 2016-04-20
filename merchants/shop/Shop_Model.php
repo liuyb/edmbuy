@@ -162,7 +162,7 @@ class Shop_Model extends Model
                 $where = "cat_id in ({$business_scope})";
             };
         }
-        $sql = "select cat_name from shp_business_category where  {$where}";
+        $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC";
         $list = D()->query($sql)->fetch_column();
         if (count($list) > 0) {
             $result["business_scope"] = implode(",", $list);

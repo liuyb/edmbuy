@@ -79,11 +79,6 @@ $(function(){
 					showMsg("请输入正整数！");
 					input.focus();
 				}
-			}else if(type == 'url'){
-				if(!isURL(val)){
-					showMsg("请输入正确的网址！");
-					input.focus();
-				}
 			}
 		}
 	});
@@ -182,7 +177,7 @@ function topCenterDOM(obj){
 }*/
 //表单验证
 (function($){  
-    $.fn.formValid=function(){  
+    $.fn.formValid=function(){
     	var valid = true;
         $(this).find(":text").each(function(){
         	var OBJ = $(this);
