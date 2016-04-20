@@ -104,14 +104,14 @@
 	cursor:pointer;
 }
 #store_btn{
-	width:120px;
+	width:120px; 
 	height:40px;
-	background:#f26427;
+	background:#fff;
 	font-size:12px;
-	color:#fff;
+	color:#333;
 	border-radius:4px;
-	border:0;
-	margin:20px 0;
+	border:1px solid #ccc;
+	margin:20px 10px 20px 0;
 }
 .store_operate a{
 	color:#7d7d7d;
