@@ -119,6 +119,7 @@ class Shop_Model extends Model
         return D()->query($sql)->fetch_array_all();
     }
 
+
     /**
      * 得到已经开启的模版id
      * @return mixed
@@ -131,7 +132,6 @@ class Shop_Model extends Model
         return D()->query($sql, $merchant_id)->get_one();
 
     }
-
 
     /**
      * 店铺名是否已经存在
