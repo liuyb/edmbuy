@@ -22,45 +22,49 @@
 
 </style>
 
+<!--
 <div id="sus_money">
 	<img src="./img/sss1.png">
 	<p id="sus_tit">支付成功</p>
 	<p style="padding-bottom:15px;">您还需要填写如下注册信息，完成注册</p>
 </div>
+-->
 
 <div id="sus_flow">
 	<ul>
-		<li class="li_cs">付款</li>
-		<li class="li_cs li_co">注册</li>
-		<li>激活完成</li>
+		<li class="li_co">商家资料</li>
+		<li class="li_cs"><img src="./img/back.png"></li>
+		<li>邀请码</li>
+		<li class="li_cs"><img src="./img/back.png"></li>
+		<li>支付</li>
+		<li class="li_cs"><img src="./img/back.png"></li>
+		<li>完成开通</li>
 	</ul>
+	<div class="clear"></div>
 </div>
 
 <div id="sus_info">
 	<ul>
 		<li>
-			<span>手机号码</span>
 			<input id="phone_nums_p" class="ps_common" type="text" value="" placeholder="请填写正确的号码">
 			<span class="common_red_x">*</span>
 		</li>
 		<li>
-			<span>验<i class="i_common"></i>证<i class="i_common"></i>码</span>
 			<input id="auth_code" class="ps_common" type="text" value="" placeholder="请输入验证码">
 			<button id="ps_btn">获取验证码</button>
 		</li> 
 		<li>
-			<span>邮<i style="padding:0 15px"></i>箱</span>
-			<input id="ps_email" class="ps_common" type="text" value="" placeholder="请填写正确的邮箱">
+			<input id="ps_email" class="ps_common" type="text" value="" placeholder="请输入店铺名称(可不填)">
 			<span class="common_red_x">*</span>
 		</li>
 		<li>
-			<span>邀<i class="i_common"></i>请<i class="i_common"></i>码</span>
-			<input id="inviter" class="ps_common" type="text" value="" placeholder="(选填)邀请人的多米号">
-		</li> 
+			<input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入店铺名称(可不填)">
+			<span class="common_red_x"><img src="./img/bg1.png"></span>
+		</li>
 	</ul>
 </div>
 
-<div id="wx_success_pay"  style="margin-top:10px;">
+<div id="wx_success_pay"  style="margin-top:30px;">
 	<span id="red_deal">我已阅读，同意接受《益多米商家入驻协议》</span>
 	<button id="next_step">下一步</button>
 </div>

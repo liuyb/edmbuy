@@ -75,9 +75,9 @@
 .store_file{
   	width: 300px;
   	position: absolute;
-  	top: 0;
-  	left: 0;
-  	height: 40px;
+  	top: 10px;
+  	left: 25px;
+  	height: 118px;
   	opacity: 0;	
 }
 #file_save img{
@@ -142,6 +142,9 @@
 	height:16px;
 	width:16px;
 }
+#file_save{
+	position:relative;
+}
 </style>
 
 <!--#include file="header_commen.html"-->
@@ -167,14 +170,11 @@
 				<tr>
 					<td>1</td>
 					<td>
-						<div id="browse">
-							浏览
-							<input type="file" id="file" name="file" class="store_file" onchange="">	
-						</div>
 						<div id="file_save">
-							<img src="../mch/img/01_ba.png">			
+							<img src="../mch/img/01_ba.png">
+							<input type="file" id="file" name="file" class="store_file" onchange="">			
 						</div>
-						<div class="offer_size">建议尺寸640*250px</div>
+						<div class="offer_size">建议尺寸640*250px <label for="file" style="float:right;cursor:pointer;">重新上传</label></div>
 					</td>
 					<td><input id="link_address"  class="link_address_on" type="text" value="www.baidu.com"></td>
 					<td class="store_operate">
@@ -185,11 +185,11 @@
 				<tr>
 					<td>2</td>
 					<td>
-						<div id="browse">
-							浏览
-							<input type="file" id="file" name="file" class="store_file" onchange="">	
+						<div id="file_save">
+							<img src="../mch/img/jia1.png">	
+							<input type="file" id="file" name="file" class="store_file" onchange="">			
 						</div>
-						<div class="offer_size">建议尺寸640*250px</div>
+						<div class="offer_size">建议尺寸640*250px <label for="file" style="float:right;cursor:pointer;">重新上传</label></div>
 					</td>
 					<td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
 					<td class="store_operate">
@@ -200,11 +200,11 @@
 					<tr>
 					<td>2</td>
 					<td>
-						<div id="browse">
-							浏览
-							<input type="file" id="file" name="file" class="store_file" onchange="">	
+						<div id="file_save">
+							<img src="../mch/img/jia1.png">	
+							<input type="file" id="file" name="file" class="store_file" onchange="">			
 						</div>
-						<div class="offer_size">建议尺寸640*250px</div>
+						<div class="offer_size">建议尺寸640*250px <label for="file" style="float:right;cursor:pointer;">重新上传</label></div>
 					</td>
 					<td><input id="link_address" class="link_address_on" type="text" value="www.baidu.com"></td>
 					<td class="store_operate">
