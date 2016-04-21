@@ -406,7 +406,7 @@ div .alert {
 	background:#fff;
 	height:40px;
 	display:inline-block;
-	margin:15px 0 0 15px;
+	margin:0 0 0 15px;
 	border-radius:4px;
 	border:0;
 }
@@ -467,8 +467,8 @@ div .alert {
 	border:1px solid #eee;
   	position: absolute;
   	top: 60px;
-  	  left: 93px;
-	
+  	left: 93px;
+	z-index:50000;
 }
 .jt_s{
   	position: absolute;

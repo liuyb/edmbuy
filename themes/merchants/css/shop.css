@@ -288,7 +288,7 @@
 	background:#ecf1f5;
 	border:0;
 	border-radius:4px;
-	overflow:hidden;
+	overflow-y:scroll;
 	resize:none;
 	padding-left:10px;
 }
