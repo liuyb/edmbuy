@@ -1,0 +1,37 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--[HEAD_CSS]-->
+<style>
+body{
+	min-width:200px;
+}
+html, body{
+	background-color:#fff;
+}
+</style>
+<!--[/HEAD_CSS]-->
+<div style="margin:15px;">
+<form id="refuseForm" onsubmit="return refuseSubmit();">
+	<textarea class="text_area" placeholder="请填写拒绝理由" name="refuse_txt" required></textarea>
+	<input type="hidden" name="rec_id" value="<!--{$rec_id}-->"/>
+	<button type='submit' class="btn_re_close">提交</button></td>
+</form>	
+</div>
+
+<script>
+function refuseSubmit(){
+	if(!$("#refuseForm").formValid()){
+		return false;
+	}
+	var data = $("#refuseForm").serializeJson();
+	data.check_status = 'N';
+	F.postWithLoading('/order/refund/check', data, function(ret){
+		if(ret.result == 'SUCC'){
+			$(window.parent.document).find("#search_type_infos").trigger('click');
+			parent.layer.closeAll();
+		}else{
+			showMsg(ret.msg);
+		}
+	});
+	return false;
+}
+</script>

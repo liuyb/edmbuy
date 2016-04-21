@@ -333,6 +333,8 @@ class Fn extends Func {
           }else if(in_array($ship_status, array(SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART))){
               $ret = "待收货";
           }
+      }else if($pay_status == PS_REFUNDING){
+          $ret = "退款中";
       }
       return $ret;
   }

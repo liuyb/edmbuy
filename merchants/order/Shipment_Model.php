@@ -1,4 +1,7 @@
 <?php
+
+defined('IN_SIMPHP') or die('Access Denied');
+
 /**
  * 运费模板实现
  * @author Jean

@@ -1,4 +1,5 @@
 <?php
+defined('IN_SIMPHP') or die('Access Denied');
 /**
  * 商品模块提供的原子服务
  * @author Jean

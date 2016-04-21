@@ -62,7 +62,7 @@ class Goods_Controller extends MerchantController
             "start_date" => $start_date, "end_date" => $end_date,
             "orderby" => $orderby, "order_field" => $order_field
         );
-        $pager = new Pager($curpage, $this->getPageSize());
+        $pager = new Pager($curpage, 8);
         Goods_Model::getPagedGoods($pager, $options);
         $ret = $pager->outputPageJson();
         $ret['otherResult'] = $pager->otherMap;

@@ -24,7 +24,12 @@ class Order_Controller extends MerchantController {
             'order/shipment/away' => 'shipment_delete',
             'order/shipment' => 'shipment_save',
             'order/prepared' => 'batch_order_prepared',
-            'order/away' => 'batch_order_removed'
+            'order/away' => 'batch_order_removed',
+            'order/refund' => 'order_refund',
+            'order/refund/list' => 'order_refund_list',
+            'order/refund/check' => 'order_refund_check',
+            'order/refund/refuse' => 'order_refund_refuse',
+            'order/refund/detail' => 'get_refund_detail'
         ];
     }
     
@@ -439,6 +444,90 @@ class Order_Controller extends MerchantController {
         $response->sendJSON($data);
     }
     
+    /**
+     * 退款页面
+     * @param Request $request
+     * @param Response $response
+     */
+    public function order_refund(Request $request, Response $response)
+    {
+        $this->v->set_tplname('mod_order_refund');
+        $this->setPageLeftMenu('order', 'refund');
+        $response->send($this->v);
+    }
+    
+    public function order_refund_list(Request $request, Response $response){
+        $curpage = $request->get('curpage', 1);
+        $order_sn = $request->get('order_sn', '');
+        $buyer = $request->get('buyer', '');
+        $check_status = $request->get('check_status', 0);
+        $options = array("order_sn" => $order_sn, "buyer" => $buyer,"check_status" => $check_status);
+        $pager = new Pager($curpage, $this->getPageSize());
+        OrderRefund_Model::getPagedOrders($pager, $options);
+        $ret = $pager->outputPageJson();
+        $response->sendJSON($ret);
+    }
+    
+    /**
+     * 退款详情
+     * @param Request $request
+     * @param Response $response
+     */
+    public function get_refund_detail(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_box');
+        $this->v->set_tplname('mod_order_refund_detail');
+        $rec_id = $request->get('rec_id', '');
+        $refund = OrderRefund_Model::getRefundDetails($rec_id);
+        $goods = Order::getTinyItems($refund['order_id']);
+        $this->v->assign('goods', $goods);
+        if(!$refund['nick_name']){
+            $refund['nick_name'] = $refund['consignee'];
+        }
+        $refund_status = OrderRefund_Model::getRefundStatus($refund['check_status'], $refund['wx_status']);
+        $refund['status'] = $refund_status;
+        if(OrderRefund::WX_STATUS_FAIL == $refund['wx_status']){
+            $refund['fail_msg'] = $refund['wx_response'];
+        }
+        $this->v->assign('refund', $refund);
+        $response->send($this->v);
+    }
+    
+    /**
+     * 退款解决原因填写页面
+     * @param Request $request
+     * @param Response $response
+     */
+    public function order_refund_refuse(Request $request, Response $response)
+    {
+        $this->setPageView($request, $response, '_page_box');
+        $this->v->set_tplname('mod_order_refund_refuse');
+        $rec_id = $request->get('rec_id', '');
+        $this->v->assign('rec_id', $rec_id);
+        $response->send($this->v);
+    }
+    
+    /**
+     * 退款申请审核
+     * @param Request $request
+     * @param Response $response
+     */
+    public function order_refund_check(Request $request, Response $response){
+        if($request->is_post()){
+            $rec_id = $request->post('rec_id', '');
+            $check_status = $request->post('check_status', '');
+            if(!$rec_id || !$check_status){
+                $ret = ['result' => 'FAIL' , 'msg' => '非法的数据请求'];
+                $response->sendJSON($ret);
+            }
+            if('N' == $check_status){
+                $refuse_txt = $request->post('refuse_txt', '');
+                $ret = OrderRefund_Model::refuseRefund($rec_id, $refuse_txt);
+            }else if('Y' == $check_status){
+                $ret = OrderRefund_Model::acceptRefund($rec_id);
+            }
+            $response->sendJSON($ret);
+        }
+    }
 }
 
 /*----- END FILE: Order_Controller.php -----*/

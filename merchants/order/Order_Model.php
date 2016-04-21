@@ -30,7 +30,8 @@ class Order_Model extends Model {
             $where .= " and o.add_time <= $endtime ";
         }
         if($options['buyer']){
-            $where .= " and o.consignee like '%%".D()->escape_string(trim($options['buyer']))."%%' ";
+            $buy = D()->escape_string(trim($options['buyer']));
+            $where .= " and (o.consignee like '%%".$buy."%%' or u.nick_name like '%%".$buy."%%') ";
         }
         if($options['status']){
             $statusSql = Order::build_order_status_sql(intval($options['status']), 'o');
@@ -46,7 +47,7 @@ class Order_Model extends Model {
         $sql = "SELECT count(1) FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where merchant_ids='%s' and is_separate = 0 $where ";
         $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "SELECT o.*, o.consignee as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='%s' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "SELECT o.*, ifnull(u.nick_name, '') as nick_name FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where o.merchant_ids='%s' and is_separate = 0 $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $orders = D()->query($sql, $muid)->fetch_array_all();
         foreach ($orders as &$order){
             self::rebuild_order_info($order);
