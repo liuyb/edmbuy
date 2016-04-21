@@ -1,0 +1,48 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--[HEAD_CSS]-->
+<style>
+body{
+	min-width:200px;
+}
+html, body{
+	background-color:#fff;
+}
+</style>
+<!--[/HEAD_CSS]-->
+<div style="margin:15px;">
+	<table cellspacing="0" cellpadding="0" id="refund_t_see">
+		<tr>
+			<td class="refun_comm_left">商品名称：</td>
+			<td>
+			<!--{foreach from=$goods item=gd}-->
+			<div><!--{$gd.goods_name}--> (￥<!--{$gd.goods_price}--> x<!--{$gd.goods_number}-->)</div>
+			<!--{/foreach}-->
+			</td>
+		</tr>
+		<tr>
+			<td class="refun_comm_left">退款金额：</td><td style="color:#f26427;">￥<!--{$refund.refund_money}-->（实付：<!--{$refund.refund_money}-->）</td>
+		</tr>
+		<tr>
+			<td class="refun_comm_left">退货原因：</td><td><!--{$refund.refund_reason}--></td>
+		</tr>
+		<tr>
+			<td class="refun_comm_left">联系人：</td><td><!--{$refund.nick_name}--><!--{if $refund.mobilephone}-->(<!--{$refund.mobilephone}-->)<!--{/if}--></td>
+		</tr>
+		<tr>
+			<td class="refun_comm_left">退款状态：</td><td><!--{$refund.status}--></td>
+		</tr>
+		<!--{if isset($refund.fail_msg) && $refund.fail_msg}-->
+		<tr>
+			<td class="refun_comm_left">失败原因：</td><td><!--{$refund.fail_msg}--></td>
+		</tr>
+		<!--{/if}-->
+		<!--{if $refund.check_status eq 2}-->
+		<tr>
+			<td class="refun_comm_left">拒绝原因：</td><td><!--{$refund.refuse_txt}--></td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<td class="refun_comm_left"></td><td><button class="btn_re_close" onclick="parent.layer.closeAll();">关闭</button></td>
+		</tr>
+	</table>
+</div>

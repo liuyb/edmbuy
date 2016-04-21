@@ -5,7 +5,7 @@
  * @author Jean
  *
  */
-
+defined('IN_SIMPHP') or die('Access Denied');
 //阿里云OSS库
 require SIMPHP_INCS . '/libs/aliyun_oss/OssCommon.php';
 

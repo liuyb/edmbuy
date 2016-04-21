@@ -44,6 +44,7 @@ class Trade_Controller extends MobileController {
       'trade/order/record'   => 'order_record',
       'trade/order/topay'    => 'order_topay',
       'trade/order/payok'    => 'order_payok',
+      'trade/order/refund'   => 'order_refund'
     ];
   }
 
@@ -1070,6 +1071,73 @@ class Trade_Controller extends MobileController {
   
   		$response->sendJSON($ret);
   	}
+  }
+  
+  /**
+   * 退款申请
+   * @param Request $request
+   * @param Response $response
+   */
+  public function order_refund(Request $request, Response $response)
+  {
+      if ($request->is_post()) {
+          $ret = ['flag'=>'FAIL','msg'=>'退款失败'];
+          $user_id = $GLOBALS['user']->uid;
+          if (!$user_id) {
+              $ret['msg'] = '未登录, 请登录';
+              $response->sendJSON($ret);
+          }
+  
+          $order_id = $request->post('order_id', 0);
+          if (!$order_id) {
+              $ret['msg'] = '订单id为空';
+              $response->sendJSON($ret);
+          }
+  
+          $order = Order::load($order_id);
+          if(!$order->is_exist() || $user_id != $order->user_id){
+              $ret['msg'] = '订单不存在';
+              $response->sendJSON($ret);
+          }
+          //待发货状态时才能处理
+          $valid_status = Fn::get_order_status(CS_AWAIT_SHIP);
+          if(!OrderRefund::isValidRefundStatus($order->pay_status, $order->shipping_status)){    
+              $ret['msg'] = '当前订单状态不支持退款';
+              $response->sendJSON($ret);
+          }
+          //不能重复退款 - 微信退款失败时，用户可以重复退款
+          $has_refund = D()->from(OrderRefund::table())->where("order_sn='%s' and wx_status <> '%d'", $order->order_sn, OrderRefund::WX_STATUS_FAIL)
+                            ->select('count(1)')->result();
+          if($has_refund){
+              $ret['msg'] = '当前订单已经申请退款，不能重复提交';
+              $response->sendJSON($ret);
+          }
+          $refund_reason = $request->post('refund_reason', '');
+          $refund_desc = $request->post('refund_desc', '');
+          
+          $refund = new OrderRefund();
+          $refund->order_sn = $order->order_sn;
+          $refund->order_id = $order_id;
+          $refund->pay_trade_no = $order->pay_trade_no;
+          $refund->refund_sn = Fn::gen_unique_code('R');
+          $refund->trade_money = $order->money_paid;
+          $refund->refund_money = $order->money_paid;
+          $refund->refund_time = date('Y-m-d H:i:s', time());
+          $refund->user_id = $order->user_id;
+          $refund->refund_reason = $refund_reason;
+          $refund->refund_desc = $refund_desc;
+          $refund->consignee = $order->consignee;
+          $refund->nick_name = $GLOBALS['user']->nickname;
+          $refund->merchant_id = $order->merchant_ids;
+          $refund->save(Storage::SAVE_INSERT);
+          if (D()->insert_id()) {
+              //订单状态修改成退款中
+              $order->pay_status = PS_REFUNDING;
+              $order->save(Storage::SAVE_UPDATE);
+              $ret = ['flag'=>'SUC'];
+          }
+          $response->sendJSON($ret);
+      }
   }
 }
  

@@ -37,7 +37,12 @@ class MerchantController extends Controller {
 		$q = $request->q();
 		$q = explode('/', $q);
 		if($q && count($q) > 0){
-    		$this->setSystemNavigate($q[0]);
+		    $q = $q[0];
+		    if($q == 'user'){//默认是user/index
+		        $this->setSystemNavigate('index');
+		    }else{
+        		$this->setSystemNavigate($q);
+		    }
 		}else{
 		    $this->setSystemNavigate('index');
 		}

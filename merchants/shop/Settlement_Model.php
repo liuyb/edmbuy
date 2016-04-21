@@ -1,4 +1,5 @@
 <?php
+defined('IN_SIMPHP') or die('Access Denied');
 /**
  * 结算管理相关的逻辑
  * @author Jean

@@ -1,4 +1,5 @@
 <?php
+defined('IN_SIMPHP') or die('Access Denied');
 /**
  * 提供给商品模块的工具类
  */

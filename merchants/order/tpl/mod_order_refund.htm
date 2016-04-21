@@ -1,0 +1,161 @@
+<!--{add_css file="/themes/merchants/css/order.css" scope="module"}-->
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
+<!--{include file="inc/left_common.htm"}-->
+<div id="order_list_right">
+	<div id="order_type">
+		<ul>	
+			<li data-type='wait_check' class='order_type_on'>待处理</li>
+			<li data-type='record'>退款记录</li>
+		</ul>
+	</div>
+	
+	<div id="choose_condition">
+		<input class="choose_panel" contenteditable id="order_num" placeholder="订单号">
+		<input class="choose_panel" contenteditable id="buyer"  placeholder="买家/收货人">
+		<button id="search_type_infos">搜索</button>
+	</div>
+	
+	<div id="refund_info">
+			<table cellspacing="0" cellpadding="0" id="refund_tab_list">
+			<tr>
+				<th>订单号</th>
+				<th>买家</th>
+				<th>收货人</th>
+				<th>申请时间</th>
+				<th>退款金额</th>
+				<th>退款状态</th>
+				<th>操作</th>
+			</tr>
+			<tbody class="body-data"></tbody>
+		</table>
+	</div>
+		
+	<div id="list_type_foot">
+		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+	</div>
+</div>
+<script>
+var tableOptions = {id : 'refund_tab_list',url : '/order/refund/list',colspan : 7};
+var $order_type_li;
+var _cur_ordertype = 'wait_check';
+$(function(){
+	$order_type_li = $("#order_type");
+	loadPageDataTable(1, true, tableOptions);
+	$order_type_li.on('click','li',function(){
+		var obj = $(this);
+		clearQueryCondtion();
+		obj.siblings().removeClass("order_type_on");
+		obj.addClass("order_type_on");
+		loadPageDataTable(1, true, tableOptions);
+		var type = obj.data('type');
+		_cur_ordertype = type;
+	});
+	$("#search_type_infos").on('click',function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+	$("#refund_tab_list").on('click', '.operation', function(e){
+		e.stopPropagation();
+		var $op = $(this);
+		var $tr = $op.closest("tr").first();
+		var rec_id = $tr.data("id");
+		if($op.hasClass("view")){
+			layer.open({
+		        type: 2,
+		        title: '查看退款详情',
+		        shadeClose: true,
+		        shade: 0.8,
+		        area: ['500px', '450px'],
+		        content: '/order/refund/detail?rec_id=' + rec_id
+			});  
+		}else if($op.hasClass("accept")){
+			refundCheck(rec_id, 'Y');
+		}else if($op.hasClass("refuse")){
+			refundCheck(rec_id, 'N');
+		}
+	});
+	
+	$("#order_num").enterEvent(function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+	$("#buyer").enterEvent(function(){
+		loadPageDataTable(1, true, tableOptions);
+	});
+});
+
+//清空当前页面条件
+function clearQueryCondtion(){
+	$("#order_num").val("");
+	$("#buyer").val("");
+}
+
+//获取当前页面条件
+function pageQueryCondtion(){
+	var status = 'wait_check';
+	$("#order_type").find("li").each(function(){
+		var THIS = $(this);
+		if(THIS.hasClass("order_type_on")){
+			status = THIS.attr("data-type");
+		}
+	});
+	_cur_ordertype = status;
+	var order_num = $("#order_num").val();
+	var buyer = $("#buyer").val();
+	
+	var data = {order_sn : order_num,buyer : buyer, check_status : status};
+	return data;
+}
+function costructRowData(result){
+	var status = getRefundStatus(result);
+	var TR = "<tr data-id="+result.rec_id+">";
+	TR += "<td>"+result.order_sn+"</td><td>"+result.nick_name+"</td><td>"+result.consignee+"</td><td>"+result.refund_time+"</td><td>"+result.refund_money+"</td><td>"+status+"</td>";
+	TR += "<td class=\"order_pero_common\"><a href='javascript:;' class='operation view'><img src=\"/themes/merchants/img/check_order.png\"><br>查看</a>";
+	if(_cur_ordertype == 'wait_check'){
+		TR += "<a href='javascript:;' class='operation accept'><img src=\"/themes/merchants/img/tongyi.png\"><br>同意</a><a href='javascript:;' class='operation refuse'><img src=\"/themes/merchants/img/sc.png\"><br>拒绝</a>";
+	}
+	TR += "</td></tr>";
+	return TR;
+}
+function getRefundStatus(result){
+	var check_status = result.check_status;
+	check_status = check_status ? parseInt(check_status) : 0;
+	var wx_status = result.wx_status;
+	wx_status = wx_status ?　parseInt(wx_status) : 0;
+	var display = '';
+	switch(check_status){
+		case 1 : 
+			display = (wx_status == 1 ? '退款成功' : (wx_status == 2 ? '退款失败' : '退款中'));
+			break;	
+		case 2 : 
+			display = '已拒绝';
+			break;	
+		default : 
+			display = '待审核';
+	}
+	return display;
+}
+
+function refundCheck(rec_id, check_status){
+	if(check_status == 'N'){
+		layer.open({
+	        type: 2,
+	        title: '拒绝理由',
+	        shadeClose: true,
+	        shade: 0.8,
+	        area: ['450px', '300px'],
+	        content: '/order/refund/refuse?rec_id=' + rec_id
+	    });
+	}else if(check_status == 'Y'){
+		showConfirm('是否继续当前操作？', function(){
+			F.postWithLoading('/order/refund/check', {"rec_id" : rec_id, check_status : check_status}, function(ret){
+				if(ret.result == 'SUCC'){
+					showMsg('操作成功');
+					loadPageDataTable(1, true, tableOptions);
+				}else{
+					showMsg(ret.msg);
+				}
+			});	
+		});
+	}
+}
+</script>

@@ -1,5 +1,10 @@
 @CHARSET "UTF-8";
 
+/*override bootstrap*/
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #fff;
+    opacity: 1;
+}
 /*form dealing*/
 .inptxt {padding:4px 3px 3px 3px;font-size:14px;width:300px;height:20px;line-height:20px;border:1px solid #E5E5E5;}
 .inptxt-focus,.inptxt:focus {border-color:#aaa;background-color:#FBFBFB;}
@@ -407,6 +412,17 @@ div .alert {
 	height:40px;
 	display:inline-block;
 	margin:0 0 0 15px;
+	border-radius:4px;
+	border:0;
+}
+.choose_panel{
+	line-height:40px;
+	padding-left:5px;
+	width:200px;
+	background:#fff;
+	height:40px;
+	display:inline-block;
+	margin:15px 0 0 15px;
 	border-radius:4px;
 	border:0;
 }

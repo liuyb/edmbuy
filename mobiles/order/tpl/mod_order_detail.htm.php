@@ -146,7 +146,13 @@ $().ready(function(){
 		form_topay_submit($(this).attr('data-order_id'));
 	});
 	$(".btn_refund_money").bind('click', function(){
-		return_product(this);
+		F.post('/trade/order/refund',{order_id : $(this).data("order_id"),refund_reason:'无理由退款'},function(ret){
+			if(ret.flag == 'SUC'){
+				alert('退款申请已提交，等待商家审核。');
+			}else{
+				alert(ret.msg);
+			}
+		});
 	});
 	$(".btn_refund_order").bind('click', function(){
 		return_product(this);

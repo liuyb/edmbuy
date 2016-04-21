@@ -344,6 +344,32 @@ class WxTplMsg {
 		return self::send($openid, $tplData);
 	}
 	
+	/**
+	 * 退款模板消息
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $url
+	 * @param array $extra
+	 */
+	static function refund_msg($openid, $first, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = '0jEzX6Umm-A2ajrlDJFsta3Vr8egzGDGrzOPQbxiLEs'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = '0jEzX6Umm-A2ajrlDJFsta3Vr8egzGDGrzOPQbxiLEs'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first, '#173177');
+	    $tplData->keyword1   = self::packdata($extra['succ_time']);
+	    $tplData->keyword2   = self::packdata($extra['order_sn']);
+	    $tplData->keyword3   = self::packdata($extra['refund_sn']);
+	    $tplData->keyword4   = self::packdata($extra['refund_money']);
+	    $tplData->keyword5   = self::packdata($extra['reason']);
+	    return self::send($openid, $tplData);
+	}
 }
 
 /**
