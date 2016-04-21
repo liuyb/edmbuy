@@ -82,11 +82,33 @@
   	text-align: left;
   	margin: 6px 0;
   	float: left;
+	width: 180px;
+  	max-height: 40px;
+  	overflow: hidden;	
+}
+.see_all{
+	position:absolute;
+	top:50px;
+	width:14px !important;
+	height:14px !important;
+}
+.see_all img{
+	width:14px !important;
+	height:14px !important;	
   	width: 200px;
 }
 .goods_img{
 	float:left;
 	margin:10px;
+}
+.goods_img img{
+	width:60px;
+	height:60px;
+}
+.goods_img_new img{
+	width:60px !important;
+	height:60px !important;
+  	vertical-align: middle;	
 }
 .goods_edit{
 	background: url(../img/edit_11.png) no-repeat top;
