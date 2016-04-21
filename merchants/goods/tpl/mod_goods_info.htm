@@ -503,13 +503,12 @@ function goodsSpecifiEvent(){
 		}else{
 			z_in_height.hide();  
 		}
-		container.find(".common_a_li").hide();
+		//container.find(".common_a_li").hide();
 		isSpecifSelected(container);
 		$(".mask_bg").show();
 	})
 	//点击规格项
 	$(document).on("click",'.check_list_info li',function(){
-		$(".mask_bg").hide();
 		var container = getContainer(this);
 		var _text = $(this).text();
 		var cat = $(this).data('cat')
@@ -532,14 +531,16 @@ function goodsSpecifiEvent(){
 		container.find(".z_in_height").hide();
 		isSpecifSelected(container);
 		generateSpecifTable();
+		cancelSpecifSelect(container);
 		$(".deletelink").show();
+		$(".mask_bg").hide();
 	})
 	//点击添加属性
 	$(document).on("click",'.add_common_a',function(){
 		var container = getContainer(this);
 		container.find(".common_a_tow").show();
 		container.find(".result_d .jt_g").remove();
-		var cat_id = container.find(".stand_check").data('cat');
+		var cat_id = container.find(".stand_check").attr('data-cat');
 		var attr_list = container.find(".common_a_li");
 		get_attr_by_type(cat_id, function(ret){
 			var li = "";
@@ -591,11 +592,7 @@ function goodsSpecifiEvent(){
 	//点击取消属性
 	$(document).on("click",'.cancel_one',function(){
 		var container = getContainer(this);
-		//隐藏属性选择
-		container.find(".common_a_tow").hide();
-		//移除文本框数据
-		container.find("span.jt_g").remove();
-		//showAttrList(container);
+		cancelSpecifSelect(container);
 	});
 	//选择好的属性over事件
 	$(document).on("mouseover",'.yjtj',function(){
@@ -621,6 +618,15 @@ function goodsSpecifiEvent(){
 		$(".z_in_height").hide();
 		$(this).hide();
 	});
+}
+/**
+ * 取消规格选择
+ */
+function cancelSpecifSelect(container){
+	//隐藏属性选择
+	container.find(".common_a_tow").hide();
+	//移除文本框数据
+	container.find("span.jt_g").remove();
 }
 //删除规格
 function deleteSpecif(obj){
