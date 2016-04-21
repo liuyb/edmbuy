@@ -55,10 +55,13 @@
 .store_file{
 	width: 300px;
 	position: absolute;
-	top: 0;
-	left: 0;
-	height: 40px;
+	top: 10px;
+	left: 25px;
+	height: 118px;
 	opacity: 0;
+}
+#file_save{
+	position:relative;
 }
 #file_save img{
 	vertical-align: middle;
