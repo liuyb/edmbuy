@@ -153,28 +153,58 @@
 	</ul>
 </div>
 
+<a href="javascript:;"><div class="mask"></div></a>
+
+<!-- 二维码 -->
+<div class="store_wx">
+	<div class="store_wx_tit">更多优惠，请关注店铺公众号</div>
+	<div class="store_wx_img"><img src="./img/ydm.png"></div>
+	<div class="store_ts">长按二维码可以保存</div>
+	<div class="store_wx_colse"><img src="./img/guanbi.png"></div>
+</div>
+
+<!-- 收藏 -->
+<div class="store_up_t">
+	<div class="up_wx_tit"><span>收藏成功</span></div>
+	<div class="store_wx_img"><img src="./img/ydm.png"></div>
+	<div class="store_ts">关注益多米，超值产品任你选</div>
+	<div class="store_wx_colse"><img src="./img/guanbi.png"></div>
+</div>
+
+
 <script>
-	$(".store_up").on("click",function(){
-		if(!$(this).hasClass("store_up_on")){
-			$(this).addClass("store_up_on");
-			$(".two_code").removeClass("two_code_on");
-			$(".shop_cart_store").removeClass("shop_cart_store_on");
-		}
-	})
-	$(".two_code").on("click",function(){
-		if(!$(this).hasClass("two_code_on")){
-			$(this).addClass("two_code_on");
-			$(".store_up").removeClass("store_up_on");
-			$(".shop_cart_store").removeClass("shop_cart_store_on");
-		}
-	})
-	$(".shop_cart_store").on("click",function(){
-		if(!$(this).hasClass("shop_cart_store_on")){
-			$(this).addClass("shop_cart_store_on");
-			$(".store_up").removeClass("store_up_on");
-			$(".two_code").removeClass("two_code_on");
-		}
-	})
+$(".store_up").on("click",function(){
+	if(!$(this).hasClass("store_up_on")){
+		$(this).addClass("store_up_on");
+		$(".two_code").removeClass("two_code_on");
+		$(".shop_cart_store").removeClass("shop_cart_store_on");
+	}
+	$(".mask").show();
+	$(".store_up_t").show();
+})
+$(".two_code").on("click",function(){
+	if(!$(this).hasClass("two_code_on")){
+		$(this).addClass("two_code_on");
+		$(".store_up").removeClass("store_up_on");
+		$(".shop_cart_store").removeClass("shop_cart_store_on");
+	}
+	$(".mask").show();
+	$(".store_wx").show();
+})
+$(".shop_cart_store").on("click",function(){
+	if(!$(this).hasClass("shop_cart_store_on")){
+		$(this).addClass("shop_cart_store_on");
+		$(".store_up").removeClass("store_up_on");
+		$(".two_code").removeClass("two_code_on");
+	}
+})
+
+//关闭
+$(".mask,.store_wx_colse").on("click",function(){
+	$(".mask").hide();
+	$(".store_wx").hide();
+	$(".store_up_t").hide();
+})
 </script>
 
 

@@ -1,0 +1,165 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/swiper.min.css" />
+<link rel="stylesheet" href="./css/scrollbar.css" />
+<link rel="stylesheet" href="./css/mobiles_store.css" />
+<script src="./js/jquery-1.8.3.js"></script> 
+<script src="./js/swiper.min.js"></script>
+<script src="./js/scrollbar.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+<style>
+</style>
+
+<body style="background:#eee;">
+<div class="title_common_top">
+	<div class="all_goods_title">
+		<div class="tit_left"><img src="./img/fanhui.png"></div>
+		<div class="tit_center"><button class="search"></button><input type="text" value="" placeholder="搜索"></div>
+		<div class="tit_right"><img src="./img/fenlei.png"></div>
+	</div>
+	
+	<div class="all_goods_type">
+		<ul>
+			<li id="li1" class="li_all_on" onclick="f(1)">最新</li>
+			<li id="li2" onclick="f(2)">销量</li>
+			<li id="li3" onclick="f(3)">售价</li>
+			<div class="clear"></div>
+		</ul>
+	</div>
+</div>
+
+<div class="all_goods_common" id="list1">
+	<div class="newest_goods">
+		<ul>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+		</ul>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<div class="all_goods_common" id="list2" style="display:none;">
+	<div class="newest_goods">
+		<ul>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+		</ul>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<div class="all_goods_common" id="list3" style="display:none;">
+	<div class="newest_goods">
+		<ul>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+			<li class="goods_li">
+				<div class="next_goods">
+					<img src="http://merchant.edmbuy.com/images/201601/goods_img/1042_P_1452906750984.jpg" style="float:right">
+					<p class="all_goods_tit">天山雪水养育  新疆阿克苏极品灰枣</p>
+					<p class="all_goods_price"><span>￥118.00</span><b>￥135.00</b></p>
+				</div>
+			</li>
+		</ul>
+		<div class="clear"></div>
+	</div>
+</div>
+<div class="click_more_all"><span class="more_all_things">点击加载更多</span></div>
+
+<script>
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".all_goods_common").hide();
+	
+	if($(_li).hasClass("li_all_on")){
+		$(_li).removeClass("li_all_on");
+		$(_li).addClass("li_all_on_x");
+	}else{
+		$(".all_goods_type li").removeClass("li_all_on");
+		$(".all_goods_type li").removeClass("li_all_on_x");
+		$(_li).addClass("li_all_on");
+		$(_li).removeClass("li_all_on_x");
+	}
+	
+	$(_list).show();
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
