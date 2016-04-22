@@ -313,14 +313,14 @@ class Goods_Model extends Model
         } else {
             $orderby .= " order by g.last_update desc ";
         }
-        $sql = "select count(*) from shp_goods g where merchant_id='%s' $where ";
+        $sql = "select count(*) from shp_goods g where merchant_id='%s' and g.is_delete=0 $where ";
         $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.is_delete=0 and g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql, $muid)->fetch_array_all();
         //$goods = self::buildGoodsImg($goods);
         $pager->setResult($goods);
-        $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='%s' $groupbyWhere group by is_on_sale";
+        $sql = "SELECT count(*) as count, is_on_sale as cat FROM shp_goods g where merchant_id='%s' and g.is_delete=0 $groupbyWhere group by is_on_sale";
         $result = D()->query($sql, $muid)->fetch_array_all();
         $pager->otherMap = $result;
 

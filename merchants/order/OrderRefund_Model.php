@@ -57,7 +57,7 @@ class OrderRefund_Model extends Model{
                       'reason' => $refuse_txt
             ];
             $msg = '尊敬的会员，您有一笔退款申请被商家拒绝，点击详情查看被拒绝理由。如需申诉，请及时向益多米官方提交申诉材料。';
-            WxTplMsg::refund_msg(self::getUserOpenid($refund->user_id), '', U('order/detail','',true), $extra);
+            WxTplMsg::refund_msg(self::getUserOpenid($refund->user_id), $msg, U('order/detail','',true), $extra);
         }catch (Exception $e){
             D()->rollback();
             $ret = ['result' => 'FAIL', 'msg' => $e->getMessage()];

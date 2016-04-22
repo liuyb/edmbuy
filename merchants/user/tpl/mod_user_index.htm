@@ -12,19 +12,19 @@
     <table cellspacing="0" cellpadding="0" id="tem_tab">
       <tr>
         <td id="tem_tit">待处理订单信息：</td>
-        <td>未付款订单<span>（8）</span></td>
-        <td>代发货订单<span>（8）</span></td>
-        <td>未退款订单<span>（8）</span></td>
+        <td>未付款订单<span>（<!--{$wait_pay_count}-->）</span></td>
+        <td>待发货订单<span>（<!--{$wait_ship_count}-->）</span></td>
+        <td>待退款订单<span>（<!--{$wait_refund_count}-->）</span></td>
         <td></td>
-        <td><button class="tem_btn_common">管理订单</button></td>
+        <td><button class="tem_btn_common" onclick="window.location.href='/order'">管理订单</button></td>
       </tr>
       <tr>
         <td id="tem_tit">商品信息：</td>
-        <td>商品总数<span>（8）</span></td>
-        <td>未上架商品总数<span>（8）</span></td>
-        <td>可发布平台商品总数<span>（8）</span</td>
-        <td>库存预警（3）</td>
-        <td><button class="tem_btn_common">维护商品</button></td>
+        <td>商品总数<span>（<!--{$goods_total}-->）</span></td>
+        <td>未上架商品总数<span>（<!--{$unsale_goods_total}-->）</span></td>
+        <td>库存预警（<!--{$warn_goods_number}-->）</td>
+        <td></td>
+        <td><button class="tem_btn_common" onclick="window.location.href='/goods'">维护商品</button></td>
       </tr>
     </table>
   </div>
