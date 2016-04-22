@@ -153,7 +153,7 @@
 <div class="moddle">
     <div id="common_repaly">
         <div class="goods-name">商品名称：</div>
-        <div style="font-size:13px;color:#333;" class="goods-name-content">1<!--{$ret.goods_name}--></div>
+        <div style="font-size:13px;color:#333;" class="goods-name-content"><!--{$ret.goods_name}--></div>
 
         <div style="font-size:13px;color:#7d7d7d;">评价等级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_level}--></span></div>
 
@@ -182,7 +182,7 @@
             </div>
         </div>
         <div class="content-title">评价内容： </div>
-        <div class="content">```1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111<!--{$ret.content}--></div>
+        <div class="content"><!--{$ret.content}--></div>
         <div class="content-title-2" >回复内容：</div>
         <!--{if $type=="view"}-->
         <div class="comment_reply"><!--{$ret.comment_reply}--></div>
@@ -248,11 +248,12 @@
         var url = "/goods/rplayCommone";
         var common_id = $("#comment_id").val()
         var content = $("#content").val();
-        if(content.length>=200){
+        if(content.length > 200){
             showMsg("字数超限！");return;
         }
         var data = {"common_id": common_id, "content": content}
         F.postWithLoading(url, data, function (ret) {
+            showMsg(ret.retMsg);
             if (ret.status == 1) {
                 showMsg(ret.retmsg);
                 setTimeout(function(){

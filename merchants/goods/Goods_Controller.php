@@ -470,15 +470,18 @@ class Goods_Controller extends MerchantController
     {
         $common_id = $request->post("common_id");
         $comtent = $request->post("content");
-        if (strlen($comtent) > 200) {
+        if (mb_strlen($comtent,"UTF-8") > 200) {
             $ret['retmsg'] = "字数超出限制！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+       $res = Goods_Model::merchantRely($common_id, $comtent);
+        if($res!==false){
+            $ret['retmsg'] = "回复成功！";
             $ret['status'] = 1;
             $response->sendJSON($ret);
         }
-        Goods_Model::merchantRely($common_id, $comtent);
-        $ret['retmsg'] = "回复成功！";
-        $ret['status'] = 1;
-        $response->sendJSON($ret);
+
     }
 
     /**

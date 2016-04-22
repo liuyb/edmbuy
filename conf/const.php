@@ -113,5 +113,6 @@ define('OOS_CONSULT',               2); // 与店主协商
 define('SURPLUS_SAVE',              0); // 为帐户冲值
 define('SURPLUS_RETURN',            1); // 从帐户提款
 
-
+/*商城id*/
+define("MECHANT_GOODS_ID",1000);
 /*----- END FILE: const.php -----*/

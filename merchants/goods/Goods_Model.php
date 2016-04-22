@@ -602,7 +602,7 @@ class Goods_Model extends Model
         $table = "`shp_comment`";
         $setArr['comment_reply'] = $merchart_content;
         $whereArr['comment_id'] = $comment_id;
-        D()->update($table, $setArr, $whereArr);
+       return D()->update($table, $setArr, $whereArr);
     }
 
     /**

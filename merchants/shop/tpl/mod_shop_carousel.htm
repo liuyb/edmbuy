@@ -17,7 +17,7 @@
         display: inline-block;
         margin: 10px 0 0;
         padding-right: 20px;
-        border-radius: 4px; 
+        border-radius: 4px;
         position: relative;
         text-align: center;
         cursor: pointer;
@@ -61,7 +61,8 @@
         border-radius: 4px;
         text-align: center;
     }
-    #imageTip{
+
+    #imageTip {
         display: none;
         position: fixed;
         width: 640px;
@@ -72,7 +73,8 @@
 </style>
 <!--[/HEAD_CSS]-->
 <div id="store_infos">
-    <div class="layui-layer-shade" id="show_img"  style="z-index:19891015; background-color:#000; opacity:0.3; filter:alpha(opacity=30);display: none"></div>
+    <div class="layui-layer-shade" id="show_img"
+         style="z-index:19891015; background-color:#000; opacity:0.3; filter:alpha(opacity=30);display: none"></div>
     <table cellspacing="0" cellpadding="0" id="store_table_list">
         <tr>
             <th>排序</th>
@@ -81,30 +83,32 @@
             <th width="150">操作</th>
         </tr>
 
+
         <!--{foreach from=$carousel item=val}-->
         <tr>
             <td>
-                <input class="link_id" type="text" data-type="positive" value="<!--{$val.sort}-->" >
+                <input class="link_id" type="text" data-type="positive" value="<!--{$val.sort}-->">
             </td>
             <td>
-                <div class="browse">
-                    浏览
-                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)" >
-                </div>
                 <input type="hidden" class="img" value="<!--{$val.carousel_img}-->"/>
                 <input type="hidden" class="carousel" value="<!--{$val.carousel_id}-->"/>
 
-                <div class="file_save">
+                <div id="file_save">
                     <!--{if $val.link_url}-->
-                    <div class="add_img">
-                        <img src="<!--{$val.carousel_img}-->"/>
-                    </div>
+                    <img src="<!--{$val.carousel_img}-->" id="upload_img"/>
+                    <!--{else}-->
+                    <img src="/themes/mobiles/img/jia1.png" id="upload_img">
                     <!--{/if}-->
+                    <input id="file_<!--{$val.carousel_id}-->" type="file" name="file" class="store_file"
+                           onchange="fileupload(event,this)">
                 </div>
-                <div class="offer_size">建议尺寸640*250px</div>
+
+                <div class="offer_size">建议尺寸640*250px <label for="file_<!--{$val.carousel_id}-->"
+                                                             style="float:right;cursor:pointer;">重新上传</label>
+                </div>
             </td>
             <td><input class="link_address" type="text"
-                       value="<!--{$val.link_url}-->"  data-type='url' placeholder="请输入链接地址"></td>
+                       value="<!--{$val.link_url}-->" data-type='url' placeholder="请输入链接地址"></td>
             <td>
                 <span class="store_del">删除</span>
             </td>
@@ -112,22 +116,22 @@
         <!--{foreachelse}-->
         <tr>
             <td>
-                <input class="link_id" type="text" data-type="positive" value="1" >
+                <input class="link_id" type="text" data-type="positive" value="">
             </td>
             <td>
-                <div class="browse">
-                    浏览
-                    <input type="file" name="file" class="store_file" onchange="fileupload(event,this)">
-                </div>
                 <input type="hidden" class="img" value=""/>
-                <input type="hidden" class="carousel" value="0"/>
+                <input type="hidden" class="carousel" value=""/>
 
-                <div class="file_save">
+                <div id="file_save">
+                    <img src="/themes/mobiles/img/jia1.png" id="upload_img">
+                    <input type="file" id="file_1" name="file" class="store_file" onchange="fileupload(event,this)">
                 </div>
-                <div class="offer_size">建议尺寸640*250px</div>
+                <div class="offer_size">建议尺寸640*250px <label for="file_1"
+                                                             style="float:right;cursor:pointer;">重新上传</label>
+                </div>
             </td>
-            <td><input class="link_address " type="text"
-                       value=""  data-type='url'  placeholder="请输入链接地址"></td>
+            <td><input class="link_address" type="text"
+                       value="" data-type='url' placeholder="请输入链接地址"></td>
             <td>
                 <span class="store_del">删除</span>
             </td>
@@ -136,26 +140,31 @@
     </table>
     <button id="store_btn">继续添加</button>
     <button id="save_btn">保存</button>
-        <img src="" alt="" id="imageTip" />
+    <img src="" alt="" id="imageTip"/>
 </div>
 
 <script>
-    $(document).on('click','#store_btn',function () {
+    $(document).on('click', '#store_btn', function () {
         var total = $("#store_table_list tr").length;
+//        $("table tr:last)
+        var id = $("#store_table_list tr:last").find("input[class='store_file']").attr("id");
+        var ids = id.split("_");
+        var file_id = ids[1];
+        file_id = parseInt(file_id) + 1;
         if (total == 6) {
             showMsg("您最多只能添加五张轮播图！");
             return;
         }
-        var html = "<tr><td><input class='link_id'  data-type='positive'  type='text' value='" + total + "'></td>" +
-                "<td><div class='browse'>" +
-                "浏览" +
-                "<input type='file'  name='file' class='store_file' onchange='fileupload(event,this)'>" +
-                "</div>" +
+        var html = "<tr>" +
+                "<td> <input class='link_id' type='text' data-type='positive' value='"+file_id+"'>" +
+                "</td>" +
+                "<td>" +
                 "<input type='hidden' class='img' value=''/>" +
                 "<input type='hidden' class='carousel' value='0'/>" +
-                "<div class='file_save'>" +
-                "</div>" +
-                "<div class='offer_size'>建议尺寸640*250px</div>" +
+                "<div id='file_save'>" +
+                '<img src="/themes/mobiles/img/jia1.png" id="upload_img">' +
+                "<input type='file' id='file_" + file_id + "' name='file' class='store_file' onchange='fileupload(event,this)'>" +
+                "<div class='offer_size'>建议尺寸640*250px <label for='file_" + file_id + "' style='float:right;cursor:pointer;'>重新上传</label>" +
                 "</td>" +
                 "<td><input class='link_address '   type='text' value='' data-type='url' placeholder='请输入链接地址'></td>" +
                 "<td>" +
@@ -173,13 +182,9 @@
 //            selectedCls = "add_img_selected";
 //        }
         image_upload(url, e, obj, function (ret) {
-            var thumb = ret.thumb;
-            var html = '	<div class="add_img goods_gallery">'
-                    + '		<img src="' + thumb + '"  data-ori="' + ret.result + '" data-std="' + ret.stdpath + '"/>	'
-                    + '      <img src="/themes/merchants/img/close_11.png" class="close_img_d" style="display:none;" >'
-                    + '	</div>';
-            $obj.parent().parent().find(".file_save").html(html);
+
             var path = ret.stdpath;
+            $obj.parent().parent().find("#upload_img").attr("src", path);
             $obj.parent().parent().find(".img").val(path);
 
         });
@@ -189,21 +194,22 @@
         var $tr = $(this).parent().parent();
         var carousel = $tr.find(".carousel").val();
         var img = $tr.find(".img").val();
-        if(img == ""){
-            $tr.remove();return;
+        if (img == "") {
+            $tr.remove();
+            return;
         }
         showConfirm('确定要删除选中的轮播图吗？', function () {
             if (carousel == 0) {
                 $tr.remove();
             } else if (carousel > 0) {
                 var data = {"carousel_id": carousel};
-                F.postWithLoading('shop/carousel/del', data, function (data) {
+                F.postWithLoading('/shop/carousel/del', data, function (data) {
                     layer.msg(data.retmsg);
                     $tr.remove();
 //                    location.reload();
                 });
             }
-            if(total-1==0){
+            if (total - 1 == 0) {
                 location.reload();
             }
 
@@ -223,8 +229,8 @@
                 var link_address = $tr.find(".link_address").val();
                 var img_url = $tr.find(".img").val();
                 var carousel_id = $tr.find(".carousel").val();
-                if(!$("#store_table_list").formValid()){
-                     erro = 1;
+                if (!$("#store_table_list").formValid()) {
+                    erro = 1;
                     return;
                 }
                 if (sort == '') {
@@ -266,30 +272,30 @@
 
     })
 
-    $(document).on('focus','.link_address',function () {
+    $(document).on('focus', '.link_address', function () {
                 var obj = $(this);
                 obj.attr("placeholder", "");
                 obj.css("text-align", "left");
             }
     );
 
-    $(document).on('click','.add_img img',function() {
-        $obj=$("#imageTip");
+    $(document).on('click', '.add_img img', function () {
+        $obj = $("#imageTip");
         $obj.attr("src", this.src);//设置提示图片的路径
         centerDOM($obj);
-        $obj.css("display","block");
-        $("#show_img").css("display","block")
+        $obj.css("display", "block");
+        $("#show_img").css("display", "block")
     });
 
-    function centerDOM(obj){
+    function centerDOM(obj) {
         var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
-       // var scrolltop = $(document).scrollTop();//获取当前窗口距离页面顶部高度
-        var objLeft = (screenWidth - obj.width())/2 ;
-        var objTop = (screenHeight - obj.height())/2 ;
+        // var scrolltop = $(document).scrollTop();//获取当前窗口距离页面顶部高度
+        var objLeft = (screenWidth - obj.width()) / 2;
+        var objTop = (screenHeight - obj.height()) / 2;
         obj.css({left: objLeft + 'px', top: objTop + 'px'});
     }
-    $(document).on('click',"#show_img",function(){
-        $("#imageTip").css('display','none');
-        $(this).css('display','none');
+    $(document).on('click', "#show_img", function () {
+        $("#imageTip").css('display', 'none');
+        $(this).css('display', 'none');
     })
 </script>

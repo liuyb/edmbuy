@@ -1,0 +1,235 @@
+.clear{
+	clear:both;
+}
+.store_index_tit{
+	height:160px;	
+	text-align:center;
+}
+.store_index_tit img{
+	vertical-align:middle;
+	width:100%;
+	height:100%;
+}
+.tit_d{
+	width:50px !important;
+	height:50px !important;
+	border-radius:50%;
+	margin-top:-25px;
+}
+.store_name_info{
+	background:#fff;
+	padding-top:35px;
+}
+.name_s_line{
+	background:url(../img/line1.png) no-repeat center;
+	margin:0 10px;
+	text-align:center;
+}
+.line_inf{
+	padding:0 10px;
+	background-color:#fff;
+	font-size:15px;
+	color:#323232;
+}
+.store_n{
+	margin:10px 10px 0;
+}
+.store_ensure{
+	width:100%;
+}
+.store_ensure li{
+	display:inline-block;
+	font-size:10px;
+	color:#323232;
+}
+.flag_img{
+	background:url(../img/qijian.png) no-repeat left;
+	background-size:12px;
+  	padding-left: 15px;
+  	margin-right: 10px;	
+}
+.ydm_img{
+	background:url(../img/danbao.png) no-repeat left;
+	background-size:10px 12px;
+  	padding-left: 15px;
+  	margin-right: 10px;	
+}
+.auto_img{
+	background:url(../img/shiming.png) no-repeat left;
+	background-size:12px 9px;
+  	padding-left: 15px;
+  	margin-right: 10px;	
+}
+.direct_img{
+	background:url(../img/changjia.png) no-repeat left;
+	background-size:12px 9px;
+  	padding-left: 15px;
+  	margin-right: 10px;	
+}
+.store_sell_things{
+	padding:10px 0 15px;
+	font-size:12px;
+	color:#8c8c8c;
+}
+.store_index_navi{
+	margin:15px 0;
+	background:#fff;
+	height:60px;
+  	position: relative;	
+}
+.store_index_navi li{
+	float:left;
+	text-align:center;
+	width:33%;
+	margin-top:8px;
+}
+.store_index_navi img{
+	width:20px;
+	height:20px;
+}
+.store_index_navi a{
+	font-size:14px;
+	color:#323232;
+}
+.line_o{
+  	border-right: 1px solid #eee;
+  	height: 54px;
+	top:3px;
+}
+.line_t{
+  	border-right: 1px solid #eee;
+  	height: 54px;
+	top:3px;
+}
+
+.store_list_co{
+	background:#fff;
+}
+.co_title{
+	font-size:15px;
+	color:#323232;
+	display:inline-block;
+	font-weight:500;
+}
+.co_see_more a{
+	color:#323232;	
+	text-decoration: none;
+}
+.co_see_more{
+	font-size:15px;
+	color:#323232;	
+	display:inline-block;
+	float:right;
+}
+.buy_store_list{
+	margin-right: 10px;
+}
+.buy_store_list li{
+  	width: 50%;
+  	float: left;
+  	margin-top:5px;
+  	margin-bottom: 5px;	
+}
+.store_info_pc{
+	margin-left:10px;
+}
+.store_info_pc img{
+  	max-width: 100%;	
+}
+.store_table_tit{
+  	overflow: hidden;
+  	-webkit-line-clamp: 2;
+  	display: -webkit-box;
+  	-webkit-box-orient: vertical;
+  	padding: 5px 5px 0;
+  	font-size: 14px;
+  	color: #333;
+  	line-height: 17px;
+  	height: 33px;	
+}
+.store_table_price{
+	 padding-left: 2px;
+}	
+.store_table_price span{
+  	font-size: 16px;
+  	color: #Ff6325;	
+}
+.store_table_price b{
+  	font-size: 11px;
+  	color: #999;
+  	text-decoration: line-through;
+  	margin-left: 15px;	
+}
+.tech_m{
+  	text-align: center;
+  	height: 50px;
+  	line-height: 50px;	
+	color:#999;
+	font-size:10px;
+	padding-bottom:49px;
+	background:#f1f1f1;
+}
+.tech_m img{
+	width:30px;
+	height:30px;
+ 	vertical-align: middle;
+	margin-right:10px;	
+}
+.store_bottom_comm{
+  	width: 100%;
+  	position: fixed;
+  	bottom: 0;
+  	left: 0;	
+	border-top:1px solid #ccc;
+	background:#f9f9f9;
+}
+.store_bottom_comm li{
+	float:left;
+	width:33%;
+	text-align:center;
+	height:48px;
+	line-height:49px;	
+}
+.store_up{
+  	background: url(../img/shoucang_n.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+  	padding-top: 8px;
+  	margin: 4px 0 2px;
+  	font-size: 10px;
+  	color: #323232;	
+}
+.store_up_on{
+	background: url(../img/shoucang_h.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+}	
+.two_code{
+	background: url(../img/erweima_n.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+  	padding-top: 8px;
+  	margin: 4px 0 2px;
+  	font-size: 10px;
+  	color: #323232;	
+}
+.two_code_on{
+	background: url(../img/erweima_h.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+}
+.shop_cart_store{
+	background: url(../img/gouwuche_n.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+  	padding-top: 8px;
+  	margin: 4px 0 2px;
+  	font-size: 10px;
+  	color: #323232;	
+}
+
+.shop_cart_store_on{
+	background: url(../img/gouwuche_h.png) no-repeat center;
+ 	background-size: 20px;
+  	background-position: 50% 3px;
+}
