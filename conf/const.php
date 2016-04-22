@@ -72,6 +72,11 @@ define('OS_SPLITING_PART',          6); // 部分分单
 define('OS_REFUND',                 7); // 退款
 define('OS_REFUND_PART',            8); // 部分退款
 
+define('OS_REFUNDING',              9); // 申请退款中
+define('OS_REFUND_REFUSED',         10); // 退款拒绝
+define('OS_REFUND_FAILED',          11); // 退款失败
+
+
 /* 支付类型 */
 define('PAY_ORDER',                 0); // 订单支付
 define('PAY_SURPLUS',               1); // 会员预付款

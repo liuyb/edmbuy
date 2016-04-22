@@ -1132,6 +1132,7 @@ class Trade_Controller extends MobileController {
           if (D()->insert_id()) {
               //订单状态修改成退款中
               $order->pay_status = PS_REFUNDING;
+              $order->order_status = OS_REFUNDING;
               $order->save(Storage::SAVE_UPDATE);
               $ret = ['flag'=>'SUC'];
           }

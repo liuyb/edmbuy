@@ -302,7 +302,7 @@ class Fn extends Func {
           //已关闭  
           case CS_CLOSED : 
               $ret = array("pay_status" => array(PS_CANCEL, PS_REFUND), 
-                           "order_status" => array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED));
+                           "order_status" => array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED, OS_REFUND_REFUSED, OS_REFUND_FAILED));
               break;
           default:
               $ret = [];
@@ -334,7 +334,13 @@ class Fn extends Func {
               $ret = "待收货";
           }
       }else if($pay_status == PS_REFUNDING){
-          $ret = "退款中";
+          if($order_status == OS_REFUNDING){
+              $ret = "申请退款中";
+          }else if($order_status == OS_REFUND_REFUSED){
+              $ret = "退款已拒绝";
+          }else if($order_status == OS_REFUND_FAILED){
+              $ret = "退款失败";
+          }
       }
       return $ret;
   }

@@ -51,6 +51,8 @@ class OrderRefund_Model extends Model{
             $refund->save(Storage::SAVE_UPDATE);
             Order::action_log($refund->order_id, ['action_note'=>'商家退款拒绝', 'action_user'=>$muid]);
             $ret = ['result' => 'SUCC'];
+            //修改订单状态 退款拒绝
+            D()->update(Order::table(), array('order_status'=>OS_REFUND_REFUSED), "order_id=$refund->order_id");
             
             $extra = ['succ_time' => simphp_dtime(), 'order_sn' => $refund->order_sn,
                       'refund_sn' => $refund->refund_sn, 'refund_money' => $refund->refund_money,
@@ -98,7 +100,8 @@ class OrderRefund_Model extends Model{
             $refund->succ_time = $result['succ_time'];
         }else{
             $refund->wx_status = OrderRefund::WX_STATUS_FAIL;
-            
+            //修改订单状态 退款失败
+            D()->update(Order::table(), array('order_status'=>OS_REFUND_FAILED), "order_id=$refund->order_id");
             $extra = ['succ_time' => simphp_dtime(), 'order_sn' => $refund->order_sn,
                 'refund_sn' => $refund->refund_sn, 'refund_money' => $refund->refund_money,
                 'reason' => $result['msg']

@@ -45,10 +45,10 @@
 	<div id="list_type_foot">
 		<span id="all_check"></span>
 		<button class="btn_common" onclick="deleteGoods();">批量删除</button>
-		<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsStatus(null,'is_on_sale', 0);" style="width:66px;">下架</button>
-		<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;width:66px;' onclick="updateGoodsStatus(null,'is_on_sale', 1);">上架</button>
-		<button class="btn_common" id="recommend_shop" style="width:106px;" onclick="updateGoodsStatus(null,'shop_recommend', 1);">推荐到店铺首页</button>
-		<button class="btn_common" id="unrecommend_shop" style="width:106px;" onclick="updateGoodsStatus(null,'shop_recommend', 0);">取消推荐</button>
+		<button  class="btn_common batch_out" id="goodsNotSale" onclick="updateGoodsSaleStatus(null,'is_on_sale', 0);" style="width:66px;">下架</button>
+		<button  class="btn_common batch_out" id="goodsOnSale" style='display:none;width:66px;' onclick="updateGoodsSaleStatus(null,'is_on_sale', 1);">上架</button>
+		<button class="btn_common" id="recommend_shop" style="width:106px;" onclick="updateGoodsRecommStatus(null,'shop_recommend', 1);">推荐到店铺首页</button>
+		<button class="btn_common" id="unrecommend_shop" style="width:106px;" onclick="updateGoodsRecommStatus(null,'shop_recommend', 0);">取消推荐</button>
 		<div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
 	</div>
 </div>
@@ -106,7 +106,7 @@ function pageQueryCondtion(){
 }
 function costructRowData(result){
 	var TR = "";
-	TR+= "<tr data-id="+result.goods_id+"><td class=\"common_check\"></td><td style=\"position: relative;\"><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img goods_img_new\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
+	TR+= "<tr data-id="+result.goods_id+" data-recomm="+result.shop_recommend+"><td class=\"common_check\"></td><td style=\"position: relative;\"><a href='"+site+"/item/"+result.goods_id+"' style='color:#222;' target='_blank'><div class=\"goods_img goods_img_new\" style=\"float:left;\"><img src=\""+result.goods_thumb+"\"></div>";
 	TR+= "<div style=\"width:200px;\" class=\"goods_name\" title='"+result.goods_name+"'>"+result.goods_name+"";
 	if(result.shop_recommend == 1){
 		TR+= "<div class=\"see_all\"><img src=\"/themes/merchants/img/tj.png\"></div>";
@@ -179,9 +179,9 @@ function DOMEventBind(){
 		var type = THIS.attr("data-type");
 		var obj = THIS.closest("tr").first();
 		if(type == "sale"){
-			updateGoodsStatus(obj,'is_on_sale',0);
+			updateGoodsSaleStatus(obj,'is_on_sale',0);
 		}else if(type == "nosale"){
-			updateGoodsStatus(obj,'is_on_sale',1);			
+			updateGoodsSaleStatus(obj,'is_on_sale',1);			
 		}else if(type == "delete"){
 			deleteGoods(obj);
 		}else if(type == "edit"){
@@ -207,14 +207,14 @@ function deleteGoods(obj){
 		});
 	});
 }
-function updateGoodsStatus(obj, status, statusVal){
+function updateGoodsSaleStatus(obj, status, statusVal){
 	var goods_id = batchHandleData(obj);
 	if(!goods_id || !goods_id.length){
 		layer.msg('还没有选择商品！');
 		return;
 	}
 	var data = {status : status, goods_ids : goods_id, statusVal : statusVal};
-	if(status == 'is_on_sale' && statusVal != 1){
+	if(statusVal != 1){
 		showConfirm('确定要下架选中的商品吗？',function(){
 			F.postWithLoading('/goods/status', data, function(data){
 				layer.msg('操作成功');
@@ -227,6 +227,34 @@ function updateGoodsStatus(obj, status, statusVal){
 			loadPageDataTable(1, true, tableOptions);
 		});
 	}
+}
+function updateGoodsRecommStatus(obj, status, statusVal){
+	var goods_id = [];
+	var real_goods_id = [];
+	$(".common_check").each(function(){
+		if($(this).hasClass("common_check_on")){
+			var $tr = $(this).closest("tr").first();
+			var id = $tr.data('id');
+			var recomm = $tr.data('recomm');
+			goods_id.push(id);
+			if(recomm != statusVal){
+				real_goods_id.push(id);
+			}
+		}
+	});
+	if(!goods_id.length){
+		layer.msg('还没有选择商品！');
+		return;
+	}
+	if(!real_goods_id.length){
+		layer.msg('所选商品已是对应状态！');
+		return;
+	}
+	var data = {status : status, goods_ids : goods_id, statusVal : statusVal};
+	F.postWithLoading('/goods/status', data, function(data){
+		layer.msg('操作成功');
+		loadPageDataTable(1, true, tableOptions);
+	});
 }
 function editGoods(obj){
 	var goods_id = obj.attr("data-id");

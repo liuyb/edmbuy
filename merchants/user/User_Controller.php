@@ -9,7 +9,13 @@ defined('IN_SIMPHP') or die('Access Denied');
 class User_Controller extends MerchantController
 {
 
-
+    public function menu()
+    {
+        return [
+            'user/home/trade/data'    => 'get_merchant_trade_data'
+        ];
+    }
+    
     /**
      * default action 'index'
      * @param Request $request
@@ -26,16 +32,37 @@ class User_Controller extends MerchantController
             $goods_total = Home_Model::getGoodsTotalByIsSale(-1, $muid);
             $unsale_goods_total = Home_Model::getGoodsTotalByIsSale(0, $muid);
             $warn_goods_number = Home_Model::getGoodsNumberWarning($muid, 10);
+            $shop = Home_Model::getShopInfo($muid);
+            $totalSales = Home_Model::getOrderSalesMoney($muid);
             $this->v->assign('wait_pay_count', $wait_pay_count);
             $this->v->assign('wait_ship_count', $wait_ship_count);
             $this->v->assign('wait_refund_count', $wait_refund_count);
             $this->v->assign('goods_total', $goods_total);
             $this->v->assign('unsale_goods_total', $unsale_goods_total);
             $this->v->assign('warn_goods_number', $warn_goods_number);
+            $this->v->assign('totalSales', $totalSales);
+            $this->v->assign('shop', $shop);
             $response->send($this->v);
         } else {
             $response->redirect('/login');
         }
+    }
+    
+    /**
+     * 商家运营数据
+     * @param Request $request
+     * @param Response $response
+     */
+    public function get_merchant_trade_data(Request $request, Response $response){
+        $gaps = [array('time' => '昨日', 'gap' => 'yesterday'),
+            array('time' => '近7天', 'gap' => 1),
+            array('time' => '近30天', 'gap' => 30)
+        ];
+        foreach ($gaps as &$gap){
+            $result = Home_Model::getMerchantDataByTime($GLOBALS['user']->uid, $gap['gap']);
+            $gap = array_merge($gap, $result);
+        }
+        $response->sendJSON($gaps);
     }
 
     /**
