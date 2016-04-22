@@ -25,7 +25,7 @@ class Sms
         $SmsConfig = C("port.sms");
         $contentArray = C("msg.sms");
         $content = $contentArray[$type];
-        $code = self::rand_code();
+        $code = rand_code();
         $_SESSION[$type] = $code;
         if (!$verify) {
             $imgCode = rand_code();

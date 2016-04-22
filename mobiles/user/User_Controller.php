@@ -29,10 +29,13 @@ class User_Controller extends MobileController
             'user/nickname/update' => 'update_nickname',
             'user/merchant/checkin' => 'merchant_checkIn',
             'user/merchant/payment' => 'merchant_payment',
-            'user/merchant/register' => 'merchant_register',
             'user/merchant/getcode' => 'merchant_getcode',
-            'user/merchant/savereg' => 'merchant_savereg',
-            'user/merchant/regsuc' => 'merchantRegSuc',
+            'user/merchant/openshop' => 'merchant_openshop_onestep',
+            'user/merchant/doonestep' => 'merchant_do_onestep',
+            'user/merchant/twostep' => 'merchant_shop_twostep',
+            'user/merchant/dotwostep' => 'merchant_shop_dotwostep',
+            'user/merchant/dosuccess' => 'merchant_reg_succ',
+            'user/merchant/paysuc' => 'merchant_pay_success',
         ];
     }
 
@@ -665,7 +668,21 @@ class User_Controller extends MobileController
      */
     public function merchant_checkIn(Request $request, Response $response)
     {
+        $result = User_Model::checkIsPaySuc();
+        if (!empty($result)) {
+            $response->redirect("/user/merchant/dosuccess");
+        }
+        if (isset($_SESSION['step'])) {
+            if ($_SESSION['step'] == 1) {
+                $response->redirect("/user/merchant/openshop");
+            } elseif ($_SESSION['step'] == 2) {
+                $response->redirect("/user/merchant/twostep");
+            } elseif ($_SESSION['step'] == 3) {
+                $response->redirect("/trade/order/confirm_sysbuy");
+            }
+        }
         $this->v->set_tplname('mod_user_checkin');
+        //得到商城信息
         $this->nav_no = 0;
         $response->send($this->v);
     }
@@ -683,14 +700,20 @@ class User_Controller extends MobileController
     }
 
     /**
-     * 商家注册
+     * 商家入驻第一步
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_register(Request $request, Response $response)
+    public function merchant_openshop_onestep(Request $request, Response $response)
     {
-        $this->v->set_tplname('mod_user_merreg');
+        $_SESSION['step'] = 1;
+        $result = User_Model::checkIsPaySuc();
+        if (!empty($result)) {
+            $response->redirect("user/merchant/dosuccess");
+        }
         $this->nav_no = 0;
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_tplname("mod_user_onestep");
         $response->send($this->v);
     }
 
@@ -717,7 +740,7 @@ class User_Controller extends MobileController
         //$result = Sms::sendSms($phone, "merchant_reg",false);
         if (true) {
             $_SESSION['merchant_reg'] = 8888;
-            $_SESSION['moblie'] = $phone;
+            $_SESSION['mobile'] = $phone;
             $ret['retmsg'] = "发送验证码成功";
             $ret['status'] = 1;
             $response->sendJSON($ret);
@@ -729,16 +752,18 @@ class User_Controller extends MobileController
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_savereg(Request $request, Response $response)
+    public function merchant_do_onestep(Request $request, Response $response)
     {
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $mobile = $request->post("mobile");
         $mobileCode = $request->post("mobile_code");
+        $shop_face = $request->post("shop_face");
+        $_SESSION['shop_face'] = $shop_face;
         $mobileCode = intval($mobileCode);
-        $email = $request->post("email");
-        $inviteCode = $request->post("invite_code");
-        $inviteCode = intval($inviteCode);
+
         $verifycode = $request->post("verifycode");
         $verifycode = intval($verifycode);
+
 //        $read = $request->post("read");
         if (empty($mobileCode)) {
             $ret['retmsg'] = "手机验证码不能为空！";
@@ -778,78 +803,96 @@ class User_Controller extends MobileController
         }
         $show_page = true;
         if ($show_page) {
+            $_SESSION['step'] = 2;
             $ret['retmsg'] = "校验成功";
             $ret['status'] = 1;
             $response->sendJSON($ret);
         }
-//        if(!empty($inviteCode)){
-//            //校验邀请码
-//           $result = User_Model::checkInviteCode($inviteCode);
-//            if(!$result){
-//                $ret['retmsg'] = "邀请人多米号不存在！";
-//                $ret['status'] = 0;
-//                $response->sendJSON($ret);
-//            }
-//        }
-//        //保存商家信息发送短信
-//        $password = rand_code();
-//        $res = User_Model::saveMerchantInfo($mobile, $email, $inviteCode, $password);
-//        if ($res !== false) {
-//            unset($_SESSION['mobile']);
-//            unset($_SESSION['merchant_reg']);
-//            //todo
-//            //Sms::sendSms($mobile, 'reg_success', false);
-//            $res = $this->sendEmail($email, $mobile, $password);
-//            if($res && true){
-//                $ret['retmsg'] = "注册成功！";
-//                $ret['status'] = 1;
-//                $ret['pwd'] = $password;
-//                $response->sendJSON($ret);
-//            }else{
-//                $ret['retmsg'] = "邮箱号不存在！";
-//                $ret['status'] = 0;
-//                $response->sendJSON($ret);
-//            }
-//        }
     }
 
     /**
-     * 商家注册第二步
+     * 商家入驻第二步骤
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_regstept(Request $request, Response $response)
+    public function merchant_shop_twostep(Request $request, Response $response)
     {
-        $this->v->set_tplname("mod_user_setpassword");
+        if (!isset($_SESSION['step'])) {
+            $response->redirect("/user/merchant/openshop");
+        }elseif($_SESSION['step']==3){
+            $response->redirect("/trade/order/confirm_sysbuy");
+        }
+        $result = User_Model::checkIsPaySuc();
+        if (!empty($result)) {
+            $response->redirect("/user/merchant/dosuccess");
+        }
+        $this->v->set_tplname("mod_user_twostep");
         $this->nav_no = 0;
         $response->send($this->v);
     }
 
+    /**
+     * 保存第二步骤
+     * 商家入驻第步骤
+     */
+    public function merchant_shop_dotwostep(Request $request, Response $response)
+    {
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $invite_code = $request->post("invite_code");
+        if (!empty($invite_code)) {
+            User_Model::checkInviteCode($invite_code);
+            $_SESSION['invite_code'] = $invite_code;
+        }
+        $_SESSION['step'] = 3;
+        echo "1";
+    }
 
-    /***
-     * 保存用户的注册信息
+
+    /**
+     * 支付成功
      * @param Request $request
      * @param Response $response
      */
-    public function merchant_dosavereg(Request $request, Response $response)
+    public function merchant_pay_success(Request $request, Response $response)
     {
-        $password = $request->post("password");
-        $confirmpassword = $request->post("confirmpassword");
-        if ($password != $confirmpassword) {
-            $ret['retmsg'] = "密码不一致请重新输入!";
-            $ret['status'] = 0;
-            $response->sendJSON($ret);
+        /**
+         * 支付成功后保存商家信息
+         */
+        if (!$request->post()) {
+            $this->v->set_tplname("mod_user_paysuc");
+            $response->send($this->v);
         }
+        if (!isset($_SESSION['step'])) {
+            $response->redirect("/user/merchant/openshop");
+        }
+        $result = User_Model::checkIsPaySuc();
+        if (!empty($result)) {
+            $response->redirect("/user/merchant/dosuccess");
+        }
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $order_id = $request->post("order_id");
+        $order_sn = $request->post("order_sn");
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $password = rand_code();
+        $_SESSION['password'] = $password;
         $mobile = $_SESSION['mobile'];
-        $res = User_Model::saveMerchantInfo($mobile, "", "", $password);
-        if($res!==false){
-//            $res=Sms::sendSms($mobile, 'reg_success');
-            if($res){
-                unset($_SESSION['mobile']);
-                $ret['retmsg'] = "注册成功!";
-                $ret['status'] = 1;
-                $response->sendJSON($ret);
-            }
+        $invite_code = isset($_SESSION['invite_code']) ? $_SESSION['invite_code'] : '';
+        $facename = isset($_SESSION['facename']) ? $_SESSION['facename'] : '';
+        $merchant_id = User_Model::saveMerchantInfo($mobile, $invite_code, $password, $facename);
+        if (!empty($merchant_id)) {
+            User_Model::UpdataMerchantInfo($merchant_id, $order_id, $order_sn);
+            //todo 发送短信
+            // Sms::sendSms($mobile, 'reg_success');
+            unset($_SESSION['step']);
+            unset($_SESSION['facename']);
+            unset($_SESSION['verifycode']);
+            unset($_SESSION['invite_code']);
+            unset($_SESSION['shop_face']);
+            unset($_SESSION['merchant_reg']);
+        }
+        if ($request->post()) {
+            $ret['url'] = "/user/merchant/paysuc";
+            $response->sendJSON($ret);
         }
     }
 
@@ -858,21 +901,33 @@ class User_Controller extends MobileController
      * @param Request $request
      * @param Response $response
      */
-    public function merchantRegSuc(Request $request, Response $response)
+    public function merchant_reg_succ(Request $request, Response $response)
     {
+        if (!isset($_SESSION['step'])==1) {
+            $response->redirect("/user/merchant/openshop");
+        }elseif($_SESSION['step']==2){
+            $response->redirect("/user/merchant/twostep");
+        }elseif($_SESSION['step']==3){
+            $response->redirect("/trade/order/confirm_sysbuy");
+        }
         $this->v->set_tplname('mod_user_regsuc');
+        if (!isset($_SESSION['password'])) {
+            $this->v->assign("is_complate", 1);
+        }
         $this->nav_no = 0;
         $urlarr = C("storage.cookie.mch");
         $url = $urlarr["domain"];
-        $url = "http://" . $urlarr["domain"];
-        $mobile = $request->get("mobile");
-        $pwd = $request->get("pwd");
+        $url = "http://" . $url;
+        if (isset($_SESSION['password']) && isset($_SESSION['password'])) {
+            $password = $_SESSION['password'];
+            unset($_SESSION['password']);
+            $this->v->assign("pwd", $password);
+        }
+        $mobile = $_SESSION['mobile'];
         $this->v->assign("mobile", $mobile);
-        $this->v->assign("pwd", $pwd);
         $this->v->assign("url", $url);
         $response->send($this->v);
     }
 
 }
-
 /*----- END FILE: User_Controller.php -----*/

@@ -2,7 +2,7 @@
 <div id="pay_top">
 	<img src="/themes/mobiles/img/bzb.png">
 </div>
-
+<form action="/user/merchant/openshop" method="post">
 <div>
 	<table cellspacing="0" cellpadding="0" class="pay_tab">
 		<tr>
@@ -26,12 +26,12 @@
 		</tr>
 	</table>
 </div>
-
 <div id="how_much">
-	优惠价：<b>￥699/年</b><i>市场价：￥899/年</i>
+	优惠价：<b data-type="699">￥699/年</b><i>市场价：￥899/年</i>
 </div>
-
 <div id="wx_success_pay">
-	<button id="sus_pay">微信安全支付</button>
+	<button id="sus_pay" type="submit">立即开通</button>
 	<span id="red_deal">我已阅读，同意接受《益多米商家入驻协议》</span>
 </div>
+</form>
+

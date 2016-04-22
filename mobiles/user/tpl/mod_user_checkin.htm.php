@@ -18,9 +18,9 @@
 			<span>商家入驻流程</span>
 		</li>
 	</ul>
-	<button id="gains_enter">我要入驻</button>
+	<button id="gains_enter" >我要入驻</button>
 		<script>
 				$("#gains_enter").click(function(){
-					window.location.href="/user/merchart/payment";
+					window.location.href="/user/merchant/payment";
 				})
 		</script>
