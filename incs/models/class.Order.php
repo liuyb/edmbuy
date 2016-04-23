@@ -79,9 +79,9 @@ class Order extends StorageNode{
                 'parent_id'          => 'parent_id',
                 'discount'           => 'discount',
                 'merchant_ids'       => 'merchant_ids',
+                'is_delete'          => 'is_delete',   
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2',
-                'is_delete'          => 'is_delete'   
             ));
     }
     

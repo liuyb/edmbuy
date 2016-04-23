@@ -165,9 +165,10 @@ class File extends CStatic {
 	 * @param       array       $watermark_place    水印位置代码，包括 x:水印在原始图的x位置;y:水印在原始图的y位置;w:水印在原始图的宽度;h:水印在原始图的高度。可选参数pos值: 'lt'(左上),'rt'(右上),'lb'(左下),'rb'(右下),'ct'(居中)
 	 * @param       int         $watermark_alpha    水印透明度(0~100)
 	 * @param       string      $bgcolor            背景颜色
+	 * @param       array       $extra              额外控制参数，如 $extra['png2jpg'=>true]
 	 * @return      mix         如果成功则返回文件路径，否则返回false
 	 */
-	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 85, $bgcolor = '')
+	static function add_watermark($filename, $target_file = '', $watermark = '', Array $watermark_place = array(), $watermark_alpha = 85, $bgcolor = '', Array $extra = array())
 	{	
 		// 是否安装了GD
 		if (!self::gd_exists())
@@ -181,26 +182,35 @@ class File extends CStatic {
 			return false;
 		}
 		
-		/* 如果水印的位置为0，则返回原图 */
-		if (empty($watermark_place) || empty($watermark))
+		// 如果水印的位置为0，则返回原图
+		if (empty($watermark_place) || empty($watermark) || false===($watermark_info=@getimagesize($watermark)))
 		{
 			return str_replace(SIMPHP_ROOT, '', str_replace('\\', '/', realpath($filename)));
 		}
 		
 		// 获得水印文件以及源文件的信息
-		$watermark_info     = @getimagesize($watermark);
 		$watermark_handle   = self::img_resource($watermark, $watermark_info[2]);
-		
 		if (!$watermark_handle)
 		{
 			return false;
 		}
 		
 		// 根据文件类型获得原始图片的操作句柄
-		$source_info    = @getimagesize($filename);
+		$source_info = @getimagesize($filename);
+		if (isset($extra['png2jpg'])&&$extra['png2jpg'] && 3==$source_info[2])
+		{ //PNG图片，且需要转成JPG图片
+			$_filename = self::img_png2jpg($filename,'',$bgcolor);
+			if ($_filename && $_filename!=$filename)
+			{
+				$filename = $_filename;
+				$source_info= @getimagesize($filename);
+			}
+			unset($_filename);
+		}
 		$source_handle  = self::img_resource($filename, $source_info[2]);
 		if (!$source_handle)
 		{
+			imagedestroy($watermark_handle);
 			return false;
 		}
 		
@@ -234,15 +244,16 @@ class File extends CStatic {
 			}
 			if (!$watermark_thumb)
 			{
+				imagedestroy($watermark_handle);
+				imagedestroy($source_handle);
 				return false;
 			}
 			
 			/* 背景颜色 */
-			if (!empty($bgcolor))
+			if (self::is_color($bgcolor))
 			{
 				list($red, $green, $blue) = self::hexcolor2rgb($bgcolor);
-				$clr = imagecolorallocate($watermark_thumb, $red, $green, $blue);
-				imagefilledrectangle($watermark_thumb, 0, 0, $thumb_width, $thumb_height, $clr);
+				imagefilledrectangle($watermark_thumb, 0, 0, $thumb_width, $thumb_height, imagecolorallocate($watermark_thumb, $red, $green, $blue));
 			}
 			
 			/* 将水印图片进行缩放处理 */
@@ -395,6 +406,50 @@ class File extends CStatic {
 	}
 	
 	/**
+	 * 将png图片改成jpg图片格式保存
+	 * @param string $img_src 源PNG图片路径
+	 * @param string $img_dst 目标JPG图片保存路径, 该参数为空时，用$img_src加后缀'.jpg'替代，表示jpg图片格式
+	 * @param string $bgcolor 背景填充颜色，空或者格式：#FFFFFF
+	 * @return string 返回转换过的图片路径
+	 */
+	static function img_png2jpg($img_src, $img_dst = '', $bgcolor = '')
+	{
+		$img_info   = @getimagesize($img_src);
+		if (false===$img_info || 3!=$img_info[2]) { //如果不是PNG图片格式，直接返回原图路径
+			return $img_src;
+		}
+		
+		if (function_exists('imagecreatetruecolor')) {
+			$bg_handle = imagecreatetruecolor($img_info[0], $img_info[1]);
+		}
+		else {
+			$bg_handle = imagecreate($img_info[0], $img_info[1]);
+		}
+		if (!$bg_handle) { //如果创建底图失败，也直接返回原图路径
+			return $img_src;
+		}
+		
+		//背景填充色
+		if (self::is_color($bgcolor)) {
+			list($red, $green, $blue) = self::hexcolor2rgb($bgcolor);
+			imagefilledrectangle($bg_handle, 0, 0, $img_info[0], $img_info[1], imagecolorallocate($bg_handle, $red, $green, $blue));
+		}
+		imagealphablending($bg_handle, TRUE);
+		$img_handle  = self::img_resource($img_src, $img_info[2]);
+		imagecopy($bg_handle, $img_handle, 0, 0, 0, 0, $img_info[0], $img_info[1]);
+		
+		$target = !empty($img_dst) ? $img_dst : $img_src.'.jpg'; //默认在原路径后加'.jpg'后缀表示jpg图片格式
+		$wrsucc = self::img_write($bg_handle, $target, 3); //$mime==3表示JPG图片
+		imagedestroy($img_handle);
+		imagedestroy($bg_handle);
+		if ($wrsucc) {
+			return $target;
+		}
+		
+		return $img_src;
+	}
+	
+	/**
 	 * 根据来源文件的文件类型创建一个图像操作的标识符
 	 *
 	 * @param   string      $img_file   图片文件的路径
@@ -475,6 +530,15 @@ class File extends CStatic {
 		$color = preg_replace ('/^#/','',$color);
 		sscanf($color, "%2x%2x%2x", $red, $green, $blue);
 		return [$red,$green,$blue];
+	}
+	
+	/**
+	 * 检查一个颜色值是否合法的 #FFFFFF 这种格式的值
+	 * @param string $color
+	 * @return boolean
+	 */
+	static function is_color($color) {
+		return preg_match('/^#[a-zA-Z0-9]{6}$/', $color);
 	}
 	
 }

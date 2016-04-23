@@ -17,6 +17,7 @@ class Common_Controller extends Controller {
     'user/oauth/%s',
     'default/app_activate',
     'default/app_doactivate',
+    't/%d',
   ];
   
   /**

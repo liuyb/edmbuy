@@ -302,6 +302,7 @@ class Users extends StorageNode {
 		}
 		$ulogo = realpath($ulogo);
 		$ret = File::add_watermark($source_file, $target_file, $ulogo, ['pos'=>'center','w'=>90,'h'=>90], 100,'#FFFFFF');
+		@unlink($ulogo);
 		return $ret;
 	}
 	
@@ -376,6 +377,7 @@ class Users extends StorageNode {
 		$ret = File::add_watermark($sourcefile, $targetfile, $qrimg, ['x'=>95,'y'=>480,'w'=>344,'h'=>344], 100);
 		// 添加个人头像
 		$ret = File::add_watermark($targetfile, '', $ulogo, ['x'=>20,'y'=>25,'w'=>75,'h'=>75], 100, '#FFFFFF');
+		@unlink($ulogo);
 		// 添加文字
 		$ret = File::add_text($targetfile, '', $txtinfo);
 		if ($ret) { //创建水印成功
@@ -402,6 +404,54 @@ class Users extends StorageNode {
 		return true;
 	}
 
+	/**
+	 * 返回当前用户在“本机”的推广二维码相对路径
+	 * 
+	 * @param $uid   integer  用户ID，不提供时用当前登录用户
+	 * @param $ulogo string   用户logo地址，不提供时用当前登录用户
+	 * @return boolean
+	 */
+	static function my_tgqr($uid = NULL, $ulogo = '') {
+		if (!isset($uid)) {
+			$uid   = $GLOBALS['user']->uid;
+			$ulogo = $GLOBALS['user']->logo;
+		}
+		$dir = Fn::gen_qrcode_dir($uid, 'utg', true);
+		$locfile = $dir . $uid . '.png';
+		$locfile_jpg = $locfile. '.jpg';
+		$qrcode = '';
+		if (!file_exists($locfile_jpg)) {
+			if (mkdirs($dir)) {
+				$qrinfo = U('t/'.$uid,'',true);
+				include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 15, 2);
+				if (file_exists($locfile)) {
+					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+					if (preg_match('/^http(s?):\/\//i', $ulogo)) {
+						$ulogo = File::get_remote($ulogo);
+					}
+					if (Media::is_app_file($ulogo)) {
+						$ulogo = SIMPHP_ROOT . $ulogo;
+					}
+					if (!file_exists($ulogo)) {
+						$ulogo = '';
+					}
+					if ($ulogo) {
+						$ulogo = realpath($ulogo);
+						$wtm_succ = File::add_watermark($locfile, '', $ulogo, ['x'=>180,'y'=>180,'w'=>75,'h'=>75], 100, '#FFFFFF', ['png2jpg'=>true]);
+						if ($wtm_succ) {
+							$qrcode = $wtm_succ;
+						}
+						@unlink($ulogo);
+					}
+				}
+			}
+		} else {
+			$qrcode = str_replace(SIMPHP_ROOT, '', $locfile_jpg);
+		}
+		return $qrcode;
+	}
+	
 	/**
 	 * 获取用户收货地址列表
 	 *
