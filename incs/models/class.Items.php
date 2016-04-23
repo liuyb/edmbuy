@@ -15,7 +15,7 @@ class Items extends StorageNode {
 				'columns' => array( //命名特点：'goods_%s'=>'item_%s'，其他不变
 					'item_id'     => 'goods_id',
 					'merchant_uid'=> 'merchant_uid',//兼容老数据 INT 格式
-				    'merchant_id' => 'merchant_id',//新增 CHAR格式的 ID
+				  	'merchant_id' => 'merchant_id',//新增 CHAR格式的 ID
 					'cat_id'      => 'cat_id',
 					'origin_place_id' => 'origin_place_id',
 					'item_sn'     => 'goods_sn',
@@ -71,7 +71,7 @@ class Items extends StorageNode {
 				    'shipping_fee'    => 'shipping_fee',
 				    'shipping_template' => 'shipping_template',
 				    'fee_or_template' => 'fee_or_template',
-				    'shop_recommend'  => 'shop_recommend'
+				    'shop_recommend'  => 'shop_recommend',
 				)
 		);
 	}
