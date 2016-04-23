@@ -613,3 +613,49 @@
 	height:16px;
 }
 /*-- 16-4-15 e */
+
+/*-- 16-4-20 s */
+.refun_comm_left{
+	font-size:13px;
+	color:#7d7d7d;
+	width:70px;
+	text-align:right;
+}
+#refund_t_see{
+	width:100%;
+}
+#refund_t_see td{
+	height:40px;
+}
+.btn_re_close{
+	width:100px;
+	height:40px;
+	line-height:40px;
+	border:0;
+	border-radius:4px;
+	font-size:14px;
+	color:#fff;
+	background:#f26427;
+}
+.text_area{
+	overflow:hidden; 
+	resize:none;
+	display:block;
+	width:98%;
+	height:100px;
+	margin-bottom:20px;
+	border-radius:4px;
+	background:#ecf1f5;
+}
+/*-- 16-4-20 e */
+
+
+
+
+
+
+
+
+
+
+

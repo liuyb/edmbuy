@@ -72,6 +72,11 @@ define('OS_SPLITING_PART',          6); // 部分分单
 define('OS_REFUND',                 7); // 退款
 define('OS_REFUND_PART',            8); // 部分退款
 
+define('OS_REFUNDING',              9); // 申请退款中
+define('OS_REFUND_REFUSED',         10); // 退款拒绝
+define('OS_REFUND_FAILED',          11); // 退款失败
+
+
 /* 支付类型 */
 define('PAY_ORDER',                 0); // 订单支付
 define('PAY_SURPLUS',               1); // 会员预付款
@@ -113,5 +118,6 @@ define('OOS_CONSULT',               2); // 与店主协商
 define('SURPLUS_SAVE',              0); // 为帐户冲值
 define('SURPLUS_RETURN',            1); // 从帐户提款
 
-
+/*商城id*/
+define("MECHANT_GOODS_ID",1000);
 /*----- END FILE: const.php -----*/

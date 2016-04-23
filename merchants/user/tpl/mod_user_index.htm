@@ -12,19 +12,19 @@
     <table cellspacing="0" cellpadding="0" id="tem_tab">
       <tr>
         <td id="tem_tit">待处理订单信息：</td>
-        <td>未付款订单<span>（8）</span></td>
-        <td>代发货订单<span>（8）</span></td>
-        <td>未退款订单<span>（8）</span></td>
+        <td>未付款订单<span>（<!--{$wait_pay_count}-->）</span></td>
+        <td>待发货订单<span>（<!--{$wait_ship_count}-->）</span></td>
+        <td>待退款订单<span>（<!--{$wait_refund_count}-->）</span></td>
         <td></td>
-        <td><button class="tem_btn_common">管理订单</button></td>
+        <td><button class="tem_btn_common" onclick="window.location.href='/order'">管理订单</button></td>
       </tr>
       <tr>
         <td id="tem_tit">商品信息：</td>
-        <td>商品总数<span>（8）</span></td>
-        <td>未上架商品总数<span>（8）</span></td>
-        <td>可发布平台商品总数<span>（8）</span</td>
-        <td>库存预警（3）</td>
-        <td><button class="tem_btn_common">维护商品</button></td>
+        <td>商品总数<span>（<!--{$goods_total}-->）</span></td>
+        <td>未上架商品总数<span>（<!--{$unsale_goods_total}-->）</span></td>
+        <td>库存预警（<!--{$warn_goods_number}-->）</td>
+        <td></td>
+        <td><button class="tem_btn_common" onclick="window.location.href='/goods'">维护商品</button></td>
       </tr>
     </table>
   </div>
@@ -34,20 +34,20 @@
   <div id="tem_top"><p>店铺信息</p></div>
   
   <div id="tem_infos">
-    <div id="store_left"><img src="http://merchant.edmbuy.com/images/201604/goods_img/1128_P_1460003883987.jpg" alt=""/></div>
+    <div id="store_left"><img src="<!--{$shop.logo}-->"/></div>
     <div id="store_right">
       <p>
         <span class="right_tit">店铺名称：益多米</span>
-        <span>总销售额：<i class="common_money">8888.00元</i></span>
-        <button class="detail_btn">交易明细</button>
+        <span>总销售额：<i class="common_money"><!--{$totalSales}-->元</i></span>
+        <button class="detail_btn" onclick="window.location.href='/order'">交易明细</button>
       </p>
       <p>
-        <span class="right_tit">到期日期：2015-5-5</span>
-        <span>可提现金额：<i class="common_money">8888.00元</i></span>
-        <button class="tem_btn_common">我要提现</button><button class="detail_btn">提现记录</button>
+        <span class="right_tit">到期日期：<!--{$shop.end_time}--></span>
+        <!-- <span>可提现金额：<i class="common_money">8888.00元</i></span>
+        <button class="tem_btn_common">我要提现</button><button class="detail_btn">提现记录</button> -->
       </p>
     </div>
-    <div><button class="tem_btn_common">进入店铺</button></div>
+    <div><button class="tem_btn_common" onclick="window.location.href='/shop'">进入店铺</button></div>
   </div>
 </div>
 
@@ -63,20 +63,22 @@
         <th>新增访问量（次）</th>
         <th>新增订单数量（个）</th>
       </tr>
-      <tr>
-        <td>昨日</td>
-        <td>￥1500.00</td>
-        <td>￥666.00</td>
-        <td>545</td>
-        <td>44</td>
-      </tr>
-      <tr>
-        <td>昨日</td>
-        <td>￥1500.00</td>
-        <td>￥666.00</td>
-        <td>545</td>
-        <td>44</td>
-      </tr>
+      <tbody id="run_cash_body"></tbody>
     </table>
   </div>
 </div>
+<script>
+$(function(){
+	F.get('/user/home/trade/data', null, function(ret){
+		if(!ret || !ret.length){
+			return;
+		}
+		var ROW = "";
+		for(var i = 0,len=ret.length; i < len; i++){
+			var obj = ret[i];
+			ROW += "<tr><td>"+obj.time+"</td><td>"+obj.money_paid+"</td><td>"+obj.income+"</td><td>"+obj.visit+"</td><td>"+obj.totalOrder+"</td></tr>";
+		}
+		$("#run_cash_body").html($(ROW));
+	});
+});
+</script>

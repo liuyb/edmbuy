@@ -15,16 +15,16 @@
     <div class="repo_check">
         <!--{if empty($current_tpl.tpl_image)}-->
         <img src="" id="tpl_image">
-            <!--{else}-->
+        <!--{else}-->
         <img src="<!--{$current_tpl.tpl_image}-->" id="tpl_image">
         <!--{/if}-->
     </div>
     <div class="repo_er">
-            <!--{if $dir}-->
+        <!--{if $dir}-->
         <p><img src="<!--{$dir}-->" id="qcode"></p>
-             <!--{else}-->
+        <!--{else}-->
         <p><img src="" id="qcode"></p>
-            <!--{/if}-->
+        <!--{/if}-->
         <p style="color:#999;font-size:13px;margin-left:-15px;">手机扫描此二维码，可直接在手机上访问商城</p>
     </div>
     <div class="clear"></div>
@@ -35,9 +35,9 @@
         <ul id="tpl_use">
             <li id="current_tpl"><p style="margin:10px 0"><!--{$current_tpl.tpl_name}--></p><img src="<!--{$current_tpl.tpl_thumb}-->"><p><button class="repo_start_using using_on" data-type="<!--{$current_tpl.tpl_id}-->">已启用</button></p></li>
             <!--{foreach from=$tpl item=val}-->
-                <!--{if  $val.tpl_id!=$current_tpl.tpl_id}-->
+            <!--{if  $val.tpl_id!=$current_tpl.tpl_id}-->
             <li><p style="margin:10px 0"><!--{$val.tpl_name}--></p><img src="<!--{$val.tpl_thumb}-->"><p><button class="repo_start_using" data-type="<!--{$val.tpl_id}-->">未启用</button></p></li>
-                 <!--{/if}-->
+            <!--{/if}-->
             <!--{/foreach}-->
         </ul>
     </div>

@@ -55,10 +55,13 @@
 .store_file{
 	width: 300px;
 	position: absolute;
-	top: 0;
-	left: 0;
-	height: 40px;
+	top: 10px;
+	left: 25px;
+	height: 118px;
 	opacity: 0;
+}
+#file_save{
+	position:relative;
 }
 #file_save img{
 	vertical-align: middle;
@@ -104,14 +107,14 @@
 	cursor:pointer;
 }
 #store_btn{
-	width:120px;
+	width:120px; 
 	height:40px;
-	background:#f26427;
+	background:#fff;
 	font-size:12px;
-	color:#fff;
+	color:#333;
 	border-radius:4px;
-	border:0;
-	margin:20px 0;
+	border:1px solid #ccc;
+	margin:20px 10px 20px 0;
 }
 .store_operate a{
 	color:#7d7d7d;
@@ -285,7 +288,7 @@
 	background:#ecf1f5;
 	border:0;
 	border-radius:4px;
-	overflow:hidden;
+	overflow-y:scroll;
 	resize:none;
 	padding-left:10px;
 }
@@ -425,6 +428,7 @@
 .data_tab_right{
 	font-size:13px;
 	color:#1f1f1f;	
+	width:870px;
 }
 #shop_data_tab td{
 	padding:10px 0;

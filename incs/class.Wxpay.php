@@ -45,6 +45,9 @@ class Wxpay {
    */
   const CASH_FEE_RATE = 0.01;
   
+  //操作员帐号, 默认为商户号
+  const OP_USER_ID = 1296288001;
+  
   /**
    * 统一下单接口
    * 
@@ -177,6 +180,46 @@ class Wxpay {
   		$ret['msg'] = '提现记录不存在';
   	}
   	return $ret;
+  }
+  
+  /**
+   * 订单退款申请
+   * @param array $orders
+   */
+  public static function orderRefund(array $params) {
+      return ['code'=>'SUCC','msg'=>'成功。。。','wx_refund_no'=>'1234567890','succ_time'=>date('Y-m-d H:i:s')];
+      $ret = ['code'=>'FAIL','msg'=>''];
+      $input = new WxPayRefund();
+      $input->SetOp_user_id(Wxpay::OP_USER_ID);
+      $input->SetOut_trade_no($params['order_no']);
+      $input->SetTransaction_id($params['trans_id']);
+      $input->SetOut_refund_no($params['refund_no']);
+      $input->SetRefund_fee($params['refund_fee']);
+      $input->SetTotal_fee($params['total_fee']);
+      $wxpay_ret = null;
+      $err_msg = '';
+      try{
+          $wxpay_ret = WxPayApi::refund($input);
+      }catch (Exception $e){
+          $err_msg = $e->getMessage();
+          Log::ERROR($e);
+      }
+      if(!$wxpay_ret){
+          $ret['msg'] = '退款异常:'.$err_msg;
+          return $ret;
+      }
+      if ('SUCCESS'==$wxpay_ret['return_code']) {
+          if ('SUCCESS'==$wxpay_ret['result_code']) {
+              $ret = ['code'=>'SUCC','msg'=>'付款成功','wx_refund_no'=>$wxpay_ret['refund_id'],'succ_time'=>date('Y-m-d H:i:s', time())];
+          }
+          else {
+              $ret['msg'] = $wxpay_ret['err_code'].': '.$wxpay_ret['err_code_des'];
+          }
+      }
+      else {
+          $ret['msg'] = $wxpay_ret['return_msg'];
+      }
+      return $ret;
   }
   
 }

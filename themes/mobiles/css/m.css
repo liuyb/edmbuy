@@ -4696,17 +4696,22 @@ td.cash_td2 img {
 #sus_flow{
   width:100%;
   border-bottom:1px solid #eee;
+  background:#f7f7f7;
 }
 #sus_flow li{
-  display:inline-block;
-  width:32%;
+  float:left;
+  width:19%;
   text-align:center;
   height:44px;
   line-height:44px;
 }
+#sus_flow img{
+  width:14px;
+  height:14px;
+  vertical-align: middle;
+}
 .li_cs{
-  background:url(../img/back.png) no-repeat right;
-  background-size:16px;
+  width:8% !important;
 }
 .li_co{
   color:#f65d00;
@@ -4767,3 +4772,54 @@ td.cash_td2 img {
   color:#ff6d14;
 }
 /*2106-4-6 e*/
+.pay_n{
+  text-align:center;
+  color:#45c019;
+  font-size:16px;
+}
+.pay_n img{
+  width:60px;
+  height:60px;
+}
+.pay_order_info{
+  height:40px;
+  line-height:40px;
+  background:#f7f7f7;
+  padding-left:10px;
+  font-size:15px;
+}
+.buy_time_info{
+  width:100%;
+}
+.buy_time_info tr{
+  text-align:center;
+  font-size:15px;
+  color:#333;
+  height:50px;
+  line-height:50px;
+}
+.buy_time_info th{
+  text-align:center;
+  font-size:15px;
+  color:#333;
+  height:50px;
+  line-height:50px;
+  border-bottom:1px solid #e7e7e7;
+}
+.to_us_tell{
+  overflow:hidden;
+  resize:none;
+  width:97%;
+  height:100px;
+  border-radius:4px;
+  overflow: hidden;
+}
+.common_red_x img{
+  width: 90px;
+  height: 35px;
+  margin-top:5px;
+  border-radius:4px;
+}
+#phone_nums_p,#auth_code,#ps_email,#ps_img{
+  margin-left:0 !important;
+}

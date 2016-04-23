@@ -14,58 +14,74 @@
         margin-top: 10px;
         position: relative;
     }
-
+    #common_repaly div,textarea{
+        padding-bottom: 4px;
+    }
     .merchant-content{
-        padding-left: 4px;
-        /*padding-top: 4px;*/
-        margin-top: 95px;
-        border: 1px solid #ddd;
-        width: 320px;
+        /*margin-top: 95px;*/
+        resize:none;
+        padding-left:10px;
+        width: 300px;
+        /*border:1px solid #ddd;*/
+        border-radius: 5px;
+        margin-left: 62px;
+        margin-top: 3px;
+        /*height:100px;*/
+    }
+    textarea {
+        /*margin-top: 95px;*/
+        resize:none;
+        padding-left:10px;
+        width: 300px;
         height: 100px;
         border-radius: 5px;
-        position: absolute;
-        top:114px;
-        left:72px;
-    	font-size:13px;
-    	color:#333;    	 
-    	padding: 5px 10px;
+        margin-left: 65px;
+        margin-top: 13px;
+    }
+    .comment_reply{
+        /*padding-left:10px;*/
+        display: inline-block;
+        width: 300px;
+        margin-left: 65px;
+        margin-top: 10px;
     }
     .content {
-        border: 1px solid #ddd;
-        width: 320px;
-        height: 100px;
+        /*border: 1px solid #ddd;*/
+        width: 300px;
+        /*height: 100px;*/
         border-radius: 5px;
         /*display: inline-block;*/
-        position: absolute;
+        margin-left: 63px;
         top:97px;
         left:72px;
         padding-left: 4px;
     	font-size:13px;
-    	color:#333;  
-    	padding: 5px 10px;
+    	color:#333;
+    	/*padding: 5px 10px;*/
     }
     .content-title-2{
-        /*display:inline-block;*/
-        margin-top: 90px;
     	font-size:13px;
-    	color:#7d7d7d;    	
+    	color:#7d7d7d;
+         display: inline-block;
+        position: absolute;
+        top:171px;
     }
     .content-title{
         /*display:inline-block;*/
-        margin-top: 38px;
+        /*margin-top: 35px;*/
     	font-size:13px;
     	color:#7d7d7d;
+        position: absolute;
     }
     .div-button,.div-close{
         background: #f26427;
         width: 120px;
-        margin-top: 100px;
-        margin-left: 153px;
+        margin-top: 10px;
+        margin-left: 65px;
         height: 40px;
         line-height: 40px;
-        /* margin-top: 50px; */
         color: #fff;
-        text-align: center;
+         float: left;
         font-size: 14px;
         border-radius: 5px;
         border: 0;
@@ -73,50 +89,171 @@
     .moddle{
         margin: 0 auto;
     }
-    hr {
-        margin-top: 5px!important;
-        margin-bottom: 5px !important;
+    .goods-name{
+        /*height: 40px;*/
+        font-size:13px;
+        color:#7d7d7d;
+        position: absolute;
+    }
+    .goods-name-content{
+        margin-left: 64px;
+    }
 
+    .p_1, .p_2, .p_3, .p_4, .p_5, .n_1, .n_2, .n_3, .n_4, .n_5 {
+        background: url(/themes/mobiles/img/pingxing-weixuan.png) no-repeat center;
+        background-size: 28px;
+        padding: 15px 15px;
+        float: left;
+        margin-right: 12px;
+    }
+    .fhsd_font, .fwtd_font {
+        float: left;
+        font-size: 14px;
+        padding-right: 3px;
+        color: #7d7d7d;
+    }
+    .red_on{
+        background:url(/themes/mobiles/img/pingxing-xuanzhong.png) no-repeat center;
+        background-size: 28px;
+    }
+    .p_hp_on {
+        background: url(/themes/mobiles/img/haoping-xuanzhong.png) no-repeat center;
+        background-size: 80px;
+    }
+    .p_rank p {
+        /*margin: 10px;*/
+        height: 23px;
+        cursor: pointer;
+    }
+    .p_zp {
+        background: url(/themes/mobiles/img/zhongping=weixuan.png) no-repeat center;
+        background-size: 80px;
+    }
+    .p_cp {
+        background: url(/themes/mobiles/img/chaping-weixuan.png) no-repeat center;
+        background-size: 80px;
+    }
+    .p_rank {
+        padding: 10px 5px;
+    }
+    .comment_p {
+        margin-top: 10px;
+        background: #fff;
+    }
+    .p_rank div{
+        display:inline-block;
+        width:32.33%;
+    }
+    .c_textarea{
+        display:inline-block ;
     }
 </style>
 <!--[/HEAD_CSS]-->
-<!--{if $type=="view"}-->
+
 <div class="moddle">
     <div id="common_repaly">
-        <div style="font-size:13px;color:#7d7d7d;">商品名称：<span style="font-size:13px;color:#333;"><!--{$ret.goods_name}--></span></div>
-        <hr/>
-        <div style="font-size:13px;color:#7d7d7d;">商品星级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_rank}-->星</span></div>
-        <hr/>
-        <div class="content-title">评价类容： </div>
+        <div class="goods-name">商品名称：</div>
+        <div style="font-size:13px;color:#333;" class="goods-name-content"><!--{$ret.goods_name}--></div>
+
+        <div style="font-size:13px;color:#7d7d7d;">评价等级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_level}--></span></div>
+
+        <div class="comment_p">
+            <div class="fhsd_xj">
+                <p class="fhsd_font">发货速度:</p>
+                <p>
+                    <span class="p_1"  data-id="1"></span>
+                    <span class="p_2"  data-id="2"></span>
+                    <span class="p_3"  data-id="3"></span>
+                    <span class="p_4"  data-id="4"></span>
+                    <span class="p_5"  data-id="5"></span>
+                </p>
+                <div class="clear"></div>
+            </div>
+            <div class="fwtd_xj">
+                <p class="fwtd_font">服务态度:</p>
+                <p>
+                    <span class="n_1"  data-num="1"></span>
+                    <span class="n_2"  data-num="2"></span>
+                    <span class="n_3"  data-num="3"></span>
+                    <span class="n_4"  data-num="4"></span>
+                    <span class="n_5"  data-num="5"></span>
+                </p>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="content-title">评价内容： </div>
         <div class="content"><!--{$ret.content}--></div>
-        <div class="content-title-2" >回复类容：</div>
-        <div class="merchant-content" ><!--{$ret.comment_reply}--></div>
+        <div class="content-title-2" >回复内容：</div>
+        <!--{if $type=="view"}-->
+        <div class="comment_reply"><!--{$ret.comment_reply}--></div>
         <button class="div-close">确定</button>
-    </div>
-</div>
-<!--{else}-->
-<div class="moddle">
-    <div id="common_repaly">
-        <div style="font-size:13px;color:#7d7d7d;">商品名称：<span style="font-size:13px;color:#333;"><!--{$ret.goods_name}--></span></div>
-        <hr/>
-        <div style="font-size:13px;color:#7d7d7d;">商品星级：<span style="font-size:13px;color:#333;"><!--{$ret.comment_rank}-->星</span></div>
-        <hr/>
-        <div class="content-title">评价类容： </div>
-        <div class="content"><!--{$ret.content}--></div>
-        <div class="content-title-2" >回复类容：</div>
-        <div class="merchant-content" contenteditable="true" id="content"></div>
+        <!--{else}-->
+        <div class="c_textarea">
+            <textarea  id="content" autofocus="autofocus"></textarea>
+        </div>
         <button class="div-button">保存</button>
+        <!--{/if}-->
+        <div class="clear"></div>
     </div>
 </div>
-<!--{/if}-->
+
 <input type="hidden" id="comment_id" value="<!--{$common_id}-->"/>
 <script>
+    var shipping_level = <!--{$ret.shipping_level}-->;
+    var service_level = <!--{$ret.service_level}-->;
+    $(function(){
+            add_class(".fwtd_xj",".n_",service_level);
+    })
+    $(function(){
+        add_class(".fhsd_xj",".p_",shipping_level);
+        var height =$(".content").height();
+        var top2=$(".goods-name-content").height();
+        var top = $(".content-title-2").css("top");
+        top =parseInt(top);
+        top2 =parseInt(top2);
+        height =parseInt(height);
+        if(height==0){
+            if(top2 >0){
+                $("textarea").css("margin-top","53px");
+                $(".content-title-2").css("top",top2+top);
+            }else{
+                $("textarea").css("margin-top","32px");
+            }
+        }else if(height>=20){
+            var res=top+height-20+top2-20+"px";
+            $(".content-title-2").css("top",res);
+        }
+    })
+    function add_class(cls,whe,id){
+        var where = cls +" span";
+        $(where).each(function(){
+            var _p = whe + id ;
+            $(_p).addClass("red_on");
+            id--;
+            if(id<=0){
+                return false;
+            }
+        })
+    }
+    $("#content").keyup(function(){
+        var $obj=$(this);
+        var content = $obj.val();
+        if(content.length>=200){
+            showMsg("字数超限！");
+            var str =content.substr(0,200);
+            $obj.val(str);
+        }
+    })
     $(".div-button").click(function () {
         var url = "/goods/rplayCommone";
         var common_id = $("#comment_id").val()
-        var content = $("#content").text();
+        var content = $("#content").val();
+        if(content.length > 200){
+            showMsg("字数超限！");return;
+        }
         var data = {"common_id": common_id, "content": content}
         F.postWithLoading(url, data, function (ret) {
+            showMsg(ret.retMsg);
             if (ret.status == 1) {
                 showMsg(ret.retmsg);
                 setTimeout(function(){

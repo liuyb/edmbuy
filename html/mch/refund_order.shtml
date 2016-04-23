@@ -96,6 +96,42 @@
 	</div>
 </div>
 
+<div class="mask" style="display:block;"></div>
+
+<div style="width:500px;height:500px;position:fixed;z-index:55555;background:#fff;display:block;" >
+	<div style="margin:15px;">
+		<table cellspacing="0" cellpadding="0" id="refund_t_see">
+			<tr>
+				<td class="refun_comm_left">商品名称：</td><td>商品名称商品名称商品名称商品名称</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left">退款金额：</td><td style="color:#f26427;">￥179.00（实付：255.00）</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left">退款数量：</td><td>1（购买1）</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left">退货原因：</td><td>问老王</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left">联系人：</td><td>老王隔壁老李</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left">退款状态：</td><td>退款成功</td>
+			</tr>
+			<tr>
+				<td class="refun_comm_left"></td><td><button class="btn_re_close">关闭</button></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div style="width:500px;height:500px;position:fixed;z-index:55555;background:#fff;display:none;" >
+	<div style="margin:15px;">
+		<textarea class="text_area" placeholder="请填写拒绝理由"></textarea>
+		<button class="btn_re_close">关闭</button></td>
+	</div>
+</div>
 
 <script>
 $("#tkcl").addClass("order_left_common");

@@ -26,47 +26,16 @@
 </div>
 
 <div class="pay_price">
-	<p class="pay_tit">订单支付成功</p>
-	<p class="pay_p">订单金额：<span class="price_sucee">￥138.00</span></p>
+	<p class="pay_tit">支付成功</p>
+	<p class="pay_tit">多米分销系统</p>
+	<p class="pay_p"><span class="price_sucee">￥138.00</span></p>
 <div>
 
-<div class="becmoe_rice">
-	恭喜您，已成为米商!
+<div id="wx_success_pay"  style="margin-top:30px;">
+	<button id="sus_pay">微信安全支付</button>
 </div>
 
-<div>
-	<button class="pay_check_order_but">查看订单</button>
-	<button class="pay_m_plan_but">米商计划</button>
-</div>
 
-<div class="pay_tier">
-	<div class="tier_c">
-		<p class="c_tit">绑定手机号，追踪物流</p>
-		<p class="c_tit1">如果不绑定，会追踪不到物流</p>
-		<p class="c_input"><input class="input_val" type="text" maxlength="15" placeholder="请输入你的手机号" value="" ></p>
-		<div class="tier_tit"><img src="./img/zwl.png"></div>
-	</div>
-	
-	<div class="tier_but">
-		确认手机号
-	</div>
-</div>
-
-<script>
-	$(function(){
-		$(".pay_tier").show();
-	})
-	
-	$(".tier_but").live("click",function(){
-		var text = $(".input_val").val();
-		if(text == ''){
-			boxalert("请输入电话号码");
-		}else{
-			$(".pay_tier").hide();
-		}
-			
-	})
-</script>
 
 
 

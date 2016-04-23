@@ -9,7 +9,13 @@ defined('IN_SIMPHP') or die('Access Denied');
 class User_Controller extends MerchantController
 {
 
-
+    public function menu()
+    {
+        return [
+            'user/home/trade/data'    => 'get_merchant_trade_data'
+        ];
+    }
+    
     /**
      * default action 'index'
      * @param Request $request
@@ -19,10 +25,44 @@ class User_Controller extends MerchantController
     {
         if (Merchant::is_logined()) {
             $this->v->set_tplname('mod_user_index');
+            $muid = $GLOBALS['user']->uid;
+            $wait_pay_count = Home_Model::getOrderTotalByStatus(CS_AWAIT_PAY, $muid);
+            $wait_ship_count = Home_Model::getOrderTotalByStatus(CS_AWAIT_SHIP, $muid);
+            $wait_refund_count = Home_Model::getWaitRefundOrderTotal($muid);
+            $goods_total = Home_Model::getGoodsTotalByIsSale(-1, $muid);
+            $unsale_goods_total = Home_Model::getGoodsTotalByIsSale(0, $muid);
+            $warn_goods_number = Home_Model::getGoodsNumberWarning($muid, 10);
+            $shop = Home_Model::getShopInfo($muid);
+            $totalSales = Home_Model::getOrderSalesMoney($muid);
+            $this->v->assign('wait_pay_count', $wait_pay_count);
+            $this->v->assign('wait_ship_count', $wait_ship_count);
+            $this->v->assign('wait_refund_count', $wait_refund_count);
+            $this->v->assign('goods_total', $goods_total);
+            $this->v->assign('unsale_goods_total', $unsale_goods_total);
+            $this->v->assign('warn_goods_number', $warn_goods_number);
+            $this->v->assign('totalSales', $totalSales);
+            $this->v->assign('shop', $shop);
             $response->send($this->v);
         } else {
             $response->redirect('/login');
         }
+    }
+    
+    /**
+     * 商家运营数据
+     * @param Request $request
+     * @param Response $response
+     */
+    public function get_merchant_trade_data(Request $request, Response $response){
+        $gaps = [array('time' => '昨日', 'gap' => 'yesterday'),
+            array('time' => '近7天', 'gap' => 1),
+            array('time' => '近30天', 'gap' => 30)
+        ];
+        foreach ($gaps as &$gap){
+            $result = Home_Model::getMerchantDataByTime($GLOBALS['user']->uid, $gap['gap']);
+            $gap = array_merge($gap, $result);
+        }
+        $response->sendJSON($gaps);
     }
 
     /**
@@ -42,7 +82,6 @@ class User_Controller extends MerchantController
         $retmsg = '';
         $retuname = '';
         $retupass = '';
-        $status ="-1";
         if (isset($_POST['loginname']) && isset($_POST['password']) && isset($_POST['erro'])) {
             $loginname = trim($_POST['loginname']);
             $password = trim($_POST['password']);
@@ -52,33 +91,54 @@ class User_Controller extends MerchantController
             $retuname = $loginname;
             $retupass = $password;
             if ('' == $loginname) {
-                $retmsg = '请输入用户名';
+                $ret['retmsg'] = '请输入用户名';
+                $ret['status'] =-1;
+                $_SESSION['erro'] = 1;
+                $response->sendJSON($ret);
             } elseif ('' == $password) {
-                $retmsg = '请输入密码';
+                $ret['retmsg'] = '请输入密码';
+                $ret['status'] =-2;
+                $_SESSION['erro'] = 1;
+                $response->sendJSON($ret);
             } else {
                 if ($erro == 1) {
                     if ('' == $verifycode) {
-                        $retmsg = '请输入验证码';
+                        $ret['retmsg'] = '请输入验证码';
+                        $ret['status'] =-3;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
                     } elseif ($verifycode != $_SESSION['verifycode']) {
-                        $retmsg = '请输入正确的验证码';
-                        $status = 2;
+                        $ret['retmsg'] = '请输入正确的验证码';
+                        $ret['status'] =-3;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
                     } elseif ('' == $loginname) {
-                        $retmsg = '请输入用户名';
+                        $ret['retmsg'] = '请输入用户名';
+                        $ret['status'] =-1;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
                     } elseif ('' == $password) {
-                        $retmsg = '请输入密码';
+                        $ret['retmsg'] = '请输入密码';
+                        $ret['status'] =-1;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
                     }
                 }
                 if($retmsg==""){
                     $check = User_Model::check_logined($loginname, $password, $login_uinfo);
                     if ($check < 0) {
-                        $retmsg = '不存在该用户';
-                        $status = 0;
-                    } elseif (0 === $check) {
-                        $retmsg = '密码错误！';
-                        $status =1;
+                        $ret['retmsg']= '不存在该用户';
+                        $ret['status']=-1;
                         $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
+                    } elseif (0 === $check) {
+                        $ret['retmsg']= '密码错误！';
+                        $ret['status']=-2;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
                     } else { //Final Login Success
-                        $retmsg = '登录成功！';
+                        $ret['retmsg'] = '登录成功！';
+                        $ret['status'] = 1;
                         if (isset($_POST['member_me'])) {
                             Cookie::set('member_me', $login_uinfo['merchant_id'], 3600 * 24 * 7);
                         }
@@ -86,8 +146,7 @@ class User_Controller extends MerchantController
                         unset($_SESSION['verifycode']);
                         $cMerchantUser = new Merchant($login_uinfo['merchant_id']);
                         $cMerchantUser->set_logined_status();
-
-                        $response->redirect('/home');
+                        $response->sendJSON($ret);
                     }
                 }
             }
@@ -103,7 +162,6 @@ class User_Controller extends MerchantController
             }else{
                $v->assign('erro', 0);
             }
-            $v->assign('status',$status);
             $response->send($v);
         }
     }

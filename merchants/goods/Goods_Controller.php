@@ -62,7 +62,7 @@ class Goods_Controller extends MerchantController
             "start_date" => $start_date, "end_date" => $end_date,
             "orderby" => $orderby, "order_field" => $order_field
         );
-        $pager = new Pager($curpage, $this->getPageSize());
+        $pager = new Pager($curpage, 8);
         Goods_Model::getPagedGoods($pager, $options);
         $ret = $pager->outputPageJson();
         $ret['otherResult'] = $pager->otherMap;
@@ -198,9 +198,8 @@ class Goods_Controller extends MerchantController
             'errMsg' => '上传失败，请稍后重试！'
         ];
         if ($request->is_post()) {
-            $imgDIR = "/a/mch/goods/";
             $img = $_POST["img"];
-            $upload = new Upload($img, $imgDIR);
+            $upload = new AliyunUpload($img, 'goods', '', true, 750, 750);
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
         }
@@ -240,9 +239,7 @@ class Goods_Controller extends MerchantController
             if (!is_array($goods_ids)) {
                 $goods_ids = [$goods_ids];
             }
-            if ($status == 'sale') {
-                Goods_Model::batchUpdateGoods($goods_ids, 'is_on_sale', $statusVal);
-            }
+            Goods_Model::batchUpdateGoods($goods_ids, $status, $statusVal);
         }
         $response->sendJSON(['result' => 'SUCC']);
     }
@@ -405,11 +402,8 @@ class Goods_Controller extends MerchantController
      */
     public function upload_goods_categroy(Request $request, Response $response)
     {
-        $imgDIR = "/a/mch/goodcategory/";
         $img = $_REQUEST["img"];
-        $upload = new Upload($img, $imgDIR);
-        $upload->has_thumb = true;
-        $upload->thumbwidth = 200;
+        $upload = new AliyunUpload($img, 'category', '');
         $result = $upload->saveImgData();
         $ret = $upload->buildUploadResult($result);
         $response->sendJSON($ret);
@@ -476,15 +470,18 @@ class Goods_Controller extends MerchantController
     {
         $common_id = $request->post("common_id");
         $comtent = $request->post("content");
-        if (strlen($comtent) > 200) {
+        if (mb_strlen($comtent,"UTF-8") > 200) {
             $ret['retmsg'] = "字数超出限制！";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
+        }
+       $res = Goods_Model::merchantRely($common_id, $comtent);
+        if($res!==false){
+            $ret['retmsg'] = "回复成功！";
             $ret['status'] = 1;
             $response->sendJSON($ret);
         }
-        Goods_Model::merchantRely($common_id, $comtent);
-        $ret['retmsg'] = "回复成功！";
-        $ret['status'] = 1;
-        $response->sendJSON($ret);
+
     }
 
     /**

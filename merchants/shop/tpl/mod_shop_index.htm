@@ -1,15 +1,16 @@
 <!--{add_css file="shop.css" scope="global"}-->
-<!--{include file="inc/left_common.htm"}-->
-<div id="store_right_finish">
-    <div id="store_type">
-        <ul>
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div id="store_right_finish">
+        <div id="store_type">
+            <ul>
 
-            <li  class='store_type_on'  data-type='template'>当前使用模板</li>
-            <li    data-type="carousel">首页轮播图</li>
-        </ul>
-    </div>
-    <div id="inner_data">
-
+                <li  class='store_type_on'  data-type='template'>当前使用模板</li>
+                <li    data-type="carousel">首页轮播图</li>
+            </ul>
+        </div>
+        <div id="inner_data">
+        </div>
     </div>
 </div>
 
@@ -29,7 +30,7 @@
         }
     })
     function getHtml(data){
-        F.get('shop/template/use', data, function(ret){
+        F.get('/shop/template/use', data, function(ret){
             $("#inner_data").html(ret);
         },"HTML");
     }

@@ -249,16 +249,6 @@ class User_Model extends Model
         return D()->query($sql, $mobile)->result();
     }
 
-    /**
-     * 检查商家入驻的邮箱
-     * @param $mobile
-     * @return mixed
-     */
-    static function checkMerchantEmeil($mobile)
-    {
-        $sql = "select email from shp_merchant where email ='%s'";
-        return D()->query($sql, $mobile)->result();
-    }
 
     /**
      * 保存商家的注册信息
@@ -266,11 +256,11 @@ class User_Model extends Model
      * @param $email
      * @param $inviteCode
      */
-    static function saveMerchantInfo($mobile, $email, $inviteCode, $password)
+    static function saveMerchantInfo($mobile, $inviteCode, $password,$facename)
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
 
-        $add_time =time() - date('Z');
+        $add_time = time() - date('Z');
         $role_id = 1;
         $sql = "SELECT action_list FROM shp_role WHERE role_id ={$role_id}";
         $row = D()->query($sql)->get_one();
@@ -282,7 +272,7 @@ class User_Model extends Model
 
         $data_admin = array(
             'user_name' => $mobile,
-            'email' => $email,
+            'email' => '',
             'password' => '',
             'ec_salt' => '',
             'add_time' => $add_time,
@@ -290,9 +280,8 @@ class User_Model extends Model
             'nav_list' => $nav_list,
             'role_id' => $role_id,
         );
-
         $tablename = "`shp_merchant`";
-        $table_admin="`shp_admin_user`";
+        $table_admin = "`shp_admin_user`";
         $insertarr['merchant_id'] = self::gen_merchant_id();
         $salt = self::gen_salt();
         $password_enc = self::gen_password($password, $salt);
@@ -302,20 +291,21 @@ class User_Model extends Model
         $insertarr['salt'] = $salt;
         $insertarr['mobile'] = $mobile;
         $insertarr['invite_code'] = $inviteCode ? $inviteCode : "";
-        $insertarr['email'] = $email;
+        $insertarr['email'] = '';
         $insertarr['password'] = $password_enc;
         $insertarr['role_id'] = $role_id;
+        $insertarr['facename'] = $facename;
         $admin_uid = D()->insert($table_admin, $data_admin);
-        if($admin_uid!==false){
+        if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
             $effnum = D()->insert($tablename, $insertarr);
-            if ($effnum!==false) {
-               $result= D()->update($table_admin, array('merchant_id'=>$insertarr['merchant_id']), array('user_id'=>$admin_uid)); //更新merchant_id
-                    return $result;
+            if ($effnum !== false) {
+                D()->update($table_admin, array('merchant_id' => $insertarr['merchant_id']), array('user_id' => $admin_uid)); //更新merchant_id
+                return $insertarr['merchant_id'];
             }
-                return false;
-        }
              return false;
+        }
+        return false;
     }
 
     static function gen_merchant_id()
@@ -345,4 +335,39 @@ class User_Model extends Model
     }
 
 
+
+    /**
+     * 注册成功更新商家信息
+     * @param $merchant_id
+     * @param $invite_code
+     * @param $order_id
+     */
+    static function UpdataMerchantInfo($merchant_id, $order_id,$order_sn)
+    {
+//        update($tablename, Array $setarr, $wherearr, $flag = '')
+        $tablename = "`shp_merchant_payment`";
+        $setarr['order_id'] = $order_id;
+        $setarr['order_sn'] = $order_sn;
+        $setarr['money_paid'] = 0;
+        $setarr['merchant_id'] = $merchant_id;
+        $setarr['start_time'] = date("Y-m-d H:i:s", time()).'';
+        $endDate = date("Y-m-d", strtotime("+1 year", time()))."23:59:59";
+        $setarr['end_time'] = $endDate;
+        $setarr['term_time'] = '1y';
+        $setarr['discount'] = 200;
+        $setarr['goods_amount'] = 899;
+        $setarr['order_amount'] = 699;
+        $setarr['user_id'] = $GLOBALS['user']->uid;
+        D()->insert($tablename, $setarr);
+    }
+
+    /**
+     * 检验当前操作进行到了第几步骤
+     */
+    static function checkIsPaySuc(){
+            $user_id = $GLOBALS['user']->uid;
+            $time =date('Y-m-d H:i:s' ,time()).'';
+            $sql = "select count(1) from shp_merchant_payment where user_id = %d and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
+           return D()->query($sql,$user_id)->result();
+    }
 }

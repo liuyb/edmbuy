@@ -119,6 +119,7 @@ class Shop_Model extends Model
         return D()->query($sql)->fetch_array_all();
     }
 
+
     /**
      * 得到已经开启的模版id
      * @return mixed
@@ -131,7 +132,6 @@ class Shop_Model extends Model
         return D()->query($sql, $merchant_id)->get_one();
 
     }
-
 
     /**
      * 店铺名是否已经存在
@@ -162,7 +162,7 @@ class Shop_Model extends Model
                 $where = "cat_id in ({$business_scope})";
             };
         }
-        $sql = "select cat_name from shp_business_category where  {$where}";
+        $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC";
         $list = D()->query($sql)->fetch_column();
         if (count($list) > 0) {
             $result["business_scope"] = implode(",", $list);
