@@ -19,7 +19,7 @@
 		<span class="head_l">我的头像</span>
 		<span class="head_r" id="userHeaderImg">
 			<?php if($logo): ?>
-				<img src="<?=$logo?>">
+				<img src="<?=$logo?>?_=<?=$user->randver?>" alt="logo"/>
 			<?php else:?>
 				<img src="/themes/mobiles/img/mt.png">
 			<?php endif;?>

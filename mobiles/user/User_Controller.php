@@ -649,12 +649,12 @@ class User_Controller extends MobileController
             global $user;
             if ($user->nickname == $nickname) {
                 return;
-            }
+            }/*
             $nuser = Users::load_by_nickname($nickname);
             if ($nuser && !empty($nuser->uid)) {
                 $ret = ['result' => 'FAIL', 'msg' => '昵称' . $nickname . '已经在系统存在！'];
                 $response->sendJSON($ret);
-            }
+            }*/
             User_Model::updateUserInfo(array('nickname' => $nickname));
             $ret = ['result' => 'SUC', 'msg' => '修改成功'];
             $response->sendJSON($ret);

@@ -81,9 +81,10 @@ a.blka { display: block;cursor: default; }
 .btn.btn-block {
 	text-align: center;
 	width: 100%;
-	padding: 11px 10px;
+	/*padding: 11px 10px;*/
+	padding: 5px;
 	font-size: 16px;
-	line-height: 16px;
+	line-height: 30px;
 	border-radius: 4px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;

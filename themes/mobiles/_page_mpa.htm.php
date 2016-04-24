@@ -82,6 +82,7 @@ add_js('m.js',['pos'=>'foot']);
 <nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <script id="Mpending" type="text/html"></script>
 <div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
+<?php include T('inc/popalert');?>
 <?php include T('inc/popdlg');?>
 </body>
 <?php tplholder('FOOT_JS');?>

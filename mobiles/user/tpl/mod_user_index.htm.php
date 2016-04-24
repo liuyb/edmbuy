@@ -15,7 +15,7 @@ function displayNickImg($level){
 <div class="mem_bg">
 	<div class="mem_l">
 		<?php if($logo): ?>
-			<img src="<?=$logo?>">
+			<img src="<?=$logo?>?_=<?=$user->randver?>" alt="logo">
 		<?php else:?>
 			<img src="/themes/mobiles/img/mt.png">
 		<?php endif;?>
