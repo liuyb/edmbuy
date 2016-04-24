@@ -92,6 +92,7 @@ class Users extends StorageNode {
 						'state'       => 'state',
 						'from'        => 'from',
 						'authmethod'  => 'auth_method',
+						'randver'     => 'randver',
 						'synctimes'   => 'synctimes',
 				));
 	}
@@ -308,9 +309,13 @@ class Users extends StorageNode {
 	
 	/**
 	 * 返回用户的微信推广二维码
+	 * @param  $regen boolean 是否重新生成
 	 * @return string
 	 */
-	public function wx_qrimg() {
+	public function wx_qrimg($regen = FALSE) {
+		if ($regen) {
+			$this->wxqrimg = '';
+		}
 		if (!empty($this->wxqrimg)) { //存在就直接返回
 			return $this->wxqrimg;
 		}
@@ -338,9 +343,14 @@ class Users extends StorageNode {
 	
 	/**
 	 * 返回用户带微信二维码的推广图片地址
+	 * 
+	 * @param  $regen boolean 是否重新生成
 	 * @return string
 	 */
-	public function wx_qrpromote() {
+	public function wx_qrpromote($regen = FALSE) {
+		if ($regen) {
+			$this->wxqrpromote = '';
+		}
 		if (!empty($this->wxqrpromote)) { //存在就直接返回
 			return Media::path($this->wxqrpromote, true);
 		}
@@ -349,7 +359,7 @@ class Users extends StorageNode {
 		$targetdir      = SIMPHP_ROOT . File::gen_unique_dir('id', $this->uid, '/a/wx/promote/');
 		$targetfile     = $targetdir . $this->uid . '.jpg';
 		$qrimg_default  = SIMPHP_ROOT . '/misc/images/wx/qrcode_430.jpg';
-		$qrimg          = SIMPHP_ROOT . $this->wx_qrimg();
+		$qrimg          = SIMPHP_ROOT . $this->wx_qrimg($regen);
 		if (!file_exists($qrimg)) {
 			$qrimg = $qrimg_default;
 		}
@@ -405,13 +415,21 @@ class Users extends StorageNode {
 	}
 
 	/**
+	 * 重新生成randver
+	 */
+	public function regen_randver() {
+		D()->query("UPDATE ".self::table(). " SET randver='%s' WHERE user_id=%d", rand(100000, 999999),$this->uid);
+	}
+	
+	/**
 	 * 返回当前用户在“本机”的推广二维码相对路径
 	 * 
 	 * @param $uid   integer  用户ID，不提供时用当前登录用户
 	 * @param $ulogo string   用户logo地址，不提供时用当前登录用户
+	 * @param $regen boolean  是否重新生成
 	 * @return boolean
 	 */
-	static function my_tgqr($uid = NULL, $ulogo = '') {
+	static function my_tgqr($uid = NULL, $ulogo = '', $regen = FALSE) {
 		if (!isset($uid)) {
 			$uid   = $GLOBALS['user']->uid;
 			$ulogo = $GLOBALS['user']->logo;
@@ -419,12 +437,21 @@ class Users extends StorageNode {
 		$dir = Fn::gen_qrcode_dir($uid, 'utg', true);
 		$locfile = $dir . $uid . '.png';
 		$locfile_jpg = $locfile. '.jpg';
+		if ($regen) {
+			if (file_exists($locfile_jpg)) {
+				@unlink($locfile_jpg);
+			}
+			if (file_exists($locfile)) {
+				@unlink($locfile);
+			}
+		}
+		
 		$qrcode = '';
 		if (!file_exists($locfile_jpg)) {
 			if (mkdirs($dir)) {
 				$qrinfo = U('t/'.$uid,'',true);
 				include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
-				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 15, 2);
+				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_M, 15, 2);
 				if (file_exists($locfile)) {
 					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
 					if (preg_match('/^http(s?):\/\//i', $ulogo)) {

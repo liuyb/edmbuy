@@ -84,22 +84,43 @@ class T_Controller extends MobileController {
 		$this->nav_no = 0;
 		$this->extra_css = 'greybg';
 	
-		if (!Users::is_logined()) {
-			throw new ViewException($this->v, '未登录，请先登录');
-		} else {
-
-			$qrcode = Users::my_tgqr();
-			$this->v->assign('qrcode', $qrcode);
+		if ($request->is_post()) {
+			$regen = $request->post('regen',0);
+			$ret = ['flag'=>'FAIL','msg'=>'no action'];
+			if ($regen) {
+				
+				if (!Users::is_logined()) {
+					$ret['msg'] = '未登录，请先登录';
+					$response->sendJSON($ret);
+				}
+				
+				global $user;
+				$my_tgqr = Users::my_tgqr(NULL,'',TRUE);
+				$prom_qr = $user->wx_qrpromote(TRUE);
+				$user->regen_randver();
+				$ret = ['flag'=>'SUCC','msg'=>'重新生成成功','tgqr'=>$my_tgqr,'promote_qr'=>$prom_qr];
+				$response->sendJSON($ret);
+			}
+			$response->sendJSON($ret);
+		}
+		else {
+			if (!Users::is_logined()) {
+				throw new ViewException($this->v, '未登录，请先登录');
+			} else {
 			
-			//分享信息
-			$share_info = [
-					'title' => '收藏了很久的特价商城，各种超划算！',
-					'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
-					'link'  => U('', 'spm='.Spm::user_spm(), true),
-					'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
-			];
-			$this->v->assign('share_info', $share_info);
-			
+				$qrcode = Users::my_tgqr();
+				$this->v->assign('qrcode', $qrcode);
+					
+				//分享信息
+				$share_info = [
+						'title' => '收藏了很久的特价商城，各种超划算！',
+						'desc'  => '便宜又实惠，品质保证，生活中的省钱利器！',
+						'link'  => U('', 'spm='.Spm::user_spm(), true),
+						'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
+				];
+				$this->v->assign('share_info', $share_info);
+					
+			}
 		}
 	
 		throw new ViewResponse($this->v);

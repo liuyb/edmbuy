@@ -15,11 +15,10 @@ $(function(){
 
 <?php else:?>
 
-<div class="comeon"><img src="<?=$qrimg?>" alt="QR Code"/></div>
+<div class="comeon"><img src="<?=$qrimg?>?_=<?=$user->randver?>" alt="QR Code"/></div>
 <?php if(!empty($promoter)):?>
 <div class="bbsizing promoter">
 你的推荐人：<em><?=$promoter['nickname']?></em>　推荐人多米号：<em><?=$promoter['uid']?></em>
-</em>
 </div>
 <?php endif;?>
 
