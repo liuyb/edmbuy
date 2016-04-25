@@ -93,8 +93,8 @@ class MerchantVisitStatisticsJob extends CronJob{
             $merchant_id = D()->query($sql, $goods_id)->result();
             $module = self::$MODULE_GOODS;
         }else{
-            //返回$matchs[/shop/mc_aaa111,aaa111]
-            $matchs = preg_match('/\/shop\/mc_(\w+)$/', $targetUrl, $mc);
+            //返回$matchs[/shop/mc_aaa111,mc_aaa111]
+            $matchs = preg_match('/\/shop\/(mc_\w+)$/', $targetUrl, $mc);
             if($mc && count($mc) == 2){
                 $merchant_id = $mc[1];
                 $module = self::$MODULE_SHOP;
