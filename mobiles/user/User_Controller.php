@@ -672,15 +672,6 @@ class User_Controller extends MobileController
         if (!empty($result)) {
             $response->redirect("/user/merchant/dosuccess");
         }
-        if (isset($_SESSION['step'])) {
-            if ($_SESSION['step'] == 1) {
-                $response->redirect("/user/merchant/openshop");
-            } elseif ($_SESSION['step'] == 2) {
-                $response->redirect("/user/merchant/twostep");
-            } elseif ($_SESSION['step'] == 3) {
-                $response->redirect("/trade/order/confirm_sysbuy");
-            }
-        }
         $this->v->set_tplname('mod_user_checkin');
         //得到商城信息
         $this->nav_no = 0;
@@ -709,7 +700,7 @@ class User_Controller extends MobileController
         $_SESSION['step'] = 1;
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
-            $response->redirect("user/merchant/dosuccess");
+            $response->redirect("/user/merchant/dosuccess");
         }
         $this->nav_no = 0;
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
@@ -818,10 +809,9 @@ class User_Controller extends MobileController
     public function merchant_shop_twostep(Request $request, Response $response)
     {
         if (!isset($_SESSION['step'])) {
-            $response->redirect("/user/merchant/openshop");
-        }elseif($_SESSION['step']==3){
-            $response->redirect("/trade/order/confirm_sysbuy");
+            $response->redirect("/user/merchant/checkin");
         }
+        $_SESSION['step']=2;
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
             $response->redirect("/user/merchant/dosuccess");
@@ -863,11 +853,13 @@ class User_Controller extends MobileController
             $response->send($this->v);
         }
         if (!isset($_SESSION['step'])) {
-            $response->redirect("/user/merchant/openshop");
+            $ret['url'] = "/user/merchant/openshop";
+            $response->sendJSON($ret);
         }
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
-            $response->redirect("/user/merchant/dosuccess");
+            $ret['url'] = "/user/merchant/dosuccess";
+            $response->sendJSON($ret);
         }
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $order_id = $request->post("order_id");
@@ -882,8 +874,7 @@ class User_Controller extends MobileController
         if (!empty($merchant_id)) {
             User_Model::UpdataMerchantInfo($merchant_id, $order_id, $order_sn);
             //todo 发送短信
-            // Sms::sendSms($mobile, 'reg_success');
-            unset($_SESSION['step']);
+            Sms::sendSms($mobile, 'reg_success');
             unset($_SESSION['facename']);
             unset($_SESSION['verifycode']);
             unset($_SESSION['invite_code']);
@@ -903,13 +894,6 @@ class User_Controller extends MobileController
      */
     public function merchant_reg_succ(Request $request, Response $response)
     {
-        if (!isset($_SESSION['step'])==1) {
-            $response->redirect("/user/merchant/openshop");
-        }elseif($_SESSION['step']==2){
-            $response->redirect("/user/merchant/twostep");
-        }elseif($_SESSION['step']==3){
-            $response->redirect("/trade/order/confirm_sysbuy");
-        }
         $this->v->set_tplname('mod_user_regsuc');
         if (!isset($_SESSION['password'])) {
             $this->v->assign("is_complate", 1);
@@ -923,8 +907,9 @@ class User_Controller extends MobileController
             unset($_SESSION['password']);
             $this->v->assign("pwd", $password);
         }
-        $mobile = $_SESSION['mobile'];
-        $this->v->assign("mobile", $mobile);
+
+        $mobile=User_Model::getMechantPaymentClums("mobile");
+        $this->v->assign("mobile", $mobile['mobile']);
         $this->v->assign("url", $url);
         $response->send($this->v);
     }

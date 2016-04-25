@@ -57,11 +57,11 @@ $(function(){
 
 				wxpayJsApiCall(ret.js_api_params,ret.order_id,function(flag){
 	  				if(flag=='OK'){
-					var data ={'order_id':ret.order_id,'order_sn':ret.order_sn}
-					F.post("/user/merchant/paysuc",data,function(ret){
-					window.location.href=ret.url;
-				});
+						var data ={'order_id':ret.order_id,'order_sn':ret.order_sn}
+						F.post("/user/merchant/paysuc",data,function(ret){
+							window.location.href=ret.url;
 				}
+ });
  	  		});
 //  				form_topay_submit(ret.order_id, 'wxpay');
   			}

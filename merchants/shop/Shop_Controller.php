@@ -97,7 +97,8 @@ class Shop_Controller extends MerchantController
                     $locfile = $dir . $isusetpl['tpl_id'] . '.png';
                     if (!file_exists($locfile)) {
                         mkdirs($dir);
-                        $qrinfo = C("port.merchant_url");
+                        $merchant_id =$GLOBALS['user']->uid;
+                        $qrinfo =SHOP_URL_MERCHANT."/{$merchant_id}";
                         include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
                         QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
                     }
@@ -126,7 +127,8 @@ class Shop_Controller extends MerchantController
         $locfile = $dir . $tpl_id . '.png';
         if (!file_exists($locfile)) {
             mkdirs($dir);
-            $qrinfo = C("port.merchant_url");
+            $merchant_id =$GLOBALS['user_id']->uid;
+            $qrinfo =SHOP_URL_MERCHANT."/{$merchant_id}";
             include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
             QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
         }
@@ -134,7 +136,7 @@ class Shop_Controller extends MerchantController
         //得到img
         $img = Shop_Model::getImg($tpl_id);
         //更新店铺信息
-        $result = Shop_Model::updShopInformation($tpl_id);
+        $result = Shop_Model::updShopInformation($tpl_id,$locfile);
         if ($result !== false) {
             $res['retmsg'] = "启用模板成功！";
             $res['status'] = 1;

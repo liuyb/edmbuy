@@ -85,6 +85,8 @@
         F.post(url,data,function(ret){
             if(ret.status==1){
                window.location.href="/user/merchant/twostep";
+            }else{
+                myAlert(ret.retmsg);
             }
         })
     });

@@ -123,7 +123,7 @@
                 <input type="hidden" class="carousel" value=""/>
 
                 <div id="file_save">
-                    <img src="/themes/mobiles/img/jia1.png" id="upload_img">
+                    <img src="/themes/merchants/img/jia1.png" id="upload_img">
                     <input type="file" id="file_1" name="file" class="store_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="offer_size">建议尺寸640*250px <label for="file_1"
@@ -151,7 +151,7 @@
         var ids = id.split("_");
         var file_id = ids[1];
         file_id = parseInt(file_id) + 1;
-        if (total == 6) {
+        if (total >= 6) {
             showMsg("您最多只能添加五张轮播图！");
             return;
         }
@@ -162,7 +162,7 @@
                 "<input type='hidden' class='img' value=''/>" +
                 "<input type='hidden' class='carousel' value='0'/>" +
                 "<div id='file_save'>" +
-                '<img src="/themes/mobiles/img/jia1.png" id="upload_img">' +
+                '<img src="/themes/merchants/img/jia1.png" id="upload_img">' +
                 "<input type='file' id='file_" + file_id + "' name='file' class='store_file' onchange='fileupload(event,this)'>" +
                 "<div class='offer_size'>建议尺寸640*250px <label for='file_" + file_id + "' style='float:right;cursor:pointer;'>重新上传</label>" +
                 "</td>" +
@@ -272,12 +272,12 @@
 
     })
 
-    $(document).on('focus', '.link_address', function () {
-                var obj = $(this);
-                obj.attr("placeholder", "");
-                obj.css("text-align", "left");
-            }
-    );
+//    $(document).on('focus', '.link_address', function () {
+//                var obj = $(this);
+//                obj.attr("placeholder", "");
+//                obj.css("text-align", "left");
+//            }
+//    );
 
     $(document).on('click', '.add_img img', function () {
         $obj = $("#imageTip");

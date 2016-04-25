@@ -69,5 +69,5 @@ if($border) imageRectangle($image, 0, 0, $width-1, $height-1, $bordercolor);
 header("content-type:image/jpeg\r\n");
 imagejpeg($image);
 imagedestroy($image);
- 
+
 /*----- END FILE: vc_mch.php -----*/

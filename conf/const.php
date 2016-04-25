@@ -120,4 +120,7 @@ define('SURPLUS_RETURN',            1); // 从帐户提款
 
 /*商城id*/
 define("MECHANT_GOODS_ID",1000);
+
+/*商城前台url*/
+define('SHOP_URL_MERCHANT', "http://m.ydmbuy.com/shop");
 /*----- END FILE: const.php -----*/

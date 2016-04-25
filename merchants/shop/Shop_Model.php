@@ -23,12 +23,13 @@ class Shop_Model extends Model
      * 更新店铺的信息
      * @param $tpl_id
      */
-    static function updShopInformation($tpl_id)
+    static function updShopInformation($tpl_id,$shop_qcode)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_merchant`";
         $whereArr['merchant_id'] = $GLOBALS['user']->uid;
         $setArr['shop_template'] = $tpl_id;
+        $setArr['shop_qcode'] = $shop_qcode;
         return D()->update($tablename, $setArr, $whereArr);
     }
 

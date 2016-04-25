@@ -379,7 +379,11 @@ class Trade_Controller extends MobileController {
    */
   public function order_confirm_sysbuy(Request $request, Response $response)
   {
-
+    import("User/User_Model");
+    $result = User_Model::checkIsPaySuc();
+    if (!empty($result)) {
+      $response->redirect("/user/merchant/dosuccess");
+    }
     $this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_order_confirm_sysbuy');
     $this->nav_flag1 = 'order';

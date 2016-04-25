@@ -366,8 +366,19 @@ class User_Model extends Model
      */
     static function checkIsPaySuc(){
             $user_id = $GLOBALS['user']->uid;
-            $time =date('Y-m-d H:i:s' ,time()).'';
+            $time =date('Y-m-d H:i:s' ,time());
             $sql = "select count(1) from shp_merchant_payment where user_id = %d and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
+
            return D()->query($sql,$user_id)->result();
     }
+
+    /**
+     *拿字段的值
+     */
+    static function getMechantPaymentClums($clums){
+        $user_id = $GLOBALS['user']->uid;
+        $sql ="select {$clums} from shp_merchant_payment pay LEFT JOIN shp_merchant mer on pay.merchant_id = mer.merchant_id  where pay.user_id = %d";
+        return D()->query($sql,$user_id)->get_one();
+    }
+
 }
