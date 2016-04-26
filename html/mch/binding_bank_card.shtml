@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/account.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--#include file="header_commen.html"-->
+
+<style>
+</style>
+
+<div id="body" class="ifr-body">
+	<!--#include file="account_left_common.html"-->
+	
+	<div id="new_common">
+		<div class="withdraw_title">绑定银行卡</div>
+		
+		<div class="binding_infos">
+			<div class="edit_common_div">
+				<span class="edit_left_common" style="letter-spacing:1px;">持卡人姓名：</span>
+				<input type="text" value="郭涛">
+			</div>
+			<div class="edit_common_div">
+				<span class="edit_left_common" style="letter-spacing:4px;">银行卡号：</span>
+				<input type="text" value="郭涛">
+			</div>
+			<div class="edit_common_div">
+				<span class="edit_left_common"><i style="letter-spacing:11px;">开户行</i>：</span>
+				<select class="edit_bank_select">
+					<option>平安银行</option>
+					<option>招商银行</option>
+				</select>
+			</div>
+			<div class="edit_common_div">
+				<span class="edit_left_common" style="letter-spacing:4px;">开户分行：</span>
+				<select class="edit_branch_one">
+					<option>平安银行</option>
+					<option>招商银行</option>
+				</select>
+				<select class="edit_branch_two">
+					<option>平安银行</option>
+					<option>招商银行</option>
+				</select>
+			</div>
+			<div class="edit_common_div">
+				<input style="margin-left:88px;" type="text" value="">
+			</div>
+			<div class="edit_common_div" style="letter-spacing:1px;">
+				<span class="edit_left_common">身份证号码：</span>
+				<input type="text" value="123456789464656">
+			</div>
+			<div class="edit_common_div">
+				<span class="edit_left_common" style="letter-spacing:4px;">手机号码：</span>
+				<input type="text" value="123456789464656">
+			</div>
+			<div class="edit_common_div">
+				<span class="edit_left_common"><i style="letter-spacing:11px;">校验码</i>：</span>
+				<input type="text" value="123456789464656" class="check_code_binding">
+				<button class="free_get_code">免费获取</button>
+			</div>
+			
+			<div class="edit_common_div">
+				<button class="save_bank_btn">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮
+$("#wdzh").addClass("account_on");
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
