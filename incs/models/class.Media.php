@@ -48,7 +48,7 @@ class Media extends StorageNode {
 	 * 
 	 * @param string  $ori_path
 	 * @param boolean $ret_full  是否保证返回的地址都是http://开头的全地址(true)，还是相对项目地址(false)
-	 * @return string OSS path or original path
+	 * @return string OSS path or original path 当返回空串时表示找不到对应图片
 	 */
 	static function path($ori_path, $ret_full = false) {
 		$ori_path = trim($ori_path);
@@ -77,8 +77,11 @@ class Media extends StorageNode {
 			$true_path .= '/../' . SHOP_PLATFORM . $std_path;
 		}
 		$true_path = realpath($true_path);
-		if (!file_exists($true_path)) { //TODO 由于以后很可能是edmshop只部署一个server，而edmbuy会部署多个，所以可能不能总检测到同servser的edmshop的文件，这是需要下载处理
-			return $ret_full ? self::full_path($std_path) : $std_path;
+		if (!file_exists($true_path)) {
+			//TODO 由于以后很可能是edmshop只部署一个server，而edmbuy会部署多个，所以可能不能总检测到同servser的edmshop的文件，这是需要下载处理
+			//暂时安装一个服务器的方式处理
+			//return $ret_full ? self::full_path($std_path) : $std_path;
+			return '';
 		}
 		
 		$media = Media::load($mkey);
@@ -109,6 +112,9 @@ class Media extends StorageNode {
 		}
 		if (!isset(self::$server_shop)) {
 			self::$server_shop = Config::get('env.site.shop');
+		}
+		if (!isset(self::$server_id)) {
+			self::$server_id = Config::get('env.server_id', 1);
 		}
 		return (!self::is_app_file($rel_path) ? self::$server_shop : self::$servers[self::$server_id]) . '/' . ltrim($rel_path,'/');
 	}

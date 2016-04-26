@@ -269,6 +269,15 @@ class Fn extends Func {
   }
   
   /**
+   * 解析"钱"数字，单位：分
+   * @param float $val 以“元”为单位的数值
+   * @return int
+   */
+  static function money_fen($val) {
+  	return intval(round($val*100));
+  }
+  
+  /**
    * 待付款   查询的时候需要判断订单是否已关闭
    * 已关闭用或条件，其他用and条件
    * 根据传入的综合状态返回 订单状态

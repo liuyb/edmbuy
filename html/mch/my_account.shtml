@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/account.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="account_left_common.html"-->
+	
+	<div class="my_account">
+		<div class="my_account_left">
+			<div class="comm_account_div">
+				<span class="left_name_common" style="letter-spacing:3px;">账户余额：</span>
+				<span class="right_price_common">8888.88元</span>
+				<img src="./img/wh.png">
+				<button class="withdraw_btn">我要提现</button>
+			</div>
+			<div class="comm_account_div">
+				<span class="left_name_common">已提现金额：</span>
+				<span class="right_price_common">888.88元</span>
+				<img src="./img/wh.png">
+			</div>
+			<div class="comm_account_div">
+				<span class="left_name_common" style="letter-spacing:3px;">累计收入：</span>
+				<span class="right_price_common">88.88元</span>
+				<img src="./img/wh.png">
+			</div>
+			<div class="comm_account_div">
+				<span class="left_name_common">未生效收入：</span>
+				<span class="right_price_common">888.88元</span>
+				<img src="./img/wh.png">
+			</div>
+			<div class="comm_account_div">
+				<span class="left_name_common"><i style="letter-spacing:9px;">纯收入</i>：</span>
+				<span class="right_price_common">8.88元</span>
+				<img src="./img/wh.png">
+			</div>
+		</div>
+		
+		<div class="my_account_right">
+			<div class="right_tit_name">已绑定银行卡</div>
+			<div class="bind_bank">
+				<span>平安银行(2545)</span><button class="bank_btn">编辑</button>
+			</div>
+			<div class="bind_bank">
+				<span>平安银行(2545)</span><button class="bank_btn">编辑</button>
+			</div>
+			<div class="add_bank"><button class="add_bank_btn">添加银行卡</button></div>
+		</div>
+	</div>
+</div>
+
+<div class="mask"></div>
+
+<div style="width:500px;height:500px;position:fixed;z-index:55555;background:#fff;display:none;" class="add_bank_t">
+	<div style="margin:0 15px;">
+		<div class="edit_common_div">
+			<span class="edit_left_common" style="letter-spacing:1px;">持卡人姓名：</span>
+			<input type="text" value="郭涛">
+		</div>
+		<div class="edit_common_div">
+			<span class="edit_left_common" style="letter-spacing:4px;">银行卡号：</span>
+			<input type="text" value="郭涛">
+		</div>
+		<div class="edit_common_div">
+			<span class="edit_left_common"><i style="letter-spacing:11px;">开户行</i>：</span>
+			<select class="edit_bank_select">
+				<option>平安银行</option>
+				<option>招商银行</option>
+			</select>
+		</div>
+		<div class="edit_common_div">
+			<span class="edit_left_common" style="letter-spacing:4px;">开户分行：</span>
+			<select class="edit_branch_one">
+				<option>平安银行</option>
+				<option>招商银行</option>
+			</select>
+			<select class="edit_branch_two">
+				<option>平安银行</option>
+				<option>招商银行</option>
+			</select>
+		</div>
+		<div class="edit_common_div">
+			<input style="margin-left:88px;" type="text" value="">
+		</div>
+		<div class="edit_common_div" style="letter-spacing:1px;">
+			<span class="edit_left_common">身份证号码：</span>
+			<input type="text" value="123456789464656">
+		</div>
+		<div class="edit_common_div">
+			<button class="save_bank_btn">保存</button>
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮
+$("#wdzh").addClass("account_on");
+
+$(".add_bank_btn").on("click",function(){
+	$(".mask").show();
+	$(".add_bank_t").show();
+})
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

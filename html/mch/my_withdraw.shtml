@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/account.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="account_left_common.html"-->
+	
+	<div id="new_common">
+		<div class="withdraw_title">提现</div>
+		
+		<div class="withdraw_infos">
+		
+			<!-- 输入提现金额 -->
+			<div class="withdraw_can_money">
+				<div class="with_infos_left">
+					<span>到账银行卡：</span>
+					<select class="edit_bank_select">
+						<option>平安银行</option>
+						<option>招商银行</option>
+					</select>
+					<button class="bank_btn">添加银行卡</button>
+				</div>
+				<div class="with_infos_left">
+					<span style="letter-spacing:3px;">提现金额：</span>
+					<input class="widthdraw_money" type="text" placeholder="0.00">
+					<i class="can_money">可提现￥688.00</i>
+				</div>
+				<div style="font-size:12px;color:#ccc;margin-left:108px;">预计3~5个工作日到账</div>
+				<div class="with_btn_click"><button class="with_bottom">提现</button></div>
+			</div>
+			
+			<!-- 输入提现密码 -->
+			<div class="withdraw_password">
+				<div class="with_infos_left">
+					<span>输入提现密码：</span>
+					<input class="widthdraw_money" type="text" placeholder="请输入6位数密码">
+					
+					<div class="with_btn_password"><button class="submit_password">提交</button></div>
+				</div>
+			</div>
+			
+			<!-- 提交成功 -->
+			<div class="submit_success">
+				<div class="success_left"><img src="./img/cg.png"></div>
+				<div class="success_right">
+					<p class="right_c_s"><b>提现申请已提交，请耐心等待审核！</b></p>
+					<p class="right_c_s">审核周期大概3~5个工作日</p>
+					<p class="right_c_s"><button class="back_index">返回首页</button></p>
+				</div>
+			</div>
+	
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮
+$("#wdzh").addClass("account_on");
+
+$(".with_bottom").on("click",function(){
+	$(".withdraw_can_money").hide();
+	$(".withdraw_password").show();
+})
+
+$(".submit_password").on("click",function(){
+	$(".withdraw_password").hide();
+	$(".submit_success").show();
+})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
