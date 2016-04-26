@@ -9,14 +9,13 @@ defined('IN_SIMPHP') or die('Access Denied');
 class Shop_Model extends Model
 {
 
-
     /**检查商家商铺是否可用并且返回商家信息
      * @param $merchant_id
      */
     static function checkMerchantStatus($merchant_id)
     {
         $time =date("Y-m-d H:i:s",time());
-        $sql = "select mer.shop_template ,mer.shop_qcode,mer.facename ,mer.logo,mer.shop_desc from shp_merchant mer
+        $sql = "select mer.shop_template ,mer.wxqr,mer.shop_qcode,mer.facename ,mer.logo,mer.shop_desc from shp_merchant mer
 				left JOIN shp_merchant_payment payment ON
 				mer.merchant_id = payment.merchant_id where
 				mer.merchant_id = '%s' and mer.is_completed =1 AND payment.money_paid > 0
@@ -38,8 +37,14 @@ class Shop_Model extends Model
     /**
      * 得到商家推荐的商品
      */
-    static function getShopRecommend($merchant_id){
-       return Items::findGoodsRcoment($merchant_id);
+    static function getShopRecommend($merchant_id,PagerPull $pager=null ,$recoment='',$pages =false ,$search =''){
+        if(!$pages){
+            return Items::findGoodsRcoment($merchant_id);
+        }else{
+          $result =  Items::findGoodsRcoment($merchant_id,$pager,$recoment,false,$search);
+            $pager->setResult($result);
+        }
+
 
     }
 
@@ -47,8 +52,14 @@ class Shop_Model extends Model
      * 拿到商品分类列表
      * @param $merchant_id
      */
-    static function getGoodsCategory($merchant_id){
-        return Items::getCategoryRcoment($merchant_id);
+    static function getGoodsCategory($merchant_id,PagerPull $pager=null ,$recoment='',$pages=false,$search = ''){
+        if(!$pages){
+            return Items::getCategoryRcoment($merchant_id);
+        }else{
+            $result = Items::getCategoryRcoment($merchant_id,$pager,$recoment,false,$search);
+            $pager->setResult($result['category']);
+        }
+
     }
 
     /**
@@ -101,6 +112,15 @@ class Shop_Model extends Model
         $pager->setResult($result);
     }
 
+    /**
+     * 商品推荐列表
+     * @param $pager
+     * @param $recoment
+     */
+    static function findRcomentList($pager, $recoment){
+        $result = Items::findRecomentListByType($pager ,$recoment);
+
+    }
 
 
 }

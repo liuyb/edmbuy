@@ -330,6 +330,7 @@ class User_Model extends Model
      */
     static function checkInviteCode($inviteCode)
     {
+        $inviteCode =intval($inviteCode);
         $sql = "select user_id from shp_users where user_id = {$inviteCode}";
         return D()->query($sql)->result();
     }
@@ -354,9 +355,9 @@ class User_Model extends Model
         $endDate = date("Y-m-d", strtotime("+1 year", time()))."23:59:59";
         $setarr['end_time'] = $endDate;
         $setarr['term_time'] = '1y';
-        $setarr['discount'] = 200;
-        $setarr['goods_amount'] = 899;
-        $setarr['order_amount'] = 699;
+        $setarr['discount'] = MECHANT_GOODS_AMOUNT - MECHANT_ORDER_AMOUNT;
+        $setarr['goods_amount'] = MECHANT_GOODS_AMOUNT;
+        $setarr['order_amount'] = MECHANT_ORDER_AMOUNT;
         $setarr['user_id'] = $GLOBALS['user']->uid;
         D()->insert($tablename, $setarr);
     }
@@ -379,6 +380,15 @@ class User_Model extends Model
         $user_id = $GLOBALS['user']->uid;
         $sql ="select {$clums} from shp_merchant_payment pay LEFT JOIN shp_merchant mer on pay.merchant_id = mer.merchant_id  where pay.user_id = %d";
         return D()->query($sql,$user_id)->get_one();
+    }
+
+    /**
+     *更新invite_id
+     */
+    static function updUserInvetCode(){
+        $user_id =$GLOBALS['user']->uid;
+        $sql ="select parent_id from shp_users where user_id  = %d";
+        return D()->query($sql,$user_id)->result();
     }
 
 }

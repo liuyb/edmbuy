@@ -3179,7 +3179,7 @@ td.cash_td2 img {
   font-weight: bold;
 }
 .tit_left{
-  border-right:8px solid #ff1414;
+  /*border-right:8px solid #ff1414;*/
   margin: 0 10px 0 8px;
 }
 .list_tab{
@@ -4746,7 +4746,7 @@ td.cash_td2 img {
   font-size:14px;
   margin-top:5px;
   border-radius:4px;
-  width:90px;
+  width:100px;
 }
 #inviter{
   width:200px;

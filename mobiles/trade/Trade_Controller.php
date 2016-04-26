@@ -578,9 +578,9 @@ class Trade_Controller extends MobileController {
           $order_info  = $exOrder->to_array(true);
           $jsApiParams = '';
           //todo
-          if ('wxpay'==$pay_mode) {
-            $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
-          }
+//          if ('wxpay'==$pay_mode) {
+//            $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
+//          }
 
           $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'order_sn'=>$order_sn,'js_api_params'=>json_decode($jsApiParams)];
           $response->sendJSON($ret);

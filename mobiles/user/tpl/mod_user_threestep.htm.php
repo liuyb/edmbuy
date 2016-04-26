@@ -1,40 +1,41 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <div id="sus_flow">
     <ul>
-        <li class="li_co">商家资料</li>
+        <li>商家资料</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-        <li>邀请码</li>
+        <li >邀请码</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-        <li>支付</li>
+        <li class="li_co">支付</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
         <li>完成开通</li>
     </ul>
     <div class="clear"></div>
 </div>
 
-<div id="sus_info">
-    <ul>
-        <li>
-            <input id="phone_nums_p" class="ps_common" type="text" value="" placeholder="请填写正确的号码">
-            <span class="common_red_x">*</span>
-        </li>
-        <li>
-            <input id="auth_code" class="ps_common" type="text" value="" placeholder="请输入验证码">
-            <button id="ps_btn">获取验证码</button>
-        </li>
-        <li>
-            <input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入图形验证码">
-            <span class="common_red_x"><img id="verifyimg" src="/vc.php" onclick="this.src='/vc.php?'+Math.random()" alt="验证码" title="点击刷新验证码"></span>
-        </li>
-        <li>
-            <input id="ps_email" class="ps_common" type="text" value="" placeholder="请输入店铺名称(可不填)">
-            <span class="common_red_x"></span>
-        </li>
-    </ul>
+<div id="sus_info" style="height:150px;">
+    <div class="pay_n" style="padding-top:30px"><img src="/themes/mobiles/img/sss1.png"></div>
+    <div class="pay_n">订单提交成功</div>
 </div>
-<div id="wx_success_pay"  style="margin-top:30px;">
-    <span id="red_deal">我已阅读，同意接受《益多米商家入驻协议》</span>
-    <button id="next_step">下一步</button>
+
+<div class="pay_order_info">订单详情</div>
+
+<div id="sus_info">
+    <table cellspacing="0" cellpadding="0" class="buy_time_info">
+        <tr>
+            <th>名称</th><th>有效期</th><th>总金额</th>
+        </tr>
+        <tr>
+            <td>多米分销系统</td><td>1年</td><td>￥699.00</td>
+        </tr>
+    </table>
+</div>
+
+<div id="sus_info">
+    <textarea class="to_us_tell" placeholder="有话更益多米说..."></textarea>
+</div>
+
+<div id="wx_success_pay"  style="margin-top:20px;">
+    <button id="sus_pay">确认支付</button>
 </div>
 
 <script>
@@ -84,9 +85,8 @@
         var data ={'mobile':mobile,'mobile_code':auth_code,'verifycode':verifycode,'shop_face':shop_face};
         F.post(url,data,function(ret){
             if(ret.status==1){
+                var password = ret.pwd;
                window.location.href="/user/merchant/twostep";
-            }else{
-                myAlert(ret.retmsg);
             }
         })
     });

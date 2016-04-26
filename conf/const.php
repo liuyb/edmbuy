@@ -119,7 +119,9 @@ define('SURPLUS_SAVE',              0); // 为帐户冲值
 define('SURPLUS_RETURN',            1); // 从帐户提款
 
 /*商城id*/
-define("MECHANT_GOODS_ID",1000);
+define("MECHANT_GOODS_ID",1142);
+define("MECHANT_GOODS_AMOUNT",899);
+define("MECHANT_ORDER_AMOUNT",699);
 
 /*商城前台url*/
 define('SHOP_URL_MERCHANT', "http://m.ydmbuy.com/shop");

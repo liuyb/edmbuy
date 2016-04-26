@@ -1,4 +1,7 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
+<?php if ('' !== $errmsg): ?>
+	<div class="error"><?= $errmsg ?></div>
+<?php else: ?>
 <div class="store_index_tit">
 	<div class="swipe">
 		<ul id="slider" class="slider">
@@ -70,12 +73,12 @@
 </div>
 
 <div class="store_list_co">
-	<div style="padding:10px;"><p class="co_title">店长推荐</p><p class="co_see_more"><a href="javascript:;">查看更多</a></p></div>
+	<div style="padding:10px;"><p class="co_title">店长推荐</p><p class="co_see_more"><a href="javascript:;" onclick="getRecoment()">查看更多</a></p></div>
 	<div class="buy_store_list">
 		<?php if(!empty($recommend_info)): ?>
 		<ul>
 			<?php foreach ($recommend_info as $good): ?>
-			<a href="javascript:;" onclick="gotoItem(<?=$good['goods_id'] ?>">
+			<a href="javascript:;" onclick="gotoItem(<?=$good['goods_id'] ?>)">
 				<li>
 					<div class="store_info_pc">
 						<img src="<?=$good['goods_img']?>" style="float:right">
@@ -86,6 +89,7 @@
 			</a>
 			<?php endforeach;?>
 		</ul>
+			<input type="hidden" id="merchant_id" value="<?=$merchant_id?>">
 		<?php else: ?>
 			<div style="text-align: center;margin-top: 20px;padding-bottom: 20px;">
 				还没有商品!
@@ -96,12 +100,12 @@
 </div>
 
 <div class="store_list_co" style="margin-top:15px;">
-	<div style="padding:10px;"><p class="co_title"><?=$goods_category['cat_list']?></p><p class="co_see_more"><a href="javascript:;">查看更多</a></p></div>
+	<div style="padding:10px;"><p class="co_title"><?=$goods_category['cat_list']?></p><p class="co_see_more"><a href="javascript:;" onclick="getCategory()">查看更多</a></p></div>
 	<div class="buy_store_list">
 		<?php if(!empty($goods_category['category'])): ?>
 		<ul>
 			<?php foreach ($goods_category['category'] as $category): ?>
-			<a href="javascript:;" onclick="gotoItem(<?=$good['goods_id'] ?>">
+			<a href="javascript:;" onclick="gotoItem(<?=$good['goods_id'] ?>)">
 				<li>
 					<div class="store_info_pc">
 						<img src="<?=$category['goods_img']?>" style="float:right">
@@ -143,8 +147,19 @@
 	<div class="store_ts">关注益多米，超值产品任你选</div>
 	<div class="store_wx_colse"><img src="/themes/mobiles/img/guanbi.png"></div>
 </div>
+<?php endif;?>
 
 <script>
+	function  getRecoment(){
+		window.location ="<?php echo U('shop/getrecoment',"merchant_id={$merchant_id}");?>";
+	}
+	function getCategory(){
+		window.location ="<?php echo U('shop/getcategory',"merchant_id={$merchant_id}");?>";
+	}
+	function gotoItem(goodId){
+		window.location = '/shop/item/'+goodId+'?back=index';
+	}
+
 	$(document).on("click",'.store_up',function(){
 		var $store_up =$(this);
 		if(!$(this).hasClass("store_up_on")){
@@ -162,9 +177,6 @@
 		}
 	});
 
-	function gotoItem(goodId){
-		window.location = '/item/'+goodId+'?back=index';
-	}
 	$(document).on("click",'.two_code',function(){
 		if(!$(this).hasClass("two_code_on")){
 			$(this).addClass("two_code_on");
@@ -172,7 +184,7 @@
 		}
 		$(".mask").show();
 		$(".store_wx").show();
-	})
+	});
 	$(document).on("click",'.shop_cart_store',function(){
 		if(!$(this).hasClass("shop_cart_store_on")){
 			$(this).addClass("shop_cart_store_on");

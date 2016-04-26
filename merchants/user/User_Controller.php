@@ -136,7 +136,12 @@ class User_Controller extends MerchantController
                         $ret['status']=-2;
                         $_SESSION['erro'] = 1;
                         $response->sendJSON($ret);
-                    } else { //Final Login Success
+                    } elseif($check['activation']==0) {
+                        $ret['retmsg']= '帐号未激活！';
+                        $ret['status']=-4;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
+                    }else{ //Final Login Success
                         $ret['retmsg'] = '登录成功！';
                         $ret['status'] = 1;
                         if (isset($_POST['member_me'])) {
