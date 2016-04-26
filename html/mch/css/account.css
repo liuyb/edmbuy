@@ -281,6 +281,105 @@
 	padding:0 25px;
 	margin-left:16px;
 }
+.with_tab_list{
+	background:#fff;
+}
+.withdraw_tab{
+	width:100%;
+}
+.withdraw_tab th{
+	text-align:center;
+  	height: 39px;
+  	line-height: 40px;
+  	text-align: center;
+  	font-size: 13px;
+  	color: #333;
+  	border-bottom: 1px solid #eee;	
+}
+.withdraw_tab td{
+	text-align:center;
+  	height: 59px;
+  	line-height: 60px;
+  	text-align: center;
+  	font-size: 12px;
+  	color: #7d7d7d;
+  	border-bottom: 1px solid #eee;	
+}
+.deal_order_num{
+  	line-height: 40px;
+  	padding-left: 5px;
+  	width: 155px;
+  	background: #fff;
+  	height: 40px;
+  	display: inline-block;
+ 	margin: 0 0 0 15px;
+  	border-radius: 4px;
+  	border: 0;	
+}
+.deal_type_one,.deal_type_two{
+	background:#fff url(../img/f26427.png) no-repeat 90%;
+	color:#999;
+  	line-height: 42px;
+  	padding-left: 5px;
+  	width: 155px;
+  	height: 42px;
+  	display: inline-block;
+ 	margin: 0 0 0 15px;
+  	border-radius: 4px;
+  	border: 0;	
+	padding:0;
+}
+.edit_password_bg{
+	background:#fff;
+	min-height:600px;
+	padding-top:15px;
+}
+.password_bg_div{
+	height:60px;
+	line-height:60px;
+	padding:0 20px;
+}
+.bg_span_left{
+	font-size:13px;
+	color:#999;
+}
+.first_password,.news_password,.news_password_again{
+	background:#ecf1f5;
+	padding-left:10px;
+	font-size:13px;
+	color:#999;
+	height:40px;
+	line-height:40px;
+	border:0;
+	border-radius:4px;
+	width:400px;
+}
+.submit_new_password{
+	margin: 30px 0 0 133px;
+}
+.submit_new_password button{
+	border:0;
+	border-radius:4px;
+	height:40px;
+	line-height:40px;
+	padding:0 30px;
+	background:#f26427;
+	color:#fff;
+	font-size:13px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
