@@ -247,7 +247,8 @@ function updateGoodsRecommStatus(obj, status, statusVal){
 		return;
 	}
 	if(!real_goods_id.length){
-		layer.msg('所选商品已是对应状态！');
+		var msg = statusVal ? "所选商品已是推荐商品！" : "所选商品不是推荐商品！";
+		layer.msg(msg);
 		return;
 	}
 	var data = {status : status, goods_ids : goods_id, statusVal : statusVal};
