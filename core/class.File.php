@@ -142,9 +142,6 @@ class File extends CStatic {
 			curl_close($ch);
 			$succ = empty($err) ? true : false;
 		}
-		else { //TODO other method
-			
-		}
 		
 		// Get file mime to rename to currect extension
 		if ($succ) {
@@ -219,7 +216,13 @@ class File extends CStatic {
 		$thumb_height   = $watermark_info[1];
 		$thumb_scale    = $watermark_info[1] ? ($watermark_info[0]/$watermark_info[1]) : 1;
 		$need_resize    = false;
-		if (isset($watermark_place['w']) && $watermark_place['w'] && $watermark_place['w']!=$watermark_info[0])
+		if (isset($watermark_place['w']) && isset($watermark_place['h']) && ($watermark_place['w']!=$watermark_info[0] || $watermark_place['h']!=$watermark_info[1]))
+		{
+			$need_resize  = true;
+			$thumb_width  = $watermark_place['w'];
+			$thumb_height = $watermark_place['h'];
+		}
+		elseif (isset($watermark_place['w']) && $watermark_place['w'] && $watermark_place['w']!=$watermark_info[0])
 		{ //以宽为基准缩放
 			$need_resize  = true;
 			$thumb_width  = $watermark_place['w'];

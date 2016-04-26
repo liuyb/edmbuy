@@ -291,19 +291,26 @@ class Users extends StorageNode {
 		$source_file = SIMPHP_ROOT . $local_path;
 		$target_file = preg_replace('/\.jpg$/i', '', $source_file).'_wl'.File::ext($source_file);
 		
+		$tmpfile = '';
 		$ulogo = $this->logo;
 		if (preg_match('/^http(s?):\/\//i', $ulogo)) {
-			$ulogo = File::get_remote($ulogo);
+			$ulogo = $tmpfile = File::get_remote($ulogo);
 		}
 		if (Media::is_app_file($ulogo)) {
 			$ulogo = SIMPHP_ROOT . $ulogo;
+			if (''!=$tmpfile) {
+				$tmpfile = SIMPHP_ROOT . $tmpfile;
+			}
 		}
 		if (empty($ulogo)) {
 			return $local_path;
 		}
 		$ulogo = realpath($ulogo);
 		$ret = File::add_watermark($source_file, $target_file, $ulogo, ['pos'=>'center','w'=>90,'h'=>90], 100,'#FFFFFF');
-		@unlink($ulogo);
+		// 删除可能存在的临时文件
+		if (''!=$tmpfile) {
+			@unlink($tmpfile);
+		}
 		return $ret;
 	}
 	
@@ -351,8 +358,8 @@ class Users extends StorageNode {
 		if ($regen) {
 			$this->wxqrpromote = '';
 		}
-		if (!empty($this->wxqrpromote)) { //存在就直接返回
-			return Media::path($this->wxqrpromote, true);
+		if (!empty($this->wxqrpromote) && $_p=Media::path($this->wxqrpromote, true)) { //存在就直接返回
+			return $_p;
 		}
 		
 		$sourcefile     = SIMPHP_ROOT . '/misc/images/wx/promote_base.jpg';
@@ -367,12 +374,16 @@ class Users extends StorageNode {
 			mkdirs($targetdir);
 		}
 		
+		$tmpfile = '';
 		$ulogo   = $this->logo;
 		if (preg_match('/^http(s?):\/\//i', $ulogo)) {
-			$ulogo = File::get_remote($ulogo);
+			$ulogo = $tmpfile = File::get_remote($ulogo);
 		}
 		if (Media::is_app_file($ulogo)) {
 			$ulogo = SIMPHP_ROOT . $ulogo;
+			if (''!=$tmpfile) {
+				$tmpfile = SIMPHP_ROOT . $tmpfile;
+			}
 		}
 		if (empty($ulogo)) {
 			$ulogo  = SIMPHP_ROOT . '/misc/images/wx/edm_logo_r.png';
@@ -387,9 +398,12 @@ class Users extends StorageNode {
 		$ret = File::add_watermark($sourcefile, $targetfile, $qrimg, ['x'=>95,'y'=>480,'w'=>344,'h'=>344], 100);
 		// 添加个人头像
 		$ret = File::add_watermark($targetfile, '', $ulogo, ['x'=>20,'y'=>25,'w'=>75,'h'=>75], 100, '#FFFFFF');
-		@unlink($ulogo);
 		// 添加文字
 		$ret = File::add_text($targetfile, '', $txtinfo);
+		// 删除可能存在的临时文件
+		if (''!=$tmpfile) {
+			@unlink($tmpfile);
+		}
 		if ($ret) { //创建水印成功
 			$upUser = new Users($this->uid);
 			$upUser->wxqrpromote = $ret;
@@ -454,11 +468,15 @@ class Users extends StorageNode {
 				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_M, 15, 2);
 				if (file_exists($locfile)) {
 					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+					$tmpfile= '';
 					if (preg_match('/^http(s?):\/\//i', $ulogo)) {
-						$ulogo = File::get_remote($ulogo);
+						$ulogo = $tmpfile = File::get_remote($ulogo);
 					}
 					if (Media::is_app_file($ulogo)) {
 						$ulogo = SIMPHP_ROOT . $ulogo;
+						if (''!=$tmpfile) {
+							$tmpfile = SIMPHP_ROOT . $tmpfile;
+						}
 					}
 					if (!file_exists($ulogo)) {
 						$ulogo = '';
@@ -469,7 +487,9 @@ class Users extends StorageNode {
 						if ($wtm_succ) {
 							$qrcode = $wtm_succ;
 						}
-						@unlink($ulogo);
+					}
+					if (''!=$tmpfile) {
+						@unlink($tmpfile);
 					}
 				}
 			}

@@ -90,7 +90,7 @@ class Wxpay {
       $input->SetDetail($order_detail);
       $input->SetAttach('edmbuy'); //商家自定义数据，原样返回
       $input->SetOut_trade_no($order['order_sn']);
-      $input->SetTotal_fee(intval($order['order_amount']*100)); //'分'为单位
+      $input->SetTotal_fee(Fn::money_fen($order['order_amount'])); //'分'为单位
       $input->SetTime_start(date('YmdHis', $now));
       $input->SetTime_expire(date('YmdHis', $now + 60*15)); //15分钟内支付有效
       $input->SetGoods_tag(''); //商品标记，代金券或立减优惠功能的参数

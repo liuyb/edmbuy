@@ -57,7 +57,7 @@ class Wxpay_Controller extends Controller {
         $order_id = $pay_log['order_id'];
         
         //检查支付金额是否正确
-        if (intval($pay_log['order_amount']*100) != $total_fee) {
+        if (Fn::money_fen($pay_log['order_amount']) != $total_fee) {
           $msg = '金额不对';
           //D()->unlock_tables();// 解锁
           D()->commit();
