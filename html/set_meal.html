@@ -38,8 +38,35 @@
 		<p class="meal_names">套餐名称</p>
 		<p class="meal_get_now">
 			<button class="get_now_btn">立即领取</button>
-			<span class="see_meal_infos">查看套餐详情</span>
+			<span class="see_meal_infos" data-type="1">查看套餐详情</span>
 		</p>
+		<div class="meal_infos_lsit" >
+			<table cellspacing="0" cellpadding="0" class="meal_list_tab">
+				<tr>
+					<td class="big_img"><img src="./img/receal.png"></td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img"><img src="./img/receal.png"></td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img"><img src="./img/receal.png"></td>
+				</tr>
+				<tr>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+					<td></td>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+					<td></td>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </div>
 
@@ -49,13 +76,52 @@
 		<p class="meal_names">套餐名称</p>
 		<p class="meal_get_now">
 			<button class="get_now_btn">立即领取</button>
-			<span class="see_meal_infos">查看套餐详情</span>
+			<span class="see_meal_infos" data-type="1">查看套餐详情</span>
 		</p>
+		<div class="meal_infos_lsit" >
+			<table cellspacing="0" cellpadding="0" class="meal_list_tab">
+				<tr>
+					<td class="big_img"><img src="./img/receal.png"></td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img"><img src="./img/receal.png"></td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img"><img src="./img/receal.png"></td>
+				</tr>
+				<tr>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+					<td></td>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+					<td></td>
+					<td>
+						<p class="tea_info_title">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price"><span>￥98.00</span></p>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </div>
 
 
+<script>
+$(".see_meal_infos").on("click",function(){
 
+	if($(this).attr('data-type')=='1') {
+		$(this).parent().parent().find(".meal_infos_lsit").show();
+		$(this).attr('data-type','0');
+	}
+	else {
+		$(this).parent().parent().find(".meal_infos_lsit").hide();
+		$(this).attr('data-type','1');
+	}
+})
+</script>
 
 
 
