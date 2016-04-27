@@ -3036,6 +3036,185 @@ td.cash_td2 img {
 	margin-left:0 !important;
 }
 
+/* 代理*/
+
+.buy_agency_title{
+	background:#fff url(../img/backl.png) no-repeat 10px;
+	background-size:20px;
+	width:100%;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	font-size:18px;
+	color:#111;
+}
+.agency_is{
+	height:80px;
+	line-height:80px;
+	background:#f65d00;
+	font-size:15px;
+}
+.agency_is span{
+	color:#fff;
+}
+.agency_is img{
+	width:50px;
+	height:50px;  
+	vertical-align: middle;
+	border-radius:50%;
+	margin:0 10px;
+}
+.agency_navig{
+	background:#fff;
+	height:44px; 
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+}
+.navig_next{
+	margin:0 10px;
+}
+.navig_next li{
+	display: inline-block;
+	width:50%;
+	text-align:center;
+	line-height:44px;
+	font-size:15px;
+	color:#323232;
+}
+.navig_on{
+	color:#f65d00 !important;
+	border-bottom:1px solid #f65d00;
+}
+.agency_common{
+	background:#fff;
+	margin-bottom:108px;
+}
+.gold_medal_agency{
+	margin:0 10px;
+}
+.agency_tab{
+	width:100%;
+}
+.agency_tab td{
+	height:60px;
+	vertical-align: middle;
+	border-bottom:1px solid #e6e6e6;
+	font-size:12px;
+	color:#323232;
+}
+.agency_tab img{
+	width:30px;
+	height:30px;
+	vertical-align: middle;	
+	margin-right:10px;
+}
+.agency_font{
+	color:#f65d00 !important;
+}
+.agency_bottom_next{
+	background:#fff;
+	position:fixed;
+	left:0;
+	bottom:49px;
+	width:100%;
+}
+.agency_bottom{
+	background:#fff;
+	position:fixed;
+	left:0;
+	bottom:0;
+	width:100%;
+}
+.agency_money{
+	height:47px;
+	line-height:49px;
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+}
+.silver_money{
+	height:47px;
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+}
+.fl{
+	float:left;
+	margin-left:10px;
+	font-size:15px;
+	color:#323232;
+}
+.fr{
+	float:right;
+}
+.right_buy_btn{
+	width:105px;
+	background:#f65d00;
+	height:49px;
+	line-height:47px;
+	font-size:16px;
+	color:#fff;
+	text-align:center;
+	margin-top:-1px;
+}
+.amoney_right span{
+	display:inline-block;
+	height:49px;
+}
+.right_money{
+	margin-right:10px;
+	font-size:18px;
+	color:#f65d00;
+}
+.right_money_silver{
+	font-size:18px;
+	color:#f65d00;	
+	position: absolute;	
+	right:118px;	
+}
+.left_agency{
+	font-size:15px;
+	color:#323232;
+}
+.agency_bottom_menu{
+	height:49px;
+}
+.agency_bottom_menu li{
+  	float: left;
+  	width: 25%;
+  	height: 49px;
+  	text-align: center;	
+}
+#s_sjlm{
+	background:url(../img/sjlm1.png) no-repeat center;
+	background-size:39px 36px;
+}
+#s_sjlm.on{
+	background:url(../img/sjlm2.png) no-repeat center;
+	background-size:39px 36px;
+}
+#s_dl{
+	background:url(../img/daili1.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_dl.on{
+	background:url(../img/daili2.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_dp{
+	background:url(../img/dp1.png) no-repeat center;
+	background-size:22px 36px;
+}
+#s_dp.on{
+	background:url(../img/dp2.png) no-repeat center;
+	background-size:22px 36px;
+}
+#s_wd{
+	background:url(../img/wd1.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_wd.on{
+	background:url(../img/wd2.png) no-repeat center;
+	background-size:20px 36px;
+}
 
 
 
