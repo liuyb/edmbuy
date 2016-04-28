@@ -130,7 +130,8 @@ class Wxpay_Controller extends Controller {
       return false;
       
     });
-    
+    //trace_debug('wxpay_final', $GLOBALS['HTTP_RAW_POST_DATA']);
+    exit; //应该退出，避免上层影响返回
   }
   
 }

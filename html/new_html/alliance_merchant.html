@@ -1,0 +1,146 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="../css/c.css" />
+<link rel="stylesheet" href="../css/animate.min.css" />
+<link rel="stylesheet" href="../css/wu.css" />
+<link rel="stylesheet" href="../css/du.css" />
+<script src="../js/jquery-1.8.3.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/j.js"></script>
+<!-- head end -->
+</head>
+
+<style>
+</style>
+
+<body style="background:#eee;">
+
+<div class="header alliance">
+	<ul>	
+		<li id="li1" onclick="f(1)" class="allliance_on">销量</li><li id="li2" onclick="f(2)">粉丝</li>
+	</ul>
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div class="alliance_list_common" id="list1">
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+		<div class="iance_list_bottom">
+			<ul>
+				<li><img src="../img/newtea_05.jpg"></li>
+				<li style="margin:0 2%;"><img src="../img/newtea_05.jpg"></li>
+				<li><img src="../img/newtea_05.jpg"></li>
+			</ul>
+		</div>
+	</div><div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+		<div class="iance_list_bottom">
+			<ul>
+				<li><img src="../img/newtea_05.jpg"></li>
+				<li style="margin:0 2%;"><img src="../img/newtea_05.jpg"></li>
+				<li><img src="../img/newtea_05.jpg"></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="alliance_list_common" id="list2" style="display:none;">
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/123.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+		<div class="iance_list_bottom">
+			<ul>
+				<li><img src="../img/369.jpg"></li>
+				<li style="margin:0 2%;"><img src="../img/369.jpg"></li>
+				<li><img src="../img/369.jpg"></li>
+			</ul>
+		</div>
+	</div><div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+		<div class="iance_list_bottom">
+			<ul>
+				<li><img src="../img/newtea_05.jpg"></li>
+				<li style="margin:0 2%;"><img src="../img/newtea_05.jpg"></li>
+				<li><img src="../img/newtea_05.jpg"></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div style="text-align:center;height:40px;line-height:40px;margin-bottom:59px;"><span class="allicen_more">下拉加载更多</span></div>
+
+<div class="agency_bottom">
+	<div class="agency_bottom_menu">
+		<ul>
+			<ul>
+				<a href="javascript:;"><li id="s_sjlm"></li></a>
+				<a href="javascript:;"><li id="s_dl"></li></a>
+				<a href="javascript:;"><li id="s_dp"></li></a>
+				<a href="javascript:;"><li id="s_wd"></li></a>
+			</ul>
+		</ul>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$("#s_sjlm").addClass("on");  //底部导航高亮
+});
+
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".alliance_list_common").hide();
+	$(".alliance li").removeClass("allliance_on");
+	
+	$(_li).addClass("allliance_on");
+	$(_list).show();
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
