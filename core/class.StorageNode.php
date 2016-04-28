@@ -202,8 +202,7 @@ abstract class StorageNode extends Model {
 		foreach ($this->__DATA__ AS $k=>$v) {
 			$obj->__DATA__[$k] = $v;
 		}
-		//$obj->id = NULL;
-		unset($obj->__DATA__[$meta['key']]);
+		if(isset($obj->__DATA__[$meta['key']])) unset($obj->__DATA__[$meta['key']]);
 		return $obj;
 	}
 	
