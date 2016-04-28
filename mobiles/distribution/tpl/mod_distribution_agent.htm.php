@@ -28,7 +28,7 @@ show_topnav($('#forTopnav').html());
 				<?php if($user->level == Users::USER_LEVEL_3):?>
 				<img src="/themes/mobiles/img/jinpai.png" class="jin_z">
 				<?php elseif ($user->level == Users::USER_LEVEL_4):?>
-				<img src="/themes/mobiles/img/jinpai.png" class="jin_z">
+				<img src="/themes/mobiles/img/yinpai.png" class="jin_z">
 				<?php endif;?>
 				</p>
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
@@ -51,6 +51,8 @@ show_topnav($('#forTopnav').html());
 			<li id="li1" class="navig_on" onclick="agency_switch(1)">金牌代理</li><li id="li2" onclick="agency_switch(2)">银牌代理</li>
 		</ul>
 	</div>
+	<input type='button' value='测试-支付成功后点击' onclick="testBuy();" />
+	<input type='button' value='测试-清除购买记录' onclick="clearAgent();" />
 </div>
 
 <div class="agency_common" id="list1">
@@ -122,8 +124,6 @@ function agency_switch(a){
 	$(_agency).show();
 }
 </script>
-<a href='javascript:testBuy();'>测试-购买代理成功后点击</a>
-<a href='javascript:clearAgent();'>测试-清除购买代理记录</a>
 <script>
 function testBuy(){
 	F.get('/distribution/test/buy', null, function(ret){
@@ -173,13 +173,13 @@ $(function(){
 		var goods_number = 1;
 
 		var order_type = _this.data('type');
-
-		_this.text('支付中, 请稍候...').addClass('disabled',true);
+		var paybtn = $(".btn-wxpay");
+		paybtn.text('支付中, 请稍候...').addClass('disabled',true);
 		F.post('<?php echo U('trade/order/submit_item')?>',
 				{"order_sn":order_sn,"item_id":goods_id,"item_number":goods_number,"pay_id":pay_id,"order_msg":""},
 				function(ret){
           			 if (ret.flag=='SUC') {
-          				_this.text('支付跳转中...');
+           				paybtn.text('支付跳转中...');
         
         				wxpayJsApiCall(ret.js_api_params,ret.order_id,function(flag){
         	  				if(flag=='OK'){
@@ -188,7 +188,7 @@ $(function(){
          					}
         				});	
   					}else{
-          				_this.text('立即支付').removeClass('disabled');
+  						paybtn.text('立即支付').removeClass('disabled');
           				myAlert(ret.msg);
           			}
 	  			});

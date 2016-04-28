@@ -382,6 +382,7 @@ class Distribution_Controller extends MobileController{
             $newOrder->order_status = OS_CONFIRMED;
             $newOrder->shipping_status = SS_UNSHIPPED;
             $newOrder->pay_status   = PS_PAYED;
+            $newOrder->confirm_time = simphp_gmtime();
             $newOrder->consignee    = $exAddr->consignee;
             $newOrder->country      = $exAddr->country;
             $newOrder->province     = $exAddr->province;
@@ -409,7 +410,6 @@ class Distribution_Controller extends MobileController{
             $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
             //...
             $newOrder->relate_order_id = $agent->order_id;//对应上购买代理的订单ID
-           	
             $newOrder->save(Storage::SAVE_INSERT);
             $order_id = 0;
             if ($newOrder->id) { //订单表生成成功

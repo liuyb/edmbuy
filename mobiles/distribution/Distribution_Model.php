@@ -15,7 +15,7 @@ class Distribution_Model extends Model{
      * @param array $options orderby(oc销量|cc收藏量) 
      */
     static function getMerchantsList(PagerPull $pager, array $options){
-        $orderby = $options['orderby'] ?: 'oc';
+        $orderby = $options['orderby'] ? $options['orderby'] : 'oc';
         $sql = "select m.merchant_id as merchant_id, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc from shp_merchant m left join
                 (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and pay_status = ".PS_PAYED." and merchant_ids <> ''
                 group by merchant_ids) mo
@@ -145,6 +145,7 @@ class Distribution_Model extends Model{
                 $subOrder->merchant_ids = Merchant::getMidByAdminUid($m_uid);
                 $subOrder->order_status = OS_CONFIRMED;
                 $subOrder->pay_status   = PS_PAYED;
+                $subOrder->confirm_time = simphp_gmtime();
                 $subOrder->relate_order_id = $agent_order_id;
                 $subOrder->save(Storage::SAVE_INSERT); //先生成一个克隆子订单
                  

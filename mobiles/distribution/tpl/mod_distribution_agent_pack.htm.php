@@ -79,7 +79,10 @@ function gotoItem(itemId){
 }
 
 function confirmPackage(pid){
-	window.location.href='/distribution/agent/package/confirm?pid='+pid;
+	var cf = window.confirm('您是否确定领取此套餐？套餐领取后无法更改！');
+	if(cf){
+    	window.location.href='/distribution/agent/package/confirm?pid='+pid;
+	}
 }
 </script>
 
