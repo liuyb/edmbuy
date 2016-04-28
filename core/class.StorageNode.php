@@ -197,11 +197,13 @@ abstract class StorageNode extends Model {
 	 */
 	public function clone_one() {
 		$clsname = get_class($this);
+		$meta = $clsname::meta();
 		$obj = new $clsname();
 		foreach ($this->__DATA__ AS $k=>$v) {
 			$obj->__DATA__[$k] = $v;
 		}
-		$obj->id = NULL;
+		//$obj->id = NULL;
+		unset($obj->__DATA__[$meta['key']]);
 		return $obj;
 	}
 	

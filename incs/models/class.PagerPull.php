@@ -43,7 +43,8 @@ class PagerPull extends Pager{
     
     public function outputPageJson(){
         return ["curpage" => $this->curpage + 1,
-                "hasnexpage" => $this->hasnexpage
+                "hasnexpage" => $this->hasnexpage,
+                "result"   => $this->result
         ];
     }
 }

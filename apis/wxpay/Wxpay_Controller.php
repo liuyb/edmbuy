@@ -111,7 +111,12 @@ class Wxpay_Controller extends Controller {
           
           //更新订单下所有商品卖出的"单品数"
           Items::updatePaidNumByOrderid($order_id);
-                    
+          
+          //当前订单是金牌银牌代理更新
+          $agent = AgentPayment::getAgentByOrderId($order_id);
+          if($agent && $agent->pid){
+              AgentPayment::callbackAfterAgentPay($order_id, $cUser);
+          }
           //微信通知
           $cUser->notify_pay_succ($order_id);
         }

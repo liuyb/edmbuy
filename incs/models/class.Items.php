@@ -403,9 +403,9 @@ HERESQL;
 	static function getCategoryRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
 	{
 		if($flat){
-		$limit = 4;
-		$order = "g.sort_order desc";
-	}
+		  $limit = 4;
+		  $order = "g.sort_order desc";
+	    }
 		if(!$flat&&$type){
 			switch($type){
 				case "new_asc":

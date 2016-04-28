@@ -27,6 +27,7 @@ class Goods_Model extends Model
             $is_insert = true;
             $goods->add_time = simphp_gmtime();
             $goods->merchant_id = $GLOBALS['user']->uid;
+            $goods->merchant_uid = $GLOBALS['user']->admin_uid;
         }
         $goods->last_update = simphp_gmtime();
         try {

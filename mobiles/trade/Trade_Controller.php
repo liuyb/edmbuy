@@ -462,6 +462,16 @@ class Trade_Controller extends MobileController {
         $ret['msg'] = '商品库存不足，无法下单';
         $response->sendJSON($ret);
       }
+      
+      //金牌银牌代理处理
+      if($this->is_agent_order($item_id)){
+        $u = Users::load($user_id);
+        if(Users::isAgent($u->level)){
+            D()->commit();
+            $ret['msg'] = '你已经是米商代理了，不需要重复购买';
+            $response->sendJSON($ret);
+        }
+      }
 
       // 生成订单信息
       $newOrder = new Order();
@@ -564,7 +574,12 @@ class Trade_Controller extends MobileController {
 
           // 生成表 pay_log 记录
           PayLog::insert($order_id, $order_sn, $newOrder->order_amount, PAY_ORDER);
-
+            
+          //金牌银牌代理处理
+          if($this->is_agent_order($item_id)){
+              AgentPayment::createAgentPayment($user_id, $order_id, $item_id == GOLD_AGENT_GOODS_ID ? 3 : 4);
+          }
+          
           // 提交事务
           D()->commit();
 
@@ -599,6 +614,14 @@ class Trade_Controller extends MobileController {
       }
 
     }
+  }
+  
+  /**
+   * 是否是购买米商代理
+   * @param unknown $item_id
+   */
+  private function is_agent_order($item_id){
+      return (GOLD_AGENT_GOODS_ID == $item_id || SILVER_AGENT_GOODS_ID == $item_id);
   }
 
   /**
