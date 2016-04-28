@@ -26,14 +26,14 @@ class User_Controller extends MerchantController
         if (Merchant::is_logined()) {
             $this->v->set_tplname('mod_user_index');
             $muid = $GLOBALS['user']->uid;
-            $wait_pay_count = Home_Model::getOrderTotalByStatus(CS_AWAIT_PAY, $muid);
-            $wait_ship_count = Home_Model::getOrderTotalByStatus(CS_AWAIT_SHIP, $muid);
-            $wait_refund_count = Home_Model::getWaitRefundOrderTotal($muid);
-            $goods_total = Home_Model::getGoodsTotalByIsSale(-1, $muid);
-            $unsale_goods_total = Home_Model::getGoodsTotalByIsSale(0, $muid);
-            $warn_goods_number = Home_Model::getGoodsNumberWarning($muid, 10);
-            $shop = Home_Model::getShopInfo($muid);
-            $totalSales = Home_Model::getOrderSalesMoney($muid);
+            $wait_pay_count = Merchant::getOrderTotalByStatus(CS_AWAIT_PAY, $muid);
+            $wait_ship_count = Merchant::getOrderTotalByStatus(CS_AWAIT_SHIP, $muid);
+            $wait_refund_count = Merchant::getWaitRefundOrderTotal($muid);
+            $goods_total = Merchant::getGoodsTotalByIsSale(-1, $muid);
+            $unsale_goods_total = Merchant::getGoodsTotalByIsSale(0, $muid);
+            $warn_goods_number = Merchant::getGoodsNumberWarning($muid, 10);
+            $shop = Merchant::getShopInfo($muid);
+            $totalSales = Merchant::getOrderSalesMoney($muid);
             $this->v->assign('wait_pay_count', $wait_pay_count);
             $this->v->assign('wait_ship_count', $wait_ship_count);
             $this->v->assign('wait_refund_count', $wait_refund_count);
@@ -136,7 +136,12 @@ class User_Controller extends MerchantController
                         $ret['status']=-2;
                         $_SESSION['erro'] = 1;
                         $response->sendJSON($ret);
-                    } else { //Final Login Success
+                    } elseif($check['activation']==0) {
+                        $ret['retmsg']= '帐号未激活！';
+                        $ret['status']=-4;
+                        $_SESSION['erro'] = 1;
+                        $response->sendJSON($ret);
+                    }else{ //Final Login Success
                         $ret['retmsg'] = '登录成功！';
                         $ret['status'] = 1;
                         if (isset($_POST['member_me'])) {

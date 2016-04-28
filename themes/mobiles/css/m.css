@@ -1775,14 +1775,14 @@ a.ph_btn{
   width:20%;
 }
 .info_td2{
-  width:50%;
+  width:45%;
   padding-left:10px;
   vertical-align: top;
 }
 .info_td3{
   vertical-align: top;
   text-align:right;
-  width:20%;
+  width:35%;
 }
 .info_name{
   font-size:14px;
@@ -3179,7 +3179,7 @@ td.cash_td2 img {
   font-weight: bold;
 }
 .tit_left{
-  border-right:8px solid #ff1414;
+  /*border-right:8px solid #ff1414;*/
   margin: 0 10px 0 8px;
 }
 .list_tab{
@@ -4746,7 +4746,7 @@ td.cash_td2 img {
   font-size:14px;
   margin-top:5px;
   border-radius:4px;
-  width:90px;
+  width:100px;
 }
 #inviter{
   width:200px;
@@ -5275,6 +5275,358 @@ td.cash_td2 img {
   text-align:center;
 }
 
+/*多米分销20160427*/
+
+.buy_agency_title{
+	background:#fff url(../img/backl.png) no-repeat 10px;
+	background-size:20px;
+	width:100%;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	font-size:18px;
+	color:#111;
+}
+.agency_is{
+	height:80px;
+	line-height:80px;
+	background:#f65d00;
+	font-size:15px;
+}
+.agency_is span{
+	color:#fff;
+}
+.agency_is img{
+	width:50px;
+	height:50px;  
+	vertical-align: middle;
+	border-radius:50%;
+	margin:0 10px;
+}
+.agency_navig{
+	background:#fff;
+	height:44px; 
+	border-bottom:1px solid #ddd;
+	margin:10px 0;
+}
+.navig_next{
+	margin:0 10px;
+}
+.navig_next li{
+	display: inline-block;
+	width:50%;
+	text-align:center;
+	line-height:44px;
+	font-size:15px;
+	color:#323232;
+}
+.navig_on{
+	color:#f65d00 !important;
+	border-bottom:1px solid #f65d00;
+}
+.agency_common{
+	background:#fff;
+	margin-bottom:108px;
+}
+.gold_medal_agency{
+	margin:0 10px;
+}
+.agency_tab{
+	width:100%;
+}
+.agency_tab td{
+	height:60px;
+	vertical-align: middle;
+	border-bottom:1px solid #e6e6e6;
+	font-size:12px;
+	color:#323232;
+}
+.agency_tab img{
+	width:30px;
+	height:30px;
+	vertical-align: middle;	
+	margin-right:10px;
+}
+.agency_font{
+	color:#f65d00 !important;
+}
+.agency_bottom_next{
+	background:#fff;
+	position:fixed;
+	left:0;
+	bottom:49px;
+	width:100%;
+}
+.agency_bottom{
+	background:#fff;
+	position:fixed;
+	left:0;
+	bottom:0;
+	width:100%;
+}
+.agency_money{
+	height:47px;
+	line-height:49px;
+	border-top:1px solid #ddd;
+}
+.silver_money{
+	height:47px;
+	border-top:1px solid #ddd;
+}
+.fl{
+	float:left;
+	margin-left:10px;
+	font-size:15px;
+	color:#323232;
+}
+.fr{
+	float:right;
+}
+.right_buy_btn{
+	width:105px;
+	background:#f65d00;
+	height:49px;
+	line-height:47px;
+	font-size:16px;
+	color:#fff;
+	text-align:center;
+}
+.amoney_right span{
+	display:inline-block;
+	height:49px;
+}
+.right_money{
+	margin-right:10px;
+	font-size:18px;
+	color:#f65d00;
+}
+.right_money_silver{
+	font-size:18px;
+	color:#f65d00;	
+	position: absolute;	
+	right:118px;	
+}
+.left_agency{
+	font-size:15px;
+	color:#323232;
+}
+.agency_bottom_menu{
+	height:49px;
+}
+.agency_bottom_menu li{
+  	float: left;
+  	width: 25%;
+  	height: 49px;
+  	text-align: center;	
+}
+#s_sjlm{
+	background:url(../img/sjlm1.png) no-repeat center;
+	background-size:39px 36px;
+}
+#s_sjlm.on{
+	background:url(../img/sjlm2.png) no-repeat center;
+	background-size:39px 36px;
+}
+#s_dl{
+	background:url(../img/daili1.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_dl.on{
+	background:url(../img/daili2.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_dp{
+	background:url(../img/dp1.png) no-repeat center;
+	background-size:22px 36px;
+}
+#s_dp.on{
+	background:url(../img/dp2.png) no-repeat center;
+	background-size:22px 36px;
+}
+#s_wd{
+	background:url(../img/wd1.png) no-repeat center;
+	background-size:20px 36px;
+}
+#s_wd.on{
+	background:url(../img/wd2.png) no-repeat center;
+	background-size:20px 36px;
+}
+
+/* 支付成功*/
+.agency_infos_pay{
+	margin:0 10px;
+	text-align:center;
+}
+.agency_infos_pay img{
+	width:90px;
+	height:95px;
+	margin-top:45px;
+}
+.at_get_combo{
+	height:44px;
+	line-height:44px;
+	width:100%;
+	background:#f65d00;
+	border:0;
+	border-radius:4px;
+	font-size:16px;
+	color:#fff;
+	margin-top:15px;
+}
+.agency_my_develop{
+	height:42px;
+	line-height:44px;
+	width:100%;
+	background:#fff;
+	border:1px solid #f65d00;
+	border-radius:4px;
+	font-size:16px;
+	color:#f65d00;
+	margin-top:15px;
+}
+
+
+/* 领取套餐 */
+
+
+
+.meal_j{
+	background:#f65d00;
+	height:80px;
+	text-align:center;
+}
+.meal_j p{
+	margin-top:18px;
+	font-size:15px;
+	color:#fff;	
+	display:inline-block;
+}
+.meal_infos{
+	background:#fff;
+	margin:10px 0;
+}
+.infos_comms{
+	padding:10px 10px 0 10px;
+}
+.infos_comms img{
+	width:100%;
+  	vertical-align: middle;
+}
+.meal_names{
+	height:39px;
+	line-height:40px;
+	border-bottom:1px solid #e6e6e6;
+	font-size:14px;
+	color:#323232;
+}
+.meal_get_now{
+	height:40px;
+	line-height:40px;
+}
+.get_now_btn{
+	float:left;
+	height:27px;
+	width:75px;
+	border:1px solid #f65d00;
+	color:#f65d00;
+	font-size:14px;
+	border-radius:4px;
+	background:#fff;
+	margin-top:6px;
+}
+.see_meal_infos{
+	float:right;
+	padding-right:20px;
+	font-size:14px;
+	color:#8c8c8c;
+}
+.arrow_down_bg{
+	background:url(../img/dress_more.png) no-repeat right;
+	background-size:16px;
+}
+.arrow_up_bg{
+	background:url(../img/jiantou_shang.png) no-repeat right;
+	background-size:16px;
+}
+.now_get_btn{
+	margin:30px 10px;
+	background:#f65d00;
+	font-size:16px;
+	color:#fff;
+	border:0;
+	border-radius:4px;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+}
+.meal_infos_lsit{
+	border-top:1px solid #e6e6e6;
+	padding:10px 0;
+	display:none;
+}
+.meal_list_tab{
+	width:100%;
+}
+.meal_list_tab{
+	text-align:center;
+}
+.big_img img{
+	width:80px !important;
+	height:80px !important;
+}
+.small_img img{
+	width:18px !important;
+	height:18px !important;
+}
+.big_img{
+	width:30%;
+}
+.small_img{
+	width:5%;
+}
+/* 成为金牌 */
+.become_a_tab{
+	width:100%;
+}
+.become_a_tab td{
+	height:80px;
+  	vertical-align: middle;	
+}
+.jin_z{
+	width:17px !important;
+	height:19px !important;
+}
+.agency_become{
+  height: 80px;
+  background: #f65d00;
+  font-size: 15px;
+}
+.agency_become img{
+  	width: 50px;
+  	height: 50px;
+  	vertical-align: middle;
+  	border-radius: 50%;
+  	margin: 0 10px;	
+}
+.become_name{
+	font-size:17px;
+	color:#fff;
+}
+.become_name_id{
+	font-size:12px;
+	color:#fff;
+}
+.get_become_meal{
+  	background: #cf4e00;
+  	border-top-left-radius: 10px;
+  	border-bottom-left-radius: 10px;
+  	text-align: center;
+  	height: 27px;
+  	line-height: 27px;
+  	font-size: 14px;
+  	color: #fff;	
+}
+/*多米分销20160427*/
 
 
 

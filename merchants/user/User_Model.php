@@ -38,7 +38,7 @@ class User_Model extends Model
         }
 
         $output = $admin;
-        return 1;
+        return $admin;
     }
 
     /**

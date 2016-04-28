@@ -118,8 +118,18 @@ define('OOS_CONSULT',               2); // 与店主协商
 define('SURPLUS_SAVE',              0); // 为帐户冲值
 define('SURPLUS_RETURN',            1); // 从帐户提款
 
-/*商城id*/
-define("MECHANT_GOODS_ID",1000);
+/*商城商品id*/
+define("MECHANT_GOODS_ID",1142);
+define("MECHANT_GOODS_AMOUNT",899);
+define("MECHANT_ORDER_AMOUNT",699);
+
+/**
+ * 代理商品ID
+ */
+//金牌代理
+define('GOLD_AGENT_GOODS_ID', 1196);
+//银牌代理
+define('SILVER_AGENT_GOODS_ID', 1197);
 
 /*商城前台url*/
 define('SHOP_URL_MERCHANT', "http://m.ydmbuy.com/shop");

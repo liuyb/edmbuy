@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/account.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="account_left_common.html"-->
+	
+	<div class="my_account">
+		<div id="choose_condition">
+			<input type="input" style="width:155px;" id="start_date" readonly="" class="form_datetime check_time_left form-control" placeholder="请选择开始日期">
+			<p style="padding-left:15px;display:inline-block;height:70px;line-height:70px;">至</p>
+			<input type="input" style="width:155px;" id="end_date" readonly="" class="form_datetime check_time_left form-control" placeholder="请选择结束日期">
+			<input type="text" value="" placeholder="订单号" class="deal_order_num">
+			<select class="deal_type_one">
+				<option>订单状态</option>
+				<option>你说呢</option>
+			</select>
+			<select class="deal_type_two">
+				<option>结算状态</option>
+				<option>我不说</option>
+			</select>
+			<button id="search_type_infos">搜索</button>
+		</div>
+		
+		<div class="with_tab_list">
+			<table cellspacing="0" cellpadding="0" class="withdraw_tab">
+				<tr>	
+					<th>订单编号</th>
+					<th>结算状态</th>
+					<th>买家</th>
+					<th>订单金额</th>
+					<th>订单状态</th>
+					<th>结算时间</th>
+					<th>下单时间</th>
+				</tr>
+				<tr>
+					<td>123456</td>
+					<td>大师</td>
+					<td>2016-3-6 15:22</td>
+					<td>中国邮政深圳分行</td>
+					<td>*******123456</td>
+					<td>￥565.00</td>
+					<td>2016-3-6 15:22</td>
+				</tr>
+				<tr>
+					<td>123456</td>
+					<td>大师</td>
+					<td>2016-3-6 15:22</td>
+					<td>中国邮政深圳分行</td>
+					<td>*******123456</td>
+					<td>￥565.00</td>
+					<td>2016-3-6 15:22</td>
+				</tr>
+				<tr>
+					<td>123456</td>
+					<td>大师</td>
+					<td>2016-3-6 15:22</td>
+					<td>中国邮政深圳分行</td>
+					<td>*******123456</td>
+					<td>￥565.00</td>
+					<td>2016-3-6 15:22</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+//菜单高亮
+$("#jymx").addClass("account_on");
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

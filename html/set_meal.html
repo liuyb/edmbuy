@@ -1,0 +1,129 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/j.js"></script>
+<!-- head end -->
+</head>
+
+<style>
+</style>
+
+<body style="background:#eee;">
+
+<div class="header">
+	领取套餐
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+
+<div class="meal_j">
+	<p>您已经成为益多米金牌代理<br>您可以领取下面任意一份698元套餐</p>
+</div>
+
+<div class="meal_infos">
+	<div class="infos_comms">
+		<img src="./img/beijing.png">
+		<p class="meal_names">套餐名称</p>
+		<p class="meal_get_now">
+			<button class="get_now_btn">立即领取</button>
+			<span class="see_meal_infos" data-type="1">查看套餐详情</span>
+		</p>
+		<div class="meal_infos_lsit">
+			<table cellspacing="0" cellpadding="0" class="meal_list_tab">
+				<tr>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="meal_infos">
+	<div class="infos_comms">
+		<img src="./img/beijing.png">
+		<p class="meal_names">套餐名称</p>
+		<p class="meal_get_now">
+			<button class="get_now_btn">立即领取</button>
+			<span class="see_meal_infos" data-type="1">查看套餐详情</span>
+		</p>
+		<div class="meal_infos_lsit" >
+			<table cellspacing="0" cellpadding="0" class="meal_list_tab">
+				<tr>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+					<td class="small_img"><img src="./img/jia1.png"></td>
+					<td class="big_img">
+						<img src="./img/receal.png">
+						<p class="tea_info_title" style="text-align:left;">仿古套壶 260cc原矿紫泥 自带竹制茶盘竹制茶盘  </p>
+						<p class="tea_info_price" style="text-align:left;"><span>￥98.00</span></p>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$(".see_meal_infos").on("click",function(){
+
+	if($(this).attr('data-type')=='1') {
+		$(this).parent().parent().find(".meal_infos_lsit").show();
+		$(this).attr('data-type','0');
+	}
+	else {
+		$(this).parent().parent().find(".meal_infos_lsit").hide();
+		$(this).attr('data-type','1');
+	}
+})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

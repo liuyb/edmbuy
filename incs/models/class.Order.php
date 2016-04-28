@@ -82,6 +82,7 @@ class Order extends StorageNode{
                 'is_delete'          => 'is_delete',   
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2',
+                'relate_order_id'     => 'relate_order_id'//领取套餐时对应购买代理的订单ID。
             ));
     }
     

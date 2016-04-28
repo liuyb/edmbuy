@@ -384,9 +384,11 @@ class Goods_Controller extends MerchantController
     public function deleCategory(Request $request, Response $response)
     {
         $cat_id = $request->post('cat_id');
+        $n = $request->post('n');
         $result = Goods_Model::delgoodsCategory($cat_id);
         if ($result) {
             $data['status'] = 1;
+            $data['n'] = $n;
             $data['retmsg'] = "删除分类成功！";
         } else {
             $data['status'] = 0;

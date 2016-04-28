@@ -23,12 +23,12 @@
             <button id="ps_btn">获取验证码</button>
         </li>
         <li>
-            <input id="ps_email" class="ps_common" type="text" value="" placeholder="请输入店铺名称(可不填)">
-            <span class="common_red_x">*</span>
+            <input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入图形验证码">
+            <span class="common_red_x"><img id="verifyimg" src="/vc.php" onclick="this.src='/vc.php?'+Math.random()" alt="验证码" title="点击刷新验证码"></span>
         </li>
         <li>
-            <input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入图形验证码">
-            <span class="common_red_x"><img id="verifyimg" src="/vc.php" onclick="javascript:this.src='/vc_mch.php?'+new Date().getTime()" alt="验证码" title="点击刷新验证码"></span>
+            <input id="ps_email" class="ps_common" type="text" value="" placeholder="请输入店铺名称(可不填)">
+            <span class="common_red_x"></span>
         </li>
     </ul>
 </div>

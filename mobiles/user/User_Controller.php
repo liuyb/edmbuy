@@ -830,11 +830,25 @@ class User_Controller extends MobileController
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $invite_code = $request->post("invite_code");
         if (!empty($invite_code)) {
-            User_Model::checkInviteCode($invite_code);
+           $result =  User_Model::checkInviteCode($invite_code);
+            if(!$result){
+                $ret['retmsg'] ="推荐人不存在";
+                $ret['status'] =0;
+                $response->sendJSON($ret);
+            }else{
+                $_SESSION['invite_code'] = $invite_code;
+                $_SESSION['step'] = 3;
+                $ret['status'] =1;
+                $response->sendJSON($ret);
+            }
+        }else{
+            $invite_code = User_Model::updUserInvetCode();
             $_SESSION['invite_code'] = $invite_code;
+            $_SESSION['step'] = 3;
+            $ret['status'] =1;
+            $response->sendJSON($ret);
         }
-        $_SESSION['step'] = 3;
-        echo "1";
+
     }
 
 
@@ -850,6 +864,8 @@ class User_Controller extends MobileController
          */
         if (!$request->post()) {
             $this->v->set_tplname("mod_user_paysuc");
+            $order_price = round(MECHANT_ORDER_AMOUNT,2);
+            $this->v->assign("order_price",$order_price);
             $response->send($this->v);
         }
         if (!isset($_SESSION['step'])) {
@@ -874,7 +890,7 @@ class User_Controller extends MobileController
         if (!empty($merchant_id)) {
             User_Model::UpdataMerchantInfo($merchant_id, $order_id, $order_sn);
             //todo 发送短信
-            Sms::sendSms($mobile, 'reg_success');
+            //Sms::sendSms($mobile, 'reg_success');
             unset($_SESSION['facename']);
             unset($_SESSION['verifycode']);
             unset($_SESSION['invite_code']);

@@ -355,25 +355,58 @@ HERESQL;
 	 * 获取在售的推荐商品商品列表
 	 * @param PagerPull $pager
 	 */
-	static function findGoodsRcoment($mercant_id)
+	static function findGoodsRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
 	{
+		if($flat){
+			$limit = 4;
+			$order = "sort_order desc";
+		}
+		if(!$flat&&$type){
+			switch($type){
+				case "new_asc":
+					$order = "add_time asc";
+					break;
+				case "new_desc":
+					$order = "add_time desc";
+					break;
+				case "sale_asc":
+					$order = "shop_price asc";
+					break;
+				case "sale_desc":
+					$order = "paid_order_count desc";
+					break;
+				case "price_asc":
+					$order = "paid_order_count desc";
+					break;
+				case "price_desc":
+					$order = "shop_price asc";
+					break;
+				default :
+					$order = "sort_order desc";
+			}
+			$limit = "{$pager->start},{$pager->realpagesize}";
+		}
+
 		$where = "and shop_recommend = 1 and merchant_id = '%s'";
-		$sql = "select goods_id,goods_name,shop_price,market_price,
-	            goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by sort_order limit 4";
-		$goods = D()->query($sql,$mercant_id)->fetch_array_all();
+		if($search){
+			$where .=" and goods_name like '%{$search}%'";
+		}
+		$sql = "select goods_id,goods_name,shop_price,market_price,goods_brief,
+	            goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by {$order} limit {$limit}";
+		$goods = D()->query($sql,$merchant_id)->fetch_array_all();
 		return self::buildGoodsImg($goods);
 	}
 
 	/**
 	 * 拿到推荐分类列表
 	 */
-	static function getCategoryRcoment($merchant_id,PagerPull $pager=null,$type="",$limit = true)
+	static function getCategoryRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
 	{
-		if($limit){
-			$limit = 4;
-			$order = "g.sort_order desc";
-		}
-		if(!$limit&&$type){
+		if($flat){
+		  $limit = 4;
+		  $order = "g.sort_order desc";
+	    }
+		if(!$flat&&$type){
 			switch($type){
 				case "new_asc":
 					$order = "g.add_time asc";
@@ -382,13 +415,13 @@ HERESQL;
 					$order = "g.add_time desc";
 					break;
 				case "sale_asc":
-					$order = "g.sale_asc asc";
+					$order = "g.shop_price asc";
 					break;
 				case "sale_desc":
-					$order = "g.sale_asc desc";
+					$order = "g.paid_order_count desc";
 					break;
 				case "price_asc":
-					$order = "g.shop_price desc";
+					$order = "g.paid_order_count desc";
 					break;
 				case "price_desc":
 					$order = "g.shop_price asc";
@@ -396,17 +429,16 @@ HERESQL;
 				default :
 					$order = "g.sort_order desc";
 			}
-					$limit = "%d,%d";
+			$limit = "{$pager->start},{$pager->realpagesize}";
 		}
-
-
+		$where ="g.cat_id = c.cat_id and c.merchant_id = '%s' and c.shop_recommend = 1  and g.is_on_sale = 1  and g.is_delete = 0 ";
+		if($search){
+			$where .="and g.goods_name like '%{$search}%'";
+		}
 		$sql = "select c.cat_name, g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img from shp_goods g
 		RIGHT JOIN shp_category c ON c.merchant_id = g.merchant_id
-	    where g.cat_id = c.cat_id and c.merchant_id = '%s'
-	    and c.shop_recommend = 1
-	    and g.is_on_sale = 1  and g.is_delete = 0
-	    order by {$order}, g.paid_order_count desc limit {$limit}";
-		if($limit){
+	    where {$where} order by {$order} limit {$limit}";
+		if($flat){
 			$goods = D()->query($sql, $merchant_id)->fetch_array_all();
 			$cat_list = "";
 			foreach ($goods as $val) {
@@ -415,14 +447,15 @@ HERESQL;
 			$cat_list = rtrim($cat_list, ",");
 			$list['cat_list'] = $cat_list;
 		}else{
-			$goods = D()->query($sql, $merchant_id,$pager->start,$pager->realpagesize)->fetch_array_all();
+			$goods = D()->query($sql, $merchant_id)->fetch_array_all();
 		}
 		$goods = self::buildGoodsImg($goods);
 		$list['category'] =$goods;
 		return $list;
     }
+	static function getWhere(){
 
-
+	}
 
 }
  
