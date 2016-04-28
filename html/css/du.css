@@ -3479,5 +3479,80 @@ td.cash_td2 img {
 	color:#323232;
 }
 
+.alliance{
+  	font-weight: normal !important;
+  	padding: 0 70px !important;
+}
+.alliance li{
+	display:inline-block;
+	width:50%;
+	height:43px;
+}
+.allliance_on{
+	font-size:17px;
+	color:#f65d00;
+	border-bottom:1px solid #f65d00;
+}
+.alliance_list_common{
+	background:#fff;
+}
+.iance_list_infos{
+	padding:10px;
+	border-bottom:1px solid #e6e6e6;
+}
+.iance_list_top{
+	margin-bottom:10px;
+	height:50px;
+}
+.l_top_img{
+	width:50px;
+	height:50px;
+	float:left;
+}
+.l_top_infos{
+	float:left;
+	height:50px;
+}
+.l_top_btn{
+	float:right;
+	width:49px;
+	height:24px;
+	background:#fff;
+	color:#f65d00;
+	border:1px solid #f65d00;
+	border-radius:5px;
+	margin-top:13px;
+}
+.t_infos_nmae{
+	font-size:15px;
+	color:#323232;
+	margin-left:10px;
+	height:25px;
+}
+.t_infos_num{
+	margin-left:10px;
+	height:25px;	
+}
+.t_infos_num i{
+	font-size:11px;
+	color:#8c8c8c;
+}
+.iance_list_bottom{
+	font-size:0;	
+}
+.iance_list_bottom li{
+	display:inline-block;
+	width:32%;
+}
+.iance_list_bottom img{
+	width:100%;
+}
+.allicen_more{
+	background:url(../img/xiala.png) no-repeat right;
+	background-size:14px;
+  	font-size: 14px;
+  	color: #8c8c8c;
+  	padding-right: 20px;	
+}
 
 
