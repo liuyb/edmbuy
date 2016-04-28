@@ -58,10 +58,18 @@ class Distribution_Model extends Model{
      * @param PagerPull $pager
      * @param unknown $uid
      */
-    static function getChildAgentList(PagerPull $pager, $uid){
-        $sql = "select user_id, nick_name, mobile_phone,logo,level,reg_time from shp_users 
-                where parent_id = '%d' and level in (3,4) order by reg_time desc limit %d,%d";
-        return D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+    static function getChildAgentList(PagerPull $pager, $level, $uid){
+        switch ($level){
+            case Partner::Partner_LEVEL_1 : 
+                Partner::findFirstLevelList($uid, $pager, Partner::LEVEL_TYPE_AGENCY);
+            break; 
+            case Partner::Partner_LEVEL_2 :
+                Partner::findSecondLevelList($uid, $pager, Partner::LEVEL_TYPE_AGENCY);
+            break;
+            case Partner::Partner_LEVEL_3 :
+                Partner::findThirdLevelList($uid, $pager, Partner::LEVEL_TYPE_AGENCY);
+            break;
+        }
     }
     
     /**
@@ -79,9 +87,84 @@ class Distribution_Model extends Model{
      * @param PagerPull $pager
      * @param unknown $invite_code
      */
-    static function getChildShopList(PagerPull $pager, $invite_code){
-        $sql = "select merchant_id, facename,mobile,logo,created from shp_merchant where invite_code = '%s' order by created desc limit %d,%d";
-        return D()->query($sql, $invite_code, $pager->start, $pager->realpagesize)->fetch_array_all();
+    static function getChildShopList(PagerPull $pager, $level, $invite_code){
+        switch ($level){
+            case Partner::Partner_LEVEL_1 :
+                self::findFirstLevelShopList($invite_code, $pager);
+                break;
+            case Partner::Partner_LEVEL_2 :
+                self::findSecondLevelShopList($invite_code, $pager);
+                break;
+            case Partner::Partner_LEVEL_3 :
+                self::findThirdLevelShopList($invite_code, $pager);
+                break;
+        }
+    }
+    
+    /**
+     * 第一层列表
+     * @param unknown $uid
+     * @param Pager $pager
+     */
+    static function findFirstLevelShopList($uid, PagerPull $pager){
+        $column = self::outputLevelListQueryColumn();
+        $sql = "select $column where m.invite_code = '%s' order by m.created desc limit %d,%d";
+        $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $result = self::rebuildLevelResult($result);
+        $pager->setResult($result);
+        return $result;
+    }
+    
+    /**
+     * 第二层列表
+     * @param unknown $uid
+     * @param Pager $pager
+     */
+    static function findSecondLevelShopList($uid, PagerPull $pager){
+        $column = self::outputLevelListQueryColumn();
+        $sql = "select $column where m.invite_code in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = '%s' ) order by m.created desc limit %d,%d";
+        $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $result = self::rebuildLevelResult($result);
+        $pager->setResult($result);
+        return $result;
+    }
+    
+    /**
+     * 第三层列表
+     * @param unknown $uid
+     * @param Pager $pager
+     */
+    static function findThirdLevelShopList($uid, PagerPull $pager){
+        $column = self::outputLevelListQueryColumn();
+        $sql = "select $column where m.invite_code 
+                 in (
+                    SELECT user_id FROM edmbuy.shp_users su where
+                    su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = '%s' )
+                    )   
+                    order by m.created desc limit %d,%d";
+        $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $result = self::rebuildLevelResult($result);
+        $pager->setResult($result);
+        return $result;
+    }
+    
+    static function outputLevelListQueryColumn(){
+        $queryCols = "m.merchant_id as merchant_id, m.facename as facename, m.logo as logo,m.created as created, 
+                ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc from shp_merchant m left join
+                (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and pay_status = ".PS_PAYED." and merchant_ids <> ''
+                group by merchant_ids) mo
+                on m.merchant_id = mo.merchant_ids
+                left join
+                (select count(1) as cc, merchant_id from shp_collect_shop group by merchant_id) cs
+                on m.merchant_id = cs.merchant_id";
+        return $queryCols;
+    }
+    
+    static function rebuildLevelResult($result){
+        foreach ($result as &$rs){
+            $rs['created'] = date('Y-m-d H:i', $rs['created']);
+        }
+        return $result;
     }
     
     /**

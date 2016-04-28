@@ -25,11 +25,7 @@ show_topnav($('#forTopnav').html());
 			<td><img src="<?=$user->logo ?>"></td>
 			<td>
 				<p class="become_name"><?=$user->nickname ?>
-				<?php if($user->level == Users::USER_LEVEL_3):?>
-				<img src="/themes/mobiles/img/jinpai.png" class="jin_z">
-				<?php elseif ($user->level == Users::USER_LEVEL_4):?>
-				<img src="/themes/mobiles/img/yinpai.png" class="jin_z">
-				<?php endif;?>
+				<img src="<?=AgentPayment::getAgentIconByLevel($user->level) ?>" class="jin_z">
 				</p>
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
 			</td>

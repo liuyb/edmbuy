@@ -21,10 +21,10 @@
         	<div class="agency_bottom_menu">
         		<ul>
         			<ul>
-        				<a href="javascript:;"><li id="s_sjlm" <?php if('merchants' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
-        				<a href="javascript:;"><li id="s_dl" <?php if('agency' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
-        				<a href="javascript:;"><li id="s_dp" <?php if('shop' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
-        				<a href="javascript:;"><li id="s_wd" <?php if('my' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
+        				<a href="/distribution/merchants"><li id="s_sjlm" <?php if('merchants' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
+        				<a href="/distribution/agent"><li id="s_dl" <?php if('agency' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
+        				<a href="/distribution/shop"><li id="s_dp" <?php if('shop' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
+        				<a href="/distribution/my"><li id="s_wd" <?php if('my' == $nav_flag2):?>class="on"<?php endif;?>></li></a>
         			</ul>
         		</ul>
         	</div>

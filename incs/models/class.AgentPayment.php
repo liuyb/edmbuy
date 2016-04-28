@@ -66,10 +66,7 @@ class AgentPayment extends StorageNode {
 	}
 	
 	static function getAgentNameByLevel($level){
-	    if(!Users::isAgent($level)){
-	        return '';
-	    }
-	    return (Users::USER_LEVEL_3 == $level) ? '金牌代理' : '银牌代理';
+	    return Users::displayUserLevel($level);
 	}
 	
 	static function getAgentPaidMoney($level, $dot = 0){
@@ -81,6 +78,13 @@ class AgentPayment extends StorageNode {
 	        $money = sprintf("%.".$dot."f", $money);
 	    }
 	    return $money;
+	}
+	
+	static function getAgentIconByLevel($level){
+	    if(!Users::isAgent($level)){
+	        return '';
+	    }
+	    return (Users::USER_LEVEL_3 == $level) ? '/themes/mobiles/img/jinpai.png' : '/themes/mobiles/img/yinpai.png';
 	}
 }
 
