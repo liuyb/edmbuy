@@ -1,0 +1,160 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="../css/c.css" />
+<link rel="stylesheet" href="../css/animate.min.css" />
+<link rel="stylesheet" href="../css/wu.css" />
+<link rel="stylesheet" href="../css/du.css" />
+<script src="../js/jquery-1.8.3.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/j.js"></script>
+<!-- head end -->
+</head>
+
+<style>
+</style>
+
+<body style="background:#eee;">
+<div class="header">
+	我的店铺
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div class="store_three_list">
+	<ul>
+		<li class="navig_on" id="li1" onclick="f(1)">14人</br>一级店铺</li>
+		<li class="" id="li2" onclick="f(2)">14人</br>二级店铺</li>
+		<li class="" id="li3" onclick="f(3)">14人</br>三级店铺</li>
+	</ul>
+</div>
+
+<div class="m_store_common" id="list1">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="m_store_common" id="list2" style="display:none;">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="m_store_common" id="list3" style="display:none;">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">2016-12-12 12:00</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<button class="l_top_btn">进店</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".m_store_common").hide();
+	$(".store_three_list li").removeClass("navig_on");
+	
+	$(_li).addClass("navig_on");
+	$(_list).show();
+}
+</script>
+
+
+
+
+
+
+
