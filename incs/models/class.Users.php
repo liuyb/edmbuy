@@ -15,6 +15,8 @@ class Users extends StorageNode {
 	const USER_LEVEL_0 = 0; //米客
 	const USER_LEVEL_1 = 1; //米商
 	const USER_LEVEL_2 = 2; //合伙人
+	const USER_LEVEL_3 = 3; //金牌代理
+	const USER_LEVEL_4 = 4; //银牌代理
 	
 	static $level_amount = [
 			0 => 0,             //米客消费金额
@@ -93,7 +95,7 @@ class Users extends StorageNode {
 						'from'        => 'from',
 						'authmethod'  => 'auth_method',
 						'randver'     => 'randver',
-						'synctimes'   => 'synctimes',
+						'synctimes'   => 'synctimes'
 				));
 	}
 	
@@ -730,6 +732,12 @@ class Users extends StorageNode {
 		}
 	}
 	
+	/**
+	 * 是不是代理
+	 */
+	public static function isAgent($level){
+	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_4);
+	}
 }
  
 /*----- END FILE: class.Users.php -----*/
