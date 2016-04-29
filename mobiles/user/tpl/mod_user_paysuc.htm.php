@@ -6,7 +6,7 @@
 <div class="pay_price">
     <p class="pay_tit">支付成功</p>
     <p class="pay_tit">多米分销系统</p>
-    <p class="pay_p"><span class="price_sucee">￥<?=$order_price?></span></p>
+    <p class="pay_p"><span class="price_sucee">金额:￥<?=$order_price?></span></p>
 </div>
 
 <div id="wx_success_pay"  style="margin-top:30px;">

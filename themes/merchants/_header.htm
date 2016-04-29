@@ -17,7 +17,7 @@
 		<button id="common_btn" class="common_name" data-show="0">90年代</button>
 		<div class="set_pero" style="display:none;">
 			<ul>
-				<li class="use_id_set">账号设置</li>
+				<li class="use_id_set" id="account_set">账号设置</li>
 				<li class="log_out">退出登录</li>
 			</ul>
 			<img src="/themes/merchants/img/sj.png" class="jt_s">
@@ -71,4 +71,7 @@ $(document).on("click",function(e){
 		$("."+firecls).attr('data-show','0');
 	}
 });
+	$(document).on('click',"#account_set",function(){
+		window.location ="/account";
+	})
 </script>

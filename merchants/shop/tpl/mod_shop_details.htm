@@ -6,17 +6,24 @@
             <div id="store_pore"><p>店铺付费信息</p></div>
 
             <div style="padding:20px 0">
-                <span class="store_pay_name">付款金额：</span><span class="store_right_f">699元</span>
+                <span class="store_pay_name">付款金额：</span><span class="store_right_f"><!--{$buyInfo.money_paid}-->元</span>
+                <!--{if $buyInfo.money_paid >0}-->
                 <button class="store_data_btn">申请退款</button>
-            </div>
+                <!--{else}-->
+                <button class="store_data_btn" >付款</button>
+                <span style="color: red;margin-left: 10px;">*您为成功付款请点击付款</span>
+                <!--{/if}-->
 
+            </div>
+            <!--{if $buyInfo.money_paid >0}-->
             <div style="padding:0 0 20px;">
-                <span class="store_pay_name">激活日期：<i class="store_right_f">2016.3.3</i></span>
-                <span class="store_pay_name data_due">到期日期：<i class="store_right_f">2016.3.3</i></span>
+                <span class="store_pay_name">激活日期：<i class="store_right_f"><!--{$buyInfo.start_time}--></i></span>
+                <span class="store_pay_name data_due">到期日期：<i class="store_right_f"><!--{$buyInfo.end_time}--></i></span>
             </div>
             <div style="padding:0 0 20px;">
-                <span class="store_pay_name">使用期限：<i class="store_right_f">1年</i></span>
+                <span class="store_pay_name">使用期限：<i class="store_right_f"><!--{$limit[$buyInfo.term_time]}--></i></span>
             </div>
+            <!--{/if}-->
         </div>
 
         <div id="store_infos" style="margin-top:20px;">
@@ -58,8 +65,8 @@
                     <td class="data_tab_right"><!--{$shop_info.shop_desc}--></td>
                 </tr>
                 <!--<tr>-->
-                    <!--<td class="data_tab_left">店铺招牌：</td>-->
-                    <!--<td class="data_tab_right sign_d"><img src="/themes/merchants/img/01_ba.png"></td>-->
+                <!--<td class="data_tab_left">店铺招牌：</td>-->
+                <!--<td class="data_tab_right sign_d"><img src="/themes/merchants/img/01_ba.png"></td>-->
                 <!--</tr>-->
                 <tr>
                     <td class="data_tab_left">公众号二维码：</td>

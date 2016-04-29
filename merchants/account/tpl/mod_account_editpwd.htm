@@ -1,0 +1,66 @@
+<!--{add_css file="account.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="my_account">
+        <div class="edit_password_bg" id="check_form">
+            <div class="password_bg_div">
+                <span class="bg_span_left"><i style="letter-spacing:11px;">原始密码</i>：</span>
+                <input type="text" value="" required placeholder="请输入原始密码" class="first_password" name="password" data-type="">
+            </div>
+            <div class="password_bg_div">
+                <span class="bg_span_left"><i style="letter-spacing:19px;">新密码</i>：</span>
+                <input type="password" value="" required placeholder="请输入6-12位字符的新密码" class="news_password" name="pwd"
+                       data-type="pwd">
+            </div>
+            <div class="password_bg_div">
+                <span class="bg_span_left" style="letter-spacing:0.6px;">再次输入新密码：</span>
+                <input type="password" value="" required placeholder="请再一次输入密码" class="news_password_again" data-type="pwd"
+                       name="confirm_pwd">
+            </div>
+
+            <div class="submit_new_password">
+                <button class="password_btn_submit" id="account_sumbit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //菜单高亮
+    $(function () {
+        $("#xgmm").addClass("account_on");
+    })
+    $("#account_sumbit").click(function () {
+        //formValid
+        var $obj = $("#check_form");
+        if (!$obj.formValid()) {
+            return false;
+        }
+        var pwd = $("input[name='pwd']").val();
+        var confirm_pwd = $("input[name='confirm_pwd']").val();
+        if (pwd != confirm_pwd) {
+            showMsg("两次密码输入不一致");
+            return;
+        }
+        if(!checkPwd(pwd)){
+            $("input[name='pwd']").focus();
+            return false;
+        };
+        if(!checkPwd(confirm_pwd)){
+            $("input[name='pwd']").focus();
+            return false;
+        };
+
+        var password = $("input[name='password']").val();
+        var data ={'password':password,'pwd':pwd,'confirm_pwd':confirm_pwd};
+        F.postWithLoading('/account/setpwd', data, function (data) {
+            layer.msg(data.retmsg);
+            if(data.status==1){
+                setTimeout(function () {
+                    location.reload();
+                }, "2000");
+
+            }
+        });
+    });
+</script>

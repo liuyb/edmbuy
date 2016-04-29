@@ -52,6 +52,9 @@ class Shop_Controller extends MerchantController
         if(!$result || empty($result)){
             Fn::show_pcerror_message("数据不存在！");
         }
+        $buyInfo =Shop_Model::getBuyDetail();
+        $this ->v->assign("buyInfo",$buyInfo);
+        $this ->v->assign("limit",  C("merchant"));
         $this->v->assign('shop_info',$result);
         $response->send($this->v);
     }
@@ -129,7 +132,7 @@ class Shop_Controller extends MerchantController
         $locfile = $dir . $tpl_id . '.png';
         if (!file_exists($locfile)) {
             mkdirs($dir);
-            $merchant_id =$GLOBALS['user_id']->uid;
+            $merchant_id =$GLOBALS['user']->uid;
             $qrinfo =SHOP_URL_MERCHANT."/{$merchant_id}";
             include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
             QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);

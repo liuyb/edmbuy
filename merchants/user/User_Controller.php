@@ -24,6 +24,10 @@ class User_Controller extends MerchantController
     public function index(Request $request, Response $response)
     {
         if (Merchant::is_logined()) {
+            $shop = Merchant::load($GLOBALS['user']->uid);
+            if(!$shop->is_completed){
+                $response->redirect('/shop/start');
+            }
             $this->v->set_tplname('mod_user_index');
             $muid = $GLOBALS['user']->uid;
             $wait_pay_count = Merchant::getOrderTotalByStatus(CS_AWAIT_PAY, $muid);

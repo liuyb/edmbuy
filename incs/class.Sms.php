@@ -33,6 +33,12 @@ class Sms
             $imgCode = $_SESSION['verifycode'];
         }
         $content = sprintf($content, $imgCode, $code);
+        if($type=="reg_success"){
+            $pwd =$_SESSION['password'];
+            $config = C("storage.cookie.mch");
+            $url = $config['edmmch.fxmapp.com'];
+            $content =sprintf($content,$imgCode,$url,$pwd);
+        }
         $uname = $SmsConfig['username'];
         $smsnumber = $SmsConfig['smsnumber'];
         $pwd = $SmsConfig['userpwd'];

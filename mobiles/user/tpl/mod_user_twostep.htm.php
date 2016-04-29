@@ -15,8 +15,8 @@
 <div id="sus_info">
     <ul>
         <li>
-            <span style="font-size: 16px;padding-right: 20px;">邀请码(选填)</span><input id="phone_nums_p" class="ps_common"
-                                                                                    type="text" value=""
+            <span style="font-size: 16px;padding-right: 20px;">邀请码(选填)</span><input id="phone_nums_p" class="ps_common"   <?php if($parent_id>0): ?> readonly<?php endif;?>
+                                                                                    type="text" value="<?=$parent_id?>"
                                                                                     placeholder="请输入邀请码">
             <span class="common_red_x"></span>
         </li>
@@ -33,7 +33,7 @@
     });
     $("#next_step").click(function () {
         var invite_code = $("#phone_nums_p").val();
-            var data ={"invite_code":invite_code};
+        var data ={"invite_code":invite_code};
         F.post('/user/merchant/dotwostep', data, function (ret) {
             if(ret.status==1){
                 window.location.href = "<?php echo U("trade/order/confirm_sysbuy");?>"

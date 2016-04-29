@@ -1,0 +1,83 @@
+<!--{add_css file="account.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div id="new_common">
+        <div class="withdraw_title">提现</div>
+
+        <div class="withdraw_infos">
+
+            <!-- 输入提现金额 -->
+            <div class="withdraw_can_money">
+                <div class="with_infos_left">
+                    <span>到账银行卡：</span>
+                    <select class="edit_bank_select">
+                        <!--{foreach from=$bank_list item=val}-->
+                            <option value="<!--{$val.bank_code}-->"><!--{$val.bank_name}--></option>
+                        <!--{/foreach}-->
+                    </select>
+                    <button class="bank_btn" onclick="addBank(0)">添加银行卡</button>
+                </div>
+                <div class="with_infos_left">
+                    <span style="letter-spacing:3px;">提现金额：</span>
+                    <input class="widthdraw_money" type="text" placeholder="0.00" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <i class="can_money">可提现￥688.00</i>
+                </div>
+                <div style="font-size:12px;color:#ccc;margin-left:108px;">预计3~5个工作日到账</div>
+                <div class="with_btn_click"><button class="with_bottom">提现</button></div>
+            </div>
+
+            <!-- 输入提现密码 -->
+            <div class="withdraw_password">
+                <div class="with_infos_left">
+                    <span>输入提现密码：</span>
+                    <input class="widthdraw_money" type="text" placeholder="请输入6位数密码">
+
+                    <div class="with_btn_password"><button class="submit_password">提交</button></div>
+                </div>
+            </div>
+
+            <!-- 提交成功 -->
+            <div class="submit_success">
+                <div class="success_left"><img src="./img/cg.png"></div>
+                <div class="success_right">
+                    <p class="right_c_s"><b>提现申请已提交，请耐心等待审核！</b></p>
+                    <p class="right_c_s">审核周期大概3~5个工作日</p>
+                    <p class="right_c_s"><button class="back_index">返回首页</button></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    //菜单高亮
+    $("#wdzh").addClass("account_on");
+
+    $(".with_bottom").on("click",function(){
+        $(".withdraw_can_money").hide();
+        $(".withdraw_password").show();
+    })
+
+    $(".submit_password").on("click",function(){
+        $(".withdraw_password").hide();
+        $(".submit_success").show();
+    })
+
+        function addBank(type,val){
+            var title="添加银行卡";
+            var url = '/account/bind/bank';
+            if(type == 1){
+                url += '?rid='+val;
+                title = "编辑银行卡";
+            }
+            layer.open({
+                type: 2,
+                title: title,
+                shadeClose: true,
+                shade: 0.8,
+                area: ['500px', '500px'],
+                content:url//iframe的url
+            });
+        }
+</script>
