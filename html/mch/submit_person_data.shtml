@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/terrace.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="terrace_left_common.html"-->
+<style>
+.submit_rz_data{
+	background:url(../mch/img/left_l.png) no-repeat left;
+	padding-left:15px;
+	font-size:14px;
+	color:#323232;
+}
+.cret_type{
+	background:#fff;
+	height:80px;
+	margin:5px 0 20px;
+	padding:5px 20px 0;
+}
+.cret_type p{
+	height:30px;
+	line-height:30px;
+	margin:5px 0;
+	font-size:13px;
+	color:#323232;
+}
+.two_cret_list li{
+	margin-right:10px;
+	display:inline-block;
+	width:240px;
+	padding:20px 0;
+	text-align:center;
+	background:#bcbac2;
+	border-radius:2px;
+	font-size:16px;
+	color:#fff;
+}
+.two_cret_list i{
+	font-size:13px !important;	
+}
+.cret_on{
+	background:#f26427 !important;	
+}
+.cret_common{
+	background:#fff;
+	padding:20px;
+}
+.cret_tab_list td{
+	padding-bottom:20px;
+}
+.cret_tab_left{
+	text-align:right;
+	padding-right:10px;
+	font-size:13px;
+	color:#7d7d7d;
+}
+.cret_tab_right input{
+  	width: 500px;
+  	height: 40px;
+  	line-height: 40px;
+  	padding-left: 10px;
+  	background: #ecf1f5;
+  	border: 0;
+  	border-radius: 4px;
+	font-size:13px;
+	color:#bbb;
+}
+.cert_top_common{
+	vertical-align:top;
+}
+.file_common_img{
+	width:120px;
+	height:120px;
+	position:relative;
+}
+.file_common_img img{
+	width:120px;
+	height:120px;
+}
+.cert_common_file{
+	opacity: 0;
+  	width: 120px;
+  	height: 120px;
+  	position: absolute;
+  	top: 0;
+  	left: 0;	
+}
+.ts_com{
+	margin-top:5px;
+}
+.ts_com p{
+	font-size:12px;
+	color:#8c8c8c;
+}
+.cret_btn{
+	font-size: 13px;
+ 	background: #f26427;
+ 	width: 80px;
+ 	height: 40px;
+ 	line-height: 40px;
+ 	border-radius: 4px;
+ 	border: 0;
+ 	color: #fff;	
+}
+</style>
+	<div class="terrace_right_common">
+		<div class="submit_rz_data">提交认证资料</div>
+		<div class="cret_type">
+			<p>益多米提供2中认证类型，请根据实际情况任选一种：</p>
+			<p style="color:#8c8c8c;">提交申请后一个工作日内完成审核，店铺通过认证后，又一次修改认证类型的机会，个人认证后期可更改为企业认证。</p>
+		</div>
+		<div class="two_cret_list">
+			<ul>
+				<li class="cret_on">个人认证（快速审核）</br><i>适合个人经营</i></li>
+				<li>企业认证（人工审核）</br><i>适合公司经营，上传资料获得企业认证</i></li>
+			</ul>
+		</div>
+		
+		<div class="cret_common">
+			<table cellspacing="0" cellpadding="0" class="cret_tab_list">
+				<tr>
+					<td class="cret_tab_left">真实姓名：</td>
+					<td class="cret_tab_right"><input type="text" placeholder="请填写您的真实姓名"></td>
+				</tr>
+				<tr>
+					<td class="cret_tab_left">身份证号码：</td>
+					<td class="cret_tab_right"><input type="text" placeholder="请填写您的身份证号码"></td>
+				</tr>
+				<tr>
+					<td class="cret_tab_left cert_top_common">手持身份证照片：</td>
+					<td>
+						<div class="file_common_img">
+							<img src="../mch/img/editor_plus.png">
+							<input type="file" id="file" name="file" class="cert_common_file" onchange="">
+						</div>
+						<div class="ts_com">
+							<p>身份证上的所有信息清晰可见，必须能看清证件号。</p>
+							<p>支持jpg,bmp,gif格式照片，不得超过1M。</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="cret_tab_left cert_top_common">个人营业执照：</td>
+					<td>
+						<div class="file_common_img">
+							<img src="../mch/img/editor_plus.png">
+							<input type="file" id="file" name="file" class="cert_common_file" onchange="">
+						</div>
+						<div class="ts_com">
+							<p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
+					<td>
+						<div class="file_common_img">
+							<img src="../mch/img/editor_plus.png">
+							<input type="file" id="file" name="file" class="cert_common_file" onchange="">
+						</div>
+						<div class="ts_com">
+							<p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="cret_tab_left"></td>
+					<td>
+						<button class="cret_btn">提交</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮
+$("#zzsh").addClass("item_on");
+
+</script>
+
+  
