@@ -9,7 +9,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header alliance">
 	<ul id="order_bar">	
-		<li onclick="merchants_order(this, 'oc')" class="allliance_on">销量</li><li onclick="merchants_order(this, 'cc')">粉丝</li>
+		<li onclick="merchants_order(this, 'oc')" class="allliance_on" data-type='oc'>销量</li><li onclick="merchants_order(this, 'cc')" data-type='cc'>粉丝</li>
 	</ul>
 </div>
 </script>
@@ -20,52 +20,45 @@ show_topnav($('#forTopnav').html());
 <div class="alliance_list_common" id="resultList">
 </div>
 
-<div id="showMore" style="text-align:center;height:40px;line-height:40px;margin-bottom:10px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
+<div id="showMore" style="text-align:center;height:40px;line-height:40px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
 
 <script>
-function merchants_order(obj, orderby){
-	var $obj = $(obj);
-	if(!$obj.hasClass("allliance_on")){
-		$obj.siblings("li").removeClass("allliance_on");
-		$obj.addClass("allliance_on");
-	}
-	getMerchantsList(orderby);
-}
-
+var $showMore;
+var $resultList;
+var $mbody;
 $(function(){
-	getMerchantsList('oc');
+	$showMore = $("#showMore");
+	$resultList = $("#resultList");
+	$mbody = $("#Mbody");
+	
+	getMerchantsList('oc', 1, true);
 
-	$("#resultList").on('click', '.gotoshop', function(){
+	$resultList.on('click', '.gotoshop', function(){
 		var mid = $(this).data("mid");
 		window.location.href='/shop/'+mid;
 	});
 
-	$("#resultList").on('click', '.iance_list_bottom li', function(){
+	$resultList.on('click', '.iance_list_bottom li', function(){
 		var gid = $(this).data("gid");
 		window.location.href='/item/'+gid;
 	});
 
-	//$(document).on();
+	$mbody.on('pullMore', function(){
+		var orderby = $("#order_bar").find("li[class='allliance_on']").data('type');
+		var curpage = $showMore.data('curpage');
+		getMerchantsList(orderby ? orderby : 'oc', (curpage ? curpage : 1), false);
+	});
+	$mbody.pullMoreDataEvent($showMore);
 });
 //获取商家列表
-function getMerchantsList(orderby){
-	F.get('/distribution/merchants/list', {orderby : orderby}, function(ret){
-		constructRows(ret);
-		handleWhenHasNextPage(ret);
+function getMerchantsList(orderby, curpage, isInit){
+	F.get('/distribution/merchants/list', {orderby : orderby, curpage : curpage}, function(ret){
+		constructRows(ret, isInit);
+		F.handleWhenHasNextPage($showMore, ret);
 	});
 }
-//当还有下一页时处理下拉
-function handleWhenHasNextPage(data){
-	var hasnex = data.hasnexpage;
-	if(hasnex){
-		$("#showMore").show();
-		$("#showMore").attr('curpage',data.curpage);
-	}else{
-		$("#showMore").hide();
-	}
-}
 //构建HTML输出
-function constructRows(ret){
+function constructRows(ret, isInit){
 	var HTML = "";
 	if(!ret || !ret.result || !ret.result.length){
 		HTML = "<div style='text-align:center;'>还没有相关数据.</div>";
@@ -94,8 +87,18 @@ function constructRows(ret){
 			HTML += "</div>";
 		}
 	}
-	$("#resultList").html($(HTML));
+	F.afterConstructRow(isInit, $resultList, HTML, $showMore);
 }
+
+function merchants_order(obj, orderby){
+	var $obj = $(obj);
+	if(!$obj.hasClass("allliance_on")){
+		$obj.siblings("li").removeClass("allliance_on");
+		$obj.addClass("allliance_on");
+	}
+	getMerchantsList(orderby, 1, true);
+}
+
 </script>
 
 <?php endif;?>

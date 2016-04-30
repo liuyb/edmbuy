@@ -43,12 +43,11 @@
 
 <div class="manage_btn_list">
 	<button class="enter_store_btn" onclick="window.location.href='/shop/<?=$merchant->uid ?>'">进入店铺</button>
-	<button class="store_code_btn">店铺二维码</button>
+	<button class="enter_store_btn">店铺二维码</button>
 </div>
 
 <div style="text-align:center;margin-bottom:59px;">
-	<p style="font-size:12px;color:#8c8c8c;">电脑登录网址：http://www.edmbuy.com</p>
-	<p style="font-size:12px;color:#8c8c8c;">电脑端登录初始密码：123456</p>
+	<p style="font-size:12px;color:#8c8c8c;">电脑登录网址：<?=C('env.site.merchant') ?></p>
 </div>
 <?php endif;?>
 <?php endif;?>

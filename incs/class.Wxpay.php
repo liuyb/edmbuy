@@ -187,7 +187,6 @@ class Wxpay {
    * @param array $orders
    */
   public static function orderRefund(array $params) {
-      return ['code'=>'SUCC','msg'=>'成功。。。','wx_refund_no'=>'1234567890','succ_time'=>date('Y-m-d H:i:s')];
       $ret = ['code'=>'FAIL','msg'=>''];
       $input = new WxPayRefund();
       $input->SetOp_user_id(Wxpay::OP_USER_ID);

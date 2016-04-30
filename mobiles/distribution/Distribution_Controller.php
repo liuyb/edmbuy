@@ -24,6 +24,8 @@ class Distribution_Controller extends MobileController{
             'distribution/my/child/agent/list' => 'my_child_agent_list',
             'distribution/my/child/shop' => 'my_child_shop',
             'distribution/my/child/shop/list' => 'my_child_shop_list',
+            'distribution/my/child/agent/count' => 'getMyChildAgencyCount',
+            'distribution/my/child/shop/count' => 'getMyChildShopCount',
             'distribution/spread' => 'spread',
             'distribution/shop' => 'shop_info',
             'distribution/agent' => 'agent_center',
@@ -142,11 +144,21 @@ class Distribution_Controller extends MobileController{
             $parent = Users::load($user->parentid);
             $this->v->assign('parent', $parent);
         }
-        $agent_count = Distribution_Model::getChildAgentCount($user->uid);
-        $child_shop_count = Distribution_Model::getChildShopCount($user->uid);
+        $uid = $user->uid;
+        //我的代理总数
+        $agentLevel1 = Partner::findFirstLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $agentLevel2 = Partner::findSecondLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $agentLevel3 = Partner::findThirdLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $agentTotal = intval($agentLevel1) + intval($agentLevel2) + intval($agentLevel3);
+        //我的店铺总数
+        $shopLevel1 = Distribution_Model::findFirstLevelShopCount($uid);
+        $shopLevel2 = Distribution_Model::findSecondLevelShopCount($uid);
+        $shopLevel3 = Distribution_Model::findThirdLevelShopCount($uid);
+        $shopTotal = intval($shopLevel1) + intval($shopLevel2) + intval($shopLevel3);
+        
         $this->v->assign('user', $user);
-        $this->v->assign('agent_count', $agent_count);
-        $this->v->assign('child_shop_count', $child_shop_count);
+        $this->v->assign('agentTotal', $agentTotal);
+        $this->v->assign('shopTotal', $shopTotal);
         throw new ViewResponse($this->v);
     }
     
@@ -177,6 +189,13 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_myagency');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $uid = $GLOBALS['user']->uid;
+        $level1 = Partner::findFirstLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $level2 = Partner::findSecondLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $level3 = Partner::findThirdLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
+        $this->v->assign('level1', $level1);
+        $this->v->assign('level2', $level2);
+        $this->v->assign('level3', $level3);
         $this->topnav_no = 1;
         $this->nav_flag2 = 'my';
         throw new ViewResponse($this->v);
@@ -192,7 +211,7 @@ class Distribution_Controller extends MobileController{
         $curpage = $request->get('curpage', 1);
         $level = $request->get('level', 1);
         global $user;
-        $pager = new PagerPull($curpage, NULL);
+        $pager = new PagerPull($curpage, null);
         Distribution_Model::getChildAgentList($pager, $level, $user->uid);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
@@ -208,13 +227,20 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_childshop');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $uid = $GLOBALS['user']->uid;
+        $level1 = Distribution_Model::findFirstLevelShopCount($uid);
+        $level2 = Distribution_Model::findSecondLevelShopCount($uid);
+        $level3 = Distribution_Model::findThirdLevelShopCount($uid);
+        $this->v->assign('level1', $level1);
+        $this->v->assign('level2', $level2);
+        $this->v->assign('level3', $level3);
         $this->topnav_no = 1;
         $this->nav_flag2 = 'my';
         throw new ViewResponse($this->v);
     }
     
     /**
-     * 我发展的代理列表
+     * 我发展的店铺列表
      * @param Request $request
      * @param Response $response
      * @throws ViewResponse
@@ -223,7 +249,7 @@ class Distribution_Controller extends MobileController{
         $curpage = $request->get('curpage', 1);
         $level = $request->get('level', 1);
         global $user;
-        $pager = new PagerPull($curpage, NULL);
+        $pager = new PagerPull($curpage, null);
         Distribution_Model::getChildShopList($pager, $level, $user->uid);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
@@ -399,7 +425,6 @@ class Distribution_Controller extends MobileController{
             $newOrder->order_status = OS_CONFIRMED;
             $newOrder->shipping_status = SS_UNSHIPPED;
             $newOrder->pay_status   = PS_PAYED;
-            $newOrder->confirm_time = simphp_gmtime();
             $newOrder->consignee    = $exAddr->consignee;
             $newOrder->country      = $exAddr->country;
             $newOrder->province     = $exAddr->province;
@@ -425,6 +450,8 @@ class Distribution_Controller extends MobileController{
             //...
             $newOrder->referer      = '本站';
             $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
+            $newOrder->confirm_time = simphp_gmtime();
+            $newOrder->pay_time = simphp_gmtime();
             //...
             $newOrder->relate_order_id = $agent->order_id;//对应上购买代理的订单ID
             $newOrder->save(Storage::SAVE_INSERT);

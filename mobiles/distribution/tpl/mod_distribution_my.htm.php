@@ -28,12 +28,12 @@
 	<?php endif;?>
 	<a href="<?php echo U('distribution/my/child/agent')?>">
 	<div class="in_common_agency">
-		<img src="/themes/mobiles/img/daili.png"><span>我发展的代理</span><i><?=$agent_count ?>人</i>
+		<img src="/themes/mobiles/img/daili.png"><span>我发展的代理</span><i id="myChildAgency"><?=$agentTotal ?></i>
 	</div>
 	</a>
 	<a href="<?php echo U('distribution/my/child/shop')?>">
 	<div class="in_common_agency border_common">
-		<img src="/themes/mobiles/img/dianp.png"><span>我发展的店铺</span><i><?=$child_shop_count ?>家</i>
+		<img src="/themes/mobiles/img/dianp.png"><span>我发展的店铺</span><i id="myChildShop"><?=$shopTotal ?></i>
 	</div>
 	</a>
 </div>
@@ -57,4 +57,5 @@
 		</ul>
 	</div>
 </div>
+
 <?php endif;?>

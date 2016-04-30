@@ -27,8 +27,9 @@ class Partner extends StorageNode {
      * @param unknown $uid
      * @return mixed
      */
-    static function findFirstLevelCount($uid){
-        $sql = "SELECT count(1) FROM edmbuy.shp_users where `parent_id` = %d";
+    static function findFirstLevelCount($uid, $options = ''){
+        $where = self::setLevelQueryCondition($options);
+        $sql = "SELECT count(1) FROM edmbuy.shp_users where `parent_id` = %d $where ";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -38,9 +39,10 @@ class Partner extends StorageNode {
      * @param unknown $uid
      * @return mixed
      */
-    static function findSecondLevelCount($uid){
+    static function findSecondLevelCount($uid, $options = ''){
+        $where = self::setLevelQueryCondition($options);
         $sql = "SELECT count(1) FROM edmbuy.shp_users u where
-                    u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)";
+                    u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d $where )";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -50,11 +52,12 @@ class Partner extends StorageNode {
      * @param unknown $uid
      * @return mixed
      */
-    static function findThirdLevelCount($uid){
+    static function findThirdLevelCount($uid, $options = ''){
+        $where = self::setLevelQueryCondition($options);
         $sql = "SELECT count(1) FROM edmbuy.shp_users tu where
                  tu.parent_id in (
                 		SELECT user_id FROM edmbuy.shp_users su where
-                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d)
+                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d $where )
                     )";
         $count = D()->query($sql, $uid)->result();
         return $count;
@@ -66,12 +69,7 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findFirstLevelList($uid, PagerPull $pager, $options = ''){
-        $where = '';
-        if($options){
-            if($options == Partner::LEVEL_TYPE_AGENCY){
-                $where = ' and level '.Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
-            }
-        }
+        $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = '%d' $where order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -86,12 +84,7 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findSecondLevelList($uid, PagerPull $pager, $options = ''){
-        $where = '';
-        if($options){
-            if($options == Partner::LEVEL_TYPE_AGENCY){
-                $where = ' and level '.Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
-            }
-        }
+        $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users u where
                 u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d $where )
@@ -108,12 +101,7 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findThirdLevelList($uid, PagerPull $pager, $options = ''){
-        $where = '';
-        if($options){
-            if($options == Partner::LEVEL_TYPE_AGENCY){
-                $where = ' and level '.Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
-            }
-        }
+        $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users tu where
                  tu.parent_id in (
@@ -124,6 +112,16 @@ class Partner extends StorageNode {
         $result = self::rebuildLevelResult($result);
         $pager->setResult($result);
         return $result;
+    }
+    
+    private static function setLevelQueryCondition($options){
+        $where = '';
+        if($options){
+            if($options == Partner::LEVEL_TYPE_AGENCY){
+                $where = ' and level '.Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
+            }
+        }
+        return $where;
     }
     
     /**
