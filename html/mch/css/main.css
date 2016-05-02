@@ -490,3 +490,33 @@ body { min-width: 1200px;}
   	color: #f26427 !important;
   	border-bottom: 1px solid #f23427 !important;	
 }
+.common_check {
+  	background: url(../img/check_true.png) no-repeat center;
+  	background-size: 16px;
+  	cursor: pointer;
+}
+.common_check_on {
+  	background: url(../img/xz.png) no-repeat center !important;
+  	background-size: 16px;
+  	cursor: pointer;
+}
+#all_check {
+  	background: url(../img/check_true.png) no-repeat center;
+  	background-size: 16px;
+  	cursor: pointer;
+  	padding-left: 60px;
+  	display: inline-block;
+  	height: 16px;
+  	width: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
