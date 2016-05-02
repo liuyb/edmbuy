@@ -32,6 +32,26 @@ function kmod($bn, $sn = 10)
 }
 
 /**
+ * Url safe version of base64_encode
+ * @param string $data
+ * @return string
+ */
+function base64url_encode($data)
+{
+	return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+/**
+ * Url safe version of base64_decode
+ * @param string $data
+ * @return string
+ */
+function base64url_decode($data)
+{
+	return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
+
+/**
  * Get file mime type
  * @param string $file
  * @return string

@@ -50,6 +50,8 @@ class ApiRequest implements ApiRequestInterface {
                'debug'  => FALSE,       //是否打印输出调试信息
            'sign_params'=> array(),     //如果此数组不为空，则签名时只让该数组成员参与签名
     'urlencode_level'   => 2,           //urlencode级别:
+                                        //  5: base64url_encode key 和 value
+                                        //  4: base64url_encode value
                                         //  3: rawurlencode key 和 value
                                         //  2: 仅rawurlencode value
                                         //  1: 仅rawurlencode key
@@ -86,13 +88,15 @@ class ApiRequest implements ApiRequestInterface {
 	 *                  'debug'   => FALSE,    //是否打印输出调试信息
 	 *               'sign_params'=> array(),  //如果此数组不为空，则签名时只让该数组成员参与签名
 	 *        'urlencode_level'   => 2,        //urlencode级别
+	 *                                         //  5: base64url_encode key 和 value
+	 *                                         //  4: base64url_encode value
 	 *                                         //  3: rawurlencode key 和 value
 	 *                                         //  2: 仅rawurlencode value
 	 *                                         //  1: 仅rawurlencode key
 	 *                                         //  0: key 和 value 都不rawurlencode
 	 *                )
 	 * @param  Callable $callback
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function sign($signinfo=array(), $callback=NULL) {
 		if (is_callable($signinfo)) { //让支持第一个参数也可以是函数
@@ -168,7 +172,7 @@ class ApiRequest implements ApiRequestInterface {
 	
 	/**
 	 * 发送ApiRequest请求
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function send() {
 		try {
@@ -233,6 +237,8 @@ class ApiRequest implements ApiRequestInterface {
 	 * 拼接查询参数
 	 * @param Array or String $params
 	 * @param Int $encode_level
+	 *        5 => base64url_encode key 和 value
+	 *        4 => base64url_encode value
 	 *        3 => rawurlencode key and value
 	 *        2 => just rawurlencode value
 	 *        1 => just rawurlencode key
@@ -247,6 +253,13 @@ class ApiRequest implements ApiRequestInterface {
 		$query_string = array();
 		foreach ($params as $key => $val) {
 			switch ($encode_level) {
+				case 5:
+					$key = self::base64url_encode($key);
+					$val = self::base64url_encode($val);
+					break;
+				case 4:
+					$val = self::base64url_encode($val);
+					break;
 				case 3:
 					$key = rawurlencode($key);
 					$val = rawurlencode($val);
@@ -301,7 +314,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set request url
 	 * @param string $url
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setUrl($url) {
 		$this->apiConfig['url'] = $url;
@@ -311,7 +324,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set request params
 	 * @param string $params
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setParams($params) {
 		$this->apiConfig['params'] = $params;
@@ -321,7 +334,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set request cookies
 	 * @param string $cookies
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setCookies($cookies) {
 		$this->apiConfig['cookies'] = $cookies;
@@ -331,7 +344,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set files for posting
 	 * @param Array $files
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setFiles(Array $files) {
 		$this->apiConfig['files'] = $files;
@@ -341,7 +354,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set signature info
 	 * @param Array $signinfo
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setSigninfo(Array $signinfo) {
 		$this->apiConfig['signinfo'] = $signinfo;
@@ -351,7 +364,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set request protocol: http/https
 	 * @param string $protocol
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setProtocol($protocol) {
 		$this->apiConfig['protocol'] = $protocol;
@@ -361,7 +374,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set request http method: get/post
 	 * @param string $method
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setMethod($method) {
 		$this->apiConfig['method'] = $method;
@@ -371,7 +384,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set response result
 	 * @param Array $response
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setResponse(Array $response) {
 		$this->response = $response;
@@ -389,7 +402,7 @@ class ApiRequest implements ApiRequestInterface {
 	/**
 	 * set error message
 	 * @param Array $error
-	 * @return calling object(this)
+	 * @return ApiRequest
 	 */
 	public function setError($error) {
 		if ($error instanceof Exception) {
@@ -513,6 +526,24 @@ class ApiRequest implements ApiRequestInterface {
 		}
 		
 		$array = $result;
+	}
+	
+	/**
+	 * Url safe version of base64_encode
+	 * @param string $data
+	 * @return string
+	 */
+	static function base64url_encode($data) {
+		return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+	}
+	
+	/**
+	 * Url safe version of base64_decode
+	 * @param string $data
+	 * @return string
+	 */
+	static function base64url_decode($data) {
+		return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
 	}
 	
 	/**
