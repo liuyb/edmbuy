@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/terrace.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="terrace_left_common.html"-->
+	
+	<style>
+	</style>
+	
+	<div class="terrace_right_common">
+		<div class="examin_flow">
+			<div class="did_not">	
+				<div class="did_not_left"><img src="../mch/img/cha.png"></div>
+
+				<div class="did_not_right">
+					<p class="right_did">您的资料已经提交，请等待审核</p>
+					<p class="right_did" style="font-size:12px;">审核周期为3~5个工作日</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮
+$("#tjydm").addClass("item_on");
+
+</script>
+
+  

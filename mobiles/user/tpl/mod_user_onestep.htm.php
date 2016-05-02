@@ -58,12 +58,15 @@
         isphone(mobile);
         var data = {"mobile": mobile};
         $.post(url, data,function (ret) {
-            myAlert(ret.retmsg);
+
             if(ret.status==1){
+                myAlert(ret.retmsg);
                 refresh();
                 $("#ps_btn").css("display","block");
                 time = setInterval("refresh();", 1000);
                 $("#ps_btn").attr("disabled","disabled").css("background","grey");
+            }else if(ret.status==0){
+                myAlert(ret.retmsg);
             }
         })
     });
@@ -84,7 +87,7 @@
         var data ={'mobile':mobile,'mobile_code':auth_code,'verifycode':verifycode,'shop_face':shop_face};
         F.post(url,data,function(ret){
             if(ret.status==1){
-               window.location.href="/user/merchant/twostep";
+                window.location.href="/user/merchant/twostep";
             }else{
                 myAlert(ret.retmsg);
             }

@@ -84,6 +84,9 @@ add_js('m.js',['pos'=>'foot']);
 <div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
 <?php include T('inc/popalert');?>
 <?php include T('inc/popdlg');?>
+<!-- loading -->
+<?php include T('inc/loading');?>
+<!-- loading -->
 </body>
 <?php tplholder('FOOT_JS');?>
 <script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>

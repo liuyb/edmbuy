@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/terrace.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="terrace_left_common.html"-->
+
+	<div id="new_common">
+		<div id="order_type">
+			<ul>	
+				<li id="li1" onclick="" data-cert="1" class="new_common_on">全部<span id="on_all">(0)</span></li>
+				<li id="li2" onclick="" data-cert="2">审核通过<span id="pass_cert">(0)</span></li>
+				<li id="li3" onclick="" data-cert="3">审核中<span id="cert_loading">(0)</span></li>
+				<li id="li4" onclick="" data-cert="4">被拒接<span id="pass_fail">(0)</span></li>
+				<div class="clear"></div>
+			</ul>
+			<button class="prom_issue_btn">发布</button>
+		</div>
+		<div id="choose_condition">
+			<input style="margin:13px 0 0 15px;" class="check_time_left" id="goods_name" placeholder="商品名称">
+			<select class="prom_sele">
+				<option>推荐类型</option>
+			</select>
+			<button id="search_type_infos">搜索</button>
+		</div>
+		
+		<div class="common_cert" id="list1">
+			<table cellspacing="0" cellpadding="0" class="search_cert_tab" >
+				<tr class="header">	
+					<th width="75px;">选择</th>
+					<th>商品名称</th>
+					<th>供货价</th>
+					<th>售价</th>
+					<th>佣金</th>
+					<th>推荐类型</th>
+					<th>销量</th>
+					<th>审核状态</th>
+					<th>操作</th>
+				</tr>
+				<tr>
+					<td class="common_check"></td>
+					<td>琉璃海棠</td>
+					<td>11.00</td>
+					<td>11.00</td>
+					<td>0.00</td>
+					<td>琉璃海棠</td>
+					<td>0</td>
+					<td>琉璃海棠</td>
+					<td class="cert_edit">
+						<a href="javascript:;" data-type="delete"><img src="../mch/img/sc.png"><br>取消推广</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="common_check"></td>
+					<td>琉璃海棠</td>
+					<td>11.00</td>
+					<td>11.00</td>
+					<td>0.00</td>
+					<td>琉璃海棠</td>
+					<td>0</td>
+					<td>琉璃海棠</td>
+					<td class="cert_edit">
+						<a href="javascript:;" data-type="edit"><img src="../mch/img/edit_11.png"><br>我要投诉</a>
+						<a href="javascript:;" data-type="sale"><img src="../mch/img/check_order.png"><br>查看原因</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="cert_type_foot">
+			<span id="all_check"></span>
+			<button class="btn_common_c">删除</button>
+		</div>
+		<div class="cert_ts_z">
+			<p>备注：1.修改产品时，如果该产品在益多米平台显示已通过状态，益多米商城显示状态变为审核中</p>
+			<p style="margin-left:39px;">2.修改产品时，如果该产品在益多米平台显示为被拒绝/审核中状态，益多米商城显示状态不变</p>
+		</div>
+		
+		<div class="no_fb">
+			<p style="margin-bottom:10px;">您还未发布商品</p>
+			<button class="fb_btn">立即发布</button>
+		</div>
+		
+		<div class="as_cz_pro">
+			<div style="font-size:14px;color:#f26427;border-bottom:1px solid #eee;"><p style="border-bottom:1px solid #f26427;width:85px;">关于超值产品<p></div>
+			<p style="font-size:13px;font-size:#1f1f1f;margin-top:10px;">什么是超值产品？</p>
+			<p style="font-size:13px;color:#7d7d7d;">通过平台审核的超值产品可以免费发布到商城上，获得商城的流量支持，而且更容易受到平台会员的青睐，最大限度的增大其品牌、产品的网络曝光率</p>
+			<p style="font-size:13px;font-size:#1f1f1f;margin-top:10px;">发布超值产品有什么好处？</p>
+			<p style="font-size:13px;color:#7d7d7d;">通过平台审核的超值产品可以免费发布到商城上，获得商城的流量支持，而且更容易受到平台会员的青睐，最大限度的增大其品牌、产品的网络曝光率</p>
+			<p style="font-size:13px;font-size:#1f1f1f;margin-top:10px;">如何发布超值产品？</p>
+			<p style="font-size:13px;color:#7d7d7d;">第一步：店铺认证    签署协议—提交店铺资料—等待审核</p>
+			<p style="font-size:13px;color:#7d7d7d;">第二步：发布产品 （店铺认证审核通过才可以发布超值产品）</p>
+			<p style="font-size:13px;color:#7d7d7d;">第三步：审核通过，商品自动发布到其选择推广类型中</p>
+		</div>
+	</div>
+</div>
+
+<script>
+//菜单高亮  
+$("#zzsh").addClass("item_on");
+
+
+//单选
+$(".common_check").on("click",function(){
+	if($(this).hasClass("common_check_on")){
+		$(this).removeClass("common_check_on");
+		cartSelectAll();
+	}else{
+		$(this).addClass("common_check_on");
+		cartSelectAll();
+	}
+})
+//全选
+$("#all_check").on("click",function(){
+	if($(this).hasClass("common_check_on")){
+		$(this).removeClass("common_check_on");
+		$(".common_check").removeClass("common_check_on");
+	}else{
+		$(this).addClass("common_check_on");
+		$(".common_check").addClass("common_check_on");
+	}
+})
+
+//是否符合全选
+function cartSelectAll(){
+	var item_num = $(".search_cert_tab .common_check").length;
+	var select_num = $(".search_cert_tab .common_check_on").length;
+	if(item_num == select_num){
+		$("#all_check").addClass("common_check_on");
+	}else{
+		$("#all_check").removeClass("common_check_on");
+	}
+}
+
+</script>
+
+  

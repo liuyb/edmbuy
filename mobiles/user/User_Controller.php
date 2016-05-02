@@ -668,13 +668,15 @@ class User_Controller extends MobileController
      */
     public function merchant_checkIn(Request $request, Response $response)
     {
+        $this->nav_flag1=0;
+        $this->nav_no = 0;
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_tplname("mod_user_checkin");
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
             $response->redirect("/user/merchant/dosuccess");
         }
-        $this->v->set_tplname('mod_user_checkin');
         //得到商城信息
-        $this->nav_no = 0;
         $response->send($this->v);
     }
 
@@ -685,8 +687,10 @@ class User_Controller extends MobileController
      */
     public function merchant_payment(Request $request, Response $response)
     {
-        $this->v->set_tplname('mod_user_merpayment');
+        $this->nav_flag1=0;
         $this->nav_no = 0;
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_tplname("mod_user_merpayment");
         $response->send($this->v);
     }
 
@@ -697,14 +701,16 @@ class User_Controller extends MobileController
      */
     public function merchant_openshop_onestep(Request $request, Response $response)
     {
+        $this->nav_flag1=0;
+        $this->nav_no = 0;
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_tplname('mod_user_onestep');
         $_SESSION['step'] = 1;
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
             $response->redirect("/user/merchant/dosuccess");
         }
-        $this->nav_no = 0;
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-        $this->v->set_tplname("mod_user_onestep");
         $response->send($this->v);
     }
 
@@ -717,7 +723,7 @@ class User_Controller extends MobileController
     {
         //step1验证手机号
         $phone = $request->post("mobile");
-        $result = User_Model::ckeckMobile($phone); //检验米商手机号是否被注册
+        $result = User_Model::ckeckMobile($phone);//检验米商手机号是否被注册
         if ($result) {
             $ret['retmsg'] = "此手机号已注册";
             $ret['status'] = 0;
@@ -728,14 +734,19 @@ class User_Controller extends MobileController
             $response->sendJSON($ret);
         }
         //todo
-        //$result = Sms::sendSms($phone, "merchant_reg",false);
-        if (true) {
-            $_SESSION['merchant_reg'] = 8888;
+        $result = Sms::sendSms($phone, "merchant_reg");
+        if ($result!==false) {
+//            $_SESSION['merchant_reg'] = 8888;
             $_SESSION['mobile'] = $phone;
             $ret['retmsg'] = "发送验证码成功";
             $ret['status'] = 1;
             $response->sendJSON($ret);
+        }else{
+            $ret['retmsg'] = "发送验证码失败!";
+            $ret['status'] = 0;
+            $response->sendJSON($ret);
         }
+
     }
 
     /**
@@ -749,7 +760,7 @@ class User_Controller extends MobileController
         $mobile = $request->post("mobile");
         $mobileCode = $request->post("mobile_code");
         $shop_face = $request->post("shop_face");
-        $_SESSION['shop_face'] = $shop_face;
+        $_SESSION['facename'] = $shop_face;
         $mobileCode = intval($mobileCode);
 
         $verifycode = $request->post("verifycode");
@@ -808,6 +819,11 @@ class User_Controller extends MobileController
      */
     public function merchant_shop_twostep(Request $request, Response $response)
     {
+        $this->nav_flag1=0;
+        $this->nav_no = 0;
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_tplname('mod_user_twostep');
+
         if (!isset($_SESSION['step'])) {
             $response->redirect("/user/merchant/checkin");
         }
@@ -816,8 +832,8 @@ class User_Controller extends MobileController
         if (!empty($result)) {
             $response->redirect("/user/merchant/dosuccess");
         }
-        $this->v->set_tplname("mod_user_twostep");
-        $this->nav_no = 0;
+        $parent_id  = User_Model::getParentId();
+        $this->v->assign("parent_id",$parent_id);
         $response->send($this->v);
     }
 
@@ -831,18 +847,24 @@ class User_Controller extends MobileController
         $invite_code = $request->post("invite_code");
         if (!empty($invite_code)) {
            $result =  User_Model::checkInviteCode($invite_code);
-            if(!$result){
+            $level =[3,4];
+            if(!$result['user_id']){
                 $ret['retmsg'] ="推荐人不存在";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
+            }elseif(!in_array($result['level'],$level)){
+                $ret['retmsg'] ="当前推荐人不是代理!";
+                $ret['status'] =0;
+                $response->sendJSON($ret);
             }else{
+                User_Model::updUserInvetCode($invite_code,$result['nick_name']);
                 $_SESSION['invite_code'] = $invite_code;
                 $_SESSION['step'] = 3;
                 $ret['status'] =1;
                 $response->sendJSON($ret);
             }
         }else{
-            $invite_code = User_Model::updUserInvetCode();
+            $invite_code = User_Model::getParentId();
             $_SESSION['invite_code'] = $invite_code;
             $_SESSION['step'] = 3;
             $ret['status'] =1;
@@ -890,12 +912,12 @@ class User_Controller extends MobileController
         if (!empty($merchant_id)) {
             User_Model::UpdataMerchantInfo($merchant_id, $order_id, $order_sn);
             //todo 发送短信
-            //Sms::sendSms($mobile, 'reg_success');
+            Sms::sendSms($mobile, 'reg_success');
             unset($_SESSION['facename']);
             unset($_SESSION['verifycode']);
             unset($_SESSION['invite_code']);
-            unset($_SESSION['shop_face']);
             unset($_SESSION['merchant_reg']);
+            unset($_SESSION['reg_success']);
         }
         if ($request->post()) {
             $ret['url'] = "/user/merchant/paysuc";
@@ -910,11 +932,14 @@ class User_Controller extends MobileController
      */
     public function merchant_reg_succ(Request $request, Response $response)
     {
+        $this->nav_flag1=0;
+        $this->nav_no = 0;
+        $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_regsuc');
+
         if (!isset($_SESSION['password'])) {
             $this->v->assign("is_complate", 1);
         }
-        $this->nav_no = 0;
         $urlarr = C("storage.cookie.mch");
         $url = $urlarr["domain"];
         $url = "http://" . $url;

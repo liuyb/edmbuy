@@ -23,7 +23,7 @@ class Shop_Model extends Model
      * 更新店铺的信息
      * @param $tpl_id
      */
-    static function updShopInformation($tpl_id,$shop_qcode)
+    static function updShopInformation($tpl_id, $shop_qcode)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_merchant`";
@@ -163,11 +163,11 @@ class Shop_Model extends Model
                 $where = "cat_id in ({$business_scope})";
             };
         }
-        $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC";
+        $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC ";
         $list = D()->query($sql)->fetch_column();
         if (count($list) > 0) {
             $result["business_scope"] = implode(",", $list);
-        }else{
+        } else {
             $result["business_scope"] = "";
         }
         $regionIds = [$result['province'], $result['city'], $result['district']];
@@ -186,5 +186,16 @@ class Shop_Model extends Model
         $sql = "select tpl_id from shp_shop_template where is_default = 1 ";
         $result = D()->query($sql)->result();
         return $result;
+    }
+
+    /**
+     * getBuyDetail
+     */
+    static function getBuyDetail()
+    {
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select money_paid ,start_time,end_time ,term_time from shp_merchant_payment where merchant_id = '%s'";
+        return D()->query($sql, $merchant_id)->get_one();
+
     }
 }

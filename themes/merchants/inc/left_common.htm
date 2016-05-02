@@ -16,6 +16,12 @@
 		<a href="/shop/template/index"><li id="dpzx" <!--{if $left_item == "list"}-->class="item_on"<!--{/if}-->>店铺装修</li></a>
 		<a href="#"><li id="kfgl" <!--{if $left_item == "returned"}-->class="item_on"<!--{/if}-->>客服管理</li></a>
 		<a href="/shop/settlement/manager"><li id="jsgl" <!--{if $left_item == "settlement"}-->class="item_on"<!--{/if}-->>结算管理</li></a>
+
+		<!--{elseif $left_module == "account"}-->
+		<a href="/account"><li id="wdzh" <!--{if $left_item == "list"}-->class="item_on"<!--{/if}-->>我的账户</li></a>
+		<a href="#"><li id="txmx" <!--{if $left_item == ""}-->class="item_on"<!--{/if}-->>提现明细</li></a>
+		<a href="/account/trade/detail"><li id="jymx" <!--{if $left_item == "trade_detail"}-->class="item_on"<!--{/if}-->>交易明细</li></a>
+		<a href="/account/editpwd"><li id="xgmm" <!--{if $left_item == "editpwd"}-->class="item_on"<!--{/if}-->>修改密码</li></a>
 		<!--{/if}-->
 	</ul>
 </div>

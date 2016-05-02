@@ -1,0 +1,145 @@
+<!--{add_css file="account.css" scope="global"}-->
+<!--[HEAD_CSS]-->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    #verifyimg{
+        opacity: 0;
+    }
+
+    body {
+        min-width: 0px !important;
+    }
+</style>
+<!--[/HEAD_CSS]-->
+<div style="height:578px;background:#fff;" class="add_bank_t" id="check_form">
+    <div style="margin:0 15px;">
+        <div class="edit_common_div">
+            <span class="edit_left_common" style="letter-spacing:1px;">持卡人姓名：</span>
+           <input <!--{if $rid>0}-->readonly <!--{/if}-->  type="text" value="<!--{$bank_detail.bank_uname}-->" required placeholder="请输入持卡人姓名" name="bank_uname" >
+        </div>
+        <div class="edit_common_div">
+            <span class="edit_left_common" style="letter-spacing:4px;">银行卡号：</span>
+            <input type="text" value="<!--{$bank_detail.bank_no}-->" placeholder="请输入银行卡号" name="bank_no" data-type="bank_no" required>
+        </div>
+        <div class="edit_common_div">
+            <span class="edit_left_common"><i style="letter-spacing:11px;">开户行</i>：</span>
+            <select class="edit_bank_select" name="bank_name" onchange="">
+                <option value="no">请选择银行</option>
+                <!--{foreach from=$bank_list item=val}-->
+                <option value="<!--{$val.bank_code}-->" <!--{if $bank_detail.bank_code eq $val.bank_code}-->selected<!--{/if}--> ><!--{$val.bank_name}--></option>
+                <!--{/foreach}-->
+            </select>
+        </div>
+        <div class="edit_common_div">
+            <span class="edit_left_common" style="letter-spacing:4px;">开户分行：</span>
+            <select class="edit_branch_one" onchange="regionChange(this,2,'selCity');" name="bank_province">
+                <option value="no">请选择省</option>
+                <!--{foreach from=$province_list item=val}-->
+              <option value="<!--{$val.region_id}-->" <!--{if $bank_detail.bank_province eq $val.region_id}-->selected<!--{/if}-->   ><!--{$val.region_name}--></option>
+                <!--{/foreach}-->
+            </select>
+            <select class="edit_branch_two" id="selCity" name="bank_city">
+                <option value="no">请选择市</option>
+                <!--{foreach from=$city_list item=val}-->
+                <option value="<!--{$val.region_id}-->" <!--{if $bank_detail.bank_city eq $val.region_id}-->selected<!--{/if}--> ><!--{$val.region_name}--></option>
+                <!--{/foreach}-->
+            </select>
+        </div>
+        <div class="edit_common_div">
+            <input style="margin-left:88px;" type="text" value="<!--{$bank_detail.bank_branch}-->" name="bank_branch" required placeholder="请输入详细地址">
+        </div>
+        <div class="edit_common_div" style="letter-spacing:1px;">
+            <span class="edit_left_common">身份证号码：</span>
+            <input type="text" value="<!--{$bank_detail.card_num}-->" placeholder="请输入身份证号码" data-type="card_no" name="card_num" required/>
+        </div>
+
+        <div class="edit_common_div">
+            <span class="edit_left_common" style="letter-spacing:4px;" >手机号码：</span>
+            <input type="text" value="" id="mobile" placeholder="请输入手机号码" required data-type="mobile">
+        </div>
+        <div class="edit_common_div">
+            <span class="edit_left_common"><i style="letter-spacing:11px;">校验码</i>：</span>
+            <input type="text" value="" class="check_code_binding" placeholder="请输入校验码" required id="mobile_code">
+            <button class="free_get_code" id="get_code">免费获取</button>
+        </div>
+        <div class="edit_common_div">
+            <button class="save_bank_btn" id="bank_save">保存</button>
+        </div>
+        <img id="verifyimg" src="/vc_mch.php"/>
+        <input type="hidden" id="type" value="<!--{$type}-->">
+        <input type="hidden" id="rid" value="<!--{$rid}-->">
+    </div>
+
+</div>
+
+<script>
+    $("#bank_save").click(function () {
+        var bank_uname = $("input[name='bank_uname']").val();
+        var bank_no = $("input[name='bank_no']").val();
+        var card_num = $("input[name='card_num']").val();
+        var bank_branch = $("input[name='bank_branch']").val();
+        var bank_province = $(".edit_branch_one").val();
+        var bank_city = $(".edit_branch_two").val();
+        var bank_code = $(".edit_bank_select").val();
+        var type = $("#type").val();
+        var rid = $("#rid").val();
+        var mobile = $("#mobile").val();
+        var mobile_code = $("#mobile_code").val();
+        var bank_name = $(".edit_bank_select option[value='" + bank_code + "']").text();
+        var data = {
+            bank_uname: bank_uname,
+            card_num: card_num,
+            bank_no: bank_no,
+            bank_branch: bank_branch,
+            bank_province: bank_province,
+            bank_city: bank_city,
+            bank_code: bank_code,
+            bank_name: bank_name,
+            type: type,
+            rid: rid,
+            mobile: mobile,
+            mobile_code: mobile_code,
+        }
+        if (!$("#check_form").formValid()) {
+            return false;
+        }
+        if (bank_code == 'no') {
+            showMsg("请选择开户行!");
+            return false;
+        } else if (bank_province == 'no') {
+            showMsg("请选择省份!");
+            return false;
+        }
+        var url = "/account/merchant/setbank";
+
+        F.postWithLoading('/account/merchant/setbank', data, function (data) {
+            showMsg(data.retmsg);
+            if (data.status == 1) {
+                setTimeout(function () {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                }, "5000")
+                window.parent.document.location.reload();
+            }
+        });
+    });
+
+    $("#get_code").click(function(){
+        var mobile = $("#mobile").val();
+        if(!isMobile(mobile)){
+            showMsg("手机号码格式错误!");
+            return false;
+        }else if($.trim(mobile)==''){
+            showMsg("手机号码不能为空!");
+            return false;s
+        }
+        var data = {mobile:mobile};
+        F.postWithLoading('/account/merchant/getcode', data, function (data) {
+                 showMsg(data.retmsg);
+        });
+    })
+
+</script>

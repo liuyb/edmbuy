@@ -331,8 +331,8 @@ class User_Model extends Model
     static function checkInviteCode($inviteCode)
     {
         $inviteCode =intval($inviteCode);
-        $sql = "select user_id from shp_users where user_id = {$inviteCode}";
-        return D()->query($sql)->result();
+        $sql = "select user_id ,level,nick_name from shp_users where user_id = {$inviteCode}";
+        return D()->query($sql)->get_one();
     }
 
 
@@ -383,12 +383,24 @@ class User_Model extends Model
     }
 
     /**
-     *更新invite_id
+     * 更新user表
+     * @param $parent_id
+     * @param $nick_name
      */
-    static function updUserInvetCode(){
-        $user_id =$GLOBALS['user']->uid;
-        $sql ="select parent_id from shp_users where user_id  = %d";
-        return D()->query($sql,$user_id)->result();
+    static function updUserInvetCode($parent_id,$nick_name){
+//        update($tablename, Array $setarr, $wherearr, $flag = '');
+        $tablename ="`shp_users`";
+        $setarr['parent_id'] = $parent_id;
+        $setarr['nick_name'] = $nick_name;
+        $wherearr['user_id'] = $GLOBALS['user']->uid;
+        D()->update($tablename,$setarr,$wherearr);
     }
 
+    /**
+     * 得到用户的panrent_id
+     */
+    static function getParentId(){
+        $sql = "select parent_id from shp_users where user_id = {$GLOBALS['user']->uid}";
+        return D()->query($sql)->result();
+    }
 }

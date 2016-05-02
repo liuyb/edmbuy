@@ -738,6 +738,22 @@ class Users extends StorageNode {
 	public static function isAgent($level){
 	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_4);
 	}
+	
+	public static function displayUserLevel($level){
+	    switch($level){
+	        case Users::USER_LEVEL_1 : 
+	            return '米商';
+	        break;
+	        case Users::USER_LEVEL_3 :
+	            return '金牌代理';
+	        break;
+	        case Users::USER_LEVEL_4 :
+	            return '银牌代理';
+	        break;
+	        default : 
+	           return '米客';
+	    }
+	}
 }
  
 /*----- END FILE: class.Users.php -----*/

@@ -17,7 +17,7 @@ show_topnav($('#forTopnav').html());
 </script>
 
 <div class="meal_j">
-	<p>您已经成为益多米<?=AgentPayment::getAgentNameByLevel($user->level) ?>牌代理<br>您可以领取下面任意一份<?=AgentPayment::getAgentPaidMoney($user->level) ?>元套餐</p>
+	<p>您已经成为益多米<?=AgentPayment::getAgentNameByLevel($user->level) ?><br>您可以领取下面任意一份<?=AgentPayment::getAgentPaidMoney($user->level) ?>元套餐</p>
 </div>
 
 <?php foreach ($packages as $pack):?>

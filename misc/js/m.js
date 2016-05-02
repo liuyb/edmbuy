@@ -84,6 +84,19 @@
 			break;
 		}
 	};
+	F.loadingCount = 0;
+	F.loadingOn = function(){
+		F.loadingCount ++;
+		$("#loading_mask").show();
+		$("#ajax_loadding").show();
+	};
+	F.loadingOff = function(){
+		F.loadingCount --;
+		if(F.loadingCount <= 0){
+			$("#loading_mask").hide();
+			$("#ajax_loadding").hide();
+		}
+	};
 	// set content minimal height
 	F.set_content_minheight = function(){
 		if (typeof(gData.page_use_iscroll)!='undefined' && !gData.page_use_iscroll) return false;
@@ -342,40 +355,113 @@
 	 * 覆写F.get 方法，增加loading方法 默认2秒才显示滚动条
 	 */
 	F.get = function(url, data, callback){
-		var effect = "overlay";
-		F.loadingStart(effect);
-		F.loading_canvas.hide();
+		F.loading = true;
 		setTimeout(function(){
-			var isLoadingExist = $("#loadingCover").find(".spinner").length;
-			if(isLoadingExist){
-				F.loading_canvas.show();
+			if(F.loading){
+				F.loadingOn();
 			}
 		}, 2000);
-		var promise = $.get(url, data, callback);
+		var promise = $.get(url, data, function(){
+			if(callback){
+				F.loading =false;
+				callback.apply(this,arguments);
+				F.loadingOff();
+			}
+		});
 		promise.always = function(){
-			F.loadingStop(effect);
+			F.loading =false;
+			F.loadingOff();
+		}
+		promise.fail = function(){
+			F.loading =false;
+			F.loadingOff();
+			alert('数据加载异常，请刷新重试!');
 		}
 	};
 	
 	/**
-	 * 增加post 方法，增加loading方法 默认2秒才显示滚动条 
+	 * 增加post 方法，增加loading方法 
 	 */
 	F.postWithLoading = function(url, data, callback, ajax_start_cb, ajax_complete_cb){
-		F.loadingStart();
-		F.loading_canvas.hide();
-		setTimeout(function(){
-			var isLoadingExist = $("#loadingCover").find(".spinner").length;
-			if(isLoadingExist){
-				F.loading_canvas.show();
-			}
-		}, 2000);
+		F.loadingOn();
 		F.post(url, data, callback, ajax_start_cb, function(param){
+			F.loadingOff();
 			if(ajax_complete_cb){
 				ajax_complete_cb(param);
 			}
-			F.loadingStop();
 		});
 	};
+	
+	/**
+	 * 下拉加载更多事件
+	 * @param showMore 当前下拉加载DOM
+	 */
+	$.fn.pullMoreDataEvent = function(showMore){
+		var _this = $(this);
+		_this.on({
+			'touchend' : function(){
+				if(!showMore.is(":visible")){
+					//console.log('没有更多了..');
+					return;
+				}
+				//增加setTimeout延时是因为下拉太快时获取到的滚动条位置不准确。
+				setTimeout(function(){
+					/*var sh = _this.scrollTop();//数据少的时候scrollTop太小，没法匹配
+					var windowH = _this.height();
+					//提前20px开始加载
+					var bufferH = 20; 
+					if((sh + bufferH) > windowH){
+						//触发加载事件
+						showMore.find("span").text("玩命加载中...");
+						_this.trigger('pullMore');
+					}*/
+					var showMoreTop = showMore.offset().top;//距离顶部间距
+					var thisHeight = showMore.height();//下拉加载DIV高度
+					var headHeight = $("#Mhead").height();//头部Mhead高度
+					//从顶部到加载更多的固定高度   拉到底部时 showMoreTop = windowH
+					var windowH = _this.height() + headHeight - thisHeight;
+					//提前20px开始加载
+					var bufferH = 20; 
+					if((windowH + bufferH) >= showMoreTop){
+						//触发加载事件
+						showMore.find("span").text("玩命加载中...");
+						_this.trigger('pullMore');
+					}
+					console.log((showMoreTop)+"......"+windowH);
+				},250);
+			}
+		});
+	}
+	/**
+	 * 当还有下一页时处理下拉
+	 * @param showMore 下拉加载对应的DOM
+	 * @param data 后台PagePull 对象
+	 */
+	F.handleWhenHasNextPage = function(showMore, data){
+		var hasnex = data.hasnexpage;
+		if(hasnex){
+			showMore.show();
+			showMore.attr('data-curpage',data.curpage);
+		}else{
+			showMore.hide();
+		}
+	}
+	/**
+	 * 构建数据行之后处理Append HTML事件
+	 * @param isInit 是不是初始化事件
+	 * @param resultList 当前存放数据DIV DOM
+	 * @param HTML 当前构建的数据行
+	 * @param showMore 下拉加载更多DOM
+	 */
+	F.afterConstructRow = function(isInit,resultList,HTML,showMore){
+		if(isInit){
+			$("#Mbody").scrollTop(0)
+			resultList.html($(HTML));
+		}else{
+			resultList.append($(HTML));
+		}
+		showMore.find("span").text("下拉加载更多");
+	}
 	
 })(jQuery, FUI, this);
 

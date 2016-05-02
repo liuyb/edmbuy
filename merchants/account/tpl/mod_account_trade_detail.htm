@@ -1,0 +1,99 @@
+<!--{add_css file="/themes/merchants/css/kkpager_orange.css" scope="module"}-->
+<!--{add_js file="/themes/merchants/js/kkpager.min.js" scope="module" pos="foot"}-->
+
+<!--{add_css file="account.css" scope="global"}-->
+<!--{add_css file="/themes/merchants/css/bootstrap-datetimepicker.min.css" scope="module"}-->
+<!--{add_js file="/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js" scope="module" pos="foot"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="my_account">
+        <div id="choose_condition">
+            <input type="input" style="width:155px;" id="start_date" readonly=""
+                   class="form_datetime check_time_left form-control" placeholder="请选择开始日期">
+
+            <p style="padding-left:15px;display:inline-block;height:70px;line-height:70px;">至</p>
+            <input type="input" style="width:155px;" id="end_date" readonly=""
+                   class="form_datetime check_time_left form-control" placeholder="请选择结束日期">
+            <input type="text" value="" placeholder="订单号" class="deal_order_num" id="order_num">
+            <select class="deal_type_one" id="order_status">
+                <option value="0">订单状态</option>
+                <option value="0">全部</option>
+                <option value="100">待付款</option>
+                <option value="101">待发货</option>
+                <option value="103">待收获</option>
+                <option value="102">已完成</option>
+                <option value="104">已关闭</option>
+            </select>
+            <select class="deal_type_two" id="simp_status">
+                <option value="0">结算状态</option>
+                <option value="0">全部</option>
+                <option value="2">已结算</option>
+                <option value="1">未结算</option>
+            </select>
+            <button id="search_type_infos">搜索</button>
+        </div>
+
+        <div class="with_tab_list">
+            <table cellspacing="0" cellpadding="0" class="withdraw_tab" id="type_table_list">
+                <tr>
+                    <th>订单编号</th>
+                    <th>结算状态</th>
+                    <th>买家</th>
+                    <th>订单金额</th>
+                    <th>订单状态</th>
+                    <th>结算时间</th>
+                    <th>下单时间</th>
+                </tr>
+                <tbody class="body-data"></tbody>
+            </table>
+        </div>
+        <div id="kkpager" style="float:right;clear:none;padding:0px;"></div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<script>
+    var tableOptions = {id: 'type_table_list', url: '/account/trade/list', colspan: 9};
+    $(function () {
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd', autoclose: true, todayBtn: true, minView: 2});
+        loadPageDataTable(1, true, tableOptions);
+    });
+    function pageQueryCondtion() {
+        var status = 0;
+        status = $("#order_status").val();
+        var order_num = $("#order_num").val();
+        var simp_status = $("#simp_status").val();
+        var start_date = $("#start_date").val();
+        var end_date = $("#end_date").val();
+        var data = {
+            order_sn: order_num,
+            simp_status: simp_status,
+            order_status: status,
+            start_date: start_date,
+            end_date: end_date
+        };
+        return data;
+    }
+
+
+    function costructRowData(result) {
+
+        var ship_st = parseInt(result.shipping_status);
+        var order_st = parseInt(result.order_status);
+        var pay_st = parseInt(result.pay_status);
+
+        var TR = "<tr><td>" + result.order_sn + "</td>";
+        TR += "<td>" + result.stmt_status + "</td>";   //结算状态
+        TR += "<td>" + result.nick_name + "</td>";
+        TR += "<td>￥" + result.actual_order_amount + "</td>";
+        TR += "<td>" + result.order_status_text + "</td>";
+
+        TR += "<td>" + result.confirm_time + "</td>";
+        TR += "<td>" + result.add_time + "</td></tr>";
+
+        return TR;
+    }
+    $("#search_type_infos").click(function(){
+        loadPageDataTable(1, true, tableOptions);
+    });
+</script>

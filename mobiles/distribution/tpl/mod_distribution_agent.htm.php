@@ -25,11 +25,7 @@ show_topnav($('#forTopnav').html());
 			<td><img src="<?=$user->logo ?>"></td>
 			<td>
 				<p class="become_name"><?=$user->nickname ?>
-				<?php if($user->level == Users::USER_LEVEL_3):?>
-				<img src="/themes/mobiles/img/jinpai.png" class="jin_z">
-				<?php elseif ($user->level == Users::USER_LEVEL_4):?>
-				<img src="/themes/mobiles/img/yinpai.png" class="jin_z">
-				<?php endif;?>
+				<img src="<?=AgentPayment::getAgentIconByLevel($user->level) ?>" class="jin_z">
 				</p>
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
 			</td>
@@ -72,7 +68,7 @@ show_topnav($('#forTopnav').html());
 			</tr>
 			<tr>
 				<td><img src="/themes/mobiles/img/4_0.png"></td>
-				<td>推荐商家入驻分佣比例：一层<i class="agency_font">20%</i>，二层<i class="agency_font">5%</i>， 三层<i class="agency_font">5%</i>。</td>
+				<td>推荐商家入驻分佣比例：一层<i class="agency_font">30%</i>，二层<i class="agency_font">10%</i>， 三层<i class="agency_font">5%</i>。</td>
 			</tr>
 			<tr>
 				<td style="border-bottom:0;"><img src="/themes/mobiles/img/5.png"></td>
@@ -95,7 +91,7 @@ show_topnav($('#forTopnav').html());
 			</tr>
 			<tr>
 				<td><img src="/themes/mobiles/img/3.png"></td>
-				<td>发展金牌代理商，总佣金为<i class="agency_font">198元</i>。198元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
+				<td>发展金牌代理商，总佣金为<i class="agency_font">98元</i>。98元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
 			</tr>
 			<tr>
 				<td><img src="/themes/mobiles/img/4_0.png"></td>
@@ -103,7 +99,7 @@ show_topnav($('#forTopnav').html());
 			</tr>
 			<tr>
 				<td style="border-bottom:0;"><img src="/themes/mobiles/img/5.png"></td>
-				<td style="border-bottom:0;">推荐商家销售产生总佣金<i class="agency_font">2%</i>的终身提点。</td>
+				<td style="border-bottom:0;">推荐商家销售产生总佣金<i class="agency_font">1%</i>的终身提点。</td>
 			</tr>
 		</table>
 	</div>

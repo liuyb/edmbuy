@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/terrace.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="terrace_left_common.html"-->
+	
+	<div class="terrace_right_common">
+		<div class="examin_flow">
+			<div class="recom_key">一键推荐，销售网络快速裂变</div>
+			
+			<div class="recom_list" id="list1">
+				<table cellspacing="0" cellpadding="0" class="cret_tab_list">
+					<tr>
+						<td class="cret_tab_left">公司名称：</td>
+						<td class="cret_tab_right">
+							<select class="prefe_checks">
+								<option>98专区</option>
+								<option>茶叶专区</option>
+							</select>
+							<p style="font-size:13px;color:#ccc;">爆品折扣：价格超低，不及利润，引流至您的店铺消费其他产品</p>
+						</td>
+					</tr>
+					<tr>
+						<td class="cret_tab_left">公司名称：</td>
+						<td class="cret_tab_right">
+							<p><button class="cret_btn" id="check_goods_btn">选择商品</button></p>
+							<table cellspacing="0" cellpadding="0" class="recom_tab_list" style="">
+								<tr>
+									<th>商品名称</th>
+									<th>售价</th>
+									<th>供货价</th>
+									<th>佣金</th>
+									<th>成本价</th>
+									<th width="160px;">操作</th>
+								</tr>
+								<tr>
+									<td>沃尔沃大师傅</td>
+									<td><input class="recom_edit_price" type="text" value="2542.00"></td>
+									<td>9587.00</td>
+									<td>542.00</td>
+									<td>5642.00</td>
+									<td><a href="javascript:;" class="edit_prict_btn">修改价格</a><a href="javascript:;">删除</a></td>
+								</tr>
+								<tr>
+									<td>沃尔沃大师傅</td>
+									<td><input class="recom_edit_price" type="text" value="2542.00"></td>
+									<td>9587.00</td>
+									<td>542.00</td>
+									<td>5642.00</td>
+									<td><a href="javascript:;">修改价格</a><a href="javascript:;">删除</a></td>
+								</tr>
+								<tr>
+									<td>沃尔沃大师傅</td>
+									<td><input class="recom_edit_price" type="text" value="2542.00"></td>
+									<td>9587.00</td>
+									<td>542.00</td>
+									<td>5642.00</td>
+									<td><a href="javascript:;" class="edit_prict_btn">修改价格</a><a href="javascript:;">删除</a></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="cret_tab_left">备注：</td>
+						<td class="cret_tab_right">
+							<input type="text" placeholder="请认真填写，不少于10个字符">
+							<p style="font-size:13px;color:#ccc;">我们每天审核的产品数量非常多，为了能更快的通过审核，建议您给我们充分的理由。</p>
+						</td>
+					</tr>
+					<tr>
+						<td class="cret_tab_left"></td>
+						<td class="cret_tab_right">
+							<button class="cret_btn" id="submit_recom">提交</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="mask" ></div>
+
+
+<!-- 选择商品 -->
+<div style="width:1000px;height:500px;position:fixed;z-index:55555;background:#fff;display:none;" class="recom_c">
+	<div id="choose_condition">
+		<select class="prom_sele">
+			<option>全部分类</option>
+		</select>
+		<input style="margin:13px 0 0 15px;" class="check_time_left" id="goods_name" placeholder="关键词">
+		<button id="search_type_infos">搜索</button>
+	</div>
+	<div style="padding:20px;">
+		<div class="recom_check_left">
+			<div class="tab_list_s">
+				<ul>	
+					<li class="li_one">商品名称</li>
+					<li style="width:80px">售价</li>
+					<li style="width:80px">供货价</li>
+					<li style="width:70px">操作</li>
+					<div class="clear"></div> 
+				</ul>
+			</div>			
+			<div class="over_tab">	
+				<table cellspacing="0" cellpadding="0" class="check_left_tab">
+					<tr>
+						<td width="250px">	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td width="80px">2536.00</td>
+						<td width="80px">4864.22</td>
+						<td width="70px">746.23</td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="recom_check_right">
+			<div class="tab_list_s">
+				<ul>	
+					<li class="li_one">商品名称</li>
+					<li style="width:80px">售价</li>
+					<li style="width:80px">供货价</li>
+					<li class="li_four">操作</li>
+					<div class="clear"></div> 
+				</ul>
+			</div>	
+			<div class="over_tab_right">		
+				<table cellspacing="0" cellpadding="0" class="check_right_tab">
+					<td width="250px">	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td width="80px">2536.00</td>
+						<td width="80px">4864.22</td>
+						<td width="70px">746.23</td>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+					<tr>
+						<td>	
+							<div class="recom_img_left"><img src="../mch/img/01_ba.png"></div>
+							<div class="recom_name_right" title="">楼上房间看电视了酸辣粉聚少离多间看电视了酸辣粉聚少离多</div>
+						</td>
+						<td>2536.00</td>
+						<td>4864.22</td>
+						<td>746.23</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<button class="cret_btn" id="sure_btn" style="margin-top:30px;">确定</button>
+	</div>
+</div>
+
+<!-- 选择商品 -->
+<div style="width:400px;height:300px;position:fixed;z-index:55555;background:#fff;display:none;" class="recom_s">
+	<div class="tj_recom">
+		<img src="../mch/img/cg.png"> 提交成功，审核中
+	</div>
+	<div style="text-align:center;">
+		<button class="cret_btn" id="recom_back_btn" style="margin:30px 5px 0;">返回</button>
+		<button class="cret_btn" id="go_on_btn" style="margin:30px 5px 0;">继续添加</button>
+	</div>
+</div>
+
+<script>
+//菜单高亮  
+$("#tjydm").addClass("item_on");
+
+$(".edit_prict_btn").on("click",function(){
+	$(this).parent().find("recom_edit_price").addClass("recom_on");
+})
+$("#check_goods_btn").on("click",function(){
+	$(".mask").show();
+	$(".recom_c").show();
+})
+</script>
+
+  
