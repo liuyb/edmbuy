@@ -3481,7 +3481,7 @@ td.cash_td2 img {
 
 .alliance{
   	font-weight: normal !important;
-  	padding: 0 70px !important;
+  	padding: 0px !important;
 }
 .alliance li{
 	display:inline-block;
@@ -3497,11 +3497,10 @@ td.cash_td2 img {
 	background:#fff;
 }
 .iance_list_infos{
-	padding:10px;
 	border-bottom:1px solid #e6e6e6;
 }
 .iance_list_top{
-	margin-bottom:10px;
+	padding:10px;
 	height:50px;
 }
 .l_top_img{
@@ -3538,11 +3537,13 @@ td.cash_td2 img {
 	color:#8c8c8c;
 }
 .iance_list_bottom{
+	padding:0 7px 10px;
 	font-size:0;	
 }
 .iance_list_bottom li{
 	display:inline-block;
-	width:32%;
+	width:23%;
+	margin:0 1%;
 }
 .iance_list_bottom img{
 	width:100%;
