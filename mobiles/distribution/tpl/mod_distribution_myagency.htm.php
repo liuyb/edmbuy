@@ -49,7 +49,7 @@ $(function(){
 
 	$mbody.on('pullMore', function(){
 		var level = $("#levelBar").find("li[class='navig_on']").data('type');
-		var curpage = $showMore.data('curpage');
+		var curpage = $showMore.attr('data-curpage');
 		getAgencyList(level ? level : 1, (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);
@@ -65,7 +65,7 @@ function getAgencyList(level, curpage, isInit){
 function constructRows(ret, isInit){
 	var HTML = "";
 	if(!ret || !ret.result || !ret.result.length){
-		HTML = "<div style='text-align:center;'>还没有相关数据.</div>";
+		HTML = "<div class='no_more_data'>还没有相关数据.</div>";
 	}else{
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){

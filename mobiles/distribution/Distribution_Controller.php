@@ -87,7 +87,7 @@ class Distribution_Controller extends MobileController{
     public function merchant_list(Request $request, Response $response){
         $curpage = $request->get('curpage', 1);
         $orderby = $request->get('orderby', 'oc');
-        $pager = new PagerPull($curpage, 10);
+        $pager = new PagerPull($curpage, 20);
         Distribution_Model::getMerchantsList($pager, array("orderby" => $orderby));
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
@@ -516,7 +516,7 @@ class Distribution_Controller extends MobileController{
                 //$order_update['commision'] = $total_commision; //订单总佣金
                 if ($true_amount!=$newOrder->goods_amount) {
                     $order_update['goods_amount'] = $true_amount;
-                    //$order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
+                    $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
                 }
                 if (empty($succ_goods)) { //如果一个商品都没有购买成功，则需要更改此订单状态为"无效"OS_INVALID
                     $order_update['order_status'] = OS_INVALID;

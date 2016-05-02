@@ -461,35 +461,41 @@ class Order extends StorageNode{
     
     	$ectb_order = self::table();
     	$ectb_goods = Items::table();
+    	$ectb_merchant = Merchant::table();
     	$ectb_order_goods = OrderItems::table();
     	$where = "";
     	if ('wait_pay'==$status) {
-    		$where .= " AND pay_status IN(".PS_UNPAYED.", ".PS_PAYING.")";
+    	    $where .= self::build_order_status_sql(CS_AWAIT_PAY, 'od');
     	}
     	elseif ('wait_ship'==$status) {
-    		$where .= " AND pay_status=".PS_PAYED;
-    		$where .= " AND shipping_status IN(".SS_UNSHIPPED.",".SS_PREPARING.",".SS_SHIPPED_ING.")";
+    		$where .= self::build_order_status_sql(CS_AWAIT_SHIP, 'od');
     	}
     	elseif ('wait_recv'==$status) {
-    		$where .= " AND pay_status=".PS_PAYED;
-    		$where .= " AND shipping_status IN(".SS_SHIPPED.",".SS_SHIPPED_PART.",".OS_SHIPPED_PART.")";
+    		$where .= self::build_order_status_sql(CS_AWAIT_RECEIVE, 'od');
     	}
     	elseif ('finished'==$status) {
-    		$where .= " AND shipping_status=".SS_RECEIVED;
+    		$where .= self::build_order_status_sql(CS_FINISHED, 'od');
     	}
     	
-    	$sql = "SELECT * FROM {$ectb_order} WHERE `user_id`=%d and is_separate = 0 $where ORDER BY `order_id` DESC LIMIT %d,%d";
+    	$sql = "SELECT od.*,mc.facename FROM {$ectb_order} od left join {$ectb_merchant} mc on od.merchant_ids = mc.merchant_id 
+    	        WHERE od.`user_id`=%d and od.is_separate = 0 and is_delete = 0 $where ORDER BY od.`order_id` DESC LIMIT %d,%d";
     	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
     	if (!empty($orders)) {
     		foreach ($orders AS &$ord) {
+    		    $ord['status_txt'] = Fn::get_order_text($ord['pay_status'], $ord['shipping_status'], $ord['order_status']);
     			$ord['show_status_html'] = self::genStatusHtml($ord);
     			$ord['order_goods'] = [];
-    			$sql = "SELECT og.*,g.`goods_thumb` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
+    			$sql = "SELECT og.*,g.`goods_thumb`, attr.cat1_name,attr.cat2_name,attr.cat3_name,
+    			attr.attr1_value,attr.attr2_value,attr.attr3_value 
+    			FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
+    			LEFT JOIN shp_goods_attr attr on og.goods_attr_id = attr.goods_attr_id  
+    			WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
     			$order_goods = D()->raw_query($sql, $ord['order_id'])->fetch_array_all();
     			if (!empty($order_goods)) {
     				foreach ($order_goods AS &$g) {
     					$g['goods_url']   = Items::itemurl($g['goods_id']);
     					$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+    					$g['attr_txt'] = self::genGoodsAttrTxt($g);
     				}
     				$ord['order_goods'] = $order_goods;
     			}
@@ -502,6 +508,22 @@ class Order extends StorageNode{
     }
     
     /**
+     * 商品属性文本
+     */
+    static function genGoodsAttrTxt($attr){
+        $txt = "";
+        for($i = 1; $i <= 3; $i++){
+            if($attr["cat".$i."_name"]){
+                $txt .= $attr["cat".$i."_name"].":".$attr["attr".$i."_value"].";";
+            }
+        }
+        if($txt){
+            $txt = substr($txt, 0, strlen($txt) - 1);
+        }
+        return $txt;
+    }
+    
+    /**
      * 生成订单各种状态显示html
      *
      * @param array $order
@@ -511,35 +533,26 @@ class Order extends StorageNode{
     
     	$html = '';
     
-    	$order['active_order'] = 0; //便于区分订单显示样式
-    	$br = '<br/>';
     	if (!in_array($order['order_status'], [OS_CANCELED,OS_INVALID,OS_RETURNED])) { //订单“活动中”
     		$order['active_order'] = 1;
     		if (in_array($order['pay_status'], [PS_UNPAYED, PS_PAYING, PS_CANCEL, PS_FAIL])) { //未支付和支付中
-    			$html .= '<p class="order-status-txt">'.Fn::pay_status($order['pay_status']).'</p>';
-    			$html .= '<p class="order-status-op"><a href="javascript:;" class="btn btn-orange btn-order-topay" data-order_id="'.$order['order_id'].'">立即付款</a></p>';
-    			$html .= '<p class="order-status-op last"><a href="javascript:;" class="btn-order-cancel" data-order_id="'.$order['order_id'].'">取消订单</a></p>';
+    		    $html .= '<button class="order_but_l btn-order-cancel" data-order_id="'.$order['order_id'].'">取消订单</button>';
+    		    $html .= '<button class="order_but_r btn-order-topay" data-order_id="'.$order['order_id'].'">立即付款</button>';
     		}
     		elseif ($order['pay_status']==PS_PAYED) { //已支付
-    			$html .= '<p class="order-status-txt">'.Fn::pay_status($order['pay_status']).$br.Fn::shipping_status($order['shipping_status']);
     			if ($order['shipping_status']==SS_RECEIVED) {
-    				$html.= $br.'<span style="color:green">'.Fn::zonghe_status(CS_FINISHED).'</span>'; //订单完成
-    				$html.= '</p>';
-    				$order['active_order'] = 0;
+    			    $html .= '<button class="order_but_l btn-order-delete" data-order_id="'.$order['order_id'].'">删除订单</button>';
+    			    //$html .= '<button class="order_but_r btn-order-comment" data-order_id="'.$order['order_id'].'">评价</button>';
     			}
     			elseif ($order['shipping_status']==SS_SHIPPED) {
-    				$html .= '</p><p class="order-status-op"><a href="javascript:;" class="btn btn-orange btn-ship-confirm" data-order_id="'.$order['order_id'].'">确认收货</a></p>';
-    			}
-    			else {
-    				$html.= '</p>';
+    			    $html .= '<button class="order_but_r btn-ship-confirm" data-order_id="'.$order['order_id'].'">确认收货</button>';
     			}
     		}
     		else { //支付中
-    			$html .= '<p class="order-status-txt">'.Fn::order_status(OS_CONFIRMED).$br.Fn::pay_status($order['pay_status']).'</p>';
     		}
     	}
     	else {
-    		$html .= '<p>'.Fn::order_status($order['order_status']).'</p>';
+    	    $html .= '<button class="order_but_l btn-order-delete" data-order_id="'.$order['order_id'].'">删除订单</button>';
     	}
     
     	return $html;
@@ -561,7 +574,7 @@ class Order extends StorageNode{
                          $prefix.order_status ".Func::db_create_in($status['order_status']).")";
         }else if(CS_AWAIT_PAY == $composite_status){//待付款
             return " AND $prefix.pay_status ".Func::db_create_in($status['pay_status'])." 
-                      AND order_status NOT ".Func::db_create_in(array(OS_CANCELED, OS_INVALID));
+                      AND $prefix.order_status NOT ".Func::db_create_in(array(OS_CANCELED, OS_INVALID));
         }
         $sql = "";
         foreach ($status as $field => $arr){

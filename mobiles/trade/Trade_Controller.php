@@ -39,6 +39,7 @@ class Trade_Controller extends MobileController {
       'trade/order/submit_item' => 'order_submit_item',
       'trade/order/upaddress'=> 'order_upaddress',
       'trade/order/cancel'   => 'order_cancel',
+      'trade/order/delete'   => 'order_delete',
       'trade/order/chpaystatus'=> 'order_chpaystatus',
       'trade/order/confirm_shipping'   => 'order_confirm_shipping',
       'trade/order/record'   => 'order_record',
@@ -919,6 +920,44 @@ class Trade_Controller extends MobileController {
 
       $response->sendJSON($ret);
     }
+  }
+  
+  /**
+   * 删除订单
+   *
+   * @param Request $request
+   * @param Response $response
+   */
+  public function order_delete(Request $request, Response $response)
+  {
+      if ($request->is_post()) {
+          $ret = ['flag'=>'FAIL','msg'=>'删除失败'];
+  
+          $user_id = $GLOBALS['user']->uid;
+          if (!$user_id) {
+              $ret['msg'] = '未登录, 请登录';
+              $response->sendJSON($ret);
+          }
+  
+          $order_id = $request->post('order_id', 0);
+          if (!$order_id) {
+              $ret['msg'] = '订单id为空';
+              $response->sendJSON($ret);
+          }
+  
+          $order = Order::load($order_id);
+          if($user_id != $order->user_id){
+              Fn::show_error_message();
+          }
+          $order->is_delete = 1;
+          $order->save(Storage::SAVE_UPDATE);
+          $b = D()->affected_rows();
+          if ($b) {
+              $ret = ['flag'=>'SUC','msg'=>'删除成功', 'order_id'=>$order_id];
+          }
+  
+          $response->sendJSON($ret);
+      }
   }
 
   /**

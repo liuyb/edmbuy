@@ -42,7 +42,8 @@ class Merchant extends StorageNode {
 				    'shop_desc' => 'shop_desc',
 				    'business_scope' => 'business_scope',
 				    'shop_template' => 'shop_template',
-				    'is_completed' => 'is_completed'
+				    'is_completed' => 'is_completed',
+				    'shop_qcode' => 'shop_qcode'
 				)
 		);
 	}

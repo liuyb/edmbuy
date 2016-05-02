@@ -25,8 +25,8 @@ class Distribution_Model extends Model{
                 on m.merchant_id = cs.merchant_id order by $orderby desc limit %d,%d";
         $result = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
         foreach ($result as &$mch){
-            $recomm_goods = self::findGoodsRcoment($mch['merchant_id'], 3);
-            if($recomm_goods && count($recomm_goods) == 3){
+            $recomm_goods = self::findGoodsRcoment($mch['merchant_id'], 4);
+            if($recomm_goods && count($recomm_goods) == 4){
                 $mch['recommend'] = $recomm_goods;
             }
         }
@@ -265,10 +265,10 @@ class Distribution_Model extends Model{
                         $commision    += $oit['commision'] * $oit['goods_number'];
                     }
     
-                    //$order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
+                    $order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
                     $order_update = [];
                     $order_update['goods_amount'] = $goods_amount;
-                    //$order_update['order_amount'] = $order_amount;
+                    $order_update['order_amount'] = $order_amount;
                     //$order_update['commision']    = $commision;
                     if (!empty($order_update)) {
                         D()->update(Order::table(), $order_update, ['order_id'=>$subOrder->id]);

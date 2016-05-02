@@ -8,9 +8,11 @@
 
 <script id="forTopnav" type="text/html">
 <div class="header alliance">
+<div style="padding:0 20px;">
 	<ul id="order_bar">	
 		<li onclick="merchants_order(this, 'oc')" class="allliance_on" data-type='oc'>销量</li><li onclick="merchants_order(this, 'cc')" data-type='cc'>粉丝</li>
 	</ul>
+</div>
 </div>
 </script>
 <script>
@@ -45,7 +47,7 @@ $(function(){
 
 	$mbody.on('pullMore', function(){
 		var orderby = $("#order_bar").find("li[class='allliance_on']").data('type');
-		var curpage = $showMore.data('curpage');
+		var curpage = $showMore.attr('data-curpage');
 		getMerchantsList(orderby ? orderby : 'oc', (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);
@@ -61,7 +63,7 @@ function getMerchantsList(orderby, curpage, isInit){
 function constructRows(ret, isInit){
 	var HTML = "";
 	if(!ret || !ret.result || !ret.result.length){
-		HTML = "<div style='text-align:center;'>还没有相关数据.</div>";
+		HTML = "<div class='no_more_data'>还没有相关数据.</div>";
 	}else{
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
@@ -70,16 +72,12 @@ function constructRows(ret, isInit){
 			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" />";
 			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+obj.facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
 			HTML += "<button class=\"l_top_btn gotoshop\" data-mid=\""+obj.merchant_id+"\">进店</button></div>";
-
-			if(obj.recommend && obj.recommend.length == 3){
+			console.log(obj.recommend);
+			if(obj.recommend && obj.recommend.length){
 				HTML += "<div class=\"iance_list_bottom\"><ul>";
-				for(var r = 0; r < 3; r++){
+				for(var r = 0,rlen = obj.recommend.length; r < rlen; r++){
 					var recomm = obj.recommend[r];
-					var style = "";
-					if(r == 1){
-						style = "style='margin:0 2%;'";
-					}
-					HTML += "<li "+style+" data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+recomm.goods_img+"')\" /></li>";
+					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+recomm.goods_img+"')\" /></li>";
 				}
 				HTML += "</ul></div>";
 			}

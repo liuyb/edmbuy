@@ -45,49 +45,70 @@ $(function(){
 
 <?php else :?>
 
-<?php foreach ($orders AS $ord):?>
-
-<div class="list-container">
-  
-  <div class="list-head <?php if ($ord['active_order']):echo 'list-head-blue';else:echo 'list-head-gray';endif;?> list-head-order">
-    <span class="order-date"><?php echo date('Y-m-d',$ord['add_time'])?></span><span class="order-sn">订单号：<em><?=$ord['order_sn']?></em></span>
-  </div>
-  
-  <div class="list-body list-body-order">
-  
-  <?php foreach($ord['order_goods'] AS $g):?>
-    <div class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['order_id']?>">
-      <div class="c-24-6 col-2 withclickurl"><img src="<?=$g['goods_thumb']?>" alt="" class="goods_pic" /></div>
-      <div class="c-24-11 col-3 withclickurl">
-        <p><?=$g['goods_name']?></p>
-        <p class="price-txt">(￥<?=$g['goods_price']?> x<?=$g['goods_number']?>)</p>
-      </div>
-    </div>
-  <?php endforeach;?>
-    <div class="right-merge">
-      <p>￥<span class="gprice"><?php if ($ord['pay_status']==PS_PAYED): echo $ord['money_paid']; else: echo $ord['order_amount']; endif;?></span></p>
-      <div class="order-status"><?=$ord['show_status_html']?></div>
-    </div>
-    
-  </div>
-  
+<?php foreach ($orders AS $ord): 
+    $count = 0?>
+<div class="order_list">
+	<div class="order_title">
+		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
+		<span class="title_name"><?=$ord['facename'] ?></span>
+		<span class="tit_type"><?=$ord['status_txt'] ?></span>
+	</div>
+	<?php foreach($ord['order_goods'] AS $g):
+	   $count ++;
+	?>
+		<div class="order_info" data-rid="<?=$g['order_id']?>" data-gid="<?=$g['goods_id']?>">
+			<table cellspacing="0" cellpadding="0" class="order_info_tab">
+				<tr>
+					<td class="info_td1" >
+						<img src="<?=$g['goods_thumb']?>">
+					</td>
+					<td class="info_td2">
+						<p class="info_name"><?=$g['goods_name']?></p>
+						<p class="ifno_etalon"><?=$g['attr_txt'] ?></p>
+					</td>
+					<td class="info_td3">
+						<p class="info_price">￥<?=$g['goods_price']?></p>
+						<p class="info_num">x<?=$g['goods_number']?></p>
+						<?php if($ord['shipping_status'] == SS_RECEIVED):?>
+						<p style="margin-top: 15px;font-size:16px;color:#ff0101;" class='goods_comment'>评价</p>
+						<?php endif;?>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<?php endforeach;?>	
+	<div class="order_price">
+		<p>
+			<span style="padding-right:12px;">共<span><?=$count ?></span>件商品 </span>
+			合计：￥ <span class="price_p"><?php if ($ord['pay_status']==PS_PAYED): echo $ord['money_paid']; else: echo $ord['order_amount']; endif;?></span> （含运费：￥<?=$ord['shipping_fee']?>）
+		</p>
+	</div>
+	<?php if($ord['show_status_html']):?>
+	<div class="order_serve order_right">
+		<?=$ord['show_status_html'] ?>
+	</div>
+	<?php endif;?>
 </div>
 
 <?php endforeach;?>
 
 <?php form_topay_script(U('trade/order/payok'));?>
-<?php require_scroll2old();?>
 <script>
 $(function(){
-	var $lbod = $('.list-body');
 	var thisctx = {};
 	
-	$('.withclickurl',$lbod).click(function(){
-		//window.location.href = $(this).parent().attr('data-url')+'?ref=/trade/order/record';
-		window.location.href = '/order/'+$(this).parent().attr('data-rid')+'/detail'+'<?php echo (isset($_GET['spm']) ? '?spm='.$_GET['spm'] : '')?>';
+	$('.order_info').click(function(){
+		window.location.href = '/order/'+$(this).attr('data-rid')+'/detail'+'<?php echo (isset($_GET['spm']) ? '?spm='.$_GET['spm'] : '')?>';
 		return false;
 	});
-	$('.btn-order-cancel',$lbod).click(function(){
+	$(".goods_comment").click(function(e){
+		e.stopPropagation();
+		var $parent = $(this).closest('.order_info').first();
+		var order_id = $parent.data("rid");
+		var goods_id = $parent.data("gid");
+		window.location.href = '/item/comment/page?order_id='+order_id+'&goods_id='+goods_id;
+	});
+	$('.btn-order-cancel').click(function(){
 		if (typeof(thisctx.ajaxing_cancel)=='undefined') {
 			thisctx.ajaxing_cancel = 0;
 		}
@@ -108,10 +129,21 @@ $(function(){
 		}
 		return false;
 	});
-	$('.btn-order-topay',$lbod).click(function(){
+	$('.btn-order-delete').click(function(){
+		if (confirm('确定删除该订单么？')) {
+      		var pdata = {"order_id": parseInt($(this).attr('data-order_id'))};
+      		F.post('<?php echo U('trade/order/delete')?>',pdata,function(ret){
+      			if (ret.flag=='SUC') {
+      				window.location.reload();
+      			}
+      		});
+		}
+		return false;
+	});
+	$('.btn-order-topay').click(function(){
 		form_topay_submit($(this).attr('data-order_id'));
 	});
-	$('.btn-ship-confirm',$lbod).click(function(){
+	$('.btn-ship-confirm').click(function(){
 		if (typeof(thisctx.ajaxing_confirm)=='undefined') {
 			thisctx.ajaxing_confirm = 0;
 		}
@@ -137,7 +169,6 @@ $(function(){
 		return false;
 	});
 });
-
 </script>
 
 <?php endif;?>

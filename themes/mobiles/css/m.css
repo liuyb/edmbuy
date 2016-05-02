@@ -5631,7 +5631,7 @@ td.cash_td2 img {
 }
 .alliance{
   	font-weight: normal !important;
-  	padding: 0 70px !important;
+  	padding: 0px !important;
 }
 .alliance li{
 	display:inline-block;
@@ -5647,11 +5647,10 @@ td.cash_td2 img {
 	background:#fff;
 }
 .iance_list_infos{
-	padding:10px;
 	border-bottom:1px solid #e6e6e6;
 }
 .iance_list_top{
-	margin-bottom:10px;
+	padding:10px;
 	height:50px;
 }
 .l_top_img{
@@ -5665,7 +5664,7 @@ td.cash_td2 img {
 }
 .l_top_btn{
 	float:right;
-	width:49px;
+	width:55px;
 	height:24px;
 	background:#fff;
 	color:#f65d00;
@@ -5688,11 +5687,13 @@ td.cash_td2 img {
 	color:#8c8c8c;
 }
 .iance_list_bottom{
+	padding:0 7px 10px;
 	font-size:0;	
 }
 .iance_list_bottom li{
 	display:inline-block;
-	width:32%;
+	width:23%;
+	margin:0 1%;
 }
 .iance_list_bottom img{
 	width:100%;
@@ -5725,7 +5726,7 @@ td.cash_td2 img {
 	line-height:44px;
 	border-bottom:1px solid #e6e6e6;
 	background:url(../img/btn_back.png) no-repeat right;
-	background-size:10px;
+	background-size:8px;
 }
 .border_common{
 	border:0 !important;
@@ -5762,7 +5763,7 @@ td.cash_td2 img {
 
 .my_referrer_tit{
 	background:#f1f1f1;
-	height:158px;
+	height:150px;
 	text-align:center;
 }
 .my_referrer_tit img{
@@ -5810,7 +5811,7 @@ td.cash_td2 img {
 }
 .store_three_list li{
 	font-size: 15px;
-	padding:8px 0;
+	padding:5px 0;
 	float:left;
 	width:33.3%;
 	text-align:center;
@@ -6102,8 +6103,87 @@ td.cash_td2 img {
   }
 }
 /**loading begin add by jason*/
+.no_more_data {
+	float: left;
+	margin-left: 30%;
+	margin-top: 10px;
+}
+/*2016-5-2 s */
+.member_cen_common{
+	background:#fff;
+	margin-bottom:10px;
+}
+.del_bottom{
+	border-bottom:0 !important;
+}
+.my_order_c{
+	background:#fff;
+	height:64px;
+}
+.my_order_c li{
+	float:left;
+	width:20%;
+	text-align:center;
+}
+.my_order_c img{
+	margin-top:13px;
+	width:44px;
+	height:38px;
+}
+.my_price_c{
+	color:#f65d00 !important;
+}
 
+.code_t{
+	background:#fff;
+	z-index:55555;
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+}
+.z_code_s p{
+	text-align:center;
+	font-size:16px;
+	color:#f65d00;
+}
+.z_code_s img{
+	width:200px;
+	height:200px;
+}
+.close_top{
+	height:40px;
+	line_height:40px;
+	background:#eee;
+}
+.close_top img{
+	float:right;
+	margin:8px 10px;
+	width:24px;
+	height:24px;
+}
 
+.no_store_c{
+	text-align:center;
+	margin-top:70px;
+}
+.no_store_c img{
+	width:148px;
+	height:128px;
+}
+.no_store_c button{
+	margin-top:40px;
+	width:150px;
+	height:42px;
+	line-height:40px;
+	background:#fff;
+	border:1px solid #f65d00;
+	font-size:16px;
+	color:#f65d00;
+	border-radius:4px;
+}
+/*2016-5-2 e */
 
 
 

@@ -427,7 +427,6 @@
 						showMore.find("span").text("玩命加载中...");
 						_this.trigger('pullMore');
 					}
-					console.log((showMoreTop)+"......"+windowH);
 				},250);
 			}
 		});

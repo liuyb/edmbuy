@@ -12,8 +12,13 @@
 
 <div class="my_referrer_tit">
 	<img src="<?=$parent->logo ?>">
-	<p class="refer_name"><?=$parent->nickname ?></p>
-	<button class="refer_btn"><?=AgentPayment::getAgentNameByLevel($parent->level) ?></button>
+	<p class="refer_name"><span><?=$parent->nickname ?></span>
+	<?php if ($parent->level == Users::USER_LEVEL_3):?>
+	<img src='/themes/mobiles/img/jinpai1.png' style='width:17px;height:19px;vertical-align:middle;margin:0px 0px 3px 3px;'/>
+	<?php elseif ($parent->level == Users::USER_LEVEL_4):?>
+	<img src='/themes/mobiles/img/yinpai2.png' style='width:17px;height:19px;vertical-align:middle;margin:0px 0px 3px 3px;'/>
+	<?php endif;?>
+	</p>
 </div>
 
 <div class="refer_common">

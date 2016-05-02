@@ -55,15 +55,15 @@ show_topnav($('#forTopnav').html());
 	<div class="gold_medal_agency">
 		<table cellspacing="0" cellpadding="0" class="agency_tab">	
 			<tr>
-				<td><img src="/themes/mobiles/img/1.png"></td>
+				<td><img src="/themes/mobiles/img/agent_1.png"></td>
 				<td>免费领取<i class="agency_font">698元</i>商品套餐</td>
 			</tr>
 			<tr>
-				<td><img src="/themes/mobiles/img/2.png"></td>
+				<td><img src="/themes/mobiles/img/agent_2.png"></td>
 				<td>本人购物享有锁所购买商品佣金<i class="agency_font">30%</i>的返利， 分销商品即享下两级购物佣金：一层40%，二 层30%。</td>
 			</tr>
 			<tr>
-				<td><img src="/themes/mobiles/img/3.png"></td>
+				<td><img src="/themes/mobiles/img/agent_3.png"></td>
 				<td>发展金牌代理商，总佣金为<i class="agency_font">198元</i>。198元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
 			</tr>
 			<tr>
@@ -82,15 +82,15 @@ show_topnav($('#forTopnav').html());
 	<div class="gold_medal_agency">
 		<table cellspacing="0" cellpadding="0" class="agency_tab">	
 			<tr>
-				<td><img src="/themes/mobiles/img/1.png"></td>
+				<td><img src="/themes/mobiles/img/agent_1.png"></td>
 				<td>免费领取<i class="agency_font">398元</i>商品套餐</td>
 			</tr>
 			<tr>
-				<td><img src="/themes/mobiles/img/2.png"></td>
+				<td><img src="/themes/mobiles/img/agent_2.png"></td>
 				<td>本人购物享有锁所购买商品佣金<i class="agency_font">30%</i>的返利， 分销商品即享下两级购物佣金：一层40%，二 层30%。</td>
 			</tr>
 			<tr>
-				<td><img src="/themes/mobiles/img/3.png"></td>
+				<td><img src="/themes/mobiles/img/agent_3.png"></td>
 				<td>发展金牌代理商，总佣金为<i class="agency_font">98元</i>。98元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
 			</tr>
 			<tr>

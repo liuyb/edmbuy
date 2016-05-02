@@ -7,7 +7,15 @@
 <?php else:?>
 
 <?php if(!isset($merchant) || empty($merchant)):?>
-<input type='button' value='我要开店'/>
+<div class="no_store_c">
+	<img src="/themes/mobiles/img/wdp.png">
+	<p><button onclick="window.location.href='/user/merchant/openshop'">我要开店</button></p>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#Mbody").css("background", "#fff");
+});
+</script>
 <?php else:?>
 <div class="s_manage_top">
 	<div class="manage_top_r">
@@ -41,9 +49,30 @@
 	</ul>
 </div>
 
+<div class="code_t" id="showQrcode" style="display:none;">
+	<div class="close_top" onclick="$('#showQrcode').hide();">
+		<img src="/themes/mobiles/img/gbh.png">
+	</div>
+	<div class="z_code_s">
+		<?php if($merchant->wxqr):?>
+		<p style="margin:20px 0 10px;">关注公众号二维码</p>
+		<p><img src="<?=$merchant->wxqr ?>"></p>
+		<?php endif;?>
+		
+		<?php if($merchant->shop_qcode):?>
+		<p style="margin:20px 0 10px;">关注店铺二维码</p>
+		<p><img src="<?=$merchant->shop_qcode ?>"></p>
+		<?php endif;?>
+		
+		<?php if(!$merchant->wxqr && !$merchant->shop_qcode):?>
+		<p style="margin:20px 0 10px;">还没有二维码</p>
+		<?php endif;?>
+	</div>
+</div>
+
 <div class="manage_btn_list">
 	<button class="enter_store_btn" onclick="window.location.href='/shop/<?=$merchant->uid ?>'">进入店铺</button>
-	<button class="enter_store_btn">店铺二维码</button>
+	<button class="enter_store_btn" onclick="$('#showQrcode').show()">店铺二维码</button>
 </div>
 
 <div style="text-align:center;margin-bottom:59px;">

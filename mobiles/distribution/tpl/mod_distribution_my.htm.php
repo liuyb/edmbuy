@@ -50,7 +50,7 @@
 	<div class="teamword_use">合作应用</div>
 	<div class="mem_my_applylist">
 		<ul>
-			<li><img src="/themes/mobiles/img/yiduomi.png"></li>
+			<li><a href='/'><img src="/themes/mobiles/img/yiduomi.png"></a></li>
 			<li><img src="/themes/mobiles/img/yiqix.png"></li>
 			<li> </li>
 			<li style="border-right:0;"> </li>
