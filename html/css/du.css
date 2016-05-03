@@ -4003,4 +4003,105 @@ td.cash_td2 img {
 .collect_common{
 	background:#fff;
 }
+
+.wallet_type_list{
+  	background: #fff;
+  	position: relative;	
+}
+.wallet_type_list li {
+  	border-bottom: 1px solid #e6e6e6;
+  	width: 33.3%;
+  	float: left;
+  	text-align: center;
+  	padding: 20px 0;
+}
+.wallet_type_list p {
+  	font-size: 12px;
+  	color: #8d8d8d;
+}
+.wallet_li_font{
+  	color: #f65d00 !important;
+  	font-size: 16px !important;	
+}
+.wallet_top{
+	height:90px;
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#ff7420), to(#f65d00));
+}
+.wallet_infos{
+	padding:15px 10px 5px;
+}
+.ye_account{
+	font-size:12px;
+	color:#fff;
+}
+.ye_infos{
+	background:url(../img/jt1.png) no-repeat right;
+	background-size:8px;
+	padding-right:20px;
+	font-size:14px;
+	color:#fff;	
+	float:right;
+}
+.wallet_money{
+	padding:0 5px;
+	font-size:22px;
+	color:#fff;
+}
+.line5{
+  	position: absolute;
+  	height: 60px;
+  	border-right: 1px solid #e6e6e6;
+  	top: 95px;
+  	right: 66.3%;
+}	
+.line6{
+  	position: absolute;
+  	height: 60px;
+  	border-right: 1px solid #e6e6e6;
+  	top: 95px;
+  	right: 33.3%;
+}	
+.line9{
+  	position: absolute;
+  	height: 60px;
+  	border-right: 1px solid #e6e6e6;
+  	top: 12px;
+  	right: 66.3%;
+}	
+.line10{
+  	position: absolute;
+  	height: 60px;
+  	border-right: 1px solid #e6e6e6;
+  	top: 12px;
+  	right: 33.3%;
+}
+.income_money{
+	height:90px;
+	position:relative;
+}
+.income_money li{
+	float:left;
+	text-align:center;
+	width:50%;
+	margin-top:20px;
+}
+.income_money p{
+	color:#8d8d8d;
+	font-size:12px;	
+}
+.in_com_money{
+	font-size:22px !important;	
+	color:#f65d00 !important;	
+}
+.no_force_money{
+	font-size:22px !important;	
+	color:#1fa761 !important;	
+}
+.line7{
+  	position: absolute;
+  	height: 60px;
+  	border-right: 1px solid #e1e1e1;
+  	top: 15px;
+  	right: 50%;	
+}
 /*2016-5-2 3 */
