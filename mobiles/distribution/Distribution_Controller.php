@@ -31,7 +31,7 @@ class Distribution_Controller extends MobileController{
             'distribution/agent' => 'agent_center',
             'distribution/agent/paid/succ' => 'agent_pay_succ',
             'distribution/agent/package' => 'show_agent_package',
-            'distribution/agent/package/confirm' => 'confirm_agent_premium',
+            /* 'trade/order/package/confirm' => 'confirm_agent_premium', */
             'distribution/agent/premium/buy' => 'free_buy_agent_premium',
             'distribution/agent/premium/succ' => 'buy_premium_succ',
             'distribution/test/buy' => 'test_buy_agent',
@@ -281,7 +281,6 @@ class Distribution_Controller extends MobileController{
         $this->v->set_tplname('mod_distribution_agent');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'agency';
-        $this->topnav_no = 1;
         global $user;
         $u = Users::load($user->uid);
         $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
@@ -326,34 +325,9 @@ class Distribution_Controller extends MobileController{
         if(!Users::isAgent($u->level)){
             $response->redirect('/distribution/agent');
         }
-        $packages = Distribution_Model::getAgentPackage($u->level);
+        $packages = AgentPayment::getAgentPackage($u->level);
         $this->v->assign('user', $u);
         $this->v->assign('packages', $packages);
-        throw new ViewResponse($this->v);
-    }
-    
-    /**
-     * 确认领取的套餐
-     * @param Request $request
-     * @param Response $response
-     * @throws ViewResponse
-     */
-    public function confirm_agent_premium(Request $request, Response $response){
-        $this->setPageView($request, $response, '_page_mpa');
-        $this->v->set_tplname('mod_distribution_agent_premium');
-        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-        $this->nav_flag2 = 'agency';
-        $this->topnav_no = 1;
-        global $user;
-        $u = Users::load($user->uid);
-        $pid = $request->get('pid', 0);      
-        $packages = Distribution_Model::getAgentPackage($u->level, $pid);
-        $this->v->assign('user', $u);
-        $this->v->assign('packages', count($packages) > 0 ? $packages[0] : []);
-        //搜索地址
-        $user_addrs = Users::getAddress($u->uid);
-        $this->v->assign('user_addrs', $user_addrs);
-        $this->v->assign('user_addrs_num', count($user_addrs));
         throw new ViewResponse($this->v);
     }
     

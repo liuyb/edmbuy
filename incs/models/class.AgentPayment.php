@@ -42,6 +42,44 @@ class AgentPayment extends StorageNode {
 	}
 	
 	/**
+	 * 代理 赠品礼包
+	 * @param unknown $type
+	 */
+	static function getAgentPackage($type, $pid = 0){
+	    $where = '';
+	    if($pid){
+	        $where = ' and pid = '.$pid;
+	    }
+	    $sql = "select * from shp_premium_package where enabled = 1 and type = '%d' $where order by created desc ";
+	    $result = D()->query($sql, $type)->fetch_array_all();
+	    foreach ($result as &$rs){
+	        $goods_ids = $rs['goods_ids'];
+	        if(!$goods_ids){
+	            continue;
+	        }
+	        $rs['goodslist'] = self::getGoods(explode(',', $goods_ids));
+	    }
+	    return $result;
+	}
+	
+	static function getGoods($goods_ids, &$total_price = NULL) {
+	    if (!$goods_ids || count($goods_ids) == 0) {
+	        return [];
+	    }
+	    $ret = D()->query("select * from shp_goods where goods_id ".Fn::db_create_in($goods_ids)." and is_delete=0 ")->fetch_array_all();
+	    if (!empty($ret)) {
+	        $total_price = 0;
+	        foreach ($ret As &$g) {
+	            $g['goods_url']   = Items::itemurl($g['goods_id']);
+	            $g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
+	            $g['goods_img']   = Items::imgurl($g['goods_img']);
+	            $total_price     += $g['shop_price'];
+	        }
+	    }
+	    return empty($ret) ? [] : $ret;
+	}
+	
+	/**
 	 * 购买代理支付成功后的回调
 	 * @param unknown $order_id
 	 * @param unknown $cUser

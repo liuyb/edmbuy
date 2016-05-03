@@ -15,6 +15,12 @@ class UserCommision extends StorageNode {
 	const STATE_CASHED    = 2;  //已生效，且已提现
 	const STATE_LOCKED    = 3;  //操作锁定中
 	
+	//佣金类型
+	const COMMISSION_TYPE_FX = 0; //商品分销
+	const COMMISSION_TYPE_DL = 1; //代理
+	const COMMISSION_TYPE_RZ = 2; //入驻
+	const COMMISSION_TYPE_JY = 3; //交易
+	
 	//分成比例设定
 	static $share_ratio = [
 			'0' => PLATFORM_COMMISION,  //平台分成比例
@@ -135,7 +141,7 @@ class UserCommision extends StorageNode {
 	static function get_commision_income($uid, $state = NULL)
 	{
 		$table = self::table();
-		$sql  = "SELECT SUM(`commision`) AS commision,`state` FROM {$table} WHERE `user_id` = %d AND `state`>=0 GROUP BY `state`";
+		$sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision,`state` FROM {$table} WHERE `user_id` = %d AND `state`>=0 GROUP BY `state`";
 		$list = D()->query($sql, $uid)->fetch_array_all();
 		$ret  = [
 				self::STATE_INACTIVE => 0.00,
@@ -149,6 +155,52 @@ class UserCommision extends StorageNode {
 			}
 		}
 		return isset($state) ? (isset($ret[$state]) ? $ret[$state] : false) : $ret;
+	}
+	
+	/**
+	 * 获取用户的各种类型的佣金收入
+	 * @param integer $uid
+	 * @param integer $type
+	 * @return mixed(float|array|bool)
+	 */
+	static function get_commision_income_bytype($uid, $type = NULL)
+	{
+	    $table = self::table();
+	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision,`type` FROM {$table} WHERE `user_id` = %d AND `state`>=0 GROUP BY `type`";
+	    $list = D()->query($sql, $uid)->fetch_array_all();
+	    $ret  = [
+	        self::COMMISSION_TYPE_FX => 0.00,
+	        self::COMMISSION_TYPE_DL   => 0.00,
+	        self::COMMISSION_TYPE_RZ   => 0.00,
+	        self::COMMISSION_TYPE_JY   => 0.00
+	    ];
+	    if (!empty($list)) {
+	        foreach ($list AS $it) {
+	            $ret[$it['type']] = $it['commision'];
+	        }
+	    }
+	    return isset($type) ? (isset($ret[$type]) ? $ret[$type] : false) : $ret;
+	}
+	
+	/**
+	 * 查询佣金列表
+	 * @param PagerPull $pager
+	 * @param unknown $options
+	 */
+	static function get_commision_list(PagerPull $pager, $options){
+	    $where = '';
+        if(isset($options['state'])){
+            $where .= ' AND `state` =  '.intval($options['state']);
+        }else{
+            $where .= ' AND `state` >= 0 ';
+        }
+        if(isset($options['type'])){
+            $where .= ' AND `type` =  '.intval($options['type']);
+        }
+	    $table = self::table();
+	    $sql = "select * from {$table} where `user_id` = %d $where order by rid desc limit %d,%d";
+	    $result = D()->query($sql,$GLOBALS['user']->uid,$pager->start, $pager->realpagesize)->fetch_array_all();
+	    $pager->setResult($result);
 	}
 	
 	/**

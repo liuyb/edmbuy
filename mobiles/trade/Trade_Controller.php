@@ -45,7 +45,8 @@ class Trade_Controller extends MobileController {
       'trade/order/record'   => 'order_record',
       'trade/order/topay'    => 'order_topay',
       'trade/order/payok'    => 'order_payok',
-      'trade/order/refund'   => 'order_refund'
+      'trade/order/refund'   => 'order_refund',
+      'trade/order/package/confirm' => 'confirm_agent_premium'
     ];
   }
 
@@ -292,36 +293,7 @@ class Trade_Controller extends MobileController {
     $this->nav_no    = 0;
     $this->extra_css = 'greybg';
 
-    $code = $request->get('code', '');
-    if (''!=$code) { //微信base授权
-
-      $state = $request->get('state', '');
-
-      //授权出错
-      if (!in_array($state, Weixin::$allowOAuthScopes)) {
-        Fn::show_error_message('授权出错，提交订单失败！', true);
-      }
-
-      $wx = new Weixin([Weixin::PLUGIN_JSADDR]);
-
-      //用code换取access token
-      $code_ret = $wx->request_access_token($code);
-      if (!empty($code_ret['errcode'])) {
-        Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>', true);
-      }
-
-      $accessToken = $code_ret['access_token'];
-      $wxAddrJs = $wx->jsaddr->js($accessToken);
-      $this->v->add_append_filter(function(PageView $v) use($wxAddrJs) {
-        $v->append_to_foot_js .= $wxAddrJs;
-      },'foot');
-
-    }
-    else { //正常访问
-      if (Weixin::isWeixinBrowser()) {
-        (new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
-      }
-    }
+    $this->weixin_jsaddr_set($request);
 
     if (1||$request->is_hashreq()) {
       $cart_rids = $request->get('cart_rids','');
@@ -1203,6 +1175,71 @@ class Trade_Controller extends MobileController {
               $ret = ['flag'=>'SUC'];
           }
           $response->sendJSON($ret);
+      }
+  }
+  
+  /**
+   * 确认领取的套餐
+   * @param Request $request
+   * @param Response $response
+   * @throws ViewResponse
+   */
+  public function confirm_agent_premium(Request $request, Response $response){
+      $this->setPageView($request, $response, '_page_mpa');
+      $this->v->set_tplname('mod_distribution_agent_premium');
+      $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+      $this->nav_flag2 = 'agency';
+      $this->topnav_no = 1;
+  
+      $this->weixin_jsaddr_set($request);
+  
+      global $user;
+      $u = Users::load($user->uid);
+      $pid = $request->get('pid', 0);
+      $packages = AgentPayment::getAgentPackage($u->level, $pid);
+      $this->v->assign('user', $u);
+      $this->v->assign('packages', count($packages) > 0 ? $packages[0] : []);
+      //搜索地址
+      $user_addrs = Users::getAddress($u->uid);
+      $this->v->assign('user_addrs', $user_addrs);
+      $this->v->assign('user_addrs_num', count($user_addrs));
+      throw new ViewResponse($this->v);
+  }
+  
+  /**
+   * 微信地址API设置
+   * @param Request $request
+   */
+  private function weixin_jsaddr_set(Request $request){
+      $code = $request->get('code', '');
+      if (''!=$code) { //微信base授权
+      
+          $state = $request->get('state', '');
+      
+          //授权出错
+          if (!in_array($state, Weixin::$allowOAuthScopes)) {
+              Fn::show_error_message('授权出错，提交订单失败！', true);
+          }
+      
+          $wx = new Weixin([Weixin::PLUGIN_JSADDR]);
+      
+          //用code换取access token
+          $code_ret = $wx->request_access_token($code);
+          if (!empty($code_ret['errcode'])) {
+              Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">'.$code_ret['errcode'].'('.$code_ret['errmsg'].')</span>', true);
+          }
+      
+          $accessToken = $code_ret['access_token'];
+          $wxAddrJs = $wx->jsaddr->js($accessToken);
+          $this->v->add_append_filter(function(PageView $v) use($wxAddrJs) {
+              $v->append_to_foot_js .= $wxAddrJs;
+          },'foot');
+      
+      }
+      else { //正常访问
+          if (Weixin::isWeixinBrowser()) {
+              (new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
+          }
       }
   }
 }

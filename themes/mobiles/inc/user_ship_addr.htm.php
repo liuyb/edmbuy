@@ -36,6 +36,12 @@
 </div>
 
 <script>
+$(function(){
+	$('#express-it').click(function(){
+		if(typeof(wxEditAddress)=='function') wxEditAddress(wxEditAddressCallback);
+		return false;
+	});
+});
 //微信地址回调
 function wxEditAddressCallback(res) {
   if (res) { //有返回

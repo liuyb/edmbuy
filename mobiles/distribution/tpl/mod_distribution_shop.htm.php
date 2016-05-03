@@ -23,10 +23,10 @@ $(function(){
 		<p class="top_r_title"><span class="r_span"><?=$merchant->facename ?></span></p>
 		<div class="top_r_type">	
 			<ul>
-				<li><img src="/themes/mobiles/img/qijian.png">旗舰店</li>
-				<li><img src="/themes/mobiles/img/danbao.png">益多米担保</li>
+				<li><img src="/themes/mobiles/img/yiduomi-inc.png" style="width:79px;margin-left:166%;"></li>
+				<!-- <li><img src="/themes/mobiles/img/danbao.png">益多米担保</li>
 				<li><img src="/themes/mobiles/img/shiming.png">实名认证</li>
-				<li><img src="/themes/mobiles/img/changjia.png">厂家直销</li>
+				<li><img src="/themes/mobiles/img/changjia.png">厂家直销</li> -->
 				<div class="clear"></div>
 			</ul>
 		</div>

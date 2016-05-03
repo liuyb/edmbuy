@@ -1,0 +1,136 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="../css/c.css" />
+<link rel="stylesheet" href="../css/animate.min.css" />
+<link rel="stylesheet" href="../css/wu.css" />
+<link rel="stylesheet" href="../css/du.css" />
+<script src="../js/jquery-1.8.3.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/j.js"></script>
+<!-- head end -->
+</head>
+
+<body style="background:#eee;">
+<div class="header">
+	我收藏的店铺
+	<a href="javascript:history.back();" class="back"></a>
+</div>
+
+<div class="collect_dp">
+	<div class="collect_dp_list">
+		<ul>
+			<li id="li1" onclick="f(1)" class="coll_on">最近</li>
+			<li id="li2" onclick="f(2)" >销量</li>
+			<li id="li3" onclick="f(3)" >粉丝</li>
+		</ul>
+	</div>
+</div>
+
+<div class="collect_common" id="list1">
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+</div>
+
+<div class="collect_common" id="list2" style="display:none;">
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+</div>
+
+<div class="collect_common" id="list3" style="display:none;">
+	<div class="iance_list_infos">
+		<div class="iance_list_top">
+			<img src="../img/369.jpg" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">初一茶社</p>
+				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+			</div>
+			<button class="l_top_btn">进店</button>
+		</div>
+	</div>
+</div>
+
+<script>
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".collect_common").hide();
+	$(".collect_dp_list li").removeClass("coll_on");
+	
+	$(_li).addClass("coll_on");
+	$(_list).show();
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

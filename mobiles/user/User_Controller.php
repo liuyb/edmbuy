@@ -36,6 +36,13 @@ class User_Controller extends MobileController
             'user/merchant/dotwostep' => 'merchant_shop_dotwostep',
             'user/merchant/dosuccess' => 'merchant_reg_succ',
             'user/merchant/paysuc' => 'merchant_pay_success',
+            'user/favorite/shop' => 'show_collect_shop',
+            'user/favorite/shop/list' => 'show_collect_shoplist',
+            'user/favorite/goods' => 'show_collect_goods',
+            'user/favorite/goods/list' => 'show_collect_goodslist',
+            'user/my/wallet' => 'my_wallet',
+            'user/income/detail' => 'my_income_detail',
+            'user/income/detail/list' => 'my_income_detaillist',
         ];
     }
 
@@ -61,14 +68,15 @@ class User_Controller extends MobileController
     public function index(Request $request, Response $response)
     {
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_index');
-        if ($request->is_hashreq()) {
-            //$this->showUserBaseInfo();
-        } else {
-            //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
-            Users::check_detail_info();
-            $this->showUserBaseInfo();
-        }
+        //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
+        Users::check_detail_info();
+        $this->showUserBaseInfo();
+        $collect_shop_count = User_Model::getCollectShopCount();
+        $collect_goods_count = User_Model::getCollectGoodsCount();
+        $this->v->assign('shop_count', $collect_shop_count);
+        $this->v->assign('goods_count', $collect_goods_count);
         throw new ViewResponse($this->v);
     }
 
@@ -671,6 +679,7 @@ class User_Controller extends MobileController
         $this->nav_flag1=0;
         $this->nav_no = 0;
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname("mod_user_checkin");
         $result = User_Model::checkIsPaySuc();
         if (!empty($result)) {
@@ -690,6 +699,7 @@ class User_Controller extends MobileController
         $this->nav_flag1=0;
         $this->nav_no = 0;
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname("mod_user_merpayment");
         $response->send($this->v);
     }
@@ -704,6 +714,7 @@ class User_Controller extends MobileController
         $this->nav_flag1=0;
         $this->nav_no = 0;
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_onestep');
         $_SESSION['step'] = 1;
         $result = User_Model::checkIsPaySuc();
@@ -822,6 +833,7 @@ class User_Controller extends MobileController
         $this->nav_flag1=0;
         $this->nav_no = 0;
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_twostep');
 
         if (!isset($_SESSION['step'])) {
@@ -902,7 +914,6 @@ class User_Controller extends MobileController
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $order_id = $request->post("order_id");
         $order_sn = $request->post("order_sn");
-        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $password = rand_code();
         $_SESSION['password'] = $password;
         $mobile = $_SESSION['mobile'];
@@ -935,6 +946,7 @@ class User_Controller extends MobileController
         $this->nav_flag1=0;
         $this->nav_no = 0;
         $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_regsuc');
 
         if (!isset($_SESSION['password'])) {
@@ -954,6 +966,91 @@ class User_Controller extends MobileController
         $this->v->assign("url", $url);
         $response->send($this->v);
     }
+    
+    /**
+     * 我收藏的店铺
+     * @param Request $request
+     * @param Response $response
+     * @throws ViewResponse
+     */
+    public function show_collect_shop(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_tplname('mod_user_collect_shop');
+        throw new ViewResponse($this->v);
+    }
+    
+    /**
+     * 我收藏的宝贝
+     * @param Request $request
+     * @param Response $response
+     * @throws ViewResponse
+     */
+    public function show_collect_goods(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_tplname('mod_user_collect_goods');
+        throw new ViewResponse($this->v);
+    }
+    
+    public function show_collect_shoplist(Request $request, Response $response){
+        $curpage = $request->get('curpage', 1);
+        $orderby = $request->get('orderby', '');
+        $pager = new PagerPull($curpage, null);
+        User_Model::getCollectShopList($pager, array('orderby' => $orderby));
+        $ret = $pager->outputPageJson();
+        $response->sendJSON($ret);
+    }
+    
+    public function show_collect_goodslist(Request $request, Response $response){
+        $curpage = $request->get('curpage', 1);
+        $orderby = $request->get('orderby', '');
+        $pager = new PagerPull($curpage, null);
+        User_Model::getCollectGoodsList($pager, array('orderby' => $orderby));
+        $ret = $pager->outputPageJson();
+        $response->sendJSON($ret);
+    }
+    
+    /**
+     * 我的钱包
+     * @param Request $request
+     * @param Response $response
+     * @throws ViewResponse
+     */
+    public function my_wallet(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_tplname('mod_user_wallet');
+        $uid = $GLOBALS['user']->uid;
+        $commision = UserCommision::get_commision_income($uid);
+        $type_commision = UserCommision::get_commision_income_bytype($uid);
+        $this->v->assign('commision', $commision);
+        $this->v->assign('type_commision', $type_commision);
+        throw new ViewResponse($this->v);
+    }
+    
+    /**
+     * 我的收入明细
+     * @param Request $request
+     * @param Response $response
+     * @throws ViewResponse
+     */
+    public function my_income_detail(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_tplname('mod_user_income_detail');
+        throw new ViewResponse($this->v);
+    }
+    
+    public function my_income_detaillist(Request $request, Response $response){
+        $curpage = $request->get('curpage', 1);
+        $type = $_GET['type'];
+        $state = $_GET['state'];
+        $pager = new PagerPull($curpage, null);
+        UserCommision::get_commision_list($pager, array('type' => $type, 'state' => $state));
+        $ret = $pager->outputPageJson();
+        $response->sendJSON($ret);
+    } 
 
 }
 /*----- END FILE: User_Controller.php -----*/

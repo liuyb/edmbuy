@@ -403,4 +403,54 @@ class User_Model extends Model
         $sql = "select parent_id from shp_users where user_id = {$GLOBALS['user']->uid}";
         return D()->query($sql)->result();
     }
+    
+    /**
+     * 我收藏的商家总数
+     */
+    static function getCollectShopCount(){
+        $sql = "select count(m.merchant_id) from shp_merchant m join shp_collect_shop ss on m.merchant_id = ss.merchant_id where ss.user_id = '%d' ";
+        $result = D()->query($sql, $GLOBALS['user']->uid)->result();
+        return $result;
+    }
+    
+    /**
+     * 我收藏的商家列表
+     * @param PagerPull $pager
+     * @param array $options orderby(oc销量|cc收藏量) 
+     */
+    static function getCollectShopList(PagerPull $pager, array $options){
+        $orderby = $options['orderby'] ? $options['orderby'] : 'ss.rec_id';
+        $sql = "select m.merchant_id as merchant_id, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc 
+                from shp_merchant m join shp_collect_shop ss on m.merchant_id = ss.merchant_id 
+                left join
+                (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and pay_status = ".PS_PAYED." and merchant_ids <> ''
+                group by merchant_ids) mo
+                on m.merchant_id = mo.merchant_ids
+                left join
+                (select count(1) as cc, merchant_id from shp_collect_shop group by merchant_id) cs
+                on m.merchant_id = cs.merchant_id where ss.user_id = '%d' order by $orderby desc limit %d,%d";
+        $result = D()->query($sql, $GLOBALS['user']->uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $pager->setResult($result);
+    }
+    
+    /**
+     * 我收藏的商品总数
+     * @return mixed
+     */
+    static function getCollectGoodsCount(){
+        $sql = "select count(g.goods_id) from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id and c.user_id = '%d' order by c.rec_id desc ";
+        $result = D()->query($sql, $GLOBALS['user']->uid)->result();
+        return $result;
+    }
+    
+    /**
+     * 获取我收藏的商品列表
+     * @param PagerPull $pager
+     */
+    static function getCollectGoodsList(PagerPull $pager){
+        $sql = "select g.* from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id and c.user_id = '%d' order by c.rec_id desc ";
+        $goods = D()->query($sql, $GLOBALS['user']->uid, $pager->start, $pager->realpagesize)->fetch_array_all();
+        $goods = Items::buildGoodsImg($goods);
+        $pager->setResult($goods);
+    }
 }

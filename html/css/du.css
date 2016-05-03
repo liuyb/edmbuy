@@ -3876,20 +3876,131 @@ td.cash_td2 img {
 /*2016-5-2 e */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*2016-5-3 s */
+.login_index{
+	border-top:1px solid #e6e6e6;
+	border-bottom:1px solid #e6e6e6;
+	margin-top:10px;
+}
+.login_name,.login_password,.login_wirte_phone,.login_not_code{
+	background:#fff ;
+	padding-left:10px;
+	padding:0 10px;
+	border-bottom:1px solid #e6e6e6;
+}
+.login_name input{
+	background:url(../img/yhm.png) no-repeat left;
+	background-size:18px;
+	padding-left:30px;
+	height:44px;
+	line-height:43px;	
+	width:90%;
+}
+.login_password input{
+	background:url(../img/mm.png) no-repeat left;
+	background-size:18px;
+	padding-left:30px;
+	height:44px;
+	line-height:43px;	
+	width:90%;	
+}
+.bottom_common{
+	padding:0 10px;
+	margin-top:30px;
+}
+.btn_common_bg{
+	height:40px;
+	line-height:40px;
+	background:#f65d00;
+	border-radius:4px;
+	font-size:16px;
+	color:#fff;
+	text-align:center;
+	margin-bottom:10px;
+}
+.btn_common_nbg{
+	height:38px;
+	line-height:40px;
+	background:#fff;
+	border:1px solid #f65d00;
+	border-radius:4px;
+	font-size:16px;
+	color:#f65d00;
+	text-align:center;
+}
+.login_wirte_phone input{
+	background:url(../img/sj.png) no-repeat left;
+	background-size:18px;
+	padding-left:30px;
+	height:44px;
+	line-height:43px;	
+	width:90%;	
+}
+.login_not_code input{
+	background:url(../img/yx.png) no-repeat left;
+	background-size:18px;
+	padding-left:30px;
+	height:44px;
+	line-height:43px;	
+	width:50%;	
+}
+.get_note_code{
+	float:right;
+	height:30px;
+	line-height:30px;
+	font-size:13px;
+	color:#fff;
+	background:#f26427;
+	border-radius:4px;
+	padding:0 15px;
+	margin-top:7px;
+}
+.prompt_code{
+	margin:0 10px;
+	height:40px;
+}
+.prompt_code p{
+	height:40px;
+	line-height:40px;
+	color:#f26427;	
+	font-size:12px;
+	display:none;
+}
+.use_protocol{
+	font-size:12px;
+	color:#666;
+	margin:0 10px;
+}
+.prot_on_ok{
+	background:url(../img/xz.png) no-repeat left;
+	padding-left:22px;	
+}
+.prot_on_no{
+	background:url(../img/xk1.png) no-repeat left;
+	padding-left:22px;	
+}
+.collect_dp{
+	height:43px;
+	background:#fff;
+	border-bottom:1px solid #e6e6e6;
+}
+.collect_dp_list{
+	padding:0 10px;
+}
+.collect_dp_list li{
+	float:left;
+	height:43px;
+	line-height:43px;
+	width:33.33%;
+	text-align:center;
+	font-size:15px;
+	color:#232323;
+}
+.coll_on{
+	color:#f26427 !important; 
+	border-bottom:1px solid #f26427;
+}
+.collect_common{
+	background:#fff;
+}
+/*2016-5-2 3 */
