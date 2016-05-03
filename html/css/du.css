@@ -3979,6 +3979,30 @@ td.cash_td2 img {
 	background:url(../img/xk1.png) no-repeat left;
 	padding-left:22px;	
 }
+.collect_dp{
+	height:43px;
+	background:#fff;
+	border-bottom:1px solid #e6e6e6;
+}
+.collect_dp_list{
+	padding:0 10px;
+}
+.collect_dp_list li{
+	float:left;
+	height:43px;
+	line-height:43px;
+	width:33.33%;
+	text-align:center;
+	font-size:15px;
+	color:#232323;
+}
+.coll_on{
+	color:#f26427 !important; 
+	border-bottom:1px solid #f26427;
+}
+.collect_common{
+	background:#fff;
+}
 /*2016-5-2 3 */
 
 
