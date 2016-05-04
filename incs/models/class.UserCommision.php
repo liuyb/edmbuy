@@ -183,23 +183,42 @@ class UserCommision extends StorageNode {
 	}
 	
 	/**
+	 * 获取返利收入
+	 * @param unknown $uid
+	 */
+	static function get_rebate_commision($uid)
+	{
+	    $table = self::table();
+	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision FROM {$table} WHERE `user_id` = `order_uid` and `user_id` = %d AND `state`>=0 ";
+	    return D()->query($sql, $uid)->result();
+	}
+	
+	/**
 	 * 查询佣金列表
 	 * @param PagerPull $pager
 	 * @param unknown $options
 	 */
 	static function get_commision_list(PagerPull $pager, $options){
 	    $where = '';
-        if(isset($options['state'])){
+        if(isset($options['state']) && $options['state'] >= 0){
             $where .= ' AND `state` =  '.intval($options['state']);
         }else{
-            $where .= ' AND `state` >= 0 ';
+            $where .= ' AND `state` in ('.UserCommision::STATE_ACTIVE.', '.UserCommision::STATE_CASHED.') ';
         }
-        if(isset($options['type'])){
+        if(isset($options['type']) && $options['type'] >= 0){
             $where .= ' AND `type` =  '.intval($options['type']);
+        }
+        //是否是自己返利
+        if(isset($options['rebate']) && $options['rebate'] == 1){
+            $where .= ' AND user_id = order_uid ';
         }
 	    $table = self::table();
 	    $sql = "select * from {$table} where `user_id` = %d $where order by rid desc limit %d,%d";
 	    $result = D()->query($sql,$GLOBALS['user']->uid,$pager->start, $pager->realpagesize)->fetch_array_all();
+	    foreach ($result AS &$r) {
+	        $r['paid_time'] = date("Y-m-d | H:i:s",simphp_gmtime2std($r['paid_time']));
+	        $r['paid_time'] = str_replace('|', '<br>', $r['paid_time']);
+	    }
 	    $pager->setResult($result);
 	}
 	

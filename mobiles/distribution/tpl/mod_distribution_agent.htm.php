@@ -10,14 +10,6 @@
     	opacity : 0.2;
     }
 </style>
-<script id="forTopnav" type="text/html">
-<div class="header">
-	米商代理
-</div>
-</script>
-<script>
-show_topnav($('#forTopnav').html());
-</script>
 <?php if($isAgent):?>
 <div class="agency_become">
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	

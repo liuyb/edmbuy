@@ -616,12 +616,13 @@ class User_Controller extends MobileController
     public function commission(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_user_commission');
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_no = 0;
         $user_id = $request->get("user_id", 0);
         $order_id = $request->get("order_id", 0);
         $level = $request->get('level', "1");
         $uid = $GLOBALS['user']->uid;
-        if ($request->is_hashreq()) {
+        //if ($request->is_hashreq()) {
             $flat = true;
             //是否为其他人浏览
             if ($user_id != $uid) {
@@ -637,7 +638,7 @@ class User_Controller extends MobileController
             $this->v->assign("cUser", $cUser);
             $this->v->assign('ismBusiness', $data['ismBusiness']);
             $this->v->assign('commision', $data['commision']);
-        } else {
+        //} else {
             //分享信息
             $share_info = [
                 'title' => '收藏了很久的特价商城，超划算！',
@@ -646,7 +647,7 @@ class User_Controller extends MobileController
                 'pic' => U('misc/images/napp/touch-icon-144.png', '', true),
             ];
             $this->v->assign('share_info', $share_info);
-        }
+        //}
         throw new ViewResponse($this->v);
     }
 
@@ -977,6 +978,8 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_collect_shop');
+        $this->topnav_no = 1;
+        $this->nav_no = 0;
         throw new ViewResponse($this->v);
     }
     
@@ -990,6 +993,8 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_collect_goods');
+        $this->topnav_no = 1;
+        $this->nav_no = 0;
         throw new ViewResponse($this->v);
     }
     
@@ -1004,9 +1009,8 @@ class User_Controller extends MobileController
     
     public function show_collect_goodslist(Request $request, Response $response){
         $curpage = $request->get('curpage', 1);
-        $orderby = $request->get('orderby', '');
         $pager = new PagerPull($curpage, null);
-        User_Model::getCollectGoodsList($pager, array('orderby' => $orderby));
+        User_Model::getCollectGoodsList($pager);
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
     }
@@ -1021,11 +1025,22 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_wallet');
+        $this->topnav_no = 1;
+        $this->nav_no = 0;
         $uid = $GLOBALS['user']->uid;
         $commision = UserCommision::get_commision_income($uid);
+        $totalIncome    = 0.00;
+        foreach ($commision as $item => $val){
+            if(in_array($item, [UserCommision::STATE_ACTIVE,UserCommision::STATE_CASHED])){ //总收入
+                $totalIncome += $val;
+            }
+        }
         $type_commision = UserCommision::get_commision_income_bytype($uid);
+        $rebate_commision = UserCommision::get_rebate_commision($uid);
         $this->v->assign('commision', $commision);
+        $this->v->assign('totalIncome', $totalIncome);
         $this->v->assign('type_commision', $type_commision);
+        $this->v->assign('rebate_commision', $rebate_commision);
         throw new ViewResponse($this->v);
     }
     
@@ -1039,15 +1054,24 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_income_detail');
+        $this->topnav_no = 1;
+        $this->nav_no = 0;
+        $type = $request->get('type');
+        $state = $request->get('state');
+        $rebate = $request->get('rebate', 0);
+        $this->v->assign('type', $type);
+        $this->v->assign('state', $state);
+        $this->v->assign('rebate', $rebate);
         throw new ViewResponse($this->v);
     }
     
     public function my_income_detaillist(Request $request, Response $response){
         $curpage = $request->get('curpage', 1);
-        $type = $_GET['type'];
-        $state = $_GET['state'];
+        $type = $request->get('type', -1);
+        $state = $request->get('state', -1);
+        $rebate = $request->get('rebate', 0);
         $pager = new PagerPull($curpage, null);
-        UserCommision::get_commision_list($pager, array('type' => $type, 'state' => $state));
+        UserCommision::get_commision_list($pager, array('type' => $type, 'state' => $state, 'rebate' => $rebate));
         $ret = $pager->outputPageJson();
         $response->sendJSON($ret);
     } 

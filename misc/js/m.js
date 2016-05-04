@@ -406,27 +406,17 @@
 				}
 				//增加setTimeout延时是因为下拉太快时获取到的滚动条位置不准确。
 				setTimeout(function(){
-					/*var sh = _this.scrollTop();//数据少的时候scrollTop太小，没法匹配
-					var windowH = _this.height();
+					var scrollTop = _this.scrollTop();
+					var thisHeight = _this.height();
+					var scrollHeight = _this[0].scrollHeight;
 					//提前20px开始加载
 					var bufferH = 20; 
-					if((sh + bufferH) > windowH){
-						//触发加载事件
-						showMore.find("span").text("玩命加载中...");
-						_this.trigger('pullMore');
-					}*/
-					var showMoreTop = showMore.offset().top;//距离顶部间距
-					var thisHeight = showMore.height();//下拉加载DIV高度
-					var headHeight = $("#Mhead").height();//头部Mhead高度
-					//从顶部到加载更多的固定高度   拉到底部时 showMoreTop = windowH
-					var windowH = _this.height() + headHeight - thisHeight;
-					//提前20px开始加载
-					var bufferH = 20; 
-					if((windowH + bufferH) >= showMoreTop){
+					if((scrollTop + thisHeight +  bufferH) >= scrollHeight){
 						//触发加载事件
 						showMore.find("span").text("玩命加载中...");
 						_this.trigger('pullMore');
 					}
+					console.log(scrollTop+"///"+thisHeight+"///"+scrollHeight);
 				},250);
 			}
 		});

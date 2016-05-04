@@ -37,23 +37,26 @@ function displayNickImg($level){
 </a>
 
 <?php if(isset($parentUid)):?>
-<div class="mem_refer">
-	<div class="refer_tit order_bg1">我的推荐人</div>
-	<div class="refer_info">
-		<span class="refer_name"><?=$parentNickName ?></span>
-		<img class="refer_img_ad1" style="margin-bottom: 4px;" src=" <?=displayNickImg($parentLevel)?>"/>
-		<button class="refer_but">加好友</button>
+<div class="member_cen_common">
+	<div class="in_common_agency del_bottom">
+		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUid ?></span><i><?=$parentNickName ?></i>
 	</div>
 </div>
 <?php endif;?>
 
-<div style="height:10px;background:#eee"></div>
-
-<div class="mem_my_order">
-	<div class="my_order_l  order_bg2">我的订单</div>
-	<a href="/trade/order/record"><div class="my_order_r">全部订单</div></a>
-</div>
-<div class="my_order_state">
+<div class="member_cen_common">
+	<div class="in_common_agency">
+		<span style="margin-left:0;">我的订单</span><a href="/trade/order/record?status=all"><i class="all_order_c">全部订单</i></a>
+	</div>
+	<!-- <div class="my_order_c">
+		<ul>	
+			<li><img src="/themes/mobiles/img/dfk.png"></li>
+			<li><img src="/themes/mobiles/img/dfh.png"></li>
+			<li><img src="/themes/mobiles/img/dsh.png"></li>
+			<li><img src="/themes/mobiles/img/tksh.png"></li>
+		</ul>
+	</div> -->
+	<div class="my_order_state">
 	<ul>
 		<a href="/trade/order/record?status=wait_pay">
     		<li>
@@ -75,23 +78,39 @@ function displayNickImg($level){
 		</a>
 		<a href="/trade/order/record?status=finished"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
 	</ul>
+	</div>
 </div>
 
-<div style="height:10px;background:#eee"></div>
-
-<div style="display: none;">
-	<div class="mem_my_apply order_bg3">
-		我的应用
+<div class="member_cen_common">
+	<div class="in_common_agency" onclick="window.location.href='/user/favorite/shop'">
+		<img src="/themes/mobiles/img/scddp.png"><span>我收藏的店铺</span><i><?=$shop_count ?>家</i>
 	</div>
+	<div class="in_common_agency del_bottom" onclick="window.location.href='/user/favorite/goods'">
+		<img src="/themes/mobiles/img/scdbb.png"><span>我收藏的宝贝</span><i><?=$goods_count ?>件</i>
+	</div>
+</div>
+
+<div class="member_cen_common">
+	<div class="in_common_agency" onclick="window.location.href='/user/my/wallet'">
+		<img src="/themes/mobiles/img/wdqb.png"><span>我的钱包</span><i class="my_price_c"></i>
+	</div>
+	<!-- <div class="in_common_agency del_bottom">
+		<img src="/themes/mobiles/img/yhk.png">
+	</div> -->
+</div>
+
+<div class="agency_index_infos" style="margin-bottom:60px;">
+	<div class="teamword_use">合作应用</div>
 	<div class="mem_my_applylist">
 		<ul>
-			<li><img src="/themes/mobiles/img/tym.png"></li>
-			<li><img src="/themes/mobiles/img/sxy.png"></li>
+			<li onclick="window.location.href='/distribution/merchants'"><img src="/themes/mobiles/img/dmfx.png"></li>
+			<li><img src="/themes/mobiles/img/yiqix.png"></li>
 			<li> </li>
 			<li style="border-right:0;"> </li>
 		</ul>
 	</div>
 </div>
+
 <?php include T('inc/add_as_friend');?>
 
 <script>

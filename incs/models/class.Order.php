@@ -536,23 +536,25 @@ class Order extends StorageNode{
     	if (!in_array($order['order_status'], [OS_CANCELED,OS_INVALID,OS_RETURNED])) { //订单“活动中”
     		$order['active_order'] = 1;
     		if (in_array($order['pay_status'], [PS_UNPAYED, PS_PAYING, PS_CANCEL, PS_FAIL])) { //未支付和支付中
-    		    $html .= '<button class="order_but_l btn-order-cancel" data-order_id="'.$order['order_id'].'">取消订单</button>';
-    		    $html .= '<button class="order_but_r btn-order-topay" data-order_id="'.$order['order_id'].'">立即付款</button>';
+    		    $html .= '<button class="order_but_l btn-order-cancel">取消订单</button>';
+    		    $html .= '<button class="order_but_r btn-order-topay">立即付款</button>';
     		}
     		elseif ($order['pay_status']==PS_PAYED) { //已支付
     			if ($order['shipping_status']==SS_RECEIVED) {
-    			    $html .= '<button class="order_but_l btn-order-delete" data-order_id="'.$order['order_id'].'">删除订单</button>';
-    			    //$html .= '<button class="order_but_r btn-order-comment" data-order_id="'.$order['order_id'].'">评价</button>';
+    			    $html .= '<button class="order_but_l btn-order-delete">删除订单</button>';
     			}
-    			elseif ($order['shipping_status']==SS_SHIPPED) {
-    			    $html .= '<button class="order_but_r btn-ship-confirm" data-order_id="'.$order['order_id'].'">确认收货</button>';
+    			else {
+    			    $html .= '<button class="order_but_l btn-ship-view">查看物流</button>';
+    			    if ($order['shipping_status']==SS_SHIPPED){
+        			    $html .= '<button class="order_but_r btn-ship-confirm">确认收货</button>';
+    			    }
     			}
     		}
     		else { //支付中
     		}
     	}
     	else {
-    	    $html .= '<button class="order_but_l btn-order-delete" data-order_id="'.$order['order_id'].'">删除订单</button>';
+    	    $html .= '<button class="order_but_l btn-order-delete">删除订单</button>';
     	}
     
     	return $html;

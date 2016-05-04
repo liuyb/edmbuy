@@ -1190,6 +1190,7 @@ class Trade_Controller extends MobileController {
       $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
       $this->nav_flag2 = 'agency';
       $this->topnav_no = 1;
+      $this->nav_no = 0;
   
       $this->weixin_jsaddr_set($request);
   
