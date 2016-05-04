@@ -12,7 +12,7 @@ return [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
       'user'		=> 'root',
-      'pass'		=> '123',
+      'pass'		=> 'root',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -23,7 +23,7 @@ return [
       'host'	  => '127.0.0.1',
       'port'		=> '3306',
       'user'		=> 'root',
-      'pass'		=> '123',
+      'pass'		=> 'root',
       'name'		=> 'edmbuy',
       'charset' => 'utf8',
       'pconnect'=> 0,
@@ -65,7 +65,7 @@ return [
   ],
   'cookie' => [
     'default' => [
-      'domain'	  => 'm.ydmbuy.com',
+      'domain'	  => 'm.fxmapp.com',
       'path'		  => '/',
       'lifetime'  => 0,
       'secure'    => 0,
