@@ -158,7 +158,8 @@ class Partner extends StorageNode {
         $sql = self::constructCommissionSql($column, TRUE);
         $rows = D()->query($sql, $uid, $level, (1==$status ? '1,2' : $status), $pager->start, $pager->realpagesize)->fetch_array_all();
         foreach ($rows AS &$r) {
-        	$r['paytime'] = date("Y-m-d\n H:i:s",simphp_gmtime2std($r['paytime']));
+        	$r['paytime'] = date("Y-m-d | H:i:s",simphp_gmtime2std($r['paytime']));
+        	$r['paytime'] = str_replace('|', '<br>', $r['paytime']);
         }
         return $rows;
     }

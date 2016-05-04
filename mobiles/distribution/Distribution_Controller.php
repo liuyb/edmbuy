@@ -172,6 +172,7 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_myparent');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->nav_no = 0;
         $this->nav_flag2 = 'my';
         global $user;
         $parent = Users::load($user->parentid);
@@ -189,6 +190,7 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_myagency');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->nav_no = 0;
         $uid = $GLOBALS['user']->uid;
         $level1 = Partner::findFirstLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
         $level2 = Partner::findSecondLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
@@ -227,6 +229,7 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_childshop');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->nav_no = 0;
         $uid = $GLOBALS['user']->uid;
         $level1 = Distribution_Model::findFirstLevelShopCount($uid);
         $level2 = Distribution_Model::findSecondLevelShopCount($uid);
@@ -265,6 +268,7 @@ class Distribution_Controller extends MobileController{
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_spread');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->nav_no = 0;
         $this->nav_flag2 = 'my';
         $this->topnav_no = 1;
         throw new ViewResponse($this->v);
@@ -320,6 +324,7 @@ class Distribution_Controller extends MobileController{
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'agency';
         $this->topnav_no = 1;
+        $this->nav_no = 0;
         global $user;
         $u = Users::load($user->uid);
         if(!Users::isAgent($u->level)){

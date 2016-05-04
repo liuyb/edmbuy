@@ -117,11 +117,14 @@ class User_Model extends Model
         $userInfo = $dbDrver->get_one($sql);
         $result['userInfo'] = $userInfo;
         if (empty($userInfo)) {
-            return ['userInfo' => null, 'goodsInfo' => null, 'ismBusiness' => null];
+            return ['userInfo' => null, 'goodsInfo' => [], 'ismBusiness' => '', 'commision' => 0];
         }
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
-        $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
+        $ismBusiness = null;
+        if($userInfo['user_id']){
+            $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
+        }
         /**
          * 获取用户的佣金
          */
@@ -420,6 +423,9 @@ class User_Model extends Model
      */
     static function getCollectShopList(PagerPull $pager, array $options){
         $orderby = $options['orderby'] ? $options['orderby'] : 'ss.rec_id';
+        if($orderby == 'latest'){
+            $orderby = 'ss.rec_id';
+        }
         $sql = "select m.merchant_id as merchant_id, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc 
                 from shp_merchant m join shp_collect_shop ss on m.merchant_id = ss.merchant_id 
                 left join
@@ -438,7 +444,7 @@ class User_Model extends Model
      * @return mixed
      */
     static function getCollectGoodsCount(){
-        $sql = "select count(g.goods_id) from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id and c.user_id = '%d' order by c.rec_id desc ";
+        $sql = "select count(g.goods_id) from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id where c.user_id = '%d' and g.is_delete=0 order by c.rec_id desc ";
         $result = D()->query($sql, $GLOBALS['user']->uid)->result();
         return $result;
     }
@@ -448,7 +454,7 @@ class User_Model extends Model
      * @param PagerPull $pager
      */
     static function getCollectGoodsList(PagerPull $pager){
-        $sql = "select g.* from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id and c.user_id = '%d' order by c.rec_id desc ";
+        $sql = "select g.* from shp_goods g join shp_collect_goods c on g.goods_id = c.goods_id where c.user_id = '%d' and g.is_delete=0 order by c.rec_id desc limit %d,%d ";
         $goods = D()->query($sql, $GLOBALS['user']->uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $goods = Items::buildGoodsImg($goods);
         $pager->setResult($goods);
