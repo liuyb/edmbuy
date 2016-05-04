@@ -430,7 +430,23 @@ i.desc {
 .card dl {line-height: 34px;}
 .card dd .name{display:inline-block;min-width:50px;text-align: right;}
 
-
+#searchPanel{
+	font-size: 16px;
+}
+#searchPanel a {
+	margin-left:30px;
+	cursor: pointer;
+	text-decoration : none;
+}
+#searchPanel a.selected {
+	background-color: rgb(153,153,153);
+	border-radius: 2px;
+	padding: 3px 10px;
+	color:#fff;
+}
+#searchPanel div{
+	margin-bottom:10px;
+}
 
 
 

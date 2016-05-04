@@ -13,8 +13,12 @@
         <img src="/themes/mobiles/img/beijing.png">
     </div>
     <div class="my_in_name">
-        <?= $cUser->nickname ?>
-        <img src="<?= $cUser->logo ?>">
+        <?=$cUser->nickname ?>
+        <?php if($cUser->logo): ?>
+			<img src="<?=$cUser->logo?>">
+		<?php else:?>
+			<img src="/themes/mobiles/img/mt.png">
+		<?php endif;?>
     </div>
     <div class="my_name_info">
         <div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?= $userInfo['nick_name'] ?>

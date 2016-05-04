@@ -1,0 +1,106 @@
+<!--{include_file name="_smenu_merchant.htm"}-->
+<section id="ifr-main" class="ifr-main">
+<style>
+.section_tile{
+	width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background: #BDBDBD;
+    border: 1px solid;
+    padding: 5px 0px 0px 10px;
+    margin-top: 5px;
+}
+.table_cls{
+	margin:15px;line-height:28px;width:50%;
+}
+</style>
+<!-- 页面导航 -->
+<div class="breadcrumb">当前位置：<span>店铺</span>&nbsp;&gt;&nbsp;<a href="#<!--{$backurl}-->" class="oplink hashreq">店铺管理</a>&nbsp;&gt;&nbsp;<span>店铺详情</span></div>
+
+<div class='section_tile'>店铺付费信息</div>
+<table class='table_cls'>
+<colgroup>
+<col width="100" align="left">
+<col align="left">
+</colgroup>
+<tr><td>付费金额：</td><td>¥<!--{$detail.money_paid}--></td></tr>
+<td>激活日期：</td><td><!--{$detail.start_time}-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到期日期：   <!--{$detail.end_time}--> </td></tr>
+<tr><td>使用期限：</td><td><!--{$detail.term_time}--></td></tr>
+</table>
+<div class='section_tile'>店铺经营信息</div>
+<table class='table_cls'>
+<colgroup>
+<col width="100" align="left">
+<col align="left">
+</colgroup>
+<tr><td>店铺名称：</td><td><!--{$detail.facename}--></td></tr>
+<td>店铺logo：</td><td><img src='<!--{$detail.logo}-->' style="width:60px;height:60px" /></td></tr>
+<tr><td>联系电话：</td><td><!--{$detail.mobile}--></td></tr>
+<tr><td>联系地址：</td><td><!--{$detail.address}--></td></tr>
+<tr><td>经营范围：</td><td><!--{$detail.business_scope}--></td></tr>
+<tr><td>店铺描述：</td><td><!--{$detail.shop_desc}--></td></tr>
+<tr><td>公众号二维码：</td><td><img src='<!--{$detail.wxqr}-->' style="width:150px;height:150px" /></td></tr>
+<tr><td>审核状态：</td><td><!--{$detail.verifyTxt}--></td></tr>
+<!--{if $detail.verify eq 3}-->
+<tr><td>拒绝原因：</td><td><!--{$detail.verify_fail_msg}--></td></tr>
+<!--{/if}-->
+</table>
+<div class='section_tile'>企业相关资料/个人相关资料</div>
+<table class='table_cls'>
+<colgroup>
+<col width="100" align="left">
+<col align="left">
+</colgroup>
+<tr><td>公司名称：</td><td>aa</td></tr>
+<td>法人姓名：</td><td>33</td></tr>
+<tr><td>手机号码：</td><td>aa</td></tr>
+<tr><td>经营地址：</td><td>aa</td></tr>
+</table>
+<!--{if $detail.verify eq 1}-->
+<div style='padding:5px;'><input type='button' value='通过' style='margin-right:20px;'onclick="checkpass();"/><input type='button' value='拒绝' onclick="checkRefused();"/></div>
+<!--{/if}-->
+<div id="checkRefuse" style="display:none;position:absolute;">
+<div style="background:#bdbdbd;height:30px;line-height:30px;padding:5px;">拒绝 <span style='float:right;cursor:pointer;' onclick="$('#checkRefuse').fadeOut();">关闭</span></div>
+<textarea id="failmsg" style="width:400px;height:100px;" placeholder="请输入拒绝理由"></textarea>
+<div style="height:30px;line-height:30px;padding:5px;border:solid 1px #bdbdbd;text-align:right;"><input type='button' value="确定" onclick="dorefused();"/></div>
+</div>
+</section>
+<script>
+var mid = "<!--{$detail.merchant_id}-->";
+function checkpass(){
+	if(confirm('确定审核通过吗？')){
+		F.post('/merchant/check',{mid : mid, verify : 2}, function(ret){
+			if(ret && ret.flag == 'SUC'){
+				alert('操作成功');
+				window.location.reload();
+			}else{
+				alert(ret.msg);
+			}
+		});
+	}
+}
+function dorefused(){
+	var failmsg = $("#failmsg").val();
+	F.post('/merchant/check',{mid : mid, verify : 3, verify_fail_msg : failmsg}, function(ret){
+		if(ret && ret.flag == 'SUC'){
+			alert('操作成功');
+			window.location.reload();
+		}else{
+			alert(ret.msg);
+		}
+	});
+}
+function checkRefused(){
+	var checkRefuse = $("#checkRefuse");
+	centerDOM(checkRefuse);
+	checkRefuse.fadeIn();
+}
+//居中显示一个层
+function centerDOM(obj){
+	var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
+	var scrolltop = $(document).scrollTop();//获取当前窗口距离页面顶部高度
+	var objLeft = (screenWidth - obj.width())/2 ;
+	var objTop = (screenHeight - obj.height())/2 + scrolltop;
+	obj.css({left: objLeft + 'px', top: objTop + 'px','display': 'block'});
+}
+</script>

@@ -1,0 +1,100 @@
+<!--{include_file name="_smenu_merchant.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<!-- 页面导航 -->
+<div class="breadcrumb">当前位置：<span>店铺</span>&nbsp;&gt;&nbsp;<span>店铺管理</span></div>
+
+<!-- search region -->
+<div class="boxSearch">
+  <form name="searchform" id="searchform" action="/merchant" method="post" onsubmit="return listsearch(this);">
+  	<div id="searchPanel">
+  		<div>
+  			<input type='text' name='name' value="<!--{$searchinfo.name}-->" placeholder='请输入店铺名称/手机号' id="merchantName" style='width:350px;height:40px;margin-left:30px;'/>
+  		</div>
+  		<div id="tabBlock" style="margin-top:20px;">
+  			<a data-value='all'>全部</a>
+  			<a data-value='2'>已认证</a>
+  			<a data-value='0'>未认证</a>
+  			<a data-value='1'>待审核</a>
+  			<a data-value='-1'>已过期</a>
+  			<a data-value='3'>被拒绝</a>
+  		</div>
+  	</div>
+  	<input type='hidden' name=verify id="verify" value="<!--{$searchinfo.verify}-->"/>
+  </form>
+<script type="text/javascript">
+var verify = "<!--{$searchinfo.verify}-->";
+verify = verify ? verify : "all";
+
+$(document).ready(function(){
+	$("#tabBlock").find("a").removeClass("selected");
+	$("#tabBlock").find("a[data-value='"+verify+"']").addClass("selected");
+	
+	$("#tabBlock").find("a").on('click', function(){
+		var OBJ = $(this);
+	  	var val = OBJ.attr("data-value");
+		$("#tabBlock").find("a").removeClass("selected");
+	 	OBJ.addClass("selected");
+	 	$("#verify").val(val);
+	 	submitForm();
+    });
+	
+	$("#merchantName").bind('keyup', function (e) {
+        if (e.keyCode == 13) {
+        	submitForm();
+        }
+    });
+});
+
+function listsearch(form) {
+  var url = '#/merchant,name='+$('#merchantName').val().trim()+'&verify='+$('#verify').val().trim();
+  window.location.hash = url;
+  return false;
+}
+function submitForm(){
+	$("#searchform").submit();
+}
+</script>
+</div>
+
+<!-- list nav region -->
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+</div>
+
+<!-- list content region -->
+<div class="listContent">
+  <table class="listTable">
+  <tr class="rh">
+    <th class="c2">店铺名称</th>
+    <th class="c5">手机号</th>
+    <th class="c6">有效期</th>
+    <th class="c7">店铺状态</th>
+    <th class="cl">操作</th>
+  </tr>
+  <!--{foreach from=$recordList item=it}-->
+  <tr class="rb">
+    <td class="c2"><!--{$it.facename}--></td>
+    <td class="c3"><!--{$it.mobile}--></td>
+    <td class="c4"><!--{$it.start_time}--> - <!--{$it.end_time}--></td>
+    <td class="c5"><!--{$it.verifyTxt}--></td>
+    <td class="cl">
+      <a href="#/merchant/<!--{$it.merchant_id}-->/detail,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">查看</a>
+      <!--{if $it.verify eq 1}-->
+      <a href="#/merchant/<!--{$it.merchant_id}-->/check,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">审核</a>
+      <!--{/if}-->
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="5">暂没有相应的记录</td></tr>
+  <!--{/foreach}-->
+  </table>
+</div>
+
+</section>
+

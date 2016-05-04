@@ -8,6 +8,14 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Merchant extends StorageNode {
 	
+    const VERIFY_UNDO = 0; //未认证
+    
+    const VERIFY_CHECKING = 1; //待审核
+    
+    const VERIFY_SUCC = 2; //认证成功
+    
+    const VERIFY_FAIL = 3; //认证失败
+    
 	protected static function meta() {
 		return array(
 				'table' => '`shp_merchant`',
@@ -43,7 +51,8 @@ class Merchant extends StorageNode {
 				    'business_scope' => 'business_scope',
 				    'shop_template' => 'shop_template',
 				    'is_completed' => 'is_completed',
-				    'shop_qcode' => 'shop_qcode'
+				    'shop_qcode' => 'shop_qcode',
+				    'verify_fail_msg' => 'verify_fail_msg'
 				)
 		);
 	}

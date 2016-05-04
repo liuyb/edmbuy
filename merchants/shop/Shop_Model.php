@@ -162,17 +162,17 @@ class Shop_Model extends Model
             if (strpos($business_scope, ",")) {
                 $where = "cat_id in ({$business_scope})";
             };
+            $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC ";
+            $list = D()->query($sql)->fetch_column();
+            if (count($list) > 0) {
+                $result["business_scope"] = implode(",", $list);
+            } else {
+                $result["business_scope"] = "";
+            }
+            $regionIds = [$result['province'], $result['city'], $result['district']];
+            $adrrstr = Order::getOrderRegion($regionIds);
+            $result['address'] = $adrrstr . $result['address'];
         }
-        $sql = "select cat_name from shp_business_category where  {$where} order by cat_id DESC ";
-        $list = D()->query($sql)->fetch_column();
-        if (count($list) > 0) {
-            $result["business_scope"] = implode(",", $list);
-        } else {
-            $result["business_scope"] = "";
-        }
-        $regionIds = [$result['province'], $result['city'], $result['district']];
-        $adrrstr = Order::getOrderRegion($regionIds);
-        $result['address'] = $adrrstr . $result['address'];
         return $result;
 
     }
