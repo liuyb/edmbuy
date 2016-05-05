@@ -1,0 +1,45 @@
+<!--{add_css file="platform.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="terrace_right_common">
+        <div class="submit_rz_data">提交认证资料</div>
+        <div class="cret_type">
+            <p>益多米提供2中认证类型，请根据实际情况任选一种：</p>
+            <p style="color:#8c8c8c;">提交申请后一个工作日内完成审核，店铺通过认证后，又一次修改认证类型的机会，个人认证后期可更改为企业认证。</p>
+        </div>
+        <div class="two_cret_list" >
+            <ul id="two_cret_list">
+                <li data-type="personal" class="cret_on">个人认证（快速审核）</br><i>适合个人经营</i></li>
+                <li data-type="company" >企业认证（人工审核）</br><i>适合公司经营，上传资料获得企业认证</i></li>
+            </ul>
+        </div>
+
+        <div class="cret_common" id="list1">
+
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function(){
+        var type = $("#two_cret_list .cret_on").data("type");
+        getHtml(type);
+    });
+    $("#fill_in").click(function(){
+        window.location.href = "/platform/fill/in";
+    });
+    $("#two_cret_list li").click(function(){
+            var $obj = $(this);
+        if(!$obj.hasClass("cret_on")){
+            $obj.addClass("cret_on").siblings().removeClass("cret_on");
+            var type = $obj.data("type");
+            getHtml(type)
+        }
+    });
+     function getHtml(type){
+         var url ="/platform/"+type +"/material";
+         F.get(url, {}, function (data) {
+             $("#list1").html(data);
+         },"HTML");
+     }
+</script>

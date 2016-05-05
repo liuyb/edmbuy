@@ -1,0 +1,21 @@
+<!--{add_css file="platform.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="terrace_right_common">
+        <div class="examin_flow">
+            <div class="did_not">
+                <div class="did_not_left"><img src="/themes/merchants/img/cha.png"></div>
+
+                <div class="did_not_right">
+                    <p class="right_did">您店铺未认证！暂时不能发布商品到平台！</p>
+                    <p class="right_did" id="authent"><button>立即认证</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#authent").click(function(){
+        window.location.href = "/platform/authent";
+    });
+</script>

@@ -1,28 +1,28 @@
 <div id="header_center">
-	<div id="common_header_left">
-		<img src="/themes/merchants/img/logo_new.png">
-	</div>
-	<div id="common_list">
-		<ul> 
-			<li onclick="navigateShow('/');" <!--{if $s_module == "index"}-->class="common_on"<!--{/if}-->>首页</li>
-			<li onclick="navigateShow('/shop');" <!--{if $s_module == "shop"}-->class="common_on"<!--{/if}-->>店铺</li>
-			<li onclick="navigateShow('/goods');" <!--{if $s_module == "goods"}-->class="common_on"<!--{/if}-->>商品</li>
-			<li onclick="navigateShow('/order');" <!--{if $s_module == "order"}-->class="common_on"<!--{/if}-->>订单</li>
-			<li <!--{if $s_module == "sale"}-->class="common_on"<!--{/if}-->>营销</li>
-			<li <!--{if $s_module == "platform"}-->class="common_on"<!--{/if}-->>平台</li>
-		</ul>
-	</div>
-	<div id="common_right">
-		<button id="common_btn" class="common_shop">浏览店铺</button>
-		<button id="common_btn" class="common_name" data-show="0">90年代</button>
-		<div class="set_pero" style="display:none;">
-			<ul>
-				<li class="use_id_set" id="account_set">账号设置</li>
-				<li class="log_out">退出登录</li>
-			</ul>
-			<img src="/themes/merchants/img/sj.png" class="jt_s">
-		</div>
-	</div>
+  <div id="common_header_left">
+    <img src="/themes/merchants/img/logo_new.png">
+  </div>
+  <div id="common_list">
+    <ul> 
+      <li onclick="navigateShow('/');" <!--{if $s_module == "index"}-->class="common_on"<!--{/if}-->>首页</li>
+      <li onclick="navigateShow('/shop');" <!--{if $s_module == "shop"}-->class="common_on"<!--{/if}-->>店铺</li>
+      <li onclick="navigateShow('/goods');" <!--{if $s_module == "goods"}-->class="common_on"<!--{/if}-->>商品</li>
+      <li onclick="navigateShow('/order');" <!--{if $s_module == "order"}-->class="common_on"<!--{/if}-->>订单</li>
+      <li <!--{if $s_module == "sale"}-->class="common_on"<!--{/if}-->>营销</li>
+      <li onclick="navigateShow('/platform');" <!--{if $s_module == "platform"}-->class="common_on"<!--{/if}-->>平台</li>
+    </ul>
+  </div>
+  <div id="common_right">
+    <button id="common_btn" class="common_shop">浏览店铺</button>
+    <button id="common_btn" class="common_name" data-show="0">90年代</button>
+    <div class="set_pero" style="display:none;">
+      <ul>
+        <li class="use_id_set" id="account_set">账号设置</li>
+        <li class="log_out" id="logout">退出登录</li>
+      </ul>
+      <img src="/themes/merchants/img/sj.png" class="jt_s">
+    </div>
+  </div>
 </div>
 <!-- <div id="topLoading"><b></b><span>数据加载中...</span></div>
 <div id="mainMsgBox"><span class="msg msg-error">数据保存中...</span></div> -->
@@ -30,48 +30,50 @@
 function clear_cache(){
   F.clearCacheAll();
   showTopPrompt('缓存已清除', 'ok');
-	return false;
+  return false;
 }
 function navigateShow(url){
-	window.location.href = url;
+  window.location.href = url;
 }
 
 //菜单开启
 $(document.body).on("click", ".common_name", function(){
-	if($(this).attr('data-show')=='0') {
-		$(".set_pero").show();
-		$(this).attr('data-show','1');
-	}
-	else {
-		$(".set_pero").hide();
-		$(this).attr('data-show','0');
-	}
+  if($(this).attr('data-show')=='0') {
+    $(".set_pero").show();
+    $(this).attr('data-show','1');
+  }
+  else {
+    $(".set_pero").hide();
+    $(this).attr('data-show','0');
+  }
 });
 
 //菜单关闭
 $(document).on("click",function(e){
-	var firecls = 'common_name';
-	var canfire = true;
-	if ($(e.target).hasClass(firecls)) {
-		canfire = false;
-	}
-	else {
-		var $pn = $(e.target).parent();
-		while($pn.size()>0 && $pn.get(0).tagName!='body') {
-			if ($pn.hasClass(firecls)) {
-				canfire = false;
-				break;
-			}
-			$pn = $pn.parent();
-		}
-	}
-	
-	if (canfire) {
-		$(".set_pero").hide();
-		$("."+firecls).attr('data-show','0');
-	}
+  var firecls = 'common_name';
+  var canfire = true;
+  if ($(e.target).hasClass(firecls)) {
+    canfire = false;
+  }
+  else {
+    var $pn = $(e.target).parent();
+    while($pn.size()>0 && $pn.get(0).tagName!='body') {
+      if ($pn.hasClass(firecls)) {
+        canfire = false;
+        break;
+      }
+      $pn = $pn.parent();
+    }
+  }
+  
+  if (canfire) {
+    $(".set_pero").hide();
+    $("."+firecls).attr('data-show','0');
+  }
 });
-	$(document).on('click',"#account_set",function(){
+$(function(){
+	$('#account_set').click(function(){
 		window.location ="/account";
-	})
+	});
+});
 </script>

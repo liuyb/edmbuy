@@ -136,6 +136,7 @@ class Account_Model extends Model
         $data['user_id'] = $user_id;
         $data['bank_distict'] = "";
         $data['timeline'] = time();
+        D()->insert($tablename,$data);
         return 2;
     }
 

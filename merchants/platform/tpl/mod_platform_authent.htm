@@ -1,0 +1,63 @@
+<!--{add_css file="platform.css" scope="global"}-->
+<div id="body" class="ifr-body">
+    <!--{include file="inc/left_common.htm"}-->
+    <div class="terrace_right_common">
+        <div class="examin_flow">
+            <div style="font-size:13px;color:1f1f1f;padding:20px 0;">尊敬的商家你好，您如果想发布商品到益多米推广，请完成如下三步，审核通过后即可在益多米推广!</div>
+
+            <table cellspacing="0" cellpadding="0" class="examin_tab_flow">
+                <tr>
+                    <td width="54px;"><img src="/themes/merchants/img/xuhao.png"></td>
+                    <td>
+                        <div class="examin_flow_one">
+                            <div class="one_div_left">
+                                <p class="flow_font_common">注册益多米成功<img src="/themes/merchants/img/gou1.png"></p>
+
+                                <p class="flow_m_common">填写手机号码，邮箱等信息</p>
+                            </div>
+                            <div class="one_div_right">
+                                <img src="/themes/merchants/img/gou2.png">已完成
+                            </div>
+                        </div>
+                        <div class="examin_flow_two">
+                            <div class="one_div_left">
+                                <p class="flow_font_common">提交资质</p>
+
+                                <p class="flow_m_common">提交身份证，营业执照等相关信息</p>
+                            </div>
+                            <div class="one_div_right">
+                                <!--{if empty($status)}-->
+                                <button class="fill_in" id="fill_in">填写</button>
+                                <!--{else}-->
+                                <button class="fill_in" disabled style="color: darkgray">已完成</button>
+                                <!--{/if}-->
+                            </div>
+                        </div>
+                        <div class="examin_flow_three">
+                            <div class="one_div_left">
+                                <p class="flow_font_common">益多米审核</p>
+
+                                <p class="flow_m_common">由益多米工作人员对商家资料进行审核，审核周期为3~5个工作日</p>
+                            </div>
+
+                            <div class="one_div_right">
+                                <!--{if $status==1}-->
+                                审核中
+                                <!--{elseif $status==2}-->
+                                审核成功
+                                <!--{else}-->
+                                审核失败
+                                <!--{/if}-->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $("#fill_in").click(function () {
+        window.location.href = "/platform/fill/in";
+    });
+</script>

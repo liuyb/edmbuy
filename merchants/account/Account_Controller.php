@@ -37,6 +37,8 @@ class Account_Controller extends MerchantController
         //查出店铺所有信息
         //查询用户绑定的银行卡信息
         $bank_list = Account_Model::getBindCard();
+//        $card_no =substr($bank_list['bank_no'],-4);
+//        $bank_list['bank_no'] = $card_no;
         $this->v->assign('bank_list', $bank_list);
         $response->send($this->v);
     }
@@ -215,18 +217,18 @@ class Account_Controller extends MerchantController
     public function getcode(Request $request, Response $response)
     {
         $mobile = $request->post("mobile");
-        Account_Model::checkRegMobile($mobile);
-        if (!$mobile) {
-            $ret['retmsg'] = "手机号码不存在!";
+        $result = Account_Model::checkRegMobile($mobile);
+        if (!$result) {
+            $ret['retmsg'] = "与商家入驻绑定手机号码不匹配!";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
         $type = "bind_bank";
         //todo 发送验证码
-        $result = Sms::sendSms($mobile,$type,true);
+       // $result = Sms::sendSms($mobile,$type,true);
         if (true) {
             $_SESSION['mobile'] = $mobile;
-//            $_SESSION['bind_bank'] = "8888";
+           $_SESSION['bind_bank'] = "8888";
            $ret['retmsg'] = "发送验证码成功!";
             $ret['status'] = 1;
             $response->sendJSON($ret);

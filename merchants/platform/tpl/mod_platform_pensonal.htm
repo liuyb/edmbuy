@@ -1,0 +1,95 @@
+<form method="POST" action="/platform/material/set" id="platform">
+<table cellspacing="0" cellpadding="0" class="cret_tab_list">
+    <tr>
+        <td class="cret_tab_left">真实姓名：</td>
+        <td class="cret_tab_right"><input type="text" placeholder="请填写您的真实姓名"></td>
+    </tr>
+    <tr>
+        <td class="cret_tab_left">身份证号码：</td>
+        <td class="cret_tab_right"><input type="text" placeholder="请填写您的身份证号码"></td>
+    </tr>
+    <tr>
+        <td class="cret_tab_left cert_top_common">手持身份证照片：</td>
+        <td>
+            <div class="file_common_img">
+                <input type="hidden" name="card_img" value="" required/>
+                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
+            </div>
+            <div class="ts_com">
+                <p>身份证上的所有信息清晰可见，必须能看清证件号。</p>
+                <p>支持jpg,bmp,gif格式照片，不得超过1M。</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="cret_tab_left cert_top_common">个人营业执照：</td>
+        <td>
+            <div class="file_common_img">
+                <input type="hidden" name="business_img" value="" required/>
+                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
+            </div>
+            <div class="ts_com">
+                <p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
+        <td>
+            <div class="file_common_img">
+                <input type="hidden" name="product_img" value="" required/>
+                <img src="/themes/merchants//img/editor_plus.png">
+                <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
+            </div>
+            <div class="ts_com">
+                <p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="cret_tab_left"></td>
+        <td>
+            <button class="cret_btn">提交</button>
+        </td>
+    </tr>
+</table>
+</form>
+<script>
+    function fileupload(e, obj) {
+        $obj = $(obj)
+        var url = '/platform/material/upload';
+//        var galleryCount = $(".goods_gallery").length;
+//        var selectedCls = "";
+//        if(galleryCount < 1){
+//            selectedCls = "add_img_selected";
+//        }
+        image_upload(url, e, obj, function (ret) {
+
+            var path = ret.stdpath;
+            $obj.parent().find(".img_upload").attr("src", path);
+            $obj.parent().find("input").val(path);
+        });
+    }
+    $("#cret_btn").click(function () {
+        var $obj = $("#platform")
+        if (!$obj.formValid()) {
+            return false;
+        }
+        var result = $obj.serializeJson();
+        if (result.business_img ==''|| result.card_img  ==''|| result.product_img  =='') {
+            showMsg("请上传相关照片");
+            return false;
+        }
+        result.type="personal";
+        var url = $obj.attr("action");
+        console.log(result)
+        F.postWithLoading(url,{json:result}, function (data) {
+            if(data.status==1){
+                    showMsg("上传成功");
+            }
+        });
+        return  false;
+    });
+</script>
