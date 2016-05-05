@@ -1,7 +1,7 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
 <script type="text/html" id="forTopnav">
-<div class="header">提现明细<a href="<?=$backurl?>" class="back"></a></div>
+<div class="header">提现明细<a href="javascript:history.back();" class="back"></a></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopnav').html())</script>
 

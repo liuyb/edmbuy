@@ -86,11 +86,15 @@ class AgentPayment extends StorageNode {
 	 */
 	static function callbackAfterAgentPay($agent, $cUser){
 	    if($agent && $agent->pid){
-	        $agent->is_paid = 1;
-	        $agent->save(Storage::SAVE_UPDATE);
+	        $newAgent = new AgentPayment();
+	        $newAgent->pid = $agent->pid;
+	        $newAgent->is_paid = 1;
+	        $newAgent->save(Storage::SAVE_UPDATE);
 	    
-	        $cUser->level = $agent->level;
-	        $cUser->save(Storage::SAVE_UPDATE);
+	        $newUser = new Users();
+	        $newUser->uid = $cUser->uid;
+	        $newUser->level = $agent->level;
+	        $newUser->save(Storage::SAVE_UPDATE);
 	    }
 	}
 	

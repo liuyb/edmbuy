@@ -34,6 +34,28 @@ class AdminController extends Controller {
 		
 	}
 	
+	/**
+	 * 设置查询条件里的日期区间
+	 * @param unknown $searchinfo
+	 */
+	public function setQueryDateRange(&$searchinfo){
+	    if (strlen($searchinfo['from_date'])!=10) { //format: 'YYYY-MM-DD'
+	        $searchinfo['from_date'] = '';
+	    }
+	    if (strlen($searchinfo['to_date'])!=10) { //format: 'YYYY-MM-DD'
+	        $searchinfo['to_date'] = '';
+	    }
+	    if (!empty($searchinfo['from_date']) && !empty($searchinfo['to_date']) && $searchinfo['from_date'] > $searchinfo['to_date']) { //交换
+	        $t = $searchinfo['from_date'];
+	        $searchinfo['from_date'] = $searchinfo['to_date'];
+	        $searchinfo['to_date'] = $t;
+	    }
+	}
+	
+	public function getPagerLimit(){
+	    return 30;
+	}
+	
 }
 
  

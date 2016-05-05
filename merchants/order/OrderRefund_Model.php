@@ -117,35 +117,6 @@ class OrderRefund_Model extends Model{
         return D()->from(Users::table())->where("user_id = '%d'", $user_id)->select('openid')->result();
     }
     
-    /**
-     * 返回退款状态
-     * @param unknown $check_status 审核状态
-     * @param unknown $wx_status 微信返回状态
-     * @return string
-     */
-    static function getRefundStatus($check_status, $wx_status){
-        $check_status = intval($check_status);
-        $wx_status = intval($wx_status);
-        $display = '';
-        switch($check_status){
-            case 1 :
-                $display = ($wx_status == 1 ? '退款成功' : ($wx_status == 2 ? '退款失败' : '退款中'));
-                break;
-            case 2 :
-                $display = '已拒绝';
-                break;
-            default :
-                $display = '待审核';
-        }
-        return $display;
-    }
-    
-    static function getRefundDetails($rec_id){
-        $sql = "SELECT refund.*,u.mobile_phone as mobilephone
-                FROM shp_order_refund refund left join shp_users u on refund.user_id = u.user_id where refund.rec_id='%d'";
-        $result = D()->query($sql, $rec_id)->fetch_array();
-        return $result;
-    }
 }
 
 ?>

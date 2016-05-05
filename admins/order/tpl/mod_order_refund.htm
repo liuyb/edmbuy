@@ -1,0 +1,127 @@
+<!--{include_file name="_smenu_refund.htm"}-->
+<script type="text/javascript" src="/misc/js/ext/date/jquery.calendar.js"></script>
+<link href="/misc/js/ext/date/calendars.css" rel="stylesheet" type="text/css" />
+<style>
+.inpshort {width: 155px;}
+</style>
+<section id="ifr-main" class="ifr-main">
+
+<!-- 页面导航 -->
+<div class="breadcrumb">当前位置：<span>订单</span>&nbsp;&gt;&nbsp;<span>退款管理</span></div>
+
+<!-- search region -->
+<div class="boxSearch">
+  <form name="searchform" id="searchform" action="/order/refund" method="post" onsubmit="return listsearch(this);">
+  	<div id="searchPanel">
+  		<div>
+  			<span style="margin-right:20px;">
+  			<input type="text" name="from_date" value="<!--{$searchinfo.from_date}-->" class="inptxt inpshort" id="search_from_date" placeholder="开始日期(YYYY-MM-DD)" bj="cBj" />&nbsp;&nbsp;--
+     &nbsp;&nbsp;<input type="text" name="to_date" value="<!--{$searchinfo.to_date}-->" class="inptxt inpshort" id="search_to_date" placeholder="结束日期(YYYY-MM-DD)" bj="cBj" />
+  			</span>
+  			<input type="text" class="inptxt" id="order_sn" name="order_sn" placeholder="请输入订单号" value="<!--{$searchinfo.order_sn}-->"/>
+  		</div>
+  		<div>
+  			店铺：
+  			<select id="merchant_id" name="merchant_id">
+  				<option value="">全部</option>
+  				<!--{foreach from=$merchants item=it}-->
+  				<option value='<!--{$it.merchant_id}-->' <!--{if $it.merchant_id eq $searchinfo.merchant_id}-->selected<!--{/if}-->><!--{$it.facename}--></option>
+  				<!--{/foreach}-->
+  			</select>
+  			<input type="text" style='margin-left:20px;' class="inptxt" id="buyer" name="buyer" placeholder="请输入 “买家”或“收货人”" value="<!--{$searchinfo.buyer}-->"/>
+  			<input type="submit" name="btnsubmit" id="btnsubmit" value="搜 索" class="frmbtn" style='margin-left:20px;'/>
+  		</div>
+  	</div>
+  </form>
+<script type="text/javascript">
+
+function listsearch(form) {
+  var url = '#/order/refund,from_date='+$('#search_from_date').val().trim()+'&to_date='+$('#search_to_date').val().trim();
+  url+= '&order_sn='+$('#order_sn').val().trim()+'&merchant_id='+$('#merchant_id').val().trim()+'&buyer='+$("#buyer").val().trim();
+  window.location.hash = url;
+  return false;
+}
+function submitForm(){
+	$("#searchform").submit();
+}
+$(document).ready(function(){
+  $("#search_from_date").cld();
+  $("#search_to_date").cld();
+  $("#merchant_id").enterEvent(function(){
+	  submitForm();
+  });
+  $(":input").enterEvent(function(){
+	  submitForm();
+  });
+});
+
+</script>
+</div>
+
+<!-- list nav region -->
+<div class="listnav">
+  <div class="listbtn-grp listbtn-grp-pager"><!--{include_pager url=$qparturl extraurl=$extraurl}--></div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <a href="javascript:void(0);" class="listbtn-link" onclick="return F.hashReload();">
+        <b class="smbg2 listbtn-rc listbtn-rc-1"></b>
+        <b class="smbg2 listbtn-rc listbtn-rc-2"></b>
+        <span>刷新</span>
+      </a>
+    </div>
+  </div>
+  <div class="listbtn-grp">
+    <div class="listbtn">
+      <span>总记录数:&nbsp;<!--{$totalNum}-->&nbsp;&nbsp;当前记录数:&nbsp;<!--{$recordNum}--></span>
+    </div>
+  </div>
+</div>
+
+<!-- list content region -->
+<div class="listContent">
+  <table class="listTable">
+  <tr class="rh">
+    <th class="c2">订单号</th>
+    <th class="c3">店铺名称</th>
+    <th class="c4">商品名称</th>
+    <th class="c5">买家</th>
+    <th class="c6">收货人</th>
+    <th class="c7">申请时间</th>
+    <th class="c8">退款金额</th>
+    <th class="c9">退款状态</th>
+    <th class="cl">操作</th>
+  </tr>
+  <!--{foreach from=$recordList item=it}-->
+  <tr class="rb">
+    <td class="c2"><!--{$it.order_sn}--></td>
+    <td class="c3"><!--{$it.facename}--></td>
+    <td class="c4" style="width:320px;"><!--{$it.goods_name}--></td>
+    <td class="c5"><!--{$it.nick_name}--></td>
+    <td class="c6"><!--{$it.consignee}--></td>
+    <td class="c7"><!--{$it.refund_time}--></td>
+    <td class="c8"><!--{$it.refund_money}--></td>
+    <td class="c9"><!--{$it.state_txt}--></td>
+    <td class="cl">
+      <a href="javascript:showDetail(<!--{$it.rec_id}-->);" class="oplink hashreq">查看</a>
+    </td>
+  </tr>
+  <!--{foreachelse}-->
+  <tr class="rn"><td colspan="9">暂没有相应的记录</td></tr>
+  <!--{/foreach}-->
+  </table>
+</div>
+
+</section>
+<script>
+function showDetail(rec_id){
+	layer.open({
+	    type: 2,
+	    title: '查看退款详情',
+	    shadeClose: true,
+	    shade: 0.8,
+	    area: ['500px', '450px'],
+	    content: '/order/refund/detail?rec_id=' + rec_id
+	});
+}
+</script>
+
