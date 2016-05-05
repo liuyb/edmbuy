@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
 
+/*some common css*/
+a.blka { display: block;cursor: default; }
+.bodycont { margin: 0 0 0 160px;width: 1040px;padding-top: 20px; }
+
 /*override bootstrap*/
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: #fff;

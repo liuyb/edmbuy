@@ -28,6 +28,7 @@ class User_Controller extends MerchantController
             if(!$shop->is_completed){
                 $response->redirect('/shop/start');
             }
+            $this->setPageLeftMenu('user', 'home');
             $this->v->set_tplname('mod_user_index');
             $muid = $GLOBALS['user']->uid;
             $wait_pay_count = Merchant::getOrderTotalByStatus(CS_AWAIT_PAY, $muid);
