@@ -768,35 +768,48 @@ a.h_btn{
 	position: relative;
 }
 .p_d_t1{
-	width: 20%;
-	background: url(../img/kf_55.png) no-repeat center center;
-	background-size: 36px;
+	width: 16%;
+	background: url(../img/kefu.png) no-repeat center center;
+	background-size:20px 32px;
 	border-top: 1px solid #ccc;	
 }
 .p_d_t1 p{
 	height: 100%;
 	border-right: 1px solid #ccc;
 }
-.p_d_t2{
-	width: 20%;	
-	background: url(../img/gwc－1.png) no-repeat center center;
-	background-size: 36px;
+.p_d_t5{
+	width: 16%;
+	background: url(../img/dp331.png) no-repeat center center;
+	background-size:20px 32px;
 	border-top: 1px solid #ccc;	
 }
+.p_d_t5 p{
+	height: 100%;
+	border-right: 1px solid #ccc;
+}
+.p_d_t2{
+	width: 16%;	
+	background: url(../img/shouc1.png) no-repeat center center;
+	background-size:20px 32px;
+	border-top: 1px solid #ccc;	
+}
+.t2_on{
+	width: 16%;	
+	background: url(../img/sc4.png) no-repeat center center !important;
+	background-size:20px 32px !important;
+}
 .p_d_t3{
-	width: 34%;
+	width: 26%;
 	color: #fff;
 	background: #f4503e;
-	font-size: 16px;
-	font-weight: bold;	
+	font-size: 14px;
 	border-top: 1px solid #f4503e;	
 }
 .p_d_t4{
 	width: 26%;
 	color: #fff;
 	background: #ff6d14;
-	font-size: 16px;
-	font-weight: bold;	
+	font-size: 14px;
 	border-top: 1px solid #ff6d14;	
 }
 .p_detail_button{
