@@ -4105,3 +4105,31 @@ td.cash_td2 img {
   	right: 50%;	
 }
 /*2016-5-2 3 */
+
+/*2016-5-2 3  s */
+.join_top_btn{
+   	float: right;
+ 	width: 80px;
+  	height: 24px;
+  	background: #fff url(../img/btn_back.png) no-repeat right;
+	padding-right:5px;
+	background-size:10px;
+  	color: #8c8c8c;
+  	border-radius: 5px;
+  	margin-top: 13px;	
+}
+.bg_details{
+	background:#f1f1f1;
+}
+/*2016-5-2 3  e */
+
+
+
+
+
+
+
+
+
+
+
