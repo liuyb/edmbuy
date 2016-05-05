@@ -8,6 +8,12 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Items extends StorageNode {
 	
+    //统一运费
+    const SHIPPING_FEE = 1;
+    
+    //运费模板
+    const SHIPPING_TEMPLATE = 2;
+    
 	protected static function meta() {
 		return array(
 				'table' => '`shp_goods`',
@@ -71,7 +77,8 @@ class Items extends StorageNode {
 				    'shipping_fee'    => 'shipping_fee',
 				    'shipping_template' => 'shipping_template',
 				    'fee_or_template' => 'fee_or_template',
-				    'shop_recommend'  => 'shop_recommend'
+				    'shop_recommend'  => 'shop_recommend',
+				    'goods_flag' => 'goods_flag'
 				)
 		);
 	}
@@ -136,10 +143,7 @@ class Items extends StorageNode {
 	 * @return array
 	 */
 	static function attrs($item_id) {
-		$sql = "SELECT ga.*,a.attr_name
-FROM `shp_goods_attr` AS ga INNER JOIN `shp_attribute` AS a ON ga.attr_id=a.attr_id
-WHERE ga.goods_id=%d
-ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
+		$sql = "SELECT * from shp_goods_attr where goods_id = %d";
 		$rows = D()->query($sql, $item_id)->fetch_array_all();
 		return $rows;
 	}
@@ -152,34 +156,12 @@ ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
 	 * @return string
 	 */
 	static function attrs_info($arr, $type = 'pice') {
-		$attr   = '';
-		
-		if (!empty($arr))
-		{
-			$fmt = "%s:%s[%s] \n";
-			$idstr = '';
-			if (is_array($arr)) {
-				$idstr = implode(',', $arr);
-			}
-			else {
-				$idstr = $arr;
-			}
-		
-			$tb_goods_attr = '`shp_goods_attr`';
-			$tb_attr       = '`shp_attribute`';
-			$sql = "SELECT a.attr_name, ga.attr_value, ga.attr_price ".
-					   "FROM {$tb_goods_attr} AS ga, {$tb_attr} AS a ".
-			       "WHERE ga.goods_attr_id IN(%s) AND a.attr_id = ga.attr_id";
-			$list = D()->query($sql, $idstr)->fetch_array_all();
-			if (!empty($list)) {
-				foreach ($list AS $row) {
-					$attr_price = round(floatval($row['attr_price']), 2);
-					$attr .= sprintf($fmt, $row['attr_name'], $row['attr_value'], $attr_price);
-				}
-			}
-			$attr = str_replace('[0]', '', $attr);
-		}
-		
+	    if(!$arr){
+	        return '';
+	    }
+		$sql = "select * from shp_goods_attr where goods_attr_id = %d";
+		$attr= D()->query($sql, $arr)->get_one();
+		$attr = Order::genGoodsAttrTxt($attr);
 		return $attr;
 	}
 	
@@ -190,13 +172,21 @@ ORDER BY ga.attr_id ASC,ga.goods_attr_id ASC";
 	 * @param integer $chnum, 大于0时增加库存，小于0时减少库存
 	 * @return boolean
 	 */
-	static function changeStock($item_id, $chnum = 1) {
-		$ectb_goods = self::table();
-		$chnum = intval($chnum);
-		D()->raw_query("UPDATE {$ectb_goods} SET `goods_number`=`goods_number`+%d WHERE `goods_id`=%d", $chnum, $item_id);
-		if (D()->affected_rows()) {
-			return true;
-		}
+	static function changeStock($item_id, $chnum = 1, $goods_attr_id = 0) {
+	    //规格存在时 改变规格里面的库存
+	    if($goods_attr_id){
+	        D()->raw_query("UPDATE shp_goods_attr SET `goods_number`=`goods_number`+%d WHERE `goods_attr_id`=%d", $chnum, $goods_attr_id);
+	        if (D()->affected_rows()) {
+	            return true;
+	        }
+	    }else{
+    		$ectb_goods = self::table();
+    		$chnum = intval($chnum);
+    		D()->raw_query("UPDATE {$ectb_goods} SET `goods_number`=`goods_number`+%d WHERE `goods_id`=%d", $chnum, $item_id);
+    		if (D()->affected_rows()) {
+    			return true;
+    		}
+	    }
 		return false;
 	}
 	
@@ -272,7 +262,7 @@ HERESQL;
 	        $where .= " and is_promote = 1 ";
 	    }
 	    $sql = "select goods_id,goods_name,shop_price,market_price,
-	               goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by sort_order limit %d,%d";
+	               goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 and goods_flag = 0 $where order by sort_order limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    return self::buildGoodsImg($goods);
 	}
@@ -286,7 +276,7 @@ HERESQL;
 	    $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img from shp_goods g, edmbuy.shp_category c 
 	    where g.cat_id = c.cat_id 
 	    and (c.cat_id in (%s) or c.parent_id in (%s)) 
-	    and g.is_on_sale = 1 and g.is_promote = 1 and g.is_delete = 0 
+	    and g.is_on_sale = 1 and g.is_promote = 1 and g.is_delete = 0 and g.goods_flag = 0 
 	    order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $categoryids, $categoryids, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    return self::buildGoodsImg($goods);
@@ -300,7 +290,7 @@ HERESQL;
 	static function findGoodsListByPref(PagerPull $pager, $cat){
 	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img 
                 from shp_goods g left join shp_goods_cat pg on	g.goods_id = pg.goods_id 
-                where	g.is_on_sale = 1 and g.is_delete = 0 
+                where	g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0
                 and 	(g.cat_id = %d or pg.cat_id = %d)
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $cat, $cat, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -317,12 +307,15 @@ HERESQL;
 	    if(isset($options['shop_price']) && $options['shop_price']){
 	        $where .= " and g.shop_price = $options[shop_price] ";
 	    }
-	    if(isset($options['merchant_uid']) && $options['merchant_uid']){
-	        $where .= " and g.merchant_uid = $options[merchant_uid] ";
+	    if(isset($options['merchant_id']) && $options['merchant_id']){
+	        $where .= " and g.merchant_id = '$options[merchant_id]' ";
+	    }
+	    if(isset($options['shop_recommend']) && $options['shop_recommend']){
+	        $where .= " and g.shop_recommend = $options[shop_recommend] ";
 	    }
 	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
                 from shp_goods g 
-                where	g.is_on_sale = 1 and g.is_delete = 0 
+                where	g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
                 $where 
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
@@ -392,7 +385,7 @@ HERESQL;
 			$where .=" and goods_name like '%{$search}%'";
 		}
 		$sql = "select goods_id,goods_name,shop_price,market_price,goods_brief,
-	            goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by {$order} limit {$limit}";
+	            goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 and goods_flag = 0 $where order by {$order} limit {$limit}";
 		$goods = D()->query($sql,$merchant_id)->fetch_array_all();
 		return self::buildGoodsImg($goods);
 	}
@@ -431,7 +424,7 @@ HERESQL;
 			}
 			$limit = "{$pager->start},{$pager->realpagesize}";
 		}
-		$where ="g.cat_id = c.cat_id and c.merchant_id = '%s' and c.shop_recommend = 1  and g.is_on_sale = 1  and g.is_delete = 0 ";
+		$where ="g.cat_id = c.cat_id and c.merchant_id = '%s' and c.shop_recommend = 1  and g.is_on_sale = 1  and g.is_delete = 0 and g.goods_flag = 0 ";
 		if($search){
 			$where .="and g.goods_name like '%{$search}%'";
 		}
@@ -456,7 +449,72 @@ HERESQL;
 	static function getWhere(){
 
 	}
+	
+	/**
+	 * 获取商品的邮费
+	 * @param unknown $item
+	 */
+	static function getGoodsRealShipFee(&$item){
+	    $template_fee = 0;
+	    if(Items::SHIPPING_TEMPLATE == $item->fee_or_template){
+	        $template_fee = D()->from('shp_shipment_tpl')->where("tpl_id = %d", $item->shipping_template)->select()->get_one();
+	        if(!$template_fee || empty($template_fee)){
+	            $template_fee = 0;
+	        }else{
+	            $template_fee = $template_fee['n_fee'];//temp
+	        }
+	    }else{
+	        $template_fee = $item->shipping_fee;
+	    }
+	    $item->shipFee = $template_fee;
+	}
 
+	/**
+	 * 用户 点击、取消 商品收藏
+	 * @param unknown $user_id
+	 * @param unknown $goods_id
+	 * @param unknown $action
+	 */
+	static function changeGoodsCollect($user_id, $goods_id, $action){
+	     if($action > 0){
+	         $sql = "insert into shp_collect_goods(user_id, goods_id, add_time) values(%d, %d, %d)";
+	         D()->query($sql, $user_id, $goods_id, time());
+	     }else if($action < 0){
+	         $sql = "delete from shp_collect_goods where user_id = %d and goods_id = %d";
+	         D()->query($sql, $user_id, $goods_id);
+	     }
+	}
+	
+	/**
+	 * 商品收藏数量
+	 * @param unknown $goods_id
+	 */
+	static function getGoodsCollects($goods_id, $user_id = 0){
+	    $where = '';
+	    if($user_id){
+	        $where .= " and user_id = $user_id ";
+	    }
+	    $sql = "select count(goods_id) from shp_collect_goods where goods_id = %d $where ";
+	    $result = D()->query($sql, $goods_id)->result();
+	    return $result;
+	}
+	
+	/**
+	 * 当前商品库存，规格存在时以规格为准
+	 * @param unknown $goods_number
+	 * @param unknown $spec_id
+	 */
+	static function getRealGoodsNumber($goods_number, $spec_id){
+	    if(!$spec_id){
+	        return $goods_number;
+	    }
+	    $sql = "select * from shp_goods_attr where goods_attr_id = %d";
+		$attr= D()->query($sql, $spec_id)->get_one();
+		if(!$attr){
+		    return 0;
+		}
+		return $attr['goods_number'];
+	}
 }
  
 /*----- END FILE: class.Items.php -----*/

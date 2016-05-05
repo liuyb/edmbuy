@@ -37,7 +37,9 @@ class Item_Controller extends MobileController {
 		    'item/comment/list' => 'get_goods_comment',
 		    'item/comment/page' => 'goods_comment',
 		    'item/comment' => 'post_goods_comment',
-		    'item/merchant/recommend' => 'get_merchant_recommend'
+		    'item/merchant/recommend' => 'get_merchant_recommend',
+		    'item/goods/collect/num' => 'getGoodsCollects',
+		    'item/goods/collect' => 'changeGoodsCollect'
 		];
 	}
 	
@@ -113,16 +115,14 @@ HEREDOC;
 				$this->v->assign('item', $item);
 				//$this->v->assign('item_desc', json_encode($item->item_desc));
 				
+				//运费信息
+				Items::getGoodsRealShipFee($item);
+				
 				//商品规格、属性
-				$item_attrs = Items::attrs($item->id);
-				$attr_grp = [];
-				foreach ($item_attrs AS $attr) {
-					if (!isset($attr_grp[$attr['attr_id']])) {
-						$attr_grp[$attr['attr_id']] = ['attr_name'=>$attr['attr_name'], 'attrs'=>array()];
-					}
-					$attr_grp[$attr['attr_id']]['attrs'][] = $attr;
-				}
-				$this->v->assign('attr_grp', $attr_grp);
+				list($item_attrs, $attrmap) = Item_Model::get_goods_attrs($item->item_id);
+				$this->v->assign('attr_grp', $item_attrs);
+			    $attrmap = json_encode($attrmap);
+				$this->v->assign('attrmap', $attrmap);
 				
 				//SEO信息
 				$seo = [
@@ -144,11 +144,11 @@ HEREDOC;
 				$this->v->assign('referee', $referee);
 				
 				//购物车数
-				$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
-				$this->v->assign('cartnum', $cartnum);
-				
+				//$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
+				//$this->v->assign('cartnum', $cartnum);
 				//商家信息
-				$merchant = Merchant::find_one(new Query('admin_uid', $item->merchant_uid));
+				$merchant = Merchant::find_one(new Query('uid', $item->merchant_id ? $item->merchant_id : 0));
+				$this->v->assign('merchant', $merchant);
 				$kefu_link = 'javascript:;';
 				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
 					$kefu_link = $merchant->kefu;
@@ -318,7 +318,7 @@ HEREDOC;
 	    $goods_id = $request->get('goods_id');
 	    $category = $request->get('category', '');
 	    $curpage = $request->get('curpage', 1);
-	    $pager = new PagerPull($curpage, 10);
+	    $pager = new PagerPull($curpage, 20);
 	    $c = new Comment();
 	    $c->id_value = $goods_id;
 	    Item_Model::getGoodsComment($c, $pager, $category);
@@ -331,14 +331,30 @@ HEREDOC;
 	
 	//查询店铺推荐
 	public function get_merchant_recommend(Request $request, Response $response){
-	    $merchant_uid = $request->get('merchant_uid');
+	    $merchant_id = $request->get('merchant_id');
 	    $curpage = $request->get('curpage', 1);
-	    $pager = new PagerPull($curpage, 20);
-	    Item_Model::findGoodsListInSameMerchant($pager, ["merchant_uid"=>$merchant_uid]);
+	    $pager = new PagerPull($curpage, 10);
+	    Item_Model::findShopRecommendGoodsList($pager, ["merchant_id"=>$merchant_id]);
 	    $pageJson = $pager->outputPageJson();
-	    $ret = ["result" => $pager->result];
-	    $ret = array_merge($ret, $pageJson);
-	    $response->sendJSON($ret);
+	    $response->sendJSON($pageJson);
+	}
+	
+	//获取商品收藏数
+	public function getGoodsCollects(Request $request, Response $response){
+	    $goods_id = $request->get('goods_id', 0);
+	    $totalCollects = Items::getGoodsCollects($goods_id);
+	    $myCollect = Items::getGoodsCollects($goods_id, $GLOBALS['user']->uid);
+	    $response->sendJSON(['total' => $totalCollects, 'my' => $myCollect]);
+	}
+	
+	//用户点击或取消收藏
+	public function changeGoodsCollect(Request $request, Response $response){
+	    if($request->is_post()){
+	        $goods_id = $request->post('goods_id', 0);
+	        $action = $request->post('action', 0);
+	        Items::changeGoodsCollect($GLOBALS['user']->uid, $goods_id, $action);
+	        $response->sendJSON("");
+	    }
 	}
 	
 }

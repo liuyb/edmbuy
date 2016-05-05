@@ -85,7 +85,8 @@ class Item_Model extends Model {
     /**
      * 获取当前商家的其他商品
      */
-    static function findGoodsListInSameMerchant(PagerPull $pager, array $options){
+    static function findShopRecommendGoodsList(PagerPull $pager, array $options){
+        $options['shop_recommend'] = 1;
         $result = Items::findGoodsListByCond($pager, $options);
         $pager->setResult($result);
     }
@@ -150,6 +151,121 @@ class Item_Model extends Model {
 		return str_replace(['&','='], ['%26','%3D'], $string);
 	}
 	
+	/**
+	 * 解析成页面需要的商品属性格式
+	 * [0] => Array
+        (
+            [cat_id] => 1
+            [cat_name] => 重量
+            [attrs] => Array
+                (
+                    [0] => Array
+                        (
+                            [attr_id] => 2
+                            [attr_value] => 300g
+                            [shop_price] => 9.00
+                            [goods_number] => 6
+                        )
+
+                    [1] => Array
+                        (
+                            [attr_id] => 1
+                            [attr_value] => 200g
+                            [shop_price] => 6.00
+                            [goods_number] => 6
+                        )
+
+                )
+
+        )
+	 * @param unknown $goods_id
+	 */
+	public static function get_goods_attrs($goods_id)
+	{
+	    $result = Items::attrs($goods_id);
+	    $cat_arr = [];
+	    //多个属性值 对应的 属性数据  attr1+attr2+attr3 => goods_attr_id/shop_price...
+	    $attrmap = [];
+	    foreach ($result as $item) {
+	        self::map_goods_attrs($cat_arr, $item, 1);
+	        self::map_goods_attrs($cat_arr, $item, 2);
+	        self::map_goods_attrs($cat_arr, $item, 3);
+	        self::setAttrKeyValue($item, $attrmap);
+	    }
+	    $ret_arr = [];
+	    $count = 1;
+	    if ($cat_arr && count($cat_arr) > 0) {
+	        foreach ($cat_arr as $type => $attrs) {
+	            $typeOBJ = explode('【~~】', $type);
+	            if (count($typeOBJ) == 0) {
+	                continue;
+	            }
+	            //处理每个type下的重复属性
+	            $display_attrs = self::get_goods_select_attr($count, $attrs);
+	            array_push($ret_arr, array('cat_id' => $typeOBJ[0], 'cat_name' => $typeOBJ[1], 'attrs' => $display_attrs));
+	            $count++;
+	        }
+	    }
+	    return [$ret_arr, $attrmap];
+	}
+	
+	/**
+	 * 用map来构造商品属性规格
+	 * 商品type（颜色、重量）=> array(对应的属性列表)
+	 * @param unknown $cat_arr
+	 * @param unknown $item
+	 * @param unknown $index
+	 */
+	private static function map_goods_attrs(&$cat_arr, $item, $index)
+	{
+	    $cat_id = $item['cat' . $index . '_id'];
+	    $cat_name = $item['cat' . $index . '_name'];
+	    if ($cat_id && $cat_name) {
+	        $key = $cat_id . '【~~】' . $cat_name;
+	        if (isset($cat_arr[$key]) && $cat_arr[$key]) {
+	            array_push($cat_arr[$key], $item);
+	        } else {
+	            $cat_arr[$key] = [];
+	            array_push($cat_arr[$key], $item);
+	        }
+	    }
+	}
+	
+	/**
+	* 当前商品 选中的属性 唯一过滤 把 attr1/attr2/attr3 分离出来
+	* @param unknown $index
+	* @param unknown $attrs
+	*/
+	public static function get_goods_select_attr($cat_id, $attrs)
+	{
+	    $ret = [];
+	    $map = [];
+	    foreach ($attrs as $at) {
+	        $at_id = $at['attr' . $cat_id . '_id'];
+	        $key = 'key_' . $at_id;
+	        if (isset($map[$key]) && $map[$key] > 0) {
+	            continue;
+	        }
+	        $map[$key] = '1';
+	        array_push($ret, array("attr_id" => $at_id, "attr_value" => $at['attr' . $cat_id . '_value']));
+	    }
+	    unset($map);
+	    return $ret;
+	}
+	
+	/**
+	 * 多个属性值 对应的 属性数据  attr1+attr2+attr3 => goods_attr_id/shop_price...
+	 */
+	public static function setAttrKeyValue($item, &$attrmap){
+	    $key = 'k_';
+	    for($index = 1; $index <= 3; $index++){
+	        $cat_id = $item['cat' . $index . '_id'];
+	        if($cat_id){
+	            $key .= $item["attr".$index."_id"] . "_";
+	        }
+	    }
+	    $attrmap[$key] = array("shop_price" => $item['shop_price'], "goods_number" => $item['goods_number'], "goods_attr_id" => $item['goods_attr_id']);
+	}
 }
  
 /*----- END FILE: Item_Model.php -----*/

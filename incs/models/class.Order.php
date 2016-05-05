@@ -154,7 +154,7 @@ class Order extends StorageNode{
     		$order_goods = Order::getItems($order_id);
     		if (!empty($order_goods)) {
     			foreach ($order_goods AS $g) {
-    				Items::changeStock($g['goods_id'],$g['goods_number']);
+    				Items::changeStock($g['goods_id'],$g['goods_number'], $g['goods_attr_id']);
     			}
     		}
     
@@ -485,17 +485,15 @@ class Order extends StorageNode{
     		    $ord['status_txt'] = Fn::get_order_text($ord['pay_status'], $ord['shipping_status'], $ord['order_status']);
     			$ord['show_status_html'] = self::genStatusHtml($ord);
     			$ord['order_goods'] = [];
-    			$sql = "SELECT og.*,g.`goods_thumb`, attr.cat1_name,attr.cat2_name,attr.cat3_name,
-    			attr.attr1_value,attr.attr2_value,attr.attr3_value 
+    			$sql = "SELECT og.*,g.`goods_thumb` 
     			FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` 
-    			LEFT JOIN shp_goods_attr attr on og.goods_attr_id = attr.goods_attr_id  
     			WHERE og.`order_id`=%d ORDER BY og.`rec_id` DESC";
     			$order_goods = D()->raw_query($sql, $ord['order_id'])->fetch_array_all();
     			if (!empty($order_goods)) {
     				foreach ($order_goods AS &$g) {
     					$g['goods_url']   = Items::itemurl($g['goods_id']);
     					$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
-    					$g['attr_txt'] = self::genGoodsAttrTxt($g);
+    					$g['attr_txt'] = $g['goods_attr'];//self::genGoodsAttrTxt($g);
     				}
     				$ord['order_goods'] = $order_goods;
     			}

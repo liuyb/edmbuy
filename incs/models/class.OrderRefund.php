@@ -133,7 +133,7 @@ class OrderRefund extends StorageNode {
 	        $order_goods = Order::getItems($order_id);
 	        if (!empty($order_goods)) {
 	            foreach ($order_goods AS $g) {
-	                Items::changeStock($g['goods_id'],$g['goods_number']);
+	                Items::changeStock($g['goods_id'],$g['goods_number'],$g['goods_attr_id']);
 	            }
 	        }
 	

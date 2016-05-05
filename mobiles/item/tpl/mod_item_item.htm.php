@@ -1,5 +1,14 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
+<style>
+#Mbody {
+	background-color : #fff;
+}
+.disabled_btn {
+	background-color : #c0c0c0 !important;
+}
+</style>
+
 <?php if(''!==$errmsg):?>
 
 <div class="error"><?=$errmsg?></div>
@@ -23,12 +32,11 @@
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><a href='<?=$kefu_link?>' <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
-	<a href="<?php echo U('trade/cart/list')?>">
-		<div class="fl cursor p_d_t2"><span class="f_num" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span></div>
-	</a>
-<?php if (!$item->is_on_sale):?>
-<div style="background: #c0c0c0;width: 60%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
-<?php else:?>
+    <div class="fl cursor p_d_t5" onclick="window.location.href='/shop/<?=$merchant->uid ?>'"><p></p></div>
+	<div class="fl cursor p_d_t2" id="collect_status" onclick="changeGoodsCollect(this);";><span class="f_num" style='display:none;' id="collect_number"></span></div>
+<?php if (!$item->is_on_sale || $item->is_delete):?>
+<div style="background: #c0c0c0;width: 52%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
+<?php elseif(!$item->goods_flag):?>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
 	<div class="fl cursor p_d_t4" id="Mnav-buy">立即购买</div>
 <?php endif;?>
@@ -48,16 +56,16 @@
 			<div class="p_cart_hr fl">
 				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?=$item->shop_price?>"><?=$item->shop_price?></span></div>
 				<div class="p_hr_stock">库存<span id="stock-num"><?=$item->item_number?></span>件</div>
-				<div class="p_hr_select <?php if(empty($attr_grp)):?>hide<?php endif;?>">已选：<span id="product_select">"蓝色","45"</span></div>
+                <div class="p_hr_select <?php if(count($attr_grp) == 0):?>hide<?php endif;?>">已选：<span id="product_select"></span></div>
 			</div>
 		</div>
 		<div class="p_cart_bd no-bounce">
 <?php foreach ($attr_grp AS $attrgrp): ?>
 			<div class="p_cart_item">
-				<div class="p_cart_btit"><?=$attrgrp['attr_name']?></div>
+				<div class="p_cart_btit"><?=$attrgrp['cat_name']?></div>
 				<ul class="p_cart_ul clearfix">
 	<?php $i=0; foreach ($attrgrp['attrs'] AS $attr): ?>
-					<li <?php if(0===$i): ?>class="on"<?php endif;?> data-style="" data-goods_attr_id="<?=$attr['goods_attr_id']?>" data-attr_id="<?=$attr['attr_id']?>" data-attr_price="<?=$attr['attr_price']?>"><?=$attr['attr_value']?></li>
+					<li data-id="<?=$attr['attr_id']?>"><?=$attr['attr_value']?></li>
 	<?php $i++; endforeach;?>
 					<input type="hidden"/>
 				</ul>
@@ -73,7 +81,7 @@
 			</div>
 		</div>
 		<span class="cursor p_cart_close"></span>
-		<div class="no-bounce p_cart_btn"><a href="javascript:;">确定</a></div>
+		<div class="no-bounce p_cart_btn"><a href="javascript:;" id="p_cart_btn_a" <?php if(count($attr_grp) > 0):?>class='disabled_btn'<?php endif;?>>确定</a></div>
 	</div>
 </div>
 
@@ -156,8 +164,8 @@ $(function(){
 <div class="p_detail_msg">
 	<div class="p_d_title"><?=$item->item_name?></div>
 	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>市场价: ￥<?=$item->market_price?></b><?php if(0&&$user->uid && $user->level>0):?><span class="product_zyj" id="product_zyj">总佣金：￥<?=$item->commision_show?></span><?php endif;?></div>
-	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_goods_number?>件</span><span class="fl">快递：免运费</span></div>
+	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>市场价: ￥<?=$item->market_price?></b></div>
+	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_goods_number?>件</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span></div>
 </div>
 
 <?php if($referee):?>
@@ -167,14 +175,23 @@ $(function(){
 </div>
 <?php endif;?>
 
-<div class="p_detail_serv clearfix">
-	<ul>
-		<li>七天退货</li>
-		<li>正品保证</li>
-		<li>厂家直供</li>
-		<li>担保交易</li>
-		<li>48小时内发货</li>
-	</ul>
+<div class="bg_details">
+	<div class="p_detail_serv clearfix">
+		<ul>
+			<li>七天退货</li>
+			<li>担保交易</li>
+			<li>48小时内发货</li>
+		</ul>
+	</div>
+</div>
+
+<div class="iance_list_top">
+	<img src="<?=$merchant->logo ?>" class="l_top_img">
+	<div class="l_top_infos">
+		<p class="t_infos_nmae" style="margin-top:13px;"><?=$merchant->facename ?></p>
+		<!-- <p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p> -->
+	</div>
+	<button class="join_top_btn" onclick="window.location.href='/shop/<?=$merchant->uid ?>'">进店逛逛  </button>
 </div>
 
 <div class="p_detail_pull">
@@ -184,48 +201,28 @@ $(function(){
 <div class="p_detail_info">
 	<div class="pro_tab_check">
 		<ul>
-		<li class="check_on" id="li1" data-loaded='Y' style="width:100%;">图文详情</li>
-		<!-- 
+		<!--<li class="check_on" id="li1" data-loaded='Y' style="width:100%;">图文详情</li> -->
+		 
 			<li class="check_on" id="li1" onclick="detailTabSwitch(1)" data-loaded='Y'>图文详情</li>	
 			<li class="" id="li2" onclick="detailTabSwitch(2)">宝贝评价</li>
 			<li class="" id="li3" onclick="detailTabSwitch(3)">店铺推荐</li>
-		 -->
-		</ul><!-- 
+		
+		</ul>
 		<span class="pro_line1"></span>
-		<span class="pro_line2"></span>-->
+		<span class="pro_line2"></span>
 		<div class="clear"></div> 
 	</div>
 	<div class="pro_comment" id="list1">
 		<div class="product_detail"><?=$item->item_desc?></div>
 	</div>
-	<div class="pro_comment pro_lsit_tab" id="list2" style="display:none">
-		<table cellspacing="0" cellpadding="0" class="pro_tab_evaluate">
-			<tr>
-				<td><div class="evaluate_on" data-cat='0' data-text='全部'>全部</div></td>
-				<td><div data-cat='1' data-text='好评'>好评</div></td>
-				<td><div data-cat='2' data-text='中评'>中评</div></td>
-			</tr>
-			<tr>
-				<td><div data-cat='3' data-text='差评'>差评</div></td>
-				<td><div data-cat='-1' data-text='有图'>有图</div></td>
-			</tr>
-		</table>
-		<div class="e_info_d" id="commentlist" style="margin-bottom:10px;">
-		</div>
-		<div class="remm_more" style="display: none;">下拉加载更多...</div>
-	</div>
-	<div class="pro_comment" id="list3" style="display:none">
-		<div class="shop_remm">
-			<ul>
-			</ul>
-			<div class="clear"></div>
-		</div>
-	</div>
+	<?php include T('mod_item_item_ext');?>
 </div>
 
 <script>
+var goods_id = <?=$item->item_id ?>;
+var attrmap = <?=$attrmap ?>;
 $(function(){
-
+	getGoodsCollectNum();
 	//缓存对象
 	var $mask     = $("#bodymask");
 	var $cartmain = $('#p_cart_main');
@@ -238,40 +235,6 @@ $(function(){
 	$(document.body).on("click",".w_wx_colse",function(){
 		$mask.fadeOut(255);
 		$("#cart_yj_f").fadeOut(255);
-	});
-	
-	//菜单开启
-	$(document.body).on("click", ".p_detail_more", function(){
-		if($(this).attr('data-show')=='0') {
-			$(".p_detail_menulist").show();
-			$(this).attr('data-show','1');
-		}
-		else {
-			$(".p_detail_menulist").hide();
-			$(this).attr('data-show','0');
-		}
-	});
-	//菜单关闭
-	$(document.body).on("click",function(e){
-		var firecls = 'p_detail_more';
-		var canfire = true;
-		if ($(e.target).hasClass(firecls)) {
-			canfire = false;
-		}
-		else {
-			var $pn = $(e.target).parent();
-			while($pn.size()>0 && $pn.get(0).tagName!='body') {
-				if ($pn.hasClass(firecls)) {
-					canfire = false;
-					break;
-				}
-				$pn = $pn.parent();
-			}
-		}
-		if (canfire) {
-			$(".p_detail_menulist").hide();
-			$("."+firecls).attr('data-show','0');
-		}
 	});
 	
 	//加入购物车
@@ -308,18 +271,6 @@ $(function(){
 		showSelect();
 	});
 	
-	//产品数量填写
-	/* $cartmain.on("input propertychange", ".cart_inp", function(){
-		var t = $(this);
-		var num = t.val();
-		if(!isZZ(num)){
-			t.val('1');
-			boxalert("请输入大于零的整数!");
-			return false;
-		}
-		showSelect();
-	}); */
-	
 	//产品数量减少
 	$cartmain.on("click", ".btn_minus", function(){
 		var t = $(this);
@@ -345,6 +296,9 @@ $(function(){
 	
 	//确定加入
 	$cartmain.on("click", ".p_cart_btn a", function(){
+		if($(this).hasClass("disabled_btn")){
+			return;
+		}
 		var buy_type = $('#frm_buy_type').val();
 		var item_id  = $('#frm_item_id').val();
 		var item_num = $('#frm_item_num').val();
@@ -361,31 +315,11 @@ $(function(){
 				$cartmain.addClass("is_confirm");
 				setTimeout(function(){
 					$cartmain.hide().attr("class","p_cart_main");
-					var cart_number = $("#cart_number").text()*1;
-					var select_number = $(".cart_inp").val()*1;
-					$("#cart_number").text(cart_number + select_number).show();
+					//var cart_number = $("#cart_number").text()*1;
+					//var select_number = $(".cart_inp").val()*1;
+					//$("#cart_number").text(cart_number + select_number).show();
 				},500);
 			});
-		}
-	});
-
-	 F.onScrollEnd(function(){
-		if(!$("#li2").hasClass("check_on")){
-			return;
-		}
-		if(!$(".remm_more").is(":visible")){
-			return;
-		}
-		var more = $(".remm_more");
-		var scrollHeight = $(".scrollArea").height();
-		var sh = Math.abs(this.y);
-		var windowH = $(window).height();
-		var btnNav = $("#Mnav").height();
-		windowH = windowH - (btnNav ? btnNav :0);
-		//提前20px开始加载
-		var bufferH = 20; 
-		if((sh + windowH + bufferH) > scrollHeight){
-			pulldata(more);
 		}
 	});
 });
@@ -397,17 +331,28 @@ function showSelect(){
 		showSelect.base_price = parseFloat($('#cart_shop_price').attr('data-base_price'));
 	}
 	spec_ids = '';
+	var key = 'k_';
 	var select = '', price = showSelect.base_price;
 	$("#p_cart_main .p_cart_ul").each(function(){
 		var li = $(this).find("li.on");
 		select += '"' + li.text() + '",';
-		spec_ids += li.attr('data-goods_attr_id') + ',';
-		price += parseFloat(li.attr('data-attr_price')?li.attr('data-attr_price'):0);
+		key += li.data('id')+"_";
 	});
-	select = select.substr(0,select.length-1);
-	spec_ids = spec_ids.substr(0,spec_ids.length-1);
-	$("#product_select").text(select);
-	$('#cart_shop_price').text(price.toFixed(2));
+	var attr = attrmap[key];
+	if(attr){
+		spec_ids = attr['goods_attr_id'];
+		price = parseFloat(attr['shop_price']);
+		var goods_number = attr['goods_number'];
+		$("#stock-num").text(goods_number);
+    	select = select.substr(0,select.length-1);
+    	$("#product_select").text(select);
+    	$('#cart_shop_price').text(price.toFixed(2));
+    	if(goods_number && goods_number > 0){
+        	$("#p_cart_btn_a").removeClass("disabled_btn");
+        }else{
+        	$("#p_cart_btn_a").addClass("disabled_btn");
+        }
+	}
 }
 //购买白名单
 function can_buy() {
@@ -452,6 +397,10 @@ function add_to_cart(item_id, item_num, callback) {
 			var old_stock = parseInt($('#stock-num').text());
 			old_stock -= ret.added_num;
 			$('#stock-num').text(old_stock);
+			var attr = getAttrMapBySpecId(spec_ids);
+			if(attr){
+				attr['goods_number'] = parseInt(attr['goods_number']) - ret.added_num;
+			}
 			if (typeof(callback)=='function') {
 				callback();
 			}
@@ -460,159 +409,19 @@ function add_to_cart(item_id, item_num, callback) {
 		}
 	});
 }
-//详情、评论TAB页切换
-function detailTabSwitch(a){
-	var _li = "#li" + a;
-	var _list = "#list" + a;
-	$(".pro_tab_check li").removeClass("check_on");
-	$(".pro_comment").hide();
-	
-	$(_li).addClass("check_on");
-	$(_list).show();
-	if($(_li).attr('data-loaded') != 'Y'){
-		$(_li).attr('data-loaded','Y');
-		if(a == 2){
-			loadGoodsComment(1, true);
-		}else if(a == 3){
-			getMerchantRecommend(1, true);
-		}
-	}
-	//F.set_scroller(false, 100);
-}
-//加载商品评论列表
-function loadGoodsComment(curpage, isinit, category){
-	F.get('<?php echo U('item/comment/list')?>',{curpage : curpage, goods_id : <?=$item->item_id ?>, category : category},function(ret){
-		var commentDom = $("#commentlist");
-		if(!ret || !ret.result || ret.result.length == 0){
-			$(".remm_more").html("下拉加载更多...");
-			$(".remm_more").attr("curpage",1).hide();
-			var _html = "<div style='margin:15px;text-align:center;'>还没有人评论哦~</div>";
-			commentDom.html(_html);
-			//F.set_scroller(false, 100);
-			return;
-		}
-		renderCommentNum(ret);
-		var _html = "";
-		for(var i = 0,len=ret.result.length; i < len; i++){
-			var comment = ret.result[i];
- 			_html += "<table cellspacing='0' cellpadding='0' class='evaluate_info'><tr>";
-			_html += "<td width=\"45px;\"><img src=\"/themes/mobiles/img/mt.png\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+comment.user_logo+"')\"></td>";
-			_html += "<td><p class=\"eval_name\">"+comment.user_name+"</p>";
-			if(comment.obj_attr){
-				_html += "<p class=\"eval_type\">"+comment.obj_attr+"</p>";
-			}
-			_html += "<p class=\"eval_time\">"+comment.add_time+"</p></td></tr></table>";
-			_html += "<p class=\"eval_idea\">"+comment.content+"</p>";
-			if(comment.comment_img){
-				var cimg = comment.comment_img.split(","); 
-				var cimg_thumb = comment.comment_thumb.split(","); 
-				_html += "<div class=\"idea_img\"><ul>";
-				for(var ig = 0,iglen = cimg.length; ig < iglen; ig++){
-    				_html += "<li><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" data-orisrc=\""+cimg[ig]+"\" onload=\"imgLazyLoad(this,'"+cimg_thumb[ig]+"')\"></li>";
-				}
-				_html += "</ul></div>";
-			}
-			if(comment.comment_reply){
-				_html += "<div class=\"eval_reply\">掌柜回复："+comment.comment_reply+"</div>";
-			}
-		}
-		if(isinit){
-			commentDom.html(_html);
-		}else{
-			commentDom.append(_html);
-		}
-		commentLoadedCallback();
-		handleWhenHasNextPage(ret, category);
-	});
-}
 
-$(function(){
-	
-	//好评中评差评切换
-	$(".pro_tab_evaluate").find("div").on('click', function(){
-		var OBJ = $(this);
-		if(OBJ.hasClass("evaluate_on")){
-			return;
-		}
-		$(".pro_tab_evaluate").find("div").removeClass("evaluate_on");
-		OBJ.addClass("evaluate_on");
-		loadGoodsComment(1, true, OBJ.attr("data-cat"));
-	});
-});
-//渲染评论数量
-function renderCommentNum(ret){
-	var render = $(".pro_tab_evaluate");
-	var gather = ret['gather'];
-	var all = 0;
-	for(var i = 0,len=gather.length; i < len; i++){
-		var level = gather[i];
-		var total = level.total;
-		if(total && total > 0){
-			var curLevel = render.find("div[data-cat='"+level.comment_level+"']");
-			curLevel.html(curLevel.attr('data-text')+"（"+total+"）");
-		}
-		if(level.comment_level != "-1"){
-			all += parseInt(total);
+//根据规格ID反查attrmap
+function getAttrMapBySpecId(spec_id){
+	if(!spec_id){
+		return null;
+	}
+	for(var key in attrmap){
+		var attr = attrmap[key];
+		if(attr['goods_attr_id'] == spec_id){
+			return attr;
 		}
 	}
-	if(all > 0){
-		var allLevel = render.find("div[data-cat='0']");
-		allLevel.html(allLevel.attr('data-text')+"（"+all+"）");
-	}
-}
-//评论加载后回调
-function commentLoadedCallback(){
-	//F.set_scroller(false, 100);
-    //weixin img click
-    $('.idea_img img').on('click',function(){
-    	var comment_currpic = '';
-        var comment_picset = new Array();
-        $(this).closest("ul").find("img").each(function(){
-        	comment_picset.push($(this).attr('data-orisrc'));
-        	if (''==comment_currpic) comment_currpic = $(this).attr('src');
-        });	
-    	wx.previewImage({
-            current: comment_currpic,
-            urls: comment_picset
-    	});
-    });
-}
-//当还有下一页时处理下拉
-function handleWhenHasNextPage(data, category){
-	$(".remm_more").html("下拉加载更多...");
-	var more = $(".remm_more");
-	var hasnex = data.hasnexpage;
-	if(hasnex){
-		more.show();
-		more.attr('curpage',data.curpage);
-		more.attr('category',category);
-	}else{
-		more.hide();
-	}
-}
-
-function pulldata(obj){
-	$(".remm_more").html("加载中...");
-	loadGoodsComment($(obj).attr("curpage"), false, $(obj).attr("category"));
-}
-
-function getMerchantRecommend(curpage, isinit){
-	F.get('<?php echo U('item/merchant/recommend')?>',{curpage : curpage, merchant_uid : <?=$item->merchant_uid ?>},function(ret){
-		if(!ret || !ret.result || !ret.result.length){
-			$(".shop_remm").find("ul").html($("<li><p style='line-height:50px;margin-left:10px;'>还没有可显示的商品！</p></li>"));
-			return;
-		}
-		var LI = "";
-		var result = ret.result;
-		for(var i = 0,len=result.length; i < len; i++){
-			var good = result[i];
-			LI += "<li><a href='/item/"+good.goods_id+"'><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+good.goods_img+"')\">";
-			LI += "<p class=\"remm_font\">"+good.goods_name+"</p>";
-			LI += "<p class=\"tea_info_price remm_p\"><span>￥"+good.shop_price+"</span><b>￥"+good.market_price+"</b></p></a></li>";
-		}
-		$(".shop_remm").find("ul").html($(LI));
-		//F.set_scroller(false, 100);
-	});
+	return null;
 }
 
 </script>

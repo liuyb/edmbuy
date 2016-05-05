@@ -182,7 +182,8 @@ class Cart extends StorageNode {
 			$sess_id = session_id();
 			$shopping_uid = $user_id ? : $sess_id;
 			$num = $num > 0 ? intval($num) : 1;
-			if ($num > $exItem->item_number || self::getUserCartNum($shopping_uid,$item_id)>=$exItem->item_number) {
+			$real_number = Items::getRealGoodsNumber($exItem->item_number, $spec_ids);
+			if ($num > $real_number || self::getUserCartNum($shopping_uid,$item_id)>=$real_number) {
 				$ret = ['code' => -2, 'msg' => '商品库存不足'];
 				return $ret;
 			}

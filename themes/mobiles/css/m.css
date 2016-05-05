@@ -1215,22 +1215,21 @@ a.h_btn{
 }
 .p_detail_serv{
   padding: 8px 12px;
-  background: #fff;
 }
 .p_detail_serv li{
   float: left;
   font-size: 12px;  
-  color: #f65d00;
-  margin-right: 25px;
+  color: #323232;
+  margin-right: 18px;
   line-height: 2;
   padding-left: 17px;
   background: url(../img/dgou.png) no-repeat 0 center;
   background-size: 12px;
 }
 .p_detail_pull{
-  background: #f3f3f3;
+  background: #f1f1f1;
   overflow: hidden;
-    height: 12px;
+  height: 12px;
 }
 .p_detail_pull h1{
     height: 10px;
@@ -1289,9 +1288,9 @@ a.h_btn{
   position: relative;
 }
 .p_d_t1{
-  width: 20%;
-  background: url(../img/kf_55.png) no-repeat center center;
-  background-size: 36px;
+  width: 16%;
+  background: url(../img/kefu.png) no-repeat center center;
+  background-size:20px 32px;
   border-top: 1px solid #ccc; 
 }
 .p_d_t1 a{
@@ -1300,26 +1299,39 @@ a.h_btn{
   border-right: 1px solid #ccc;
 }
 .p_d_t2{
-  width: 20%; 
-  background: url(../img/gwc－1.png) no-repeat center center;
-  background-size: 36px;
+  width: 16%;	
+  background: url(../img/shouc1.png) no-repeat center center;
+  background-size:20px 32px;
   border-top: 1px solid #ccc; 
 }
+.t2_on{
+	width: 16%;	
+	background: url(../img/sc4.png) no-repeat center center !important;
+	background-size:20px 32px !important;
+}
 .p_d_t3{
-  width: 34%;
+  width: 26%;
   color: #fff;
   background: #f4503e;
-  font-size: 16px;
-  font-weight: bold;  
+  font-size: 14px;
   border-top: 1px solid #f4503e;  
 }
 .p_d_t4{
   width: 26%;
   color: #fff;
   background: #ff6d14;
-  font-size: 16px;
-  font-weight: bold;  
+  font-size: 14px;
   border-top: 1px solid #ff6d14;  
+}
+.p_d_t5{
+	width: 16%;
+	background: url(../img/dp331.png) no-repeat center center;
+	background-size:20px 32px;
+	border-top: 1px solid #ccc;	
+}
+.p_d_t5 p{
+	height: 100%;
+	border-right: 1px solid #ccc;
 }
 .p_detail_button{
   position: fixed;
@@ -6417,6 +6429,21 @@ td.cash_td2 img {
 }
 /*2016-5-3 e*/
 
-
+/*2016-5-5  s */
+.join_top_btn{
+   	float: right;
+ 	width: 80px;
+  	height: 24px;
+  	background: #fff url(../img/btn_back.png) no-repeat right;
+	padding-right:5px;
+	background-size:10px;
+  	color: #8c8c8c;
+  	border-radius: 5px;
+  	margin-top: 13px;	
+}
+.bg_details{
+	background:#f1f1f1;
+}
+/*2016-5-5  e */
 
 

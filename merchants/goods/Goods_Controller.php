@@ -92,7 +92,7 @@ class Goods_Controller extends MerchantController
             }
             $selectedCat = $goods->cat_id;
             //邮件模板
-            if($goods->fee_or_template == Goods_Model::$SHIPPING_TEMPLATE){
+            if($goods->fee_or_template == Items::SHIPPING_TEMPLATE){
                 $selectedShip = $goods->shipping_template;
                 $goods->shipping_fee = 0;
             }
@@ -171,9 +171,9 @@ class Goods_Controller extends MerchantController
             $goods->original_img = $original_img;
             $goods->per_limit_buy = intval($per_limit_buy);
             $goods->fee_or_template = intval($fee_or_template);
-            if($fee_or_template == Goods_Model::$SHIPPING_FEE){
+            if($fee_or_template == Items::SHIPPING_FEE){
                 $goods->shipping_fee = doubleval($shipping_fee);
-            }else if($fee_or_template == Goods_Model::$SHIPPING_TEMPLATE){
+            }else if($fee_or_template == Items::SHIPPING_TEMPLATE){
                 $goods->shipping_template = intval($shipping_template);
             }
             $ret = false;

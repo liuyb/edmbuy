@@ -55,7 +55,7 @@ class Default_Model extends Model {
 	    $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img,g.goods_number 
 	           from shp_goods g, shp_package_goods pg 
                where	g.goods_id = pg.goods_id 
-               and 	g.is_on_sale = 1 and g.is_delete = 0 
+               and 	g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
                and 	pg.package_id = %d";
 	    $goods = D()->query($sql, $package_id)->fetch_array_all();
 	    if (!empty($goods)) {

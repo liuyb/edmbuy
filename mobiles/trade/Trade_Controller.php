@@ -425,7 +425,7 @@ class Trade_Controller extends MobileController {
         $ret['msg'] = '商品不存在';
         $response->sendJSON($ret);
       }
-      elseif (!$cItem->is_on_sale) {
+      elseif ($cItem->is_delete || !$cItem->is_on_sale) {
         D()->commit();
         $ret['msg'] = '该商品已下架，不能购买';
         $response->sendJSON($ret);
@@ -715,14 +715,14 @@ class Trade_Controller extends MobileController {
         foreach ($order_goods AS $cg) {
           $cItemId = $cg['goods_id'];
           $cItem = Items::load($cItemId);
-
-          if (!$cItem->is_exist() || !$cItem->is_on_sale || !$cItem->item_number) { //商品下架或者库存为0，都不能购买
+          $real_number = Items::getRealGoodsNumber($cItem->item_number, $cg['goods_attr_id']);
+          if (!$cItem->is_exist() || $cItem->is_delete || !$cItem->is_on_sale ||  !$real_number) { //商品下架或者库存为0，都不能购买
             continue;
           }
 
           //TODO 并发？
-          $true_goods_number = $cg['goods_number']>$cItem->item_number ? $cItem->item_number: $cg['goods_number'];
-          Items::changeStock($cItemId, -$true_goods_number); //立即冻结商品对应数量的库存
+          $true_goods_number = $cg['goods_number']>$real_number ? $real_number: $cg['goods_number'];
+          Items::changeStock($cItemId, -$true_goods_number, $cg['goods_attr_id']); //立即冻结商品对应数量的库存
 
           $newOI = new OrderItems();
           $newOI->order_id    = $order_id;

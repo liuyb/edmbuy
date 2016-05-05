@@ -9,11 +9,6 @@ defined('IN_SIMPHP') or die('Access Denied');
 class Goods_Model extends Model
 {
 
-    //统一运费
-    static $SHIPPING_FEE = 1;
-    //运费模板
-    static $SHIPPING_TEMPLATE = 2;
-
     /**
      * 新增OR修改商品
      * @param Items $goods

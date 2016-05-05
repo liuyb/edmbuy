@@ -39,7 +39,7 @@ class Distribution_Model extends Model{
     static function findGoodsRcoment($merchant_id, $limit){
         $where = "and shop_recommend = 1 and merchant_id = '%s'";
         $sql = "select goods_id,goods_name,shop_price,market_price,goods_brief,
-        goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 $where order by sort_order desc,last_update desc limit {$limit}";
+        goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 and goods_flag = 0 $where order by sort_order desc,last_update desc limit {$limit}";
         $goods = D()->query($sql,$merchant_id)->fetch_array_all();
         return Items::buildGoodsImg($goods);
     }
