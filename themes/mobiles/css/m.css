@@ -5373,7 +5373,7 @@ td.cash_td2 img {
 	height:47px;
 	border-top:1px solid #ddd;
 }
-.fl{
+.fl_d{
 	float:left;
 	margin-left:10px;
 	font-size:15px;
@@ -5526,7 +5526,7 @@ td.cash_td2 img {
 .get_now_btn{
 	float:left;
 	height:27px;
-	width:75px;
+	width:80px;
 	border:1px solid #f65d00;
 	color:#f65d00;
 	font-size:14px;

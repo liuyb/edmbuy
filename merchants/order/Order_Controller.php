@@ -477,13 +477,13 @@ class Order_Controller extends MerchantController {
         $this->setPageView($request, $response, '_page_box');
         $this->v->set_tplname('mod_order_refund_detail');
         $rec_id = $request->get('rec_id', '');
-        $refund = OrderRefund_Model::getRefundDetails($rec_id);
+        $refund = OrderRefund::getRefundDetails($rec_id);
         $goods = Order::getTinyItems($refund['order_id']);
         $this->v->assign('goods', $goods);
         if(!$refund['nick_name']){
             $refund['nick_name'] = $refund['consignee'];
         }
-        $refund_status = OrderRefund_Model::getRefundStatus($refund['check_status'], $refund['wx_status']);
+        $refund_status = OrderRefund::getRefundStatus($refund['check_status'], $refund['wx_status']);
         $refund['status'] = $refund_status;
         if(OrderRefund::WX_STATUS_FAIL == $refund['wx_status']){
             $refund['fail_msg'] = $refund['wx_response'];

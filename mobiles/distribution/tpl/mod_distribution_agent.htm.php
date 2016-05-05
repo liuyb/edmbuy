@@ -132,12 +132,12 @@ function clearAgent(){
 <script id="forMnav" type="text/html">
 <div class="agency_bottom_next"> 
 	<div class="agency_money gold_common" id="agency1">
-		<span class="left_agency fl">金牌代理</span>
+		<span class="left_agency fl_d">金牌代理</span>
 		<span class="right_buy_btn fr btn-wxpay" data-val='<?=$gold_agent ?>' data-type='3'>立即支付</span>
 		<span class="right_money fr">￥698.00</span>
 	</div>
 	<div class="silver_money gold_common" id="agency2" style="display:none;">
-		<span class="left_agency fl">银牌代理<br><i style="font-size:10px;color: #8c8c8c;">不支持补差价升级为金牌代理</i></span>
+		<span class="left_agency fl_d">银牌代理<br><i style="font-size:10px;color: #8c8c8c;">不支持补差价升级为金牌代理</i></span>
 		<span class="right_buy_btn fr btn-wxpay" data-val='<?=$silver_agent ?>' data-type='4'>立即支付</span>
 		<span class="right_money_silver">￥398.00</span>
 	</div>

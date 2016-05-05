@@ -51,13 +51,13 @@
 				<p>推广素材</p>
 			</li>
 		</a>
-		<a href="add_backID.html">
+		<a href="<?php echo U('cash/apply')?>">
 			<li>
 				<h1><img src="/themes/mobiles/img/sqtx.png"></h1>
 				<p>申请提现</p>
 			</li>
 		</a>
-		<a href="cash_list_info.html">
+		<a href="<?php echo U('cash/detail')?>">
 			<li>
 				<h1><img src="/themes/mobiles/img/txmx.png"></h1>
 				<p  class="del_bottom">提现明细</p>
