@@ -1,13 +1,72 @@
+ 	<!-- head start -->
 <!DOCTYPE html>
-<link rel="stylesheet" href="/edmbuy/themes/merchants/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/edmbuy/themes/merchants/css/bootstrap-datetimepicker.min.css" />
-<link rel="stylesheet" href="/edmbuy/themes/merchants/css/c.min.css" />
-<script src="/edmbuy/misc/js/ext/jquery-2.0.3.min.js"></script>
-<script src="/edmbuy/misc/js/ext/bootstrap/bootstrap.min.js"></script>
-<script src="/edmbuy/misc/js/ext/bootstrap/bootstrap-datetimepicker.min.js"></script>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="./css/c.css" />
+<link rel="stylesheet" href="./css/animate.min.css" />
+<link rel="stylesheet" href="./css/wu.css" />
+<link rel="stylesheet" href="./css/du.css" />
+<link rel="stylesheet" href="./css/normalize.css">
+<link rel="stylesheet" href="./css/jquery.slideunlock.css">
+<script src="./js/jquery-1.8.3.js"></script>
+<script src="./js/swiper.min.js"></script>
+<script src="./js/jquery.slideunlock.min.js"></script>
+<!-- head end -->
+</head>
 
-<input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime">
- 
+<body style="background:#fff;">
+
+<div id="slide-wrapper">
+	<input type="hidden" value="" id="lockable">
+	<div id="slider">
+		<span id="label"></span>
+		<span id="lableTip"></span>
+	</div>
+</div>
+<button id="reset-btn">重置</button>
+<p class="warn"></p>
+
 <script type="text/javascript">
-    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
-</script>           
+$(function () {
+	var slider = new SliderUnlock("#slider", {}, function(){
+	}, function(){
+		$(".warn").text("index:" + slider.index + "， max:" + slider.max + ",lableIndex:" + slider.lableIndex + ",value:" + $("#lockable").val() + " date:" + new Date().getUTCDate());
+	});
+	slider.init();
+
+	$("#reset-btn").on('click', function(){
+		slider.reset();
+	});
+})
+</script>
+
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p>适用浏览器：360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗. 不支持IE8及以下浏览器。</p>
+<p>来源：<a href="http://sc.chinaz.com/" target="_blank">站长素材</a></p>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
