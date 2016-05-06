@@ -500,20 +500,20 @@ HERESQL;
 	}
 	
 	/**
-	 * 当前商品库存，规格存在时以规格为准
+	 * 当前商品属性数据，规格存在时以规格为准
 	 * @param unknown $goods_number
 	 * @param unknown $spec_id
 	 */
-	static function getRealGoodsNumber($goods_number, $spec_id){
-	    if(!$spec_id){
-	        return $goods_number;
+	static function getRealGoodsInfo($spec_id){
+	    if(!$spec_id || $spec_id < 0){
+	        return null;
 	    }
-	    $sql = "select * from shp_goods_attr where goods_attr_id = %d";
-		$attr= D()->query($sql, $spec_id)->get_one();
-		if(!$attr){
-		    return 0;
+	    $sql = "select market_price,shop_price,income_price,cost_price,goods_number from shp_goods_attr where goods_attr_id = %d";
+		$attr = D()->query($sql, $spec_id)->get_one();
+		if(!$attr || empty($attr)){
+		    return null;
 		}
-		return $attr['goods_number'];
+		return $attr;
 	}
 }
  

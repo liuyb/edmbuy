@@ -236,18 +236,18 @@ class Order extends StorageNode{
      * @param integer $merchant_uid
      * @return array
      */
-    static function getItems($order_id, $merchant_uid = 0) {
+    static function getItems($order_id, $merchant_id = '') {
     	if (empty($order_id)) return [];
     
     	$ectb_goods = Items::table();
     	$ectb_order_goods = OrderItems::table();
     
     	$where = '';
-    	if ($merchant_uid) {
-    		$where = " AND g.merchant_uid=%d";
+    	if ($merchant_id) {
+    		$where = " AND g.merchant_id='%s'";
     	}
     	$sql = "SELECT og.*,g.`goods_thumb`,g.`commision` FROM {$ectb_order_goods} og INNER JOIN {$ectb_goods} g ON og.`goods_id`=g.`goods_id` WHERE og.`order_id`=%d {$where} ORDER BY og.`rec_id` DESC";
-    	$order_goods = D()->raw_query($sql, $order_id, $merchant_uid)->fetch_array_all();
+    	$order_goods = D()->raw_query($sql, $order_id, $merchant_id)->fetch_array_all();
     	if (!empty($order_goods)) {
     		foreach ($order_goods AS &$g) {
     			$g['goods_url']   = Items::itemurl($g['goods_id']);
@@ -336,7 +336,7 @@ class Order extends StorageNode{
     			$subOrder->commision    = 0;
     			$subOrder->is_separate  = 0;
     			$subOrder->parent_id    = $master_order_id;
-    			$subOrder->merchant_ids = Merchant::getMidByAdminUid($m_uid);
+    			$subOrder->merchant_ids = $m_uid;
     			$subOrder->save(Storage::SAVE_INSERT); //先生成一个克隆子订单
     			
     			if ($subOrder->id) {
@@ -354,8 +354,10 @@ class Order extends StorageNode{
     					$newOI->parent_id   = $master_order_id;
     					$newOI->save(Storage::SAVE_INSERT); //循环生成“订单-商品”关联记录
     					
-    					$goods_amount += $oit['goods_price'] * $oit['goods_number'];
-    					$commision    += $oit['commision'] * $oit['goods_number'];
+    					//$goods_amount += $oit['goods_price'] * $oit['goods_number'];
+    					//$commision    += $oit['commision'] * $oit['goods_number'];
+    					$goods_amount += $OI->goods_price * $OI->goods_number;
+    					$commision    += ((doubleval($OI->goods_price) - doubleval($OI->income_price)) * $OI->goods_number);
     				}
 
     				$order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
@@ -374,7 +376,7 @@ class Order extends StorageNode{
     				D()->update(self::table(), ['is_separate'=>1], ['order_id'=>$master_order_id]);
     				
     				//关联订单和商家ID
-    				self::relateMerchant($subOrder->id, $m_uid);
+    				//self::relateMerchant($subOrder->id, $m_uid);
     				
     			} //END if ($subOrder->id)
     		} //END foreach ($merchant_uids AS $m_uid)
