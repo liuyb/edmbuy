@@ -39,8 +39,8 @@
 			<li id="li1" class="navig_on" onclick="agency_switch(1)">金牌代理</li><li id="li2" onclick="agency_switch(2)">银牌代理</li>
 		</ul>
 	</div>
-	<input type='button' value='测试-支付成功后点击' onclick="testBuy();" />
-	<input type='button' value='测试-清除购买记录' onclick="clearAgent();" />
+	<!-- <input type='button' value='测试-支付成功后点击' onclick="testBuy();" />
+	<input type='button' value='测试-清除购买记录' onclick="clearAgent();" /> -->
 </div>
 
 <div class="agency_common" id="list1">

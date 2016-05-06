@@ -259,7 +259,7 @@ class User_Model extends Model
      * @param $email
      * @param $inviteCode
      */
-    static function saveMerchantInfo($mobile, $inviteCode, $password,$facename)
+    static function saveMerchantInfo($mobile, $inviteCode, $password)
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
 
@@ -282,10 +282,13 @@ class User_Model extends Model
             'action_list' => $action_list,
             'nav_list' => $nav_list,
             'role_id' => $role_id,
+            'agency_id' => 0,
+            'todolist' => ''
         );
         $tablename = "`shp_merchant`";
         $table_admin = "`shp_admin_user`";
         $insertarr['merchant_id'] = self::gen_merchant_id();
+        $insertarr['user_id'] = $GLOBALS['user']->uid;
         $salt = self::gen_salt();
         $password_enc = self::gen_password($password, $salt);
         $data_admin['password'] = $password_enc;
@@ -297,7 +300,8 @@ class User_Model extends Model
         $insertarr['email'] = '';
         $insertarr['password'] = $password_enc;
         $insertarr['role_id'] = $role_id;
-        $insertarr['facename'] = $facename;
+        $insertarr['created'] = time();
+        $insertarr['changed'] = time();
         $admin_uid = D()->insert($table_admin, $data_admin);
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
@@ -346,7 +350,7 @@ class User_Model extends Model
      * @param $invite_code
      * @param $order_id
      */
-    static function UpdataMerchantInfo($merchant_id, $order_id,$order_sn)
+    /* static function UpdataMerchantInfo($merchant_id, $order_id,$order_sn)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_merchant_payment`";
@@ -363,7 +367,7 @@ class User_Model extends Model
         $setarr['order_amount'] = MECHANT_ORDER_AMOUNT;
         $setarr['user_id'] = $GLOBALS['user']->uid;
         D()->insert($tablename, $setarr);
-    }
+    } */
 
     /**
      * 检验当前操作进行到了第几步骤
@@ -394,7 +398,7 @@ class User_Model extends Model
 //        update($tablename, Array $setarr, $wherearr, $flag = '');
         $tablename ="`shp_users`";
         $setarr['parent_id'] = $parent_id;
-        $setarr['nick_name'] = $nick_name;
+        $setarr['parent_nick'] = $nick_name;
         $wherearr['user_id'] = $GLOBALS['user']->uid;
         D()->update($tablename,$setarr,$wherearr);
     }

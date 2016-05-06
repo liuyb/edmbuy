@@ -1,12 +1,12 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <div id="sus_flow">
     <ul>
-        <li>商家资料</li>
-        <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-        <li >邀请码</li>
-        <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-        <li class="li_co">支付</li>
-        <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
+        <li>商家注册</li>
+        <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"></li>
+        <li class="li_cs bottom_f">邀请码</li>
+        <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"></li>
+        <li class="li_co bottom_f">支付</li>
+        <li class="li_cs"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
         <li>完成开通</li>
     </ul>
     <div class="clear"></div>
