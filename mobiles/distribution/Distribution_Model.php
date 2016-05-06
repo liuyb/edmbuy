@@ -202,7 +202,7 @@ class Distribution_Model extends Model{
                 $subOrder->commision    = 0;
                 $subOrder->is_separate  = 0;
                 $subOrder->parent_id    = $master_order_id;
-                $subOrder->merchant_ids = Merchant::getMidByAdminUid($m_uid);
+                $subOrder->merchant_ids = $m_uid;//Merchant::getMidByAdminUid($m_uid);
                 $subOrder->order_status = OS_CONFIRMED;
                 $subOrder->pay_status   = PS_PAYED;
                 $subOrder->relate_order_id = $agent_order_id;
@@ -243,7 +243,7 @@ class Distribution_Model extends Model{
                     D()->update(Order::table(), ['is_separate'=>1], ['order_id'=>$master_order_id]);
     
                     //关联订单和商家ID
-                    Order::relateMerchant($subOrder->id, $m_uid);
+                    //Order::relateMerchant($subOrder->id, $m_uid);
     
                 } //END if ($subOrder->id)
             } //END foreach ($merchant_uids AS $m_uid)

@@ -261,7 +261,7 @@ $(function(){
 		},300);
 	});
 	
-	//加入购物车选项
+	//属性规格选择
 	$cartmain.on("click", ".p_cart_ul li", function(){
 		var t = $(this);
 		var style = t.data("stype");
@@ -311,6 +311,7 @@ $(function(){
 		}
 		else {
 			add_to_cart(item_id, item_num, function(){
+				$('#Mtop').show();
 				$mask.hide();
 				$cartmain.addClass("is_confirm");
 				setTimeout(function(){
@@ -399,7 +400,9 @@ function add_to_cart(item_id, item_num, callback) {
 			$('#stock-num').text(old_stock);
 			var attr = getAttrMapBySpecId(spec_ids);
 			if(attr){
-				attr['goods_number'] = parseInt(attr['goods_number']) - ret.added_num;
+				var gn = parseInt(attr['goods_number']) - ret.added_num;
+				gn = gn > 0 ? gn : 0; 
+				attr['goods_number'] = gn;
 			}
 			if (typeof(callback)=='function') {
 				callback();

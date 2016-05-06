@@ -537,13 +537,14 @@ class Trade_Controller extends MobileController {
         $newOI->parent_id   = 0;
         $newOI->is_gift     = 0;
         $newOI->goods_attr_id = 0;
+        $newOI->merchant_ids = $cItem->merchant_id;
         $newOI->save(Storage::SAVE_INSERT_IGNORE);
 
         $order_update = [];
         if ($newOI->id) {
 
           //关联订单与商家
-          Order::relateMerchant($order_id, $cItem->merchant_uid, $cItem->merchant_id);
+          //Order::relateMerchant($order_id, $cItem->merchant_uid, $cItem->merchant_id);
 
           // 生成表 pay_log 记录
           PayLog::insert($order_id, $order_sn, $newOrder->order_amount, PAY_ORDER);
@@ -715,7 +716,20 @@ class Trade_Controller extends MobileController {
         foreach ($order_goods AS $cg) {
           $cItemId = $cg['goods_id'];
           $cItem = Items::load($cItemId);
-          $real_number = Items::getRealGoodsNumber($cItem->item_number, $cg['goods_attr_id']);
+          
+          $real_mark_price = $cItem->market_price;
+          $real_shop_price = $cItem->shop_price;
+          $real_income_price = $cItem->income_price;
+          $real_number = $cItem->item_number;
+          $real_commision = $cItem->commision;
+          $real_goods = Items::getRealGoodsInfo($cg['goods_attr_id']);
+          if($real_goods){
+              $real_mark_price = $real_goods['market_price'];
+              $real_shop_price = $real_goods['shop_price'];
+              $real_number = $real_goods['goods_number'];
+              $real_income_price = $real_goods['income_price'];
+              $real_commision = doubleval($real_shop_price) - doubleval($real_income_price);//佣金
+          }
           if (!$cItem->is_exist() || $cItem->is_delete || !$cItem->is_on_sale ||  !$real_number) { //商品下架或者库存为0，都不能购买
             continue;
           }
@@ -731,9 +745,9 @@ class Trade_Controller extends MobileController {
           $newOI->goods_sn    = $cItem->item_sn;
           $newOI->product_id  = $cg['product_id'];
           $newOI->goods_number= $true_goods_number;
-          $newOI->market_price= $cItem->market_price; //market_price,shop_price,income_price这三个字段使用最新的信息
-          $newOI->goods_price = $cItem->shop_price;
-          $newOI->income_price= $cItem->income_price;
+          $newOI->market_price= $real_mark_price; //market_price,shop_price,income_price这三个字段使用最新的信息
+          $newOI->goods_price = $real_shop_price;
+          $newOI->income_price= $real_income_price;
           $newOI->goods_attr  = $cg['goods_attr'];
           $newOI->send_number = 0;
           $newOI->is_real     = $cg['is_real'];
@@ -745,13 +759,11 @@ class Trade_Controller extends MobileController {
 
           if ($newOI->id) {
             $succ_goods[]     = $cg;
-            $true_amount     += $cItem->shop_price*$true_goods_number;
-            $total_commision += $cItem->commision *$true_goods_number;
+            $true_amount     += $real_shop_price * $true_goods_number;
+            $total_commision += $real_commision * $true_goods_number;
 
-            //关联订单与商家
-            Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
-            if (!in_array($cItem->merchant_uid, $rel_merchants)) {
-              array_push($rel_merchants, $cItem->merchant_uid);
+            if (!in_array($cItem->merchant_id, $rel_merchants)) {
+              array_push($rel_merchants, $cItem->merchant_id);
             }
           }
           else {
@@ -759,7 +771,7 @@ class Trade_Controller extends MobileController {
           }
 
         }//END foreach loop
-
+        $order_update['merchant_ids'] = implode(',', $rel_merchants);
         //检测订单变化
         $order_update['commision'] = $total_commision; //订单总佣金
         if ($true_amount!=$newOrder->goods_amount) {

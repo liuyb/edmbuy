@@ -182,7 +182,15 @@ class Cart extends StorageNode {
 			$sess_id = session_id();
 			$shopping_uid = $user_id ? : $sess_id;
 			$num = $num > 0 ? intval($num) : 1;
-			$real_number = Items::getRealGoodsNumber($exItem->item_number, $spec_ids);
+			$real_mark_price = $exItem->market_price;
+			$real_shop_price = $exItem->shop_price;
+			$real_number = $exItem->item_number;
+			$real_goods = Items::getRealGoodsInfo($spec_ids);
+			if($real_goods){
+			    $real_mark_price = $real_goods['market_price'];
+			    $real_shop_price = $real_goods['shop_price'];
+			    $real_number = $real_goods['goods_number'];
+			}
 			if ($num > $real_number || self::getUserCartNum($shopping_uid,$item_id)>=$real_number) {
 				$ret = ['code' => -2, 'msg' => '商品库存不足'];
 				return $ret;
@@ -224,8 +232,8 @@ class Cart extends StorageNode {
 				$cart->goods_sn    = $exItem->item_sn;
 				$cart->product_id  = 0;
 				$cart->goods_name  = $exItem->item_name;
-				$cart->market_price= $exItem->market_price;
-				$cart->goods_price = $exItem->shop_price;
+				$cart->market_price= $real_mark_price;
+				$cart->goods_price = $real_shop_price;
 				$cart->goods_number= $num;
 				$cart->goods_thumb = $exItem->item_thumb;
 				$cart->goods_img   = $exItem->item_img;
