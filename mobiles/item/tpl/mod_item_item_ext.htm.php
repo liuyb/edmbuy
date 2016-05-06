@@ -183,8 +183,8 @@ function getGoodsCollectNum(){
 		var total = ret.total;
 		var my = ret.my;
 		if(total && total > 0){
-    		$("#collect_number").text(total);
-    		$("#collect_number").show();
+    		//$("#collect_number").text(total);
+    		//$("#collect_number").show();
 		}
 		if(my && my > 0){
 			$("#collect_status").addClass("t2_on");
@@ -198,11 +198,11 @@ function changeGoodsCollect(obj){
 	if($this.hasClass("t2_on")){
 		action = -1;
 		$this.removeClass("t2_on");
-		setCollectNumber(-1);
+		//setCollectNumber(-1);
 	}else{
 		action = 1;
 		$this.addClass("t2_on");
-		setCollectNumber(1);
+		//setCollectNumber(1);
 	}
 	F.post('/item/goods/collect', {goods_id : goods_id, action : action});
 }

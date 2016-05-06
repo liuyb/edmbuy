@@ -18,6 +18,8 @@
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
 	<span class="p_detail_back" onclick="<?=$back ?>"></span>
+    <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
+	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span>
 	<span class="p_detail_more" data-show="0"></span>
 </div>
 <div class="p_detail_menulist">
@@ -316,9 +318,9 @@ $(function(){
 				$cartmain.addClass("is_confirm");
 				setTimeout(function(){
 					$cartmain.hide().attr("class","p_cart_main");
-					//var cart_number = $("#cart_number").text()*1;
-					//var select_number = $(".cart_inp").val()*1;
-					//$("#cart_number").text(cart_number + select_number).show();
+					var cart_number = $("#cart_number").text()*1;
+					var select_number = $(".cart_inp").val()*1;
+					$("#cart_number").text(cart_number + select_number).show();
 				},500);
 			});
 		}

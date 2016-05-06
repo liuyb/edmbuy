@@ -144,8 +144,8 @@ HEREDOC;
 				$this->v->assign('referee', $referee);
 				
 				//购物车数
-				//$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
-				//$this->v->assign('cartnum', $cartnum);
+				$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
+				$this->v->assign('cartnum', $cartnum);
 				//商家信息
 				$merchant = Merchant::find_one(new Query('uid', $item->merchant_id ? $item->merchant_id : 0));
 				$this->v->assign('merchant', $merchant);
@@ -342,7 +342,7 @@ HEREDOC;
 	//获取商品收藏数
 	public function getGoodsCollects(Request $request, Response $response){
 	    $goods_id = $request->get('goods_id', 0);
-	    $totalCollects = Items::getGoodsCollects($goods_id);
+	    $totalCollects = 0;//Items::getGoodsCollects($goods_id);
 	    $myCollect = Items::getGoodsCollects($goods_id, $GLOBALS['user']->uid);
 	    $response->sendJSON(['total' => $totalCollects, 'my' => $myCollect]);
 	}

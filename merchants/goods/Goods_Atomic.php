@@ -12,7 +12,7 @@ class Goods_Atomic{
      * @param unknown $goods_id
      */
     public static function get_goods_ext_category($goods_id){
-        $sql = "SELECT cat_id FROM shp_goods_cat WHERE goods_id = '%d' and is_main = 0 ";
+        $sql = "SELECT cat_id FROM shp_shop_goods_cat WHERE goods_id = '%d' and is_main = 0 ";
         $exist_list = D()->query($sql, $goods_id)->fetch_column();
         return $exist_list;
     }
@@ -99,7 +99,7 @@ class Goods_Atomic{
      * @param unknown $goods_ids
      */
     public static function batch_delete_goods_cat($goods_ids){
-        $sql = "DELETE FROM shp_goods_cat WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
+        $sql = "DELETE FROM shp_shop_goods_cat WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
     }
     

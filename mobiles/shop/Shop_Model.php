@@ -99,20 +99,6 @@ class Shop_Model extends Model
     }
 
     /**
-     * 拿到商品分类列表
-     * @param PagerPull $pager
-     * @param $category
-     */
-
-
-    static function findGoodsListByCategory(PagerPull $pager, $category)
-    {
-        $categoryids = self::$goods_category_mapping[$category];
-        $result = Items::findGoodsListByCategory($pager, $categoryids);
-        $pager->setResult($result);
-    }
-
-    /**
      * 商品推荐列表
      * @param $pager
      * @param $recoment
