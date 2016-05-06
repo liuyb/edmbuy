@@ -2916,6 +2916,8 @@ td.cash_td2 img {
 	text-align:center;
 	height:44px;
 	line-height:44px;
+  	position: relative;	
+  	font-size: 14px;	
 }
 #sus_flow img{
 	width:14px;
@@ -4150,8 +4152,16 @@ td.cash_td2 img {
 	text-align:center;
 	color:#fff;
 }
-
-
+.bottom_f{
+	border-bottom:1px solid #f65d00;
+}
+.bottom_dw{
+  	position: absolute;
+  	bottom: -4px;
+  	left: 0;
+  	height: 7px !important;
+  	width: 12px !important;	
+}
 
 
 
