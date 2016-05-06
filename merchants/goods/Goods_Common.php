@@ -27,7 +27,7 @@ class Goods_Common {
         {
             if ($data === false)
             {
-                $table = "shp_category";
+                $table = "shp_shop_category";
                 $sql = "SELECT c.cat_id, c.cat_name, c.parent_id from $table c where c.merchant_id = '$merchant_id' and is_delete = 0 ORDER BY c.parent_id, c.sort_order ";
                 $res = D()->query($sql)->fetch_array_all();
             }

@@ -429,7 +429,7 @@ HERESQL;
 			$where .="and g.goods_name like '%{$search}%'";
 		}
 		$sql = "select c.cat_name, g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img from shp_goods g
-		RIGHT JOIN shp_category c ON c.merchant_id = g.merchant_id
+		RIGHT JOIN shp_shop_category c ON c.merchant_id = g.merchant_id
 	    where {$where} order by {$order} limit {$limit}";
 		if($flat){
 			$goods = D()->query($sql, $merchant_id)->fetch_array_all();

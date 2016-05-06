@@ -46,11 +46,11 @@ class Shop_Controller extends MobileController
     {
         $merchant_id = $request->arg(1);
         $result = Shop_Model::checkMerchantStatus($merchant_id);
-        $isCollect = Shop_Model::checkIsCollect($merchant_id);
         if (empty($result['shop_template'])) {
             $errmsg = "店铺信息不存在！";
             $this->v->assign('error', $errmsg);
         }
+        $isCollect = Shop_Model::checkIsCollect($merchant_id);
         $tpl_id = $result['shop_template'];
         $num = Shop_Model::getCollectNum($merchant_id);
 

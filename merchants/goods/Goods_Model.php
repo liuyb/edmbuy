@@ -64,7 +64,7 @@ class Goods_Model extends Model
             /* 删除不再有的分类 */
             $delete_list = array_diff($exist_list, $cat_list);
             if ($delete_list) {
-                $sql = "DELETE FROM shp_goods_cat WHERE goods_id = '$goods_id'
+                $sql = "DELETE FROM shp_shop_goods_cat WHERE goods_id = '$goods_id'
     	        AND cat_id " . Func::db_create_in($delete_list) . " and is_main = 0 ";
                 D()->query($sql);
             }
@@ -77,15 +77,15 @@ class Goods_Model extends Model
         //冗余主分类到扩展分类 主分类放在扩展分类前，保证主分类一定存在
         if ($cat_id) {
             if ($is_insert) {
-                $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
+                $sql = "INSERT IGNORE INTO shp_shop_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 1) ";
             } else {
-                $sql = "UPDATE IGNORE shp_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
+                $sql = "UPDATE IGNORE shp_shop_goods_cat set cat_id = $cat_id where goods_id = $goods_id and is_main = 1 ";
             }
             D()->query($sql);
         }
         foreach ($add_list as $cat_id) {
             // 插入记录
-            $sql = "INSERT IGNORE INTO shp_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 0) ";
+            $sql = "INSERT IGNORE INTO shp_shop_goods_cat(goods_id, cat_id, is_main) VALUES ('$goods_id', '$cat_id', 0) ";
             D()->query($sql);
         }
     }
@@ -312,7 +312,7 @@ class Goods_Model extends Model
         $sql = "select count(*) from shp_goods g where merchant_id='%s' and g.is_delete=0 $where ";
         $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "select g.*,c.cat_name from shp_goods g left join shp_category c on g.cat_id = c.cat_id where g.is_delete=0 and g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "select g.*,c.cat_name from shp_goods g left join shp_shop_category c on g.cat_id = c.cat_id where g.is_delete=0 and g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql, $muid)->fetch_array_all();
         //$goods = self::buildGoodsImg($goods);
         $pager->setResult($goods);
@@ -352,11 +352,11 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select count(1) from shp_category where merchant_id='%s' and parent_id = 0 and is_delete =0";
+        $sql = "select count(1) from shp_shop_category where merchant_id='%s' and parent_id = 0 and is_delete =0";
         $totalCount = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($totalCount);
         $limit = $pager->start . "," . $pager->pagesize;
-        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category where merchant_id ='%s' and parent_id = 0 and is_delete =0  limit {$limit}";
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_shop_category where merchant_id ='%s' and parent_id = 0 and is_delete =0  limit {$limit}";
         $list = D()->query($sql, $merchant_id)->fetch_array_all();
         $data = self::getChirlList($merchant_id);
         $p = 0;
@@ -380,7 +380,7 @@ class Goods_Model extends Model
      */
     static function getChirlList($merchant_id)
     {
-        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_category WHERE parent_id > 0 and merchant_id='%s' and is_delete = 0";
+        $sql = "select cat_id, cat_name,parent_id,cat_thumb,sort_order from shp_shop_category WHERE parent_id > 0 and merchant_id='%s' and is_delete = 0";
         $result = D()->query($sql, $merchant_id)->fetch_array_all();
         return $result;
     }
@@ -396,7 +396,7 @@ class Goods_Model extends Model
         if (empty($merchant_id)) {
             return false;
         }
-        $sql = "select cat_name ,cat_id ,cat_thumb from shp_category where merchant_id ='%s' and parent_id=0 and is_delete=0";
+        $sql = "select cat_name ,cat_id ,cat_thumb from shp_shop_category where merchant_id ='%s' and parent_id=0 and is_delete=0";
         $list = D()->query($sql, $merchant_id)->fetch_array_all();
         return $list;
     }
@@ -418,12 +418,12 @@ class Goods_Model extends Model
             $insertarr['parent_id'] = $cat_id;
         }
         $insertarr['cat_name'] = $cateArr['cat_name'];
-        $sql = "select cat_name from shp_category where cat_name ='%s' and merchant_id = '%s' and is_delete = 0 ";
+        $sql = "select cat_name from shp_shop_category where cat_name ='%s' and merchant_id = '%s' and is_delete = 0 ";
         $cat_name = D()->query($sql, $insertarr['cat_name'], $merchant_id)->result();
         if ($cat_name && !$cateArr['edit']) {
             return "分类名已存在！";
         }
-        $tablename = "`shp_category`";
+        $tablename = "`shp_shop_category`";
         $insertarr['merchant_id'] = $merchant_id;
         $insertarr['cat_thumb'] = isset($cateArr['cate_thums']) ? $cateArr['cate_thums'] : '';
         $insertarr['sort_order'] = isset($cateArr['sort_order']) ? $cateArr['sort_order'] : 0;
@@ -450,12 +450,12 @@ class Goods_Model extends Model
         /**
          * 先查询出是否有子分类
          */
-        $sql = "select parent_id from shp_category where cat_id = %d";
+        $sql = "select parent_id from shp_shop_category where cat_id = %d";
         $parent_id = D()->query($sql, $cat_id)->result();
         $where = array(
             'cat_id' => $cat_id,
         );
-        $table = "`shp_category`";
+        $table = "`shp_shop_category`";
 
         if ($parent_id > 0) {
             /*
@@ -483,7 +483,7 @@ class Goods_Model extends Model
         if ($parent_id == 0) {//如果parent_id=0则代表是一级分类
             //求出所有的cat_id
             $cat_where = "parent_id ={$cat_id}";
-            $sql = "select cat_id from shp_category where $cat_where";
+            $sql = "select cat_id from shp_shop_category where $cat_where";
             $cat_ids = D()->query($sql)->fetch_array_all();
             $cats = "";
             foreach ($cat_ids as $id) {
@@ -495,7 +495,7 @@ class Goods_Model extends Model
                 $where = "cat_id ={$cat_id}";
             }
         }
-        $sql = "select goods_id from shp_goods_cat where {$where}";
+        $sql = "select goods_id from shp_shop_goods_cat where {$where}";
         $goods_ids = D()->query($sql)->fetch_array_all();
         $ids = "";
         foreach ($goods_ids as $id) {
@@ -507,7 +507,7 @@ class Goods_Model extends Model
         //0代表没有分类
         $category = D()->update($table, $setarr, $where);//第一步更新分类表的cat_level
         //第二步更新goods_cat关联表
-        //$cateTable = "`shp_goods_cat`";
+        //$cateTable = "`shp_shop_goods_cat`";
         // $goods_cat = D()->delete($cateTable, $whereIds);//删除goods_cat表中的记录
         //第三步更新shp_goods中的cat_id字段
         //
@@ -527,7 +527,7 @@ class Goods_Model extends Model
      */
     static function IsHadCategory($cat_id)
     {
-        $sql = "select parent_id from shp_category WHERE  cat_id=%d";
+        $sql = "select parent_id from shp_shop_category WHERE  cat_id=%d";
         $parent_id = D()->query($sql, $cat_id)->get_one();
         return $parent_id;
     }
@@ -537,7 +537,7 @@ class Goods_Model extends Model
      */
     static function getOneCategory($cat_id)
     {
-        $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_category where cat_id = {$cat_id} and is_delete=0";
+        $sql = "select cat_id,parent_id,cat_thumb,cat_name ,sort_order from shp_shop_category where cat_id = {$cat_id} and is_delete=0";
         return D()->query($sql)->get_one();
     }
 
@@ -548,7 +548,7 @@ class Goods_Model extends Model
      */
     static function updateShortOrder($cat_id, $short_order)
     {
-        $tablename = "`shp_category`";
+        $tablename = "`shp_shop_category`";
         $setArr['sort_order'] = $short_order;
         $wherearr['cat_id'] = $cat_id;
         return D()->update($tablename, $setArr, $wherearr);
