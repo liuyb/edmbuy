@@ -112,9 +112,7 @@
             F.postWithLoading(url, data, function (data) {
                 showMsg(data.retmsg);
                 if(data.status==1){
-                    setTimeout(function(){
-                        window.location.href="/home";
-                    },"1000");
+                    window.location.href="/home";
                 }else{
                     if(data.status==-1){
                         loginname.focus();

@@ -34,8 +34,8 @@ class MerchantController extends Controller {
 	{
 		$this->setPageView($request, $response);
 		//拦截处理页面头部菜单高亮显示
-		$q = $request->q();
-		$q = explode('/', $q);
+		$rq = $request->q();
+		$q = explode('/', $rq);
 		if($q && count($q) > 0){
 		    $q = $q[0];
 		    if($q == 'user'){//默认是user/index
@@ -46,7 +46,45 @@ class MerchantController extends Controller {
 		}else{
 		    $this->setSystemNavigate('index');
 		}
+		$shop = Merchant::load($GLOBALS['user']->uid);
+		$this->v->assign('global_shop', $shop);
+		//检查商家是否支付
+		$checkIgnore = false;
+  		foreach(self::$interceptWhiteList AS $key) {
+  		    if (SimPHP::qMatchPattern($key, $rq)) {
+  		        $checkIgnore = true;
+  		        break;
+  		    }
+  		}
+		if($checkIgnore){
+		    return;
+		}
+  		
+	    if(!Merchant::checkIsPaySuc(true)){
+	        $response->redirect('/shop/need/pay');
+	    }
+	    
+	    //店铺模块需要ajax等请求，不能作跳转处理
+	    if($q && $q == 'shop'){
+	        return;
+	    }
+	    
+		if($rq != 'shop/start'){
+    		if(!$shop->is_completed){
+    		    $response->redirect('/shop/start');
+    		}
+		}
 	}
+	
+	/**
+	 * 请求拦截白名单，当前地址不需要做店铺拦截处理
+	 * @var array
+	 */
+	public static $interceptWhiteList = [
+	  	'user/login',
+	  	'user/logout',
+	    'shop/need/pay'
+	];
 	
 	/**
 	 * set page view
@@ -56,6 +94,7 @@ class MerchantController extends Controller {
 	 */
 	public function setPageView(Request $request, Response $response, $basetpl = '_page') {
 		$this->v = new PageView('', $basetpl);
+		$this->page_render_mode = View::RENDER_MODE_GENERAL;
 		$this->v->add_render_filter(function(View $v){
 			$v->assign('nav',        $this->nav)
 			  ->assign('nav_second', $this->nav_second)

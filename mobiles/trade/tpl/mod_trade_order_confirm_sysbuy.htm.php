@@ -1,10 +1,10 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
-<?php if($_SESSION['step'] && $_SESSION['step'] == 3):?>
+<?php if(isset($_SESSION['step']) && $_SESSION['step'] == 3):?>
 <div id="sus_flow">
 	<ul>
 		<li>商家资料</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-		<li >邀请码</li>
+		<li>设置密码</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
 		<li class="li_co">支付</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
@@ -41,6 +41,7 @@
 </div>
 <script>
 $(function(){
+	$("#Mbody").css("background","#fff");
 	$('#btn-wxpay').click(function(){
 		var order_sn = $('#frm_order_sn').val();
 		var pay_id   = parseInt($(this).attr('data-payid'));

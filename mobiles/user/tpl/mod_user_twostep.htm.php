@@ -3,7 +3,7 @@
     <ul>
         <li>商家注册</li>
         <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"></li>
-        <li class="li_co bottom_f">邀请码</li>
+        <li class="li_co bottom_f">设置密码</li>
         <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
         <li>支付</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
@@ -20,9 +20,11 @@
 		<li>
 			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码">
 		</li>
+		<?php if(!$parent_id): ?>
 		<li>
-			<input id="invite_code" class="ps_common" type="text" <?php if($parent_id>0): ?> readonly<?php endif;?> value="<?=$parent_id?>" placeholder="请输入推荐人多米号">
+			<input id="invite_code" class="ps_common" type="text" placeholder="请输入推荐人多米号">
 		</li>
+		<?php endif;?>
 	</ul>
 </div>
 <div id="sus_info" style="font-size:14px;color:#999;margin-top:5px">
@@ -34,7 +36,7 @@
 
 <script>
     $(function () {
-        $("#sus_flow").parent().css("background", "#fff");
+    	$("#Mbody").css("background","#fff");
         $("input").css("border", "none");
     });
     $("#next_step").click(function () {

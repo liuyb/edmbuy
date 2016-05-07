@@ -221,7 +221,7 @@ class Merchant extends StorageNode {
 	    $setarr['money_paid'] = 0;
 	    $setarr['merchant_id'] = $merchant_id;
 	    $setarr['start_time'] = date("Y-m-d H:i:s", time()).'';
-	    $endDate = date("Y-m-d", strtotime("+1 year", time()))."23:59:59";
+	    $endDate = date("Y-m-d", strtotime("+1 year", time()))." 23:59:59";
 	    $setarr['end_time'] = $endDate;
 	    $setarr['term_time'] = '1y';
 	    $setarr['discount'] = MECHANT_GOODS_AMOUNT - MECHANT_ORDER_AMOUNT;
@@ -245,6 +245,22 @@ class Merchant extends StorageNode {
 	        $setarr['money_paid'] = $money_paid;
 	        D()->update($tablename, $setarr);
 	    }
+	}
+	
+	/**
+	 * 检验当前商家是否已经支付
+	 */
+	static function checkIsPaySuc($is_merchant = false){
+	    $user_id = $GLOBALS['user']->uid;
+	    $where = '';
+	    if($is_merchant){
+	        $where .= " and merchant_id = '%s' ";
+	    }else{
+	        $where .= ' and user_id = %d ';
+	    }
+	    $time =date('Y-m-d H:i:s' ,time());
+	    $sql = "select count(1) from shp_merchant_payment where 1 $where and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
+	    return D()->query($sql,$user_id)->result();
 	}
 	
 }

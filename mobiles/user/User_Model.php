@@ -302,6 +302,7 @@ class User_Model extends Model
         $insertarr['role_id'] = $role_id;
         $insertarr['created'] = time();
         $insertarr['changed'] = time();
+        $insertarr['activation'] = 1; 
         $admin_uid = D()->insert($table_admin, $data_admin);
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
@@ -370,14 +371,10 @@ class User_Model extends Model
     } */
 
     /**
-     * 检验当前操作进行到了第几步骤
+     * 检验当前商家是否已经支付
      */
     static function checkIsPaySuc(){
-            $user_id = $GLOBALS['user']->uid;
-            $time =date('Y-m-d H:i:s' ,time());
-            $sql = "select count(1) from shp_merchant_payment where user_id = %d and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
-
-           return D()->query($sql,$user_id)->result();
+        return Merchant::checkIsPaySuc();
     }
 
     /**
@@ -462,5 +459,17 @@ class User_Model extends Model
         $goods = D()->query($sql, $GLOBALS['user']->uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $goods = Items::buildGoodsImg($goods);
         $pager->setResult($goods);
+    }
+    
+    /**
+     * 当前用户还未支付的 购买系统订单
+     * @return mixed
+     */
+    static function getUnPaidOrderForMerchant(){
+        $time =date('Y-m-d H:i:s' ,time());
+        $sql = "SELECT so.order_id FROM shp_merchant_payment p join shp_order_info so on p.order_id = so.order_id 
+                and p.user_id = %d and p.start_time <= '{$time}' and p.end_time >='{$time}' and p.money_paid <= 0";
+        $order_id = D()->query($sql, $GLOBALS['user']->uid)->result();
+        return $order_id;
     }
 }

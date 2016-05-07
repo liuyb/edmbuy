@@ -21,7 +21,10 @@
 
 <button id="gains_enter" >我要入驻</button>
 <script>
-		$("#gains_enter").click(function(){
-			window.location.href="/user/merchant/payment";
-		})
+$(function(){
+	$("#Mbody").css("background","#fff");
+});
+$("#gains_enter").click(function(){
+	window.location.href="/user/merchant/payment";
+})
 </script>

@@ -2,11 +2,11 @@
 <div id="sus_money">
 	<img src="/themes/mobiles/img/sss1.png">
 	<p id="sus_tit" style="padding-bottom:20px;">
-		恭喜您，完成开通
+		<?php if(isset($_SESSION['step']) && $_SESSION['step']): unset($_SESSION['step'])?>恭喜您，完成开通<?php else:?>你已经是入驻商家<?php endif;?>
 	</p>
 </div>
 <div id="act_infos">
-	<!-- <div class="act_tit">激活信息如下：</div> -->
+	<div class="act_tit">注册信息如下：</div>
 
 	<div id="login_address">
 		<div style="padding-top:10px;">登录地址：<span class="comp_address"><?=$url?></span></div>
@@ -22,6 +22,6 @@
 </div>
 <script>
 	$(function(){
-		$("#sus_money").parent().parent().css("background","#fff");
+		$("#Mbody").css("background","#fff");
 	})
 </script>
