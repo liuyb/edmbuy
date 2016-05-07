@@ -1,0 +1,201 @@
+@CHARSET "UTF-8";
+*{margin:0;padding:0;color:#333;border:none;list-style:none;outline:none;font-family: "Microsoft Yahei" !important;-webkit-tap-highlight-color: rgba(255, 255, 255, 0);}
+.white_bg{
+	background: #fff;
+}
+.gray_bg{
+	background: #f3f3f3;
+}
+.has_footer{
+	padding-bottom: 60px;
+}
+button.clicked,button.isclick,button.isclicked{
+	background: #999;
+}
+a,a:hover{text-decoration:none;}
+img{border:none;}
+.clear{
+	clear: both;
+}
+html,body {width: 100%;height: auto;}
+@media (min-width: 1025px){
+	html{background: #666;}
+	body{max-width: 400px;margin: 0 auto;min-height: 1000px;position: relative;background: #fff;}	
+}
+.cursor{
+	cursor: pointer;
+}
+
+/* 头部 */
+.header{
+	position: relative;	
+	height: 44px;
+	line-height: 44px;
+	background: #f6f6f6;
+	color: #f26427;
+	font-weight: bold;
+	font-size: 18px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0 50px;
+	text-align: center;	
+	border-bottom: 1px solid #ccc;
+}
+.header a{
+	position: absolute;	
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;	
+	padding: 7px 12px;	
+	font-weight: normal;	
+	text-decoration: none;	
+}
+a.back{
+	left: 0;
+	top: 0;
+	width: 22px;
+	background: url(../img/fanhui.png) no-repeat 10px center;
+	padding-left:24px;
+	background-size: 10px;
+	font-size:15px;
+	color:#f26427;
+}
+a.h_btn{
+	font-size: 16px;
+	right: 0;
+	top: 0;	
+	color: #333;
+}
+
+
+.find_password{
+  	position: absolute;
+  	right: 0;
+  	font-size: 15px;
+  	font-weight: normal;
+  	margin-right: 10px;
+  	color: #f26427;	
+}
+.login_phone{
+	background:#fff;
+	height:43px;
+	line-height:44px;
+	border-bottom:1px solid #ccc;
+	padding:0 10px;
+}
+.phone_left{
+	font-size:14px;
+	color:#333;
+}
+.write_phone{
+	width:70%;
+	color:#8c8c8c;
+}
+.login_pass{
+	border-top:1px solid #ccc;	
+	margin-top:10px;
+}
+.width_j{
+	padding:0 14px;
+}
+.login_bottom{
+	padding:0 10px;
+	margin-top:30px;
+}
+.login_btn{
+	background:#f26427;
+	height:40px;
+	line-height:40px;
+	border-radius:4px;
+	text-align:center;
+	color:#fff;
+	font-size:16px;
+}
+.register_btn{
+	background:#fff;
+	height:40px;
+	line-height:40px;
+	border-radius:4px;
+	border:1px solid #f26427;
+	text-align:center;
+	color:#f26427;
+	font-size:16px;
+	margin-top:20px;
+}
+.quertion_phone{
+	font-size:13px;
+	margin:10px;
+}
+.quertion_phone i{
+	font-style: normal;
+	color:#d7ad94;
+}
+#note_code{
+	width:48% !important;
+}
+.get_note_code {
+  	float: right;
+  	height: 30px;
+  	line-height: 30px;
+  	font-size: 13px;
+  	color: #fff;
+  	background: #f26427;
+  	border-radius: 4px;
+	width:75px;
+  	margin-top: 7px;
+}
+.send_note_code{
+	font-size:14px;
+	color:#333;
+	height:43px;
+	line-height:44px;
+	border-bottom:1px solid #ccc;
+	text-align:center;
+	background:#fff;
+	margin-bottom:10px;
+	display:none;
+}
+.index_img{
+	margin-bottom:43px;
+}
+.index_img img{
+	max-width:100%;
+}
+.index_bottom{
+	position:fixed;
+	bottom:0;
+	left:0;
+	background:#f26427;
+	height:44px;
+	line-height:44px;
+	text-align:center;	
+	font-size:15px;
+	color:#fff;
+	width:100%;
+}
+.letter_bg{
+	background:url(../img/letter_bg.jpg) no-repeat;
+	background-size:100%;
+	padding:15px 0 44px;
+}
+.top_img{
+	margin-top:15px;
+}
+.top_img img{
+	max-width:100%;
+}
+.let_font{
+	font-size:13px;
+	margin:10px;
+	line-height: 25px;
+}
+
+
+
+
+
+
+
+
+
