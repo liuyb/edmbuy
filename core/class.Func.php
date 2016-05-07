@@ -292,18 +292,27 @@ class Func extends CStatic {
   	}
   	return true;
   }
-  
+
   /**
    * Check mobile format
-   * 
+   *
    * @param  string $mobile
    * @return boolean
    */
   public static function check_mobile($mobile) {
-  	if (preg_match("/^1\d{10,}$/", $mobile)) {
+  	if (preg_match("/^1\d{10}$/", $mobile)) {
   		return true;
   	}
   	return false;
+  }
+  
+  /**
+   * Check ip format
+   * @param string $ip
+   * @return boolean
+   */
+  public static function check_ip($ip) {
+  	return preg_match('/^\d{1,3}(\.\d{1,3}){3}$/', $ip) ? TRUE : FALSE;
   }
   
   /**

@@ -1,4 +1,5 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
+<?php if(isset($_SESSION['step']) && $_SESSION['step'] == 3):?>
 <div id="sus_flow">
 	<ul>
 		<li>商家资料</li>
@@ -11,12 +12,11 @@
 	</ul>
 	<div class="clear"></div>
 </div>
-
 <div id="sus_info" style="height:150px;">
 	<div class="pay_n" style="padding-top:30px"><img src="/themes/mobiles/img/sss1.png"></div>
 	<div class="pay_n">订单提交成功</div>
 </div>
-
+<?php endif;?>
 <div class="pay_order_info">订单详情</div>
 
 <div id="sus_info">
@@ -29,11 +29,11 @@
 		</tr>
 	</table>
 </div>
-
+<!-- 
 <div id="sus_info">
 	<textarea class="to_us_tell" placeholder="有话更益多米说..."></textarea>
 </div>
-
+ -->
 <div class="order-topay">
   <div class="row"><button class="btn btn-block btn-green" id="btn-wxpay" data-payid="2">微信安全支付</button>
   <?php form_order_script()?>
@@ -41,6 +41,7 @@
 </div>
 <script>
 $(function(){
+	$("#Mbody").css("background","#fff");
 	$('#btn-wxpay').click(function(){
 		var order_sn = $('#frm_order_sn').val();
 		var pay_id   = parseInt($(this).attr('data-payid'));
@@ -55,17 +56,14 @@ $(function(){
   			if (ret.flag=='SUC') {
   				$(_this).text('支付跳转中...');
 
-				var data = {'order_id': ret.order_id, 'order_sn': ret.order_sn}
+				/* var data = {'order_id': ret.order_id, 'order_sn': ret.order_sn}
 				F.post("/user/merchant/paysuc", data, function (ret) {
 					window.location.href = ret.url;
 				});
-					return false;
+					return false; */
 				wxpayJsApiCall(ret.js_api_params,ret.order_id,function(flag) {
 					if (flag == 'OK') {
-						var data = {'order_id': ret.order_id, 'order_sn': ret.order_sn}
-						F.post("/user/merchant/paysuc", data, function (ret) {
-							window.location.href = ret.url;
-						});
+						window.location.href='/user/merchant/dosuccess';
 					}
 				});
 				//form_topay_submit(ret.order_id, 'wxpay');
@@ -73,7 +71,7 @@ $(function(){
 				$(_this).text('微信安全支付').removeAttr('disabled');
 				alert(ret.msg);
 			}
-				});
+	 });
 
 		return false;
 	});

@@ -1,10 +1,10 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <div id="sus_flow">
     <ul>
-        <li>商家资料</li>
-        <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-        <li class="li_co">邀请码</li>
-        <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
+        <li>商家注册</li>
+        <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"></li>
+        <li class="li_co bottom_f">邀请码</li>
+        <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
         <li>支付</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
         <li>完成开通</li>
@@ -14,13 +14,19 @@
 
 <div id="sus_info">
     <ul>
-        <li>
-            <span style="font-size: 16px;padding-right: 20px;">邀请码(选填)</span><input id="phone_nums_p" class="ps_common"   <?php if($parent_id>0): ?> readonly<?php endif;?>
-                                                                                    type="text" value="<?=$parent_id?>"
-                                                                                    placeholder="请输入邀请码">
-            <span class="common_red_x"></span>
-        </li>
-    </ul>
+		<li>
+			<input id="shopPass" class="ps_common" type="password" value="" placeholder="设置店铺登录密码">
+		</li>
+		<li>
+			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码">
+		</li>
+		<li>
+			<input id="invite_code" class="ps_common" type="text" <?php if($parent_id>0): ?> readonly<?php endif;?> value="<?=$parent_id?>" placeholder="请输入推荐人多米号">
+		</li>
+	</ul>
+</div>
+<div id="sus_info" style="font-size:14px;color:#999;margin-top:5px">
+	注：为了保证益多米全体用户的利益不受损失，根据平台规则，入驻商家建议填写推荐人多米号，如果无推荐人，不填写即可。
 </div>
 <div id="wx_success_pay" style="margin-top:30px;">
     <button id="next_step">去支付</button>
@@ -28,17 +34,27 @@
 
 <script>
     $(function () {
-        $("#sus_flow").parent().css("background", "#fff");
+    	$("#Mbody").css("background","#fff");
         $("input").css("border", "none");
     });
     $("#next_step").click(function () {
-        var invite_code = $("#phone_nums_p").val();
-        var data ={"invite_code":invite_code};
+        var shopPass = $("#shopPass").val();
+        var confirmShopPass = $("#confirmShopPass").val();
+        if(!ispw(shopPass)){
+			myAlert('密码长度不能小于六位数！');
+			return;
+        }
+        if(shopPass != confirmShopPass){
+        	myAlert('两次输入的密码不一致，请重新输入！');
+			return;
+        }
+        var invite_code = $("#invite_code").val();
+        var data ={"invite_code":invite_code, shopPass : shopPass, confirmShopPass : confirmShopPass};
         F.post('/user/merchant/dotwostep', data, function (ret) {
             if(ret.status==1){
                 window.location.href = "<?php echo U("trade/order/confirm_sysbuy");?>"
             }else{
-                myAlert("推荐人不存在!");
+                myAlert(ret.retmsg);
             }
         });
     });

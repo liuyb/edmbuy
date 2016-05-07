@@ -116,6 +116,8 @@ class Wxpay_Controller extends Controller {
           $agent = AgentPayment::getAgentByOrderId($order_id);
           if($agent && $agent->pid){
               AgentPayment::callbackAfterAgentPay($order_id, $cUser);
+          }else{
+              Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount']);
           }
           //微信通知
           $cUser->notify_pay_succ($order_id);

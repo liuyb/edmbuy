@@ -4717,11 +4717,23 @@ td.cash_td2 img {
   text-align:center;
   height:44px;
   line-height:44px;
+  position: relative;	
+  font-size: 14px;
 }
 #sus_flow img{
   width:14px;
   height:14px;
   vertical-align: middle;
+}
+.bottom_f{
+	border-bottom:1px solid #f65d00;
+}
+.bottom_dw{
+  	position: absolute;
+  	bottom: -4px;
+  	left: 0;
+  	height: 7px !important;
+  	width: 12px !important;	
 }
 .li_cs{
   width:8% !important;
@@ -4738,7 +4750,7 @@ td.cash_td2 img {
   border-bottom:1px solid #eee;
 }
 .ps_common{
-  margin-left:20px;
+  margin-left:0px;
 }
 .common_red_x{
   float: right;

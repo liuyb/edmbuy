@@ -259,7 +259,7 @@ class User_Model extends Model
      * @param $email
      * @param $inviteCode
      */
-    static function saveMerchantInfo($mobile, $inviteCode, $password,$facename)
+    static function saveMerchantInfo($mobile, $inviteCode, $password)
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
 
@@ -282,10 +282,13 @@ class User_Model extends Model
             'action_list' => $action_list,
             'nav_list' => $nav_list,
             'role_id' => $role_id,
+            'agency_id' => 0,
+            'todolist' => ''
         );
         $tablename = "`shp_merchant`";
         $table_admin = "`shp_admin_user`";
         $insertarr['merchant_id'] = self::gen_merchant_id();
+        $insertarr['user_id'] = $GLOBALS['user']->uid;
         $salt = self::gen_salt();
         $password_enc = self::gen_password($password, $salt);
         $data_admin['password'] = $password_enc;
@@ -297,7 +300,9 @@ class User_Model extends Model
         $insertarr['email'] = '';
         $insertarr['password'] = $password_enc;
         $insertarr['role_id'] = $role_id;
-        $insertarr['facename'] = $facename;
+        $insertarr['created'] = time();
+        $insertarr['changed'] = time();
+        $insertarr['activation'] = 1; 
         $admin_uid = D()->insert($table_admin, $data_admin);
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
@@ -346,7 +351,7 @@ class User_Model extends Model
      * @param $invite_code
      * @param $order_id
      */
-    static function UpdataMerchantInfo($merchant_id, $order_id,$order_sn)
+    /* static function UpdataMerchantInfo($merchant_id, $order_id,$order_sn)
     {
 //        update($tablename, Array $setarr, $wherearr, $flag = '')
         $tablename = "`shp_merchant_payment`";
@@ -363,17 +368,13 @@ class User_Model extends Model
         $setarr['order_amount'] = MECHANT_ORDER_AMOUNT;
         $setarr['user_id'] = $GLOBALS['user']->uid;
         D()->insert($tablename, $setarr);
-    }
+    } */
 
     /**
-     * 检验当前操作进行到了第几步骤
+     * 检验当前商家是否已经支付
      */
     static function checkIsPaySuc(){
-            $user_id = $GLOBALS['user']->uid;
-            $time =date('Y-m-d H:i:s' ,time());
-            $sql = "select count(1) from shp_merchant_payment where user_id = %d and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
-
-           return D()->query($sql,$user_id)->result();
+        return Merchant::checkIsPaySuc();
     }
 
     /**
@@ -394,7 +395,7 @@ class User_Model extends Model
 //        update($tablename, Array $setarr, $wherearr, $flag = '');
         $tablename ="`shp_users`";
         $setarr['parent_id'] = $parent_id;
-        $setarr['nick_name'] = $nick_name;
+        $setarr['parent_nick'] = $nick_name;
         $wherearr['user_id'] = $GLOBALS['user']->uid;
         D()->update($tablename,$setarr,$wherearr);
     }
@@ -458,5 +459,17 @@ class User_Model extends Model
         $goods = D()->query($sql, $GLOBALS['user']->uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $goods = Items::buildGoodsImg($goods);
         $pager->setResult($goods);
+    }
+    
+    /**
+     * 当前用户还未支付的 购买系统订单
+     * @return mixed
+     */
+    static function getUnPaidOrderForMerchant(){
+        $time =date('Y-m-d H:i:s' ,time());
+        $sql = "SELECT so.order_id FROM shp_merchant_payment p join shp_order_info so on p.order_id = so.order_id 
+                and p.user_id = %d and p.start_time <= '{$time}' and p.end_time >='{$time}' and p.money_paid <= 0";
+        $order_id = D()->query($sql, $GLOBALS['user']->uid)->result();
+        return $order_id;
     }
 }

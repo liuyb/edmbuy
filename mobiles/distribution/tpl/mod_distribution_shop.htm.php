@@ -9,7 +9,7 @@
 <?php if(!isset($merchant) || empty($merchant)):?>
 <div class="no_store_c">
 	<img src="/themes/mobiles/img/wdp.png">
-	<p><button onclick="window.location.href='/user/merchant/openshop'">我要开店</button></p>
+	<p><button onclick="window.location.href='/user/merchant/checkin'">我要开店</button></p>
 </div>
 <script type="text/javascript">
 $(function(){

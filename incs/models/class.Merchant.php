@@ -207,6 +207,62 @@ class Merchant extends StorageNode {
 		
 	}
 	
+	/**
+	 * 生成订单的时候生成一条商家支付信息，money_paid 为 0
+	 * @param unknown $merchant_id
+	 * @param unknown $order_id
+	 * @param unknown $order_sn
+	 */
+	static function addMerchantPayment($merchant_id, $order_id,$order_sn)
+	{
+	    $tablename = "`shp_merchant_payment`";
+	    $setarr['order_id'] = $order_id;
+	    $setarr['order_sn'] = $order_sn;
+	    $setarr['money_paid'] = 0;
+	    $setarr['merchant_id'] = $merchant_id;
+	    $setarr['start_time'] = date("Y-m-d H:i:s", time()).'';
+	    $endDate = date("Y-m-d", strtotime("+1 year", time()))."23:59:59";
+	    $setarr['end_time'] = $endDate;
+	    $setarr['term_time'] = '1y';
+	    $setarr['discount'] = MECHANT_GOODS_AMOUNT - MECHANT_ORDER_AMOUNT;
+	    $setarr['goods_amount'] = MECHANT_GOODS_AMOUNT;
+	    $setarr['order_amount'] = MECHANT_ORDER_AMOUNT;
+	    $setarr['user_id'] = $GLOBALS['user']->uid;
+	    D()->insert($tablename, $setarr);
+	}
+	
+	/**
+	 * 当当前订单为购买店铺订单时，更新店铺流水 
+	 * @param unknown $order_id
+	 * @param unknown $money_paid
+	 */
+	static function setPaymentIfIsMerchantOrder($order_id, $money_paid){
+	    $sql = "select rid from shp_merchant_payment where order_id = %d";
+	    $result = D()->query($sql, $order_id)->result();
+	    if($result){
+	        $tablename = "`shp_merchant_payment`";
+	        $setarr['rid'] = $result;
+	        $setarr['money_paid'] = $money_paid;
+	        D()->update($tablename, $setarr);
+	    }
+	}
+	
+	/**
+	 * 检验当前商家是否已经支付
+	 */
+	static function checkIsPaySuc($is_merchant = false){
+	    $user_id = $GLOBALS['user']->uid;
+	    $where = '';
+	    if($is_merchant){
+	        $where .= " and merchant_id = '%s' ";
+	    }else{
+	        $where .= ' and user_id = %d ';
+	    }
+	    $time =date('Y-m-d H:i:s' ,time());
+	    $sql = "select count(1) from shp_merchant_payment where 1 $where and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
+	    return D()->query($sql,$user_id)->result();
+	}
+	
 }
  
 /*----- END FILE: class.Merchant.php -----*/

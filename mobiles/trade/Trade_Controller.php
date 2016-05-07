@@ -552,6 +552,15 @@ class Trade_Controller extends MobileController {
           //金牌银牌代理处理
           if($this->is_agent_order($item_id)){
               AgentPayment::createAgentPayment($user_id, $order_id, $item_id == GOLD_AGENT_GOODS_ID ? 3 : 4);
+          }else if($this->is_merchant_order($item_id)){
+              //购买商家处理
+              $merchant = Merchant::getMerchantByUserId($user_id);
+              if(!$merchant->is_exist()){
+                  D()->rollback();
+                  $ret['msg'] = '商家数据不存在！';
+                  $response->sendJSON($ret);
+              }
+              Merchant::addMerchantPayment($merchant->uid, $order_id, $order_sn);
           }
           
           // 提交事务
@@ -596,6 +605,14 @@ class Trade_Controller extends MobileController {
    */
   private function is_agent_order($item_id){
       return (GOLD_AGENT_GOODS_ID == $item_id || SILVER_AGENT_GOODS_ID == $item_id);
+  }
+  
+  /**
+   * 是否是购买商家
+   * @param unknown $item_id
+   */
+  private function is_merchant_order($item_id){
+      return (MECHANT_GOODS_ID == $item_id);
   }
 
   /**

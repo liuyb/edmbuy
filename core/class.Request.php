@@ -434,6 +434,24 @@ class Request {
     $this->params[$name] = $value;
   }
   
+  /**
+   * magic method '__isset'
+   *
+   * @param string $name
+   */
+  public function __isset($name) {
+  	return isset($this->params[$name]);
+  }
+  
+  /**
+   * magic method '__unset'
+   *
+   * @param string $name
+   */
+  public function __unset($name) {
+  	if (isset($this->params[$name])) unset($this->params[$name]);
+  }
+  
 }
  
  
