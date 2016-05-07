@@ -448,9 +448,12 @@ function showConfirm(msg, handler) {
  * @param type
  * @param selDom
  */
-function regionChange(obj, type, selDom) {
+function regionChange(obj, type, selDom, url) {
+	if(!url){
+		url = '/order/region';
+	}
     var selectVal = $(obj).val();
-    F.get('/order/region', {type: type, region: selectVal}, function (ret) {
+    F.get(url, {type: type, region: selectVal}, function (ret) {
         var selectObj = $("#" + selDom); console.log(selectObj.length);
         var html = "<option value=\"\">请选择...</option>";
         var selectedVal = "";

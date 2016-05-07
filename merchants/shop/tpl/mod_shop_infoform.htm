@@ -39,7 +39,7 @@
                     <tr>
                         <td class="flow_one_left"><span class="fill_red">*</span>联系地址：</td>
                         <td>
-                            <select onchange="regionChange(this,2,'selCity');" class="oper_province" name="province"
+                            <select onchange="regionChange(this,2,'selCity', '/shop/region');" class="oper_province" name="province"
                                     required>
                                 <option value="">请选择...</option>
                                 <!--{foreach from=$province_list item=province}-->
@@ -48,7 +48,7 @@
                                 <!--{$province.region_name}--></option>
                                 <!--{/foreach}-->
                             </select>
-                            <select id="selCity" class="oper_city" onchange="regionChange(this,3,'selDistrict');"
+                            <select id="selCity" class="oper_city" onchange="regionChange(this,3,'selDistrict', '/shop/region');"
                                     data-child="selDistrict" name="city" required>
                                 <option value="">请选择...</option>
                                 <!--{foreach from=$city_list item=city}-->

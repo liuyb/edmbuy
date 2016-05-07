@@ -221,7 +221,7 @@ class Merchant extends StorageNode {
 	    $setarr['money_paid'] = 0;
 	    $setarr['merchant_id'] = $merchant_id;
 	    $setarr['start_time'] = date("Y-m-d H:i:s", time()).'';
-	    $endDate = date("Y-m-d", strtotime("+1 year", time()))."23:59:59";
+	    $endDate = date("Y-m-d", strtotime("+1 year", time()))." 23:59:59";
 	    $setarr['end_time'] = $endDate;
 	    $setarr['term_time'] = '1y';
 	    $setarr['discount'] = MECHANT_GOODS_AMOUNT - MECHANT_ORDER_AMOUNT;

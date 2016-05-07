@@ -34,13 +34,16 @@ class Shop_Model extends Model
     }
 
     /**
-     * 判断用户是否配置了店铺信息
+     * 判断用户是否配置了店铺信息 没有则跳转至店铺装修页面
      */
-    static function checkShopStatus()
+    static function checkShopStatus($response)
     {
         $merchant_id = $GLOBALS['user']->uid;
         $sql = "select count(1) from shp_merchant where merchant_id = '%s' and is_completed = 1";
-        return D()->query($sql, $merchant_id)->result();
+        $result = D()->query($sql, $merchant_id)->result();
+        if (!$result || $result == 0) {
+            $response->redirect("/shop/start");
+        }
     }
 
     /**

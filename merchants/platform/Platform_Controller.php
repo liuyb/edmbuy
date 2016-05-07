@@ -107,7 +107,7 @@ class Platform_Controller extends MerchantController
         ];
         if ($request->is_post()) {
             $img = $_POST["img"];
-            $upload = new AliyunUpload($img, 'platform', '');
+            $upload = new AliyunUpload($img, 'platform', 'goods');
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
         }

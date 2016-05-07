@@ -490,6 +490,9 @@ div .alert {
   	left: 93px;
 	z-index:50000;
 }
+.set_pero li{
+	cursor : pointer;
+}
 .jt_s{
   	position: absolute;
   	top: -7px;

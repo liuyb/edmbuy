@@ -8,6 +8,13 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Platform_Model extends Model
 {
+    
+    static function checkMerchantStatus($response){
+        $merchant_id = $GLOBALS['user']->uid;
+        $merchant = Merchant::load($merchant_id);
+        //if()
+    }
+    
     /**
      * 检查商家是否已经上传了资料
      */
