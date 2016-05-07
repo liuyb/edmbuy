@@ -247,6 +247,22 @@ class Merchant extends StorageNode {
 	    }
 	}
 	
+	/**
+	 * 检验当前商家是否已经支付
+	 */
+	static function checkIsPaySuc($is_merchant = false){
+	    $user_id = $GLOBALS['user']->uid;
+	    $where = '';
+	    if($is_merchant){
+	        $where .= " and merchant_id = '%s' ";
+	    }else{
+	        $where .= ' and user_id = %d ';
+	    }
+	    $time =date('Y-m-d H:i:s' ,time());
+	    $sql = "select count(1) from shp_merchant_payment where 1 $where and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
+	    return D()->query($sql,$user_id)->result();
+	}
+	
 }
  
 /*----- END FILE: class.Merchant.php -----*/

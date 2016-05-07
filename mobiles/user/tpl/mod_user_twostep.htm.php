@@ -34,7 +34,7 @@
 
 <script>
     $(function () {
-        $("#sus_flow").parent().css("background", "#fff");
+    	$("#Mbody").css("background","#fff");
         $("input").css("border", "none");
     });
     $("#next_step").click(function () {

@@ -14,7 +14,7 @@
                                                           name="shop_name" class="right_input_c" required></td>
                     </tr>
                     <tr>
-                        <td class="flow_one_left">店铺logo：</td>
+                        <td class="flow_one_left"><span class="fill_red">*</span>店铺logo：</td>
                         <td class="flow_one_right">
                             <div id="logo_file">
                                 <img src="<!--{if $shop->logo}--><!--{$shop->logo}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->"
@@ -162,8 +162,12 @@
         }
         var data = $("#shopForm").serializeJson();
         data.business_scope = ',' + cat_id.join(",") + ',';//方便like操作
-        data.shop_logo = $("#shop_logo").attr("src");
-        data.shop_qrcode = $("#shop_qrcode").attr("src");
+        data.shop_logo = $("#shop_logo").attr("data-real");
+        if(!data.shop_logo){
+        	showMsg("请选择店铺logo！");
+            return false;
+        }
+        data.shop_qrcode = $("#shop_qrcode").attr("data-real");
         console.log(data);
         var smtBtn = $(".next_btn");
         smtBtn.css("opacity", 0.2).attr("disabled");
@@ -193,6 +197,7 @@
         image_upload(url, e, null, function (ret) {
             var stdpath = ret.stdpath;
             $("#shop_logo").attr("src", stdpath);
+            $("#shop_logo").attr("data-real", stdpath);
         });
     }
 
@@ -201,6 +206,7 @@
         image_upload(url, e, null, function (ret) {
             var stdpath = ret.stdpath;
             $("#shop_qrcode").attr("src", stdpath);
+            $("#shop_qrcode").attr("data-real", stdpath);
         });
     }
 </script>

@@ -34,4 +34,9 @@
 	<span id="red_deal">我已阅读，同意接受《益多米商家入驻协议》</span>
 </div>
 </form>
+<script>
+$(function(){
+	$("#Mbody").css("background","#fff");
+});
+</script>
 

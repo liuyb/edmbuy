@@ -132,5 +132,5 @@ define('GOLD_AGENT_GOODS_ID', 1196);
 define('SILVER_AGENT_GOODS_ID', 1197);
 
 /*商城前台url*/
-define('SHOP_URL_MERCHANT', "http://m.ydmbuy.com/shop");
+//define('SHOP_URL_MERCHANT', "http://m.ydmbuy.com/shop");
 /*----- END FILE: const.php -----*/

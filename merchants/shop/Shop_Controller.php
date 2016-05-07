@@ -29,7 +29,8 @@ class Shop_Controller extends MerchantController
             'shop/info' => 'shop_info',
             'shop/logo' => 'shop_logo_upload',
             'shop/qrcode' => 'shop_qrcode_upload',
-            'shop/setup' => 'shop_info_save'
+            'shop/setup' => 'shop_info_save',
+            'shop/need/pay' => 'shop_unpaid'
         ];
 
     }
@@ -101,7 +102,7 @@ class Shop_Controller extends MerchantController
                     if (!file_exists($locfile)) {
                         mkdirs($dir);
                         $merchant_id =$GLOBALS['user']->uid;
-                        $qrinfo =SHOP_URL_MERCHANT."/{$merchant_id}";
+                        $qrinfo =C('env.site.mobile')."/shop/{$merchant_id}";
                         include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
                         QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
                         $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
@@ -133,7 +134,7 @@ class Shop_Controller extends MerchantController
         if (!file_exists($locfile)) {
             mkdirs($dir);
             $merchant_id =$GLOBALS['user']->uid;
-            $qrinfo =SHOP_URL_MERCHANT."/{$merchant_id}";
+            $qrinfo =C('env.site.mobile')."/shop/{$merchant_id}";
             include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
             QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
         }
@@ -442,5 +443,26 @@ class Shop_Controller extends MerchantController
             $response->sendJSON($ret);
         }
     }
-
+    
+    /**
+     * 店铺没有支付跳转页面
+     * @param Request $request
+     * @param Response $response
+     */
+    function shop_unpaid(Request $request, Response $response){
+        $this->v->set_tplname('mod_shop_unpaid');
+        
+        $dir = SIMPHP_ROOT . '/a/qrcode/shop/';
+        $locfile = $dir . 'shop_paid.png';
+        if (!file_exists($locfile)) {
+            mkdirs($dir);
+            $merchant_id =$GLOBALS['user']->uid;
+            $qrinfo =C('env.site.mobile')."/user/pay/merchant/order";
+            include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+            QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+        }
+        $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+        $this->v->assign('qrcode', $qrcode);
+        $response->send($this->v);
+    }
 }
