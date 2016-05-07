@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"> 
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" /> 
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/store.css" />
+<script src="../mch/js/ext/jquery-2.1.3.min.js"></script>
+</head>
+<body id="bg_common"> 
+<style>
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="store_left_common.html"-->
+	<div id="store_right_finish">
+		<div id="new_common" class="o_store_img">
+			<img src="../mch/img/no_store.png">
+			
+			<p><img src="../mch/img/ydm.png" style="width:200px;"></p>
+		</div>
+	</div>
+</div>
+	
+	
+<script>
+$("#dpzx").addClass("order_left_common");
+
+</script>
+ 
