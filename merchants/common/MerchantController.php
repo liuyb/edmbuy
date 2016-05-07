@@ -23,6 +23,8 @@ class MerchantController extends Controller {
 	
 	protected $page_size = 10;
 	
+	private $no_need_intercept = ['shop/need/pay', ''];
+	
 	/**
 	 * hook init
 	 *
@@ -46,8 +48,12 @@ class MerchantController extends Controller {
 		}else{
 		    $this->setSystemNavigate('index');
 		}
+<<<<<<< HEAD
 		$shop = Merchant::load($GLOBALS['user']->uid);
 		$this->v->assign('global_shop', $shop);
+=======
+		
+>>>>>>> ef50c9aa26641a792b4f67b202826969f3cfd4a7
 		//检查商家是否支付
 		$checkIgnore = false;
   		foreach(self::$interceptWhiteList AS $key) {
@@ -64,12 +70,17 @@ class MerchantController extends Controller {
 	        $response->redirect('/shop/need/pay');
 	    }
 	    
+<<<<<<< HEAD
 	    //店铺模块需要ajax等请求，不能作跳转处理
 	    if($q && $q == 'shop'){
 	        return;
 	    }
 	    
 		if($rq != 'shop/start'){
+=======
+		if($rq != 'shop/start'){
+    		$shop = Merchant::load($GLOBALS['user']->uid);
+>>>>>>> ef50c9aa26641a792b4f67b202826969f3cfd4a7
     		if(!$shop->is_completed){
     		    $response->redirect('/shop/start');
     		}

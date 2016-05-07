@@ -30,8 +30,12 @@ class Shop_Controller extends MerchantController
             'shop/logo' => 'shop_logo_upload',
             'shop/qrcode' => 'shop_qrcode_upload',
             'shop/setup' => 'shop_info_save',
+<<<<<<< HEAD
             'shop/need/pay' => 'shop_unpaid',
             'shop/region' => 'get_regions'
+=======
+            'shop/need/pay' => 'shop_unpaid'
+>>>>>>> ef50c9aa26641a792b4f67b202826969f3cfd4a7
         ];
 
     }
@@ -453,7 +457,11 @@ class Shop_Controller extends MerchantController
         if (!file_exists($locfile)) {
             mkdirs($dir);
             $merchant_id =$GLOBALS['user']->uid;
+<<<<<<< HEAD
             $qrinfo =C('env.site.mobile')."/user/pay/merchant/order?mid=$merchant_id";
+=======
+            $qrinfo =C('env.site.mobile')."/user/pay/merchant/order";
+>>>>>>> ef50c9aa26641a792b4f67b202826969f3cfd4a7
             include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
             QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
         }
@@ -461,6 +469,7 @@ class Shop_Controller extends MerchantController
         $this->v->assign('qrcode', $qrcode);
         $response->send($this->v);
     }
+<<<<<<< HEAD
     
     /**
      * 根据选择的父区域得到子区域
@@ -475,4 +484,6 @@ class Shop_Controller extends MerchantController
             $response->sendJSON($region_list);
         }
     }
+=======
+>>>>>>> ef50c9aa26641a792b4f67b202826969f3cfd4a7
 }
