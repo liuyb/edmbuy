@@ -30,7 +30,8 @@ class Shop_Controller extends MerchantController
             'shop/logo' => 'shop_logo_upload',
             'shop/qrcode' => 'shop_qrcode_upload',
             'shop/setup' => 'shop_info_save',
-            'shop/need/pay' => 'shop_unpaid'
+            'shop/need/pay' => 'shop_unpaid',
+            'shop/region' => 'get_regions'
         ];
 
     }
@@ -41,10 +42,7 @@ class Shop_Controller extends MerchantController
      */
     public function index(Request $request, Response $response)
     {
-        $result = Shop_Model::checkShopStatus();
-        if (!$result) {
-            $response->redirect("/shop/start");
-        }
+        Shop_Model::checkShopStatus();
         $this->setSystemNavigate('shop');
         $this->v->set_tplname("mod_shop_details");
         $this->setPageLeftMenu('shop', 'details');
@@ -66,16 +64,10 @@ class Shop_Controller extends MerchantController
      */
     public function template_index(Request $request, Response $response)
     {
-        $result = Shop_Model::checkShopStatus();
-        if (!$result) {
-            $response->redirect("/shop/start");
-        }
-        $show_page = true;
-        if($show_page){
-            $this->v->set_tplname("mod_shop_index");
-            $this->setPageLeftMenu('shop', 'list');
-            $response->send($this->v);
-        }
+        Shop_Model::checkShopStatus($response);
+        $this->v->set_tplname("mod_shop_index");
+        $this->setPageLeftMenu('shop', 'list');
+        $response->send($this->v);
 
     }
 
@@ -247,6 +239,7 @@ class Shop_Controller extends MerchantController
 
     public function settlement_manager(Request $request, Response $response)
     {
+        Shop_Model::checkShopStatus($response);
         $this->v->set_tplname('mod_shop_settlement');
         $this->setPageLeftMenu('shop', 'settlement');
         $response->send($this->v);
@@ -254,6 +247,7 @@ class Shop_Controller extends MerchantController
 
     public function settlement_order_manager(Request $request, Response $response)
     {
+        Shop_Model::checkShopStatus($response);
         $this->v->set_tplname('mod_shop_settlement_order');
         $this->setPageLeftMenu('shop', 'settlement_order');
         $settle_id = $request->get('settle_id', 0);
@@ -317,12 +311,14 @@ class Shop_Controller extends MerchantController
 
     public function shop_template_step(Request $request, Response $response)
     {
+        Shop_Model::checkShopStatus($response);
         $this->v->set_tplname('mod_shop_template');
         $response->send($this->v);
     }
 
     public function shop_finished_step(Request $request, Response $response)
     {
+        Shop_Model::checkShopStatus($response);
         $this->v->set_tplname('mod_shop_finished');
         $response->send($this->v);
     }
@@ -377,7 +373,7 @@ class Shop_Controller extends MerchantController
     {
         if ($request->is_post()) {
             $img = $_REQUEST["img"];
-            $upload = new AliyunUpload($img, 'shopqrcode', '');
+            $upload = new AliyunUpload($img, 'shopqrcode', 'shoplogo');
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
             $response->sendJSON($ret);
@@ -457,12 +453,26 @@ class Shop_Controller extends MerchantController
         if (!file_exists($locfile)) {
             mkdirs($dir);
             $merchant_id =$GLOBALS['user']->uid;
-            $qrinfo =C('env.site.mobile')."/user/pay/merchant/order";
+            $qrinfo =C('env.site.mobile')."/user/pay/merchant/order?mid=$merchant_id";
             include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
             QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
         }
         $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
         $this->v->assign('qrcode', $qrcode);
         $response->send($this->v);
+    }
+    
+    /**
+     * 根据选择的父区域得到子区域
+     * @param Request $request
+     * @param Response $response
+     */
+    public function get_regions(Request $request, Response $response){
+        $type = $request->get('type');
+        $region = $request->get('region');
+        if($type && $region){
+            $region_list = Order::get_regions($type, $region);
+            $response->sendJSON($region_list);
+        }
     }
 }

@@ -4595,6 +4595,9 @@ td.cash_td2 img {
 
 
 /*2106-4-5 s*/
+#gains_top{
+	margin-bottom:45px;
+}
 #gains_top img{
   width:100%;
   height:100%;
@@ -4619,14 +4622,16 @@ td.cash_td2 img {
   color:#333;
 }
 #gains_enter{
-  width:100%;
-  background:#f65d00;
-  height:45px;
-  line-height:45px;
-  margin:40px 0;
-  border-radius:4px;
-  font-size:14px;
-  color:#fff;
+	width:100%;
+	background:#f65d00;
+	height:45px;
+	line-height:45px;
+	font-size:16px;
+	color:#fff;
+	position:fixed;
+	bottom:0;
+	left:0;
+	text-align:center;
 }
 #pay_top{
   height:136px;

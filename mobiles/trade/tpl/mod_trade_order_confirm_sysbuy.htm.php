@@ -4,7 +4,7 @@
 	<ul>
 		<li>商家资料</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
-		<li >邀请码</li>
+		<li>设置密码</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
 		<li class="li_co">支付</li>
 		<li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>

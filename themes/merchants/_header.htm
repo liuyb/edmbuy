@@ -16,7 +16,7 @@
   </div>
   <div id="common_right">
     <button id="common_btn" class="common_shop">浏览店铺</button>
-    <button id="common_btn" class="common_name" data-show="0">90年代</button>
+    <button id="common_btn" class="common_name" data-show="0"><!--{if $global_shop->facename}--><!--{$global_shop->facename}--><!--{else}--><!--{$global_shop->mobile}--><!--{/if}--></button>
     <div class="set_pero" style="display:none;">
       <ul>
         <li class="use_id_set" id="account_set">账号设置</li>
@@ -76,6 +76,9 @@ $(document).on("click",function(e){
 $(function(){
 	$('#account_set').click(function(){
 		window.location ="/account";
+	});
+	$("#logout").on('click',function(){
+		window.location = "/user/logout";
 	});
 });
 </script>

@@ -715,8 +715,8 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_onestep');
-        $_SESSION['step'] = 1;
         $this->redirectByMerchantStatus($response);
+        $_SESSION['step'] = 1;
         $this->v->assign('user', $GLOBALS['user']);
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $response->send($this->v);
@@ -1089,11 +1089,17 @@ class User_Controller extends MobileController
      * @param Response $response
      */
     public function pay_merchant_order(Request $request, Response $response){
-        //还不是商家 - 我要入驻
-        $merchant = Merchant::getMerchantByUserId($GLOBALS['user']->uid);
-        if(!$merchant->is_exist()){
-            $response->redirect('/user/merchant/checkin');
+        $mid = $request->get('mid');
+        $merchant = Merchant::load($mid);
+        $uid = $GLOBALS['user']->uid;
+        //还不是商家 或者 店铺用户跟当前用户不是同一人
+        if(!$merchant->is_exist() || $merchant->user_id != $uid){
+            Fn::show_error_message('无效的链接.');
         }
+        //还不是商家 - 我要入驻
+        /* if(!$merchant->is_exist()){
+            $response->redirect('/user/merchant/checkin');
+        } */
         //已是商家 - 已经支付 - 支付成功
         if(Merchant::checkIsPaySuc()){
             $response->redirect("/user/merchant/dosuccess");
@@ -1101,7 +1107,8 @@ class User_Controller extends MobileController
         //已是商家  - 还没支付 - 未付款 未取消 订单存在
         $order_id = User_Model::getUnPaidOrderForMerchant();
         if($order_id && $order_id > 0){
-            $response->redirect("/order/$order_id/detail");
+            $url = U('trade/order/record','spm='.(isset($_GET['spm'])?$_GET['spm']:'').'&status=wait_pay');
+            $response->redirect($url);
         }
         //已是商家  - 还没支付 - 订单不存在
         $response->redirect('/trade/order/confirm_sysbuy');

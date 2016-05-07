@@ -17,7 +17,10 @@
 			<td><img src="<?=$user->logo ?>"></td>
 			<td>
 				<p class="become_name"><?=$user->nickname ?>
-				<img src="<?=AgentPayment::getAgentIconByLevel($user->level) ?>" class="jin_z">
+				<?php $img = AgentPayment::getAgentIconByLevel($user->level); ?>
+				<?php if($img):?>
+				<img src="<?=$img ?>" class="jin_z">
+				<?php endif;?>
 				</p>
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
 			</td>

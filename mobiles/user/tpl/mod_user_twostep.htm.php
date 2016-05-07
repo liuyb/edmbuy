@@ -1,10 +1,10 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <div id="sus_flow">
     <ul>
-        <li>商家注册</li>
+        <li class="bottom_f">商家注册</li>
         <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"></li>
-        <li class="li_co bottom_f">邀请码</li>
-        <li class="li_cs bottom_f"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
+        <li class="li_co bottom_f">设置密码</li>
+        <li class="li_cs"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
         <li>支付</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
         <li>完成开通</li>
@@ -20,14 +20,18 @@
 		<li>
 			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码">
 		</li>
+		<?php if(!$parent_id): ?>
 		<li>
-			<input id="invite_code" class="ps_common" type="text" <?php if($parent_id>0): ?> readonly<?php endif;?> value="<?=$parent_id?>" placeholder="请输入推荐人多米号">
+			<input id="invite_code" class="ps_common" type="text" placeholder="请输入推荐人多米号">
 		</li>
+		<?php endif;?>
 	</ul>
 </div>
+<?php if(!$parent_id): ?>
 <div id="sus_info" style="font-size:14px;color:#999;margin-top:5px">
 	注：为了保证益多米全体用户的利益不受损失，根据平台规则，入驻商家建议填写推荐人多米号，如果无推荐人，不填写即可。
 </div>
+<?php endif;?>
 <div id="wx_success_pay" style="margin-top:30px;">
     <button id="next_step">去支付</button>
 </div>
@@ -40,8 +44,8 @@
     $("#next_step").click(function () {
         var shopPass = $("#shopPass").val();
         var confirmShopPass = $("#confirmShopPass").val();
-        if(!ispw(shopPass)){
-			myAlert('密码长度不能小于六位数！');
+        if(!ispw(shopPass) || shopPass.length > 12){
+			myAlert('店铺登录密码长度为6到12位，请重新输入！');
 			return;
         }
         if(shopPass != confirmShopPass){

@@ -3,7 +3,7 @@
     <ul>
         <li class="li_co bottom_f">商家注册</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"><img class="bottom_dw" src="/themes/mobiles/img/liz.png"></li>
-        <li>邀请码</li>
+        <li>设置密码</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
         <li>支付</li>
         <li class="li_cs"><img src="/themes/mobiles/img/back.png"></li>
