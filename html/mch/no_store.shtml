@@ -24,14 +24,15 @@
 <!--#include file="header_commen.html"-->
 
 <div id="body" class="ifr-body">
-	<!--#include file="store_left_common.html"-->
-	<div id="store_right_finish">
-		<div id="new_common" class="o_store_img">
-			<img src="../mch/img/no_store.png">
-			
-			<p><img src="../mch/img/ydm.png" style="width:200px;"></p>
-		</div>
-	</div>
+	
+
+<div class="o_store_img">
+	<img src="../mch/img/no_store.png">
+	
+	<p><img src="../mch/img/ydm.png" style="width:200px;"></p>
+</div>
+
+
 </div>
 	
 	
