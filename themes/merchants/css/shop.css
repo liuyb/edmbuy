@@ -517,3 +517,29 @@
 	background:#f6f6f6;
 }
 /*2016 4-14 e*/
+
+.get_f_phone{
+  	height: 30px;
+  	line-height: 30px;
+  	border: 1px solid #f26427;
+  	border-radius: 4px;
+  	background: #fff;
+	width:120px;
+  	color: #f26427;	
+	margin-left:50px;
+}
+.get_code{
+	margin-top:20px;
+	width:180px;
+	border:1px solid #eee;
+	display:inline-block;
+	padding:10px;
+	margin-left:100px;	
+}
+.get_code p{
+	font-size:13px;
+	margin-bottom:5px;
+}
+.get_code img{
+	width:180px;
+}

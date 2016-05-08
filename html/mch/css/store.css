@@ -250,10 +250,10 @@
 .back_home{
 	height:30px;
 	line-height:30px;
-	border:0;
+	border:1px solid #f26427;
 	border-radius:4px;
 	background:#f26427;
-	width:80px;
+	width:120px;
 	color:#fff;
 }
 /*2016 4-13 e*/
@@ -374,7 +374,31 @@
 	text-align:center;
 }
 
-
+.get_f_phone{
+  	height: 30px;
+  	line-height: 30px;
+  	border: 1px solid #f26427;
+  	border-radius: 4px;
+  	background: #fff;
+	width:120px;
+  	color: #f26427;	
+	margin-left:50px;
+}
+.get_code{
+	display:none;
+	margin-top:20px;
+	width:180px;
+	border:1px solid #eee;
+	padding:10px;
+	margin-left:530px;	
+}
+.get_code p{
+	font-size:13px;
+	margin-bottom:5px;
+}
+.get_code img{
+	width:180px;
+}
 
 
 

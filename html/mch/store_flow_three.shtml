@@ -30,16 +30,38 @@
 	<img src="../mch/img/yzsf1.png"><img src="../mch/img/szmm1.png"><img src="../mch/img/wc1.png">
 </div>
 	
-<div id="store_infos" style="width:1160px; margin:0 auto;padding:230px 0;">
-	<div style="text-align:center;">
+<div id="store_infos" style="width:1160px; margin:0 auto;height:600px; text-align: center;">
+	<div style="text-align:center;padding-top:150px;">
 		<div class="three_img_left"><img src="../mch/img/cg.png"></div>
 		<div class="three_text_right">
 			<p style="font-size:24px;color:#1f1f1f;">恭喜您，已经成功完成 开店</p>
-			<p><button class="back_home">返回首页</button></p>
+			<p><button class="back_home">返回首页</button><button class="get_f_phone">免费领取400电话</button></p>
 		</div>
+	</div>
+	<div class="get_code">
+		<p>扫描下方二维码，领取400电话</p>
+		<p>（免费赠送3个月）</p>
+		<img src="../mch/img/400phone.png">
 	</div>
 </div>
 
 <script>
 $("#dpzx").addClass("order_left_common");
+
+$(".get_f_phone").on("click",function(){
+	$(".get_code").show();
+})
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
