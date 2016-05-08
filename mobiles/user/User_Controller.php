@@ -70,7 +70,7 @@ class User_Controller extends MobileController
     {/*
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);*/
-    	Users::required_account_login();
+    	//Users::required_account_login();
         $this->v->set_tplname('mod_user_index');
         //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
         Users::check_detail_info();
