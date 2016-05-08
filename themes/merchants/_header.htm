@@ -73,6 +73,7 @@ $(document).on("click",function(e){
     $("."+firecls).attr('data-show','0');
   }
 });
+
 $(function(){
 	$('#account_set').click(function(){
 		window.location ="/account";
@@ -81,4 +82,12 @@ $(function(){
 		window.location = "/user/logout";
 	});
 });
+
+$(document).ready(function(){ 
+	var text = $(".common_name").text();
+	var new_text = text.substr(0,4);
+	$(".common_name").text(new_text);
+})
+
+
 </script>
