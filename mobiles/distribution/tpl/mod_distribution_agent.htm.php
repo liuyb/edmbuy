@@ -12,7 +12,7 @@
 </style>
 <script id="forTopnav" type="text/html">
 <div class="header">
-	购买代理
+	多米代理
 	<a href="/user" class="back"></a>
 </div>
 </script>
@@ -114,7 +114,8 @@ function clearAgent(){
 
 <script>
 $(function(){
-	 show_mnav($('#forMnav').html(), -1);
+	$("#Mbody").css("background", "#f1f1f1"); 
+	show_mnav($('#forMnav').html(), -1);
 	
 	$(document).on('click', '.btn-wxpay', function(){
 		var _this = $(this);
