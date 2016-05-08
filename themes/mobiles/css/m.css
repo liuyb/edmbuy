@@ -5336,7 +5336,7 @@ td.cash_td2 img {
 	background:#fff;
 	height:44px; 
 	border-bottom:1px solid #ddd;
-	margin:10px 0;
+	margin:10px 0 0;
 }
 .navig_next{
 	margin:0 10px;
@@ -5352,9 +5352,6 @@ td.cash_td2 img {
 .navig_on{
 	color:#f65d00 !important;
 	border-bottom:1px solid #f65d00;
-}
-.agency_common{
-	margin-bottom:108px;
 }
 .gold_medal_agency{
 	margin:0 10px;
