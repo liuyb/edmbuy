@@ -3093,7 +3093,6 @@ td.cash_td2 img {
 	border-bottom:1px solid #f65d00;
 }
 .agency_common{
-	background:#fff;
 	margin-bottom:108px;
 }
 .gold_medal_agency{
@@ -3122,7 +3121,7 @@ td.cash_td2 img {
 	background:#fff;
 	position:fixed;
 	left:0;
-	bottom:49px;
+	bottom:0;
 	width:100%;
 }
 .agency_bottom{
@@ -3160,7 +3159,6 @@ td.cash_td2 img {
 	font-size:16px;
 	color:#fff;
 	text-align:center;
-	margin-top:-1px;
 }
 .amoney_right span{
 	display:inline-block;
