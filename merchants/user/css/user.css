@@ -103,4 +103,10 @@
   text-align:center;
 }
 
+.right_tit img{
+  	vertical-align: middle;
+  	margin-left: 10px;
+  	width: 30px;
+  	height: 30px;	
+}
 /*2016-4-9 e 首页*/

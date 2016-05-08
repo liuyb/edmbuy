@@ -58,7 +58,7 @@
 		<div id="store_left"><img src="../mch/img/01_ba.png"></div>
 		<div id="store_right">
 			<p>
-				<span class="right_tit">店铺名称：益多米</span>
+				<span class="right_tit">店铺名称：益多米<img src="../mch/img/renz2.png"><img src="../mch/img/renz1.png"></span>
 				<span>总销售额：<i class="common_money">8888.00元</i></span>
 				<button class="detail_btn">交易明细</button>
 			</p>

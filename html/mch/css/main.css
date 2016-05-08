@@ -391,6 +391,12 @@ body { min-width: 1200px;}
 .right_tit{
 	padding-right:160px;
 }
+.right_tit img{
+  	vertical-align: middle;
+  	margin-left: 10px;
+  	width: 30px;
+  	height: 30px;	
+}
 .common_money{
 	color:#f13628 !important;
 	padding-right:30px;

@@ -3188,37 +3188,37 @@ td.cash_td2 img {
   	height: 49px;
   	text-align: center;	
 }
-#s_sjlm{
-	background:url(../img/sjlm1.png) no-repeat center;
-	background-size:39px 36px;
+#s_sy{
+	background:url(../img/sy1.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_sjlm.on{
-	background:url(../img/sjlm2.png) no-repeat center;
-	background-size:39px 36px;
+#s_sy.on{
+	background:url(../img/sy2.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_dl{
-	background:url(../img/daili1.png) no-repeat center;
-	background-size:20px 36px;
+#s_gwc{
+	background:url(../img/gwc1.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_dl.on{
-	background:url(../img/daili2.png) no-repeat center;
-	background-size:20px 36px;
+#s_gwc.on{
+	background:url(../img/gwc2.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_dp{
-	background:url(../img/dp1.png) no-repeat center;
-	background-size:22px 36px;
+#s_lmsj{
+	background:url(../img/lmsj1.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_dp.on{
-	background:url(../img/dp2.png) no-repeat center;
-	background-size:22px 36px;
+#s_lmsj.on{
+	background:url(../img/lmsj2.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_wd{
-	background:url(../img/wd1.png) no-repeat center;
-	background-size:20px 36px;
+#s_hyzx{
+	background:url(../img/hyzx1.png) no-repeat center;
+	background-size:40px 36px;
 }
-#s_wd.on{
-	background:url(../img/wd2.png) no-repeat center;
-	background-size:20px 36px;
+#s_hyzx.on{
+	background:url(../img/hyzx2.png) no-repeat center;
+	background-size:40px 36px;
 }
 
 
