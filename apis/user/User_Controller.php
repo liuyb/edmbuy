@@ -77,7 +77,6 @@ class User_Controller extends Controller {
 			$res['user_id']  = $exUser->id;
 			
 			$upUser = new Users($exUser->id);
-			$upUser->parentunionid  = $parentUnid; //始终保存接口传来的parent_unionid
 			$upUser->businessid     = $business_id;
 			$upUser->businesstime   = $business_time;
 			$upUser->lasttime       = simphp_dtime();

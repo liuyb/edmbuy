@@ -33,10 +33,11 @@ class MobileController extends Controller {
 	 * @param Response $response
 	 * @param string $basetpl
 	 */
-	public function setPageView(Request $request, Response $response, $basetpl = '_page') {
+	public function setPageView(Request $request, Response $response, $basetpl = '_page_mpa') {
 		$this->v = new PageView('', $basetpl);
 		$sys_css = '';
 		if ($basetpl=='_page_mpa') {
+			$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
 			if ($request->isIOS()) {
 				$sys_css = 'iOS';
 			}

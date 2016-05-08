@@ -23,41 +23,7 @@
 <?php tplholder('HEAD_CSS');?>
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
-<script>gData.page_render_mode=parseInt('<?=$page_render_mode?>');
-gData.page_use_iscroll = 1==gData.page_render_mode ? 0 : 1;
-function show_mtop(html) {
-	if (typeof(show_mtop.dom)=='undefined' || !show_mtop.dom) {
-		show_mtop.dom = $('#Mtop');
-	}
-	show_mtop.dom.html(html).show();
-}
-function show_topnav(html) {
-	if (typeof(show_topnav.dom)=='undefined' || !show_topnav.dom) {
-		show_topnav.dom = $('#Mhead');
-	}
-	show_topnav.dom.html(html).show();
-}
-function show_mnav(html, append) {
-	if (typeof(show_mnav.dom)=='undefined' || !show_mnav.dom) {
-		show_mnav.dom = $('#Mnav');
-	}
-	if (typeof(append)=='undefined') append = 0;
-	
-	if (append<0) { 
-		show_mnav.dom.prepend(html).show();
-	} else if(append>0) {
-		show_mnav.dom.append(html).show();
-	} else {
-		show_mnav.dom.html(html).show();
-	}
-}
-function append_to_body(html) {
-	$(document.body).append(html);
-}
-function required_uinfo_empty() {
-	return gUser.nickname==''&&gUser.logo=='' ? true : false;
-}
-</script>
+<?php include T('inc/common_head');?>
 </head>
 <body class="MPA<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>"><?php
 
@@ -78,15 +44,16 @@ add_js('m.js',['pos'=>'foot']);
 ?>
 <div id="Mtop"></div>
 <nav id="Mhead" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
-<div id="Mbody" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><div class="pageBg hide">品质生活从这里开始🔛</div><?php include T($tpl_content);?></div>
+<div id="Mbody" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><div class="pageBg hide">品质生活从这里开始🔛</div>
+<?php if(1==$page_render_mode):?><?php include T($tpl_content);?><?php endif;?>
+</div>
 <nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <script id="Mpending" type="text/html"></script>
 <div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
 <?php include T('inc/popalert');?>
 <?php include T('inc/popdlg');?>
-<!-- loading -->
+<?php include T('inc/weui');?>
 <?php include T('inc/loading');?>
-<!-- loading -->
 </body>
 <?php tplholder('FOOT_JS');?>
 <script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>

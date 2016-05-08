@@ -72,10 +72,13 @@ class Users extends StorageNode {
 						'salt'        => 'salt',
 						'parentid'    => 'parent_id',
 						'parentnick'  => 'parent_nick',
-						'parentunionid' => 'parent_unionid',
 						'appuserid'   => 'app_userid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
+						'parentnick1' => 'parent_nick1',
+						'parentid1'   => 'parent_id1',
+						'parentid2'   => 'parent_id2',
+						'parentid3'   => 'parent_id3',
 						'childnum1'   => 'childnum_1',
 						'childnum2'   => 'childnum_2',
 						'childnum3'   => 'childnum_3',
@@ -209,6 +212,24 @@ class Users extends StorageNode {
 	 */
 	static function is_logined() {
 		return $GLOBALS['user']->uid ? true : false;
+	}
+	
+	/**
+	 * Check whether user account logined
+	 * @return boolean
+	 */
+	static function is_account_logined() {
+		return isset($_SESSION['AC_LOGINED']) && $_SESSION['AC_LOGINED'] ? TRUE : FALSE;
+	}
+	
+	/**
+	 * 请求帐号登录
+	 */
+	static function required_account_login() {
+		if (!self::is_account_logined()) {
+			Response::redirect('user/login_account');
+		}
+		return true;
 	}
 	
 	/**

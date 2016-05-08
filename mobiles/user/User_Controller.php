@@ -67,9 +67,10 @@ class User_Controller extends MobileController
      * @param Response $response
      */
     public function index(Request $request, Response $response)
-    {
+    {/*
         $this->setPageView($request, $response, '_page_mpa');
-        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);*/
+    	Users::required_account_login();
         $this->v->set_tplname('mod_user_index');
         //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
         Users::check_detail_info();
@@ -213,6 +214,42 @@ class User_Controller extends MobileController
         } else {
             $response->redirect($refer);
         }
+    }
+
+    /**
+     * 手机帐号登录
+     *
+     * @param Request $request
+     * @param Response $response
+     */
+    public function login_account(Request $request, Response $response)
+    {
+    	if ($request->is_post()) {
+    		
+    	}
+    	else { //登录页面
+    		$this->v->set_tplname('mod_user_login_account');
+    		throw new ViewResponse($this->v);
+    	}
+    }
+    
+    /**
+     * 手机帐号注册
+     * 
+     * @param Request $request
+     * @param Response $response
+     */
+    public function reg_account(Request $request, Response $response)
+    {
+    	if ($request->is_post()) {
+    	
+    	}
+    	else { //注册页面
+    		$this->v->set_tplname('mod_user_reg_account');
+    		$step = $request->get('step', 1);
+    		$this->v->assign('step', $step);
+    		throw new ViewResponse($this->v);
+    	}
     }
 
     /**

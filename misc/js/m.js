@@ -86,12 +86,12 @@
 	};
 	F.loadingCount = 0;
 	F.loadingOn = function(){
-		F.loadingCount ++;
+		F.loadingCount++;
 		$("#loading_mask").show();
 		$("#ajax_loadding").show();
 	};
 	F.loadingOff = function(){
-		F.loadingCount --;
+		F.loadingCount--;
 		if(F.loadingCount <= 0){
 			$("#loading_mask").hide();
 			$("#ajax_loadding").hide();
