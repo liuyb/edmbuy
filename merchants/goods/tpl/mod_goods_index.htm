@@ -70,12 +70,19 @@ $(function(){
 	DOMEventBind();
 });
 
+var param_goods_type = "<!--{$goods_type}-->";
 /**
  * 判断当前cookie里面是否有选中的项，没有就用默认的
  */
 function goodsTypeHighlight(){
 	var $order_type_li = $("#order_type");
-	var goods_type = Cookies.get('mch_goods_type');
+	var goods_type;
+	if(param_goods_type){
+		goods_type = param_goods_type;
+		param_goods_type = "";
+	}else{
+		goods_type = Cookies.get('mch_goods_type');
+	}
 	if(goods_type){
 		$order_type_li.find("li[data-sale="+goods_type+"]").addClass("new_common_on");
 		//清除cookie

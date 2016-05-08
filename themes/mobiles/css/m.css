@@ -115,7 +115,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 
 /*主体页面dom*/
 #Mtop { position: absolute;left: 0;top: 0;width: 100%;display: none; }
-#Mbody { width: 100%;height: 100%;position: relative;background: #eee;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
+#Mbody { width: 100%;height: 100%;position: relative;background: #f1f1f1;overflow: hidden;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;box-sizing: border-box; }
 #activePage,#loadingCover { position: absolute;top: 0;bottom: 0;width: 100%;-webkit-overflow-scrolling: touch;overflow: hidden; }
 #activePage.useTopNav-1,#loadingCover.useTopNav-1 { top: 45px; }
 #activePage.useNav-1,#loadingCover.useNav-1 { bottom: 50px; }
@@ -6133,9 +6133,11 @@ td.cash_td2 img {
 }
 /**loading begin add by jason*/
 .no_more_data {
-	float: left;
-	margin-left: 30%;
-	margin-top: 10px;
+	text-align: center;
+}
+.no_more_data img {
+	margin-top: 20px;
+	width: 165px;
 }
 /*2016-5-2 s */
 .member_cen_common{

@@ -117,11 +117,19 @@ $(function(){
 		loadPageDataTable(1, true, tableOptions);
 	});
 });
+
+var param_order_type = "<!--{$order_type}-->";
 /**
  * 判断当前cookie里面是否有选中的项，没有就用默认的
  */
 function orderTypeHighlight(){
-	var order_type = Cookies.get('mch_order_type');
+	var order_type;
+	if(param_order_type){
+		order_type = param_order_type;
+		param_order_type = "";
+	}else{
+		order_type = Cookies.get('mch_order_type');
+	}
 	if(order_type){
 		$order_type_li.find("li[data-type="+order_type+"]").addClass("order_type_on");
 		//清除cookie

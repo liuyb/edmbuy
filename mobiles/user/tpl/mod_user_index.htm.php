@@ -4,17 +4,18 @@
 
 <div class="error"><?=$errmsg?></div>
 
-<?php else:?>
-<?php if(Users::isAgent($curuser->level) && $agent->pid && !$agent->premium_id):?>
+<?php else:
+$is_agent = Users::isAgent($curuser->level);
+?>
+<?php if($is_agent && $agent->pid && !$agent->premium_id):?>
 <div class="member_cen_common" style="margin:0;">
 	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
 		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($curuser->level) ?>元套餐未领取!</span>
-		<a href="<?=U('distribution/agent/package') ?>"><i style="color:#f65d00;">立即领取</i></a>
+		<i style="color:#f65d00;" onclick="_link('<?=U('distribution/agent/package') ?>')">立即领取</i>
 	</div>
 </div>
 <?php endif;?>
-<a href="/user/setting">
-<div class="agency_become">
+<div class="agency_become" onclick="_link('<?=U('user/setting') ?>');">
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
 			<td width="70px;">
@@ -32,10 +33,9 @@
 		</tr>
 	</table>
 </div>
-</a>
 <?php if(isset($parentUid)):?>
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom">
+	<div class="in_common_agency del_bottom" onclick="_link('/distribution/my/parent')">
 		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUid ?></span><i><?=$parentNickName ?></i>
 	</div>
 </div>
@@ -43,84 +43,70 @@
 
 <div class="member_cen_common">
 	<div class="in_common_agency">
-		<span style="margin-left:0;">我的订单</span><a href="/trade/order/record?status=all"><i class="all_order_c">全部订单</i></a>
+		<span style="margin-left:0;">我的订单</span><i class="all_order_c" onclick="_link('<?=U('trade/order/record?status=all') ?>')">全部订单</i>
 	</div>
 	<div class="my_order_state">
 	<ul>
-		<a href="/trade/order/record?status=wait_pay">
-    		<li>
-    			<img src="/themes/mobiles/img/fk1.png">
-    			<span class="waitPayCount"></span>
-    		</li>
-		</a>
-		<a href="/trade/order/record?status=wait_ship">
-			<li>
-				<img src="/themes/mobiles/img/fh2.png">
-    			<span class="unShipCount"></span>
-			</li>
-		</a>
-		<a href="/trade/order/record?status=wait_recv">
-			<li class="dsh">
-				<img src="/themes/mobiles/img/sh3.png">
-    			<span class="shipedCount"></span>
-			</li>
-		</a>
-		<a href="/trade/order/record?status=finished"><li><img src="/themes/mobiles/img/sh4.png"></li></a>
+		<li onclick="_link('/trade/order/record?status=wait_pay')">
+			<img src="/themes/mobiles/img/fk1.png">
+			<span class="waitPayCount"></span>
+		</li>
+		<li onclick="_link('/trade/order/record?status=wait_ship')">
+			<img src="/themes/mobiles/img/fh2.png">
+			<span class="unShipCount"></span>
+		</li>
+		<li class="dsh" onclick="_link('/trade/order/record?status=wait_recv')">
+			<img src="/themes/mobiles/img/sh3.png">
+			<span class="shipedCount"></span>
+		</li>
+		<li onclick="_link('/trade/order/record?status=finished')"><img src="/themes/mobiles/img/sh4.png"></li>
 	</ul>
 	</div>
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency" onclick="window.location.href='/user/favorite/shop'">
+	<div class="in_common_agency" onclick="_link('/user/favorite/shop')">
 		<img src="/themes/mobiles/img/scddp.png"><span>我收藏的店铺</span><i><?=$shop_count ?>家</i>
 	</div>
-	<div class="in_common_agency del_bottom" onclick="window.location.href='/user/favorite/goods'">
+	<div class="in_common_agency del_bottom" onclick="_link('/user/favorite/goods')">
 		<img src="/themes/mobiles/img/scdbb.png"><span>我收藏的宝贝</span><i><?=$goods_count ?>件</i>
 	</div>
 </div>
 
 <div class="member_cen_common">
-	<a href='<?=U('partner/my/child') ?>'>
-	<div class="in_common_agency">
+	<div class="in_common_agency <?php if(!$is_agent):?>del_bottom<?php endif;?>" onclick="_link('<?=U('partner/my/child') ?>')">
 		<img src="/themes/mobiles/img/wdrm.png"><span>我的人脉</span><i>全部人脉</i>
 	</div>
-	</a>
-	<a href='<?=U('distribution/my/child/agent') ?>'>
-	<div class="in_common_agency" style="margin: 0 10px 0 33px;">
+	<?php if($is_agent):?>
+	<div class="in_common_agency" style="margin: 0 10px 0 33px;" onclick="_link('<?=U('distribution/my/child/agent') ?>')">
 		<span>我发展的代理</span>
 	</div>
-	</a>
-	<a href='<?=U('distribution/my/child/shop') ?>'>
-	<div class="in_common_agency" style="margin: 0 10px 0 33px;">
+	<div class="in_common_agency del_bottom" style="margin: 0 10px 0 33px;" onclick="_link('<?=U('distribution/my/child/shop') ?>')">
 		<span>我发展的店铺</span>
 	</div>
-	</a>
+	<?php endif;?>
 </div>
-<?php if(!Users::isAgent($curuser->level)):?>
+<?php if(!$is_agent):?>
 <div class="member_cen_common">
-	<a href='<?=U('distribution/agent') ?>'>
-	<div class="in_common_agency">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/agent') ?>')">
 		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>
 	</div>
-	</a>
 </div>
 <?php endif;?>
 <div class="member_cen_common">
-	<a href='<?=U('distribution/shop') ?>'>
-	<div class="in_common_agency">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/shop') ?>')">
 		<img src="/themes/mobiles/img/wddp.png"><span>我的店铺</span>
 	</div>
-	</a>
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency" onclick="window.location.href='/user/my/wallet'">
+	<div class="in_common_agency del_bottom" onclick="_link('/user/my/wallet')">
 		<img src="/themes/mobiles/img/wdqb.png"><span>我的钱包</span><i class="my_price_c"></i>
 	</div>
 </div>
 
 <div class="member_cen_common" style="margin-bottom:60px;">
-	<div class="in_common_agency">
+	<div class="in_common_agency del_bottom">
 		<img src="/themes/mobiles/img/yqx.png"><span>一起享</span>
 	</div>
 </div>
@@ -183,6 +169,10 @@ $(function(){
 		 $(".refer_name").text(name + '...');
 	}
 });
+
+function _link(url){
+	window.location.href=url;
+}
 </script>
 
 <?php endif;?>

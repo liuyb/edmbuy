@@ -41,6 +41,8 @@ class Goods_Controller extends MerchantController
         $this->v->set_tplname('mod_goods_index');
         $this->setPageLeftMenu('goods', 'list');
         $this->v->assign('msite', C('env.site.mobile'));
+        $goods_type = $request->get('type', 0);
+        $this->v->assign('goods_type', $goods_type);
         $response->send($this->v);
     }
 
@@ -550,7 +552,7 @@ class Goods_Controller extends MerchantController
     {
         $this->setPageView($request, $response, "_page_box");
         $this->v->set_tplname("mod_goods_ajaxattr");
-        $attrId = $request->post("cat_id");
+        $attrId = $request->get("cat_id");
         $show_page = true;
         if ($show_page) {
             $goodsAttr = Goods_Model::getGoodsAttr($attrId);
@@ -589,13 +591,11 @@ class Goods_Controller extends MerchantController
             $attr_names = [];
             foreach ($attrData as $val3) {
                 if (empty($val3[0])) {
-                    $str = "'$val3[1]'";
-                    array_push($attr_names, $str);
+                    array_push($attr_names, $val3[1]);
                 }
             }
             if (!empty($attr_names)) {
-                $limit_name = implode(",", $attr_names);
-                $result = Goods_Model::checkAttrName($cat_id, $limit_name);
+                $result = Goods_Model::checkAttrName($cat_id, $attr_names);
                 if ($result) {
                     $ret['status'] = 0;
                     $ret['retmsg'] = "属性名不能重复！";
@@ -621,14 +621,22 @@ class Goods_Controller extends MerchantController
                 //编辑上移或者下移动改变short_order
                 Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order'], $val2[1]);
             }
-            if (!empty($nattr_ids)) {
-                $result = Goods_Model::ckeckDelAttr($nattr_ids);
+            
+            //
+            $delete_attr = [];
+            foreach ($nattr_ids as $attr_id) {
+                if (!in_array($attr_id, $new)) {
+                    array_push($delete_attr, $attr_id);
+                }
+            }
+            if ($delete_attr && count($delete_attr) > 0) {
+                $result = Goods_Model::ckeckDelAttr($delete_attr);
                 if($result){
                     $ret['msg'] = "此属性有商品正在使用不可删除!";
                     $ret['status'] = 0;
                     $response->sendJSON($ret);
                 }
-                Goods_Model::delGoodsAttr($nattr_ids);
+                Goods_Model::delGoodsAttr($delete_attr);
             }
             $view = true;
             if ($view) {

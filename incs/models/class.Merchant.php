@@ -152,7 +152,8 @@ class Merchant extends StorageNode {
 	 * @param unknown $muid
 	 */
 	static function getShopInfo($muid){
-	    $sql = "select m.facename as facename,m.logo as logo,p.end_time as end_time from shp_merchant m left join shp_merchant_payment p on m.merchant_id = p.merchant_id
+	    $sql = "select m.facename as facename,m.logo as logo,p.end_time as end_time,m.verify from shp_merchant m 
+	            left join shp_merchant_payment p on m.merchant_id = p.merchant_id
                 where m.merchant_id='%s' order by p.end_time desc limit 1";
 	    $result = D()->query($sql, $muid)->fetch_array();
 	    return $result;

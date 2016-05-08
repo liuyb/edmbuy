@@ -65,7 +65,7 @@ function getAgencyList(level, curpage, isInit){
 function constructRows(ret, isInit){
 	var HTML = "";
 	if(!ret || !ret.result || !ret.result.length){
-		HTML = "<div class='no_more_data'>还没有相关数据.</div>";
+		HTML = F.displayNoData();
 	}else{
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){

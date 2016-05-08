@@ -106,6 +106,7 @@ class Distribution_Controller extends MobileController{
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'shop';
         $this->topnav_no = 1;
+        $this->nav_no = 0;
         global $user;
         $merchant = Merchant::getMerchantByUserId($user->uid);
         if(!$merchant->is_exist()){
@@ -141,6 +142,7 @@ class Distribution_Controller extends MobileController{
         $this->v->set_tplname('mod_distribution_my');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'my';
+        $this->nav_no = 0;
         global $user;
         if($user->parentid){
             $parent = Users::load($user->parentid);

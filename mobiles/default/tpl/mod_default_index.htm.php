@@ -52,14 +52,10 @@ window.location.reload();
 <div class="sp_info">
 	<div class="sp_t">	
 		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/zq/98.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
-		<div class="line1"></div>
 	</div>
 
 	<div class="sp_ls">
 		<p><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/zq/teawine.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/zq/fruit.png"></a></p><p><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/zq/food.png"></a></p><p><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/zq/cloth.png"></a></p>
-		<div class="line2"></div>
-		<div class="line3"></div>
-		<div class="line4"></div>
 	</div>
 </div>
 

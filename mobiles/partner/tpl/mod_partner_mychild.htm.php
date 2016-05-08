@@ -40,9 +40,9 @@ show_topnav($('#forTopnav').html());
 
 <div class="store_three_list">
 	<ul id="levelBar">
-		<li class="navig_on" onclick="agencyChange(this, 1)" data-type=1><?=$level1 ?><br/>一级代理</li>
-		<li onclick="agencyChange(this, 2)" data-type=2><?=$level2 ?><br/>二级代理</li>
-		<li onclick="agencyChange(this, 3)" data-type=3><?=$level3 ?><br/>三级代理</li>
+		<li class="navig_on" onclick="agencyChange(this, 1)" data-type=1><?=$level1 ?><br/>一级人脉</li>
+		<li onclick="agencyChange(this, 2)" data-type=2><?=$level2 ?><br/>二级人脉</li>
+		<li onclick="agencyChange(this, 3)" data-type=3><?=$level3 ?><br/>三级人脉</li>
 	</ul>
 </div>
 
@@ -88,7 +88,7 @@ function getChildList(level, curpage, isInit){
 function constructRows(ret, isInit){
 	var HTML = "";
 	if(!ret || !ret.result || !ret.result.length){
-		HTML = "<div class='no_more_data'>还没有相关数据.</div>";
+		HTML = F.displayNoData();
 	}else{
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){

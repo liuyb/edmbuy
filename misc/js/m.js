@@ -456,6 +456,10 @@
 		showMore.find("span").text("下拉加载更多");
 	}
 	
+	F.displayNoData = function(){
+		return "<div class='no_more_data'><img src='/themes/mobiles/img/no_data_show.png' /></div>";
+	}
+	
 })(jQuery, FUI, this);
 
 //显示和隐藏弹出框

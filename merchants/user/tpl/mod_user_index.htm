@@ -7,17 +7,17 @@
     <table cellspacing="0" cellpadding="0" id="tem_tab">
       <tr>
         <td id="tem_tit">待处理订单信息：</td>
-        <td>未付款订单<span>（<!--{$wait_pay_count}-->）</span></td>
-        <td>待发货订单<span>（<!--{$wait_ship_count}-->）</span></td>
-        <td>待退款订单<span>（<!--{$wait_refund_count}-->）</span></td>
+        <td onclick="window.location.href='/order?type=100'" style='cursor:pointer;'>未付款订单<span>（<!--{$wait_pay_count}-->）</span></td>
+        <td onclick="window.location.href='/order?type=101'" style='cursor:pointer;'>待发货订单<span>（<!--{$wait_ship_count}-->）</span></td>
+        <td onclick="window.location.href='/order/refund'" style='cursor:pointer;'>待退款订单<span>（<!--{$wait_refund_count}-->）</span></td>
         <td></td>
         <td><button class="tem_btn_common" onclick="window.location.href='/order'">管理订单</button></td>
       </tr>
       <tr>
         <td id="tem_tit">商品信息：</td>
-        <td>商品总数<span>（<!--{$goods_total}-->）</span></td>
-        <td>未上架商品总数<span>（<!--{$unsale_goods_total}-->）</span></td>
-        <td>库存预警（<!--{$warn_goods_number}-->）</td>
+        <td onclick="window.location.href='/goods?type=2'" style='cursor:pointer;'>商品总数<span>（<!--{$goods_total}-->）</span></td>
+        <td onclick="window.location.href='/goods?type=1'" style='cursor:pointer;'>未上架商品总数<span>（<!--{$unsale_goods_total}-->）</span></td>
+        <!-- <td>库存预警（{$warn_goods_number}）</td> -->
         <td></td>
         <td><button class="tem_btn_common" onclick="window.location.href='/goods'">维护商品</button></td>
       </tr>
@@ -32,7 +32,7 @@
     <div id="store_left"><img src="<!--{$shop.logo}-->"/></div>
     <div id="store_right">
       <p>
-        <span class="right_tit">店铺名称：益多米</span>
+        <span class="right_tit">店铺名称：<!--{$shop.facename}--><!--{if $shop.verify eq 2}--><img src="/themes/merchants/img/renz2.png"><!--{else}--><img src="/themes/merchants/img/renz1.png"><!--{/if}--></span>
         <span>总销售额：<i class="common_money"><!--{$totalSales}-->元</i></span>
         <button class="detail_btn" onclick="window.location.href='/order'">交易明细</button>
       </p>

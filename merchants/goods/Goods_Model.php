@@ -710,12 +710,10 @@ class Goods_Model extends Model
      */
     static function checkAttrName($cat_id, $attr_name)
     {
-        $where ="attr_name ={$attr_name}";
-        if(strpos($attr_name,",")){
-            $where = "attr_name in({$attr_name})";
-        };
-        $sql = "select attr_name from shp_attribute where cat_id = {$cat_id} and $where";
-        return D()->query($sql)->result();
+        $merchant_id = $GLOBALS['user']->uid;
+        $where = "attr_name ".Fn::db_create_in($attr_name)."";
+        $sql = "select attr_name from shp_attribute where cat_id = {$cat_id} and merchant_id = '%s' and $where";
+        return D()->query($sql, $merchant_id)->result();
     }
 
     /**
@@ -751,7 +749,8 @@ class Goods_Model extends Model
         if(empty($attr_id) || count($attr_id) == 0){
             return 0;
         }
-        $where = " attr_id ".Fn::db_create_in($attr_id)." ";
+        $merchant_id = $GLOBALS['user']->uid;
+        $where = " attr_id ".Fn::db_create_in($attr_id)." and merchant_id = '$merchant_id' ";
         $tablename = "`shp_attribute`";
         return D()->delete($tablename, $where);
     }
