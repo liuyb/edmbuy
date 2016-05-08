@@ -4166,6 +4166,99 @@ td.cash_td2 img {
   	width: 12px !important;	
 }
 
-/* 运营  s */
+.trick_agency_bg{
+	position:absolute; 
+	width:100%; 
+	height:100%; 
+	z-index:-1;
+}
+.trick_agency_bg img{
+	height:100%;
+	width:100%;   
+	vertical-align: middle;
+}
 
-/* 运营  e */
+@-webkit-keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0,-100%,0);
+		transform: translate3d(0,-100%,0)
+	}
+
+	100% {
+		opacity: 1;
+		-webkit-transform: none;
+		transform: none
+	}
+}
+
+@keyframes fadeInDown {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0,-100%,0);
+		-ms-transform: translate3d(0,-100%,0);
+		transform: translate3d(0,-100%,0)
+	}
+
+	100% {
+		opacity: 1;
+		-webkit-transform: none;
+		-ms-transform: none;
+		transform: none
+	}
+}
+
+.fadeInDown {
+	-webkit-animation-name: fadeInDown;
+	animation-name: fadeInDown
+}
+.time_enter{
+  	position: absolute;	  
+  	bottom: 7%;
+}
+.time_enter button{
+	border:1px solid #fff;
+	color:#fff;
+	background:#00ceff;
+	width:110px;
+	height:44px;
+	line-height:44px;
+	font-size:16px;
+	border-radius:4px;
+}
+.no_top{
+	text-align:center;
+	margin-top:50px;
+}
+.no_top img{
+	width:160px;
+	height:160px;
+}
+.you_refer{
+	font-size:16px;
+	color:#323232;
+	margin-bottom:20px;
+}
+.no_ancegy{
+	font-size:13px;
+	color:#8c8c8c;
+	margin-bottom:5px;
+}
+.back_member_btn{
+	width:120px;
+	height:40px;
+	line-height:40px;
+	border:1px solid #f26427;
+	background:#f1f1f1;
+	margin-top:30px;
+	font-size:15px;
+	color:#f26427;
+	border-radius:4px;
+}
+
+
+
+
+
+
+
