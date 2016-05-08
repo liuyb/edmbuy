@@ -5,6 +5,29 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
+<style>
+.new_partner_list{
+	height:70px !important;
+}
+.new_m_infos_address{
+    color: #8c8c8c;
+    height: 20px;
+	line-height:20px;
+    font-size: 12px;
+    margin-left: 10px;	
+}
+.new_l_top_btn{
+	margin-top:24px !important;
+}
+.new_l_top_img{
+	width:70px;
+	height:70px;
+}
+.new_m_infos_num{
+	height: 20px !important;
+	line-height:20px !important;
+}
+</style>
 <script id="forTopnav" type="text/html">
 <div class="header">
 	我的人脉
@@ -73,10 +96,10 @@ function constructRows(ret, isInit){
 			var address = obj.province+" "+obj.city;
 			address = (obj.province || obj.city) ? address : "&nbsp;";
 			var icon = obj.level == 3 ? '/themes/mobiles/img/jinpai1.png' : '/themes/mobiles/img/yinpai2.png';
-			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
-			HTML += "<p>"+address+"</p>";
-			HTML += "<p class=\"m_infos_num\">推荐人数："+obj.childnum1	+"</p><p class=\"m_infos_num\">上级："+obj.parentnick	+"</p></div><button class=\"l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
+			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top new_partner_list\">";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
+			HTML += "<p class=\"new_m_infos_address\">"+address+"</p>";
+			HTML += "<p class=\"m_infos_num new_m_infos_num\"><span>推荐人数："+obj.childnum1	+"</span><span>上级："+obj.parentnick	+"</p></span></p></div><button class=\"l_top_btn new_l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
 		}
 	}
 	F.afterConstructRow(isInit, $resultList, HTML, $showMore);
