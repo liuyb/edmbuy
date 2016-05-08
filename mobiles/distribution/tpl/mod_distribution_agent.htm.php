@@ -47,57 +47,11 @@
 </div>
 
 <div class="agency_common" id="list1">
-	<div class="gold_medal_agency">
-		<table cellspacing="0" cellpadding="0" class="agency_tab">	
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_1.png"></td>
-				<td>免费领取<i class="agency_font">698元</i>商品套餐</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_2.png"></td>
-				<td>本人购物享有锁所购买商品佣金<i class="agency_font">30%</i>的返利， 分销商品即享下两级购物佣金：一层40%，二 层30%。</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_3.png"></td>
-				<td>发展金牌代理商，总佣金为<i class="agency_font">198元</i>。198元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/4_0.png"></td>
-				<td>推荐商家入驻分佣比例：一层<i class="agency_font">30%</i>，二层<i class="agency_font">10%</i>， 三层<i class="agency_font">5%</i>。</td>
-			</tr>
-			<tr>
-				<td style="border-bottom:0;"><img src="/themes/mobiles/img/5.png"></td>
-				<td style="border-bottom:0;">推荐商家销售产生总佣金<i class="agency_font">2%</i>的终身提点。</td>
-			</tr>
-		</table>
-	</div>
+	<img src="/themes/mobiles/img/jpdl.png" style="max-width:100%;">
 </div>
 
 <div class="agency_common" id="list2" style="display:none;">
-	<div class="gold_medal_agency">
-		<table cellspacing="0" cellpadding="0" class="agency_tab">	
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_1.png"></td>
-				<td>免费领取<i class="agency_font">398元</i>商品套餐</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_2.png"></td>
-				<td>本人购物享有锁所购买商品佣金<i class="agency_font">30%</i>的返利， 分销商品即享下两级购物佣金：一层40%，二 层30%。</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/agent_3.png"></td>
-				<td>发展金牌代理商，总佣金为<i class="agency_font">98元</i>。98元的三 层分佣比例：一层45%，二层30%，三层25%。</td>
-			</tr>
-			<tr>
-				<td><img src="/themes/mobiles/img/4_0.png"></td>
-				<td>推荐商家入驻分佣比例：一层<i class="agency_font">20%</i>，二层<i class="agency_font">5%</i>， 三层<i class="agency_font">5%</i>。</td>
-			</tr>
-			<tr>
-				<td style="border-bottom:0;"><img src="/themes/mobiles/img/5.png"></td>
-				<td style="border-bottom:0;">推荐商家销售产生总佣金<i class="agency_font">1%</i>的终身提点。</td>
-			</tr>
-		</table>
-	</div>
+	<img src="/themes/mobiles/img/ypdl.png" style="max-width:100%;">
 </div>
 
 <script>
