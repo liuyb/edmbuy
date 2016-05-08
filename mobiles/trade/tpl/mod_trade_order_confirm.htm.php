@@ -56,7 +56,7 @@
   <ul class="list-body" id="cart-list-body" data-cart_rids="<?=$cart_rids_str?>">
   
   <?php foreach($order_goods AS $g):?>
-    <li class="it clearfix" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['rec_id']?>">
+    <li class="it clearfix del_bottom" data-url="<?=$g['goods_url']?>" data-rid="<?=$g['rec_id']?>">
       <div class="c-24-5 col-2 withclickurl"><img src="<?=$g['goods_thumb']?>" alt="" class="goods_pic" /></div>
       <div class="c-24-14 col-3 withclickurl"><?=$g['goods_name']?></div>
       <div class="c-24-5 col-4">
@@ -66,6 +66,7 @@
         </div>
       </div>
     </li>
+    <li class="it del_bottom" style="float:right;"><div style="margin-top:5px;font-size:12px;">运费：<?=$g['shipping_fee'] ?></div></li>
   <?php endforeach;?>
     <li class="it">
       <div><textarea name="remark" placeholder="有话跟商家说..." class="order-message" id="order-message"></textarea></div>

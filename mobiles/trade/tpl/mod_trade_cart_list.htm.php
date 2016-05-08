@@ -48,7 +48,9 @@
 					<a href="<?=$g->goods_url?>"><div class="cart_p_img"><img src="<?=$g->goods_thumb?>" alt=""></div></a>
 					<div class="cart_p_main">
 						<div class="cart_p_desc">
-							<a href="<?=$g->goods_url?>"><h1><?=$g->goods_name?></h1></a>
+							<a href="<?=$g->goods_url?>">
+							<h1><?=$g->goods_name?></h1>
+							</a>
 							<div class="cart_p_info hide"></div>
 						</div>
 						<div class="cart_p_price">

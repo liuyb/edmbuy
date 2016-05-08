@@ -37,6 +37,7 @@ class Cart extends StorageNode {
 						'is_immediate'  => 'is_immediate',
 						'can_handsel'   => 'can_handsel',
 						'goods_attr_id' => 'goods_attr_id',
+				        'shipping_fee'  => 'shipping_fee'
 				)
 		);
 	}
@@ -201,6 +202,8 @@ class Cart extends StorageNode {
 				$ret = ['code' => -3, 'msg' => '属性规格格式不正确'];
 				return $ret;
 			}
+			//运费
+			$goods_ship_fee = Items::getGoodsRealShipFee($exItem);
 			
 			$cart_rec_id = self::checkCartGoodsExist($shopping_uid, $item_id, $is_immediate);
 			if ($cart_rec_id) { //商品已经在购物车中存在，则直接将购买数+1
@@ -247,6 +250,7 @@ class Cart extends StorageNode {
 				$cart->is_immediate = $is_immediate ? 1 : 0;
 				$cart->can_handsel = 0;
 				$cart->goods_attr_id = $spec_ids;
+				$cart->shipping_fee = $goods_ship_fee;
 				$cart->save(Storage::SAVE_INSERT);
 				
 				if ($cart->id) {
@@ -288,7 +292,7 @@ class Cart extends StorageNode {
 				$g['goods_url']   = Items::itemurl($g['goods_id']);
 				$g['goods_thumb'] = Items::imgurl($g['goods_thumb']);
 				$g['goods_img']   = Items::imgurl($g['goods_img']);
-				$total_price     += $g['goods_price']*$g['goods_number'];
+				$total_price     += ($g['goods_price']*$g['goods_number']) + $g['shipping_fee'];
 			}
 		}
 		return empty($ret) ? [] : $ret;

@@ -467,6 +467,7 @@ HERESQL;
 	        $template_fee = $item->shipping_fee;
 	    }
 	    $item->shipFee = $template_fee;
+	    return $template_fee;
 	}
 
 	/**

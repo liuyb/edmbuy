@@ -344,6 +344,7 @@ class Order extends StorageNode{
     				$goods_amount = 0;
     				$order_amount = 0;
     				$commision    = 0;
+    				$shipping_fee = 0;
     				foreach ($orderIts AS $oit) {
     					
     					$OI = OrderItems::find_one(new AndQuery(new Query('order_id', $master_order_id),new Query('goods_id', $oit['goods_id'])));
@@ -358,13 +359,15 @@ class Order extends StorageNode{
     					//$commision    += $oit['commision'] * $oit['goods_number'];
     					$goods_amount += $OI->goods_price * $OI->goods_number;
     					$commision    += ((doubleval($OI->goods_price) - doubleval($OI->income_price)) * $OI->goods_number);
+    					$shipping_fee += $OI->shipping_fee;
     				}
 
-    				$order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
+    				$order_amount = $goods_amount + $shipping_fee; //TODO: 邮费这里以后要处理的
     				$order_update = [];
     				$order_update['goods_amount'] = $goods_amount;
     				$order_update['order_amount'] = $order_amount;
     				$order_update['commision']    = $commision;
+    				$order_update['shipping_fee'] = $shipping_fee;
     				if (!empty($order_update)) {
     					D()->update(self::table(), $order_update, ['order_id'=>$subOrder->id]);
     				}

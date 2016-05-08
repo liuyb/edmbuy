@@ -730,6 +730,7 @@ class Trade_Controller extends MobileController {
         $rel_merchants= [];   //关联商家
         $true_amount  = 0;    //因为有可能存在失败商品，该字段存储真正产生的费用，而不是$total_price
         $total_commision = 0; //总佣金
+        $total_ship_fee = 0; //总运费
         foreach ($order_goods AS $cg) {
           $cItemId = $cg['goods_id'];
           $cItem = Items::load($cItemId);
@@ -750,6 +751,9 @@ class Trade_Controller extends MobileController {
           if (!$cItem->is_exist() || $cItem->is_delete || !$cItem->is_on_sale ||  !$real_number) { //商品下架或者库存为0，都不能购买
             continue;
           }
+          
+          //运费
+          $goods_ship_fee = Items::getGoodsRealShipFee($cItem);
 
           //TODO 并发？
           $true_goods_number = $cg['goods_number']>$real_number ? $real_number: $cg['goods_number'];
@@ -772,12 +776,14 @@ class Trade_Controller extends MobileController {
           $newOI->parent_id   = $cg['parent_id'];
           $newOI->is_gift     = $cg['is_gift'];
           $newOI->goods_attr_id = $cg['goods_attr_id'];
+          $newOI->shipping_fee = $goods_ship_fee;
           $newOI->save(Storage::SAVE_INSERT);
 
           if ($newOI->id) {
             $succ_goods[]     = $cg;
             $true_amount     += $real_shop_price * $true_goods_number;
             $total_commision += $real_commision * $true_goods_number;
+            $total_ship_fee  += $goods_ship_fee;
 
             if (!in_array($cItem->merchant_id, $rel_merchants)) {
               array_push($rel_merchants, $cItem->merchant_id);
@@ -791,10 +797,11 @@ class Trade_Controller extends MobileController {
         $order_update['merchant_ids'] = implode(',', $rel_merchants);
         //检测订单变化
         $order_update['commision'] = $total_commision; //订单总佣金
-        if ($true_amount!=$newOrder->goods_amount) {
-          $order_update['goods_amount'] = $true_amount;
-          $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
-        }
+        $order_update['shipping_fee'] = $total_ship_fee;
+        //if ($true_amount!=$newOrder->goods_amount || $total_ship_fee > 0) {
+        $order_update['goods_amount'] = $true_amount;
+        $order_update['order_amount'] = $order_update['goods_amount'] + $total_ship_fee;
+        //}
         if (empty($succ_goods)) { //如果一个商品都没有购买成功，则需要更改此订单状态为"无效"OS_INVALID
           $order_update['order_status'] = OS_INVALID;
           $order_update['commision']    = 0;

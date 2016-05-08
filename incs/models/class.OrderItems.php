@@ -30,7 +30,8 @@ class OrderItems extends StorageNode {
 						'parent_id'      => 'parent_id',
 						'is_gift'        => 'is_gift',
 						'goods_attr_id'  => 'goods_attr_id',
-				        'has_comment'    => 'has_comment'
+				        'has_comment'    => 'has_comment',
+				        'shipping_fee'   => 'shipping_fee'
 				)
 		);
 	}
