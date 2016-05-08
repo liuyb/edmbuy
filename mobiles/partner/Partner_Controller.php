@@ -33,7 +33,8 @@ class Partner_Controller extends MobileController {
 		      'partner/list/ajax' => 'partner_list_ajax',
 		      'partner/ajax' => 'partner_ajaxdata',
 		      'partner/commission' => 'partner_commission',
-		      'partner/commission/ajax' =>'partner_commission_ajax'
+		      'partner/commission/ajax' =>'partner_commission_ajax',
+		      'partner/my/child' => 'my_child'
 		];
 	}
 	
@@ -58,6 +59,21 @@ class Partner_Controller extends MobileController {
         }
         
         throw new ViewResponse($this->v);
+	}
+	
+	public function my_child(Request $request, Response $response){
+	    $this->setPageView($request, $response, '_page_mpa');
+	    $this->v->set_tplname('mod_partner_mychild');
+	    $this->nav_no = 0;
+	    $this->topnav_no = 1;
+	    $uid = $GLOBALS['user']->uid;
+	    $firstLevelCount = Partner::findFirstLevelCount($uid);
+	    $secondLevelCount = Partner::findSecondLevelCount($uid);
+	    $thirdLevelCount = Partner::findThirdLevelCount($uid);
+	    $this->v->assign('level1', $firstLevelCount);
+	    $this->v->assign('level2', $secondLevelCount);
+	    $this->v->assign('level3', $thirdLevelCount);
+	    throw new ViewResponse($this->v);
 	}
 	
 	public function partner_list(Request $request, Response $response)

@@ -5,7 +5,15 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
-
+<script id="forTopnav" type="text/html">
+<div class="header">
+	我的店铺
+	<a href="/user" class="back"></a>
+</div>
+</script>
+<script>
+show_topnav($('#forTopnav').html());
+</script>
 <?php if(!isset($merchant) || empty($merchant)):?>
 <div class="no_store_c">
 	<img src="/themes/mobiles/img/wdp.png">

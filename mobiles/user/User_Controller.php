@@ -74,7 +74,9 @@ class User_Controller extends MobileController
         $this->v->set_tplname('mod_user_index');
         //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
         Users::check_detail_info();
-        $this->showUserBaseInfo();
+        $u = $this->showUserBaseInfo();
+        $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
+        $this->v->assign('agent', $agent);
         $collect_shop_count = User_Model::getCollectShopCount();
         $collect_goods_count = User_Model::getCollectGoodsCount();
         $this->v->assign('shop_count', $collect_shop_count);
@@ -87,7 +89,6 @@ class User_Controller extends MobileController
         $uid = $GLOBALS['user']->uid;
         $status = array('pay_status' => constant('PS_UNPAYED'), 'shipping_status' => array(constant('SS_UNSHIPPED'), constant('SS_SHIPPED')));
         $orderStatusMap = User_Model::findOrderStatusCountByUser($uid, $status);
-
         $response->sendJSON($orderStatusMap);
     }
 
@@ -572,14 +573,14 @@ class User_Controller extends MobileController
     public function showUserBaseInfo()
     {
         $uid = $GLOBALS['user']->uid;
-        global $user;
-        $currentUser = $user;
+        $currentUser = Users::load($uid);
         $this->v->assign("uid", $uid);
+        $this->v->assign('curuser', $currentUser);
         $this->v->assign("nickname", $currentUser->nickname);
         $this->v->assign("level", $currentUser->level);
         $this->v->assign("logo", $currentUser->logo);
         $this->v->assign("mobile", $currentUser->mobilephone);
-        $this->v->assign("wxqr", $user->wxqr);
+        $this->v->assign("wxqr", $currentUser->wxqr);
         if ($currentUser->parentid) {
             $parentUser = User_Model::findUserInfoById($currentUser->parentid);
             $this->v->assign("parentUid", $parentUser->uid);

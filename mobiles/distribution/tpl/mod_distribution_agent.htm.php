@@ -10,6 +10,15 @@
     	opacity : 0.2;
     }
 </style>
+<script id="forTopnav" type="text/html">
+<div class="header">
+	购买代理
+	<a href="/user" class="back"></a>
+</div>
+</script>
+<script>
+show_topnav($('#forTopnav').html());
+</script>
 <?php if($isAgent):?>
 <div class="agency_become">
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
@@ -24,7 +33,7 @@
 				</p>
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
 			</td>
-			<?php if(!$agent->premium_id):?>
+			<?php if($agent->pid && !$agent->premium_id):?>
 			<td><p class="get_become_meal" onclick="window.location.href='/distribution/agent/package';">领取<?=AgentPayment::getAgentPaidMoney($user->level) ?>元套餐</p></td>
 			<?php endif;?>
 		</tr>

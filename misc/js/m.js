@@ -349,6 +349,10 @@
 			w.go_ajaxreq(gData.currURI);
 		}
 		
+		$("#loading_mask").on('click', function(){
+			F.loadingOff();
+		});
+		
 	});
 	
 	/**

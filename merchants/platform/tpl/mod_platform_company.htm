@@ -115,7 +115,7 @@
         	return false;
         }
         var result = $obj.serializeJson();
-        if (!result.business_img) {
+        /* if (!result.business_img) {
            showMsg("请上传营业执照！");
            return false;
         }
@@ -126,7 +126,7 @@
         if(!result.org_img){
         	showMsg("请上传组织结构代码证！");
             return false;
-        }
+        } */
         result.type="company";
         console.log(result);
         F.postWithLoading('/platform/material/submit',{json:result}, function (data) {

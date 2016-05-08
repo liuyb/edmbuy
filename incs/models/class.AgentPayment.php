@@ -122,11 +122,28 @@ class AgentPayment extends StorageNode {
 	    return $money;
 	}
 	
+	/**
+	 * 根据用户level显示用户级别图标
+	 * @param unknown $level
+	 */
 	static function getAgentIconByLevel($level){
-	    if(!Users::isAgent($level)){
-	        return '';
+	    switch ($level){
+	        case Users::USER_LEVEL_1 :
+	            $icon = '/themes/mobiles/img/sha.png';
+	        break;
+	        case Users::USER_LEVEL_2 :
+	            $icon = '/themes/mobiles/img/he.png';
+	        break;
+	        case Users::USER_LEVEL_3 :
+	            $icon = '/themes/mobiles/img/jinpai.png';
+	        break;
+	        case Users::USER_LEVEL_4 :
+	            $icon = '/themes/mobiles/img/yinpai.png';
+	        break;
+	        default :
+	            $icon = '/themes/mobiles/img/ke.png';
 	    }
-	    return (Users::USER_LEVEL_3 == $level) ? '/themes/mobiles/img/jinpai.png' : '/themes/mobiles/img/yinpai.png';
+	    return $icon;
 	}
 }
 

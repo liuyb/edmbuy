@@ -5,37 +5,34 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
-<?php 
-function displayNickImg($level){
-	$bg = ($level == 1) ? "sha.png" : (($level == 2) ? "he.png" : "ke.png");
-	return '/themes/mobiles/img/'.$bg;
-}
-?>
+<?php if(Users::isAgent($curuser->level) && $agent->pid && !$agent->premium_id):?>
+<div class="member_cen_common" style="margin:0;">
+	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
+		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($curuser->level) ?>元套餐未领取!</span>
+		<a href="<?=U('distribution/agent/package') ?>"><i style="color:#f65d00;">立即领取</i></a>
+	</div>
+</div>
+<?php endif;?>
 <a href="/user/setting">
-<div class="mem_bg">
-	<div class="mem_l">
-		<?php if($logo): ?>
-			<img src="<?=$logo?>?_=<?=$user->randver?>" alt="logo">
-		<?php else:?>
-			<img src="/themes/mobiles/img/mt.png">
-		<?php endif;?>
-	</div>
-	
-	<div class="mem_c">
-		<div class="c_name">
-			<span class="c_n_tit" style="color:#fff;"><?=$nickname ?></span>
-			<img class="refer_img_ad" src="<?=displayNickImg($level)?>"/>
-		</div>
-		<div class="c_id">多米号：<?=$uid ?></div>
-	</div>
-	
-	<div class="mem_r">
-		<img src="/themes/mobiles/img/set.png">
-	</div>
-	<div class="clear"></div>
+<div class="agency_become">
+	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
+		<tr>
+			<td width="70px;">
+			<?php if($logo): ?>
+    			<img src="<?=$logo?>?_=<?=$curuser->randver?>" alt="logo">
+    		<?php else:?>
+    			<img src="/themes/mobiles/img/mt.png">
+    		<?php endif;?>
+    		</td>
+			<td>
+				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z"></p>
+				<p class="become_name_id">多米号：<?=$uid ?></p>
+			</td>
+			<td class="agency_index_img"><img src="/themes/mobiles/img/shezhi.png"></td>
+		</tr>
+	</table>
 </div>
 </a>
-
 <?php if(isset($parentUid)):?>
 <div class="member_cen_common">
 	<div class="in_common_agency del_bottom">
@@ -48,14 +45,6 @@ function displayNickImg($level){
 	<div class="in_common_agency">
 		<span style="margin-left:0;">我的订单</span><a href="/trade/order/record?status=all"><i class="all_order_c">全部订单</i></a>
 	</div>
-	<!-- <div class="my_order_c">
-		<ul>	
-			<li><img src="/themes/mobiles/img/dfk.png"></li>
-			<li><img src="/themes/mobiles/img/dfh.png"></li>
-			<li><img src="/themes/mobiles/img/dsh.png"></li>
-			<li><img src="/themes/mobiles/img/tksh.png"></li>
-		</ul>
-	</div> -->
 	<div class="my_order_state">
 	<ul>
 		<a href="/trade/order/record?status=wait_pay">
@@ -91,14 +80,52 @@ function displayNickImg($level){
 </div>
 
 <div class="member_cen_common">
+	<a href='<?=U('partner/my/child') ?>'>
+	<div class="in_common_agency">
+		<img src="/themes/mobiles/img/wdrm.png"><span>我的人脉</span><i>全部人脉</i>
+	</div>
+	</a>
+	<a href='<?=U('distribution/my/child/agent') ?>'>
+	<div class="in_common_agency" style="margin: 0 10px 0 33px;">
+		<span>我发展的代理</span>
+	</div>
+	</a>
+	<a href='<?=U('distribution/my/child/shop') ?>'>
+	<div class="in_common_agency" style="margin: 0 10px 0 33px;">
+		<span>我发展的店铺</span>
+	</div>
+	</a>
+</div>
+<?php if(!Users::isAgent($curuser->level)):?>
+<div class="member_cen_common">
+	<a href='<?=U('distribution/agent') ?>'>
+	<div class="in_common_agency">
+		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>
+	</div>
+	</a>
+</div>
+<?php endif;?>
+<div class="member_cen_common">
+	<a href='<?=U('distribution/shop') ?>'>
+	<div class="in_common_agency">
+		<img src="/themes/mobiles/img/wddp.png"><span>我的店铺</span>
+	</div>
+	</a>
+</div>
+
+<div class="member_cen_common">
 	<div class="in_common_agency" onclick="window.location.href='/user/my/wallet'">
 		<img src="/themes/mobiles/img/wdqb.png"><span>我的钱包</span><i class="my_price_c"></i>
 	</div>
-	<!-- <div class="in_common_agency del_bottom">
-		<img src="/themes/mobiles/img/yhk.png">
-	</div> -->
 </div>
 
+<div class="member_cen_common" style="margin-bottom:60px;">
+	<div class="in_common_agency">
+		<img src="/themes/mobiles/img/yqx.png"><span>一起享</span>
+	</div>
+</div>
+
+<!-- 
 <div class="agency_index_infos" style="margin-bottom:60px;">
 	<div class="teamword_use">合作应用</div>
 	<div class="mem_my_applylist">
@@ -110,7 +137,7 @@ function displayNickImg($level){
 		</ul>
 	</div>
 </div>
-
+ -->
 <?php include T('inc/add_as_friend');?>
 
 <script>

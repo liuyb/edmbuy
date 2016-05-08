@@ -73,8 +73,9 @@ class Distribution_Controller extends MobileController{
     public function merchants(Request $request, Response $response){
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-        $this->nav_flag2 = 'merchants';
+        $this->nav_flag1 = 'merchant_lm';
         $this->topnav_no = 1;
+        $this->nav_no = 1;
         $this->v->set_tplname('mod_distribution_merchants');
         throw new ViewResponse($this->v);
     }
@@ -104,6 +105,7 @@ class Distribution_Controller extends MobileController{
         $this->v->set_tplname('mod_distribution_shop');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'shop';
+        $this->topnav_no = 1;
         global $user;
         $merchant = Merchant::getMerchantByUserId($user->uid);
         if(!$merchant->is_exist()){
@@ -192,6 +194,10 @@ class Distribution_Controller extends MobileController{
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_no = 0;
         $uid = $GLOBALS['user']->uid;
+        $u = Users::load($uid);
+        if(!Users::isAgent($u->level)){
+            $response->redirect('/distribution/agent');
+        }
         $level1 = Partner::findFirstLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
         $level2 = Partner::findSecondLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
         $level3 = Partner::findThirdLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
@@ -285,11 +291,16 @@ class Distribution_Controller extends MobileController{
         $this->v->set_tplname('mod_distribution_agent');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->nav_flag2 = 'agency';
+        $this->topnav_no = 1;
         global $user;
         $u = Users::load($user->uid);
+        $is_agent = Users::isAgent($u->level);
+        if($is_agent){
+            $this->nav_no = 0;
+        }
         $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
         $this->v->assign('user', $u);
-        $this->v->assign('isAgent', Users::isAgent($u->level));
+        $this->v->assign('isAgent', $is_agent);
         $this->v->assign('agent', $agent);
         $this->v->assign('gold_agent', GOLD_AGENT_GOODS_ID);
         $this->v->assign('silver_agent', SILVER_AGENT_GOODS_ID);

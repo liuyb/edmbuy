@@ -92,6 +92,8 @@
                 showMsg(ret.retmsg);
                 window.parent.document.location.reload();
                 parent.layer.closeAll(); //再执行关闭
+            }else{
+            	showMsg(ret.msg);
             }
         });
     });

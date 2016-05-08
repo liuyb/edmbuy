@@ -572,18 +572,13 @@ class Goods_Controller extends MerchantController
             $attrData = $request->post("attrDate");//前台的二维数组数据
             if(empty($attrData)){
                 $arrt_ids=Goods_Model::getAttrIds($cat_id);
-                $ids="";
-                foreach($arrt_ids as $id){
-                    $ids .=$id['attr_id'].",";
-                }
-                $ids = rtrim($ids,",");
-                $result = Goods_Model::ckeckDelAttr($ids);
+                $result = Goods_Model::ckeckDelAttr($arrt_ids);
                 if($result){
                     $ret['msg'] = "此属性有商品正在使用不可删除!";
                     $ret['status'] = 0;
                     $response->sendJSON($ret);
                 }
-                $result = Goods_Model::delGoodsAttr($ids);
+                $result = Goods_Model::delGoodsAttr($arrt_ids);
                 if($result!==false){
                     $ret['status'] = 1;
                     $ret['retmsg'] = "保存成功！";
@@ -607,7 +602,7 @@ class Goods_Controller extends MerchantController
                     $response->sendJSON($ret);
                 }
             }
-            $attr_ids = Goods_Model::getAttrIds($cat_id);//得到attr_id
+            $nattr_ids = Goods_Model::getAttrIds($cat_id);//得到attr_id
             $new = [];
             foreach ($attrData as &$val1) {
                 if (!empty($val1[0])) {
@@ -626,21 +621,14 @@ class Goods_Controller extends MerchantController
                 //编辑上移或者下移动改变short_order
                 Goods_Model::updateGoodsShortOrder($val2[0], $val2['sort_order'], $val2[1]);
             }
-            $str = "";
-            foreach ($attr_ids as $ids) {
-                if (!in_array($ids['attr_id'], $new)) {
-                    $str .= $ids['attr_id'] . ",";
-                }
-            }
-            $str = rtrim($str, ",");
-            if (!empty($str)) {
-                $result = Goods_Model::ckeckDelAttr($str);
+            if (!empty($nattr_ids)) {
+                $result = Goods_Model::ckeckDelAttr($nattr_ids);
                 if($result){
                     $ret['msg'] = "此属性有商品正在使用不可删除!";
                     $ret['status'] = 0;
                     $response->sendJSON($ret);
                 }
-                Goods_Model::delGoodsAttr($str);
+                Goods_Model::delGoodsAttr($nattr_ids);
             }
             $view = true;
             if ($view) {
@@ -659,7 +647,8 @@ class Goods_Controller extends MerchantController
     public function goodsAttributeDel(Request $request, Response $response)
     {
         $cat_id = $request->post("cat_id");
-        $result = Goods_Model::ckeckDelAttr($cat_id);
+        $attr_ids = Goods_Model::getAttrIds($cat_id);//得到attr_id
+        $result = Goods_Model::ckeckDelAttr($attr_ids);
         if ($result) {
             $ret['msg'] = "此属性有商品正在使用不可删除!";
             $ret['status'] = 0;

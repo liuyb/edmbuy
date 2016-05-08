@@ -21,7 +21,7 @@
     <div id="new_common">
         <div id="order_type">
             <ul>
-                <li id="li1" onclick="f(1)" class="new_common_on">管理</li>
+                <li id="li1" class="new_common_on">管理</li>
                 <li id="li2" onclick="editAttr('new')">新增</li>
             </ul>
         </div>
@@ -62,9 +62,13 @@
     function delAttr(val){
         showConfirm('确定要删除该商品属性吗？',function(){
             var data = {cat_id : val};
-            F.postWithLoading('/goods/attribute/delete', data, function(data){
-                layer.msg('操作成功');
-                loadTableContent(1, true);
+            F.postWithLoading('/goods/attribute/delete', data, function(ret){
+				if(ret.status == 1){
+					showMsg('操作成功');
+	                window.location.reload();
+				}else{
+					showMsg(ret.msg);
+				}
             });
         });
     }

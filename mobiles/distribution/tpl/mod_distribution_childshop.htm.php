@@ -7,7 +7,7 @@
 <?php else:?>
 <script id="forTopnav" type="text/html">
 <div class="header">
-	我的店铺
+	我发展的店铺
 	<a href="javascript:history.back();" class="back"></a>
 </div>
 </script>

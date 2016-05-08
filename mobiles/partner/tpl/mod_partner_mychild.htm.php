@@ -7,7 +7,7 @@
 <?php else:?>
 <script id="forTopnav" type="text/html">
 <div class="header">
-	我发展的代理
+	我的人脉
 	<a href="javascript:history.back();" class="back"></a>
 </div>
 </script>
@@ -37,7 +37,7 @@ $(function(){
 	$resultList = $("#resultList");
 	$mbody = $("#Mbody");
 	
-	getAgencyList(1, 1, true);
+	getChildList(1, 1, true);
 
 	$resultList.on('click', 'button', function(){
 		var $this = $(this);
@@ -50,13 +50,13 @@ $(function(){
 	$mbody.on('pullMore', function(){
 		var level = $("#levelBar").find("li[class='navig_on']").data('type');
 		var curpage = $showMore.attr('data-curpage');
-		getAgencyList(level ? level : 1, (curpage ? curpage : 1), false);
+		getChildList(level ? level : 1, (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);
 });
 //获取商家列表
-function getAgencyList(level, curpage, isInit){
-	F.get('/distribution/my/child/agent/list', {level : level, curpage : curpage}, function(ret){
+function getChildList(level, curpage, isInit){
+	F.get('/partner/list/ajax', {level : level, curpage : curpage}, function(ret){
 		constructRows(ret, isInit);
 		F.handleWhenHasNextPage($showMore, ret);
 	});
@@ -70,10 +70,13 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
+			var address = obj.province+" "+obj.city;
+			address = (obj.province || obj.city) ? address : "&nbsp;";
 			var icon = obj.level == 3 ? '/themes/mobiles/img/jinpai1.png' : '/themes/mobiles/img/yinpai2.png';
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top\">";
 			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
-			HTML += "<p class=\"m_infos_num\">多米号："+obj.uid+"</p></div><button class=\"l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
+			HTML += "<p>"+address+"</p>";
+			HTML += "<p class=\"m_infos_num\">推荐人数："+obj.childnum1	+"</p><p class=\"m_infos_num\">上级："+obj.parentnick	+"</p></div><button class=\"l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
 		}
 	}
 	F.afterConstructRow(isInit, $resultList, HTML, $showMore);
@@ -85,7 +88,7 @@ function agencyChange(obj, level){
 		$obj.siblings("li").removeClass("navig_on");
 		$obj.addClass("navig_on");
 	}
-	getAgencyList(level, 1, true);
+	getChildList(level, 1, true);
 }
 </script>
 <?php endif;?>

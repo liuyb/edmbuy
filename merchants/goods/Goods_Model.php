@@ -738,8 +738,9 @@ class Goods_Model extends Model
      */
     static function getAttrIds($cat_id)
     {
-        $sql = "select attr_id from shp_attribute where cat_id = {$cat_id}";
-        return D()->query($sql)->fetch_array_all();
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select attr_id from shp_attribute where cat_id = {$cat_id} and merchant_id = '%s'";
+        return D()->query($sql, $merchant_id)->fetch_column();
     }
 
     /**
@@ -747,10 +748,10 @@ class Goods_Model extends Model
      */
     static function delGoodsAttr($attr_id)
     {
-        $where = "attr_id in ({$attr_id})";
-        if (strlen($attr_id) == 1) {
-            $where = "attr_id ={$attr_id}";
+        if(empty($attr_id) || count($attr_id) == 0){
+            return 0;
         }
+        $where = " attr_id ".Fn::db_create_in($attr_id)." ";
         $tablename = "`shp_attribute`";
         return D()->delete($tablename, $where);
     }
@@ -761,11 +762,10 @@ class Goods_Model extends Model
      */
     static function ckeckDelAttr($attr_id)
     {
-        if(strpos($attr_id,",")){
-            $where = "in({$attr_id})";
-        }else{
-            $where ="={$attr_id}";
+        if(empty($attr_id) || count($attr_id) == 0){
+            return 0;
         }
+        $where = " ".Fn::db_create_in($attr_id)." ";
         $sql = "select count(1) from shp_goods_attr where attr1_id {$where} or attr2_id {$where} or attr3_id {$where}";
         return D()->query($sql)->result();
     }
