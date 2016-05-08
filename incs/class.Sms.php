@@ -64,6 +64,42 @@ class Sms
         D()->insert($tablename, $data);
         return $result;
     }
+    
+    static function sendVCode($mobile, $type, $vcode)
+    {
+    	error_reporting(0);
+    	$SmsConfig    = C("port.sms");
+    	$contentArray = C("msg.sms");
+    	$content      = isset($contentArray[$type]) ? $contentArray[$type] : '';
+    	if (!$content) {
+    		return false;
+    	}
+    
+    	$content   = sprintf($content, $vcode);
+    	$uname     = $SmsConfig['username'];
+    	$smsnumber = $SmsConfig['smsnumber'];
+    	$pwd       = $SmsConfig['userpwd'];
+    	$pwd       = strtoupper(md5($pwd));
+    	$url       = $SmsConfig['url'];
+    	$text      = urlencode($content);
+    	$time      = time();
+    	$url = "{$url}:8180/service.asmx/SendMessage?Id={$smsnumber}&Name={$uname}&Psw={$pwd}&Message={$text}&Phone={$mobile}&Timestamp={$time}";
+    	$sendState = file_get_contents($url);
+    	if (FALSE===$sendState) {
+    		return false;
+    	}
+    	$xmlObj = simplexml_load_string($sendState, 'SimpleXMLElement');
+    	$data = [];
+    	$data['receivePhone'] = $mobile;
+    	$data['type'] = $type;
+    	$data['overdueTime'] = time() + 60 * 1;
+    	$data['verifyCode']  = $vcode;
+    	$data['sendContent'] = $content;
+    	$result = ($xmlObj->State == "1") ? 1 : 0;
+    	$data['result'] = $result;
+    	D()->insert("`shp_usersms_log`", $data);
+    	return $result;
+    }
 
 }
 
