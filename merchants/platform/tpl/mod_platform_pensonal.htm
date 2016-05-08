@@ -1,18 +1,18 @@
-<form method="POST" action="/platform/material/set" id="platform">
+<form method="POST" action="" id="platform" onsubmit="return submitForm();">
 <table cellspacing="0" cellpadding="0" class="cret_tab_list">
     <tr>
-        <td class="cret_tab_left">真实姓名：</td>
-        <td class="cret_tab_right"><input type="text" placeholder="请填写您的真实姓名"></td>
+        <td class="cret_tab_left"><span class="fill_red">*</span>真实姓名：</td>
+        <td class="cret_tab_right"><input type="text" name="real_name" maxlength="50" placeholder="请填写您的真实姓名" required></td>
     </tr>
     <tr>
-        <td class="cret_tab_left">身份证号码：</td>
-        <td class="cret_tab_right"><input type="text" placeholder="请填写您的身份证号码"></td>
+        <td class="cret_tab_left"><span class="fill_red">*</span>身份证号码：</td>
+        <td class="cret_tab_right"><input type="text" name="card_num" maxlength="18" placeholder="请填写您的身份证号码" required></td>
     </tr>
     <tr>
-        <td class="cret_tab_left cert_top_common">手持身份证照片：</td>
+        <td class="cret_tab_left cert_top_common"><span class="fill_red">*</span>手持身份证照片：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="card_img" value="" required/>
+                <input type="hidden" name="card_img" class="img_hidden" value="" required/>
                 <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
@@ -23,10 +23,10 @@
         </td>
     </tr>
     <tr>
-        <td class="cret_tab_left cert_top_common">个人营业执照：</td>
+        <td class="cret_tab_left cert_top_common"><span class="fill_red">*</span>个人营业执照：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="business_img" value="" required/>
+                <input type="hidden" name="business_img" class="img_hidden" value="" required/>
                 <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
@@ -39,8 +39,8 @@
         <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="product_img" value="" required/>
-                <img src="/themes/merchants//img/editor_plus.png">
+                <input type="hidden" name="product_img" class="img_hidden" value="" required/>
+                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
             <div class="ts_com">
@@ -51,7 +51,7 @@
     <tr>
         <td class="cret_tab_left"></td>
         <td>
-            <button class="cret_btn">提交</button>
+            <button class="cret_btn" type="submit">提交</button>
         </td>
     </tr>
 </table>
@@ -60,36 +60,37 @@
     function fileupload(e, obj) {
         $obj = $(obj)
         var url = '/platform/material/upload';
-//        var galleryCount = $(".goods_gallery").length;
-//        var selectedCls = "";
-//        if(galleryCount < 1){
-//            selectedCls = "add_img_selected";
-//        }
         image_upload(url, e, obj, function (ret) {
-
+        	var thumb = ret.thumb;
             var path = ret.stdpath;
-            $obj.parent().find(".img_upload").attr("src", path);
-            $obj.parent().find("input").val(path);
+            $obj.siblings(".img_upload").attr("src", thumb);
+            $obj.siblings(".img_hidden").val(path);
         });
     }
-    $("#cret_btn").click(function () {
-        var $obj = $("#platform")
+    function submitForm(){
+    	var $obj = $("#platform")
         if (!$obj.formValid()) {
             return false;
         }
         var result = $obj.serializeJson();
-        if (result.business_img ==''|| result.card_img  ==''|| result.product_img  =='') {
-            showMsg("请上传相关照片");
+        if(!result.card_img){
+        	showMsg("请上传手持身份证照片！");
+            return false;
+        }
+        if (!result.business_img) {
+            showMsg("请上传个人营业执照！");
             return false;
         }
         result.type="personal";
-        var url = $obj.attr("action");
-        console.log(result)
-        F.postWithLoading(url,{json:result}, function (data) {
-            if(data.status==1){
-                    showMsg("上传成功");
+        console.log(result);
+        F.postWithLoading('/platform/material/submit',{json:result}, function (data) {
+            if(data.flag == 'SUC'){
+                showMsg("资料提交成功，等待管理员审核。");
+                window.location.href = '/platform/authent';
+            }else{
+            	showMsg(data.retmsg);
             }
         });
         return  false;
-    });
+    }
 </script>

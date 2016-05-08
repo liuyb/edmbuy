@@ -7,12 +7,11 @@
 
             <div style="padding:20px 0">
                 <span class="store_pay_name">付款金额：</span><span class="store_right_f"><!--{$buyInfo.money_paid}-->元</span>
-                <!--{if $buyInfo.money_paid >0}-->
-                <button class="store_data_btn">申请退款</button>
-                <!--{else}-->
-                <button class="store_data_btn" >付款</button>
-                <span style="color: red;margin-left: 10px;">*您为成功付款请点击付款</span>
+                <!--{if $canRefund}-->
+                <button class="store_data_btn" onclick="merchantRefund();";>申请退款</button>
                 <!--{/if}-->
+                <!-- <button class="store_data_btn" >付款</button>
+                <span style="color: red;margin-left: 10px;">*您未成功付款请先付款</span> -->
 
             </div>
             <!--{if $buyInfo.money_paid >0}-->
@@ -21,7 +20,7 @@
                 <span class="store_pay_name data_due">到期日期：<i class="store_right_f"><!--{$buyInfo.end_time}--></i></span>
             </div>
             <div style="padding:0 0 20px;">
-                <span class="store_pay_name">使用期限：<i class="store_right_f"><!--{$limit[$buyInfo.term_time]}--></i></span>
+                <span class="store_pay_name">使用期限：<i class="store_right_f"><!--{$year}--></i></span>
             </div>
             <!--{/if}-->
         </div>
@@ -81,4 +80,7 @@
     $("#edit_detail").click(function(){
         window.location.href="/shop/info";
     })
+    function merchantRefund(){
+    	alert('请联系客服退款。');
+    }
 </script>

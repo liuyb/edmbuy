@@ -11,7 +11,11 @@
     </ul>
     <div class="clear"></div>
 </div>
-
+<?php if(!$user->parentid):?>
+<div style='color:red;padding:10px;'>
+你还没有推荐人，请先绑定你的上级才能完成注册。
+</div>
+<?php else:?>
 <div id="sus_info">
     <ul>
         <li>
@@ -41,10 +45,6 @@
     <?php else :?>
     <button style='background:#bdbdbd;'>下一步</button>
     <?php endif;?>
-</div>
-<?php if(!$user->parentid):?>
-<div style='color:red;padding:10px;'>
-你还没有推荐人，请先绑定你的上级才能完成注册。
 </div>
 <?php endif;?>
 <script>

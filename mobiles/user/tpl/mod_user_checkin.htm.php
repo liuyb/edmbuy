@@ -1,6 +1,5 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <div id="gains_top">
-	<img src="/themes/mobiles/img/tp_02.png">
 	<img src="/themes/mobiles/img/_02.png">
 	<img src="/themes/mobiles/img/_03.png">
 	<img src="/themes/mobiles/img/_04.png">

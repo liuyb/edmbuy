@@ -42,7 +42,7 @@ class Shop_Controller extends MerchantController
      */
     public function index(Request $request, Response $response)
     {
-        Shop_Model::checkShopStatus();
+        Shop_Model::checkShopStatus($response);
         $this->setSystemNavigate('shop');
         $this->v->set_tplname("mod_shop_details");
         $this->setPageLeftMenu('shop', 'details');
@@ -53,7 +53,26 @@ class Shop_Controller extends MerchantController
         }
         $buyInfo =Shop_Model::getBuyDetail();
         $this ->v->assign("buyInfo",$buyInfo);
-        $this ->v->assign("limit",  C("merchant"));
+        $y = $buyInfo['term_time'];
+        if($y){
+            preg_match('/(\d+)(\w+)$/', $y, $matchs);
+            if($matchs && count($matchs) == 3){
+                $text = $matchs[2] == 'm' ? "月" : "年";
+                $y = $matchs[1] . $text;
+            }
+        }else{
+            $y = intval($y). "年";
+        }
+        $canRefund = 0;
+        $paid_time = $buyInfo['paid_time'];
+        if($paid_time){
+            $gap = (time() - intval($paid_time)) / 86400;
+            if($gap <= 3){
+                $canRefund = 1;
+            }
+        }
+        $this ->v->assign("canRefund", $canRefund);
+        $this ->v->assign("year", $y);
         $this->v->assign('shop_info',$result);
         $response->send($this->v);
     }

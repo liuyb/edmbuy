@@ -17,7 +17,7 @@ class Platform_Controller extends MerchantController
             'platform/personal/material' => 'personal',
             'platform/company/material' => 'company',
             'platform/material/upload' => 'material_upload',
-            'platform/material/set' => 'setMaterial',
+            'platform/material/submit' => 'submitMerchantMaterial',
         ];
 
     }
@@ -29,14 +29,10 @@ class Platform_Controller extends MerchantController
      */
     public function index(Request $request, Response $response)
     {
-        $status = Platform_Model::checkMaterial();
-        if ($status == 2) {//审核通过
-            $response->redirect("");
-        }
+        $response->redirect('/platform/authent');
         $this->setSystemNavigate('platform');
         $this->v->set_tplname("mod_platform_index");
         $this->setPageLeftMenu('platform', 'list');
-        $this->v->assign('status', $status);
         $response->send($this->v);
     }
 
@@ -49,9 +45,9 @@ class Platform_Controller extends MerchantController
     {
         $this->v->set_tplname("mod_platform_authent");
         //判断用户是否已经填写资料
-        $status = Platform_Model::checkMaterial();
-        $this->v->assign("status", $status);
         $this->setPageLeftMenu('platform', 'authent');
+        $merchant = Merchant::load($GLOBALS['user']->uid);
+        $this->v->assign('merchant', $merchant);
         $response->send($this->v);
 
     }
@@ -63,6 +59,7 @@ class Platform_Controller extends MerchantController
      */
     public function fillIn(Request $request, Response $response)
     {
+        Platform_Model::checkMerchantStatus($response);
         $this->v->set_tplname("mod_platform_fillin");
         $this->setPageLeftMenu('platform', 'authent');
         $response->send($this->v);
@@ -119,14 +116,24 @@ class Platform_Controller extends MerchantController
      * @param Request $request
      * @param Response $response
      */
-    public function setMaterial(Request $request, Response $response)
+    public function submitMerchantMaterial(Request $request, Response $response)
     {
-        $data = $request->post("json");
-        $type = $data['type'];
-        if ($type == 'company') {
-            Platform_Model::addComMaterial($data);
-        }elseif($type == 'personal'){
-            Platform_Model::addComMaterial($data);
+        $ret = ['flag' => 'FAIL'];
+        $result = 0;
+        if($request->is_post()){
+            $data = $request->post("json");
+            $type = $data['type'];
+            if ($type == 'company') {
+                $result = Platform_Model::addComMaterial($data);
+            }elseif($type == 'personal'){
+                $result = Platform_Model::addPerMaterial($data);
+            }
         }
+        if($result){
+            $ret = ['flag' => 'SUC'];
+        }else{
+            $ret['retmsg'] = '提交失败，请稍后重试!';
+        }
+        $response->sendJSON($ret);
     }
 }

@@ -90,7 +90,9 @@ class Merchant_Controller extends AdminController
         $this->v->assign('backurl', $backurl);
         $mid = $request->arg(1);
         $detail = Merchant_Model::getMerchantDetail($mid);
+        $result = Merchant_Model::getMerchantMaterias($detail['merchant_id'], $detail['merchant_type']);
         $this->v->assign('detail', $detail);
+        $this->v->assign('materia', $result);
         $response->send($this->v);
     }
     

@@ -197,7 +197,8 @@ class Shop_Model extends Model
     static function getBuyDetail()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select money_paid ,start_time,end_time ,term_time from shp_merchant_payment where merchant_id = '%s'";
+        $sql = "select money_paid, start_time, end_time, term_time, paid_time from shp_merchant_payment 
+                where merchant_id = '%s' and money_paid > 0 order by end_time desc limit 1";
         return D()->query($sql, $merchant_id)->get_one();
 
     }

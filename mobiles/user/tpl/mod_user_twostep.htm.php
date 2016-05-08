@@ -24,6 +24,8 @@
 		<li>
 			<input id="invite_code" class="ps_common" type="text" placeholder="请输入推荐人多米号">
 		</li>
+		<?php else:?>
+		<input id="invite_code" class="ps_common" type="hidden" value="<?=$parent_id ?>" >
 		<?php endif;?>
 	</ul>
 </div>

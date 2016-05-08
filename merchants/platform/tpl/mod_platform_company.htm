@@ -1,22 +1,22 @@
-<form method="POST" action="/platform/material/set" id="platform">
+<form method="POST" action="/" id="platform" onsubmit="return submitForm();">
 <table cellspacing="0" cellpadding="0" class="cret_tab_list" >
         <tr>
-            <td class="cret_tab_left">公司名称：</td>
+            <td class="cret_tab_left"><span class="fill_red">*</span>公司名称：</td>
             <td class="cret_tab_right"><input type="text" required name="company_name"></td>
         </tr>
         <tr>
-            <td class="cret_tab_left">法人姓名：</td>
+            <td class="cret_tab_left"><span class="fill_red">*</span>法人姓名：</td>
             <td class="cret_tab_right"><input type="text" required name="legal_name"></td>
         </tr>
         <tr>
-            <td class="cret_tab_left">手机号码：</td>
-            <td class="cret_tab_right"><input type="text" required name="mobile"></td>
+            <td class="cret_tab_left"><span class="fill_red">*</span>身份证号码：</td>
+            <td class="cret_tab_right"><input type="text" required name="card_num"></td>
         </tr>
         <tr>
-            <td class="cret_tab_left cert_top_common">营业执照：</td>
+            <td class="cret_tab_left cert_top_common"><span class="fill_red">*</span>营业执照：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="business_img" value="" required/>
+                    <input type="hidden" name="business_img" value="" class="img_hidden"/>
                     <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
@@ -26,10 +26,10 @@
             </td>
         </tr>
         <tr>
-            <td class="cret_tab_left cert_top_common">税务登记照：</td>
+            <td class="cret_tab_left cert_top_common"><span class="fill_red">*</span>税务登记照：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="tax_img" value="" required/>
+                    <input type="hidden" name="tax_img" value="" class="img_hidden"/>
                     <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
@@ -39,10 +39,10 @@
             </td>
         </tr>
         <tr>
-            <td class="cret_tab_left cert_top_common">组织结构代码证：</td>
+            <td class="cret_tab_left cert_top_common"><span class="fill_red">*</span>组织结构代码证：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="org_img" value="" required/>
+                    <input type="hidden" name="org_img" value="" class="img_hidden"/>
                     <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
@@ -55,7 +55,7 @@
             <td class="cret_tab_left cert_top_common">商标注册证：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="mark_img" value="" required/>
+                    <input type="hidden" name="mark_img" value="" class="img_hidden"/>
                     <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
@@ -68,7 +68,7 @@
             <td class="cret_tab_left cert_top_common">品牌销售授权证明：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="sales_img" value="" required/>
+                    <input type="hidden" name="sales_img" class="img_hidden" value=""/>
                     <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     < <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
@@ -81,8 +81,8 @@
             <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="product_img" value="" required/>
-                    <img src="/themes/merchants//img/editor_plus.png">
+                    <input type="hidden" name="product_img" class="img_hidden" value=""/>
+                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -93,7 +93,7 @@
         <tr>
             <td class="cret_tab_left"></td>
             <td>
-                <button class="cret_btn" id="cret_btn">提交</button>
+                <button class="cret_btn" id="cret_btn" type="submit">提交</button>
             </td>
         </tr>
     </table>
@@ -102,36 +102,41 @@
     function fileupload(e, obj) {
         $obj = $(obj)
         var url = '/platform/material/upload';
-//        var galleryCount = $(".goods_gallery").length;
-//        var selectedCls = "";
-//        if(galleryCount < 1){
-//            selectedCls = "add_img_selected";
-//        }
         image_upload(url, e, obj, function (ret) {
-
             var path = ret.stdpath;
-            $obj.parent().find(".img_upload").attr("src", path);
+            var thumb = ret.thumb;
+            $obj.parent().find(".img_upload").attr("src", thumb);
             $obj.parent().find("input").val(path);
         });
     }
-    $("#cret_btn").click(function () {
+    function submitForm(){
         var $obj = $("#platform")
         if (!$obj.formValid()) {
+        	return false;
+        }
+        var result = $obj.serializeJson();
+        if (!result.business_img) {
+           showMsg("请上传营业执照！");
+           return false;
+        }
+        if(!result.tax_img){
+        	showMsg("请上传税务登记照！");
             return false;
         }
-       var result = $obj.serializeJson();
-//        if (result.business_img ==''|| result.tax_img  ==''||
-//                result.org_img  ==''|| result.mark_img =='' ||
-//                result.sales_img  ==''|| result.product_img =='') {
-//            showMsg("请上传相关照片");
-//            return false;
-//        }
+        if(!result.org_img){
+        	showMsg("请上传组织结构代码证！");
+            return false;
+        }
         result.type="company";
-        var url = $obj.attr("action");
-        console.log(result)
-        F.postWithLoading(url,{json:result}, function (data) {
-
+        console.log(result);
+        F.postWithLoading('/platform/material/submit',{json:result}, function (data) {
+            if(data.flag == 'SUC'){
+                showMsg("资料提交成功，等待管理员审核。");
+                window.location.href = '/platform/authent';
+            }else{
+            	showMsg(data.retmsg);
+            }
         });
-            return  false;
-    });
+        return false;
+    }
 </script>

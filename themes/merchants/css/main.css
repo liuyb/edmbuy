@@ -523,8 +523,11 @@ div .alert {
 	text-align:center;
 }
 
-
-
+.fill_red{
+	color:red;
+	vertical-align: sub;
+	padding: 0 5px;
+}
 
 
 

@@ -13,6 +13,11 @@
 .table_cls{
 	margin:15px;line-height:28px;width:50%;
 }
+.materia_img{
+	width:200px;
+	height:200px;
+	cursor:pointer;
+}
 </style>
 <!-- 页面导航 -->
 <div class="breadcrumb">当前位置：<span>店铺</span>&nbsp;&gt;&nbsp;<a href="#<!--{$backurl}-->" class="oplink hashreq">店铺管理</a>&nbsp;&gt;&nbsp;<span>店铺详情</span></div>
@@ -45,17 +50,50 @@
 <tr><td>拒绝原因：</td><td><!--{$detail.verify_fail_msg}--></td></tr>
 <!--{/if}-->
 </table>
+<!--{if $materia}-->
+<!--{if $detail.merchant_type eq 1}-->
 <div class='section_tile'>企业相关资料/个人相关资料</div>
 <table class='table_cls'>
 <colgroup>
 <col width="100" align="left">
 <col align="left">
 </colgroup>
-<tr><td>公司名称：</td><td>aa</td></tr>
-<td>法人姓名：</td><td>33</td></tr>
-<tr><td>手机号码：</td><td>aa</td></tr>
-<tr><td>经营地址：</td><td>aa</td></tr>
+<tr><td>真实姓名：</td><td><!--{$materia.real_name}--></td></tr>
+<td>身份证号码：</td><td><!--{$materia.card_num}--></td></tr>
+<tr><td>手持身份证照片：</td><td><img src="<!--{$materia.card_img}-->" class="materia_img"/></td></tr>
+<tr><td>个人营业执照：</td><td><img src="<!--{$materia.business_img}-->" class="materia_img"/></td></tr>
+<!--{if $materia.product_img}-->
+<tr><td>产品质量合格证明/质检报告复印件：</td><td><img src="<!--{$materia.product_img}-->" class="materia_img"/></td></tr>
+<!--{/if}-->
 </table>
+<!--{elseif $detail.merchant_type eq 2}-->
+<div class='section_tile'>企业相关资料/个人相关资料</div>
+<table class='table_cls'>
+<colgroup>
+<col width="100" align="left">
+<col align="left">
+</colgroup>
+<tr><td>公司名称：</td><td><!--{$materia.company_name}--></td></tr>
+<td>法人姓名：</td><td><!--{$materia.legal_name}--></td></tr>
+<tr><td>身份证号码：</td><td><!--{$materia.card_num}--></td></tr>
+<tr><td>营业执照：</td><td><img src="<!--{$materia.business_img}-->" class="materia_img"/></td></tr>
+<tr><td>税务登记照：</td><td><img src="<!--{$materia.tax_img}-->" class="materia_img"/></td></tr>
+<tr><td>组织结构代码证：</td><td><img src="<!--{$materia.org_img}-->" class="materia_img"/></td></tr>
+<!--{if $materia.mark_img}-->
+<tr><td>商标注册证：</td><td><img src="<!--{$materia.mark_img}-->" class="materia_img"/></td></tr>
+<!--{/if}-->
+<!--{if $materia.sales_img}-->
+<tr><td>品牌销售授权证明：</td><td><img src="<!--{$materia.sales_img}-->" class="materia_img"/></td></tr>
+<!--{/if}-->
+<!--{if $materia.product_img}-->
+<tr><td>产品质量合格证明/质检报告复印件：</td><td><img src="<!--{$materia.product_img}-->" class="materia_img"/></td></tr>
+<!--{/if}-->
+</table>
+<!--{/if}-->
+<!--{else}-->
+<div class='section_tile'>企业相关资料/个人相关资料</div>
+还没有提交认证资料
+<!--{/if}-->
 <!--{if $detail.verify eq 1}-->
 <div style='padding:5px;'><input type='button' value='通过' style='margin-right:20px;'onclick="checkpass();"/><input type='button' value='拒绝' onclick="checkRefused();"/></div>
 <!--{/if}-->
@@ -64,9 +102,26 @@
 <textarea id="failmsg" style="width:400px;height:100px;" placeholder="请输入拒绝理由"></textarea>
 <div style="height:30px;line-height:30px;padding:5px;border:solid 1px #bdbdbd;text-align:right;"><input type='button' value="确定" onclick="dorefused();"/></div>
 </div>
+<div id="showPic" style="width:500px;height:500px;display:none;position:absolute;"></div>
+<div class='mask' id="mask"></div>
 </section>
 <script>
 var mid = "<!--{$detail.merchant_id}-->";
+
+$(function(){
+	$(".materia_img").on('click', function(){
+		var showPic = $("#showPic");
+		showPic.html("<img src = '"+$(this).attr('src')+"' />");
+		centerDOM(showPic);
+		showPic.fadeIn();
+		$("#mask").show();
+	});	
+	$("#mask").on('click', function(){
+		$("#mask").hide();
+		$("#showPic").hide();
+	});
+});
+
 function checkpass(){
 	if(confirm('确定审核通过吗？')){
 		F.post('/merchant/check',{mid : mid, verify : 2}, function(ret){
@@ -81,6 +136,10 @@ function checkpass(){
 }
 function dorefused(){
 	var failmsg = $("#failmsg").val();
+	if(!failmsg){
+		alert('请输入拒绝理由！');
+		return false;
+	}
 	F.post('/merchant/check',{mid : mid, verify : 3, verify_fail_msg : failmsg}, function(ret){
 		if(ret && ret.flag == 'SUC'){
 			alert('操作成功');

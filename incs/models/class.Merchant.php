@@ -16,6 +16,10 @@ class Merchant extends StorageNode {
     
     const VERIFY_FAIL = 3; //认证失败
     
+    const MERCHANT_TYPE_PERSON = 1; //个人商家
+    
+    const MERCHANT_TYPE_EMPLOY = 2; //企业商家
+    
 	protected static function meta() {
 		return array(
 				'table' => '`shp_merchant`',
@@ -52,7 +56,8 @@ class Merchant extends StorageNode {
 				    'shop_template' => 'shop_template',
 				    'is_completed' => 'is_completed',
 				    'shop_qcode' => 'shop_qcode',
-				    'verify_fail_msg' => 'verify_fail_msg'
+				    'verify_fail_msg' => 'verify_fail_msg',
+				    'merchant_type' => 'merchant_type'
 				)
 		);
 	}
@@ -243,6 +248,7 @@ class Merchant extends StorageNode {
 	        $tablename = "`shp_merchant_payment`";
 	        $setarr['rid'] = $result;
 	        $setarr['money_paid'] = $money_paid;
+	        $setarr['paid_time'] = time();
 	        D()->update($tablename, $setarr);
 	    }
 	}

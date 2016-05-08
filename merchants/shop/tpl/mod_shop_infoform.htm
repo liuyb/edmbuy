@@ -18,7 +18,7 @@
                         <td class="flow_one_right">
                             <div id="logo_file">
                                 <img src="<!--{if $shop->logo}--><!--{$shop->logo}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->"
-                                     style="width:60px;height:60px;" id="shop_logo">
+                                     style="width:60px;height:60px;" id="shop_logo" data-real="<!--{$shop->logo}-->">
                                 <input type="file" id="file" name="file" class="store_logo_file"
                                        onchange="logoUpload(event);">
                             </div>
@@ -106,7 +106,7 @@
                         <td class="flow_one_right">
                             <div id="logo_file_code">
                                 <img src="<!--{if $shop->wxqr}--><!--{$shop->wxqr}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->"
-                                     id="shop_qrcode">
+                                     id="shop_qrcode" data-real="<!--{$shop->wxqr}-->">
                                 <input type="file" id="file" name="file" class="logo_file_code"
                                        onchange="qrcodeUpload(event);">
                             </div>
@@ -177,10 +177,7 @@
                 if (ret.msg == 'UPDATE') {
 //				alert('to detail');
                     showMsg("修改成功！");
-                    setTimeout(function () {
-                        window.location.href = '/shop'
-                    }, "2000");
-
+                    window.location.href = '/shop';
                 } else {
                     window.location.href = '/shop/step/template'
                 }

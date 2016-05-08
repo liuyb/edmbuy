@@ -26,10 +26,10 @@
                                 <p class="flow_m_common">提交身份证，营业执照等相关信息</p>
                             </div>
                             <div class="one_div_right">
-                                <!--{if empty($status)}-->
+                                <!--{if !$merchant->verify}-->
                                 <button class="fill_in" id="fill_in">填写</button>
                                 <!--{else}-->
-                                <button class="fill_in" disabled style="color: darkgray">已完成</button>
+                                	已完成
                                 <!--{/if}-->
                             </div>
                         </div>
@@ -41,12 +41,17 @@
                             </div>
 
                             <div class="one_div_right">
-                                <!--{if $status==1}-->
-                                审核中
-                                <!--{elseif $status==2}-->
-                                审核成功
+                                <!--{if $merchant->verify eq 1}-->
+                               		 审核中
+                                <!--{elseif $merchant->verify eq 2}-->
+                                   	 审核成功
+                                <!--{elseif $merchant->verify eq 3}-->
+                                	审核被拒绝  
+                                	<!--{if $merchant->verify_fail_msg}-->
+                                	<a href="javascript:alert('<!--{$merchant->verify_fail_msg}-->')">拒绝原因</a>
+                                	<!--{/if}-->
                                 <!--{else}-->
-                                审核失败
+                                	待审核
                                 <!--{/if}-->
                             </div>
                         </div>

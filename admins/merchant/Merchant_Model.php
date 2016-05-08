@@ -101,4 +101,23 @@ class Merchant_Model extends Model {
         }
         return $txt;
     }
+    
+    /**
+     * 获取商家提交的待审核资料
+     * @param unknown $merchant_id
+     * @param unknown $merchant_type
+     * @return NULL
+     */
+    static function getMerchantMaterias($merchant_id, $merchant_type){
+        if(Merchant::MERCHANT_TYPE_PERSON == $merchant_type){
+            $sql = "select * from shp_shop_personal where merchant_id =  '%s'";
+        }else if(Merchant::MERCHANT_TYPE_EMPLOY == $merchant_type){
+            $sql = "select * from shp_shop_company where merchant_id =  '%s'";
+        }
+        if(!$sql){
+            return null;
+        }
+        $result = D()->query($sql, $merchant_id)->get_one();
+        return $result;
+    }
 }

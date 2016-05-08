@@ -201,11 +201,6 @@
 	text-align:right;
 	float:left;
 }
-.fill_red{
-	color:red;
-	vertical-align: sub;
-	padding: 0 5px;
-}
 .type_right{
 	margin:0 20px 20px 10px !important;
 }
