@@ -18,26 +18,29 @@ class Sms
      * @param $content
      * @return bool
      */
-    static function sendSms($mobile, $type, $verify = true)
+    static function send($mobile, $type, $verify = true)
     {
         error_reporting(0);
-        @header("content-type:text ml;charset=gb2312");
-        $SmsConfig = C("port.sms");
+        @header("content-type:text/xml;charset=gb2312");
+        $SmsConfig    = C("port.sms");
         $contentArray = C("msg.sms");
         $content = $contentArray[$type];
         $code = rand_code();
         $_SESSION[$type] = $code;
         if (!$verify) {
-            $imgCode = rand_code();
+        	$imgCode = rand_code();
         } else {
-            $imgCode = $_SESSION['verifycode'];
+        	$imgCode = $_SESSION['verifycode'];
         }
-        $content = sprintf($content, $imgCode, $code);
+        
         if($type=="reg_success"){
-            $pwd =$_SESSION['password'];
+            $pwd = $_SESSION['password'];
             $config = C("storage.cookie.mch");
             $url = $config['edmmch.fxmapp.com'];
             $content =sprintf($content,$imgCode,$url,$pwd);
+        }
+        else {
+        	$content = sprintf($content, $imgCode, $code);
         }
         $uname = $SmsConfig['username'];
         $smsnumber = $SmsConfig['smsnumber'];

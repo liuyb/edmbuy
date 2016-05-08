@@ -37,6 +37,7 @@ class Users extends StorageNode {
 						'subscribe'   => 'subscribe',
 						'subscribetime'=> 'subscribe_time',
 						'email'       => 'email',
+						'mobile'      => 'mobile',
 						'username'    => 'user_name',
 						'nickname'    => 'nick_name',
 						'password'    => 'password',

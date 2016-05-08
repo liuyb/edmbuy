@@ -19,6 +19,14 @@ class Eqx_Controller extends MobileController {
 	{
 		$this->nav_flag1 = 'eqx';
 		parent::init($action, $request, $response);
+		
+		//SEO信息
+		$seo = [
+				'title'   => '一起享',
+				'keyword' => '一起享,益多米',
+				'desc'    => '一起享,益多米'
+		];
+		$this->v->assign('seo', $seo);
 	}
 	
 	/**
@@ -88,17 +96,45 @@ class Eqx_Controller extends MobileController {
 	 */
 	public function reg(Request $request, Response $response)
 	{
+		$step = $request->get('step', 1);
+		if ($step!=1 && $step!=2) $step = 1;
+		
 		if ($request->is_post()) {
-	
+			$ret = ['flag' => 'FAIL', 'msg'=>''];
+			if (1==$step) {
+				$mobile = $request->post('mobile','');
+				$mobile = trim($mobile);
+				
+				if (''==$mobile || !Fn::check_mobile($mobile)) {
+					$ret['msg'] = '手机号不对';
+					$response->sendJSON($ret);
+				}
+				
+				$_SESSION['eqx_mobi'] = $mobile;
+				$ret = ['flag' => 'SUCC', 'msg'=>''];
+				$response->sendJSON($ret);
+			}
+			else {
+				
+			}
 		}
 		else { //登录页面
 			$this->v->set_tplname('mod_eqx_reg');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
 			
-			$step = $request->get('step', 1);
-			$this->v->assign('step', $step);
+			if (1==$step) {
+				if (isset($_SESSION['eqx_mobi'])) {
+					unset($_SESSION['eqx_mobi']);
+				}
+			}
+			else {
+				if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
+					$response->redirect('/eqx/reg');
+				}
+			}
 			
+			$this->v->assign('step', $step);
 			throw new ViewResponse($this->v);
 		}
 	}

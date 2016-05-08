@@ -21,12 +21,12 @@ a.h_btn{
 }
 
 .find_password{
-    position: absolute;
-    right: 0;
-    font-size: 15px;
-    font-weight: normal;
-    margin-right: 10px;
-    color: #f26427; 
+  position: absolute;
+  right: 0;
+  font-size: 15px;
+  font-weight: normal;
+  margin-right: 10px;
+  color: #f26427; 
 }
 .login_phone{
   background:#fff;
@@ -42,6 +42,7 @@ a.h_btn{
 .write_phone{
   width:70%;
   color:#8c8c8c;
+  line-height: 30px;
 }
 .login_pass{
   border-top:1px solid #ccc;  

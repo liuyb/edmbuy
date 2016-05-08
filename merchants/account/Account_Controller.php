@@ -225,7 +225,7 @@ class Account_Controller extends MerchantController
         }
         $type = "bind_bank";
         //todo 发送验证码
-       // $result = Sms::sendSms($mobile,$type,true);
+       // $result = Sms::send($mobile,$type,true);
         if (true) {
             $_SESSION['mobile'] = $mobile;
            $_SESSION['bind_bank'] = "8888";

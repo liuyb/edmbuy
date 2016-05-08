@@ -6,30 +6,30 @@
 <?php add_css($contextpath.'misc/js/ext/slideunlock/jquery.slideunlock.css',['scope'=>'global', 'ver'=>'0.1.0']);?>
 <?php add_js($contextpath.'misc/js/ext/slideunlock/jquery.slideunlock.min.js',['pos'=>'current','ver'=>'0.1.0']);?>
 <script type="text/html" id="forTopNav">
-<div class="header">欢迎加入一起享<span class="find_password">登录</span></div>
+<div class="header">欢迎加入一起享<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机账号：</span>
+	<span class="phone_left">手机帐号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
 <div class="login_phone login_pass">
 	<span class="phone_left" style="float:left;">验<i class="width_j"></i>证：</span>
 	<div id="slide-wrapper">
-	<input type="hidden" value="" id="lockable">
-	<div id="slider">
-		<span id="label"></span>
-		<span id="slider_swip"></span>
-		<span id="slider_font">按住滑块,拖动到最右边</span>
-		<span id="lableTip"></span>
+		<input type="hidden" value="" id="lockable">
+		<div id="slider">
+			<span id="label"></span>
+			<span id="slider_swip"></span>
+			<span id="slider_font">按住滑块,拖动到最右边</span>
+			<span id="lableTip"></span>
+		</div>
 	</div>
-</div>
 </div>
 
 <div class="login_bottom">
-	<div class="login_btn">下一步</div>
+	<div class="login_btn" id="btn_next">下一步</div>
 </div>
 
 <div class="quertion_phone">
@@ -40,14 +40,43 @@
 	遇到问题：<i>400-0755-888</i>
 </div>
 
-
 <script>
+var is_verify = 0;
 $(function () {
 	var slider = new SliderUnlock("#slider", {}, function(){
+		is_verify = 1;
 	}, function(){});
 	slider.init();
 
-})
+	$('#btn_next').bind('click',function(){
+		var $mb = $('#write_phone');
+		var mobi= $mb.val().trim();
+		if (''==mobi) {
+			weui_alert('请填写手机号','','好的');
+			return;
+		}
+		else if (!/^1\d{10}$/.test(mobi)) {
+			weui_alert('手机号不对');
+			return;
+		}
+		if (!is_verify) {
+			weui_alert('请拖动滑块到最右边验证身份');
+			return;
+		}
+
+		weui_toast('loading',0,'数据保存中');
+		F.post('<?php echo U('eqx/reg','step=1')?>',{mobile: mobi},function(ret){
+			if(ret.flag=='SUCC') {
+				location.href = '<?php echo U('eqx/reg','step=2')?>';
+			}
+			else {
+				weui_toast('loading',2);
+				weui_alert(ret.msg);
+			}
+		});
+		
+	});
+});
 </script>
 
 <?php else:?>
@@ -56,7 +85,7 @@ $(function () {
 <div class="header">
 	登录
 	<a href="javascript:history.back();" class="back">返回</a>
-	<span class="find_password">找回密码</span>
+	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span>
 </div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
@@ -64,6 +93,7 @@ $(function () {
 <div class="login_phone">
 	<span class="phone_left">短信验证：</span>
 	<input class="write_phone" id="note_code" type="text" value="" placeholder="请输入您的短信验证码">
+	<input type="hidden" name="mobile" value="<?=$mobile?>" id="frm_mobile" />
 	<button class="get_note_code">获取验证码</button>
 </div>
 
