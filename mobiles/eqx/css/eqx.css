@@ -63,6 +63,7 @@ a.h_btn{
   text-align:center;
   color:#fff;
   font-size:16px;
+  width: 100%;
 }
 .register_btn{
   background:#fff;
@@ -114,6 +115,7 @@ a.h_btn{
 }
 .index_img img{
   max-width:100%;
+  vertical-align:top;
 }
 .index_bottom{
   position:fixed;
@@ -145,3 +147,140 @@ a.h_btn{
   margin:10px;
   line-height: 25px;
 }
+
+.what_top{
+  background:#f26427;
+  height:90px;
+  line-height:90px;
+}
+.what_top span{
+  font-size:15px;
+  color:#fff; 
+}
+.what_top img{
+  vertical-align: top;
+  width: 50px;
+  margin: 20px;
+  border-radius: 50%; 
+}
+.what_center{
+  margin:10px 0;
+}
+.what_center img{
+  max-width:100%;
+}
+.what_commom{
+  height:60px;
+  line-height:60px;
+  border-bottom:1px solid #eee;
+  background:#fff url(../img/btn_back.png) no-repeat 97%;
+  background-size:10px;
+  padding:0 10px;
+}
+.what_commom img{
+  height:40px;
+  width:40px;
+  border-radius:50%;
+    vertical-align: top;  
+  margin:10px 10px 10px 0;
+}
+.what_wx{
+  background:url(../img/wx.png) no-repeat left;
+  padding-left:30px;
+  background-size:20px;
+}
+.wx_bottom{
+  margin:60px 0 20px;
+  text-align:center;
+  font-size:13px;
+}
+
+.develop_tw{
+  padding:10px;
+  font-size:15px;
+  color:#7d7d7d;
+}
+.weix_w{
+  border:1px solid #ccc;  
+  background:#fff;  
+  height:70px;  
+  margin:0 10px;
+}
+.weix_code{
+  height:50px;
+  padding:10px;
+}
+.weix_code img{
+  float:left;
+  height:50px;
+}
+.weix_right{
+  float:left;
+  height:50px;
+  width:75%;
+  margin-left:10px;
+}
+.r_top{
+  height:25px;
+  line-height:25px;
+  font-size:13px;
+  color:#333;
+}
+.r_bottom{
+  height:25px;
+  line-height:25px; 
+  font-size:12px;
+  color:#ccc; 
+}
+.develop_btn{
+  margin:40px 10px 20px;
+}
+.develop_bottom{
+  border:1px solid #ccc;
+  background:#fff;
+  margin:0 10px;
+  font-size:15px;
+  color:#333;
+  padding:15px 10px;
+}
+.enter_nums_deve{
+  font-style:normal;
+  color:#f26427;
+  font-size:18px;
+}
+
+.code_top{
+  background:#1c0829;
+  height:44px;
+  line-height:44px;
+}
+.code_top img{
+  float:right;
+  width:24px;
+  margin:10px;  
+  vertical-align: top;
+}
+.code_top_left{
+  float:left;
+  font-size:15px;
+  color:#fff;
+  margin-left:10px;
+}
+.code_center img{
+  max-width:100%;
+  vertical-align: middle;
+}
+.code_bottom{
+  height:80px;
+  text-align:center;
+}
+.code_bottom img{
+  width:90px;
+  height:90px;
+  margin-top:-45px;
+}
+
+.home_dlg_btns { padding: 0 0 20px;text-align: center; }
+.home_dlg_btns .home_btn { width: 40%; }
+.home_dlg_btns .home_btn.login_btn { margin-left:5%; }
+

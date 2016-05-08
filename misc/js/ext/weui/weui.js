@@ -11,7 +11,7 @@ function weui_append_html(id) {
 	return _id;
 }
 // render toast(供内部调用)
-function weui_render_toast(id, hide_type, tips) { //0:no hide, 1: auto hide, 2: hide immediately
+function weui_render_toast(id, hide_type, tips, hide_cb, hide_cb_args) { //0:no hide, 1: auto hide, 2: hide immediately
 	if (typeof(hide_type)=='undefined') hide_type = 1;
 	if (typeof(tips)=='undefined') {
 		if ('weui_toast_finish'==id) {
@@ -22,23 +22,37 @@ function weui_render_toast(id, hide_type, tips) { //0:no hide, 1: auto hide, 2: 
 		}
 	}
 	var $id = weui_append_html(id);
-	$id.find('.weui_toast_content').text(tips);
+	if (typeof(hide_cb_args)!='object') hide_cb_args = {};
 	if (2==hide_type) {
 		$id.hide();
+		if (typeof(hide_cb)=='function') {
+			hide_cb(hide_cb_args);
+		}
 	}
 	else {
+		$id.find('.weui_toast_content').text(tips);
 		$id.show();
 		if (1==hide_type) {
-			setTimeout(function(){$id.hide();}, 2000);
+			setTimeout(function(){
+				$id.hide();
+				if (typeof(hide_cb)=='function') {
+					hide_cb(hide_cb_args);
+				}
+			}, 1500);
 		}
 	}
 }
 // render dialog(供内部调用)
 function weui_render_dialog(dialog_type, content, title, ok_call, cancel_call) {
-	var id  = 'confirm'==dialog_type ? 'weui_dialog_confirm' : 'weui_dialog_alert';
+	var id  = 'confirm'==dialog_type ? 'weui_dialog_confirm' : ('alert'==dialog_type ? 'weui_dialog_alert' : 'weui_dialog_common');
 	if (typeof(title)=='undefined') title = '';
+	
 	var $id = weui_append_html(id);
-	$id.find('.weui_dialog_title').text(title);
+	if (content=='__CLOSE__') {
+		$id.hide();
+		return;
+	}
+	$id.find('.weui_dialog_title').html(title);
 	$id.find('.weui_dialog_bd').html(content);
 
 	//ok call
@@ -84,9 +98,14 @@ function weui_render_dialog(dialog_type, content, title, ok_call, cancel_call) {
 	}
 }
 // show toast(供外部调用)
-function weui_toast(toast_type,hide_type,tips) {
+function weui_toast(toast_type,hide_type,tips, hide_cb, hide_cb_args) {
 	if (toast_type!='finish' && toast_type!='loading') toast_type = 'loading';
-	weui_render_toast('weui_toast_'+toast_type, hide_type, tips);
+	weui_render_toast('weui_toast_'+toast_type, hide_type, tips, hide_cb, hide_cb_args);
+}
+// hide toast(供外部调用)
+function weui_toast_hide(toast_type) {
+	if (toast_type!='finish' && toast_type!='loading') toast_type = 'loading';
+	weui_render_toast('weui_toast_'+toast_type, 2);
 }
 // show alert dialog(供外部调用)
 function weui_alert(content, title, ok_call) {
@@ -95,4 +114,12 @@ function weui_alert(content, title, ok_call) {
 // show confirm dialog(供外部调用)
 function weui_confirm(content, title, ok_call, cancel_call) {
 	weui_render_dialog('confirm', content, title, ok_call, cancel_call);
+}
+// show common dialog(供外部调用)
+function weui_dialog(content, title) {
+	weui_render_dialog('dialog', content, title);
+}
+// hide common dialog(供外部调用)
+function weui_dialog_close() {
+	weui_render_dialog('dialog', '__CLOSE__');
 }

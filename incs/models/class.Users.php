@@ -168,7 +168,7 @@ class Users extends StorageNode {
 	 * @return Users
 	 */
 	static function load_by_mobile($mobile) {
-		return self::find_one(new Query('mobilephone', $mobile));
+		return self::find_one(new Query('mobile', $mobile));
 	}
 
 	static function load_by_nickname($mobile) {
@@ -231,6 +231,101 @@ class Users extends StorageNode {
 			Response::redirect('user/login_account');
 		}
 		return true;
+	}
+	
+	/**
+	 * 登录帐号
+	 * @param string $mobile
+	 * @param string $passwd
+	 * @return int
+	 *   >0: LOGIN OK 
+	 *   -1: 手机号非法
+	 *   -2: 手机帐号不存在
+	 *   -3: 密码不对
+	 */
+	static function login_account($mobile, $passwd) {
+		if (empty($mobile) || !Fn::check_mobile($mobile)) {
+			return -1;
+		}
+		$exUser = self::load_by_mobile($mobile);
+		if (!$exUser->is_exist()) {
+			return -2;
+		}
+		$passwd_enc  = gen_salt_password($passwd, $exUser->salt);
+		if ($passwd_enc != $exUser->password) {
+			return -3;
+		}
+		
+		//set status
+		$_SESSION['AC_LOGINED'] = 1;
+		return $exUser->uid;
+	}
+	
+	/**
+	 * 注册帐号
+	 * @param string $mobile
+	 * @param string $passwd
+	 * @param integer $parent_uid
+	 * @param integer $uid
+	 * @return boolean|integer
+	 */
+	static function reg_account($mobile, $passwd, $parent_uid = 0, $uid = NULL) {
+		if (!isset($uid)) {
+			$uid = $GLOBALS['user']->uid;
+		}
+		if (!$uid) {
+			return false;
+		}
+		$salt = gen_salt();
+		$passwd_enc  = gen_salt_password($passwd, $salt);
+		$parents_info = self::get_parent_ids($parent_uid, true);
+		
+		$upUser = new self($uid);
+		$upUser->mobile   = $mobile;
+		$upUser->password = $passwd_enc;
+		$upUser->salt     = $salt;
+		$upUser->parentnick1 = $parents_info['parent_nick1'];
+		$upUser->parentid1   = $parents_info['parent_id1'];
+		$upUser->parentid2   = $parents_info['parent_id2'];
+		$upUser->parentid3   = $parents_info['parent_id3'];
+		$upUser->save(Storage::SAVE_UPDATE);
+		return true;
+	}
+	
+	/**
+	 * 获取上三层用户ID
+	 * @param integer $layer1_puid 同时支持传入puid和mobile查询
+	 * @param boolean $strict_mode 严格模式，当为true时根据一级上级严格查询，当为false时直接读取puid,puid2,puid3的值
+	 * @return array
+	 */
+	static function get_parent_ids($layer1_puid, $strict_mode = FALSE) {
+		$ret = ['parent_id1'=>0,'parent_nick1'=>'','parent_id2'=>0, 'parent_id3'=>0];
+		if ($layer1_puid) {
+			if (11==strlen($layer1_puid)) {
+				$puser = self::load_by_mobile($layer1_puid);
+			}
+			else {
+				$puser = self::load($layer1_puid);
+			}
+			if ($puser->is_exist()) {
+				$ret['parent_id1']   = $puser->uid;
+				$ret['parent_nick1'] = $puser->unick;
+				if ($strict_mode) { //严格模式需要根据puid往上查
+					if ($puser->parent_id1) {
+						$ret['parent_id2'] = $puser->parent_id1;
+						$puser2 = self::load($puser->parent_id1);
+						if ($puser2->is_exist() && $puser2->parent_id1) {
+							$ret['parent_id2'] = $puser2->parent_id1;
+						}
+					}
+				}
+				else {
+					$ret['parent_id2'] = $puser->parent_id1;
+					$ret['parent_id3'] = $puser->parent_id2;
+				}
+			}
+		}
+		return $ret;
 	}
 	
 	/**

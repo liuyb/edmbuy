@@ -12,11 +12,14 @@
 <script>
 $(function(){
 	$('#login_btn').click(function(){
-		weui_toast('finish',1);
+		weui_toast('finish',1,'已完成',function(d){
+			alert(d.name);
+			},{name: 'Hi, Gavin'});
 		//weui_alert('这是好好看哦','',{fn:function(d){alert('ok call: '+d.name);},args:{name: 'Gavin'}});
 	});
 	$('#reg_btn').click(function(){
-		weui_toast('loading',1);
+		weui_dialog('<h1>这样好吗？</h1><a href="javascript:;" onclick="weui_dialog_close()">关闭</a>','<font color="red">提示</font>');
+		//weui_toast('loading',1);
 		//weui_confirm('确定这样做么？','确定？',{fn:function(d){alert('ok call: '+d.name);},args:{name: 'Gavin'}},{fn:function(d){alert('cancel call: '+d.name);},args:{name: 'Yancy'}});
 	});
 });

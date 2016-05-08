@@ -6,6 +6,10 @@
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
-<div class="index_img"><img src="<?=$contextpath?>mobiles/eqx/img/login.png"></div>
+<div class="index_img">
+	<img src="<?=$contextpath?>mobiles/eqx/img/login_1.png">
+	<img src="<?=$contextpath?>mobiles/eqx/img/login_2.png">
+	<img src="<?=$contextpath?>mobiles/eqx/img/login_3.png">
+</div>
 
-<div class="index_bottom"><a href="" class="blka">发现更多好项目</a></div>
+<div class="index_bottom"><a href="<?php echo U('eqx/reg')?>" class="blka">入驻一起享</a></div>

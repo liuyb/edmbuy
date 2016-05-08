@@ -83,7 +83,7 @@ $(function () {
 
 <script type="text/html" id="forTopNav">
 <div class="header">
-	登录
+	注册
 	<a href="javascript:history.back();" class="back">返回</a>
 	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span>
 </div>
@@ -93,17 +93,17 @@ $(function () {
 <div class="login_phone">
 	<span class="phone_left">短信验证：</span>
 	<input class="write_phone" id="note_code" type="text" value="" placeholder="请输入您的短信验证码">
-	<input type="hidden" name="mobile" value="<?=$mobile?>" id="frm_mobile" />
-	<button class="get_note_code">获取验证码</button>
+	<input type="hidden" name="mobile" value="<?=$mobile?>" id="frm_mobile"/>
+	<button class="get_note_code" id="get_note_code">获取验证码</button>
 </div>
 
 <div class="login_phone login_pass">
 	<span class="phone_left">密<i class="width_j"></i>码：</span>
-	<input class="write_phone" id="write_password" type="text" value="" placeholder="请输入您的密码">
+	<input class="write_phone" id="write_password" type="password" value="" placeholder="请输入您的密码">
 </div>
 
 <div class="login_bottom">
-	<div class="login_btn">完成注册</div>
+  <button class="login_btn" id="btn_finreg">完成注册</button>
 </div>
 
 <div class="quertion_phone">
@@ -113,36 +113,77 @@ $(function () {
 <script>
 var num = 60;
 var count = num;
-var time;
+var timer;
+var ajaxing = 0;
 
 function refresh(){
 	
 	num = num - 1;
 	var msg = num + "秒";
 	 
-	$(".get_note_code").html(msg);
-		
-    if(num == 0){
-    	num = count;
-    	$(".get_note_code").removeClass("sending").html("重新获取");
-    	clearInterval(time);
-    	return false;
-    }
+	$("#get_note_code").html(msg);
+
+	if(num == 0){
+		num = count;
+		$("#get_note_code").removeClass("sending").html("重新获取");
+		clearInterval(timer);
+		ajaxing = 0;
+		return false;
+  }
+	  
 }
 
-$(".get_note_code").on("click",function(){
-	refresh();
-	time = setInterval("refresh();", 1000);
-	$(".prompt_code p").show();
-})
+$(function(){
 
-$(".use_protocol").on("click",function(){
-	if($(this).hasClass("prot_on_ok")){
-		$(this).removeClass("prot_on_ok").addClass("prot_on_no");
-	}else{
-		$(this).removeClass("prot_on_no").addClass("prot_on_ok");
-	}
-})
+	$("#get_note_code").bind("click",function(){
+		if (ajaxing) return;
+		ajaxing = 1;
+		refresh();
+		timer = setInterval("refresh();", 1000);
+		//$(".prompt_code p").show();
+		F.post('<?php echo U('eqx/get_vcode')?>',{},function(ret){
+			
+		});
+	});
+
+	$('#btn_finreg').bind('click',function(){
+		var _code = $('#note_code').val().trim();
+		var _pwd  = $('#write_password').val().trim();
+		var _mobi = $('#frm_mobile').val().trim();
+		if (_code=='') {
+			weui_alert('请输入短信验证码');
+			return;
+		}
+		else if(_code.length!=6) {
+			weui_alert('短信验证码错误');
+			return;
+		}
+		if (_pwd=='') {
+			weui_alert('请输入密码');
+			return;
+		}
+		else if(_pwd.length<6) {
+			weui_alert('密码需6位或以上');
+			return;
+		}
+		
+		$(this).attr('disabled',true);
+		var _this = this;
+		weui_toast('loading',0,'数据保存中...');
+		F.post('<?php echo U('eqx/reg','step=2')?>',{mobile: _mobi, passwd: _pwd,vcode: _code},function(ret){
+			weui_toast('loading',2);
+			$(_this).attr('disabled',false);
+			if (ret.flag=='SUCC') {
+				weui_toast('finish',1,'注册成功！');
+			}
+			else {
+				weui_alert(ret.msg);
+			}
+		});
+	});
+	
+});
+
 </script>
 
 <?php endif;?>

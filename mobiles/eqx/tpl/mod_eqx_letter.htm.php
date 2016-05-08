@@ -18,5 +18,6 @@
 	<p class="top_img"><img src="<?=$contextpath?>mobiles/eqx/img/cyfs.png"></p>
 	<p class="let_font" stye="padding-bottom:20px;">益多米1.0正式版上线，购买任意套餐即可享受。 </p>
 </div>
-
+<!-- 
 <div class="index_bottom"><a href="" class="blka">入驻一起享</a></div>
+-->

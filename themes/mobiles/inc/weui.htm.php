@@ -39,7 +39,7 @@
     </div>
 </div>
 </script>
-<!-- loading toast -->
+<!-- confirm dialog -->
 <script type="text/html" id="tpl_weui_dialog_confirm">
 <div class="weui_dialog_confirm hide" id="weui_dialog_confirm">
     <div class="weui_mask"></div>
@@ -53,6 +53,7 @@
     </div>
 </div>
 </script>
+<!-- alert dialog -->
 <script type="text/html" id="tpl_weui_dialog_alert">
 <div class="weui_dialog_alert hide" id="weui_dialog_alert">
     <div class="weui_mask"></div>
@@ -62,6 +63,16 @@
         <div class="weui_dialog_ft">
             <a href="javascript:;" class="weui_btn_dialog primary">好的</a>
         </div>
+    </div>
+</div>
+</script>
+<!-- common dialog -->
+<script type="text/html" id="tpl_weui_dialog_common">
+<div class="weui_dialog_confirm hide" id="weui_dialog_common">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd"></div>
     </div>
 </div>
 </script>

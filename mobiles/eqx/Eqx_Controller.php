@@ -37,7 +37,7 @@ class Eqx_Controller extends MobileController {
 	public function menu()
 	{
 		return [
-				'eqx/%d' => 'item'
+				'eqx/%d' => 'intro'
 		];
 	}
 	
@@ -78,7 +78,38 @@ class Eqx_Controller extends MobileController {
 	public function login(Request $request, Response $response)
 	{
 		if ($request->is_post()) {
-	
+			$mobile = $request->post('mobile','');
+			$passwd = $request->post('passwd','');
+			
+			$ret = ['flag' => 'FAIL', 'msg'=>''];
+			if (''==$mobile || !Fn::check_mobile($mobile)) {
+				$ret['msg'] = '请填写正确的手机号';
+				$response->sendJSON($ret);
+			}
+			if (''==$passwd) {
+				$ret['msg'] = '密码不能为空';
+				$response->sendJSON($ret);
+			}
+			
+			$ret_code = Users::login_account($mobile, $passwd);
+			if ($ret_code > 0) {
+				$ret = ['flag' => 'SUCC', 'msg'=>'登录成功', 'logined_uid'=>$ret_code];
+			}
+			else {
+				if ($ret_code==-1) {
+					$ret['msg'] = '手机号非法';
+				}
+				elseif ($ret_code==-2) {
+					$ret['msg'] = '帐号不存在';
+				}
+				elseif ($ret_code==-3) {
+					$ret['msg'] = '密码不对';
+				}
+				else {
+					$ret['msg'] = '登录失败';
+				}
+			}
+			$response->sendJSON($ret);
 		}
 		else { //登录页面
 			$this->v->set_tplname('mod_eqx_login');
@@ -114,7 +145,45 @@ class Eqx_Controller extends MobileController {
 				$ret = ['flag' => 'SUCC', 'msg'=>''];
 				$response->sendJSON($ret);
 			}
-			else {
+			elseif(2==$step) {
+				$mobile = $request->post('mobile','');
+				$passwd = $request->post('passwd','');
+				$vcode  = $request->post('vcode','');
+				$parent_id  = $request->post('parent_id',0);
+				
+				if (!$GLOBALS['user']->uid) {
+					$ret['msg'] = '请先微信授权登录';
+					$response->sendJSON($ret);
+				}
+				if (''==$mobile || !Fn::check_mobile($mobile)) {
+					$ret['msg'] = '手机号不对';
+					$response->sendJSON($ret);
+				}
+				if (''==$vcode) {
+					$ret['msg'] = '验证码不能为空';
+					$response->sendJSON($ret);
+				}
+				elseif (strlen($vcode)!=6) {
+					$ret['msg'] = '验证码不对';
+					$response->sendJSON($ret);
+				}
+				if (''==$passwd) {
+					$ret['msg'] = '密码不能为空';
+					$response->sendJSON($ret);
+				}
+				elseif (strlen($passwd)<6) {
+					$ret['msg'] = '密码需6位或以上';
+					$response->sendJSON($ret);
+				}
+				
+				if (Users::reg_account($mobile, $passwd, $parent_id, $GLOBALS['user']->uid)) {
+					$ret = ['flag' => 'SUCC', 'msg'=>'注册成功', 'uid'=>$GLOBALS['user']->uid];
+					$response->sendJSON($ret);
+				}
+				else {
+					$ret['msg'] = '注册失败';
+					$response->sendJSON($ret);
+				}
 				
 			}
 		}
@@ -132,10 +201,44 @@ class Eqx_Controller extends MobileController {
 				if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
 					$response->redirect('/eqx/reg');
 				}
+				$this->v->assign('mobile', $_SESSION['eqx_mobi']);
 			}
 			
 			$this->v->assign('step', $step);
 			throw new ViewResponse($this->v);
+		}
+	}
+	
+	/**
+	 * 获取手机验证码
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function get_vcode(Request $request, Response $response)
+	{
+		if ($request->is_post()) {
+			
+			$ret = ['flag'=>'FAIL', 'msg'=>''];
+			if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
+				$ret['msg'] = '手机号不存在';
+				$response->send($ret);
+			}
+			
+			$type = 'reg_account';
+			$row_vc = D()->query("SELECT `id`,`overdueTime`,`verifyCode` FROM ".UsersmsLog::table()." WHERE `receivePhone`='%s' AND `type`='%s' AND `result`=1 ORDER BY `id` DESC LIMIT 0,1",
+			                     $_SESSION['eqx_mobi'], $type)->get_one();
+			$now = simphp_time();
+			if (!empty($row_vc) && $row_vc['overdueTime']>simphp_time()) {
+				$ret['msg'] = '一分钟后才能重新获取';
+				$response->send($ret);
+			}
+			
+			$ret = ['flag'=>'SUCC', 'msg'=>'发送成功'];
+			if (!Sms::sendVCode($_SESSION['eqx_mobi'], $type, rand_code(6))) {
+				$ret['msg'] = '发送失败';
+			}
+			$response->sendJSON($ret);
+			
 		}
 	}
 	
@@ -152,6 +255,66 @@ class Eqx_Controller extends MobileController {
 		}
 		else { //登录页面
 			$this->v->set_tplname('mod_eqx_findpass');
+			$this->topnav_no = 1;
+			$this->nav_no = 0;
+			
+			throw new ViewResponse($this->v);
+		}
+	}
+	
+	/**
+	 * 登录后首页
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function home(Request $request, Response $response)
+	{
+		if ($request->is_post()) {
+	
+		}
+		else { //登录页面
+			$this->v->set_tplname('mod_eqx_home');
+			$this->topnav_no = 1;
+			$this->nav_no = 0;
+			
+			throw new ViewResponse($this->v);
+		}
+	}
+	
+	/**
+	 * 去推广
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function tui(Request $request, Response $response)
+	{
+		if ($request->is_post()) {
+	
+		}
+		else { //登录页面
+			$this->v->set_tplname('mod_eqx_tui');
+			$this->topnav_no = 1;
+			$this->nav_no = 0;
+			
+			throw new ViewResponse($this->v);
+		}
+	}
+	
+	/**
+	 * 二维码推广
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function tuiqr(Request $request, Response $response)
+	{
+		if ($request->is_post()) {
+	
+		}
+		else { //登录页面
+			$this->v->set_tplname('mod_eqx_tuiqr');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
 			
