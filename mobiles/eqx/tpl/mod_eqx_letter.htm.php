@@ -3,7 +3,7 @@
 <script type="text/html" id="forTopNav">
 <div class="header">
 	介绍信
-	<span class="find_password">登录</span>
+	<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span>
 </div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>

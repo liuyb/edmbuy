@@ -2,12 +2,12 @@
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
 <script type="text/html" id="forTopNav">
-<div class="header">登录<span class="find_password">找回密码</span></div>
+<div class="header">登录<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机账号：</span>
+	<span class="phone_left">手机帐号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
@@ -18,7 +18,7 @@
 
 <div class="login_bottom">
 	<div class="login_btn">登录</div>
-	<div class="register_btn">注册</div>
+	<div class="register_btn" onclick="location.href='<?php echo U('eqx/reg')?>'">注册</div>
 </div>
 
 <div class="quertion_phone">

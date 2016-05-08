@@ -212,8 +212,8 @@
                 window.location.href = "/forgetPwd?step=2";
             }
         }, "JSON")
-    })
-    var phone =<!--$phone-->;
+    });
+    
     $(".two_submit").click(function () {
         var pwd = $("input[name=pwd]").val();
         var confirmpwd = $("input[name=confirmpwd]").val();
@@ -239,7 +239,7 @@
             } else {
                 showMsg(ret.retmsg)
             }
-        })
+        });
     });
     /**
      * 校验待封装

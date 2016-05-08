@@ -23,7 +23,7 @@ function weui_render_toast(id, hide_type, tips) { //0:no hide, 1: auto hide, 2: 
 	}
 	var $id = weui_append_html(id);
 	$id.find('.weui_toast_content').text(tips);
-	if (3==hide_type) {
+	if (2==hide_type) {
 		$id.hide();
 	}
 	else {

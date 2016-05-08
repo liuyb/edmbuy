@@ -216,7 +216,7 @@ class User_Controller extends MerchantController
             $response->redirect("/home");
         }
         $show_page = true;
-        $this->v->set_tplname('mod_user_forgetPwd');
+        $this->v->set_tplname('mod_user_forgetpwd');
         $step = $request->get('step');
         if (!empty($_SESSION['step'])) {
             $this->v->assign('step', $_SESSION['step']);
@@ -224,7 +224,7 @@ class User_Controller extends MerchantController
                 unset($_SESSION['step']);
             } elseif ($step == 1 && $_SESSION['step'] == 2) {
                 unset($_SESSION['step']);
-                unset($_SESSION['forgetPwd']);
+                unset($_SESSION['forget_pwd']);
                 $this->v->assign('step', $step);
             } elseif ($step == 3 && $_SESSION['step'] == 2) {
                 $this->v->assign('step', 2);//只有2不unset
@@ -237,7 +237,7 @@ class User_Controller extends MerchantController
             $this->v->assign('phone', $_SESSION['phone']);
         }
         if ($show_page) {
-            $v = new PageView('mod_user_forgetPwd', '_page_box');
+            $v = new PageView('mod_user_forgetpwd', '_page_box');
             $response->send($v);
         }
     }
@@ -271,12 +271,12 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-//      $result = Sms::sendSms($phone, $type = "forgetPwd");
+//      $result = Sms::sendSms($phone, $type = "forget_pwd");
         $result = "888888";
-        $_SESSION['forgetPwd'] = "888888";
+        $_SESSION['forget_pwd'] = "888888";
         if ($result) {
             $_SESSION['phone'] = $phone;
-            Cookie::set("forgetPwd", $_SESSION['forgetPwd'], 60 * 5);//验证码5分钟过后过期
+            Cookie::set("forget_pwd", $_SESSION['forget_pwd'], 60 * 5);//验证码5分钟过后过期
             $data['retmsg'] = "发送验证码成功！";
             $data['status'] = 1;
             $response->sendJSON($data);
@@ -320,7 +320,7 @@ class User_Controller extends MerchantController
             $response->sendJSON($data);
         }
 
-        if ($_SESSION['forgetPwd'] == $chkcode) {
+        if ($_SESSION['forget_pwd'] == $chkcode) {
             $_SESSION['step'] = "2";
             $_SESSION['phone'] = $phone;
             unset($_SESSION['verifycode']);
@@ -341,7 +341,7 @@ class User_Controller extends MerchantController
      */
     public function forgotSavePwd(Request $request, Response $response)
     {
-        $cookiePhone = Cookie::get("forgetPwd");
+        $cookiePhone = Cookie::get("forget_pwd");
         if (empty($cookiePhone)) {
             unset($_SESSION['step']);
             $data['retmsg'] = "手机验证码已过期！";
@@ -380,8 +380,7 @@ class User_Controller extends MerchantController
         }
         $result = User_Model::forgetPassword($phone, $password, 3);
         if ($result * 1 > 0) {
-            $_SESSION["phone"] = null;
-            $_SESSION["forgetPwd"] = null;
+            unset($_SESSION["phone"],$_SESSION["forget_pwd"]);
             $_SESSION["step"] = 3;
             if(!empty($_SESSION['erro'])){
                 unset($_SESSION['erro']);

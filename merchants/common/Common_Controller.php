@@ -18,10 +18,10 @@ class Common_Controller extends Controller {
       '!^login[a-z_]*$!i'  => 'user/$0',
       '!^logout[a-z_]*$!i' => 'user/$0',
       '!^home$!i' => 'user/index',
-		'!^forgetPwd[a-z_]*$!i'  => 'user/$0',
-		'!^checkSmsCode[a-z_]*$!i'  => 'user/$0',
-		'!^setpassword[a-z_]*$!i'  => 'user/$0',
-		'!^forgotSavePwd[a-z_]*$!i'  => 'user/$0',
+			'!^forgetPwd[a-z_]*$!i'  => 'user/$0',
+			'!^checkSmsCode[a-z_]*$!i'  => 'user/$0',
+			'!^setpassword[a-z_]*$!i'  => 'user/$0',
+			'!^forgotSavePwd[a-z_]*$!i'  => 'user/$0',
     );
   }
   

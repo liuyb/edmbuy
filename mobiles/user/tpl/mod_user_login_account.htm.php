@@ -12,7 +12,7 @@
 <script>
 $(function(){
 	$('#login_btn').click(function(){
-		weui_toast('finish',1,'OK啦');
+		weui_toast('finish',1);
 		//weui_alert('这是好好看哦','',{fn:function(d){alert('ok call: '+d.name);},args:{name: 'Gavin'}});
 	});
 	$('#reg_btn').click(function(){

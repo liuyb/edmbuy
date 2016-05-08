@@ -21,23 +21,24 @@ class Sms
     static function sendSms($mobile, $type, $verify = true)
     {
         error_reporting(0);
-        @header("content-type:text ml;charset=gb2312");
-        $SmsConfig = C("port.sms");
+        @header("content-type:text/xml;charset=gb2312");
+        $SmsConfig    = C("port.sms");
         $contentArray = C("msg.sms");
-        $content = $contentArray[$type];
-        $code = rand_code();
+        $content      = $contentArray[$type];
+        $code         = rand_code();
         $_SESSION[$type] = $code;
         if (!$verify) {
-            $imgCode = rand_code();
+        	$imgCode = rand_code();
         } else {
-            $imgCode = $_SESSION['verifycode'];
+        	$imgCode = $_SESSION['verifycode'];
         }
+        
         $content = sprintf($content, $imgCode, $code);
         if($type=="reg_success"){
-            $pwd =$_SESSION['password'];
-            $config = C("storage.cookie.mch");
-            $url = $config['edmmch.fxmapp.com'];
-            $content =sprintf($content,$imgCode,$url,$pwd);
+        	$pwd = $_SESSION['password'];
+        	$config = C("storage.cookie.mch");
+        	$url = $config['edmmch.fxmapp.com'];
+        	$content =sprintf($content,$imgCode,$url,$pwd);
         }
         $uname = $SmsConfig['username'];
         $smsnumber = $SmsConfig['smsnumber'];
@@ -46,18 +47,18 @@ class Sms
         $text = urlencode($content);
         $time = time();
         $url = "{$url}:8180/service.asmx/SendMessage?Id={$smsnumber}&Name={$uname}&Psw={$pwd}&Message={$text}&Phone={$mobile}&Timestamp={$time}";
-        try {
-            $sendState = file_get_contents($url);
-        } catch (Exception $e) {
-            return false;
+        $sendState = file_get_contents($url);
+        if (FALSE===$sendState) {
+        	return false;
         }
         $xmlObj = simplexml_load_string($sendState, 'SimpleXMLElement');
         $tablename = "`shp_usersms_log`";
-        $data ['receivePhone'] = $mobile;
-        $data ['type'] = $type;
-        $data ['overdueTime'] = time() + 60 * 1;
-        $data ['verifyCode'] = $code;
-        $data ['sendContent'] = $content;
+        $data = [];
+        $data['receivePhone'] = $mobile;
+        $data['type'] = $type;
+        $data['overdueTime'] = time() + 60 * 1;
+        $data['verifyCode']  = $code;
+        $data['sendContent'] = $content;
         $result = ($xmlObj->State == "1") ? 1 : 0;
         $data['result'] = $result;
         D()->insert($tablename, $data);

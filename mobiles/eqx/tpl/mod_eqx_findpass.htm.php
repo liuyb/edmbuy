@@ -16,7 +16,7 @@
 </div>
 
 <div class="login_phone">
-	<span class="phone_left">手机账号：</span>
+	<span class="phone_left">手机帐号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
