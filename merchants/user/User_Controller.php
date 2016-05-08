@@ -271,7 +271,7 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-//      $result = Sms::send($phone, $type = "forget_pwd");
+//      $result = Sms::sendSms($phone, $type = "forget_pwd");
         $result = "888888";
         $_SESSION['forget_pwd'] = "888888";
         if ($result) {

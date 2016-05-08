@@ -779,7 +779,7 @@ class User_Controller extends MobileController
             $response->sendJSON($ret);
         }
         //todo
-        $result = Sms::send($phone, "merchant_reg");
+        $result = Sms::sendSms($phone, "merchant_reg");
         if ($result!==false) {
 //            $_SESSION['merchant_reg'] = 8888;
             $_SESSION['mobile'] = $phone;
@@ -913,7 +913,7 @@ class User_Controller extends MobileController
                     $ret['status'] =0;
                     $response->sendJSON($ret);
                 }
-                Sms::send($mobile, 'reg_success');
+                Sms::sendSms($mobile, 'reg_success');
                 unset($_SESSION['mobile']);
                 unset($_SESSION['reg_success']);
                 $_SESSION['step'] = 3;
@@ -977,7 +977,7 @@ class User_Controller extends MobileController
         if (!empty($merchant_id)) {
             //User_Model::UpdataMerchantInfo($merchant_id, $order_id, $order_sn);
             //todo 发送短信
-            Sms::send($mobile, 'reg_success');
+            Sms::sendSms($mobile, 'reg_success');
             unset($_SESSION['verifycode']);
             unset($_SESSION['invite_code']);
             unset($_SESSION['merchant_reg']);
