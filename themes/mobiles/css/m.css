@@ -2314,7 +2314,7 @@ a.ph_btn{
 }
 .order_type_btn{
   width: 100%;
-  position: absolute;
+  position: fixed;
   height: 40px;
   bottom: 0;
   text-align: right;
@@ -4625,8 +4625,8 @@ td.cash_td2 img {
 #gains_enter{
 	width:100%;
 	background:#f65d00;
-	height:45px;
-	line-height:45px;
+	height:50px;
+	line-height:50px;
 	font-size:16px;
 	color:#fff;
 	position:fixed;
@@ -4908,7 +4908,7 @@ td.cash_td2 img {
   margin:10px 10px 0;
 }
 .store_ensure{
-  width:100%;
+  	width:100%;
 	text-align:center;
 }
 .store_ensure li{
