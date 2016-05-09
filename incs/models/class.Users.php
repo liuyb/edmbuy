@@ -76,8 +76,7 @@ class Users extends StorageNode {
 						'appuserid'   => 'app_userid',
 						'businessid'  => 'business_id',
 						'businesstime'=> 'business_time',
-						'parentnick1' => 'parent_nick1',
-						'parentid1'   => 'parent_id1',
+						'parentid0'   => 'parent_id0',
 						'parentid2'   => 'parent_id2',
 						'parentid3'   => 'parent_id3',
 						'childnum1'   => 'childnum_1',
@@ -586,6 +585,72 @@ class Users extends StorageNode {
 				include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
 				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_M, 15, 2);
 				if (file_exists($locfile)) {
+					File::make_thumb($locfile, 435, 435);
+					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+					$tmpfile= '';
+					if (preg_match('/^http(s?):\/\//i', $ulogo)) {
+						$ulogo = $tmpfile = File::get_remote($ulogo);
+					}
+					if (Media::is_app_file($ulogo)) {
+						$ulogo = SIMPHP_ROOT . $ulogo;
+						if (''!=$tmpfile) {
+							$tmpfile = SIMPHP_ROOT . $tmpfile;
+						}
+					}
+					if (!file_exists($ulogo)) {
+						$ulogo = '';
+					}
+					if ($ulogo) {
+						$ulogo = realpath($ulogo);
+						$wtm_succ = File::add_watermark($locfile, '', $ulogo, ['x'=>180,'y'=>180,'w'=>75,'h'=>75], 100, '#FFFFFF', ['png2jpg'=>true]);
+						if ($wtm_succ) {
+							$qrcode = $wtm_succ;
+						}
+					}
+					if (''!=$tmpfile) {
+						@unlink($tmpfile);
+					}
+				}
+			}
+		} else {
+			$qrcode = str_replace(SIMPHP_ROOT, '', $locfile_jpg);
+		}
+		return $qrcode;
+	}
+	
+	/**
+	 * 返回当前用户在“本机”的推广一起享二维码相对路径
+	 * 
+	 * @param $uid   integer  用户ID，不提供时用当前登录用户
+	 * @param $ulogo string   用户logo地址，不提供时用当前登录用户
+	 * @param $regen boolean  是否重新生成
+	 * @return boolean
+	 */
+	static function eqx_tuiqr($uid = NULL, $ulogo = '', $regen = FALSE) {
+		if (!isset($uid)) {
+			$uid   = $GLOBALS['user']->uid;
+			$ulogo = $GLOBALS['user']->logo;
+		}
+		$dir = Fn::gen_qrcode_dir($uid, 'uteqx', true);
+		$locfile = $dir . $uid . '.png';
+		$locfile_jpg = $locfile. '.jpg';
+		if ($regen) {
+			if (file_exists($locfile_jpg)) {
+				@unlink($locfile_jpg);
+			}
+			if (file_exists($locfile)) {
+				@unlink($locfile);
+			}
+		}
+		
+		$qrcode = '';
+		if (!file_exists($locfile_jpg)) {
+			if (mkdirs($dir)) {
+				$qrinfo = U('t/'.$uid.'/eqx','',true);
+				include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+				QRcode::png($qrinfo, $locfile, QR_ECLEVEL_M, 15, 2);
+				if (file_exists($locfile)) {
+					File::make_thumb($locfile, 435, 435);
 					$qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
 					$tmpfile= '';
 					if (preg_match('/^http(s?):\/\//i', $ulogo)) {

@@ -154,6 +154,65 @@ class File extends CStatic {
 	}
 	
 	/**
+	 * 生成缩略图
+	 * @param string  $filename
+	 * @param integer $thumb_width
+	 * @param integer $thumb_height
+	 * @param string  $saveto
+	 * @return boolean|mixed
+	 */
+	static function make_thumb($filename, $thumb_width, $thumb_height, $saveto = '')
+	{
+		$img_info = getimagesize($filename);
+		
+		// 获得水印文件以及源文件的信息
+		$img_handle = self::img_resource($filename, $img_info[2]);
+		if (!$img_handle)
+		{
+			return false;
+		}
+		
+		if (function_exists('imagecreatetruecolor'))
+		{
+			$img_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+		}
+		else
+		{
+			$img_thumb = imagecreate($thumb_width, $thumb_height);
+		}
+		if (!$img_thumb)
+		{
+			imagedestroy($img_handle);
+			return false;
+		}
+		
+		/* 将水印图片进行缩放处理 */
+		if (function_exists('imagecopyresampled'))
+		{
+			imagecopyresampled($img_thumb, $img_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $img_info[0], $img_info[1]);
+		}
+		else
+		{
+			imagecopyresized($img_thumb, $img_handle, 0, 0, 0, 0, $thumb_width, $thumb_height, $img_info[0], $img_info[1]);
+		}
+		
+		/* 写文件到目标目录 */
+		$target = empty($saveto) ? $filename : $saveto;
+		$wrsucc = self::img_write($img_thumb, $target, $img_info[2]);
+		
+		/* 清除image资源对象 */
+		imagedestroy($img_handle);
+		imagedestroy($img_thumb);
+		
+		$path = realpath($target);
+		if ($wrsucc && $path)
+		{
+			return str_replace(SIMPHP_ROOT, '', str_replace('\\', '/', $path));
+		}
+		return false;
+	}
+	
+	/**
 	 * 为图片增加水印
 	 *
 	 * @param       string      $filename           原始图片文件名，包含完整路径
