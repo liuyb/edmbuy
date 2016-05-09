@@ -20,16 +20,19 @@
 		<li>
 			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码">
 		</li>
-		<?php if(!$parent_id): ?>
+		<?php if(!$user->parentid): ?>
 		<li>
 			<input id="invite_code" class="ps_common" type="text" placeholder="请输入推荐人多米号">
 		</li>
 		<?php else:?>
-		<input id="invite_code" class="ps_common" type="hidden" value="<?=$parent_id ?>" >
+		<li>
+		您的推荐人：<?=$parent->nickname ?>（<?=$user->parentid ?>）
+		</li>
+		<input id="invite_code" class="ps_common" type="hidden" value="<?=$user->parentid ?>" >
 		<?php endif;?>
 	</ul>
 </div>
-<?php if(!$parent_id): ?>
+<?php if(!$user->parentid): ?>
 <div id="sus_info" style="font-size:14px;color:#999;margin-top:5px">
 	注：为了保证益多米全体用户的利益不受损失，根据平台规则，入驻商家建议填写推荐人多米号，如果无推荐人，不填写即可。
 </div>

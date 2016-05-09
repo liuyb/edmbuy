@@ -29,7 +29,7 @@ $(function(){
 	
 	getGoodsList(1, true);
 
-	$resultList.on('click', 'img', function(){
+	$resultList.on('click', '.goods_li', function(){
 		var $this = $(this);
 		var gid = $this.data("gid");
 		window.location.href='/item/'+gid;
@@ -58,8 +58,8 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
-			HTML += "<li class=\"goods_li\"><div class=\"next_goods\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" data-gid="+obj.goods_id+" style='float:right;' data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.goods_img+"')\"/>";
+			HTML += "<li class=\"goods_li\" data-gid="+obj.goods_id+"><div class=\"next_goods\">";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" style='float:right;' data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.goods_img+"')\"/>";
 			HTML += "<p class=\"all_goods_tit\">"+obj.goods_name+"</p><p class=\"all_goods_price\"><span>￥"+obj.shop_price+"</span><b>￥"+obj.market_price+"</b></p></div></li>";
 		}
 	}
