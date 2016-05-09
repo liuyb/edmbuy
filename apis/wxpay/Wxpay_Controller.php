@@ -114,10 +114,12 @@ class Wxpay_Controller extends Controller {
           
           //当前订单是金牌银牌代理更新
           $agent = AgentPayment::getAgentByOrderId($order_id);
-          if($agent && $agent->pid){
-              AgentPayment::callbackAfterAgentPay($order_id, $cUser);
+          if($agent && $agent['pid']){
+              AgentPayment::callbackAfterAgentPay($agent, $cUser);
+              Order::setOrderShippingReceived($order_id);
           }else{
               Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount']);
+              Order::setOrderShippingReceived($order_id);
           }
           //微信通知
           $cUser->notify_pay_succ($order_id);

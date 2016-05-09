@@ -28,7 +28,7 @@ class Distribution_Controller extends MobileController{
             'distribution/my/child/shop/count' => 'getMyChildShopCount',
             'distribution/spread' => 'spread',
             'distribution/shop' => 'shop_info',
-            'distribution/agent' => 'agent_center',
+            /* 'distribution/agent' => 'agent_center', */
             'distribution/agent/paid/succ' => 'agent_pay_succ',
             'distribution/agent/package' => 'show_agent_package',
             /* 'trade/order/package/confirm' => 'confirm_agent_premium', */
@@ -198,7 +198,7 @@ class Distribution_Controller extends MobileController{
         $uid = $GLOBALS['user']->uid;
         $u = Users::load($uid);
         if(!Users::isAgent($u->level)){
-            $response->redirect('/distribution/agent');
+            $response->redirect('/trade/order/agent');
         }
         $level1 = Partner::findFirstLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
         $level2 = Partner::findSecondLevelCount($uid, Partner::LEVEL_TYPE_AGENCY);
@@ -288,7 +288,7 @@ class Distribution_Controller extends MobileController{
      * @param Response $response
      * @throws ViewResponse
      */
-    public function agent_center(Request $request, Response $response){
+    /* public function agent_center(Request $request, Response $response){
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_distribution_agent');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
@@ -307,7 +307,7 @@ class Distribution_Controller extends MobileController{
         $this->v->assign('gold_agent', GOLD_AGENT_GOODS_ID);
         $this->v->assign('silver_agent', SILVER_AGENT_GOODS_ID);
         throw new ViewResponse($this->v);
-    }
+    } */
     
     /**
      * 代理支付成功跳转页面
@@ -341,7 +341,7 @@ class Distribution_Controller extends MobileController{
         global $user;
         $u = Users::load($user->uid);
         if(!Users::isAgent($u->level)){
-            $response->redirect('/distribution/agent');
+            $response->redirect('/trade/order/agent');
         }
         $packages = AgentPayment::getAgentPackage($u->level);
         $this->v->assign('user', $u);

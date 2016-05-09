@@ -88,7 +88,7 @@ $is_agent = Users::isAgent($curuser->level);
 </div>
 <?php if(!$is_agent):?>
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/agent') ?>')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('trade/order/agent') ?>')">
 		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>
 	</div>
 </div>

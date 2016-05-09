@@ -97,7 +97,7 @@ function constructRows(ret, isInit){
 			var obj = result[i];
 			var address = obj.province+" "+obj.city;
 			address = (obj.province || obj.city) ? address : "&nbsp;";
-			var icon = obj.level == 3 ? '/themes/mobiles/img/jinpai1.png' : '/themes/mobiles/img/yinpai2.png';
+			var icon = getLevelIcon(obj.level);
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top new_partner_list\">";
 			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
 			HTML += "<p class=\"new_m_infos_address\">"+address+"</p>";
@@ -105,6 +105,28 @@ function constructRows(ret, isInit){
 		}
 	}
 	F.afterConstructRow(isInit, $resultList, HTML, $showMore);
+}
+
+function getLevelIcon(level){
+	level = level ? parseInt(level) : 0;
+	icon = "";
+	switch (level){
+        case 1 :
+            icon = '/themes/mobiles/img/sha.png';
+        break;
+        case 2 :
+            icon = '/themes/mobiles/img/he.png';
+        break;
+        case 3 :
+            icon = '/themes/mobiles/img/jinpai1.png';
+        break;
+        case 4 :
+            icon = '/themes/mobiles/img/yinpai2.png';
+        break;
+        default :
+            icon = '/themes/mobiles/img/ke.png';
+	}
+	return icon;
 }
 
 function agencyChange(obj, level){

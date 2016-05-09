@@ -12,7 +12,6 @@
 	<p style="font-size:14px;color:#323232;">付款金额：<i style="color:#f65d00;">￥<?=AgentPayment::getAgentPaidMoney($order_type, 2) ?></i></p>
 	<p style="font-size:16px;color:#323232;margin-top:30px;">恭喜你，已成为<?=AgentPayment::getAgentNameByLevel($order_type) ?>！</p>
 	<div class="at_get_combo" onclick="window.location.href='/distribution/agent/package';">立即领取<?=AgentPayment::getAgentPaidMoney($order_type) ?>套餐</div>
-	<div class="agency_my_develop" onclick="window.location.href='/distribution/spread'">我要推广</div>
 </div>
 
 <?php endif;?>

@@ -703,6 +703,14 @@ class Order extends StorageNode{
         }
         return $region;
     }
+    
+    /**
+     * 虚拟商品付款后直接设置成已收货
+     * @param unknown $order_id
+     */
+    static function setOrderShippingReceived($order_id){
+        D()->query("update shp_order_info set shipping_status = ".SS_RECEIVED." where order_id = %d", $order_id);
+    }
 }
 
 /*----- END FILE: class.Order.php -----*/
