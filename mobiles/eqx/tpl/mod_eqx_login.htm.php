@@ -45,10 +45,12 @@ $(function(){
 		$(_this).attr('disabled',true);
 		weui_toast('loading',0,'登录中...');
 		F.post('<?php echo U('eqx/login')?>',{mobile: _mobi, passwd: _pass},function(ret){
-			weui_toast('loading',2);
+			weui_toast_hide('loading');
 			$(_this).attr('disabled',false);
 			if (ret.flag=='SUCC') {
-				weui_toast('finish',1,'登录成功');
+				weui_toast('finish',1,'登录成功',function(){
+					location.href = '<?php echo U('eqx/home')?>';
+				});
 			}
 			else {
 				weui_alert(ret.msg);

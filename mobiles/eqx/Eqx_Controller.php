@@ -22,7 +22,7 @@ class Eqx_Controller extends MobileController {
 		
 		//SEO信息
 		$seo = [
-				'title'   => '一起享',
+				'title'   => '一起享/益多米',
 				'keyword' => '一起享,益多米',
 				'desc'    => '一起享,益多米'
 		];
@@ -52,6 +52,16 @@ class Eqx_Controller extends MobileController {
 		$this->v->set_tplname('mod_eqx_letter');
 		$this->topnav_no = 1;
 		$this->nav_no = 0;
+		
+		//分享信息
+		$share_info = [
+				'title' => '一起共享人脉和项目，就在一起享',
+				'desc'  => '一套人网，多个项目，重复变现',
+				'link'  => U('eqx/intro', 'spm='.Spm::user_spm(), true),
+				'pic'   => U('misc/images/napp_eqx/touch-icon-144.png','',true),
+		];
+		$this->v->assign('share_info', $share_info);
+		
 		throw new ViewResponse($this->v);
 	}
 	
@@ -91,42 +101,56 @@ class Eqx_Controller extends MobileController {
 			$mobile = $request->post('mobile','');
 			$passwd = $request->post('passwd','');
 			
-			$ret = ['flag' => 'FAIL', 'msg'=>''];
-			if (''==$mobile || !Fn::check_mobile($mobile)) {
-				$ret['msg'] = '请填写正确的手机号';
-				$response->sendJSON($ret);
-			}
-			if (''==$passwd) {
-				$ret['msg'] = '密码不能为空';
-				$response->sendJSON($ret);
-			}
-			
+			$ret = ['flag'=>'FAIL', 'msg'=>''];			
 			$ret_code = Users::login_account($mobile, $passwd);
 			if ($ret_code > 0) {
-				$ret = ['flag' => 'SUCC', 'msg'=>'登录成功', 'logined_uid'=>$ret_code];
+				$ret = ['flag'=>'SUCC', 'msg'=>'登录成功', 'logined_uid'=>$ret_code];
 			}
 			else {
-				if ($ret_code==-1) {
-					$ret['msg'] = '手机号非法';
-				}
-				elseif ($ret_code==-2) {
-					$ret['msg'] = '帐号不存在';
-				}
-				elseif ($ret_code==-3) {
-					$ret['msg'] = '密码不对';
-				}
-				else {
-					$ret['msg'] = '登录失败';
+				switch ($ret_code) {
+					case -1:
+						$ret['msg'] = '手机号非法';
+						break;
+					case -2:
+						$ret['msg'] = '密码不能为空';
+						break;
+					case -3:
+						$ret['msg'] = '帐号不存在';
+						break;
+					case -4:
+						$ret['msg'] = '密码不对';
+						break;
+					default:
+						$ret['msg'] = '登录失败';
 				}
 			}
 			$response->sendJSON($ret);
 		}
 		else { //登录页面
+			if (Users::is_account_logined()) {
+				$response->redirect('/eqx/home');
+			}
+			
 			$this->v->set_tplname('mod_eqx_login');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
 			throw new ViewResponse($this->v);
 		}
+	}
+	
+	/**
+	 * 退出会员登录
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function logout(Request $request, Response $response)
+	{
+		if (isset($_SESSION[Users::AC_LOGINED_KEY])) {
+			unset($_SESSION[Users::AC_LOGINED_KEY]);
+		}
+		
+		// Reload current pag
+		$response->redirect('/eqx/login');
 	}
 	
 	/**
@@ -144,31 +168,39 @@ class Eqx_Controller extends MobileController {
 			$ret = ['flag' => 'FAIL', 'msg'=>''];
 			if (1==$step) {
 				$mobile = $request->post('mobile','');
+				$is_verify = $request->post('is_verify',0);
 				$mobile = trim($mobile);
+				$is_verify = intval($is_verify);
 				
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
 					$response->sendJSON($ret);
 				}
+				if (!$is_verify) {
+					$ret['msg'] = '尚未验证';
+					$response->sendJSON($ret);
+				}
 				
 				$_SESSION['eqx_mobi'] = $mobile;
-				$ret = ['flag' => 'SUCC', 'msg'=>''];
+				$ret = ['flag' => 'SUCC', 'msg'=>'手机号正确'];
 				$response->sendJSON($ret);
 			}
 			elseif(2==$step) {
 				$mobile = $request->post('mobile','');
 				$passwd = $request->post('passwd','');
 				$vcode  = $request->post('vcode','');
-				$parent_id  = $request->post('parent_id',0);
+				$parent_id = $request->post('parent_id',0);
 				
 				if (!$GLOBALS['user']->uid) {
 					$ret['msg'] = '请先微信授权登录';
 					$response->sendJSON($ret);
 				}
+				
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
 					$response->sendJSON($ret);
 				}
+				
 				if (''==$vcode) {
 					$ret['msg'] = '验证码不能为空';
 					$response->sendJSON($ret);
@@ -177,6 +209,11 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '验证码不对';
 					$response->sendJSON($ret);
 				}
+				elseif (!UsersmsLog::check_vcode($vcode, $mobile, 'reg_account')) {
+					$ret['msg'] = '验证码无效';
+					$response->sendJSON($ret);
+				}
+				
 				if (''==$passwd) {
 					$ret['msg'] = '密码不能为空';
 					$response->sendJSON($ret);
@@ -186,7 +223,20 @@ class Eqx_Controller extends MobileController {
 					$response->sendJSON($ret);
 				}
 				
+				if (Users::check_mobile_exist($mobile)) {
+					$ret['msg'] = '该手机号已注册，不能重新注册';
+					$response->sendJSON($ret);
+				}
+				
+				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
+					$parent_id = $_SESSION['eqx_referee_uid'];
+				}
+				
 				if (Users::reg_account($mobile, $passwd, $parent_id, $GLOBALS['user']->uid)) {
+					if (isset($_SESSION['eqx_referee_uid'])) unset($_SESSION['eqx_referee_uid']);
+					if (isset($_SESSION['eqx_mobi'])) unset($_SESSION['eqx_mobi']);
+					
+					Users::set_account_logined();
 					$ret = ['flag' => 'SUCC', 'msg'=>'注册成功', 'uid'=>$GLOBALS['user']->uid];
 					$response->sendJSON($ret);
 				}
@@ -197,10 +247,29 @@ class Eqx_Controller extends MobileController {
 				
 			}
 		}
-		else { //登录页面
+		else { //注册页面
+			
+			if (Users::is_account_logined()) {
+				$response->redirect('/eqx/home');
+			}
+			
 			$this->v->set_tplname('mod_eqx_reg');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
+			
+			//Spm信息
+			$referee_uid = 0;
+			$spm = Spm::check_spm();
+			if ($spm && preg_match('/^user\.(\d+)(\.\w+)?$/i', $spm, $matchspm)) {
+				$referee = Users::load($matchspm[1]);
+				if ($referee->is_exist()) {
+					$referee_uid = $referee->uid;
+				}
+			}
+			$this->v->assign('referee_uid', $referee_uid);
+			if ($referee_uid) {
+				$_SESSION['eqx_referee_uid'] = $referee_uid;
+			}
 			
 			if (1==$step) {
 				if (isset($_SESSION['eqx_mobi'])) {
@@ -284,9 +353,17 @@ class Eqx_Controller extends MobileController {
 	
 		}
 		else { //登录页面
+			
+			if (!Users::is_account_logined()) {
+				$response->redirect('/eqx/login');
+			}
+			
 			$this->v->set_tplname('mod_eqx_home');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
+			
+			$is_agent = in_array($GLOBALS['user']->level, [Users::USER_LEVEL_3,Users::USER_LEVEL_4]) ? 1 : 0;
+			$this->v->assign('is_agent', $is_agent);
 			
 			throw new ViewResponse($this->v);
 		}
@@ -307,6 +384,9 @@ class Eqx_Controller extends MobileController {
 			$this->v->set_tplname('mod_eqx_tui');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
+			
+			$usertotal = Users::user_total();
+			$this->v->assign('usertotal', $usertotal);
 			
 			throw new ViewResponse($this->v);
 		}

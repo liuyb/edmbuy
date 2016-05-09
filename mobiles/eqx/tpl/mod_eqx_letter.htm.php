@@ -3,7 +3,11 @@
 <script type="text/html" id="forTopNav">
 <div class="header">
 	介绍信
-	<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span>
+<?php if(Users::is_account_logined()): ?>
+<span class="find_password" onclick="location.href='<?php echo U('eqx/home')?>'">我的</span>
+<?php else:?>
+<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span>
+<?php endif;?>
 </div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>

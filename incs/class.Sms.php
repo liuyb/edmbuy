@@ -56,7 +56,8 @@ class Sms
         $data = [];
         $data['receivePhone'] = $mobile;
         $data['type'] = $type;
-        $data['overdueTime'] = time() + 60 * 1;
+        $data['touchTime']   = simphp_time();
+        $data['overdueTime'] = $data['touchTime'] + 60 * 1;
         $data['verifyCode']  = $code;
         $data['sendContent'] = $content;
         $result = ($xmlObj->State == "1") ? 1 : 0;
@@ -92,7 +93,8 @@ class Sms
     	$data = [];
     	$data['receivePhone'] = $mobile;
     	$data['type'] = $type;
-    	$data['overdueTime'] = time() + 60 * 1;
+      $data['touchTime']   = simphp_time();
+      $data['overdueTime'] = $data['touchTime'] + 60 * 1;
     	$data['verifyCode']  = $vcode;
     	$data['sendContent'] = $content;
     	$result = ($xmlObj->State == "1") ? 1 : 0;

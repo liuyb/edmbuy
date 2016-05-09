@@ -513,9 +513,10 @@ function T($tpl_name) {
  * @param string $uri the input uri
  * @param string|array $vars the input parameters
  * @param boolean $domain whether display domain, default to FALSE
+ * @param boolean $no_spm whether attached spm info auto
  * @return string
  */
-function U($uri = '', $vars = '', $domain = FALSE) {
+function U($uri = '', $vars = '', $domain = FALSE, $no_spm = FALSE) {
   
   // Cache some variables
   static $is_clean, $ctx_path, $site_domain;
@@ -551,7 +552,7 @@ function U($uri = '', $vars = '', $domain = FALSE) {
   }
   
   // spm
-  if (!isset($vars['spm'])) {
+  if (!$no_spm && !isset($vars['spm'])) {
   	$spm = isset($_GET['spm']) ? $_GET['spm'] : '';
   	if (!empty($spm)) {
   		$vars['spm'] = $spm;

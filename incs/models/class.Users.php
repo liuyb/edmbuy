@@ -18,6 +18,12 @@ class Users extends StorageNode {
 	const USER_LEVEL_3 = 3; //金牌代理
 	const USER_LEVEL_4 = 4; //银牌代理
 	
+	/**
+	 * 会员登录状态session key
+	 * @var constant
+	 */
+	const AC_LOGINED_KEY = 'AC_LOGINED';
+	
 	static $level_amount = [
 			0 => 0,             //米客消费金额
 			1 => 98,            //米商消费金额
@@ -219,7 +225,14 @@ class Users extends StorageNode {
 	 * @return boolean
 	 */
 	static function is_account_logined() {
-		return isset($_SESSION['AC_LOGINED']) && $_SESSION['AC_LOGINED'] ? TRUE : FALSE;
+		return isset($_SESSION[self::AC_LOGINED_KEY]) && $_SESSION[self::AC_LOGINED_KEY] ? TRUE : FALSE;
+	}
+	
+	/**
+	 * 设置账号登录状态
+	 */
+	static function set_account_logined() {
+		$_SESSION[self::AC_LOGINED_KEY] = simphp_time();
 	}
 	
 	/**
@@ -239,24 +252,28 @@ class Users extends StorageNode {
 	 * @return int
 	 *   >0: LOGIN OK 
 	 *   -1: 手机号非法
-	 *   -2: 手机帐号不存在
-	 *   -3: 密码不对
+	 *   -2: 密码不能为空
+	 *   -3: 手机帐号不存在
+	 *   -4: 密码不对
 	 */
 	static function login_account($mobile, $passwd) {
 		if (empty($mobile) || !Fn::check_mobile($mobile)) {
 			return -1;
 		}
+		if (empty($passwd)) {
+			return -2;
+		}
 		$exUser = self::load_by_mobile($mobile);
 		if (!$exUser->is_exist()) {
-			return -2;
+			return -3;
 		}
 		$passwd_enc  = gen_salt_password($passwd, $exUser->salt);
 		if ($passwd_enc != $exUser->password) {
-			return -3;
+			return -4;
 		}
 		
 		//set status
-		$_SESSION['AC_LOGINED'] = 1;
+		self::set_account_logined();
 		return $exUser->uid;
 	}
 	
@@ -283,10 +300,13 @@ class Users extends StorageNode {
 		$upUser->mobile   = $mobile;
 		$upUser->password = $passwd_enc;
 		$upUser->salt     = $salt;
-		$upUser->parentnick1 = $parents_info['parent_nick1'];
-		$upUser->parentid1   = $parents_info['parent_id1'];
-		$upUser->parentid2   = $parents_info['parent_id2'];
-		$upUser->parentid3   = $parents_info['parent_id3'];
+		$upUser->parentid   = $parents_info['parent_id'];
+		$upUser->parentnick = $parents_info['parent_nick'];
+		$upUser->parentid2  = $parents_info['parent_id2'];
+		$upUser->parentid3  = $parents_info['parent_id3'];
+		$upUser->regip     = Request::ip();
+		$upUser->regtime   = simphp_time();
+		$upUser->from      = 'reg';
 		$upUser->save(Storage::SAVE_UPDATE);
 		return true;
 	}
@@ -298,7 +318,7 @@ class Users extends StorageNode {
 	 * @return array
 	 */
 	static function get_parent_ids($layer1_puid, $strict_mode = FALSE) {
-		$ret = ['parent_id1'=>0,'parent_nick1'=>'','parent_id2'=>0, 'parent_id3'=>0];
+		$ret = ['parent_id'=>0,'parent_nick'=>'','parent_id2'=>0, 'parent_id3'=>0];
 		if ($layer1_puid) {
 			if (11==strlen($layer1_puid)) {
 				$puser = self::load_by_mobile($layer1_puid);
@@ -307,19 +327,19 @@ class Users extends StorageNode {
 				$puser = self::load($layer1_puid);
 			}
 			if ($puser->is_exist()) {
-				$ret['parent_id1']   = $puser->uid;
-				$ret['parent_nick1'] = $puser->unick;
+				$ret['parent_id']   = $puser->uid;
+				$ret['parent_nick'] = $puser->nickname;
 				if ($strict_mode) { //严格模式需要根据puid往上查
-					if ($puser->parent_id1) {
-						$ret['parent_id2'] = $puser->parent_id1;
-						$puser2 = self::load($puser->parent_id1);
-						if ($puser2->is_exist() && $puser2->parent_id1) {
-							$ret['parent_id2'] = $puser2->parent_id1;
+					if ($puser->parent_id) {
+						$ret['parent_id2'] = $puser->parent_id;
+						$puser2 = self::load($puser->parent_id);
+						if ($puser2->is_exist() && $puser2->parent_id) {
+							$ret['parent_id3'] = $puser2->parent_id;
 						}
 					}
 				}
 				else {
-					$ret['parent_id2'] = $puser->parent_id1;
+					$ret['parent_id2'] = $puser->parent_id;
 					$ret['parent_id3'] = $puser->parent_id2;
 				}
 			}
@@ -865,7 +885,7 @@ class Users extends StorageNode {
 				if ($uParent1->is_exist()) {
 					$extra = [
 						'order_sn'     => $order->order_sn,
-					    'order_id'     => $order_id,
+					  'order_id'     => $order_id,
 						'order_amount' => $order->money_paid.'元',
 						'order_state'  => '支付成功，你可以获得%.2f元佣金'
 					];
@@ -936,6 +956,25 @@ class Users extends StorageNode {
 	           return '米客';
 	    }
 	}
+	
+	/**
+	 * 检查是否已存在唯一手机号
+	 * @param string $mobile
+	 * @return boolean
+	 */
+	static function check_mobile_exist($mobile) {
+		$extu = D()->from(self::table())->where(['mobile'=>$mobile])->select('user_id')->result();
+		return $extu ? : false;
+	}
+	
+	/**
+	 * 统计用户总数(只包括用手机注册部分)
+	 */
+	static function user_total() {
+		$total = D()->query("SELECT COUNT(user_id) AS utotal FROM ".self::table()." WHERE `mobile`<>''")->result();
+		return $total;
+	}
+	
 }
  
 /*----- END FILE: class.Users.php -----*/

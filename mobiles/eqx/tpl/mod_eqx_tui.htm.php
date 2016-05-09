@@ -32,8 +32,8 @@
 	</a>
 </div>
 
-<div class="develop_btn"><div class="login_btn">一起享首页</div></div>
+<div class="develop_btn"><button class="login_btn" onclick="location.href='<?php echo U('eqx/home')?>'">一起享首页</button></div>
 
 <div class="develop_bottom">
-	已有<i class="enter_nums_deve">4658</i>位小伙伴已经入驻一起享，你还在犹豫什么呢？
+	已有<i class="enter_nums_deve"><?=$usertotal?></i>位小伙伴已经入驻一起享，你还在犹豫什么呢？
 </div>

@@ -2,7 +2,7 @@
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
 <script type="text/html" id="forTopNav">
-<div class="header">一起享<a href="javascript:history.back();" class="back">返回</a></div>
+<div class="header">一起享<!--<a href="javascript:history.back();" class="back">返回</a>--></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
@@ -23,14 +23,28 @@
 <div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">ABC850890</i></span></div>
 
 <script>
+var is_agent = parseInt('<?=$is_agent?>');
 function cancel_act(obj) {
 	weui_dialog_close();
 }
 function do_act(obj) {
+	location.href = '<?php echo U('distribution/agent')?>';
 	weui_dialog_close();
 }
 function gotui() {
-	var html = '<p>恭喜您获得一起享优先推广权的机会，前往多米商城购买套餐立即获得推广权</p><div class="home_dlg_btns"><button class="home_btn register_btn" onclick="cancel_act(this)">我再看看</button><button class="home_btn login_btn" onclick="do_act(this)">立即前往</button></div>';
-	weui_dialog(html,'<span style="color:red">提示</span>')
+	if (is_agent) {
+		location.href = '<?php echo U('eqx/tui')?>';
+	}
+	else {
+		var html = '<p>恭喜您获得一起享优先推广权的机会，前往多米商城购买套餐立即获得推广权</p><div class="home_dlg_btns"><button class="home_btn register_btn" onclick="cancel_act(this)">我再看看</button><button class="home_btn login_btn" onclick="do_act(this)">立即前往</button></div>';
+		weui_dialog(html,'<span style="color:red">提示</span>');
+	}
 }
+$(function(){
+	if (!is_agent) {
+		setTimeout(function(){
+			gotui();
+		},500);
+	}
+});
 </script>

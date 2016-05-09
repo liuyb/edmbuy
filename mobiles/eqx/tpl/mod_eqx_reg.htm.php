@@ -52,7 +52,7 @@ $(function () {
 		var $mb = $('#write_phone');
 		var mobi= $mb.val().trim();
 		if (''==mobi) {
-			weui_alert('请填写手机号','','好的');
+			weui_alert('请填写手机号');
 			return;
 		}
 		else if (!/^1\d{10}$/.test(mobi)) {
@@ -65,12 +65,14 @@ $(function () {
 		}
 
 		weui_toast('loading',0,'数据保存中');
-		F.post('<?php echo U('eqx/reg','step=1')?>',{mobile: mobi},function(ret){
+		F.post('<?php echo U('eqx/reg','step=1')?>',{mobile: mobi, is_verify: is_verify},function(ret){
+			weui_toast_hide('loading');
 			if(ret.flag=='SUCC') {
-				location.href = '<?php echo U('eqx/reg','step=2')?>';
+				weui_toast('finish',1,'手机验证通过',function(d){
+					location.href = '<?php echo U('eqx/reg','step=2')?>';
+				});
 			}
 			else {
-				weui_toast('loading',2);
 				weui_alert(ret.msg);
 			}
 		});
@@ -140,7 +142,6 @@ $(function(){
 		ajaxing = 1;
 		refresh();
 		timer = setInterval("refresh();", 1000);
-		//$(".prompt_code p").show();
 		F.post('<?php echo U('eqx/get_vcode')?>',{},function(ret){
 			
 		});
@@ -167,16 +168,18 @@ $(function(){
 			return;
 		}
 		
-		$(this).attr('disabled',true);
 		var _this = this;
+		$(_this).attr('disabled',true);
 		weui_toast('loading',0,'数据保存中...');
 		F.post('<?php echo U('eqx/reg','step=2')?>',{mobile: _mobi, passwd: _pwd,vcode: _code},function(ret){
-			weui_toast('loading',2);
-			$(_this).attr('disabled',false);
+			weui_toast_hide('loading');
 			if (ret.flag=='SUCC') {
-				weui_toast('finish',1,'注册成功！');
+				weui_toast('finish',1,'注册成功！',function(d){
+					location.href = '<?php echo U('eqx/home')?>';
+				});
 			}
 			else {
+				$(_this).attr('disabled',false);
 				weui_alert(ret.msg);
 			}
 		});
