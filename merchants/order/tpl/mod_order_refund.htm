@@ -111,7 +111,7 @@ function costructRowData(result){
 	TR += "<td>"+result.order_sn+"</td><td>"+result.nick_name+"</td><td>"+result.consignee+"</td><td>"+result.refund_time+"</td><td>"+result.refund_money+"</td><td>"+status+"</td>";
 	TR += "<td class=\"order_pero_common\"><a href='javascript:;' class='operation view'><img src=\"/themes/merchants/img/check_order.png\"><br>查看</a>";
 	if(_cur_ordertype == 'wait_check'){
-		TR += "<a href='javascript:;' class='operation accept'><img src=\"/themes/merchants/img/tongyi.png\"><br>同意</a><a href='javascript:;' class='operation refuse'><img src=\"/themes/merchants/img/sc.png\"><br>拒绝</a>";
+		TR += "<a href='javascript:;' class='operation accept'><img src=\"/themes/merchants/img/tongyi.png\"><br>同意</a><a href='javascript:;' class='operation refuse'><img style=\"height:12px;\" src=\"/themes/merchants/img/sc.png\"><br>拒绝</a>";
 	}
 	TR += "</td></tr>";
 	return TR;

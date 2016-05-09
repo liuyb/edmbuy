@@ -48,7 +48,7 @@
 			 
 			<table cellspacing="0" cellpadding="0" id="shop_data_tab">
 				<tr>
-					<td class="data_tab_left">店铺名称：</td><td class="data_tab_right">水果店铺</td>
+					<td class="data_tab_left">店铺名称：</td><td class="data_tab_right">水果店铺<img class="right_img_s" src="../mch/img/renz1.png"></td>
 				</tr>	
 				<tr>
 					<td class="data_tab_left">店铺logo：</td>
