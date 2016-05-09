@@ -22,7 +22,7 @@
 <div class="no_top">
 	<img src="/themes/mobiles/img/no_data.png">
 	<p class="you_refer">您的推荐人：<?=$parent->nickname ?></p>
-	<p class="no_ancegy">您还不是代理商，无法完成入驻</p>
+	<p class="no_ancegy">还不是代理商，无法完成入驻</p>
 	<p class="no_ancegy">5月16好前，需要代理商推荐才能进入</p>
 	<button class="back_member_btn" onclick="window.location.href='/user'">返回会员中心</button>
 </div>

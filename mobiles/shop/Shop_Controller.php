@@ -64,7 +64,7 @@ class Shop_Controller extends MobileController
         $this->nav_no = 3;
         $this->nav_flag1 = "merchant";
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-        $pager = new PagerPull(1, 4);
+        $pager = new PagerPull(1, 3);//pagesize设置成3 实际查询未4
         $recommend_info = Items::findGoodsListByCond($pager, ["merchant_id" => $merchant_id, "shop_recommend" => 1]); //推荐商品
         $goods_category = Shop_Model::getGoodsGroupByCategory($merchant_id);
         $shop_carousel = Shop_Model::getShopCarousel($merchant_id);//得到商家首页的轮播图以及地址

@@ -92,15 +92,16 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- <tr>
+                    <tr>
                         <td class="flow_one_left">店铺招牌：</td>
                         <td class="flow_one_right">
                             <div id="logo_file_sign">
-                                <input type="file" id="file" name="file" class="logo_file_sign_z" onchange="">
+                            	<img id="slogan"  src="<!--{if $shop->slogan}--><!--{$shop->slogan}--><!--{else}-->/themes/merchants/img/3.png<!--{/if}-->" style="margin:51px 231px;">
+                                <input type="file" id="file" name="file" class="logo_file_sign_z" onchange="sloganUpload(event)">
                             </div>
                             <div style="font-size:13px;color:#ccc;margin-top:5px">建议尺寸300*500</div>
                         </td>
-                    </tr> -->
+                    </tr>
                     <tr>
                         <td class="flow_one_left">公众号二维码：</td>
                         <td class="flow_one_right">
@@ -168,6 +169,7 @@
             return false;
         }
         data.shop_qrcode = $("#shop_qrcode").attr("data-real");
+        data.slogan = $("#slogan").attr("data-real"); 
         console.log(data);
         var smtBtn = $(".next_btn");
         smtBtn.css("opacity", 0.2).attr("disabled");
@@ -204,6 +206,16 @@
             var stdpath = ret.stdpath;
             $("#shop_qrcode").attr("src", stdpath);
             $("#shop_qrcode").attr("data-real", stdpath);
+        });
+    }
+    
+    function sloganUpload(e, obj) {
+        $obj = $(obj)
+        var url = '/shop/carousel/upload';
+        image_upload(url, e, obj, function (ret) {
+            var stdpath = ret.stdpath;
+			$("#slogan").attr("src", stdpath);
+			$("#slogan").attr("data-real", stdpath);
         });
     }
 </script>

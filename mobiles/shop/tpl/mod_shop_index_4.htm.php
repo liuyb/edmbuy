@@ -2,23 +2,17 @@
 <?php if ('' !== $errmsg): ?>
 	<div class="error"><?= $errmsg ?></div>
 <?php else: ?>
+
 <div class="store_index_tit">
-	<div class="swipe">
-		<ul id="slider" class="slider">
-				<?php foreach ($shop_carousel as $carousel): ?>
-			<li style="display:block"><a href="<?=$carousel['link_url']?>"><img src="<?=$carousel['carousel_img']?>"></a></li>
-				<?php endforeach;?>
-		</ul>
-		<div id="slinav" class="slinav clearfix">
-			<?php for($i=1;$i<=count($shop_carousel);$i++){ ?>
-			<a href="javascript:void(0);" <?php if($i==1);?> class='active'><?=$i?></a>
-			<?php }?>
-		</div>
-	</div>
+	<?php if ($shop_info->slogan):?>
+	<img src="<?=$shop_info->slogan?>" />
+	<?php else:?>
+	<img src="/themes/mobiles/img/shop_slogan_df.png" />
+	<?php endif;?>
 	<img class="tit_d" src="<?=$shop_info->logo?>">
 </div>
 <script type="text/javascript">
-	var t1;
+	/* var t1;
 	$(function(){
 		var _active = 0, $_ap = $('#slinav a');
 
@@ -42,11 +36,7 @@
 		});
 
 		setTimeout(function(){t1.resize();},500);
-		/*
-		 F.onScrollDownPull(function(){
-		 window.location.reload();
-		 });*/
-	});
+	}); */
 </script>
 
 <div class="store_name_info">
@@ -54,7 +44,8 @@
 	<div class="store_n">
 		<div class="store_ensure">
 			<ul>
-				<li class="flag_img">旗舰店</li><li class="ydm_img">益多米担保</li><li class="auto_img">实名认证</li><li class="direct_img">厂家直供</li>
+				<!-- <li class="flag_img">旗舰店</li><li class="ydm_img">益多米担保</li><li class="auto_img">实名认证</li><li class="direct_img">厂家直供</li> -->
+				<li><img src="/themes/mobiles/img/yiduomi-inc.png" style="width:79px;margin-left:166%;"></li>
 			</ul>
 		</div>
 		<div class="store_sell_things"><?=$shop_info->shop_desc ?></div>
@@ -63,7 +54,7 @@
 
 <div class="store_index_navi">
 	<ul>
-		<a href="javascript:;"><li id="tit_o"><img src="/themes/mobiles/img/qbsp.png"><br>全部商品</li></a>
+		<a href="javascript:showGoodsList('all');"><li id="tit_o"><img src="/themes/mobiles/img/qbsp.png"><br>全部商品</li></a>
 		<a href="<?=U('trade/order/record?status=all') ?>" ><li id="tit_t"><img src="/themes/mobiles/img/ddzx.png"><br>订单中心</li></a>
 		<a href="<?=U('user') ?>"><li id="tit_th"><img src="/themes/mobiles/img/hyzx.png"><br>会员中心</li></a>
 		<span class="line_o" style="position: absolute; left:33%;"></span>
@@ -121,7 +112,7 @@
 	</div>
 	<div class="clear"></div>
 </div>
-<?php if($category['goods'] && count($category['goods']) > 4):?>
+<?php if($category['goods'] && count($category['goods']) > 3):?>
 <div style="text-align:center;height:30px;line-height:40px;" onclick="showGoodsList('shop_cat_id', '<?=$category['cat_id']?>');"><p class="co_title">查看更多商品</p></div>
 <?php endif;?>
 <?php endforeach;?>
@@ -205,7 +196,7 @@
 	});
 
 	function showGoodsList(type, val){
-		window.location.href="/shop/goods?"+type+"="+val;
+		window.location.href="/shop/goods?merchant_id="+merchant_id+"&"+type+"="+val;
 	}
 
 	$(document).on("click",'.two_code',function(){
