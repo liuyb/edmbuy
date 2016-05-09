@@ -41,7 +41,7 @@ class Goods_Controller extends MerchantController
         $this->v->set_tplname('mod_goods_index');
         $this->setPageLeftMenu('goods', 'list');
         $this->v->assign('msite', C('env.site.mobile'));
-        $goods_type = $request->get('type', 0);
+        $goods_type = $request->get('type');
         $this->v->assign('goods_type', $goods_type);
         $response->send($this->v);
     }
@@ -158,7 +158,7 @@ class Goods_Controller extends MerchantController
 
             $goods = new Items();
             $goods->item_id = intval($goods_id);
-            $goods->cat_id = intval($catgory_id);
+            $goods->shop_cat_id = intval($catgory_id);
             $goods->item_name = $goods_name;
             $goods->item_brief = $item_brief;
             $goods->item_number = intval($goods_number);

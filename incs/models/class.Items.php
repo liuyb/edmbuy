@@ -23,6 +23,7 @@ class Items extends StorageNode {
 					'merchant_uid'=> 'merchant_uid',//兼容老数据 INT 格式
 				    'merchant_id' => 'merchant_id',//新增 CHAR格式的 ID
 					'cat_id'      => 'cat_id',
+				    'shop_cat_id'=> 'shop_cat_id',
 					'origin_place_id' => 'origin_place_id',
 					'item_sn'     => 'goods_sn',
 					'item_name'   => 'goods_name',
@@ -78,7 +79,7 @@ class Items extends StorageNode {
 				    'shipping_template' => 'shipping_template',
 				    'fee_or_template' => 'fee_or_template',
 				    'shop_recommend'  => 'shop_recommend',
-				    'goods_flag' => 'goods_flag'
+				    'goods_flag' => 'goods_flag' //标记商品是否类型 默认0位普通商品，其他分 店铺 跟 代理等
 				)
 		);
 	}
@@ -305,21 +306,26 @@ HERESQL;
 	static function findGoodsListByCond(PagerPull $pager, array $options){
 	    $where = '';
 	    if(isset($options['shop_price']) && $options['shop_price']){
-	        $where .= " and g.shop_price = $options[shop_price] ";
+	        $where .= " and g.shop_price = ".doubleval($options['shop_price'])." ";
 	    }
 	    if(isset($options['merchant_id']) && $options['merchant_id']){
-	        $where .= " and g.merchant_id = '$options[merchant_id]' ";
+	        $where .= " and g.merchant_id = '".D()->escape_string($options['merchant_id'])."' ";
 	    }
 	    if(isset($options['shop_recommend']) && $options['shop_recommend']){
-	        $where .= " and g.shop_recommend = $options[shop_recommend] ";
+	        $where .= " and g.shop_recommend = ".intval($options['shop_recommend'])." ";
 	    }
-	    $sql = "select distinct g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
+	    if(isset($options['shop_cat_id']) && $options['shop_cat_id']){
+	        $where .= " and g.shop_cat_id = ".intval($options['shop_cat_id'])." ";
+	    }
+	    $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
                 from shp_goods g 
                 where	g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
                 $where 
                 order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
-	    return self::buildGoodsImg($goods);
+	    $goods = self::buildGoodsImg($goods);
+	    $pager->setResult($goods);
+	    return $goods;
 	}
 	
 	/**
@@ -342,112 +348,6 @@ HERESQL;
 	        $goods = [];
 	    }
 	    return $goods;
-	}
-
-	/**
-	 * 获取在售的推荐商品商品列表
-	 * @param PagerPull $pager
-	 */
-	static function findGoodsRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
-	{
-		if($flat){
-			$limit = 4;
-			$order = "sort_order desc";
-		}
-		if(!$flat&&$type){
-			switch($type){
-				case "new_asc":
-					$order = "add_time asc";
-					break;
-				case "new_desc":
-					$order = "add_time desc";
-					break;
-				case "sale_asc":
-					$order = "shop_price asc";
-					break;
-				case "sale_desc":
-					$order = "paid_order_count desc";
-					break;
-				case "price_asc":
-					$order = "paid_order_count desc";
-					break;
-				case "price_desc":
-					$order = "shop_price asc";
-					break;
-				default :
-					$order = "sort_order desc";
-			}
-			$limit = "{$pager->start},{$pager->realpagesize}";
-		}
-
-		$where = "and shop_recommend = 1 and merchant_id = '%s'";
-		if($search){
-			$where .=" and goods_name like '%{$search}%'";
-		}
-		$sql = "select goods_id,goods_name,shop_price,market_price,goods_brief,
-	            goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 and goods_flag = 0 $where order by {$order} limit {$limit}";
-		$goods = D()->query($sql,$merchant_id)->fetch_array_all();
-		return self::buildGoodsImg($goods);
-	}
-
-	/**
-	 * 拿到推荐分类列表
-	 */
-	static function getCategoryRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
-	{
-		if($flat){
-		  $limit = 4;
-		  $order = "g.sort_order desc";
-	    }
-		if(!$flat&&$type){
-			switch($type){
-				case "new_asc":
-					$order = "g.add_time asc";
-					break;
-				case "new_desc":
-					$order = "g.add_time desc";
-					break;
-				case "sale_asc":
-					$order = "g.shop_price asc";
-					break;
-				case "sale_desc":
-					$order = "g.paid_order_count desc";
-					break;
-				case "price_asc":
-					$order = "g.paid_order_count desc";
-					break;
-				case "price_desc":
-					$order = "g.shop_price asc";
-					break;
-				default :
-					$order = "g.sort_order desc";
-			}
-			$limit = "{$pager->start},{$pager->realpagesize}";
-		}
-		$where ="g.cat_id = c.cat_id and c.merchant_id = '%s' and c.shop_recommend = 1  and g.is_on_sale = 1  and g.is_delete = 0 and g.goods_flag = 0 ";
-		if($search){
-			$where .="and g.goods_name like '%{$search}%'";
-		}
-		$sql = "select c.cat_name, g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img from shp_goods g
-		RIGHT JOIN shp_shop_category c ON c.merchant_id = g.merchant_id
-	    where {$where} order by {$order} limit {$limit}";
-		if($flat){
-			$goods = D()->query($sql, $merchant_id)->fetch_array_all();
-			$cat_list = "";
-			foreach ($goods as $val) {
-				$cat_list .= $val['cat_name'] . ",";
-			}
-			$cat_list = rtrim($cat_list, ",");
-			$list['cat_list'] = $cat_list;
-		}else{
-			$goods = D()->query($sql, $merchant_id)->fetch_array_all();
-		}
-		$goods = self::buildGoodsImg($goods);
-		$list['category'] =$goods;
-		return $list;
-    }
-	static function getWhere(){
-
 	}
 	
 	/**
@@ -478,6 +378,10 @@ HERESQL;
 	 */
 	static function changeGoodsCollect($user_id, $goods_id, $action){
 	     if($action > 0){
+	         $count = D()->query('select count(1) from shp_collect_goods where user_id=%d and goods_id = %d',$user_id,$goods_id)->result();
+	         if($count){
+	             return;
+	         }
 	         $sql = "insert into shp_collect_goods(user_id, goods_id, add_time) values(%d, %d, %d)";
 	         D()->query($sql, $user_id, $goods_id, time());
 	     }else if($action < 0){

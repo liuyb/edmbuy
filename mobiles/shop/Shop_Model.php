@@ -35,31 +35,101 @@ class Shop_Model extends Model
     }
 
     /**
-     * 得到商家推荐的商品
+     * 获取在售的推荐商品商品列表
+     * @param PagerPull $pager
      */
-    static function getShopRecommend($merchant_id,PagerPull $pager=null ,$recoment='',$pages =false ,$search =''){
-        if(!$pages){
-            return Items::findGoodsRcoment($merchant_id);
-        }else{
-          $result =  Items::findGoodsRcoment($merchant_id,$pager,$recoment,false,$search);
-            $pager->setResult($result);
+    static function findGoodsRcoment($merchant_id,PagerPull $pager=null,$type="",$flat = true,$search="")
+    {
+        if($flat){
+            $limit = 4;
+            $order = "sort_order desc";
         }
-
-
+        if(!$flat&&$type){
+            switch($type){
+                case "new_asc":
+                    $order = "add_time asc";
+                    break;
+                case "new_desc":
+                    $order = "add_time desc";
+                    break;
+                case "sale_asc":
+                    $order = "shop_price asc";
+                    break;
+                case "sale_desc":
+                    $order = "paid_order_count desc";
+                    break;
+                case "price_asc":
+                    $order = "paid_order_count desc";
+                    break;
+                case "price_desc":
+                    $order = "shop_price asc";
+                    break;
+                default :
+                    $order = "sort_order desc";
+            }
+            $limit = "{$pager->start},{$pager->realpagesize}";
+        }
+    
+        $where = "and shop_recommend = 1 and merchant_id = '%s'";
+        if($search){
+            $where .=" and goods_name like '%{$search}%'";
+        }
+        $sql = "select goods_id,goods_name,shop_price,market_price,goods_brief,
+        goods_thumb,goods_img from shp_goods where is_on_sale = 1 and is_delete = 0 and goods_flag = 0 $where order by {$order} limit {$limit}";
+        $goods = D()->query($sql,$merchant_id)->fetch_array_all();
+        return self::buildGoodsImg($goods);
     }
 
     /**
-     * 拿到商品分类列表
-     * @param $merchant_id
+     * 拿到推荐分类列表
      */
-    static function getGoodsCategory($merchant_id,PagerPull $pager=null ,$recoment='',$pages=false,$search = ''){
-        if(!$pages){
-            return Items::getCategoryRcoment($merchant_id);
-        }else{
-            $result = Items::getCategoryRcoment($merchant_id,$pager,$recoment,false,$search);
-            $pager->setResult($result['category']);
+    static function getGoodsGroupByCategory($merchant_id, $limit = 4)
+    {
+        $sql = "select cat_id,cat_name from shp_shop_category where merchant_id = '%s' and is_delete = 0 order by sort_order desc ";
+        $cats = D()->query($sql, $merchant_id)->fetch_array_all();
+        foreach ($cats as &$cat){
+            $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
+                    from shp_goods g where g.merchant_id = '%s' and g.shop_cat_id = %d and g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
+                    order by g.sort_order desc,g.add_time desc limit {$limit}";
+            $result = D()->query($sql, $merchant_id, $cat['cat_id'])->fetch_array_all();
+            $cat['goods'] = $result;
         }
-
+        $newcats = [];
+        foreach ($cats as $c){
+            if(count($c['goods']) > 0){
+                array_push($newcats, $c);     
+            }
+        }
+        return $newcats;
+        /* $order = "g.sort_order desc add_time desc";
+        $where =" c.merchant_id = '%s' and g.is_on_sale = 1  and g.is_delete = 0 and g.goods_flag = 0 ";
+        $sql = "select g.*, c.cat_name, c.cat_id from shp_goods g
+        RIGHT JOIN shp_shop_category c ON c.cat_id = g.shop_cat_id
+        where {$where} order by {$order} limit {$limit}";
+        $goods = D()->query($sql, $merchant_id)->fetch_array_all();
+        if(!$goods || count($goods) == 0){
+            return [];
+        }
+        $goods = self::buildGoodsImg($goods);
+        $categorys = [];
+        foreach ($goods as $item){
+            $key = $item['cat_id'].'【~~】'.$item['cat_name'];
+            if(!isset($categorys[$key])){
+                $categorys[$key] = [];
+            }
+            array_push($categorys[$key], $item); 
+        }
+        $result = [];
+        foreach ($categorys as $cat => $items){
+            $val = explode("【~~】", $cat);
+            if(!$val || count($val) < 2){
+                continue;
+            }
+            $cat_id = $val[0];
+            $cat_name = $val[1];
+            array_push($result, array('cat_id' => $cat_id, 'cat_name' => $cat_name, 'items' => $items));
+        }
+        return $result; */
     }
 
     /**
@@ -83,19 +153,26 @@ class Shop_Model extends Model
      * 收藏店铺
      * @param $merchant_id
      */
-    static function collectShop($merchant_id){
-//        insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '');
-        $user_id =$GLOBALS['user']->uid;
-        $sql="select count(1) from shp_collect_shop where user_id = %d AND merchant_id ='%s'";
-        $result = D()->query($sql)->get_one();
-        if($result){
-            return ;
+    static function collectShop($merchant_id, $action){
+        if(!$action){
+            return;
         }
-        $tablename = "`shp_collect_shop`";
-        $insertarr['merchant_id'] = $merchant_id;
-        $insertarr['user_id'] = $user_id;
-        $insertarr['add_time'] = time();
-        D()->insert($tablename,$insertarr);
+        $user_id =$GLOBALS['user']->uid;
+        if($action < 0){
+            $sql = "delete from shp_collect_shop where user_id=%d and merchant_id = '%s'";
+            D()->query($sql,$user_id,$merchant_id);
+        }else{
+            $sql="select count(1) from shp_collect_shop where user_id = %d AND merchant_id ='%s'";
+            $result = D()->query($sql)->result();
+            if($result && $result > 0){
+                return;
+            }
+            $tablename = "`shp_collect_shop`";
+            $insertarr['merchant_id'] = $merchant_id;
+            $insertarr['user_id'] = $user_id;
+            $insertarr['add_time'] = time();
+            D()->insert($tablename,$insertarr);
+        }
     }
 
     /**

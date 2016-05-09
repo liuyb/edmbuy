@@ -8,15 +8,7 @@
 	<?php if(preg_match('/^merchant/', $nav_flag1)):?>
 		<div class="clear"></div>
 	<?php endif;?>
-	<?php if('merchant'==$nav_flag1):?>
-		<div class="store_bottom_comm">
-		<ul>
-			<li><p class="store_up <?php if(isset($isCollect)):?>store_up_on<?php endif;?>">收藏(<?=$num?>)</p></li>
-			<li><p class="two_code">二维码</p></li>
-			<li><p class="shop_cart_store">购物车</p></li>
-		</ul>
-		</div>
-	<?php elseif('cart'!=$nav_flag1):?>
+	<?php if('merchant' != $nav_flag1 && 'cart' != $nav_flag1):?>
     	<div class="agency_bottom">
         	<div class="agency_bottom_menu">
         		<ul>

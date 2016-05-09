@@ -380,10 +380,10 @@
 .back_home{
 	height:30px;
 	line-height:30px;
-	border:0;
+	border:1px solid #f26427;
 	border-radius:4px;
 	background:#f26427;
-	width:80px;
+	width:120px;
 	color:#fff;
 }
 /*2016 4-13 e*/
@@ -524,17 +524,17 @@
   	border: 1px solid #f26427;
   	border-radius: 4px;
   	background: #fff;
-	width:120px;
+	width:130px;
   	color: #f26427;	
-	margin-left:50px;
+	margin-left:40px;
 }
 .get_code{
+	display:none;
 	margin-top:20px;
-	width:180px;
+	width:210px;
 	border:1px solid #eee;
-	display:inline-block;
 	padding:10px;
-	margin-left:100px;	
+	margin-left:490px;	
 }
 .get_code p{
 	font-size:13px;
