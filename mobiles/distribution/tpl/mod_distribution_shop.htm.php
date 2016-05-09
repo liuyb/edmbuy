@@ -46,8 +46,8 @@ $(function(){
 		<li><p class="type_li_font"><?=$all_goods ?></p><p>全部商品</p></li>
 		<li><p class="type_li_font"><?=$all_orders ?></p><p>订单总数</p></li>
 		<li><p class="type_li_font"><?=$sale_amount ?></p><p>总销售额</p></li>
-		<li><p class="type_li_font"><?=$wait_pay_orders ?></p><p>代付款订单</p></li>
-		<li><p class="type_li_font"><?=$wait_ship_orders ?></p><p>代发货订单</p></li>
+		<li><p class="type_li_font"><?=$wait_pay_orders ?></p><p>待付款订单</p></li>
+		<li><p class="type_li_font"><?=$wait_ship_orders ?></p><p>待发货订单</p></li>
 		<li><p class="type_li_font"><?=$wait_return_orders ?></p><p>退换货订单</p></li>
 		<div class="clear"></div>
 		<span class="line1"></span>
