@@ -132,7 +132,7 @@ class Shop_Model extends Model
     {
         $merchant_id = $GLOBALS['user']->uid;
         //先判断用户有没有配置店铺信息
-        $sql = "select tpl.tpl_id  as tpl_id ,tpl.tpl_image as tpl_image,tpl.tpl_name as tpl_name ,tpl.tpl_thumb as tpl_thumb from shp_merchant info  LEFT join shp_shop_template as tpl on  info.shop_template = tpl.tpl_id  where info.merchant_id= '%s'";
+        $sql = "select tpl.tpl_id  as tpl_id ,tpl.tpl_image as tpl_image,tpl.tpl_name as tpl_name ,tpl.tpl_thumb as tpl_thumb from shp_merchant info join shp_shop_template as tpl on  info.shop_template = tpl.tpl_id  where info.merchant_id= '%s'";
         return D()->query($sql, $merchant_id)->get_one();
 
     }
