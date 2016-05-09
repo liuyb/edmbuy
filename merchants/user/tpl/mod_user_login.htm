@@ -45,7 +45,7 @@
                     <input type="submit" name="btnsubmit" id="btnsubmit" class="button loginbtn" value="登 录">
                 </div>
                 <div>
-                    <p><a class="apply_for" href="javascript:;" class="remember_me">没有账号？申请入驻</a></p>
+                    <p><a class="apply_for" href="javascript:openShop();" class="remember_me">没有账号？申请入驻</a></p>
                 </div>
             </form>
         </div>
@@ -80,6 +80,17 @@
             $("p[class='submit']").show();
         }
     })
+    
+    function openShop(){
+    	layer.open({
+            type: 2,
+            title: '申请入驻',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['550px', '480px'],
+            content: '/user/open/shop/guide'
+        });
+    }
 
     $(".remember_me").on("click", function () {
         if ($(this).hasClass("remember_me_on")) {

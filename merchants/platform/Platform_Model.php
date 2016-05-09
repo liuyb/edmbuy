@@ -45,13 +45,13 @@ class Platform_Model extends Model
             $result = D()->update($tablename, $data, ['merchant_id' => $merchant_id]);
         }else{
             $result = D()->insert($tablename, $data);
-            if ($result) {
-                $merchant = new Merchant();
-                $merchant->uid = $merchant_id;
-                $merchant->verify = Merchant::VERIFY_CHECKING;
-                $merchant->merchant_type = Merchant::MERCHANT_TYPE_PERSON;
-                $merchant->save(Storage::SAVE_UPDATE);
-            }
+        }
+        if ($result) {
+            $merchant = new Merchant();
+            $merchant->uid = $merchant_id;
+            $merchant->verify = Merchant::VERIFY_CHECKING;
+            $merchant->merchant_type = Merchant::MERCHANT_TYPE_PERSON;
+            $merchant->save(Storage::SAVE_UPDATE);
         }
         return $result;
     
@@ -77,13 +77,13 @@ class Platform_Model extends Model
             $result = D()->update($tablename, $data, ['merchant_id' => $merchant_id]);
         }else{
             $result = D()->insert($tablename, $data);
-            if ($result) {
-                $merchant = new Merchant();
-                $merchant->uid = $merchant_id;
-                $merchant->verify = Merchant::VERIFY_CHECKING;
-                $merchant->merchant_type = Merchant::MERCHANT_TYPE_EMPLOY;
-                $merchant->save(Storage::SAVE_UPDATE);
-            }
+        }
+        if ($result) {
+            $merchant = new Merchant();
+            $merchant->uid = $merchant_id;
+            $merchant->verify = Merchant::VERIFY_CHECKING;
+            $merchant->merchant_type = Merchant::MERCHANT_TYPE_EMPLOY;
+            $merchant->save(Storage::SAVE_UPDATE);
         }
         return $result;
     }

@@ -20,15 +20,6 @@
 	<span class="p_detail_back" onclick="<?=$back ?>"></span>
     <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
 	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span>
-	<span class="p_detail_more" data-show="0"></span>
-</div>
-<div class="p_detail_menulist">
-	<span class="p_detail_jian"></span>
-	<ul class="p_detail_menu">
-		<li class="p_menu_sy"><a href="/">首页</a></li>
-		<li class="p_menu_hhr"><a href="/partner">米商</a></li>
-		<li class="p_menu_hy"><a href="/user">会员</a></li>
-	</ul>
 </div>
 </script>
 <script id="forMnav" type="text/html">
@@ -215,7 +206,7 @@ $(function(){
 		<div class="clear"></div> 
 	</div>
 	<div class="pro_comment" id="list1">
-		<div class="product_detail"><?=$item->item_desc?></div>
+		<div class="product_detail"><?=$item_desc ?></div>
 	</div>
 	<?php include T('mod_item_item_ext');?>
 </div>

@@ -30,7 +30,7 @@ class Goods_Model extends Model
             $goods_id = $is_insert ? D()->insert_id() : $goods->item_id;
             $other_cat = $request->post('other_cat', []);
             $other_cat = is_array($other_cat) ? $other_cat : [$other_cat];
-            self::handle_other_cat($is_insert, $goods_id, $goods->cat_id, array_unique($other_cat));
+            self::handle_other_cat($is_insert, $goods_id, $goods->shop_cat_id, array_unique($other_cat));
 
             self::handle_goods_gallery($is_insert, $goods_id, $request->post('gallery_list', []));
 
@@ -312,7 +312,7 @@ class Goods_Model extends Model
         $sql = "select count(*) from shp_goods g where merchant_id='%s' and g.is_delete=0 $where ";
         $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "select g.*,c.cat_name from shp_goods g left join shp_shop_category c on g.cat_id = c.cat_id where g.is_delete=0 and g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
+        $sql = "select g.*,c.cat_name from shp_goods g left join shp_shop_category c on g.shop_cat_id = c.cat_id where g.is_delete=0 and g.merchant_id='%s' $where $orderby  limit {$pager->start},{$pager->pagesize}";
         $goods = D()->query($sql, $muid)->fetch_array_all();
         //$goods = self::buildGoodsImg($goods);
         $pager->setResult($goods);

@@ -418,6 +418,7 @@ class Shop_Controller extends MerchantController
             $business_scope = $request->post('business_scope', '');
             //$shop_sign = $request->post('shop_sign');
             $shop_qrcode = $request->post('shop_qrcode', '');
+            $slogan = $request->post('slogan');
             $act = $request->post('act', '');
             if (Shop_Model::isShopNameExists($shop_name)) {
                 $ret = [
@@ -437,6 +438,7 @@ class Shop_Controller extends MerchantController
                 $shop->shop_desc = $shop_desc;
                 $shop->business_scope = $business_scope;
                 $shop->wxqr = $shop_qrcode;
+                $shop->slogan = $slogan;
                 $shop->is_completed = 1;
                 if(!$shop->shop_template){
                     $shop->shop_template = Shop_Model::getDefaultTemplate();

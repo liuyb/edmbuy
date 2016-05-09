@@ -6469,9 +6469,9 @@ td.cash_td2 img {
 .p_detail_carts{
   position: fixed;
   display: inline-block;
-  right: 50px;
+  right: 10px;
   top: 7px;
- 	width: 30px;
+  width: 30px;
   height: 30px;
   background: url(../img/gwc.png) no-repeat;
   background-size: 30px;
@@ -6480,7 +6480,7 @@ td.cash_td2 img {
 .carts_nums_n{  
 	position: fixed;
   display: inline-block;
-  right: 46px;
+  right: 7px;
   top: 3px;
   width: 15px;
   height: 15px;
@@ -6573,7 +6573,7 @@ td.cash_td2 img {
 	margin-bottom:5px;
 }
 .back_member_btn{
-	width:120px;
+	padding: 0px 20px;
 	height:40px;
 	line-height:40px;
 	border:1px solid #f26427;

@@ -12,7 +12,8 @@ class User_Controller extends MerchantController
     public function menu()
     {
         return [
-            'user/home/trade/data'    => 'get_merchant_trade_data'
+            'user/home/trade/data'    => 'get_merchant_trade_data',
+            'user/open/shop/guide' => 'openShopQr'
         ];
     }
     
@@ -395,6 +396,26 @@ class User_Controller extends MerchantController
         }
     }
 
+    /**
+     * 开店入驻二维码
+     * @param Request $request
+     * @param Response $response
+     */
+    public function openShopQr(Request $request, Response $response){
+        $this->setPageView($request, $response, '_page_box');
+        $this->v->set_tplname('mod_user_openshop');
+        $dir = SIMPHP_ROOT . '/a/qrcode/shop/';
+        $locfile = $dir . 'open_shop.png';
+        if (!file_exists($locfile)) {
+            mkdirs($dir);
+            $qrinfo =C('env.site.mobile')."/user/merchant/checkin";
+            include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
+            QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);
+        }
+        $qrcode = str_replace(SIMPHP_ROOT, '', $locfile);
+        $this->v->assign('qrcode', $qrcode);
+        $response->send($this->v);
+    }
 }
 
 

@@ -33,7 +33,8 @@
             <table cellspacing="0" cellpadding="0" id="shop_data_tab">
                 <tr>
                     <td class="data_tab_left">店铺名称：</td>
-                    <td class="data_tab_right"><!--{$shop_info.facename}--><img class="right_img_s" src="/themes/merchants/img/renz1.png"></td>
+                    <td class="data_tab_right"><!--{$shop_info.facename}-->
+                    <!--{if $shop_info.verify eq 2}--><img src="/themes/merchants/img/renz2.png" class="right_img_s"><!--{else}--><img src="/themes/merchants/img/renz1.png" class="right_img_s"><!--{/if}--></td>
                 </tr>
                 <tr>
                     <td class="data_tab_left">店铺logo：</td>
@@ -63,10 +64,10 @@
                     <td class="data_tab_left">店铺描述：</td>
                     <td class="data_tab_right"><!--{$shop_info.shop_desc}--></td>
                 </tr>
-                <!--<tr>-->
-                <!--<td class="data_tab_left">店铺招牌：</td>-->
-                <!--<td class="data_tab_right sign_d"><img src="/themes/merchants/img/01_ba.png"></td>-->
-                <!--</tr>-->
+                <tr>
+					<td class="data_tab_left">店铺招牌：</td>
+					<td class="data_tab_right sign_d"><img src="<!--{$shop_info.slogan}-->"></td>
+				</tr>	
                 <tr>
                     <td class="data_tab_left">公众号二维码：</td>
                     <td class="data_tab_right sign_code"><img src="<!--{$shop_info.wxqr}-->"></td>

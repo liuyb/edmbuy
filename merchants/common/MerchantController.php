@@ -82,7 +82,13 @@ class MerchantController extends Controller {
 	 */
 	public static $interceptWhiteList = [
 	  	'user/login',
-	  	'user/logout',
+  		'user/logout',
+	  	'user/forgetPwd',
+	  	'user/checkSmsCode',
+	  	'user/setpassword',
+	  	'user/getPhoneCodeAjax',
+	  	'user/forgotSavePwd',
+	    'user/open/shop/guide',
 	    'shop/need/pay'
 	];
 	

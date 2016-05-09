@@ -221,7 +221,7 @@ function setCollectNumber(num){
 }
 
 //菜单开启
-$(document.body).on("click", ".p_detail_more", function(){
+/* $(document.body).on("click", ".p_detail_more", function(){
 	if($(this).attr('data-show')=='0') {
 		$(".p_detail_menulist").show();
 		$(this).attr('data-show','1');
@@ -252,5 +252,5 @@ $(document.body).on("click",function(e){
 		$(".p_detail_menulist").hide();
 		$("."+firecls).attr('data-show','0');
 	}
-});
+}); */
 </script>

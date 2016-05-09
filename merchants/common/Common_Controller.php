@@ -37,6 +37,7 @@ class Common_Controller extends Controller {
 	  	'user/setpassword',
 	  	'user/getPhoneCodeAjax',
 	  	'user/forgotSavePwd',
+        'user/open/shop/guide'
   ];
   
   /**

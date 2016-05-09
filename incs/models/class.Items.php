@@ -321,7 +321,7 @@ HERESQL;
                 from shp_goods g 
                 where	g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
                 $where 
-                order by g.sort_order desc, g.paid_order_count desc limit %d,%d";
+                order by g.sort_order desc, g.add_time desc limit %d,%d";
 	    $goods = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
 	    $goods = self::buildGoodsImg($goods);
 	    $pager->setResult($goods);

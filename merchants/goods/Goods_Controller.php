@@ -92,7 +92,7 @@ class Goods_Controller extends MerchantController
             if (!$goods || $goods->merchant_id != $merchant_id) {
                 Fn::show_pcerror_message();
             }
-            $selectedCat = $goods->cat_id;
+            $selectedCat = $goods->shop_cat_id;
             //邮件模板
             if($goods->fee_or_template == Items::SHIPPING_TEMPLATE){
                 $selectedShip = $goods->shipping_template;
