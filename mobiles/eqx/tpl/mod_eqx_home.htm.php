@@ -28,7 +28,7 @@ function cancel_act(obj) {
 	weui_dialog_close();
 }
 function do_act(obj) {
-	location.href = '<?php echo U('distribution/agent')?>';
+	location.href = '<?php echo U('trade/order/agent')?>';
 	weui_dialog_close();
 }
 function gotui() {

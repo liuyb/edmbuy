@@ -45,7 +45,7 @@ return [
       'goods' => array('std' => 'gpic_std', 'thumb' => 'gpic_thumb'),//640*640
       'category' => array('std' => 'category_std', 'thumb' => 'category_std'), //240*240
       'shoplogo' => array('std' => 'shoplogo_std', 'thumb' => 'shoplogo_std'), //320*320
-      'carousel' => array('std' => 'carousel_std', 'thumb' => 'carousel_std') //640*250
+      'carousel' => array('std' => 'carousel_std', 'thumb' => 'carousel_std') //640*320
   ],
   //debug白名单uid
   //'debug_white_list' => ['10001','109','104'],

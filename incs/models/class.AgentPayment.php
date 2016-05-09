@@ -38,7 +38,9 @@ class AgentPayment extends StorageNode {
 	 * @param unknown $user_id
 	 */
 	static function getAgentByOrderId($order_id){
-	    return self::find_one(new AndQuery(new Query('order_id', $order_id), new InQuery('level', [Users::USER_LEVEL_3,Users::USER_LEVEL_4])));
+	    $sql = "select pid,level from shp_agent_payment where order_id = %d and level ".Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4])."";
+	    $result = D()->query($sql, $order_id)->get_one();
+	    return $result;
 	}
 	
 	/**
@@ -85,15 +87,15 @@ class AgentPayment extends StorageNode {
 	 * @param unknown $cUser
 	 */
 	static function callbackAfterAgentPay($agent, $cUser){
-	    if($agent && $agent->pid){
+	    if($agent && $agent['pid']){
 	        $newAgent = new AgentPayment();
-	        $newAgent->pid = $agent->pid;
+	        $newAgent->pid = $agent['pid'];
 	        $newAgent->is_paid = 1;
 	        $newAgent->save(Storage::SAVE_UPDATE);
 	    
 	        $newUser = new Users();
 	        $newUser->uid = $cUser->uid;
-	        $newUser->level = $agent->level;
+	        $newUser->level = $agent['level'];
 	        $newUser->save(Storage::SAVE_UPDATE);
 	    }
 	}

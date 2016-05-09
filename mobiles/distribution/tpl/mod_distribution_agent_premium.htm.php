@@ -8,7 +8,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	确认领取
-    <a href="/distribution/agent" class="back"></a>
+    <a href="/trade/order/agent" class="back"></a>
 </div>
 </script>
 <script>

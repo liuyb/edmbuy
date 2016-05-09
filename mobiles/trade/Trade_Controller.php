@@ -46,7 +46,8 @@ class Trade_Controller extends MobileController {
       'trade/order/topay'    => 'order_topay',
       'trade/order/payok'    => 'order_payok',
       'trade/order/refund'   => 'order_refund',
-      'trade/order/package/confirm' => 'confirm_agent_premium'
+      'trade/order/package/confirm' => 'confirm_agent_premium',
+      'trade/order/agent' => 'agent_center'
     ];
   }
 
@@ -1278,6 +1279,33 @@ class Trade_Controller extends MobileController {
               (new Weixin())->authorizing_base('jsapi_address',$request->url());//base授权获取access token以便于操作收货地址
           }
       }
+  }
+  
+  /**
+   * 代理
+   * @param Request $request
+   * @param Response $response
+   * @throws ViewResponse
+   */
+  public function agent_center(Request $request, Response $response){
+      $this->setPageView($request, $response, '_page_mpa');
+      $this->v->set_tplname('mod_trade_agent');
+      $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+      $this->nav_flag2 = 'agency';
+      $this->topnav_no = 1;
+      global $user;
+      $u = Users::load($user->uid);
+      $is_agent = Users::isAgent($u->level);
+      if($is_agent){
+          $this->nav_no = 0;
+      }
+      $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
+      $this->v->assign('user', $u);
+      $this->v->assign('isAgent', $is_agent);
+      $this->v->assign('agent', $agent);
+      $this->v->assign('gold_agent', GOLD_AGENT_GOODS_ID);
+      $this->v->assign('silver_agent', SILVER_AGENT_GOODS_ID);
+      throw new ViewResponse($this->v);
   }
 }
 
