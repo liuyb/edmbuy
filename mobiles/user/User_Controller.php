@@ -755,7 +755,11 @@ class User_Controller extends MobileController
         $this->v->set_tplname('mod_user_onestep');
         $this->redirectByMerchantStatus($response);
         $_SESSION['step'] = 1;
-        $this->v->assign('user', $GLOBALS['user']);
+        $u = Users::load($GLOBALS['user']->uid);
+        $this->v->assign('user', $u);
+        if($u->parentid){
+            $this->v->assign('parent', Users::load($u->parentid));
+        }
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $response->send($this->v);
     }
@@ -871,8 +875,11 @@ class User_Controller extends MobileController
             $response->redirect("/user/merchant/checkin");
         }
         $this->redirectByMerchantStatus($response);
-        $parent_id  = User_Model::getParentId();
-        $this->v->assign("parent_id",$parent_id);
+        $u = Users::load($GLOBALS['user']->uid);
+        $this->v->assign("user",$u);
+        if($u->parentid){
+            $this->v->assign('parent', Users::load($u->parentid));
+        }
         $response->send($this->v);
     }
 

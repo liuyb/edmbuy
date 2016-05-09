@@ -27,7 +27,7 @@
 	</table>
 </div>
 <div id="how_much">
-	优惠价：<b data-type="699">￥699/年</b><i>市场价：￥899/年</i>
+	优惠价：<b data-type="699">￥999/年</b>
 </div>
 <div id="wx_success_pay">
 	<button id="sus_pay" type="submit">立即开通</button>
