@@ -22,7 +22,7 @@ class Distribution_Model extends Model{
                 on m.merchant_id = mo.merchant_ids
                 left join
                 (select count(1) as cc, merchant_id from shp_collect_shop group by merchant_id) cs
-                on m.merchant_id = cs.merchant_id where m.facename <> '' and m.logo <> '' order by $orderby desc limit %d,%d";
+                on m.merchant_id = cs.merchant_id where m.recommed_flag = 1 order by $orderby desc limit %d,%d";
         $result = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
         foreach ($result as &$mch){
             $recomm_goods = self::findGoodsRcoment($mch['merchant_id'], 4);
