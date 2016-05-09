@@ -111,7 +111,7 @@ a.h_btn{
   display:none;
 }
 .index_img{
-  margin-bottom:43px;
+  /*margin-bottom:43px;*/
 }
 .index_img img{
   max-width:100%;
@@ -131,6 +131,15 @@ a.h_btn{
   margin: 0;
 }
 .index_bottom a { color: #fff; }
+a.index_btm {
+  background:#f26427;
+  line-height:50px;
+  text-align:center;  
+  font-size:15px;
+  color:#fff;
+  width:100%;
+  margin: 0;
+}
 .letter_bg{
   background:url(../img/letter_bg.jpg) no-repeat;
   background-size:100%;
@@ -282,5 +291,5 @@ a.h_btn{
 
 .home_dlg_btns { padding: 0 0 20px;text-align: center; }
 .home_dlg_btns .home_btn { width: 40%; }
-.home_dlg_btns .home_btn.login_btn { margin-left:5%; }
+.home_dlg_btns .home_btn.login_btn { margin-left:10%; }
 

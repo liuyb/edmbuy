@@ -44,10 +44,10 @@ add_js('m.js',['pos'=>'foot']);
 ?>
 <div id="Mtop"></div>
 <nav id="Mhead" class="topnav no-bounce topnav-<?=$topnav_no?>"></nav>
+<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <div id="Mbody" class="useTopNav-<?=$topnav_no?> useNav-<?=$nav_no?>"><div class="pageBg hide">品质生活从这里开始🔛</div>
 <?php if(1==$page_render_mode):?><?php include T($tpl_content);?><?php endif;?>
 </div>
-<nav id="Mnav" class="nav no-bounce nav-<?=$nav_no?>"><?php include T('_nav');?></nav>
 <script id="Mpending" type="text/html"></script>
 <div id="cover-wxtips" class="cover"><img alt="" src="<?=$contextpath;?>themes/mobiles/img/guide.png"/></div>
 <?php include T('inc/popalert');?>

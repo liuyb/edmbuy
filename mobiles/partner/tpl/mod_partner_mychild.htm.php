@@ -5,6 +5,7 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
+<!--[HEAD_CSS]-->
 <style>
 .new_partner_list{
 	height:70px !important;
@@ -28,10 +29,11 @@
 	line-height:20px !important;
 }
 </style>
+<!--[/HEAD_CSS]-->
 <script id="forTopnav" type="text/html">
 <div class="header">
 	我的人脉
-	<a href="javascript:history.back();" class="back"></a>
+	<a href="<?php echo U('user')?>" class="back"></a>
 </div>
 </script>
 <script>

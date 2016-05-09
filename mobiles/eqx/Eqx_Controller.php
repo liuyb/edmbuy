@@ -75,7 +75,7 @@ class Eqx_Controller extends MobileController {
 	{
 		$this->v->set_tplname('mod_eqx_intro');
 		$this->topnav_no = 1;
-		$this->nav_no = 0;
+		$this->nav_no = 1;
 		
 		//分享信息
 		$share_info = [

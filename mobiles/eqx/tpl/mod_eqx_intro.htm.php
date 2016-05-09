@@ -16,5 +16,10 @@
 	<img src="<?=$contextpath?>mobiles/eqx/img/login_2.png">
 	<img src="<?=$contextpath?>mobiles/eqx/img/login_3.png">
 </div>
-
+<!-- 
 <div class="index_bottom"><a href="<?php echo U('eqx/reg')?>" class="blka">入驻一起享</a></div>
+ -->
+<script type="text/html" id="forMNav">
+<a href="<?php echo U('eqx/reg')?>" class="index_btm blka">入驻一起享</a>
+</script>
+<script type="text/javascript">show_mnav($('#forMNav').html());</script>

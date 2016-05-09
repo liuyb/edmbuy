@@ -107,7 +107,7 @@ $is_agent = Users::isAgent($curuser->level);
 
 <div class="member_cen_common" style="margin-bottom:60px;">
 	<div class="in_common_agency del_bottom">
-		<img src="/themes/mobiles/img/yqx.png"><span>一起享</span>
+		<a class="blka" href="<?php echo U('eqx/intro')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
 	</div>
 </div>
 
