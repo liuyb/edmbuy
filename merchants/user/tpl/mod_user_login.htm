@@ -7,7 +7,7 @@
 <div id="login_new_header">
     <div id="header_center">
         <div id="login_header_left">
-            <img src="/themes/merchants/img/logo_new.png">
+            <a href="/"><img src="/themes/merchants/img/logo_new.png"></a>
         </div>
         <div id="login_header_right">
             <ul>
@@ -32,7 +32,7 @@
                 <p class="submit" hidden>
                     <input type="text" name="verifycode" id="verifycode" class="input input-short" value=""
                            maxlength="4">
-                    <img id="verifyimg" src="/vc_mch.php" onclick="" alt="验证码" title="点击刷新验证码">
+                    <img id="verifyimg" src="/vc_mch.php" onclick="this.src='/vc_mch.php?_='+Math.random()*100000;" alt="验证码" title="点击刷新验证码"/>
                 </p>
                 <input type="hidden" name="erro" value="<!--{$erro}-->">
 
