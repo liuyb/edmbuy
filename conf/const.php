@@ -14,7 +14,7 @@ define('SHOP_PLATFORM', 'edmshop');
 
 // ecshop数据库名称
 define('ECDB', 'edmshop');
-define('ECDB_PRE', 'fxs_');
+define('ECDB_PRE', 'shp_');
 
 // 服务器内部对外通信加密key
 define('INTERNAL_ENC_KEY', 'w$zc8kH&cRJ&sVaG74A%DVQuetGpb$6CGYCWLeyz');
