@@ -4,31 +4,31 @@
     <div class="my_account">
         <div class="my_account_left">
             <div class="comm_account_div">
-                <span class="left_name_common" style="letter-spacing:3px;">账户余额：</span>
-                <span class="right_price_common">8888.88元</span>
-                <img src="/themes/merchants/img/wh.png">
+                <span class="left_name_common" style="letter-spacing:3px;">可提现金额：</span>
+                <span class="right_price_common">0.00元</span>
+                <img src="/themes/merchants/img/wh.png" title="账户当前可提现至提现账户的金额">
                 <button class="withdraw_btn" id="withdraw">我要提现</button>
             </div>
             <div class="comm_account_div">
                 <span class="left_name_common">已提现金额：</span>
-                <span class="right_price_common">888.88元</span>
-                <img src="/themes/merchants/img/wh.png">
+                <span class="right_price_common">0.00元</span>
+                <img src="/themes/merchants/img/wh.png" title="申请提现后，已打入您提现账户的总金额">
             </div>
             <div class="comm_account_div">
-                <span class="left_name_common" style="letter-spacing:3px;">累计收入：</span>
-                <span class="right_price_common">88.88元</span>
-                <img src="/themes/merchants/img/wh.png">
+                <span class="left_name_common" style="letter-spacing:3px;">销售总额：</span>
+                <span class="right_price_common"><!--{$totalSales}-->元</span>
+                <img src="/themes/merchants/img/wh.png" title="单位时间内，支付成功的订单交易收入总和">
             </div>
             <div class="comm_account_div">
                 <span class="left_name_common">未生效收入：</span>
-                <span class="right_price_common">888.88元</span>
-                <img src="/themes/merchants/img/wh.png">
+                <span class="right_price_common">0.00元</span>
+                <img src="/themes/merchants/img/wh.png" title="等待买家确认收货达成结算的收入">
             </div>
-            <div class="comm_account_div">
+            <!-- <div class="comm_account_div">
                 <span class="left_name_common"><i style="letter-spacing:9px;">纯收入</i>：</span>
                 <span class="right_price_common">8.88元</span>
                 <img src="/themes/merchants/img/wh.png">
-            </div>
+            </div> -->
         </div>
 
         <div class="my_account_right">
@@ -97,6 +97,7 @@
         }
     }
         $("#withdraw").click(function(){
-            window.location="/account/merchant/withdraw";
+            //window.location="/account/merchant/withdraw";
+            showMsg('暂不可提现');
         });
 </script>

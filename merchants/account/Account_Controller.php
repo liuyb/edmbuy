@@ -37,9 +37,10 @@ class Account_Controller extends MerchantController
         //查出店铺所有信息
         //查询用户绑定的银行卡信息
         $bank_list = Account_Model::getBindCard();
-//        $card_no =substr($bank_list['bank_no'],-4);
-//        $bank_list['bank_no'] = $card_no;
+        $muid = $GLOBALS['user']->uid;
+        $totalSales = Merchant::getOrderSalesMoney($muid);
         $this->v->assign('bank_list', $bank_list);
+        $this->v->assign('totalSales', $totalSales);
         $response->send($this->v);
     }
 

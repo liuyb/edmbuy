@@ -6136,6 +6136,7 @@ td.cash_td2 img {
 /**loading begin add by jason*/
 .no_more_data {
 	text-align: center;
+	background: #f1f1f1;
 }
 .no_more_data img {
 	margin-top: 20px;
