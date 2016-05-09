@@ -12,18 +12,18 @@ use OSS\Core\OssException;
  */
 class OssCommon
 {
-	  
     //Develop environment
     const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
     const endpoint_domain = 'edmdev.oss-cn-hangzhou.aliyuncs.com';
     const endpoint_domain_image = 'edmdev.img-cn-hangzhou.aliyuncs.com';
     const endpoint        = 'oss-cn-hangzhou.aliyuncs.com';
     const bucket          = 'edmdev';
-	  
-    //Production environment
+    
     /*
+    //Production environment    
     const endpoint_foreign= 'oss-cn-hangzhou.aliyuncs.com';
     const endpoint_domain = 'oss.edmbuy.com';
+    const endpoint_domain_image = 'img.edmbuy.com';
     const endpoint        = 'vpc100-oss-cn-hangzhou.aliyuncs.com';
     //const endpoint        = 'oss-cn-hangzhou-internal.aliyuncs.com';
     const bucket          = 'edmbuy';
