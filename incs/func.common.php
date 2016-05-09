@@ -741,7 +741,7 @@ wxData.shareinfo.refresh = function(){
     link: wxData.shareinfo.link,
     imgUrl: wxData.shareinfo.pic,
     success: function (res) {
-        alert('谢谢分享！');
+        weui_alert('谢谢分享！');
         wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
@@ -754,7 +754,7 @@ wxData.shareinfo.refresh = function(){
     link: wxData.shareinfo.link,
     imgUrl: wxData.shareinfo.pic,
     success: function (res) {
-      alert('谢谢分享！');
+      weui_alert('谢谢分享！');
       wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
@@ -768,7 +768,7 @@ wxData.shareinfo.refresh = function(){
     link: wxData.shareinfo.link,
     imgUrl: wxData.shareinfo.pic,
     success: function (res) {
-      alert('谢谢分享！');
+      weui_alert('谢谢分享！');
       wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {
@@ -782,7 +782,7 @@ wxData.shareinfo.refresh = function(){
     link: wxData.shareinfo.link,
     imgUrl: wxData.shareinfo.pic,
     success: function (res) {
-      alert('谢谢分享！');
+      weui_alert('谢谢分享！');
       wxData.shareinfo.hide_cover();
     },
     cancel: function (res) {

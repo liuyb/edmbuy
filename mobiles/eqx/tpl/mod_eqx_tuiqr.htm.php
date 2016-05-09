@@ -2,7 +2,11 @@
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
 <script type="text/html" id="forTopNav">
-<div class="header">推广二维码<a href="javascript:history.back();" class="back">返回</a></div>
+<div class="header">推广二维码
+<?php if(Users::is_account_logined()):?>
+<a href="javascript:history.back();" class="back">返回</a>
+<?php endif;?>
+</div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
@@ -13,7 +17,10 @@
 </div>
 
 <div class="code_center">
-	<img src="<?=$contextpath?>mobiles/eqx/img/top1.png">
+<!-- 
+	<img src="<?=$contextpath?>mobiles/eqx/img/top1.png" alt="QR Code">
+ -->
+	<img src="<?=$qrcode_tui?>" alt="QR Code"/>
 </div>
 
 <script>

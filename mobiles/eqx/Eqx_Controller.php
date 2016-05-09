@@ -37,7 +37,7 @@ class Eqx_Controller extends MobileController {
 	public function menu()
 	{
 		return [
-				'eqx/%d' => 'intro'
+				
 		];
 	}
 	
@@ -66,6 +66,16 @@ class Eqx_Controller extends MobileController {
 		$this->v->set_tplname('mod_eqx_intro');
 		$this->topnav_no = 1;
 		$this->nav_no = 0;
+		
+		//分享信息
+		$share_info = [
+				'title' => '一起共享人脉和项目，就在一起享',
+				'desc'  => '一套人网，多个项目，重复变现',
+				'link'  => U('eqx/intro', 'spm='.Spm::user_spm(), true),
+				'pic'   => U('misc/images/napp_eqx/touch-icon-144.png','',true),
+		];
+		$this->v->assign('share_info', $share_info);
+		
 		throw new ViewResponse($this->v);
 	}
 	
@@ -311,12 +321,29 @@ class Eqx_Controller extends MobileController {
 	public function tuiqr(Request $request, Response $response)
 	{
 		if ($request->is_post()) {
-	
+				
 		}
 		else { //登录页面
 			$this->v->set_tplname('mod_eqx_tuiqr');
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
+			
+			//分享信息
+			$share_info = [
+					'title' => '一起共享人脉和项目，就在一起享',
+					'desc'  => '一套人网，多个项目，重复变现',
+					'link'  => U('eqx/intro', 'spm='.Spm::user_spm(), true),
+					'pic'   => U('misc/images/napp_eqx/touch-icon-144.png','',true),
+			];
+			$this->v->assign('share_info', $share_info);
+			
+			$qrcode  = Users::eqx_tuiqr();
+			$baseimg = SIMPHP_ROOT . '/mobiles/eqx/img/top1.png';
+			$qrcode_tui = $qrcode.'tui.jpg';
+			if (!file_exists(SIMPHP_ROOT.$qrcode_tui)) {
+				File::add_watermark($baseimg, SIMPHP_ROOT.$qrcode_tui, SIMPHP_ROOT.$qrcode, ['x'=>191,'y'=>475,'w'=>258,'h'=>258], 100, '#FFFFFF', ['png2jpg'=>true]);
+			}
+			$this->v->assign('qrcode_tui', $qrcode_tui);
 			
 			throw new ViewResponse($this->v);
 		}
