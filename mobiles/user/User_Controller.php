@@ -70,7 +70,7 @@ class User_Controller extends MobileController
     {
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-    	//Users::required_account_login();
+    	Users::required_account_login();
         $this->v->set_tplname('mod_user_index');
         //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
         Users::check_detail_info();
@@ -414,8 +414,8 @@ class User_Controller extends MobileController
                     $parent_nick = $pUser->nickname;
                 }
             }
-            $upUser->parentid = $parent_id;
-            $upUser->parentnick = $parent_nick;
+            $upUser->parentid0 = $parent_id;
+            //$upUser->parentnick = $parent_nick;
 
             $upUser->save(Storage::SAVE_INSERT_IGNORE); //先快速保存insert
             $upUser = new Users($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
@@ -454,7 +454,7 @@ class User_Controller extends MobileController
             $loginedUser = $upUser;
 
             //微信模板消息通知
-            if ($parent_id) {
+            if (0&&$parent_id) {
                 $loginedUser = Users::load($upUser->id, true);
                 $loginedUser->notify_reg_succ();
             }

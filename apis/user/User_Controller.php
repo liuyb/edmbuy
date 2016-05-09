@@ -210,7 +210,8 @@ class User_Controller extends Controller {
 			'4004' => '\'logo\' invalid',
 			'5000' => 'db op fail',
 		]);
-	
+		throw new ApiException(1401); //屏蔽该接口
+		
 		$app_userid           = intval($request->app_userid);
 		$app_mobile           = $request->app_mobile;
 		$app_regtime          = $request->app_regtime;
