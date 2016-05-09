@@ -48,7 +48,7 @@ $(function(){
 <?php foreach ($orders AS $ord): 
     $count = 0?>
 <div class="order_list">
-	<div class="order_title">
+	<div class="order_title" <?php if($ord['merchant_id']):?>onclick="window.location.href='<?=U('/shop/'.$ord['merchant_id']) ?>'"<?php endif;?>>
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
 		<span class="title_name"><?=$ord['facename'] ?></span>
 		<span class="tit_type"><?=$ord['status_txt'] ?></span>

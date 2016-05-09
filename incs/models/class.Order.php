@@ -482,7 +482,7 @@ class Order extends StorageNode{
     		$where .= self::build_order_status_sql(CS_FINISHED, 'od');
     	}
     	
-    	$sql = "SELECT od.*,mc.facename FROM {$ectb_order} od left join {$ectb_merchant} mc on od.merchant_ids = mc.merchant_id 
+    	$sql = "SELECT od.*,mc.facename,mc.merchant_id FROM {$ectb_order} od left join {$ectb_merchant} mc on od.merchant_ids = mc.merchant_id 
     	        WHERE od.`user_id`=%d and od.is_separate = 0 and is_delete = 0 $where ORDER BY od.`order_id` DESC LIMIT %d,%d";
     	$orders = D()->raw_query($sql, $user_id, $start, $limit)->fetch_array_all();
     	if (!empty($orders)) {

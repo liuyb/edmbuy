@@ -34,7 +34,7 @@ $(function(){
 	
 	getGoodsList(1, true);
 
-	$resultList.on('click', 'button', function(){
+	$resultList.on('click', '.goods_li', function(){
 		var $this = $(this);
 		var id = $this.data("id");
 		window.location.href='/item/'+id;
