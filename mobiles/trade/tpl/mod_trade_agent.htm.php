@@ -114,7 +114,6 @@ function clearAgent(){
 
 <script>
 $(function(){
-	$("#Mbody").css("background", "#f1f1f1"); 
 	show_mnav($('#forMnav').html(), -1);
 	
 	$(document).on('click', '.btn-wxpay', function(){

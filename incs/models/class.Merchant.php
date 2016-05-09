@@ -165,7 +165,7 @@ class Merchant extends StorageNode {
 	 * @return mixed
 	 */
 	static function getOrderSalesMoney($muid){
-	    $sql = "SELECT ifnull(sum(money_paid), 0) as salesTotal from shp_order_info where merchant_ids='%s' and is_separate=0 and is_delete=0 and pay_status = ".PS_PAYED."";
+	    $sql = "SELECT ifnull(sum(money_paid), 0)+ifnull(sum(order_amount), 0) as salesTotal from shp_order_info where merchant_ids='%s' and is_separate=0 and is_delete=0 and pay_status = ".PS_PAYED."";
 	    return D()->query($sql, $muid)->result();
 	}
 	

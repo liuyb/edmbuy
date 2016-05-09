@@ -17,8 +17,9 @@
     $globalConfig = include( "config.php" );
     $imgSavePathConfig = $globalConfig[ 'imageSavePath' ];
     
+    $siteroot = substr(dirname(__FILE__), 0, -29);
     //阿里云OSS库
-    require SIMPHP_INCS . '/libs/aliyun_oss/OssCommon.php';
+    require $siteroot . '/incs/libs/aliyun_oss/OssCommon.php';
     
     use OSS\OssClient;
 
@@ -54,7 +55,6 @@
 
     //$config[ 'savePath' ] = $path . '/';
     //$siteroot = str_replace('/misc/editor/ueditor/php', '', dirname(__FILE__));
-    $siteroot = substr(dirname(__FILE__), 0, -29);
     $config[ 'savePath' ] = $siteroot.'/a/'.$path . '/'; //Modified by Gavin
 
     //生成上传实例对象并完成上传
@@ -73,8 +73,18 @@
      */
     $info = $up->getFileInfo();
     $info['url'] = str_replace($siteroot, '', $info['url']);
-    print_r($info);
-
+    //Ueditor 图片上传至阿里云
+    $ossClient = OssCommon::getOssClient();
+    $bucket    = OssCommon::getBucketName();
+    $YM = date('Ym');
+    $filecode = date('d_His') . '_' . rand(1, 99999999) . $info['type'];
+    $remote_file = 'goods/' . $YM . '/' . $filecode;
+    $oripath = $siteroot . $info['url'];
+    $ossClient->uploadFile($bucket, $remote_file, $oripath);
+    $oss_path = OssCommon::getOssImgPath($remote_file);
+    unlink($oripath);
+    $stardardpath = $oss_path.'@!gpic_std.jpg';
+    $info['url'] = $stardardpath;
     /**
      * 向浏览器返回数据json数据
      * {

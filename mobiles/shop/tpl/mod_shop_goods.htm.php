@@ -11,7 +11,7 @@ show_topnav($('#forTopnav').html());
 </script>
 
 <div class="all_goods_common" style="padding: 0" id="list1">
-	<div class="newest_goods" style="padding: 0">
+	<div class="newest_goods" style="padding: 0;margin-top:5px;">
 		<ul id="resultList">
 		</ul>
 		<div class="clear"></div>
@@ -30,7 +30,6 @@ $(function(){
 	$showMore = $("#showMore");
 	$resultList = $("#resultList");
 	$mbody = $("#Mbody");
-	$mbody.css("background", "#f1f1f1");
 	
 	getGoodsList(1, true);
 

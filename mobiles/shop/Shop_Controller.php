@@ -70,14 +70,14 @@ class Shop_Controller extends MobileController
         $shop_carousel = Shop_Model::getShopCarousel($merchant_id);//得到商家首页的轮播图以及地址
         //收藏次数
         $share_info = [
-            'title' => '收藏了很久的特价商城，各种超划算！',
-            'desc' => '便宜又实惠，品质保证，生活中的省钱利器！',
-            'link' => U('', 'spm=' . Spm::user_spm(), true),
-            'pic' => U('misc/images/napp/touch-icon-144.png', '', true),
+            'title' => $merchant->facename,
+            'desc' => '发现一家非常有趣又好玩的多米店！',
+            'link' => U('shop/'.$merchant_id, 'spm=' . Spm::user_spm(), true),
+            'pic' => U($merchant->logo?$merchant->logo : 'misc/images/napp/touch-icon-144.png', '', true),
         ];
+        $this->v->assign('share_info', $share_info);
         $this->v->assign("recommend_info", $recommend_info);
         $this->v->assign("goods_category", $goods_category);
-        $this->v->assign('share_info', $share_info);
         $this->v->assign('shop_carousel', $shop_carousel);
 
         $this->v->assign('merchant_id',$merchant_id);
@@ -121,6 +121,16 @@ class Shop_Controller extends MobileController
         $this->v->assign('shop_recommend',$shop_recommend);
         $this->v->assign('shop_cat_id',$shop_cat_id);
         $this->v->assign('name',$name);
+        $merchant = Merchant::load($merchant_id);
+        //收藏次数
+        $img = $merchant->logo?$merchant->logo : 'misc/images/napp/touch-icon-144.png';
+        $share_info = [
+            'title' => "$merchant->facename:全部商品",
+            'desc' => '发现一家非常有趣又好玩的多米店！',
+            'link' => U("shop/goods?merchant_id=$merchant_id&shop_cat_id=$shop_cat_id&name=$name", 'spm=' . Spm::user_spm(), true),
+            'pic' => U($img, '', true),
+        ];
+        $this->v->assign('share_info', $share_info);
         $response->send($this->v);
     }
     
