@@ -54,7 +54,7 @@
 
 <div class="store_index_navi">
 	<ul>
-		<a href="javascript:showGoodsList('all');"><li id="tit_o"><img src="/themes/mobiles/img/qbsp.png"><br>全部商品</li></a>
+		<a href="javascript:showGoodsList('all', '');"><li id="tit_o"><img src="/themes/mobiles/img/qbsp.png"><br>全部商品</li></a>
 		<a href="<?=U('trade/order/record?status=all') ?>" ><li id="tit_t"><img src="/themes/mobiles/img/ddzx.png"><br>订单中心</li></a>
 		<a href="<?=U('user') ?>"><li id="tit_th"><img src="/themes/mobiles/img/hyzx.png"><br>会员中心</li></a>
 		<span class="line_o" style="position: absolute; left:33%;"></span>
@@ -64,7 +64,7 @@
 </div>
 
 <div class="store_list_co">
-	<div style="padding:10px;"><p class="co_title">店长推荐</p><p class="co_see_more"><a href="javascript:;" onclick="showGoodsList('shop_recommend', 1)">查看更多</a></p></div>
+	<div style="padding:10px;"><p class="co_title">店长推荐</p><p class="co_see_more"><a href="javascript:;" onclick="showGoodsList('shop_recommend', 1, '店铺推荐商品')">查看更多</a></p></div>
 	<div class="buy_store_list">
 		<?php if(!empty($recommend_info)): ?>
 		<ul>
@@ -92,7 +92,8 @@
 <?php if(!empty($goods_category)): ?>
 <?php foreach ($goods_category as $category): ?>
 <div class="store_list_co" style="margin-top:15px;border-bottom:1px solid #ddd;">
-	<div style="padding:10px;"><p class="co_title"><b><?=$category['cat_name']?></b></p></div>
+	<div style="padding:10px;"><p class="co_title"><b><?=$category['cat_name']?></b></p>
+	<p class="co_see_more"><a href="javascript:showGoodsList('shop_cat_id', '<?=$category['cat_id']?>', '<?=$category['cat_name']?>');">查看更多</a></p></div>
 	<div class="buy_store_list">
 		<?php if($category['goods'] && count($category['goods']) > 0): ?>
 		<ul>
@@ -112,9 +113,6 @@
 	</div>
 	<div class="clear"></div>
 </div>
-<?php if($category['goods'] && count($category['goods']) > 3):?>
-<div style="text-align:center;height:30px;line-height:40px;" onclick="showGoodsList('shop_cat_id', '<?=$category['cat_id']?>');"><p class="co_title">查看更多商品</p></div>
-<?php endif;?>
 <?php endforeach;?>
 <?php endif; ?>
 
@@ -195,8 +193,15 @@
 		});
 	});
 
-	function showGoodsList(type, val){
-		window.location.href="/shop/goods?merchant_id="+merchant_id+"&"+type+"="+val;
+	function showGoodsList(type, val, name){
+		var cond = "";
+		if(val){
+			cond += "&"+type+"="+val;
+		}
+		if(name){
+			cond += "&name="+name;
+		}
+		window.location.href="/shop/goods?merchant_id="+merchant_id+""+cond+"";
 	}
 
 	$(document).on("click",'.two_code',function(){

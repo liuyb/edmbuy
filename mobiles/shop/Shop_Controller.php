@@ -116,9 +116,11 @@ class Shop_Controller extends MobileController
         $merchant_id = $request ->get("merchant_id","");
         $shop_recommend = $request ->get("shop_recommend","");
         $shop_cat_id = $request ->get("shop_cat_id","");
+        $name = $request->get('name');
         $this->v->assign('merchant_id',$merchant_id);
         $this->v->assign('shop_recommend',$shop_recommend);
         $this->v->assign('shop_cat_id',$shop_cat_id);
+        $this->v->assign('name',$name);
         $response->send($this->v);
     }
     

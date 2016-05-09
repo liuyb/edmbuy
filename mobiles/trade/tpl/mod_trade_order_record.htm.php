@@ -4,7 +4,7 @@
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
 <?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
-    <li class="noon"><a href="<?php echo U('user')?>" class="btna back">&nbsp;</a></li>
+    <li class="noon"><a href="javascript:history.back();" class="btna back">&nbsp;</a></li>
 <?php endif;?>
 		<li <?php if($status == '' || $status == 'all'): ?> class="header_order_on" <?php endif;?> data_status="all">全部</li>
 		<li <?php if($status == 'wait_pay'): ?> class="header_order_on" <?php endif;?> data_status="wait_pay">待付款</li>

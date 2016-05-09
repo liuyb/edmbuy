@@ -1,4 +1,5 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
+<?php if(isset($parent) && $parent && Users::isAgent($parent->level)):?>
 <div id="sus_flow">
     <ul>
         <li class="li_co bottom_f">商家注册</li>
@@ -11,19 +12,20 @@
     </ul>
     <div class="clear"></div>
 </div>
+<?php endif;?>
 <?php if(!$user->parentid):?>
 <div class="no_top">
 	<img src="/themes/mobiles/img/no_data.png">
-	<p class="no_ancegy">您没有推荐人，无法完成入驻</p>
-	<p class="no_ancegy">5月16好前，需要代理商推荐才能进入</p>
+	<p class="no_ancegy">您还没有推荐人，无法完成入驻</p>
+	<p class="no_ancegy">5月16号前，需要代理商推荐才能进入</p>
 	<button class="back_member_btn" onclick="window.location.href='/user'">返回会员中心</button>
 </div>
 <?php elseif(isset($parent) && !Users::isAgent($parent->level)):?>
 <div class="no_top">
 	<img src="/themes/mobiles/img/no_data.png">
 	<p class="you_refer">您的推荐人：<?=$parent->nickname ?></p>
-	<p class="no_ancegy">还不是代理商，无法完成入驻</p>
-	<p class="no_ancegy">5月16好前，需要代理商推荐才能进入</p>
+	<p class="no_ancegy">他还不是代理商，无法完成入驻</p>
+	<p class="no_ancegy">5月16号前，需要代理商推荐才能进入</p>
 	<button class="back_member_btn" onclick="window.location.href='/user'">返回会员中心</button>
 </div>
 <?php else:?>

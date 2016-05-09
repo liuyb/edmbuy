@@ -2,7 +2,7 @@
 
 <script id="forTopnav" type="text/html">
 <div class="header">
-	商品列表
+	<?=($name ? $name : "商品列表") ?>
 	<a href="javascript:history.back();" class="back"></a>
 </div>
 </script>
