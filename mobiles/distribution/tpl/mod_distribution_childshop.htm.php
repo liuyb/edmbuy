@@ -34,6 +34,7 @@ $(function(){
 	$showMore = $("#showMore");
 	$resultList = $("#resultList");
 	$mbody = $("#Mbody");
+	$mbody.css("background", "#f1f1f1");
 	
 	getShopList(1, 1, true);
 

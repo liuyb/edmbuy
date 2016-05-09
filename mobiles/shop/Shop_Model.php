@@ -88,11 +88,12 @@ class Shop_Model extends Model
         $sql = "select cat_id,cat_name from shp_shop_category where merchant_id = '%s' and is_delete = 0 order by sort_order desc ";
         $cats = D()->query($sql, $merchant_id)->fetch_array_all();
         foreach ($cats as &$cat){
-            $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img
+            $sql = "select g.goods_id,g.goods_name,g.goods_brief, g.shop_price,g.market_price,g.goods_img 
                     from shp_goods g where g.merchant_id = '%s' and g.shop_cat_id = %d and g.is_on_sale = 1 and g.is_delete = 0 and g.goods_flag = 0 
                     order by g.sort_order desc,g.add_time desc limit {$limit}";
-            $result = D()->query($sql, $merchant_id, $cat['cat_id'])->fetch_array_all();
-            $cat['goods'] = $result;
+            $goods = D()->query($sql, $merchant_id, $cat['cat_id'])->fetch_array_all();
+            $goods = Items::buildGoodsImg($goods);
+            $cat['goods'] = $goods;
         }
         $newcats = [];
         foreach ($cats as $c){

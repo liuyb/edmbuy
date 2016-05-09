@@ -44,9 +44,6 @@ show_topnav($('#forTopnav').html());
     					<p class="tea_info_title" style="text-align:left;"><?=$good['goods_name'] ?>  </p>
     					<!-- <p class="tea_info_price" style="text-align:left;"><span></span></p>  -->
     				</td>
-    				<?php if($count != $pos):?>
-    				<td class="small_img"><img src="/themes/mobiles/img/jia1.png"></td>
-    				<?php endif;?>
     				
     				<?php endforeach;?>
     			</tr>

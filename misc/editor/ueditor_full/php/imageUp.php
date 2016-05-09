@@ -16,6 +16,11 @@
     $path = htmlspecialchars($_POST['dir'], ENT_QUOTES);
     $globalConfig = include( "config.php" );
     $imgSavePathConfig = $globalConfig[ 'imageSavePath' ];
+    
+    //阿里云OSS库
+    require SIMPHP_INCS . '/libs/aliyun_oss/OssCommon.php';
+    
+    use OSS\OssClient;
 
     //获取存储目录
     if ( isset( $_GET[ 'fetch' ] ) ) {
@@ -68,6 +73,7 @@
      */
     $info = $up->getFileInfo();
     $info['url'] = str_replace($siteroot, '', $info['url']);
+    print_r($info);
 
     /**
      * 向浏览器返回数据json数据
