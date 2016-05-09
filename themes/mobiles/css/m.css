@@ -4635,30 +4635,28 @@ td.cash_td2 img {
 	text-align:center;
 }
 #pay_top{
-  height:136px;
-  background:#f1f1f1;
-  text-align:center;
+  	background: #f1f1f1;
+  	text-align: center;	
 }
 #pay_top img{
-  width:120px;
-  height:100px;
-  margin-top:18px;
+ 	max-width: 100%;
+  	vertical-align: middle;	
 }
 .pay_tab{
   width:100%;
 }
 .pay_tab td{
-  background:url(../img/ty1.png) no-repeat 10px;
-  padding-left:30px;
   background-size:16px;
   height:44px;
   line-height:44px;
   font-size:14px;
   color:#333;
-  border-bottom:1px solid #eee;
 }
-.pay_right_line{
-  border-left:1px solid #eee;
+.pay_tab img {
+  width: 20px;
+  height: 20px;
+  vertical-align: top;
+  margin: 12px 5px 0 10px;
 }
 #how_much{
   padding-left:10px;

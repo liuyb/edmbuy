@@ -4,25 +4,25 @@
 </div>
 <form action="/user/merchant/openshop" method="post">
 <div>
-	<table cellspacing="0" cellpadding="0" class="pay_tab">
+	<table cellspacing="0" cellpadding="0" class="pay_tab">	
 		<tr>
-			<td>三级分销系统（1套） </td>
-			<td class="pay_right_line">自有店铺（1个）</td>
+			<td><img src="/themes/mobiles/img/fenxiao.png">三级分销系统（1套） </td>
+			<td><img src="/themes/mobiles/img/dianpu.png">自有店铺（1个）</td>
 		</tr>
 		<tr>
-			<td>自动提现系统（1套）</td>
-			<td class="pay_right_line">精美店铺模版</td>
+			<td><img src="/themes/mobiles/img/tixian.png">自动提现系统（1套）</td>
+			<td><img src="/themes/mobiles/img/muban.png">精美店铺模版</td>
 		</tr>
 		<tr>
-			<td>多功能营销辅助工具</td>
-			<td class="pay_right_line">多米商城销售辅助</td>
+			<td><img src="/themes/mobiles/img/gongju.png">多功能营销辅助工具</td>
+			<td><img src="/themes/mobiles/img/fuzhu.png">多米商城销售辅助</td>
 		</tr>
 		<tr>
-			<td>百万分销商资源共享</td>
-			<td class="pay_right_line">全程客服支持</td>
+			<td><img src="/themes/mobiles/img/gongxiang.png">百万分销商资源共享</td>
+			<td><img src="/themes/mobiles/img/kefu1.png">全程客服支持</td>
 		</tr>
 		<tr>
-			<td colspan="2">免费赠送400电话</td>
+			<td><img src="/themes/mobiles/img/dianhua.png">免费赠送400电话</td>
 		</tr>
 	</table>
 </div>
