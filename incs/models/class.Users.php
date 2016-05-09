@@ -240,7 +240,8 @@ class Users extends StorageNode {
 	 */
 	static function required_account_login() {
 		if (!self::is_account_logined()) {
-			Response::redirect('user/login_account');
+			//Response::redirect('user/login_account');
+			Response::redirect('eqx/reg');
 		}
 		return true;
 	}

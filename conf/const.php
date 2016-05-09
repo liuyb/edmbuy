@@ -25,6 +25,9 @@ define('SESS_TOKEN', 'shwipgm5h1t8my2zoe7l8hma5sudlrv2');
 // 平台分佣比例
 define('PLATFORM_COMMISION', 0.2);
 
+// 迁移前最大用户ID
+define('MAX_BETA_USERS_ID', 134083);
+
 /*----------以下为ECSHOP中的常量----------*/
 
 /* 原产地分类顶级id */

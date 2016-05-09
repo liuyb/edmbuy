@@ -1443,7 +1443,7 @@ class WeixinHelper {
     			if (!$exUser->openid) {
     				$upUser->openid  = $openid;
     			}
-    			if (empty($exUser->parentnick)) {
+    			if (empty($exUser->parentnick) && $parent_id) {
     				$upUser->parentnick = Users::getNick($parent_id);
     			}
     			$upUser->lasttime  = simphp_dtime();
@@ -1472,9 +1472,10 @@ class WeixinHelper {
     				if (is_numeric($scene_id)) {
     					$wxqr = Wxqrcode::load($scene_id); //EventKey就是scene_id
     					if ($wxqr->is_exist()) {
-    						$parent_id = $wxqr->user_id;
-    						$upUser->parentid  = $parent_id;
-    						$upUser->parentnick= Users::getNick($parent_id);
+    						//$parent_id = $wxqr->user_id;
+    						//$upUser->parentid0  = $parent_id;
+    						$upUser->parentid0  = $wxqr->user_id;
+    						//$upUser->parentnick= Users::getNick($parent_id);
     					}
     				}
     			}
