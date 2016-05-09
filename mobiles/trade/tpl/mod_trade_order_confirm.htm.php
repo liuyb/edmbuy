@@ -152,7 +152,7 @@ $(function(){
 	});
 	$('#btn-wxpay').click(function(){
 		var pay_id   = parseInt($(this).attr('data-payid'));
-		var addr_id  = 1;//parseInt($('#express-it').attr('data-addrid'));
+		var addr_id  = parseInt($('#express-it').attr('data-addrid'));
 		var order_msg= $('#order-message').val();
 		var cart_rids= $('#cart-list-body').attr('data-cart_rids');
 		if (!addr_id) {

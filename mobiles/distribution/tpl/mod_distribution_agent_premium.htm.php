@@ -57,7 +57,7 @@ function recPremiumPackage(obj){
 	if($obj.hasClass("buying")){
 		return;
 	}
-	var addr_id  = 1;//parseInt($('#express-it').attr('data-addrid'));
+	var addr_id  = parseInt($('#express-it').attr('data-addrid'));
 	var order_msg= $('#order-message').val();
 	if (!addr_id) {
 		myAlert('请填写收货地址');
