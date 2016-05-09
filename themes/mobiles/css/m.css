@@ -4909,6 +4909,7 @@ td.cash_td2 img {
 }
 .store_ensure{
   width:100%;
+	text-align:center;
 }
 .store_ensure li{
   display:inline-block;
@@ -5060,7 +5061,7 @@ td.cash_td2 img {
   float:left;
   width:33%;
   text-align:center;
-  /*height:48px;*/
+  height:48px;
   line-height:49px;
 }
 .store_up{
@@ -5260,7 +5261,7 @@ td.cash_td2 img {
   line-height:60px;
   background:#f26427;
   color:#fff;
-  font-size:18px;
+  font-size:16px;
   border-top-left-radius:4px;
   border-top-right-radius:4px;
   text-align:center;

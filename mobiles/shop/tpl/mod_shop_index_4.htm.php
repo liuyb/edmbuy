@@ -39,13 +39,19 @@
 	}); */
 </script>
 
+<style>
+.nav li {
+    border-top:0 !important; 
+}
+</style>
+
 <div class="store_name_info">
 	<div class="name_s_line"><span class="line_inf"><?=$shop_info->facename ?></span></div>
 	<div class="store_n">
 		<div class="store_ensure">
 			<ul>
 				<!-- <li class="flag_img">旗舰店</li><li class="ydm_img">益多米担保</li><li class="auto_img">实名认证</li><li class="direct_img">厂家直供</li> -->
-				<li><img src="/themes/mobiles/img/yiduomi-inc.png" style="width:79px;margin-left:166%;"></li>
+				<li><img src="/themes/mobiles/img/yiduomi-inc.png" style="width:79px;"></li>
 			</ul>
 		</div>
 		<div class="store_sell_things"><?=$shop_info->shop_desc ?></div>
