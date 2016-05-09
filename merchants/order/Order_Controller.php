@@ -42,7 +42,7 @@ class Order_Controller extends MerchantController {
     {
         $this->v->set_tplname('mod_order_index');
         $this->setPageLeftMenu('order', 'list');
-        $order_type = $request->get('type', 0);
+        $order_type = $request->get('type');
         $this->v->assign('order_type', $order_type);
         $response->send($this->v);
     }

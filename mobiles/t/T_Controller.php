@@ -28,7 +28,8 @@ class T_Controller extends MobileController {
 	public function menu()
 	{
 		return [
-			't/%d'  => 'go',
+			't/%d'    => 'go',
+			't/%d/%s' => 'go',
 		];
 	}
 	
@@ -67,7 +68,13 @@ class T_Controller extends MobileController {
 	{
 		$the_uid = $request->arg(1);
 		$the_uid = intval($the_uid);
-		$response->redirect('/?spm='.Spm::user_spm($the_uid));
+		$flag = $request->arg(2);
+		if ($flag && $flag=='eqx') {
+			$response->redirect('/eqx/intro?spm='.Spm::user_spm($the_uid));
+		}
+		else {
+			$response->redirect('/?spm='.Spm::user_spm($the_uid));
+		}
 	}
 	
 	/**

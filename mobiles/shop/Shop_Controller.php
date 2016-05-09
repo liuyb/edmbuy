@@ -31,8 +31,8 @@ class Shop_Controller extends MobileController
         return [
             'shop/mc_%s' => 'index',
             'shop/collect' => 'collect',
-            'shop/goods/recoment'=>'recoment',
-            'shop/goods/category'=>'category'
+            'shop/goods'=>'getShopGoods',
+            'shop/goods/list'=>'getShopGoodsList'
         ];
     }
 
@@ -45,13 +45,18 @@ class Shop_Controller extends MobileController
     public function index(Request $request, Response $response)
     {
         $merchant_id = $request->arg(1);
-        $result = Shop_Model::checkMerchantStatus($merchant_id);
+        /* $result = Shop_Model::checkMerchantStatus($merchant_id);
         if (empty($result['shop_template'])) {
+            $errmsg = "店铺信息不存在！";
+            $this->v->assign('error', $errmsg);
+        } */
+        $merchant = Merchant::load($merchant_id);
+        if(!$merchant->is_exist()){
             $errmsg = "店铺信息不存在！";
             $this->v->assign('error', $errmsg);
         }
         $isCollect = Shop_Model::checkIsCollect($merchant_id);
-        $tpl_id = $result['shop_template'];
+        $tpl_id = $merchant->shop_template;
         $num = Shop_Model::getCollectNum($merchant_id);
 
         $this->setPageView($request, $response, '_page_mpa');
@@ -59,8 +64,9 @@ class Shop_Controller extends MobileController
         $this->nav_no = 3;
         $this->nav_flag1 = "merchant";
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-        $recommend_info = Shop_Model::getShopRecommend($merchant_id);//推荐商品
-        $goods_category = Shop_Model::getGoodsCategory($merchant_id);
+        $pager = new PagerPull(1, 4);
+        $recommend_info = Items::findGoodsListByCond($pager, ["merchant_id" => $merchant_id, "shop_recommend" => 1]); //推荐商品
+        $goods_category = Shop_Model::getGoodsGroupByCategory($merchant_id);
         $shop_carousel = Shop_Model::getShopCarousel($merchant_id);//得到商家首页的轮播图以及地址
         //收藏次数
         $share_info = [
@@ -77,7 +83,7 @@ class Shop_Controller extends MobileController
         $this->v->assign('merchant_id',$merchant_id);
         $this->v->assign('isCollect', $isCollect);
         $this->v->assign('num', $num);
-        $this->v->assign('shop_info', $result);
+        $this->v->assign('shop_info', $merchant);
         throw new ViewResponse($this->v);
     }
 
@@ -88,8 +94,56 @@ class Shop_Controller extends MobileController
      */
     public function collect(Request $request, Response $response)
     {
-        $merchant_id = $_SESSION['merchant_id'];
-        Shop_Model::collectShop($merchant_id);
+        if($request->is_post()){
+            $merchant_id = $request->post('merchant_id', 0);
+            $action = $request->post('action', 0);
+            Shop_Model::collectShop($merchant_id, $action);
+        }
+        $response->sendJSON("");
+    }
+    
+    /**
+     * 店铺商品
+     * @param Request $request
+     * @param Response $respons
+     */
+    public function getShopGoods(Request $request, Response $response){
+        $this->nav_no = 0;
+        $this->topnav_no = 1;
+        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+        $this->setPageView($request, $response, '_page_mpa');
+        $this->v->set_tplname('mod_shop_goods');
+        $merchant_id = $request ->get("merchant_id","");
+        $shop_recommend = $request ->get("shop_recommend","");
+        $shop_cat_id = $request ->get("shop_cat_id","");
+        $this->v->assign('merchant_id',$merchant_id);
+        $this->v->assign('shop_recommend',$shop_recommend);
+        $this->v->assign('shop_cat_id',$shop_cat_id);
+        $response->send($this->v);
+    }
+    
+    /**
+     * 店铺商品列表
+     * @param Request $request
+     * @param Response $response
+     */
+    public function getShopGoodsList(Request $request, Response $response)
+    {
+        $curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+        $merchant_id = $request->get("merchant_id","");
+        $shop_recommend = $request->get('shop_recommend');
+        $shop_cat_id = $request->get('shop_cat_id');
+        $options = ["merchant_id" => $merchant_id];
+        if($shop_recommend){
+            $options['shop_recommend'] = $shop_recommend;
+        }
+        if($shop_cat_id){
+            $options['shop_cat_id'] = $shop_cat_id;
+        }
+        $pager = new PagerPull($curpage, null);
+        Items::findGoodsListByCond($pager, $options);
+        $pageJson = $pager->outputPageJson();
+        $response->sendJSON($pageJson);
     }
 
     /**
