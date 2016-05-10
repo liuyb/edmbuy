@@ -45,12 +45,6 @@
 
 <div class="guest_list">
 	<ul>
-		<a href='/distribution/spread'>
-			<li>
-				<h1><img src="/themes/mobiles/img/tgsc.png"></h1>
-				<p>推广素材</p>
-			</li>
-		</a>
 		<a href="<?php echo U('cash/apply')?>">
 			<li>
 				<h1><img src="/themes/mobiles/img/sqtx.png"></h1>

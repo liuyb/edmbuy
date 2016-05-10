@@ -561,7 +561,7 @@ class Trade_Controller extends MobileController {
                   $ret['msg'] = '商家数据不存在！';
                   $response->sendJSON($ret);
               }
-              Merchant::addMerchantPayment($merchant->uid, $order_id, $order_sn);
+              Merchant::addMerchantPayment($merchant->uid, $user_id, $newOrder);
           }
           
           // 提交事务

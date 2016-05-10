@@ -18,6 +18,8 @@ class Users extends StorageNode {
 	const USER_LEVEL_3 = 3; //金牌代理
 	const USER_LEVEL_4 = 4; //银牌代理
 	
+	const USER_LEVEL_5 = 5; //金牌代理
+	
 	/**
 	 * 会员登录状态session key
 	 * @var constant
@@ -939,7 +941,7 @@ class Users extends StorageNode {
 	 * 是不是代理
 	 */
 	public static function isAgent($level){
-	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_4);
+	    return in_array($level, self::getAgentArray());
 	}
 	
 	public static function displayUserLevel($level){
@@ -950,12 +952,22 @@ class Users extends StorageNode {
 	        case Users::USER_LEVEL_3 :
 	            return '金牌代理';
 	        break;
+	        case Users::USER_LEVEL_5 :
+	            return '金牌代理';
+	        break;
 	        case Users::USER_LEVEL_4 :
 	            return '银牌代理';
 	        break;
 	        default : 
 	           return '米客';
 	    }
+	}
+	
+	/**
+	 * 返回代理数组
+	 */
+	static function getAgentArray(){
+	    return [Users::USER_LEVEL_3, Users::USER_LEVEL_4, Users::USER_LEVEL_5];
 	}
 	
 	/**

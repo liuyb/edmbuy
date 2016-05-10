@@ -60,7 +60,7 @@ class MerchantController extends Controller {
 		    return;
 		}
   		
-	    if(0&&!Merchant::checkIsPaySuc(true)){
+	    if(!$shop->activation){
 	        $response->redirect('/shop/need/pay');
 	    }
 	    

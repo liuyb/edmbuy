@@ -139,6 +139,9 @@ class AgentPayment extends StorageNode {
 	        case Users::USER_LEVEL_3 :
 	            $icon = '/themes/mobiles/img/jinpai.png';
 	        break;
+	        case Users::USER_LEVEL_5 :
+	            $icon = '/themes/mobiles/img/jinpai.png';
+	        break;
 	        case Users::USER_LEVEL_4 :
 	            $icon = '/themes/mobiles/img/yinpai.png';
 	        break;

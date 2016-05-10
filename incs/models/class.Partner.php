@@ -118,7 +118,7 @@ class Partner extends StorageNode {
         $where = '';
         if($options){
             if($options == Partner::LEVEL_TYPE_AGENCY){
-                $where = ' and level '.Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
+                $where = ' and level '.Fn::db_create_in(Users::getAgentArray());
             }
         }
         return $where;

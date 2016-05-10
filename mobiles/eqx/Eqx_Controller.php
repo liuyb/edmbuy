@@ -396,7 +396,7 @@ class Eqx_Controller extends MobileController {
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
 			
-			$is_agent = in_array($GLOBALS['user']->level, [Users::USER_LEVEL_3,Users::USER_LEVEL_4]) ? 1 : 0;
+			$is_agent = in_array($GLOBALS['user']->level, Users::getAgentArray()) ? 1 : 0;
 			$this->v->assign('is_agent', $is_agent);
 			
 			throw new ViewResponse($this->v);

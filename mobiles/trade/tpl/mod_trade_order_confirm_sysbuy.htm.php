@@ -25,7 +25,7 @@
 			<th>名称</th><th>有效期</th><th>总金额</th>
 		</tr>
 		<tr>
-			<td>多米分销系统</td><td>1年</td><td>￥699.00</td>
+			<td>多米分销系统</td><td>1年</td><td>￥999.00</td>
 		</tr>
 	</table>
 </div>

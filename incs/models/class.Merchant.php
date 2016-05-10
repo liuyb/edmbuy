@@ -57,7 +57,8 @@ class Merchant extends StorageNode {
 				    'is_completed' => 'is_completed',
 				    'shop_qcode' => 'shop_qcode',
 				    'verify_fail_msg' => 'verify_fail_msg',
-				    'merchant_type' => 'merchant_type'
+				    'merchant_type' => 'merchant_type',
+				    'activation' => 'activation'
 				)
 		);
 	}
@@ -219,21 +220,21 @@ class Merchant extends StorageNode {
 	 * @param unknown $order_id
 	 * @param unknown $order_sn
 	 */
-	static function addMerchantPayment($merchant_id, $order_id,$order_sn)
+	static function addMerchantPayment($merchant_id, $user_id, $newOrder)
 	{
 	    $tablename = "`shp_merchant_payment`";
-	    $setarr['order_id'] = $order_id;
-	    $setarr['order_sn'] = $order_sn;
+	    $setarr['order_id'] = $newOrder->order_id;
+	    $setarr['order_sn'] = $newOrder->order_sn;
 	    $setarr['money_paid'] = 0;
 	    $setarr['merchant_id'] = $merchant_id;
 	    $setarr['start_time'] = date("Y-m-d H:i:s", time()).'';
 	    $endDate = date("Y-m-d", strtotime("+1 year", time()))." 23:59:59";
 	    $setarr['end_time'] = $endDate;
 	    $setarr['term_time'] = '1y';
-	    $setarr['discount'] = MECHANT_GOODS_AMOUNT - MECHANT_ORDER_AMOUNT;
-	    $setarr['goods_amount'] = MECHANT_GOODS_AMOUNT;
-	    $setarr['order_amount'] = MECHANT_ORDER_AMOUNT;
-	    $setarr['user_id'] = $GLOBALS['user']->uid;
+	    $setarr['discount'] = $newOrder->discount;
+	    $setarr['goods_amount'] = $newOrder->goods_amount;
+	    $setarr['order_amount'] = $newOrder->order_amount;
+	    $setarr['user_id'] = $user_id;
 	    D()->insert($tablename, $setarr);
 	}
 	
@@ -243,14 +244,21 @@ class Merchant extends StorageNode {
 	 * @param unknown $money_paid
 	 */
 	static function setPaymentIfIsMerchantOrder($order_id, $money_paid){
-	    $sql = "select rid from shp_merchant_payment where order_id = %d";
-	    $result = D()->query($sql, $order_id)->result();
-	    if($result){
+	    $sql = "select rid,merchant_id from shp_merchant_payment where order_id = %d";
+	    $result = D()->query($sql, $order_id)->get_one();
+	    if($result && $result['rid']){
 	        $tablename = "`shp_merchant_payment`";
-	        $setarr['rid'] = $result;
+	        $setarr['rid'] = $result['rid'];
 	        $setarr['money_paid'] = $money_paid;
 	        $setarr['paid_time'] = time();
-	        D()->update($tablename, $setarr);
+	        D()->update($tablename, $setarr, array('order_id' => $order_id));
+	        
+	        //激活商家
+	        $mid = $result['merchant_id'];
+	        $mch = new Merchant();
+	        $mch->uid = $mid;
+	        $mch->activation = 1;
+	        $mch->save(Storage::SAVE_UPDATE);
 	    }
 	}
 	
