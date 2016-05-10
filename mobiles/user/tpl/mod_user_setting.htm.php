@@ -48,7 +48,7 @@
 	</a>
 </div> 
 <!-- 
-<div style="height:20px;background:#eee"></div>
+<div style="height:20px;"></div>
 
 <div style="background: #fff;">
 	<a href="javascript:;"> 
@@ -58,7 +58,7 @@
 	</a>
 </div>
  -->
-<div style="height:20px;background:#eee"></div>
+<div style="height:20px;"></div>
 
 <div style="background: #fff;">
 	<div class="person_head_comment" style="border-top:0;">
@@ -90,8 +90,11 @@
 	<?php endif;?>
 </div>
 
-<div style="height:auto;background:#eee"></div>
-
+<div style="height:20px;"></div>
+<div style="text-align: center">
+<button onclick="location.href='<?php echo U('/user/logout_account')?>'" class="btn_common_bg" style="width:90%;margin:0 auto;">退出登录</button>
+</div>
+<div style="height:30px;"></div>
 
 <?php include T('inc/add_as_friend');?>
 

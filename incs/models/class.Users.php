@@ -258,8 +258,9 @@ class Users extends StorageNode {
 	 *   -2: 密码不能为空
 	 *   -3: 手机帐号不存在
 	 *   -4: 密码不对
+	 *   -5: 当前手机号没有绑定该微信
 	 */
-	static function login_account($mobile, $passwd) {
+	static function login_account($mobile, $passwd, $theuid = NULL) {
 		if (empty($mobile) || !Fn::check_mobile($mobile)) {
 			return -1;
 		}
@@ -273,6 +274,12 @@ class Users extends StorageNode {
 		$passwd_enc  = gen_salt_password($passwd, $exUser->salt);
 		if ($passwd_enc != $exUser->password) {
 			return -4;
+		}
+		if (!isset($theuid)) {
+			$theuid = $GLOBALS['user']->uid;
+		}
+		if ($theuid != $exUser->uid) {
+			return -5;
 		}
 		
 		//set status

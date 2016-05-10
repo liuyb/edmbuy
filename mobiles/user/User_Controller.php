@@ -235,6 +235,27 @@ class User_Controller extends MobileController
     		throw new ViewResponse($this->v);
     	}
     }
+
+    /**
+     * 手机帐号登录
+     *
+     * @param Request $request
+     * @param Response $response
+     */
+    public function logout_account(Request $request, Response $response)
+    {
+    	if ($request->is_post()) {
+    		
+    	}
+    	else { //登录页面
+				if (isset($_SESSION[Users::AC_LOGINED_KEY])) {
+					unset($_SESSION[Users::AC_LOGINED_KEY]);
+				}
+				
+				// Reload current pag
+				$response->redirect('/');
+    	}
+    }
     
     /**
      * 手机帐号注册
