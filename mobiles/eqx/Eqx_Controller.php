@@ -22,11 +22,18 @@ class Eqx_Controller extends MobileController {
 		
 		//SEO信息
 		$seo = [
-				'title'   => '一起享/益多米',
+				'title'   => '一起享',
 				'keyword' => '一起享,益多米',
 				'desc'    => '一起享,益多米'
 		];
+		$inapp = $request->get('inapp','');
+		$refer = $request->get('refer','');
+		if ('edm'==$inapp) {
+			$seo['title'] = '益多米';
+		}
 		$this->v->assign('seo', $seo);
+		$this->v->assign('inapp', $inapp);
+		$this->v->assign('refer', $refer);
 	}
 	
 	/**
@@ -90,7 +97,7 @@ class Eqx_Controller extends MobileController {
 	}
 	
 	/**
-	 * 帐号登录
+	 * 账号登录
 	 *
 	 * @param Request $request
 	 * @param Response $response
@@ -115,7 +122,7 @@ class Eqx_Controller extends MobileController {
 						$ret['msg'] = '密码不能为空';
 						break;
 					case -3:
-						$ret['msg'] = '帐号不存在';
+						$ret['msg'] = '账号不存在';
 						break;
 					case -4:
 						$ret['msg'] = '密码不对';
@@ -154,7 +161,7 @@ class Eqx_Controller extends MobileController {
 	}
 	
 	/**
-	 * 帐号注册
+	 * 账号注册
 	 *
 	 * @param Request $request
 	 * @param Response $response
@@ -169,8 +176,13 @@ class Eqx_Controller extends MobileController {
 			if (1==$step) {
 				$mobile = $request->post('mobile','');
 				$is_verify = $request->post('is_verify',0);
+				$parent_id = $request->post('parent_id',0);
 				$mobile = trim($mobile);
 				$is_verify = intval($is_verify);
+				$parent_id = intval($parent_id);
+				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
+					$parent_id = $_SESSION['eqx_referee_uid'];
+				}
 				
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
@@ -178,6 +190,18 @@ class Eqx_Controller extends MobileController {
 				}
 				if (!$is_verify) {
 					$ret['msg'] = '尚未验证';
+					$response->sendJSON($ret);
+				}
+				if ($GLOBALS['user']->mobile) {
+					$ret['msg'] = '该账号已注册(注册手机号：<br>'.$GLOBALS['user']->mobile.')，请登录';
+					$response->sendJSON($ret);
+				}
+				if (Users::check_mobile_exist($mobile)) {
+					$ret['msg'] = '该手机号已注册，不能重新注册';
+					$response->sendJSON($ret);
+				}
+				if ($GLOBALS['user']->uid > MAX_BETA_USERS_ID && !$parent_id) {
+					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
 				
@@ -190,6 +214,7 @@ class Eqx_Controller extends MobileController {
 				$passwd = $request->post('passwd','');
 				$vcode  = $request->post('vcode','');
 				$parent_id = $request->post('parent_id',0);
+				$inapp  = $request->get('inapp','');
 				
 				if (!$GLOBALS['user']->uid) {
 					$ret['msg'] = '请先微信授权登录';
@@ -209,7 +234,7 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '验证码不对';
 					$response->sendJSON($ret);
 				}
-				elseif (!UsersmsLog::check_vcode($vcode, $mobile, 'reg_account')) {
+				elseif (!UsersmsLog::check_vcode($vcode, $mobile, $inapp=='edm'?'reg_account':'reg_eqx')) {
 					$ret['msg'] = '验证码无效';
 					$response->sendJSON($ret);
 				}
@@ -223,6 +248,10 @@ class Eqx_Controller extends MobileController {
 					$response->sendJSON($ret);
 				}
 				
+				if ($GLOBALS['user']->mobile) {
+					$ret['msg'] = '该账号已注册(注册手机号：<br>'.$GLOBALS['user']->mobile.')，请登录。';
+					$response->sendJSON($ret);
+				}
 				if (Users::check_mobile_exist($mobile)) {
 					$ret['msg'] = '该手机号已注册，不能重新注册';
 					$response->sendJSON($ret);
@@ -230,6 +259,10 @@ class Eqx_Controller extends MobileController {
 				
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
+				}
+				if ($GLOBALS['user']->uid > MAX_BETA_USERS_ID && !$parent_id) {
+					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
+					$response->sendJSON($ret);
 				}
 				
 				if (Users::reg_account($mobile, $passwd, $parent_id, $GLOBALS['user']->uid)) {
@@ -302,8 +335,9 @@ class Eqx_Controller extends MobileController {
 				$ret['msg'] = '手机号不存在';
 				$response->send($ret);
 			}
+			$inapp = $request->get('inapp','');
 			
-			$type = 'reg_account';
+			$type = $inapp=='edm' ? 'reg_account' : 'reg_eqx';
 			$row_vc = D()->query("SELECT `id`,`overdueTime`,`verifyCode` FROM ".UsersmsLog::table()." WHERE `receivePhone`='%s' AND `type`='%s' AND `result`=1 ORDER BY `id` DESC LIMIT 0,1",
 			                     $_SESSION['eqx_mobi'], $type)->get_one();
 			$now = simphp_time();

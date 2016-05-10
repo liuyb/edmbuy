@@ -26,12 +26,6 @@
 <script type="text/javascript">$('#Mnav').on('click','a',function(){
 	var rel = $(this).attr('rel');
 	var href= $(this).attr('href');
-	if( (rel=='partner'||rel=='user') && required_uinfo_empty()) {
-		if(confirm('请求该页面需要微信授权，是否重定向到微信授权页？')) {
-			window.location.href = "<?php echo U('user/go_detail_oauth')?>?refer="+href;
-		}
-		return false;
-	}
 	$(this).parents('.nav').find('a').removeClass('on');
 	$(this).addClass('on');
 	return true;

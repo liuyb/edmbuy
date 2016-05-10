@@ -238,7 +238,7 @@ class Users extends StorageNode {
 	/**
 	 * 请求帐号登录
 	 */
-	static function required_account_login() {
+	static function required_account_logined() {
 		if (!self::is_account_logined()) {
 			//Response::redirect('user/login_account');
 			Response::redirect('eqx/reg');

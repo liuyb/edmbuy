@@ -6260,6 +6260,7 @@ td.cash_td2 img {
 	color:#fff;
 	text-align:center;
 	margin-bottom:10px;
+	width: 100%;
 }
 .btn_common_nbg{
 	height:38px;
@@ -6270,6 +6271,7 @@ td.cash_td2 img {
 	font-size:16px;
 	color:#f65d00;
 	text-align:center;
+	width: 100%;
 }
 .login_wirte_phone input{
 	background:url(../img/sj.png) no-repeat left;

@@ -1,17 +1,18 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
+<script type="text/javascript">var inapp='<?=$inapp?>',refer='<?=$refer?>',referee_uid=parseInt('<?=$referee_uid?>');</script>
 <?php if(1==$step):?>
 
 <?php add_css($contextpath.'misc/js/ext/slideunlock/jquery.slideunlock.css',['scope'=>'global', 'ver'=>'0.1.0']);?>
 <?php add_js($contextpath.'misc/js/ext/slideunlock/jquery.slideunlock.min.js',['pos'=>'current','ver'=>'0.1.0']);?>
 <script type="text/html" id="forTopNav">
-<div class="header">欢迎加入一起享<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span></div>
+<div class="header"><?php if('edm'==$inapp):?>欢迎加入益多米<span class="find_password" onclick="show_login_dlg()">登录</span><?php else:?>欢迎加入一起享<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span><?php endif;?></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机帐号：</span>
+	<span class="phone_left">手机账号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
@@ -33,7 +34,7 @@
 </div>
 
 <div class="quertion_phone">
-注册即表示同意：《一起享用户服务协议》
+注册即表示同意：<?php if($inapp=='edm'):?>《益多米用户服务协议》<?php else:?>《一起享用户服务协议》<?php endif;?>
 </div>
 
 <div class="quertion_phone">
@@ -65,11 +66,11 @@ $(function () {
 		}
 
 		weui_toast('loading',0,'数据保存中');
-		F.post('<?php echo U('eqx/reg','step=1')?>',{mobile: mobi, is_verify: is_verify},function(ret){
+		F.post('<?php echo U('eqx/reg','step=1&inapp='.$inapp)?>',{mobile: mobi, is_verify: is_verify, parent_id: referee_uid},function(ret){
 			weui_toast_hide('loading');
 			if(ret.flag=='SUCC') {
 				weui_toast('finish',1,'手机验证通过',function(d){
-					location.href = '<?php echo U('eqx/reg','step=2')?>';
+					location.href = '<?php echo U('eqx/reg','step=2&inapp='.$inapp.'&refer='.$refer)?>';
 				});
 			}
 			else {
@@ -87,7 +88,7 @@ $(function () {
 <div class="header">
 	注册
 	<a href="javascript:history.back();" class="back">返回</a>
-	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span>
+	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass','inapp='.$inapp.'&refer='.$refer)?>'">找回密码</span>
 </div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
@@ -142,7 +143,7 @@ $(function(){
 		ajaxing = 1;
 		refresh();
 		timer = setInterval("refresh();", 1000);
-		F.post('<?php echo U('eqx/get_vcode')?>',{},function(ret){
+		F.post('<?php echo U('eqx/get_vcode','inapp='.$inapp)?>',{},function(ret){
 			
 		});
 	});
@@ -171,11 +172,21 @@ $(function(){
 		var _this = this;
 		$(_this).attr('disabled',true);
 		weui_toast('loading',0,'数据保存中...');
-		F.post('<?php echo U('eqx/reg','step=2')?>',{mobile: _mobi, passwd: _pwd,vcode: _code},function(ret){
+		F.post('<?php echo U('eqx/reg','step=2&inapp='.$inapp)?>',{mobile: _mobi, passwd: _pwd,vcode: _code},function(ret){
 			weui_toast_hide('loading');
 			if (ret.flag=='SUCC') {
 				weui_toast('finish',1,'注册成功！',function(d){
-					location.href = '<?php echo U('eqx/home')?>';
+					if (refer!='') {
+						location.href = refer;
+					}
+					else {
+						if ('edm'==inapp) {
+							location.href = '<?php echo U('user')?>';
+						}
+						else {
+							location.href = '<?php echo U('eqx/home')?>';
+						}
+					}
 				});
 			}
 			else {

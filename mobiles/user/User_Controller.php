@@ -70,7 +70,6 @@ class User_Controller extends MobileController
     {
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-    	Users::required_account_login();
         $this->v->set_tplname('mod_user_index');
         //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
         Users::check_detail_info();
@@ -79,8 +78,11 @@ class User_Controller extends MobileController
         $this->v->assign('agent', $agent);
         $collect_shop_count = User_Model::getCollectShopCount();
         $collect_goods_count = User_Model::getCollectGoodsCount();
-        $this->v->assign('shop_count', $collect_shop_count);
-        $this->v->assign('goods_count', $collect_goods_count);
+        
+        $is_account_logined  = Users::is_account_logined();
+        $this->v->assign('shop_count', $is_account_logined ? $collect_shop_count : 0);
+        $this->v->assign('goods_count', $is_account_logined ?$collect_goods_count: 0);
+        $this->v->assign('is_account_logined', $is_account_logined);
         throw new ViewResponse($this->v);
     }
 

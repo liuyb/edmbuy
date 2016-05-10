@@ -53,6 +53,7 @@ add_js('m.js',['pos'=>'foot']);
 <?php include T('inc/popalert');?>
 <?php include T('inc/popdlg');?>
 <?php include T('inc/weui');?>
+<?php include T('inc/poplogin');?>
 <?php include T('inc/loading');?>
 </body>
 <?php tplholder('FOOT_JS');?>

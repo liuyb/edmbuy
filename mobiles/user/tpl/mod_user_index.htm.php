@@ -7,7 +7,7 @@
 <?php else:
 $is_agent = Users::isAgent($curuser->level);
 ?>
-<?php if($is_agent && $agent->pid && !$agent->premium_id):?>
+<?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
 <div class="member_cen_common" style="margin:0;">
 	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
 		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($curuser->level) ?>元套餐未领取!</span>
@@ -19,15 +19,20 @@ $is_agent = Users::isAgent($curuser->level);
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
 			<td width="70px;">
-			<?php if($logo): ?>
+				<?php if($is_account_logined && $logo): ?>
     			<img src="<?=$logo?>?_=<?=$curuser->randver?>" alt="logo">
     		<?php else:?>
-    			<img src="/themes/mobiles/img/mt.png">
+    			<img src="/themes/mobiles/img/mt.png"/>
     		<?php endif;?>
     		</td>
 			<td>
+			<?php if($is_account_logined):?>
 				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z"></p>
 				<p class="become_name_id">多米号：<?=$uid ?></p>
+			<?php else:?>
+				<p class="become_name">注册/登录</p>
+				<p class="become_name_id">多米号：0</p>			
+			<?php endif;?>
 			</td>
 			<td class="agency_index_img"><img src="/themes/mobiles/img/shezhi.png"></td>
 		</tr>
@@ -171,6 +176,9 @@ $(function(){
 });
 
 function _link(url){
+	if (required_account_logined()) {
+		return false;
+	}
 	window.location.href=url;
 }
 </script>

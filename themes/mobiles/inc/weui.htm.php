@@ -3,6 +3,8 @@
 <!-- weui style -->
 <!--[HEAD_CSS]-->
 <style>
+.weui_mask, .weui_mask_transition, .weui_mask_transparent {z-index: 50000;}
+.weui_dialog,.weui_toast {z-index: 50005;}
 .weui_btn_dialog.primary{color: #ff6d14;}
 </style>
 <!--[/HEAD_CSS]-->
