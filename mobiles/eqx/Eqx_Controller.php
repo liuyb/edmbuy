@@ -81,7 +81,7 @@ class Eqx_Controller extends MobileController {
 	public function intro(Request $request, Response $response)
 	{
 		$this->v->set_tplname('mod_eqx_intro');
-		$this->topnav_no = 1;
+		$this->topnav_no = 0;
 		$this->nav_no = 1;
 		
 		//分享信息
@@ -126,6 +126,9 @@ class Eqx_Controller extends MobileController {
 						break;
 					case -4:
 						$ret['msg'] = '密码不对';
+						break;
+					case -5:
+						$ret['msg'] = '当前手机号没有绑定该微信';
 						break;
 					default:
 						$ret['msg'] = '登录失败';
@@ -184,6 +187,10 @@ class Eqx_Controller extends MobileController {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
 				
+				if (0) {
+					$ret['msg'] = '系统暂时关闭注册';
+					$response->sendJSON($ret);
+				}
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
 					$response->sendJSON($ret);
@@ -200,7 +207,7 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '该手机号已注册，不能重新注册';
 					$response->sendJSON($ret);
 				}
-				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id) {
+				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id && $GLOBALS['user']->level<2) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
@@ -216,6 +223,10 @@ class Eqx_Controller extends MobileController {
 				$parent_id = $request->post('parent_id',0);
 				$inapp  = $request->get('inapp','');
 				
+				if (0) {
+					$ret['msg'] = '系统暂时关闭注册';
+					$response->sendJSON($ret);
+				}
 				if (!$GLOBALS['user']->uid) {
 					$ret['msg'] = '请先微信授权登录';
 					$response->sendJSON($ret);
@@ -260,7 +271,7 @@ class Eqx_Controller extends MobileController {
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
-				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id) {
+				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id && $GLOBALS['user']->level<2) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}

@@ -23,6 +23,22 @@ class ItemsGallery extends StorageNode {
 		);
 	}
 	
+	static function imgurl($img_path){
+	    if(!$img_path){
+	        return $img_path;
+	    }
+	    if(preg_match('/^http(s?):\/\//i', $img_path)){
+	        return $img_path;
+	    }
+	    if(strpos($img_path, "/") !== 0){
+	        return "/".$img_path;
+	    }
+	}
+	    
+	function startsWith($haystack, $needle) {
+	    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+	}
+	
 }
  
 /*----- END FILE: class.ItemsGallery.php -----*/

@@ -99,6 +99,11 @@ class Goods_Controller extends MerchantController
                 $goods->shipping_fee = 0;
             }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
+            foreach ($gallery as &$gy){
+                $gy->img_url = ItemsGallery::imgurl($gy->img_url);
+                $gy->thumb_url = ItemsGallery::imgurl($gy->thumb_url);
+                $gy->img_original = ItemsGallery::imgurl($gy->img_original);
+            }
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
             $goods->item_desc = json_encode(htmlspecialchars_decode($goods->item_desc));
             $goods->other_cat = $other_cat;
