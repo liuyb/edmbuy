@@ -32,6 +32,8 @@ function do_act(obj) {
 	weui_dialog_close();
 }
 function gotui() {
+	weui_alert('恭喜您获得一起享优先推广权的机会，请先前往“我的人脉”查看人网关系是否正确');
+	return false;
 	if (is_agent) {
 		location.href = '<?php echo U('eqx/tui')?>';
 	}
