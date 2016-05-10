@@ -94,8 +94,6 @@ class Wxpay_Controller extends Controller {
           	D()->update($ec_order, $updata, ['parent_id'=>$order_id]);
           }
           
-          //设置佣金计算
-          UserCommision::generate($order_id);
         
           //记录订单操作记录
           Order::action_log($order_id, ['action_note'=>'用户支付']);
@@ -117,12 +115,19 @@ class Wxpay_Controller extends Controller {
           if($agent && $agent['pid']){
               AgentPayment::callbackAfterAgentPay($agent, $cUser);
               Order::setOrderShippingReceived($order_id);
+              UserCommision::generatForAgent($order_id, $cUser, $agent);
           }else{
-              Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount']);
-              Order::setOrderShippingReceived($order_id);
+              $is_merchant_order = Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount']);
+              if($is_merchant_order){
+                  //是购买店铺时 用店铺分佣模式
+                  UserCommision::generatForMerchant($order_id, $cUser);
+              }else{
+                  //设置佣金计算
+                  UserCommision::generate($order_id);
+              }
           }
           //微信通知
-          $cUser->notify_pay_succ($order_id);
+          //$cUser->notify_pay_succ($order_id);
         }
         else {
           //D()->unlock_tables();// 解锁

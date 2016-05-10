@@ -91,12 +91,12 @@ class AgentPayment extends StorageNode {
 	        $newAgent = new AgentPayment();
 	        $newAgent->pid = $agent['pid'];
 	        $newAgent->is_paid = 1;
-	        $newAgent->save(Storage::SAVE_UPDATE);
+	        $newAgent->save(Storage::SAVE_UPDATE_IGNORE);
 	    
 	        $newUser = new Users();
 	        $newUser->uid = $cUser->uid;
 	        $newUser->level = $agent['level'];
-	        $newUser->save(Storage::SAVE_UPDATE);
+	        $newUser->save(Storage::SAVE_UPDATE_IGNORE);
 	    }
 	}
 	
@@ -106,7 +106,7 @@ class AgentPayment extends StorageNode {
 	    $agent->order_id = $order_id;
 	    $agent->level = $level;
 	    $agent->created = time();
-	    $agent->save(Storage::SAVE_INSERT);
+	    $agent->save(Storage::SAVE_INSERT_IGNORE);
 	}
 	
 	static function getAgentNameByLevel($level){

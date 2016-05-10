@@ -259,7 +259,12 @@ class Merchant extends StorageNode {
 	        $mch->uid = $mid;
 	        $mch->activation = 1;
 	        $mch->save(Storage::SAVE_UPDATE);
+	        
+	        //如果是购买店铺，直接设置成已收货
+	        Order::setOrderShippingReceived($order_id);
+	        return true;
 	    }
+	    return false;
 	}
 	
 	/**

@@ -70,7 +70,7 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
-			var icon = obj.level == 3 ? '/themes/mobiles/img/jinpai1.png' : '/themes/mobiles/img/yinpai2.png';
+			var icon = getLevelIcon(obj.level);
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top\">";
 			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
 			HTML += "<p class=\"m_infos_num\">多米号："+obj.uid+"</p></div><button class=\"l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";

@@ -28,6 +28,26 @@ class UserCommision extends StorageNode {
 			'2' => 0.35,                //二级上级分成比例
 			'3' => 0.30,                //三级上级分成比例
 	];
+	//发展代理 各层分佣
+	static $share_ratio_agent = [
+	    '1' => 0.45,
+	    '2' => 0.30,
+	    '3' => 0.25
+	];
+	
+	//金牌推荐商家 各层分佣
+	static $share_ratio_gold_merchant = [
+	    '1' => 0.30,
+	    '2' => 0.10,
+	    '3' => 0.05
+	];
+	
+	//银牌推荐商家 各层分佣
+	static $share_ratio_silver_merchant = [
+	    '1' => 0.20,
+	    '2' => 0.05,
+	    '3' => 0.05
+	];
 	
 	protected static function meta() {
 		return array(
@@ -46,7 +66,8 @@ class UserCommision extends StorageNode {
 						'use_ratio'    => 'use_ratio',
 						'paid_time'    => 'paid_time',
 						'state'        => 'state',
-						'state_time'   => 'state_time'
+						'state_time'   => 'state_time',
+				        'type'         => 'type'
 				)
 		);
 	}
@@ -124,12 +145,138 @@ class UserCommision extends StorageNode {
 				}
 								
 			}
-			
-			
 			return true;
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 发展代理生成佣金
+	 * @param unknown $order_id
+	 * @param unknown $cUser
+	 * @param $agent
+	 */
+	static function generatForAgent($order_id, $cUser, $agent){
+	    $exOrder = Order::load($order_id);
+	    if (!$exOrder->is_exist()) {
+	        return false;
+	    }
+	    // 1级
+	    $parent_level= 1;
+	    if ($cUser->parentid) {
+	        $agent_type = $agent['level'];
+	        //佣金根据类型写死
+	        if($agent_type == Users::USER_LEVEL_3 || $agent_type == Users::USER_LEVEL_5){
+	            $exOrder->commision = 198;
+	        }else if($agent_type == Users::USER_LEVEL_4){
+	            $exOrder->commision = 98;
+	        }
+	        $commision_dl = UserCommision::COMMISSION_TYPE_DL;
+	        $share_radio = UserCommision::$share_ratio_agent;
+	        
+	        $parent = Users::load($cUser->parentid);
+	        self::createCommisionForAgent($cUser, $parent, $exOrder, $parent_level, $commision_dl, $share_radio);
+	        //2级
+	        $parent_level = 2;
+	        if($parent->parentid){
+    	        $parent2 = Users::load($parent->parentid);
+	            self::createCommisionForAgent($cUser, $parent2, $exOrder, $parent_level, $commision_dl, $share_radio);
+	            
+	            //3级
+	            $parent_level = 3;
+	            if($parent2->parentid){
+    	            $parent3 = Users::load($parent2->parentid);
+	                self::createCommisionForAgent($cUser, $parent3, $exOrder, $parent_level, $commision_dl, $share_radio);
+	            }
+	        }
+	    
+	    }
+	}
+	
+	/**
+	 * 推荐商家生成佣金
+	 * @param unknown $order_id
+	 * @param unknown $cUser
+	 * @param $agent
+	 */
+	static function generatForMerchant($order_id, $cUser){
+	    $exOrder = Order::load($order_id);
+	    if (!$exOrder->is_exist()) {
+	        return false;
+	    }
+	    // 1级
+	    $parent_level= 1;
+	    if ($cUser->parentid) {
+	        $exOrder->commision = $exOrder->goods_amount;
+	        $commision_rz = UserCommision::COMMISSION_TYPE_RZ;
+	        $share_gold_radio = UserCommision::$share_ratio_gold_merchant;
+	        $share_silver_radio = UserCommision::$share_ratio_silver_merchant;
+	         
+	        $parent = Users::load($cUser->parentid);
+	        self::createCommisionForAgent($cUser, $parent, $exOrder, $parent_level, $commision_rz, $share_gold_radio, $share_silver_radio);
+	    
+	        //2级
+	        $parent_level = 2;
+	        if($parent->parentid){
+    	        $parent2 = Users::load($parent->parentid);
+	            self::createCommisionForAgent($cUser, $parent2, $exOrder, $parent_level, $commision_rz, $share_gold_radio, $share_silver_radio);
+	            
+	            //3级
+	            $parent_level = 3;
+	            if($parent2->parentid){
+    	            $parent3 = Users::load($parent2->parentid);
+	                self::createCommisionForAgent($cUser, $parent3, $exOrder, $parent_level, $commision_rz, $share_gold_radio, $share_silver_radio);
+	            }
+	        }
+	         
+	    }
+	}
+	
+	/**
+	 * 发展代理推荐店铺 给一二三层分配佣金，只有代理资格才能分佣
+	 * @param $buyer 购买人
+	 * @param unknown $cUser 当前需要分配佣金用户
+	 * @param unknown $exOrder
+	 * @param unknown $parent_level
+	 * @param unknown $gold_share_radio
+	 * @param unknown $silver_share_radio
+	 */
+	static function createCommisionForAgent($buyer, $cUser, $exOrder, $parent_level, $type, $gold_share_radio, $silver_share_radio = null){
+	    if(!Users::isAgent($cUser->level)){
+	        return;
+	    }
+	    if(!$silver_share_radio || count($silver_share_radio) == 0){
+	        $silver_share_radio = $gold_share_radio;
+	    }
+	    $radio = 0;
+	    if($cUser->level == Users::USER_LEVEL_3 || $cUser->level == Users::USER_LEVEL_5){
+	        //金牌代理
+	        $radio = $gold_share_radio[$parent_level];
+	    }else if($cUser->level == Users::USER_LEVEL_4){
+	        //银牌代理
+	        $radio = $silver_share_radio[$parent_level];
+	    }
+	    $radio = $radio ? $radio : 0;
+	    $commision = number_format($exOrder->commision*$radio,2);
+	    return self::createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision);
+	}
+	
+	static function createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision){
+	    $upUC = new UserCommision();
+	    $upUC->user_id      = $cUser->uid;
+	    $upUC->parent_level = $parent_level;
+	    $upUC->order_uid    = $buyer->uid;
+	    $upUC->order_unick  = $buyer->nickname;
+	    $upUC->order_id     = $exOrder->order_id;
+	    $upUC->order_sn     = $exOrder->order_sn;
+	    $upUC->order_amount = $exOrder->goods_amount;
+	    $upUC->commision    = $commision;
+	    $upUC->use_ratio    = $radio;
+	    $upUC->paid_time    = $exOrder->pay_time;
+	    $upUC->type         = $type;
+	    $upUC->save(Storage::SAVE_INSERT_IGNORE);
+	    return $upUC;
 	}
 	
 	/**
