@@ -77,7 +77,7 @@ class MockCreateMerchantJob extends CronJob{
     }
     
     private static function getMerchantPaidUser(){
-        $list = Users::find(new Query('level', Users::USER_LEVEL_5));
+        $list = Users::find(new Query('level', Users::USER_LEVEL_5), ['from'=>0,'size'=>10000]);
         return $list;
     }
 }

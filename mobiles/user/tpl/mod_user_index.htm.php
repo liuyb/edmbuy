@@ -31,7 +31,7 @@ $is_agent = Users::isAgent($curuser->level);
 				<p class="become_name_id">多米号：<?=$uid ?></p>
 			<?php else:?>
 				<p class="become_name">注册/登录</p>
-				<p class="become_name_id">多米号：0</p>			
+				<p class="become_name_id">多米号：<?=$uid ?></p>			
 			<?php endif;?>
 			</td>
 			<td class="agency_index_img"><img src="/themes/mobiles/img/shezhi.png"></td>
@@ -112,7 +112,7 @@ $is_agent = Users::isAgent($curuser->level);
 
 <div class="member_cen_common" style="margin-bottom:60px;">
 	<div class="in_common_agency del_bottom">
-		<a class="blka" href="<?php echo U('eqx/intro')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
+		<a class="blka" href="<?php echo U('eqx/letter')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
 	</div>
 </div>
 

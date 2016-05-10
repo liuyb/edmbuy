@@ -45,10 +45,10 @@ $json =<<<HEREDOC
     			"name" : "米商计划",
     			"url"  : "http://m.edmbuy.com/riceplan"
         },
-      	{
+        {
     			"type" : "view",
-    			"name" : "米商中心",
-    			"url"  : "http://m.edmbuy.com/partner"
+    			"name" : "一起享",
+    			"url"  : "http://m.edmbuy.com/eqx/letter"
         }
       ]
 		},
@@ -59,11 +59,6 @@ $json =<<<HEREDOC
     			"type" : "view",
     			"name" : "会员中心",
     			"url"  : "http://m.edmbuy.com/user"
-        },
-        {
-    			"type" : "view",
-    			"name" : "个人信息",
-    			"url"  : "http://m.edmbuy.com/user/setting"
         },
         {
     			"type" : "view",
