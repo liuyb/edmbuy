@@ -200,7 +200,7 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '该手机号已注册，不能重新注册';
 					$response->sendJSON($ret);
 				}
-				if ($GLOBALS['user']->uid > MAX_BETA_USERS_ID && !$parent_id) {
+				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
@@ -260,7 +260,7 @@ class Eqx_Controller extends MobileController {
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
-				if ($GLOBALS['user']->uid > MAX_BETA_USERS_ID && !$parent_id) {
+				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
