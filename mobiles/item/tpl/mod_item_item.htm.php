@@ -29,7 +29,7 @@
 	<div class="fl cursor p_d_t2" id="collect_status" onclick="changeGoodsCollect(this);";><span class="f_num" style='display:none;' id="collect_number"></span></div>
 <?php if (!$item->is_on_sale || $item->is_delete):?>
 <div style="background: #c0c0c0;width: 52%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
-<?php elseif(!$item->goods_flag):?>
+<?php else:?>
 	<div class="fl cursor p_d_t3" id="Mnav-add-cart">加入购物车</div>
 	<div class="fl cursor p_d_t4" id="Mnav-buy">立即购买</div>
 <?php endif;?>
@@ -94,6 +94,9 @@ show_mtop($('#forMtop').html());
 <?php endif;?>
 $(function(){
 	show_mnav($('#forMnav').html());
+	<?php if($item->goods_flag):?>
+	$('#Mnav').hide();
+	<?php endif;?>
 	append_to_body($('#forBody').html());
 });
 </script>
