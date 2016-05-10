@@ -511,6 +511,7 @@ class Trade_Controller extends MobileController {
       $newOrder->referer      = isset($_GET['refer']) && !empty($_GET['refer']) ? $_GET['refer'] : '本站';
       $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
       //...
+      $newOrder->merchant_ids = $cItem->merchant_id;
 
       $newOrder->save(Storage::SAVE_INSERT_IGNORE);
       $order_id = 0;
@@ -577,9 +578,9 @@ class Trade_Controller extends MobileController {
           $order_info  = $exOrder->to_array(true);
           $jsApiParams = '';
           //todo
-         if ('wxpay'==$pay_mode) {
-           $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
-         }
+           if ('wxpay'==$pay_mode) {
+              $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
+           }
 
           $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'order_sn'=>$order_sn,'js_api_params'=>json_decode($jsApiParams)];
           $response->sendJSON($ret);

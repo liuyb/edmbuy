@@ -309,7 +309,7 @@ class User_Model extends Model
         $admin_uid = D()->insert($table_admin, $data_admin);
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
-            $effnum = D()->insert($tablename, $insertarr);
+            $effnum = D()->insert($tablename, $insertarr, true, 'IGNORE');
             if ($effnum !== false) {
                 D()->update($table_admin, array('merchant_id' => $insertarr['merchant_id']), array('user_id' => $admin_uid)); //更新merchant_id
                 return $insertarr['merchant_id'];

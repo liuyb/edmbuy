@@ -115,9 +115,10 @@ class Default_Controller extends MobileController {
    */
   public function riceplan(Request $request, Response $response)
   {
-  	$this->v = new PageView('','_page_spa');
+  	$this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_default_riceplan');
-    
+    $this->nav_no = 0;
+    $this->topnav_no = 1;
     if (!Users::is_logined()) {
     	throw new ViewException($this->v, '未登录，需要在微信客户端中登录');
     }
@@ -133,10 +134,10 @@ class Default_Controller extends MobileController {
     		'link'  => U('riceplan', 'spm='.Spm::user_spm(), true),
     		'pic'   => U('misc/images/napp/touch-icon-144.png','',true),
     ];
-    $pager = new PagerPull(1, 6);
+    //$pager = new PagerPull(1, 6);
     //首页推荐商品列表
-    Default_Model::findGoodsList($pager, true);
-    $this->v->assign("result", $pager->result);
+    //Default_Model::findGoodsList($pager, true);
+    //$this->v->assign("result", $pager->result);
     $this->v->assign('share_info', $share_info);
     
     throw new ViewResponse($this->v);

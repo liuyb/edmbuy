@@ -198,17 +198,17 @@ class Order_Controller extends MerchantController {
             $order = Order::load($order_id);
             if($order->pay_status == PS_PAYED){
                 $ret = ['result' => 'FAIL', 'msg' => '只有在未付款状态才能修改价格！'];
-                return $ret;
+                $response->sendJSON($ret);
             }
             if(!Order_Model::isOrderValid($order->order_status)){
                 $ret = ['result' => 'FAIL', 'msg' => '订单已失效，不能修改价格！'];
-                return $ret;
+                $response->sendJSON($ret);
             }
             $commission = $order->commision;
             $now_price = Order::get_actual_orderobj_amount($order, $discount);
             if($now_price < 0 || $now_price < $commission){
                 $ret = ['result' => 'FAIL', 'msg' => '折扣后价格不能小于佣金！'];
-                return $ret;
+                $response->sendJSON($ret);
             }
             $order = new Order();
             $order->order_id = $order_id;

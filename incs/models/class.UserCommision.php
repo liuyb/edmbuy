@@ -275,6 +275,9 @@ class UserCommision extends StorageNode {
 	    $upUC->use_ratio    = $radio;
 	    $upUC->paid_time    = $exOrder->pay_time;
 	    $upUC->type         = $type;
+	    if(UserCommision::COMMISSION_TYPE_DL == $type){
+	        $upUC->state = 1;
+	    }
 	    $upUC->save(Storage::SAVE_INSERT_IGNORE);
 	    return $upUC;
 	}

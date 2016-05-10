@@ -920,7 +920,7 @@ class User_Controller extends MobileController
                 $ret['retmsg'] ="推荐人不存在";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
-            }elseif($u->level != Users::USER_LEVEL_3 && $u->level != Users::USER_LEVEL_4){
+            }elseif(!in_array($u->level, Users::getAgentArray())){
                 $ret['retmsg'] ="当前推荐人不是代理!";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
