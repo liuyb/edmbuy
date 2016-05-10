@@ -60,8 +60,9 @@
 	</ul>
 </div>
 <script>
+var _detail = "<?=U('user/income/detail?1=1')?>";
 function showDetail(state,type,rebate){
-	window.location.href='/user/income/detail?type='+type+'&state='+state+'&rebate='+rebate;
+	window.location.href=_detail+'&type='+type+'&state='+state+'&rebate='+rebate;
 }
 </script>
 <?php endif;?>

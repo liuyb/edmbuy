@@ -40,7 +40,7 @@ $is_agent = Users::isAgent($curuser->level);
 </div>
 <?php if(isset($parentUid)):?>
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('/distribution/my/parent')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/my/parent') ?>')">
 		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUid ?></span><i><?=$parentNickName ?></i>
 	</div>
 </div>
@@ -52,28 +52,28 @@ $is_agent = Users::isAgent($curuser->level);
 	</div>
 	<div class="my_order_state">
 	<ul>
-		<li onclick="_link('/trade/order/record?status=wait_pay')">
+		<li onclick="_link('<?=U('trade/order/record?status=wait_pay') ?>')">
 			<img src="/themes/mobiles/img/fk1.png">
 			<span class="waitPayCount"></span>
 		</li>
-		<li onclick="_link('/trade/order/record?status=wait_ship')">
+		<li onclick="_link('<?=U('trade/order/record?status=wait_ship') ?>')">
 			<img src="/themes/mobiles/img/fh2.png">
 			<span class="unShipCount"></span>
 		</li>
-		<li class="dsh" onclick="_link('/trade/order/record?status=wait_recv')">
+		<li class="dsh" onclick="_link('<?=U('trade/order/record?status=wait_recv') ?>')">
 			<img src="/themes/mobiles/img/sh3.png">
 			<span class="shipedCount"></span>
 		</li>
-		<li onclick="_link('/trade/order/record?status=finished')"><img src="/themes/mobiles/img/sh4.png"></li>
+		<li onclick="_link('<?=U('trade/order/record?status=finished') ?>')"><img src="/themes/mobiles/img/sh4.png"></li>
 	</ul>
 	</div>
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency" onclick="_link('/user/favorite/shop')">
+	<div class="in_common_agency" onclick="_link('<?=U('user/favorite/shop') ?>')">
 		<img src="/themes/mobiles/img/scddp.png"><span>我收藏的店铺</span><i><?=$shop_count ?>家</i>
 	</div>
-	<div class="in_common_agency del_bottom" onclick="_link('/user/favorite/goods')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/favorite/goods') ?>')">
 		<img src="/themes/mobiles/img/scdbb.png"><span>我收藏的宝贝</span><i><?=$goods_count ?>件</i>
 	</div>
 </div>
@@ -105,7 +105,7 @@ $is_agent = Users::isAgent($curuser->level);
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('/user/my/wallet')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/my/wallet') ?>')">
 		<img src="/themes/mobiles/img/wdqb.png"><span>我的钱包</span><i class="my_price_c"></i>
 	</div>
 </div>

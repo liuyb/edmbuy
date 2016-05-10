@@ -563,7 +563,7 @@ class Distribution_Controller extends MobileController{
         throw new ViewResponse($this->v);
     }
     
-    public function test_buy_agent(Request $request, Response $response){
+    /* public function test_buy_agent(Request $request, Response $response){
         global $user;
         $agent = AgentPayment::find_one(new Query('user_id', $user->uid));
         if(!$agent->is_exist()){
@@ -588,5 +588,5 @@ class Distribution_Controller extends MobileController{
         D()->query('delete from shp_agent_payment where user_id=%d', $user->uid);
         D()->query('update shp_users set level = 0 where user_id = %d', $user->uid);
         $response->sendJSON("");
-    }
+    } */
 }

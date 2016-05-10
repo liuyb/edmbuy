@@ -351,11 +351,11 @@ class Goods_Controller extends MerchantController
             $data['retmsg'] = "参数不能为空！";
             $response->sendJSON($data);
         } */
-        if (strlen($cateArr['cat_name']) > 12 || empty($cateArr['cat_name'])) {
+       /*  if (strlen($cateArr['cat_name']) > 12 || empty($cateArr['cat_name'])) {
             $data['status'] = 0;
             $data['retmsg'] = "名称不能多于12个字且不能为空！";
             $response->sendJSON($data);
-        }
+        } */
         $result = Goods_Model::IsHadCategory($cat_id);
         if ($result['parent_id'] > 0 && !$cateArr['edit']) {
             $retmsg = "当前已是二级分类，不能增加子分类！";

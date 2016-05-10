@@ -12,7 +12,7 @@
 </style>
 <!--[/HEAD_CSS]-->
 <div class="add_fix" id="add_fix">
-    <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name" required><span style="margin-left: 5px;color:red;">*</span></div>
+    <div class="add_name_go">分类名称：<input type="text" value="<!--{$catgory.cat_name}-->"  name="cat_name" maxlength="12" required><span style="margin-left: 5px;color:red;">*</span></div>
     <div class="add_name_ts">分类名称不能为空且不能多于12个字</div>
     <div class="add_super_go">上级分类：
         <select class="check_s c_goods_type" name="cat_id">
