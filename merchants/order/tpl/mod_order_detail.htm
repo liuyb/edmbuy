@@ -6,7 +6,7 @@
 	<div id="commodity_list">
 		<div id="commodity_name">
 			<p>商品清单</p><!-- 订单未关闭并且未支付才能修改价格 -->
-	   		<!--{if $order.order_status neq 2 and $order.order_status neq 3 and $order.pay_status eq 0}-->
+	   		<!--{if $order.order_status neq 2 and $order.order_status neq 3 and $order.pay_status < 2}-->
 			<button id="update_price" class="commondity_btn">修改价格</button>
 			<!--{/if}-->
 		</div>

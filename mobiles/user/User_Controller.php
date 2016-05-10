@@ -602,7 +602,7 @@ class User_Controller extends MobileController
         $this->v->assign("nickname", $currentUser->nickname);
         $this->v->assign("level", $currentUser->level);
         $this->v->assign("logo", $currentUser->logo);
-        $this->v->assign("mobile", $currentUser->mobilephone);
+        $this->v->assign("mobile", $currentUser->mobile);
         $this->v->assign("wxqr", $currentUser->wxqr);
         if ($currentUser->parentid) {
             $parentUser = User_Model::findUserInfoById($currentUser->parentid);
