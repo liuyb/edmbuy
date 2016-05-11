@@ -132,9 +132,6 @@ $is_agent = Users::isAgent($curuser->level);
 <?php include T('inc/add_as_friend');?>
 
 <script>
-$().ready(function(){
-	loadAjaxData();
-});
 function loadAjaxData(){
 	var url = "/user/index/ajax";
 	F.get(url, null, function(data){
@@ -153,12 +150,15 @@ function loadAjaxData(){
 	});
 }
 
-//好友弹框
-$(".refer_but").on("click",function(){
-	getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
-});
+$(function(){
 
-$(function(){	
+	loadAjaxData();
+	
+	//好友弹框
+	$(".refer_but").on("click",function(){
+		getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
+	});
+	
 	var length = $(".c_n_tit").text().length;
 	var _length = $(".refer_name").text().length;
 	if(length >6){
