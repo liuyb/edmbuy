@@ -969,6 +969,10 @@ class User_Controller extends MobileController
             $response->redirect("/user/merchant/dosuccess");
         }
         $merchant = Merchant::getMerchantByUserId($GLOBALS['user']->uid);
+        //已激活
+        if($merchant->activation){
+            $response->redirect("/user/merchant/dosuccess");
+        }
         if($merchant->is_exist()){
             $response->redirect("/trade/order/confirm_sysbuy");
         }
@@ -1173,7 +1177,7 @@ class User_Controller extends MobileController
             $response->redirect('/user/merchant/checkin');
         } */
         //已是商家 - 已经支付 - 支付成功
-        if(Merchant::checkIsPaySuc()){
+        if($merchant->activation || Merchant::checkIsPaySuc()){
             $response->redirect("/user/merchant/dosuccess");
         }
         //已是商家  - 还没支付 - 未付款 未取消 订单存在

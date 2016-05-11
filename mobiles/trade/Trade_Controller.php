@@ -513,6 +513,14 @@ class Trade_Controller extends MobileController {
       //...
       $newOrder->merchant_ids = $cItem->merchant_id;
 
+      //金牌银牌代理处理
+      if($this->is_agent_order($item_id)){
+          $newOrder->order_flag = Order::ORDER_FLAG_AGENT;
+      }else if($this->is_merchant_order($item_id)){
+          //购买商家处理
+          $newOrder->order_flag = Order::ORDER_FLAG_MERCHANT;
+      }
+      
       $newOrder->save(Storage::SAVE_INSERT_IGNORE);
       $order_id = 0;
       if ($newOrder->id) { //订单表生成成功

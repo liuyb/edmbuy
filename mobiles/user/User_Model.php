@@ -306,7 +306,7 @@ class User_Model extends Model
         $insertarr['changed'] = time();
         //$insertarr['activation'] = 1; 
         $insertarr['shop_template'] = 1;
-        $admin_uid = D()->insert($table_admin, $data_admin);
+        $admin_uid = D()->insert($table_admin, $data_admin, true, 'IGNORE');
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
             $effnum = D()->insert($tablename, $insertarr, true, 'IGNORE');

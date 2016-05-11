@@ -110,21 +110,22 @@ class Wxpay_Controller extends Controller {
           //更新订单下所有商品卖出的"单品数"
           Items::updatePaidNumByOrderid($order_id);
           
+          $order = Order::load($order_id);
           //当前订单是金牌银牌代理更新
-          $agent = AgentPayment::getAgentByOrderId($order_id);
-          if($agent && $agent['pid']){
-              AgentPayment::callbackAfterAgentPay($agent, $cUser);
-              Order::setOrderShippingReceived($order_id);
-              UserCommision::generatForAgent($order_id, $cUser, $agent);
-          }else{
-              $is_merchant_order = Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount']);
-              if($is_merchant_order){
-                  //是购买店铺时 用店铺分佣模式
-                  UserCommision::generatForMerchant($order_id, $cUser);
-              }else{
-                  //设置佣金计算
-                  UserCommision::generate($order_id);
+          if($order->order_flag == Order::ORDER_FLAG_AGENT){
+              $agent = AgentPayment::getAgentByOrderId($order_id);
+              if(AgentPayment::callbackAfterAgentPay($agent, $cUser)){
+                  Order::setOrderShippingReceived($order_id);
+                  UserCommision::generatForAgent($order, $cUser, $agent);
               }
+          }else if($order->order_flag == Order::ORDER_FLAG_MERCHANT){
+              if(Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount'])){
+                  //是购买店铺时 用店铺分佣模式
+                  UserCommision::generatForMerchant($order, $cUser);
+              }
+          }else{
+              //普通商品交易设置佣金计算
+              UserCommision::generate($order);
           }
           //微信通知
           //$cUser->notify_pay_succ($order_id);

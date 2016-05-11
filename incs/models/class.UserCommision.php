@@ -19,15 +19,36 @@ class UserCommision extends StorageNode {
 	const COMMISSION_TYPE_FX = 0; //商品分销
 	const COMMISSION_TYPE_DL = 1; //代理
 	const COMMISSION_TYPE_RZ = 2; //入驻
-	const COMMISSION_TYPE_JY = 3; //交易
+	const COMMISSION_TYPE_JY = 3; //交易 - 商家交易给推荐人的佣金
 	
 	//分成比例设定
-	static $share_ratio = [
+	/* static $share_ratio = [
 			'0' => PLATFORM_COMMISION,  //平台分成比例
 			'1' => 0.35,                //一级上级分成比例
 			'2' => 0.35,                //二级上级分成比例
 			'3' => 0.30,                //三级上级分成比例
-	];
+	]; */
+	
+    //推荐商家 商家交易佣金终身分佣 金牌代理2% 银牌代理1%
+    static $share_radio_trade_gold = 0.02;
+    
+    static $share_radio_trade_silver = 0.01;
+	
+    //米商及米商以上级别 有自己返利
+    static $share_ratio_fx_misha = [
+        '0' => 0.25,                //米商及米商以上级别的购物返利
+        '1' => 0.30,                //一级上级分成比例
+        '2' => 0.25,                //二级上级分成比例
+        '3' => 0.20,                //三级上级分成比例
+    ];
+    
+    //米客没有自己返利
+    static $share_ratio_fx_mike = [
+        '1' => 0.45,                //一级上级分成比例
+        '2' => 0.30,                //二级上级分成比例
+        '3' => 0.25,                //三级上级分成比例
+    ];
+    
 	//发展代理 各层分佣
 	static $share_ratio_agent = [
 	    '1' => 0.45,
@@ -87,11 +108,76 @@ class UserCommision extends StorageNode {
 	 * @param integer $leader_level 上级分级：1、2、3
 	 * @return double
 	 */
-	static function user_share($total_commision, $leader_level = 1) {
+	/* static function user_share($total_commision, $leader_level = 1) {
 		if (!in_array($leader_level, [1,2,3])) return 0;
 		$total_commision = self::can_share($total_commision);
 		if ($total_commision <= 0) return 0;
 		return number_format($total_commision*self::$share_ratio[$leader_level],2);
+	} */
+	
+	static function generate($exOrder) {
+	    if (!$exOrder->is_exist()) {
+	        return false;
+	    }
+	    $total_commision = $exOrder->commision;
+	    if(!$total_commision){
+	        return false;
+	    }
+	    $cUser  = Users::load($exOrder->user_id);
+	    //扣除平台的20%
+	    $commision = self::can_share($total_commision);
+	    //推荐商家终身提点 从平台20%扣除
+	    self::merchantInviteCommision($cUser, $exOrder, ($total_commision - $commision));
+	    $share_radio = 0;
+	    //米商及米商以上
+	    if($cUser->level && $cUser->level >= Users::USER_LEVEL_1){
+	        $share_radio = self::$share_ratio_fx_misha;
+	        self::createCommisionForGoodsFX($cUser, $cUser, $exOrder, $commision, 0, self::COMMISSION_TYPE_FX, $share_radio);
+	    }else{
+	        $share_radio = self::$share_ratio_fx_mike;
+	    }
+	    // 1级
+	    $parent_level= 1;
+	    if ($cUser->parentid) {
+	        $parent = Users::load($cUser->parentid);
+	        self::createCommisionForGoodsFX($cUser, $parent, $exOrder, $commision, $parent_level, self::COMMISSION_TYPE_FX, $share_radio);
+	        //2级
+	        $parent_level = 2;
+	        if($parent->parentid){
+	            $parent2 = Users::load($parent->parentid);
+	            self::createCommisionForGoodsFX($cUser, $parent2, $exOrder, $commision, $parent_level, self::COMMISSION_TYPE_FX, $share_radio);
+	            //3级
+	            $parent_level = 3;
+	            if($parent2->parentid){
+	                $parent3 = Users::load($parent2->parentid);
+	                self::createCommisionForGoodsFX($cUser, $parent3, $exOrder, $commision, $parent_level, self::COMMISSION_TYPE_FX, $share_radio);
+	            }
+	        }
+	         
+	    }
+	    
+	}
+	
+	//商品交易时给商家推荐人分佣
+	static function merchantInviteCommision($cUser, $exOrder, $platf_commision){
+	    //查找当前订单商家对应的推荐人
+	    $merchant = Merchant::load($exOrder->merchant_ids);
+	    if($merchant->invite_code){
+	        $invite_user = Users::load($merchant->invite_code);
+	        if($invite_user->is_exist()){
+	            $radio = 0;
+	            if(Users::isGoldAgent($invite_user->level)){
+	                $radio = self::$share_radio_trade_gold;
+	            }else if(Users::isSilverAgent($invite_user->level)){
+	                $radio = self::$share_radio_trade_silver;
+	            }
+	            $commision = number_format($platf_commision*$radio,2);
+	            if(!$radio || $commision <= 0){
+	                return;
+	            }
+	            self::createCommision($cUser, $invite_user, $exOrder, 0, UserCommision::COMMISSION_TYPE_JY, $radio, $commision);
+	        }
+	    }
 	}
 	
 	/**
@@ -99,7 +185,8 @@ class UserCommision extends StorageNode {
 	 * @param integer  $order_id
 	 * @return boolean
 	 */
-	static function generate($order_id) {
+	/* static function generate($order_id) {
+	    
 		$exOrder = Order::load($order_id);
 		if ($exOrder->is_exist()) {			
 			$oUser  = Users::load($exOrder->user_id);
@@ -149,7 +236,7 @@ class UserCommision extends StorageNode {
 		}
 		
 		return false;
-	}
+	} */
 	
 	/**
 	 * 发展代理生成佣金
@@ -157,8 +244,7 @@ class UserCommision extends StorageNode {
 	 * @param unknown $cUser
 	 * @param $agent
 	 */
-	static function generatForAgent($order_id, $cUser, $agent){
-	    $exOrder = Order::load($order_id);
+	static function generatForAgent($exOrder, $cUser, $agent){
 	    if (!$exOrder->is_exist()) {
 	        return false;
 	    }
@@ -200,8 +286,7 @@ class UserCommision extends StorageNode {
 	 * @param unknown $cUser
 	 * @param $agent
 	 */
-	static function generatForMerchant($order_id, $cUser){
-	    $exOrder = Order::load($order_id);
+	static function generatForMerchant($exOrder, $cUser){
 	    if (!$exOrder->is_exist()) {
 	        return false;
 	    }
@@ -262,7 +347,37 @@ class UserCommision extends StorageNode {
 	    return self::createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision);
 	}
 	
+	/**
+	 * 商品分销返佣
+	 * @param unknown $buyer
+	 * @param unknown $cUser
+	 * @param unknown $exOrder
+	 * @param unknown $commision
+	 * @param unknown $parent_level
+	 * @param unknown $type
+	 * @param unknown $share_radio
+	 */
+	static function createCommisionForGoodsFX($buyer, $cUser, $exOrder, $commision, $parent_level, $type, $share_radio){
+	    $radio = $share_radio[$parent_level];
+	    $radio = $radio ? $radio : 0;
+	    $commision = number_format($commision*$radio,2);
+	    return self::createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision);
+	}
+	
+	/**
+	 * 创建佣金数据
+	 * @param unknown $buyer
+	 * @param unknown $cUser
+	 * @param unknown $exOrder
+	 * @param unknown $parent_level
+	 * @param unknown $type
+	 * @param unknown $radio
+	 * @param unknown $commision
+	 */
 	static function createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision){
+	    if($commision <= 0){
+	        return;
+	    }
 	    $upUC = new UserCommision();
 	    $upUC->user_id      = $cUser->uid;
 	    $upUC->parent_level = $parent_level;

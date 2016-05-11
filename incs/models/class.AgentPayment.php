@@ -97,7 +97,9 @@ class AgentPayment extends StorageNode {
 	        $newUser->uid = $cUser->uid;
 	        $newUser->level = $agent['level'];
 	        $newUser->save(Storage::SAVE_UPDATE_IGNORE);
+	        return true;
 	    }
+	    return false;
 	}
 	
 	static function createAgentPayment($user_id, $order_id, $level){
@@ -140,7 +142,7 @@ class AgentPayment extends StorageNode {
 	            $icon = '/themes/mobiles/img/jinpai.png';
 	        break;
 	        case Users::USER_LEVEL_5 :
-	            $icon = '/themes/mobiles/img/jinpai.png';
+	            $icon = '/themes/mobiles/img/qiye.png';
 	        break;
 	        case Users::USER_LEVEL_4 :
 	            $icon = '/themes/mobiles/img/yinpai.png';

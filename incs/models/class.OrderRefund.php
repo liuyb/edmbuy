@@ -95,7 +95,8 @@ class OrderRefund extends StorageNode {
 	            D()->raw_query("DELETE FROM shp_user_commision WHERE `order_id`=%d AND `state`<%d", $p_order_id, UserCommision::STATE_CASHED);
 	            //父订单佣金需要减去退款订单的佣金，并重新生成佣金
 	            D()->raw_query("UPDATE shp_order_info SET `commision`=`commision`-%d WHERE `order_id`=%d", $order->commision, $p_order_id);
-	            UserCommision::generate($p_order_id);
+	            $porder = Order::load($p_order_id);
+	            UserCommision::generate($porder);
 	            
 	            //写order_action的日志
 	            $action_note = sprintf("子订单%d退款，删除原佣金记录，从shp_order_info的父订单%d的commision扣减%d，并重新生成佣金。",

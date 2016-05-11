@@ -112,7 +112,7 @@ class Distribution_Controller extends MobileController{
         if(!$merchant->is_exist()){
             throw new ViewResponse($this->v);
         }
-        if (!Merchant::checkIsPaySuc()) {
+        if (!$merchant->activation) {
             $response->redirect("/user/pay/merchant/order?mid=$merchant->uid");
         }
         $muid = $merchant->uid;

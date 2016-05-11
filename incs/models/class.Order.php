@@ -8,6 +8,12 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Order extends StorageNode{
     
+    //购买代理订单
+    const ORDER_FLAG_AGENT = 1;
+    
+    //商城入驻订单
+    const ORDER_FLAG_MERCHANT = 2;
+    
     protected static function meta() {
         return array(
             'table' => '`shp_order_info`',
@@ -82,7 +88,8 @@ class Order extends StorageNode{
                 'is_delete'          => 'is_delete',   
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2',
-                'relate_order_id'     => 'relate_order_id'//领取套餐时对应购买代理的订单ID。
+                'relate_order_id'    => 'relate_order_id',//领取套餐时对应购买代理的订单ID。
+                'order_flag'         => 'order_flag'   //0 普通订单，1 代理订单， 2 商城入驻
             ));
     }
     

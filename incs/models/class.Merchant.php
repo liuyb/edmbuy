@@ -58,7 +58,8 @@ class Merchant extends StorageNode {
 				    'shop_qcode' => 'shop_qcode',
 				    'verify_fail_msg' => 'verify_fail_msg',
 				    'merchant_type' => 'merchant_type',
-				    'activation' => 'activation'
+				    'activation' => 'activation',
+				    'invite_code' => 'invite_code'
 				)
 		);
 	}
@@ -235,7 +236,7 @@ class Merchant extends StorageNode {
 	    $setarr['goods_amount'] = $newOrder->goods_amount;
 	    $setarr['order_amount'] = $newOrder->order_amount;
 	    $setarr['user_id'] = $user_id;
-	    D()->insert($tablename, $setarr);
+	    D()->insert($tablename, $setarr, true, 'IGNORE');
 	}
 	
 	/**
@@ -244,7 +245,7 @@ class Merchant extends StorageNode {
 	 * @param unknown $money_paid
 	 */
 	static function setPaymentIfIsMerchantOrder($order_id, $money_paid){
-	    $sql = "select rid,merchant_id from shp_merchant_payment where order_id = %d";
+	    $sql = "select rid,merchant_id,user_id from shp_merchant_payment where order_id = %d";
 	    $result = D()->query($sql, $order_id)->get_one();
 	    if($result && $result['rid']){
 	        $tablename = "`shp_merchant_payment`";
@@ -259,6 +260,12 @@ class Merchant extends StorageNode {
 	        $mch->uid = $mid;
 	        $mch->activation = 1;
 	        $mch->save(Storage::SAVE_UPDATE);
+	        
+	        //用户级别更新为商家
+	        $user = new Users();
+	        $user->uid = $result['user_id'];
+	        $user->level = Users::USER_LEVEL_5;
+	        $user->save(Storage::SAVE_UPDATE_IGNORE);
 	        
 	        //如果是购买店铺，直接设置成已收货
 	        Order::setOrderShippingReceived($order_id);

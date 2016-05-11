@@ -845,13 +845,13 @@ function getLevelIcon(level){
             icon = '/themes/mobiles/img/he.png';
         break;
         case 3 :
-            icon = '/themes/mobiles/img/jinpai1.png';
+            icon = '/themes/mobiles/img/jinpai.png';
         break;
         case 5 :
-            icon = '/themes/mobiles/img/jinpai1.png';
+            icon = '/themes/mobiles/img/qiye.png';
         break;
         case 4 :
-            icon = '/themes/mobiles/img/yinpai2.png';
+            icon = '/themes/mobiles/img/yinpai.png';
         break;
         default :
             icon = '/themes/mobiles/img/ke.png';
