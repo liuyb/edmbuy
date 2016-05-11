@@ -1021,11 +1021,11 @@ class Users extends StorageNode {
 	        case Users::USER_LEVEL_3 :
 	            return '金牌代理';
 	        break;
-	        case Users::USER_LEVEL_5 :
-	            return '金牌代理';
-	        break;
 	        case Users::USER_LEVEL_4 :
 	            return '银牌代理';
+	        break;
+	        case Users::USER_LEVEL_5 :
+	            return '入驻商家';
 	        break;
 	        default : 
 	           return '米客';

@@ -9,7 +9,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	个人信息
-<a href="/user" class="back"></a>
+<a href="<?=U('user') ?>" class="back"></a>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>
@@ -69,14 +69,8 @@
 		<span class="head_l_com">我的角色</span>
 		<span class="head_r_com" style="margin-right:12px;">
 			<span style="margin-right: 5px;font-size:16px;">
-			<?php 
-			$role = ($level == 1) ? "米商" : (($level == 2) ? "合伙人" : "米客");
-			?>
-			<?=$role ?>
+			<?=Users::displayUserLevel($level) ?>
 			</span>
-			<?php if(0 == $level): ?>
-			<button class="personInfo_but" id="be-partner" style="font-size:13px;">成为米商</button>
-			<?php endif;?>
 		</span>
 	</div>
 	<?php if(isset($parentUid)):?>

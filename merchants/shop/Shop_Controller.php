@@ -108,11 +108,11 @@ class Shop_Controller extends MerchantController
                 $tpl = Shop_Model::getMchTpl();
                 $isusetpl = Shop_Model::getCurentTpl();
                 if ($isusetpl['tpl_id']) {
+                    $merchant_id =$GLOBALS['user']->uid;
                     $dir = Fn::gen_qrcode_dir($isusetpl['tpl_id'], 'shop', true);
-                    $locfile = $dir . $isusetpl['tpl_id'] . '.png';
+                    $locfile = $dir . $merchant_id . '.png';
                     if (!file_exists($locfile)) {
                         mkdirs($dir);
-                        $merchant_id =$GLOBALS['user']->uid;
                         $qrinfo =C('env.site.mobile')."/shop/{$merchant_id}";
                         include_once SIMPHP_INCS . '/libs/phpqrcode/qrlib.php';
                         QRcode::png($qrinfo, $locfile, QR_ECLEVEL_L, 7, 3);

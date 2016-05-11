@@ -259,7 +259,7 @@ class User_Model extends Model
      * @param $email
      * @param $inviteCode
      */
-    static function saveMerchantInfo($mobile, $inviteCode, $password, $uid)
+    static function saveMerchantInfo($mobile, $inviteCode, $password, $uid = 0)
     {
         //insert($tablename, Array $insertarr, $returnid = TRUE, $flag = '')
         if(!$uid){
