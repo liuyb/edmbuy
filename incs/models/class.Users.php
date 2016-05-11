@@ -304,16 +304,18 @@ class Users extends StorageNode {
 		}
 		$salt = gen_salt();
 		$passwd_enc  = gen_salt_password($passwd, $salt);
-		$parents_info = self::get_parent_ids($parent_uid, true);
-		
-		$upUser = new self($uid);
+		$cUser       = self::load($uid);
+		$upUser      = new self($uid);
 		$upUser->mobile   = $mobile;
 		$upUser->password = $passwd_enc;
 		$upUser->salt     = $salt;
-		$upUser->parentid   = $parents_info['parent_id'];
-		$upUser->parentnick = $parents_info['parent_nick'];
-		$upUser->parentid2  = $parents_info['parent_id2'];
-		$upUser->parentid3  = $parents_info['parent_id3'];
+		if (!$cUser->parentid) {
+			$parents_info = self::get_parent_ids($parent_uid, true);
+			$upUser->parentid   = $parents_info['parent_id'];
+			$upUser->parentnick = $parents_info['parent_nick'];
+			$upUser->parentid2  = $parents_info['parent_id2'];
+			$upUser->parentid3  = $parents_info['parent_id3'];
+		}
 		$upUser->regip     = Request::ip();
 		$upUser->regtime   = simphp_time();
 		$upUser->from      = 'reg';
@@ -340,17 +342,17 @@ class Users extends StorageNode {
 				$ret['parent_id']   = $puser->uid;
 				$ret['parent_nick'] = $puser->nickname;
 				if ($strict_mode) { //严格模式需要根据puid往上查
-					if ($puser->parent_id) {
-						$ret['parent_id2'] = $puser->parent_id;
-						$puser2 = self::load($puser->parent_id);
-						if ($puser2->is_exist() && $puser2->parent_id) {
-							$ret['parent_id3'] = $puser2->parent_id;
+					if ($puser->parentid) {
+						$ret['parent_id2'] = $puser->parentid;
+						$puser2 = self::load($puser->parentid);
+						if ($puser2->is_exist() && $puser2->parentid) {
+							$ret['parent_id3'] = $puser2->parentid;
 						}
 					}
 				}
 				else {
-					$ret['parent_id2'] = $puser->parent_id;
-					$ret['parent_id3'] = $puser->parent_id2;
+					$ret['parent_id2'] = $puser->parentid;
+					$ret['parent_id3'] = $puser->parentid2;
 				}
 			}
 		}

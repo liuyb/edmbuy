@@ -12,7 +12,7 @@
 </div>
 
 <div class="what_center">
-	<a href="<?php echo U('eqx/letter')?>"><img src="<?=$contextpath?>mobiles/eqx/img/whats.png"></a>
+	<a href="<?php echo U('eqx/letter','nologin=1')?>"><img src="<?=$contextpath?>mobiles/eqx/img/whats.png"></a>
 </div>
 
 <div class="what_bottom">
@@ -32,8 +32,12 @@ function do_act(obj) {
 	weui_dialog_close();
 }
 function gotui() {
-	weui_alert('恭喜您获得一起享优先推广权的机会，请先前往“我的人脉”查看人网关系是否正确');
-	return false;
+	/*
+	if (gUser.uid!=104&&gUser.uid!=114111&&gUser.uid!=7058) {
+		weui_alert('恭喜您获得一起享优先推广权的机会，请先前往“我的人脉”查看人网关系是否正确');
+		return false;
+	}
+	*/
 	if (is_agent) {
 		location.href = '<?php echo U('eqx/tui')?>';
 	}

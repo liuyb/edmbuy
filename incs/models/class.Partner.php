@@ -118,8 +118,8 @@ class Partner extends StorageNode {
      * 米商列表展示需要的字段
      */
     static function outputLevelListQueryColumn(){
-        $queryCols = " user_id as uid, logo, nick_name as nickname, level, province, city, childnum_1 as childnum1,
-            parent_nick as parentnick, mobile_phone as mobilephone, wxqr, reg_time  ";
+        $queryCols = " user_id as uid, logo, nick_name as nickname, mobile AS mobilephone, level, province, city, childnum_1 as childnum1,
+            parent_nick as parentnick, wxqr, reg_time ";
         return $queryCols;
     }
     
