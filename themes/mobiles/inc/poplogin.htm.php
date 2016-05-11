@@ -16,6 +16,7 @@
 </script>
 
 <script type="text/javascript">
+var __login_refer = '';
 function __go_login(obj) {
 	var _mobi = $('#global_frm_mobile').val().trim();
 	var _pass = $('#global_frm_passwd').val().trim();
@@ -32,11 +33,16 @@ function __go_login(obj) {
 	$(_this).attr('disabled',true);
 	weui_toast('loading',0,'登录中...');
 	F.post('<?php echo U('eqx/login')?>',{mobile: _mobi, passwd: _pass},function(ret){
-		weui_toast_hide('loading');
 		$(_this).attr('disabled',false);
+		weui_toast_hide('loading');
 		if (ret.flag=='SUCC') {
 			weui_toast('finish',1,'登录成功',function(){
-				location.reload();
+				if (!__login_refer) {
+					location.reload(true);
+				}
+				else {
+					location.href=__login_refer;
+				}
 			});
 		}
 		else {
@@ -51,7 +57,13 @@ function show_login_dlg(){
 	show_popdlg('登录益多米',$('#forGlobalLogin').html());
 	return false;
 }
-function required_account_logined() {
+function required_account_logined(touri) {
+	if (typeof(touri)=='undefined' || !touri) {
+		__login_refer = '';
+	}
+	else {
+		__login_refer = touri;
+	}
 	if(!gUser.is_account_logined) {
 		show_popdlg('登录益多米',$('#forGlobalLogin').html());
 		return true;

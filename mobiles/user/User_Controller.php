@@ -253,7 +253,7 @@ class User_Controller extends MobileController
 				}
 				
 				// Reload current pag
-				$response->redirect('/');
+				$response->redirect('/user');
     	}
     }
     

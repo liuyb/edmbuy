@@ -235,6 +235,9 @@ $(function(){
 	
 	//加入购物车
 	$('#Mnav-add-cart,#Mnav-buy').bind("click", function(){
+		if (required_account_logined()) {
+			return false;
+		}
 		if ($(this).attr('id')=='Mnav-buy') {
 			$('#frm_buy_type').val('buy');
 		}else{
