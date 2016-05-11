@@ -515,8 +515,14 @@ class Trade_Controller extends MobileController {
 
       //金牌银牌代理处理
       if($this->is_agent_order($item_id)){
+          if(GOLD_AGENT_GOODS_ID == $item_id){
+              $newOrder->commision = 198;
+          }else if(SILVER_AGENT_GOODS_ID == $item_id){
+              $newOrder->commision = 98;
+          }
           $newOrder->order_flag = Order::ORDER_FLAG_AGENT;
       }else if($this->is_merchant_order($item_id)){
+          $newOrder->commision = 999;
           //购买商家处理
           $newOrder->order_flag = Order::ORDER_FLAG_MERCHANT;
       }

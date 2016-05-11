@@ -172,9 +172,6 @@ class UserCommision extends StorageNode {
 	                $radio = self::$share_radio_trade_silver;
 	            }
 	            $commision = number_format($platf_commision*$radio,2);
-	            if(!$radio || $commision <= 0){
-	                return;
-	            }
 	            self::createCommision($cUser, $invite_user, $exOrder, 0, UserCommision::COMMISSION_TYPE_JY, $radio, $commision);
 	        }
 	    }
@@ -329,7 +326,7 @@ class UserCommision extends StorageNode {
 	 */
 	static function createCommisionForAgent($buyer, $cUser, $exOrder, $parent_level, $type, $gold_share_radio, $silver_share_radio = null){
 	    if(!Users::isAgent($cUser->level)){
-	        return;
+	        //return;
 	    }
 	    if(!$silver_share_radio || count($silver_share_radio) == 0){
 	        $silver_share_radio = $gold_share_radio;
@@ -375,9 +372,6 @@ class UserCommision extends StorageNode {
 	 * @param unknown $commision
 	 */
 	static function createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision){
-	    if($commision <= 0){
-	        return;
-	    }
 	    $upUC = new UserCommision();
 	    $upUC->user_id      = $cUser->uid;
 	    $upUC->parent_level = $parent_level;
