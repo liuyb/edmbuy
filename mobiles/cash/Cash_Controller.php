@@ -154,6 +154,11 @@ class Cash_Controller extends MobileController {
 				$ret['detail'] = '未登录，请先登录';
 				$response->sendJSON($ret);
 			}
+			if (1) {
+				$ret['msg'] = '暂不能提现';
+				$ret['detail'] = '为保资金安全，在种子内测期间暂停提现功能，待内测过后再开放';
+				$response->sendJSON($ret);
+			}
 			if (empty($cashing_amount) || $cashing_amount < self::CASH_THRESHOLD) {
 				$ret['msg'] = '无法提现';
 				$ret['detail'] = '可提现金额须'.self::CASH_THRESHOLD.'元起';

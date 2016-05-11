@@ -60,6 +60,10 @@ class Eqx_Controller extends MobileController {
 		$this->topnav_no = 1;
 		$this->nav_no = 0;
 		
+		if (Users::is_account_logined()) {
+			$response->redirect('/eqx/home');
+		}
+		
 		//分享信息
 		$share_info = [
 				'title' => '一起共享人脉和项目，就在一起享',

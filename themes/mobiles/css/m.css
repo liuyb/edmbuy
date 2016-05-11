@@ -5725,7 +5725,6 @@ td.cash_td2 img {
 }
 .iance_list_bottom img{
 	width:100%;
-	height: 90px;
 }
 .allicen_more{
 	/* background:url(../img/xiala.png) no-repeat right;
@@ -6259,7 +6258,7 @@ td.cash_td2 img {
 	font-size:16px;
 	color:#fff;
 	text-align:center;
-	margin-bottom:10px;
+	margin-bottom:15px;
 	width: 100%;
 }
 .btn_common_nbg{

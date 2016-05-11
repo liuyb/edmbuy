@@ -20,7 +20,7 @@
 	<div class="what_commom"><a href="javascript:;" class="blka" onclick="gotui()"><img src="<?=$contextpath?>mobiles/eqx/img/qtg.png"><span>去推广</span></a></div>
 </div>
 
-<div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">ABC850890</i></span></div>
+<div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">3398961935</i></span></div>
 
 <script>
 var is_agent = parseInt('<?=$is_agent?>');
@@ -42,6 +42,7 @@ function gotui() {
 		weui_dialog(html,'<span style="color:red">提示</span>');
 	}
 }
+/*
 $(function(){
 	if (!is_agent) {
 		setTimeout(function(){
@@ -49,4 +50,5 @@ $(function(){
 		},500);
 	}
 });
+*/
 </script>
