@@ -28,29 +28,9 @@ $json =<<<HEREDOC
 			"url"  : "http://m.edmbuy.com/"
 		},
 		{
-      "name" : "米商",
-      "sub_button" : [
-        {
-    			"type" : "view",
-    			"name" : "我的二维码",
-    			"url"  : "http://m.edmbuy.com/t/myqr"
-        },
-      	{
-    			"type" : "view",
-    			"name" : "推广二维码",
-    			"url"  : "http://m.edmbuy.com/comeon"
-        },
-        {
-    			"type" : "view",
-    			"name" : "米商计划",
-    			"url"  : "http://m.edmbuy.com/riceplan"
-        },
-        {
-    			"type" : "view",
-    			"name" : "一起享",
-    			"url"  : "http://m.edmbuy.com/eqx/letter"
-        }
-      ]
+			"type" : "view",
+			"name" : "一起享",
+			"url"  : "http://m.edmbuy.com/eqx/letter"
 		},
     {
       "name" : "我的",

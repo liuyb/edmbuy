@@ -49,7 +49,7 @@ class Cash_Controller extends MobileController {
 		$this->v->set_tplname('mod_cash_apply');
 		$this->nav_no    = 0;
 		$this->topnav_no = 1;
-		$this->backurl   = '/partner';
+		$this->backurl   = '/user';
 		
 		if (1||$request->is_hashreq()) {
 			
@@ -316,7 +316,7 @@ class Cash_Controller extends MobileController {
 		$this->v->set_tplname('mod_cash_detail');
 		$this->nav_no    = 0;
 		$this->topnav_no = 1;
-		$this->backurl = '/partner';
+		$this->backurl = '/user';
 		
 		if (1||$request->is_hashreq()) {
 			
