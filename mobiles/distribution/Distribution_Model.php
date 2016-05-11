@@ -230,7 +230,7 @@ class Distribution_Model extends Model{
                     $order_amount = $goods_amount + $master_order->shipping_fee; //TODO: 邮费这里以后要处理的
                     $order_update = [];
                     $order_update['goods_amount'] = $goods_amount;
-                    $order_update['order_amount'] = $order_amount;
+                    $order_update['money_paid'] = $order_amount;
                     //$order_update['commision']    = $commision;
                     if (!empty($order_update)) {
                         D()->update(Order::table(), $order_update, ['order_id'=>$subOrder->id]);
@@ -251,5 +251,34 @@ class Distribution_Model extends Model{
         return false;
     }
     
+    /**
+     * 更新订单下所有商品真正付费卖出的"单品数"
+     *
+     * @param integer $order_id
+     * @return boolean
+     */
+    static function updateGoodsPaidNumber($order_id) {
+        $order_id = intval($order_id);
+        if (empty($order_id)) return false;
+    
+        $ectb_goods       = Items::table();
+        $ectb_order_goods = OrderItems::table();
+        $sql =<<<HERESQL
+UPDATE {$ectb_goods} g, (
+				SELECT og.goods_id,SUM(og.goods_number) AS paid_goods_num
+				FROM {$ectb_order_goods} og 
+				WHERE og.goods_id IN(SELECT goods_id FROM {$ectb_order_goods} WHERE order_id={$order_id})
+				GROUP BY og.goods_id
+			) pgon
+SET g.paid_goods_number = pgon.paid_goods_num
+WHERE g.goods_id = pgon.goods_id
+HERESQL;
+    
+        D()->raw_query($sql);
+        if (D()->affected_rows() > 0) {
+            return true;
+        }
+        return false;
+    }
 }
 
