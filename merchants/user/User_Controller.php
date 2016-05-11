@@ -272,9 +272,7 @@ class User_Controller extends MerchantController
             $data['status'] = 0;
             $response->sendJSON($data);
         }
-//      $result = Sms::sendSms($phone, $type = "forget_pwd");
-        $result = "888888";
-        $_SESSION['forget_pwd'] = "888888";
+        $result = Sms::sendSms($phone, $type = "forget_pwd");
         if ($result) {
             $_SESSION['phone'] = $phone;
             Cookie::set("forget_pwd", $_SESSION['forget_pwd'], 60 * 5);//验证码5分钟过后过期

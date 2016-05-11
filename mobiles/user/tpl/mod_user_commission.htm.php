@@ -70,7 +70,7 @@
         <div class="my_income_btnc">
             <ul>
                 <li><a href="javascript:;">
-                        <div class="btnc_share">分享此页面</div>
+                        <div class="btnc_share">返回</div>
                     </a></li>
                 <li><a href="javascript:;">
                         <div class="btnc_plan">米商计划</div>
@@ -85,7 +85,8 @@
 <?php endif; ?>
 <script>
     $(".my_income_btnc .btnc_share").click(function () {
-        $('#cover-wxtips').show();
+        //$('#cover-wxtips').show();
+        history.back();
     });
     $(".my_income_btnc .btnc_plan").click(function () {
         window.location = '/riceplan';
