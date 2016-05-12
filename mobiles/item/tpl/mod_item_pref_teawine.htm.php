@@ -18,26 +18,22 @@ include T('inc/pref_popup_menu');?>
 		<div class="clear"></div>
 	</ul>
 </div>
-
 <div class="teawinecomment" id="teawinelist">
+<!-- 
 	<div class="tea_pro_list" data-cat='tea'>
-	<!-- 
-		<a href="javascript:gotoItem(1004);"><img src="/themes/mobiles/img/tea01.png"></a>
-		<a href="javascript:gotoItem(1010);"><img src="/themes/mobiles/img/tea_2.png"></a>
-		<a href="javascript:gotoItem(1008);"><img src="/themes/mobiles/img/tea03.png"></a>
-	 -->
 	 <a href="<?php echo U('zt/newtea')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/2016newtea.png"/></a>
 	</div>
 	<div class="tea_pro_list" data-cat='wine' style="display: none;">
 		<a href="javascript:gotoItem(1047);"><img src="/themes/mobiles/img/wine01.png"></a>
 		<a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine02.png"></a>
-		<!-- <a href="javascript:gotoItem(1032);"><img src="/themes/mobiles/img/wine03.png"></a> -->
 	</div>
+-->
 	<div class="tea_info_list" style="margin-top: 5px;">
 		<ul>
 		</ul>
 	</div>
 </div>
+
 <!-- 
 <div class="teawinecomment" id="winelist" style="display:none;">
 	<div class="tea_pro_list">
