@@ -289,7 +289,6 @@ class User_Model extends Model
         );
         $tablename = "`shp_merchant`";
         $table_admin = "`shp_admin_user`";
-        $insertarr['merchant_id'] = self::gen_merchant_id();
         $insertarr['user_id'] = $uid;
         $salt = self::gen_salt();
         $password_enc = self::gen_password($password, $salt);
@@ -304,12 +303,18 @@ class User_Model extends Model
         $insertarr['role_id'] = $role_id;
         $insertarr['created'] = time();
         $insertarr['changed'] = time();
-        //$insertarr['activation'] = 1; 
         $insertarr['shop_template'] = 1;
         $admin_uid = D()->insert($table_admin, $data_admin, true, 'IGNORE');
         if ($admin_uid !== false) {
             $insertarr['admin_uid'] = $admin_uid;
-            $effnum = D()->insert($tablename, $insertarr, true, 'IGNORE');
+            $mch = Merchant::getMerchantByUserId($uid);
+            if($mch->is_exist()){
+                $insertarr['merchant_id'] = $mch->uid;
+                $effnum = D()->update($tablename, $insertarr, ['merchant_id' => $mch->uid], 'IGNORE');
+            }else{
+                $insertarr['merchant_id'] = self::gen_merchant_id();
+                $effnum = D()->insert($tablename, $insertarr, true, 'IGNORE');
+            }
             if ($effnum !== false) {
                 D()->update($table_admin, array('merchant_id' => $insertarr['merchant_id']), array('user_id' => $admin_uid)); //更新merchant_id
                 return $insertarr['merchant_id'];

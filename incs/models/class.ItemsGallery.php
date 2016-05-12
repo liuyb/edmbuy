@@ -33,6 +33,7 @@ class ItemsGallery extends StorageNode {
 	    if(strpos($img_path, "/") !== 0){
 	        return "/".$img_path;
 	    }
+	    return $img_path;
 	}
 	    
 	function startsWith($haystack, $needle) {

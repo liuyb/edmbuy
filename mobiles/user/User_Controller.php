@@ -84,6 +84,9 @@ class User_Controller extends MobileController
         	$collect_goods_count = User_Model::getCollectGoodsCount();
         }
         
+        $shopOpend = Merchant::userHasOpendShop($u->uid);
+        
+        $this->v->assign('shopOpend',  $shopOpend);
         $this->v->assign('shop_count',  $collect_shop_count);
         $this->v->assign('goods_count', $collect_goods_count);
         $this->v->assign('is_account_logined', $is_account_logined);

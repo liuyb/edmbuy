@@ -68,6 +68,16 @@ class Merchant extends StorageNode {
 	    return Merchant::find_one(new Query('user_id', $user_id));
 	}
 	
+	/**
+	 * 用户是否已经有激活的店铺
+	 * @param unknown $user_id
+	 */
+	static function userHasOpendShop($user_id){
+	    $sql = "select count(1) from shp_merchant where user_id = %d and activation = 1 ";
+	    $result = D()->query($sql, $user_id)->result();
+	    return $result;
+	}
+	
 	static function getNameByAdminUid($admin_uid) {
 		$ret = D()->from(self::table())->where("admin_uid=%d", $admin_uid)->select("facename")->result();
 		return $ret;

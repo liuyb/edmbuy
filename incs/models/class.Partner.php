@@ -66,7 +66,7 @@ class Partner extends StorageNode {
     static function findFirstLevelList($uid, PagerPull $pager, $options = ''){
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = '%d' $where order by user_id desc limit %d,%d";
+        $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = '%d' $where order by user_id limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $result = self::rebuildLevelResult($result);
         $pager->setResult($result);
@@ -82,7 +82,7 @@ class Partner extends StorageNode {
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users u where parent_id2 = '%d' $where 
-                order by user_id desc limit %d,%d";
+                order by user_id limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $result = self::rebuildLevelResult($result);
         $pager->setResult($result);
@@ -97,7 +97,7 @@ class Partner extends StorageNode {
     static function findThirdLevelList($uid, PagerPull $pager, $options = ''){
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users tu where parent_id3 = '%d' $where order by user_id desc limit %d,%d";
+        $sql = "SELECT $column FROM edmbuy.shp_users tu where parent_id3 = '%d' $where order by user_id limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $result = self::rebuildLevelResult($result);
         $pager->setResult($result);

@@ -69,6 +69,21 @@ $is_agent = Users::isAgent($curuser->level);
 	</div>
 </div>
 
+<?php if(!$shopOpend):?>
+<div class="member_cen_common">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/merchant/checkin') ?>')">
+		<img src="/themes/mobiles/img/wddp.png"><span>我要开店</span>
+	</div>
+</div>
+<?php endif;?>
+<?php if(!$is_agent):?>
+<div class="member_cen_common">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('trade/order/agent') ?>')">
+		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>
+	</div>
+</div>
+<?php endif;?>
+
 <div class="member_cen_common">
 	<div class="in_common_agency" onclick="_link('<?=U('user/favorite/shop') ?>')">
 		<img src="/themes/mobiles/img/scddp.png"><span>我收藏的店铺</span><i><?=$shop_count ?>家</i>
@@ -91,18 +106,14 @@ $is_agent = Users::isAgent($curuser->level);
 	</div>
 	<?php endif;?>
 </div>
-<?php if(!$is_agent):?>
-<div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('<?=U('trade/order/agent') ?>')">
-		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>
-	</div>
-</div>
-<?php endif;?>
+
+<?php if($shopOpend):?>
 <div class="member_cen_common">
 	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/shop') ?>')">
 		<img src="/themes/mobiles/img/wddp.png"><span>我的店铺</span>
 	</div>
 </div>
+<?php endif;?>
 
 <div class="member_cen_common">
 	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/my/wallet') ?>')">
