@@ -107,28 +107,6 @@ function constructRows(ret, isInit){
 	F.afterConstructRow(isInit, $resultList, HTML, $showMore);
 }
 
-function getLevelIcon(level){
-	level = level ? parseInt(level) : 0;
-	icon = "";
-	switch (level){
-        case 1 :
-            icon = '/themes/mobiles/img/sha.png';
-        break;
-        case 2 :
-            icon = '/themes/mobiles/img/he.png';
-        break;
-        case 3 :
-            icon = '/themes/mobiles/img/jinpai1.png';
-        break;
-        case 4 :
-            icon = '/themes/mobiles/img/yinpai2.png';
-        break;
-        default :
-            icon = '/themes/mobiles/img/ke.png';
-	}
-	return icon;
-}
-
 function agencyChange(obj, level){
 	var $obj = $(obj);
 	if(!$obj.hasClass("navig_on")){

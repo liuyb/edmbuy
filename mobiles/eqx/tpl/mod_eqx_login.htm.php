@@ -7,7 +7,7 @@
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机帐号：</span>
+	<span class="phone_left">手机账号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
@@ -24,7 +24,7 @@
 </div>
 
 <div class="quertion_phone">
-	遇到问题：<i>400-0755-888</i>
+	遇到问题：<i>0755-86720209</i>
 </div>
 
 <script type="text/javascript">

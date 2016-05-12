@@ -131,24 +131,34 @@
 <a href="javascript:;"><div class="mask"></div></a>
 
 <!-- 二维码 -->
+<script id="showQrCode" type="text/html">
 <div class="store_wx">
-	<div class="store_wx_tit">更多优惠，请关注店铺公众号</div>
-	<?php if($shop_info->wxqr):?>
-	<div class="store_wx_img"><img src="<?=$shop_info->wxqr?>"></div>
-	<div class="store_ts">长按二维码可以保存</div>
-	<?php else:?>
-	<div class="store_wx_img">还没有上传二维码</div>
-	<?php endif;?>
-	<div class="store_wx_colse"><img src="/themes/mobiles/img/guanbi.png"></div>
+<div class="store_wx_tit">更多优惠，请关注店铺公众号</div>
+<?php if($shop_info->wxqr):?>
+<div class="store_wx_img"><img src="<?=$shop_info->wxqr?>"></div>
+<div class="store_ts">长按二维码可以保存</div>
+<?php else:?>
+<div class="store_wx_img">还没有上传二维码</div>
+<?php endif;?>
+<div class="store_wx_colse"><img src="/themes/mobiles/img/guanbi.png"></div>
 </div>
+</script>
+
+<script>
+$(function(){
+	append_to_body($("#showQrCode").html());
+});
+</script>
 
 <!-- 收藏 -->
+<!--
 <div class="store_up_t">
 	<div class="up_wx_tit"><span>收藏成功</span></div>
 	<div class="store_wx_img"><img src="<?=$shop_info->shop_qcode?>"></div>
 	<div class="store_ts">关注益多米，超值产品任你选</div>
 	<div class="store_wx_colse"><img src="/themes/mobiles/img/guanbi.png"></div>
 </div>
+-->
 <script id="forMnav" type="text/html">
 <div class="store_bottom_comm">
     <ul>
@@ -211,25 +221,14 @@
 	}
 
 	$(document).on("click",'.two_code',function(){
-		/* if(!$(this).hasClass("two_code_on")){
-			$(this).addClass("two_code_on");
-			$(".shop_cart_store").removeClass("shop_cart_store_on");
-		} */
 		$(".mask").show();
 		$(".store_wx").show();
 	});
-	/* $(document).on("click",'.shop_cart_store',function(){
-		if(!$(this).hasClass("shop_cart_store_on")){
-			$(this).addClass("shop_cart_store_on");
-			$(".two_code").removeClass("two_code_on");
-		}
-	}) */
 
 	//关闭
-	$(".mask,.store_wx_colse").on("click",function(){
+	$(document).on("click",".mask,.store_wx_colse",function(){
 		$(".mask").hide();
 		$(".store_wx").hide();
-		$(".store_up_t").hide();
 	})
 </script>
 <?php include T('inc/popqr');?>

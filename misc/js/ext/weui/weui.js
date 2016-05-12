@@ -38,7 +38,7 @@ function weui_render_toast(id, hide_type, tips, hide_cb, hide_cb_args) { //0:no 
 				if (typeof(hide_cb)=='function') {
 					hide_cb(hide_cb_args);
 				}
-			}, 1500);
+			}, 1000);
 		}
 	}
 }

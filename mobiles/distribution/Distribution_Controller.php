@@ -112,6 +112,9 @@ class Distribution_Controller extends MobileController{
         if(!$merchant->is_exist()){
             throw new ViewResponse($this->v);
         }
+        if (!$merchant->activation) {
+            $response->redirect("/user/pay/merchant/order?mid=$merchant->uid");
+        }
         $muid = $merchant->uid;
         $all_goods = Merchant::getGoodsTotalByIsSale(-1, $muid);
         $all_orders = Merchant::getOrderTotalByStatus(-1, $muid);
@@ -393,7 +396,7 @@ class Distribution_Controller extends MobileController{
                 $response->sendJSON($ret);
             }
         
-            //商品ID
+            //套餐ID
             $cart_rids_str = D()->query("select goods_ids from shp_premium_package where enabled = 1 and type='%d' and pid = '%d' ", $u->level, $package_id)->result();
             
             if (!$cart_rids_str || ''==$cart_rids_str || !preg_match('/^(\d)+[,\d]*$/', $cart_rids_str)) { //要严格匹配类似格式"1,2,3",连空格也不能存在(因为自家合法的数据是不会有空格的)
@@ -404,7 +407,8 @@ class Distribution_Controller extends MobileController{
             // 套餐商品列表
             $total_price = 0;
             $cart_rids_str = explode(',', $cart_rids_str);
-            $order_goods = Distribution_Model::getGoods($cart_rids_str, $total_price);
+            $sql = "select * from shp_goods where goods_id ".Fn::db_create_in($cart_rids_str)."";
+            $order_goods = D()->query($sql)->fetch_array_all();
             if (count($order_goods) == 0 || count($cart_rids_str) != count($order_goods)) {
                 $ret['msg'] = '该套餐商品无效，请重新领取';
                 $response->sendJSON($ret);
@@ -480,7 +484,7 @@ class Distribution_Controller extends MobileController{
                     $newOI->income_price= $cItem->income_price;
                     $newOI->goods_attr  = '';
                     $newOI->send_number = 0;
-                    $newOI->is_real     = $cg['is_real'];
+                    $newOI->is_real     = 0;
                     $newOI->extension_code = 0;
                     $newOI->parent_id   = 0;
                     $newOI->is_gift     = 1;
@@ -507,10 +511,10 @@ class Distribution_Controller extends MobileController{
                 //检测订单变化
                 $order_update['merchant_ids'] = implode(',', $rel_merchants);
                 //$order_update['commision'] = $total_commision; //订单总佣金
-                if ($true_amount!=$newOrder->goods_amount) {
+                //if ($true_amount!=$newOrder->goods_amount) {
                     $order_update['goods_amount'] = $true_amount;
                     $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
-                }
+                //}
                 if (empty($succ_goods)) { //如果一个商品都没有购买成功，则需要更改此订单状态为"无效"OS_INVALID
                     $order_update['order_status'] = OS_INVALID;
                     $order_update['commision']    = 0;
@@ -562,7 +566,7 @@ class Distribution_Controller extends MobileController{
         throw new ViewResponse($this->v);
     }
     
-    public function test_buy_agent(Request $request, Response $response){
+    /* public function test_buy_agent(Request $request, Response $response){
         global $user;
         $agent = AgentPayment::find_one(new Query('user_id', $user->uid));
         if(!$agent->is_exist()){
@@ -587,5 +591,5 @@ class Distribution_Controller extends MobileController{
         D()->query('delete from shp_agent_payment where user_id=%d', $user->uid);
         D()->query('update shp_users set level = 0 where user_id = %d', $user->uid);
         $response->sendJSON("");
-    }
+    } */
 }

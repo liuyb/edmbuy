@@ -91,13 +91,15 @@ class AgentPayment extends StorageNode {
 	        $newAgent = new AgentPayment();
 	        $newAgent->pid = $agent['pid'];
 	        $newAgent->is_paid = 1;
-	        $newAgent->save(Storage::SAVE_UPDATE);
+	        $newAgent->save(Storage::SAVE_UPDATE_IGNORE);
 	    
 	        $newUser = new Users();
 	        $newUser->uid = $cUser->uid;
 	        $newUser->level = $agent['level'];
-	        $newUser->save(Storage::SAVE_UPDATE);
+	        $newUser->save(Storage::SAVE_UPDATE_IGNORE);
+	        return true;
 	    }
+	    return false;
 	}
 	
 	static function createAgentPayment($user_id, $order_id, $level){
@@ -106,7 +108,7 @@ class AgentPayment extends StorageNode {
 	    $agent->order_id = $order_id;
 	    $agent->level = $level;
 	    $agent->created = time();
-	    $agent->save(Storage::SAVE_INSERT);
+	    $agent->save(Storage::SAVE_INSERT_IGNORE);
 	}
 	
 	static function getAgentNameByLevel($level){
@@ -138,6 +140,9 @@ class AgentPayment extends StorageNode {
 	        break;
 	        case Users::USER_LEVEL_3 :
 	            $icon = '/themes/mobiles/img/jinpai.png';
+	        break;
+	        case Users::USER_LEVEL_5 :
+	            $icon = '/themes/mobiles/img/qiye.png';
 	        break;
 	        case Users::USER_LEVEL_4 :
 	            $icon = '/themes/mobiles/img/yinpai.png';

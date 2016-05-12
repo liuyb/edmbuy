@@ -634,9 +634,10 @@ function get_headscript(){
     $sesstoken=sess_token();
     $rendermode = View::RENDER_MODE_DEFAULT;
     $debug_list = C('env.debug_white_list');
+    $is_account_logined = Users::is_account_logined() ? 1 : 0;
     
     $script  = '<script type="text/javascript">';
-    $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={};";
+    $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={is_account_logined:{$is_account_logined}};";
     if ($user->uid) {
         foreach ($user->column_data() AS $k => $v) {
             if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {

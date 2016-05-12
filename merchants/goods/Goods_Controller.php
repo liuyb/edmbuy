@@ -99,6 +99,11 @@ class Goods_Controller extends MerchantController
                 $goods->shipping_fee = 0;
             }
             $gallery = ItemsGallery::find(new Query('item_id', $goods_id));
+            foreach ($gallery as &$gy){
+                $gy->img_url = ItemsGallery::imgurl($gy->img_url);
+                $gy->thumb_url = ItemsGallery::imgurl($gy->thumb_url);
+                $gy->img_original = ItemsGallery::imgurl($gy->img_original);
+            }
             $other_cat = Goods_Atomic::get_goods_ext_category($goods_id);
             $goods->item_desc = json_encode(htmlspecialchars_decode($goods->item_desc));
             $goods->other_cat = $other_cat;
@@ -351,11 +356,11 @@ class Goods_Controller extends MerchantController
             $data['retmsg'] = "参数不能为空！";
             $response->sendJSON($data);
         } */
-        if (strlen($cateArr['cat_name']) > 12 || empty($cateArr['cat_name'])) {
+       /*  if (strlen($cateArr['cat_name']) > 12 || empty($cateArr['cat_name'])) {
             $data['status'] = 0;
             $data['retmsg'] = "名称不能多于12个字且不能为空！";
             $response->sendJSON($data);
-        }
+        } */
         $result = Goods_Model::IsHadCategory($cat_id);
         if ($result['parent_id'] > 0 && !$cateArr['edit']) {
             $retmsg = "当前已是二级分类，不能增加子分类！";

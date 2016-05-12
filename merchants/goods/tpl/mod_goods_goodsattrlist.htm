@@ -36,9 +36,9 @@
                 <tr>
                     <td><!--{$val.cat_name}--></td>
                     <td><!--{$val.attr_name}--></td>
-                    <td class="attr_rel"  >
-                        <span class="attr_edit" onclick="editAttr( <!--{$val.cat_id}-->)">编辑</span>
-                        <span style="margin-left:23px;" class="attr_del" onclick="delAttr( <!--{$val.cat_id}-->)">删除</span>
+                    <td class="attr_rel" >
+                    	<a href="javascript:;" onclick="editAttr( <!--{$val.cat_id}-->)"><img src="../mch/img/edit_11.png"><br>编辑</a>
+						<a href="javascript:;" onclick="delAttr( <!--{$val.cat_id}-->)"><img src="../mch/img/sc.png"><br>删除</a>
                     </td>
                 </tr>
                 <!--{foreachelse}-->

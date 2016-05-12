@@ -78,22 +78,6 @@ function agency_switch(a){
 	$(_agency).show();
 }
 </script>
-<script>
-function testBuy(){
-	F.get('/distribution/test/buy', null, function(ret){
-		if(ret.flag == 'SUC'){
-			window.location.href='/distribution/agent/paid/succ?order_type='+ret.type;
-		}else{
-			alert(ret.msg);
-		}
-	});
-}
-function clearAgent(){
-	F.get('/distribution/test/clear', null, function(ret){
-		window.location.reload();
-	});
-}
-</script>
 <?php if(!$isAgent):?>
 <script id="forMnav" type="text/html">
 <div class="agency_bottom_next"> 
@@ -114,7 +98,6 @@ function clearAgent(){
 
 <script>
 $(function(){
-	$("#Mbody").css("background", "#f1f1f1"); 
 	show_mnav($('#forMnav').html(), -1);
 	
 	$(document).on('click', '.btn-wxpay', function(){

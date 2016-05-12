@@ -68,19 +68,25 @@ class User_Controller extends MobileController
      */
     public function index(Request $request, Response $response)
     {
-        $this->setPageView($request, $response, '_page_mpa');
-        $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
-    	Users::required_account_login();
+        //$this->setPageView($request, $response, '_page_mpa');
+        //$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_index');
-        //检查用户信息完成度，nickname或logo没有的话都重定向请求OAuth2详细认证获取资料
-        Users::check_detail_info();
+        $is_account_logined  = Users::is_account_logined();
+        
         $u = $this->showUserBaseInfo();
         $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
         $this->v->assign('agent', $agent);
-        $collect_shop_count = User_Model::getCollectShopCount();
-        $collect_goods_count = User_Model::getCollectGoodsCount();
-        $this->v->assign('shop_count', $collect_shop_count);
+        
+        $collect_shop_count = 0;
+        $collect_goods_count= 0;
+        if ($is_account_logined) {
+        	$collect_shop_count = User_Model::getCollectShopCount();
+        	$collect_goods_count = User_Model::getCollectGoodsCount();
+        }
+        
+        $this->v->assign('shop_count',  $collect_shop_count);
         $this->v->assign('goods_count', $collect_goods_count);
+        $this->v->assign('is_account_logined', $is_account_logined);
         throw new ViewResponse($this->v);
     }
 
@@ -231,6 +237,27 @@ class User_Controller extends MobileController
     	else { //登录页面
     		$this->v->set_tplname('mod_user_login_account');
     		throw new ViewResponse($this->v);
+    	}
+    }
+
+    /**
+     * 手机帐号登录
+     *
+     * @param Request $request
+     * @param Response $response
+     */
+    public function logout_account(Request $request, Response $response)
+    {
+    	if ($request->is_post()) {
+    		
+    	}
+    	else { //登录页面
+				if (isset($_SESSION[Users::AC_LOGINED_KEY])) {
+					unset($_SESSION[Users::AC_LOGINED_KEY]);
+				}
+				
+				// Reload current pag
+				$response->redirect('/user');
     	}
     }
     
@@ -579,7 +606,7 @@ class User_Controller extends MobileController
         $this->v->assign("nickname", $currentUser->nickname);
         $this->v->assign("level", $currentUser->level);
         $this->v->assign("logo", $currentUser->logo);
-        $this->v->assign("mobile", $currentUser->mobilephone);
+        $this->v->assign("mobile", $currentUser->mobile);
         $this->v->assign("wxqr", $currentUser->wxqr);
         if ($currentUser->parentid) {
             $parentUser = User_Model::findUserInfoById($currentUser->parentid);
@@ -897,7 +924,7 @@ class User_Controller extends MobileController
                 $ret['retmsg'] ="推荐人不存在";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
-            }elseif($u->level != Users::USER_LEVEL_3 && $u->level != Users::USER_LEVEL_4){
+            }elseif(!in_array($u->level, Users::getAgentArray())){
                 $ret['retmsg'] ="当前推荐人不是代理!";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
@@ -942,6 +969,10 @@ class User_Controller extends MobileController
             $response->redirect("/user/merchant/dosuccess");
         }
         $merchant = Merchant::getMerchantByUserId($GLOBALS['user']->uid);
+        //已激活
+        if($merchant->activation){
+            $response->redirect("/user/merchant/dosuccess");
+        }
         if($merchant->is_exist()){
             $response->redirect("/trade/order/confirm_sysbuy");
         }
@@ -1146,7 +1177,7 @@ class User_Controller extends MobileController
             $response->redirect('/user/merchant/checkin');
         } */
         //已是商家 - 已经支付 - 支付成功
-        if(Merchant::checkIsPaySuc()){
+        if($merchant->activation || Merchant::checkIsPaySuc()){
             $response->redirect("/user/merchant/dosuccess");
         }
         //已是商家  - 还没支付 - 未付款 未取消 订单存在

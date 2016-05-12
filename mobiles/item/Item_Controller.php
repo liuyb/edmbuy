@@ -56,6 +56,10 @@ class Item_Controller extends MobileController {
 			
 			$item_id = $request->arg(1);
 			$item = Items::load($item_id);
+			if($item->goods_flag && $item->goods_flag > 0){
+			    //赠品跟系统商品不显示菜单
+			    $this->nav_no = 0;
+			}
 			if (!$item->is_exist()) {
 				$this->nav_no = 0;
 				throw new ViewException($this->v, "查询商品不存在(商品id: {$item_id})");

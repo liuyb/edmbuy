@@ -828,4 +828,33 @@
 	}else{
 		window.location.href = '/';
 	}
+};
+/**
+ * 用户等级对应的图标
+ * @param level
+ * @returns {String}
+ */
+function getLevelIcon(level){
+	level = level ? parseInt(level) : 0;
+	icon = "";
+	switch (level){
+        case 1 :
+            icon = '/themes/mobiles/img/sha.png';
+        break;
+        case 2 :
+            icon = '/themes/mobiles/img/he.png';
+        break;
+        case 3 :
+            icon = '/themes/mobiles/img/jinpai.png';
+        break;
+        case 5 :
+            icon = '/themes/mobiles/img/qiye.png';
+        break;
+        case 4 :
+            icon = '/themes/mobiles/img/yinpai.png';
+        break;
+        default :
+            icon = '/themes/mobiles/img/ke.png';
+	}
+	return icon;
 }

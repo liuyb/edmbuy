@@ -19,7 +19,6 @@
 			<th>付款时间</th>
 			<th>订单金额</th>
 			<th>佣金</th>
-			<th></th>
 		</tr>
 		<tbody id="resultList"></tbody>		
 	</table>
@@ -71,7 +70,7 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
-			HTML += "<tr class='commisionRow' data-uid="+obj.user_id+" data-oid="+obj.order_id+" data-level="+obj.parent_level+"><td>"+obj.order_unick+"</td><td class=\"sx_table_list_time\">"+obj.paid_time+"</td><td>"+obj.order_amount+"元</td><td>"+obj.commision+"元</td><td>></td></tr>";
+			HTML += "<tr class='commisionRow' data-uid="+obj.user_id+" data-oid="+obj.order_id+" data-level="+obj.parent_level+"><td>"+obj.order_unick+"</td><td class=\"sx_table_list_time\">"+obj.paid_time+"</td><td>"+obj.order_amount+"元</td><td>"+obj.commision+"元</td></tr>";
 		}
 	}
 	F.afterConstructRow(isInit, $resultList, HTML, $showMore);

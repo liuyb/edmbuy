@@ -200,7 +200,8 @@ class RefundAfterJob extends CronJob {
 		}
 		
 		//设置佣金计算
-		UserCommision::generate($order_id);
+		$order = Order::load($order_id);
+		UserCommision::generate($order);
 		
 		//记录订单操作记录
 		Order::action_log($order_id, ['action_note'=>'用户支付']);

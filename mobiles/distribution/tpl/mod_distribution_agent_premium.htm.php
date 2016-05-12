@@ -28,7 +28,7 @@ show_topnav($('#forTopnav').html());
 					<img src="<?=isset($packages['logo'])? $packages['logo'] : ''  ?>">
 				</td>
 				<td class="info_td2">
-					<p class="info_name"><?=isset($pack['name'])?$packages['name']:'' ?></p>
+					<p class="info_name"><?=isset($packages['name'])?$packages['name']:'' ?></p>
 				</td>
 				<td class="info_td3">
 					<p class="info_price" style="color:#f65d00;">￥<?=isset($packages['sale_price'])?$packages['sale_price']:0 ?></p>

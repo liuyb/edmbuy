@@ -13,11 +13,6 @@ require (__DIR__.'/core/init.php');
 $request  = new Request();
 $response = new Response();
 
-$_ip = $request->ip();
-if ($_ip!='113.97.237.86') {
-	$response->send('<center style="margin-top:50px;font-size: 40px;">系统升级维护中，请过一段时间再访问。</center>');
-}
-
 try {
   SimPHP::I(['modroot'=>'mobiles'])
   ->boot(RC_ALL ^ RC_MEMCACHE)

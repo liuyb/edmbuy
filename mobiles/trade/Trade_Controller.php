@@ -511,7 +511,22 @@ class Trade_Controller extends MobileController {
       $newOrder->referer      = isset($_GET['refer']) && !empty($_GET['refer']) ? $_GET['refer'] : '本站';
       $newOrder->add_time     = simphp_gmtime(); //跟从ecshop习惯，使用格林威治时间
       //...
+      $newOrder->merchant_ids = $cItem->merchant_id;
 
+      //金牌银牌代理处理
+      if($this->is_agent_order($item_id)){
+          if(GOLD_AGENT_GOODS_ID == $item_id){
+              $newOrder->commision = 198;
+          }else if(SILVER_AGENT_GOODS_ID == $item_id){
+              $newOrder->commision = 98;
+          }
+          $newOrder->order_flag = Order::ORDER_FLAG_AGENT;
+      }else if($this->is_merchant_order($item_id)){
+          $newOrder->commision = 999;
+          //购买商家处理
+          $newOrder->order_flag = Order::ORDER_FLAG_MERCHANT;
+      }
+      
       $newOrder->save(Storage::SAVE_INSERT_IGNORE);
       $order_id = 0;
       if ($newOrder->id) { //订单表生成成功
@@ -561,7 +576,7 @@ class Trade_Controller extends MobileController {
                   $ret['msg'] = '商家数据不存在！';
                   $response->sendJSON($ret);
               }
-              Merchant::addMerchantPayment($merchant->uid, $order_id, $order_sn);
+              Merchant::addMerchantPayment($merchant->uid, $user_id, $newOrder);
           }
           
           // 提交事务
@@ -577,9 +592,9 @@ class Trade_Controller extends MobileController {
           $order_info  = $exOrder->to_array(true);
           $jsApiParams = '';
           //todo
-         if ('wxpay'==$pay_mode) {
-           $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
-         }
+           if ('wxpay'==$pay_mode) {
+              $jsApiParams = Wxpay::unifiedOrder($order_info, $GLOBALS['user']->openid);
+           }
 
           $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'order_sn'=>$order_sn,'js_api_params'=>json_decode($jsApiParams)];
           $response->sendJSON($ret);

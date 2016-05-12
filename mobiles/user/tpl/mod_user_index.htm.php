@@ -7,7 +7,7 @@
 <?php else:
 $is_agent = Users::isAgent($curuser->level);
 ?>
-<?php if($is_agent && $agent->pid && !$agent->premium_id):?>
+<?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
 <div class="member_cen_common" style="margin:0;">
 	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
 		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($curuser->level) ?>元套餐未领取!</span>
@@ -19,15 +19,20 @@ $is_agent = Users::isAgent($curuser->level);
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
 			<td width="70px;">
-			<?php if($logo): ?>
+				<?php if($is_account_logined && $logo): ?>
     			<img src="<?=$logo?>?_=<?=$curuser->randver?>" alt="logo">
     		<?php else:?>
-    			<img src="/themes/mobiles/img/mt.png">
+    			<img src="/themes/mobiles/img/mt.png"/>
     		<?php endif;?>
     		</td>
 			<td>
+			<?php if($is_account_logined):?>
 				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z"></p>
 				<p class="become_name_id">多米号：<?=$uid ?></p>
+			<?php else:?>
+				<p class="become_name">注册/登录</p>
+				<p class="become_name_id">多米号：<?=$uid ?></p>			
+			<?php endif;?>
 			</td>
 			<td class="agency_index_img"><img src="/themes/mobiles/img/shezhi.png"></td>
 		</tr>
@@ -35,7 +40,7 @@ $is_agent = Users::isAgent($curuser->level);
 </div>
 <?php if(isset($parentUid)):?>
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('/distribution/my/parent')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/my/parent') ?>')">
 		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUid ?></span><i><?=$parentNickName ?></i>
 	</div>
 </div>
@@ -47,28 +52,28 @@ $is_agent = Users::isAgent($curuser->level);
 	</div>
 	<div class="my_order_state">
 	<ul>
-		<li onclick="_link('/trade/order/record?status=wait_pay')">
+		<li onclick="_link('<?=U('trade/order/record?status=wait_pay') ?>')">
 			<img src="/themes/mobiles/img/fk1.png">
 			<span class="waitPayCount"></span>
 		</li>
-		<li onclick="_link('/trade/order/record?status=wait_ship')">
+		<li onclick="_link('<?=U('trade/order/record?status=wait_ship') ?>')">
 			<img src="/themes/mobiles/img/fh2.png">
 			<span class="unShipCount"></span>
 		</li>
-		<li class="dsh" onclick="_link('/trade/order/record?status=wait_recv')">
+		<li class="dsh" onclick="_link('<?=U('trade/order/record?status=wait_recv') ?>')">
 			<img src="/themes/mobiles/img/sh3.png">
 			<span class="shipedCount"></span>
 		</li>
-		<li onclick="_link('/trade/order/record?status=finished')"><img src="/themes/mobiles/img/sh4.png"></li>
+		<li onclick="_link('<?=U('trade/order/record?status=finished') ?>')"><img src="/themes/mobiles/img/sh4.png"></li>
 	</ul>
 	</div>
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency" onclick="_link('/user/favorite/shop')">
+	<div class="in_common_agency" onclick="_link('<?=U('user/favorite/shop') ?>')">
 		<img src="/themes/mobiles/img/scddp.png"><span>我收藏的店铺</span><i><?=$shop_count ?>家</i>
 	</div>
-	<div class="in_common_agency del_bottom" onclick="_link('/user/favorite/goods')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/favorite/goods') ?>')">
 		<img src="/themes/mobiles/img/scdbb.png"><span>我收藏的宝贝</span><i><?=$goods_count ?>件</i>
 	</div>
 </div>
@@ -100,14 +105,14 @@ $is_agent = Users::isAgent($curuser->level);
 </div>
 
 <div class="member_cen_common">
-	<div class="in_common_agency del_bottom" onclick="_link('/user/my/wallet')">
+	<div class="in_common_agency del_bottom" onclick="_link('<?=U('user/my/wallet') ?>')">
 		<img src="/themes/mobiles/img/wdqb.png"><span>我的钱包</span><i class="my_price_c"></i>
 	</div>
 </div>
 
 <div class="member_cen_common" style="margin-bottom:60px;">
 	<div class="in_common_agency del_bottom">
-		<a class="blka" href="<?php echo U('eqx/intro')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
+		<a class="blka" href="<?php echo U('eqx/letter')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
 	</div>
 </div>
 
@@ -127,9 +132,6 @@ $is_agent = Users::isAgent($curuser->level);
 <?php include T('inc/add_as_friend');?>
 
 <script>
-$().ready(function(){
-	loadAjaxData();
-});
 function loadAjaxData(){
 	var url = "/user/index/ajax";
 	F.get(url, null, function(data){
@@ -148,12 +150,15 @@ function loadAjaxData(){
 	});
 }
 
-//好友弹框
-$(".refer_but").on("click",function(){
-	getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
-});
+$(function(){
 
-$(function(){	
+	loadAjaxData();
+	
+	//好友弹框
+	$(".refer_but").on("click",function(){
+		getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
+	});
+	
 	var length = $(".c_n_tit").text().length;
 	var _length = $(".refer_name").text().length;
 	if(length >6){
@@ -171,6 +176,9 @@ $(function(){
 });
 
 function _link(url){
+	if (required_account_logined()) {
+		return false;
+	}
 	window.location.href=url;
 }
 </script>

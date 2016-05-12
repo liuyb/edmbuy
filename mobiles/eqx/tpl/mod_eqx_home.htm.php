@@ -20,7 +20,7 @@
 	<div class="what_commom"><a href="javascript:;" class="blka" onclick="gotui()"><img src="<?=$contextpath?>mobiles/eqx/img/qtg.png"><span>去推广</span></a></div>
 </div>
 
-<div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">ABC850890</i></span></div>
+<div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">3398961935</i></span></div>
 
 <script>
 var is_agent = parseInt('<?=$is_agent?>');
@@ -32,6 +32,8 @@ function do_act(obj) {
 	weui_dialog_close();
 }
 function gotui() {
+	weui_alert('恭喜您获得一起享优先推广权的机会，请先前往“我的人脉”查看人网关系是否正确');
+	return false;
 	if (is_agent) {
 		location.href = '<?php echo U('eqx/tui')?>';
 	}
@@ -40,6 +42,7 @@ function gotui() {
 		weui_dialog(html,'<span style="color:red">提示</span>');
 	}
 }
+/*
 $(function(){
 	if (!is_agent) {
 		setTimeout(function(){
@@ -47,4 +50,5 @@ $(function(){
 		},500);
 	}
 });
+*/
 </script>

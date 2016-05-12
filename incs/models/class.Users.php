@@ -18,6 +18,8 @@ class Users extends StorageNode {
 	const USER_LEVEL_3 = 3; //金牌代理
 	const USER_LEVEL_4 = 4; //银牌代理
 	
+	const USER_LEVEL_5 = 5; //金牌代理
+	
 	/**
 	 * 会员登录状态session key
 	 * @var constant
@@ -238,7 +240,7 @@ class Users extends StorageNode {
 	/**
 	 * 请求帐号登录
 	 */
-	static function required_account_login() {
+	static function required_account_logined() {
 		if (!self::is_account_logined()) {
 			//Response::redirect('user/login_account');
 			Response::redirect('eqx/reg');
@@ -256,8 +258,9 @@ class Users extends StorageNode {
 	 *   -2: 密码不能为空
 	 *   -3: 手机帐号不存在
 	 *   -4: 密码不对
+	 *   -5: 当前手机号没有绑定该微信
 	 */
-	static function login_account($mobile, $passwd) {
+	static function login_account($mobile, $passwd, $theuid = NULL) {
 		if (empty($mobile) || !Fn::check_mobile($mobile)) {
 			return -1;
 		}
@@ -271,6 +274,12 @@ class Users extends StorageNode {
 		$passwd_enc  = gen_salt_password($passwd, $exUser->salt);
 		if ($passwd_enc != $exUser->password) {
 			return -4;
+		}
+		if (!isset($theuid)) {
+			$theuid = $GLOBALS['user']->uid;
+		}
+		if ($theuid != $exUser->uid) {
+			return -5;
 		}
 		
 		//set status
@@ -852,6 +861,58 @@ class Users extends StorageNode {
 	/**
 	 * 微信通知支付成功
 	 */
+	public function notify_buyer_pay_succ($cUser, $order) {
+	    if ($order->is_exist() && $order->pay_status==PS_PAYED)
+	    {
+	        $order_id = $order->order_id;
+	        //数据准备
+	        $orderItems = Order::getTinyItems($order_id);
+	        $itemDesc = '';
+	        if (!empty($orderItems)) {
+	            foreach ($orderItems AS $it) {
+	                $itemDesc .= $it['goods_name'].',';
+	            }
+	            $itemDesc = substr($itemDesc, 0, -1);
+	        }
+	        	
+	        //通知提醒自己
+	        $extra = [
+	            'paid_money' => $order->money_paid.'元',
+	            'item_desc'  => $itemDesc,
+	            'pay_way'    => $order->pay_name,
+	            'order_sn'   => $order->order_sn,
+	            'order_id'   => $order_id,
+	            'pay_time'   => WxTplMsg::human_dtime(simphp_gmtime2std($order->pay_time))
+	        ];
+	        if (!empty($cUser->openid)) {
+	            WxTplMsg::pay_succ($cUser->openid, '你好，你的商品已支付成功!', '你可以到交易记录查看更多信息', U("order/{$order_id}/detail",'',true), $extra);
+	        }
+	    }
+	}
+	
+	public function notify_parent_pay_succ(){
+	    /* $extra = [
+	        'order_sn'     => $order->order_sn,
+	        'order_id'     => $order_id,
+	        'order_amount' => $order->money_paid.'元',
+	        'order_state'  => '支付成功，你可以获得%.2f元佣金'
+	    ];
+	    $order_upart = $cUser->uid . ',' . $cUser->nickname;
+	    $order_state = '支付成功，你可以获得%.2f元佣金';
+	    $first  = '你的%s级米客('.$order_upart.')购买商品支付成功!';
+	    $remark = '米客确认收货7天后，你将可申请提现，点击查询详情';
+	    //一级上级
+	    if (!empty($uParent1->openid)) {
+	        $commision = UserCommision::user_share($order->commision, 1);
+	        $extra['order_state'] = sprintf($order_state, $commision);
+	        $url    = U('user/commission',['user_id'=>$cUser->parentid, 'order_id'=>$order_id, 'level'=>1],true);
+	        WxTplMsg::sharepay_succ($uParent1->openid, sprintf($first, '一'), $remark, $url, $extra);
+	    } */
+	}
+	
+	/**
+	 * 微信通知支付成功
+	 */
 	public function notify_pay_succ($order_id) {
 		$order = Order::load($order_id);
 		if ($order->is_exist() && $order->pay_status==PS_PAYED)
@@ -939,7 +1000,17 @@ class Users extends StorageNode {
 	 * 是不是代理
 	 */
 	public static function isAgent($level){
-	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_4);
+	    return in_array($level, self::getAgentArray());
+	}
+	
+	//金牌代理
+	public static function isGoldAgent($level){
+	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_5);
+	}
+	
+	//银牌代理
+	public static function isSilverAgent($level){
+	    return ($level == Users::USER_LEVEL_4);
 	}
 	
 	public static function displayUserLevel($level){
@@ -950,12 +1021,22 @@ class Users extends StorageNode {
 	        case Users::USER_LEVEL_3 :
 	            return '金牌代理';
 	        break;
+	        case Users::USER_LEVEL_5 :
+	            return '金牌代理';
+	        break;
 	        case Users::USER_LEVEL_4 :
 	            return '银牌代理';
 	        break;
 	        default : 
 	           return '米客';
 	    }
+	}
+	
+	/**
+	 * 返回代理数组
+	 */
+	static function getAgentArray(){
+	    return [Users::USER_LEVEL_3, Users::USER_LEVEL_4, Users::USER_LEVEL_5];
 	}
 	
 	/**

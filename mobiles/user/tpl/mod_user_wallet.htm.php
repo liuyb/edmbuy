@@ -45,12 +45,6 @@
 
 <div class="guest_list">
 	<ul>
-		<a href='/distribution/spread'>
-			<li>
-				<h1><img src="/themes/mobiles/img/tgsc.png"></h1>
-				<p>推广素材</p>
-			</li>
-		</a>
 		<a href="<?php echo U('cash/apply')?>">
 			<li>
 				<h1><img src="/themes/mobiles/img/sqtx.png"></h1>
@@ -66,8 +60,9 @@
 	</ul>
 </div>
 <script>
+var _detail = "<?=U('user/income/detail?1=1')?>";
 function showDetail(state,type,rebate){
-	window.location.href='/user/income/detail?type='+type+'&state='+state+'&rebate='+rebate;
+	window.location.href=_detail+'&type='+type+'&state='+state+'&rebate='+rebate;
 }
 </script>
 <?php endif;?>
