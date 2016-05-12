@@ -109,7 +109,7 @@ class Account_Model extends Model
      */
     static function getCashingBank()
     {
-        $sql = "select bank_code,bank_name from shp_cashing_bank where enabled = 1";
+        $sql = "select bank_code,bank_name from shp_cashing_bank where enabled = 1 and bank_code not in ('ALIPAY','WXPAY')";
         return D()->query($sql)->fetch_array_all();
     }
 

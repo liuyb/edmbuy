@@ -170,7 +170,7 @@ class Account_Controller extends MerchantController
         $rid = $request->post("rid");
         $mobile = $request->post("mobile");
         $mobile_code = $request->post("mobile_code");
-        Account_Model::checkRegMobile($mobile);
+        $data['bank_phone'] = $mobile;
         if (!$mobile) {
             $ret['retmsg'] = "手机号码不存在!";
             $ret['status'] = 0;
@@ -178,13 +178,15 @@ class Account_Controller extends MerchantController
         } elseif ($_SESSION['bind_bank'] != $mobile_code) {
             $ret['retmsg'] = "手机验证码错误!";
             $ret['status'] = 0;
-            $response->sendJSON($ret);
+           // $response->sendJSON($ret);
         } elseif($_SESSION['mobile']!=$mobile){
             $ret['retmsg'] = "手机号码有误请重新获取!";
             $ret['status'] = 0;
             $response->sendJSON($ret);
         }
         $result = Account_Model::setBank($data, intval($rid));
+        unset($_SESSION['bind_bank']);
+        unset($_SESSION['mobile']);
         if ($result == 1) {
             $ret['retmsg'] = "修改银行卡成功!";
             $ret['status'] = 1;
@@ -218,20 +220,20 @@ class Account_Controller extends MerchantController
     public function getcode(Request $request, Response $response)
     {
         $mobile = $request->post("mobile");
-        $result = Account_Model::checkRegMobile($mobile);
+        /* $result = Account_Model::checkRegMobile($mobile);
         if (!$result) {
             $ret['retmsg'] = "与商家入驻绑定手机号码不匹配!";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        }
+        } */
         $type = "bind_bank";
         //todo 发送验证码
         $result = Sms::sendSms($mobile,$type,true);
         if (true) {
            $_SESSION['mobile'] = $mobile;
            $ret['retmsg'] = "发送验证码成功!";
-            $ret['status'] = 1;
-            $response->sendJSON($ret);
+           $ret['status'] = 1;
+           $response->sendJSON($ret);
         }
     }
 

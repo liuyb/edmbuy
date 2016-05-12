@@ -229,13 +229,13 @@ function getSelectIds(obj) {
                     return false;
                 }
             }
-            if (type && "bank_no" == type) {
+            /*if (type && "bank_no" == type) {
                 if (!cardNoCheck(val)) {
                     OBJ.focus();
                     valid = false;
                     return false;
                 }
-            }
+            }*/
             if (type && "mobile" == type) {
                 if (!isMobile(val)) {
                     OBJ.focus();

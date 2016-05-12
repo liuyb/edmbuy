@@ -85,8 +85,9 @@ function submitForm(){
     <td class="c5"><!--{$it.verifyTxt}--></td>
     <td class="cl">
       <a href="#/merchant/<!--{$it.merchant_id}-->/detail,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">查看</a>
+      &nbsp;&nbsp;
       <!--{if $it.verify eq 1}-->
-      <a href="#/merchant/<!--{$it.merchant_id}-->/check,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">审核</a>
+      <a href="#/merchant/<!--{$it.merchant_id}-->/detail,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">审核</a>
       <!--{/if}-->
     </td>
   </tr>

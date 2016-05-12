@@ -12,11 +12,12 @@ $category = 'fruit';
 include T('inc/pref_popup_menu');?>
 
 <div class="teawinecomment">
+<!-- 
 	<div class="tea_pro_list">
-		<!-- <a href="javescript:;"><img src="/themes/mobiles/img/fruit1.png"></a> -->
+		<a href="javescript:;"><img src="/themes/mobiles/img/fruit1.png"></a>
 		<a href="javascript:gotoItem(1045);"><img src="/themes/mobiles/img/gnqc.png"></a>
 	</div>
-	
+ -->
 	<div class="tea_info_list" style="margin-top:5px;">
 		<ul id="goods_list" class="clearfix">
 		</ul>

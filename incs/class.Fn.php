@@ -287,7 +287,7 @@ class Fn extends Func {
       switch($composite_status){
           //待付款  
           case CS_AWAIT_PAY :
-              $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING));
+              $ret = array("pay_status" => array(PS_UNPAYED, PS_PAYING, PS_FAIL));
               break;
           //备货中
           /* case CS_STOCKING :
@@ -332,6 +332,8 @@ class Fn extends Func {
           $ret = "已关闭";
       }else if(in_array($pay_status, array(PS_UNPAYED, PS_PAYING))){
           $ret = "待付款";
+      }else if($pay_status == PS_FAIL){
+          $ret = "支付失败";
       }else if($pay_status == PS_PAYED){
           if($ship_status == SS_RECEIVED){
               $ret = "已完成";
