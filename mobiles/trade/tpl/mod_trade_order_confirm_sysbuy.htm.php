@@ -64,7 +64,9 @@ $(function(){
 				wxpayJsApiCall(ret.js_api_params,ret.order_id,function(flag) {
 					if (flag == 'OK') {
 						window.location.href='/user/merchant/dosuccess';
-					}
+					}else{
+						window.location.href='<?=U('trade/order/record') ?>';
+ 					}
 				});
 				//form_topay_submit(ret.order_id, 'wxpay');
 			} else{

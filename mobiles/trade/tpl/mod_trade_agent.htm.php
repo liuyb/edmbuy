@@ -123,6 +123,8 @@ $(function(){
         	  				if(flag=='OK'){
         						var data ={'order_id':ret.order_id,'order_sn':ret.order_sn}
         						window.location.href='/distribution/agent/paid/succ?order_type='+order_type;
+         					}else{
+								window.location.href='<?=U('trade/order/record') ?>';
          					}
         				});	
   					}else{

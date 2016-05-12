@@ -357,7 +357,7 @@ HERESQL;
 	static function getGoodsRealShipFee(&$item){
 	    $template_fee = 0;
 	    if(Items::SHIPPING_TEMPLATE == $item->fee_or_template){
-	        $template_fee = D()->from('shp_shipment_tpl')->where("tpl_id = %d", $item->shipping_template)->select()->get_one();
+	        $template_fee = D()->from('`shp_shipment_tpl`')->where("tpl_id = %d", $item->shipping_template)->select()->get_one();
 	        if(!$template_fee || empty($template_fee)){
 	            $template_fee = 0;
 	        }else{
