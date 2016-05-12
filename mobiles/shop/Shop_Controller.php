@@ -73,7 +73,7 @@ class Shop_Controller extends MobileController
             'title' => $merchant->facename,
             'desc' => '发现一家非常有趣又好玩的多米店！',
             'link' => U('shop/'.$merchant_id, 'spm=' . Spm::user_spm(), true),
-            'pic' => U($merchant->logo?$merchant->logo : 'misc/images/napp/touch-icon-144.png', '', true),
+            'pic' => $merchant->logo ? : U('misc/images/napp/touch-icon-144.png', '', true),
         ];
         $this->v->assign('share_info', $share_info);
         $this->v->assign("recommend_info", $recommend_info);
@@ -123,12 +123,12 @@ class Shop_Controller extends MobileController
         $this->v->assign('name',$name);
         $merchant = Merchant::load($merchant_id);
         //收藏次数
-        $img = $merchant->logo?$merchant->logo : 'misc/images/napp/touch-icon-144.png';
+        //$img = $merchant->logo?$merchant->logo : 'misc/images/napp/touch-icon-144.png';
         $share_info = [
             'title' => "$merchant->facename:全部商品",
             'desc' => '发现一家非常有趣又好玩的多米店！',
             'link' => U("shop/goods?merchant_id=$merchant_id&shop_cat_id=$shop_cat_id&name=$name", 'spm=' . Spm::user_spm(), true),
-            'pic' => U($img, '', true),
+            'pic' => $merchant->logo ? : U('misc/images/napp/touch-icon-144.png', '', true),
         ];
         $this->v->assign('share_info', $share_info);
         $response->send($this->v);

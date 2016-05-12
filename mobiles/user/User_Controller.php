@@ -846,7 +846,7 @@ class User_Controller extends MobileController
             $ret['retmsg'] = "手机验证码不能为空！";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        } elseif ($_SESSION['verifycode'] != $verifycode) {
+        } elseif (isset($_SESSION['verifycode']) && $_SESSION['verifycode'] != $verifycode) {
             $ret['retmsg'] = "图形验证码不正确！";
             $ret['status'] = 0;
             $response->sendJSON($ret);

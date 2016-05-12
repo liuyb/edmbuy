@@ -41,8 +41,7 @@ class Partner extends StorageNode {
      */
     static function findSecondLevelCount($uid, $options = ''){
         $where = self::setLevelQueryCondition($options);
-        $sql = "SELECT count(1) FROM edmbuy.shp_users u where
-                    u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d ) $where ";
+        $sql = "SELECT count(1) FROM edmbuy.shp_users u where parent_id2 = %d $where ";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -54,11 +53,7 @@ class Partner extends StorageNode {
      */
     static function findThirdLevelCount($uid, $options = ''){
         $where = self::setLevelQueryCondition($options);
-        $sql = "SELECT count(1) FROM edmbuy.shp_users tu where
-                 tu.parent_id in (
-                		SELECT user_id FROM edmbuy.shp_users su where
-                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d )
-                    ) $where ";
+        $sql = "SELECT count(1) FROM edmbuy.shp_users tu where parent_id3 = %d $where ";
         $count = D()->query($sql, $uid)->result();
         return $count;
     }
@@ -86,8 +81,7 @@ class Partner extends StorageNode {
     static function findSecondLevelList($uid, PagerPull $pager, $options = ''){
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users u where
-                u.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d) $where 
+        $sql = "SELECT $column FROM edmbuy.shp_users u where parent_id2 = '%d' $where 
                 order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $result = self::rebuildLevelResult($result);
@@ -103,11 +97,7 @@ class Partner extends StorageNode {
     static function findThirdLevelList($uid, PagerPull $pager, $options = ''){
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
-        $sql = "SELECT $column FROM edmbuy.shp_users tu where
-                 tu.parent_id in (
-                		SELECT user_id FROM edmbuy.shp_users su where
-                		su.parent_id in (SELECT user_id FROM edmbuy.shp_users where `parent_id` = %d )
-                    ) $where order by user_id desc limit %d,%d";
+        $sql = "SELECT $column FROM edmbuy.shp_users tu where parent_id3 = '%d' $where order by user_id desc limit %d,%d";
         $result = D()->query($sql, $uid, $pager->start, $pager->realpagesize)->fetch_array_all();
         $result = self::rebuildLevelResult($result);
         $pager->setResult($result);
@@ -128,8 +118,8 @@ class Partner extends StorageNode {
      * 米商列表展示需要的字段
      */
     static function outputLevelListQueryColumn(){
-        $queryCols = " user_id as uid, logo, nick_name as nickname, level, province, city, childnum_1 as childnum1,
-            parent_nick as parentnick, mobile_phone as mobilephone, wxqr, reg_time  ";
+        $queryCols = " user_id as uid, logo, nick_name as nickname, mobile AS mobilephone, level, province, city, childnum_1 as childnum1,
+            parent_nick as parentnick, wxqr, reg_time ";
         return $queryCols;
     }
     

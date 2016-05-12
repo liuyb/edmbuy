@@ -33,9 +33,7 @@ class Distribution_Controller extends MobileController{
             'distribution/agent/package' => 'show_agent_package',
             /* 'trade/order/package/confirm' => 'confirm_agent_premium', */
             'distribution/agent/premium/buy' => 'free_buy_agent_premium',
-            'distribution/agent/premium/succ' => 'buy_premium_succ',
-            'distribution/test/buy' => 'test_buy_agent',
-            'distribution/test/clear' => 'clear_buy_agent',
+            'distribution/agent/premium/succ' => 'buy_premium_succ'
         ];
     }
     
@@ -513,7 +511,7 @@ class Distribution_Controller extends MobileController{
                 //$order_update['commision'] = $total_commision; //订单总佣金
                 //if ($true_amount!=$newOrder->goods_amount) {
                     $order_update['goods_amount'] = $true_amount;
-                    $order_update['order_amount'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
+                    $order_update['money_paid'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
                 //}
                 if (empty($succ_goods)) { //如果一个商品都没有购买成功，则需要更改此订单状态为"无效"OS_INVALID
                     $order_update['order_status'] = OS_INVALID;
@@ -532,13 +530,13 @@ class Distribution_Controller extends MobileController{
                 // 生成表 pay_log 记录
                 //PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
         
+                Distribution_Model::updateGoodsPaidNumber($order_id);
                 // 生成子订单(如果有多个商家)
                 Distribution_Model::genSubOrderForPermium($order_id, $rel_merchants, $agent->order_id);
-                
                 //更新用户已经领取过赠品了
                 $agent->premium_id = $package_id;
                 $agent->save(Storage::SAVE_UPDATE);
-                $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$true_amount];
+                $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$order_update['money_paid']];
                 $response->sendJSON($ret);
             }
             else {

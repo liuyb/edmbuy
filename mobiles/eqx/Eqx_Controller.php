@@ -60,7 +60,8 @@ class Eqx_Controller extends MobileController {
 		$this->topnav_no = 1;
 		$this->nav_no = 0;
 		
-		if (Users::is_account_logined()) {
+		$nologin = $request->get('nologin',0);
+		if (!$nologin && Users::is_account_logined()) {
 			$response->redirect('/eqx/home');
 		}
 		
@@ -190,11 +191,11 @@ class Eqx_Controller extends MobileController {
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
-				
-				if (0) {
+				/*
+				if ($parent_id!=104 && $parent_id!=114111&&$parent_id!=7058) {
 					$ret['msg'] = '系统暂时关闭注册';
 					$response->sendJSON($ret);
-				}
+				}*/
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
 					$response->sendJSON($ret);
@@ -211,7 +212,14 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '该手机号已注册，不能重新注册';
 					$response->sendJSON($ret);
 				}
-				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id && $GLOBALS['user']->level<2) {
+				if ($parent_id) {
+					$pUser = Users::load($parent_id);
+					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
+						$parent_id = 0;
+					}
+				}
+				
+				if (!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
@@ -227,10 +235,6 @@ class Eqx_Controller extends MobileController {
 				$parent_id = $request->post('parent_id',0);
 				$inapp  = $request->get('inapp','');
 				
-				if (0) {
-					$ret['msg'] = '系统暂时关闭注册';
-					$response->sendJSON($ret);
-				}
 				if (!$GLOBALS['user']->uid) {
 					$ret['msg'] = '请先微信授权登录';
 					$response->sendJSON($ret);
@@ -275,7 +279,14 @@ class Eqx_Controller extends MobileController {
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
-				if (/*$GLOBALS['user']->uid > MAX_BETA_USERS_ID && */!$parent_id && $GLOBALS['user']->level<2) {
+				if ($parent_id) {
+					$pUser = Users::load($parent_id);
+					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
+						$parent_id = 0;
+					}
+				}
+				
+				if (!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}

@@ -123,14 +123,14 @@ class UserCommision extends StorageNode {
 	    if(!$total_commision){
 	        return false;
 	    }
-	    $cUser  = Users::load($exOrder->user_id);
+	    $cUser  = Users::load($exOrder->user_id, true);
 	    //扣除平台的20%
 	    $commision = self::can_share($total_commision);
-	    //推荐商家终身提点 从平台20%扣除
-	    self::merchantInviteCommision($cUser, $exOrder, ($total_commision - $commision));
+	    //推荐商家终身提点 从平台20%扣除 用总佣金计算
+	    self::merchantInviteCommision($cUser, $exOrder, ($total_commision));
 	    $share_radio = 0;
 	    //米商及米商以上
-	    if($cUser->level && $cUser->level >= Users::USER_LEVEL_1){
+	    if($cUser->level){
 	        $share_radio = self::$share_ratio_fx_misha;
 	        self::createCommisionForGoodsFX($cUser, $cUser, $exOrder, $commision, 0, self::COMMISSION_TYPE_FX, $share_radio);
 	    }else{
@@ -379,7 +379,7 @@ class UserCommision extends StorageNode {
 	    $upUC->order_unick  = $buyer->nickname;
 	    $upUC->order_id     = $exOrder->order_id;
 	    $upUC->order_sn     = $exOrder->order_sn;
-	    $upUC->order_amount = $exOrder->goods_amount;
+	    $upUC->order_amount = $exOrder->money_paid;
 	    $upUC->commision    = $commision;
 	    $upUC->use_ratio    = $radio;
 	    $upUC->paid_time    = $exOrder->pay_time;
@@ -460,7 +460,7 @@ class UserCommision extends StorageNode {
 	static function get_commision_list(PagerPull $pager, $options){
 	    $where = '';
         if(isset($options['state']) && $options['state'] >= 0){
-            $where .= ' AND `state` =  '.intval($options['state']);
+            $where .= ' AND `state` >= 0 ';
         }else{
             $where .= ' AND `state` in ('.UserCommision::STATE_ACTIVE.', '.UserCommision::STATE_CASHED.') ';
         }

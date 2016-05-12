@@ -1,0 +1,46 @@
+﻿Merge remote-tracking branch 'origin/master'
+
+# Conflicts:
+#	upmenu.php
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 6 and 6 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   conf/msg.php
+#	modified:   cron/MockCreateMerchantJob.php
+#	modified:   incs/class.Sms.php
+#	modified:   incs/models/class.Partner.php
+#	modified:   incs/models/class.UserCommision.php
+#	modified:   incs/models/class.Users.php
+#	modified:   merchants/account/Account_Controller.php
+#	modified:   merchants/shop/Shop_Controller.php
+#	modified:   merchants/shop/tpl/mod_shop_details.htm
+#	modified:   merchants/user/User_Controller.php
+#	modified:   mobiles/cash/Cash_Controller.php
+#	modified:   mobiles/distribution/Distribution_Controller.php
+#	modified:   mobiles/distribution/Distribution_Model.php
+#	modified:   mobiles/eqx/Eqx_Controller.php
+#	modified:   mobiles/eqx/tpl/mod_eqx_home.htm.php
+#	modified:   mobiles/shop/Shop_Controller.php
+#	modified:   mobiles/trade/Trade_Controller.php
+#	modified:   mobiles/user/User_Controller.php
+#	modified:   mobiles/user/User_Model.php
+#	modified:   mobiles/user/tpl/mod_user_commission.htm.php
+#	modified:   mobiles/user/tpl/mod_user_setting.htm.php
+#	modified:   mobiles/user/tpl/mod_user_wallet.htm.php
+#	modified:   upmenu.php
+#
+

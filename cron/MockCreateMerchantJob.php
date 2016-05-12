@@ -59,8 +59,8 @@ class MockCreateMerchantJob extends CronJob{
         
         $newOrder->how_oos      = Fn::oos_status(OOS_CONSULT);
         
-        $newOrder->pay_id       = 1;
-        $newOrder->pay_name     = '';
+        $newOrder->pay_id       = 2;
+        $newOrder->pay_name     = '微信支付';
         $newOrder->postscript   = '';
         $newOrder->how_surplus  = '';
         //...

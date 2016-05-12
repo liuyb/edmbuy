@@ -833,7 +833,7 @@ class Trade_Controller extends MobileController {
         }
 
         // 生成表 pay_log 记录
-        PayLog::insert($order_id, $order_sn, $true_amount, PAY_ORDER);
+        PayLog::insert($order_id, $order_sn, $order_update['order_amount'], PAY_ORDER);
 
         // 生成子订单(如果有多个商家)
         Order::genSubOrder($order_id, $rel_merchants);
@@ -841,7 +841,7 @@ class Trade_Controller extends MobileController {
         // 清除购物车
         Cart::deleteItems($cart_rids_arr, $user_id);
 
-        $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$true_amount];
+        $ret = ['flag'=>'SUC','msg'=>'订单提交成功','order_id'=>$order_id,'true_amount'=>$order_update['order_amount']];
         $response->sendJSON($ret);
       }
       else {
