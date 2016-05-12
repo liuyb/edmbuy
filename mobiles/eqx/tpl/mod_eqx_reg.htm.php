@@ -120,20 +120,23 @@ var timer;
 var ajaxing = 0;
 
 function refresh(){
-	
-	num = num - 1;
+	if (typeof(refresh._ncode)=='undefined') {
+		refresh._ncode = $("#get_note_code");
+	}
+	--num;
 	var msg = num + "秒";
-	 
-	$("#get_note_code").html(msg);
-
+	refresh._ncode.html(msg);
 	if(num == 0){
-		num = count;
-		$("#get_note_code").removeClass("sending").html("重新获取");
-		clearInterval(timer);
-		ajaxing = 0;
+		refresh_stop();
 		return false;
-  }
-	  
+  } 
+}
+function refresh_stop() {
+	clearInterval(timer);
+	timer = null;
+	num = count;
+	refresh._ncode.html("重新获取");
+	ajaxing = 0;
 }
 
 $(function(){
@@ -144,7 +147,13 @@ $(function(){
 		refresh();
 		timer = setInterval("refresh();", 1000);
 		F.post('<?php echo U('eqx/get_vcode','inapp='.$inapp)?>',{},function(ret){
-			
+			if (ret.flag=='SUCC') {
+				
+			}
+			else {
+				refresh_stop();
+				weui_alert(ret.msg);
+			}
 		});
 	});
 

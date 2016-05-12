@@ -31,7 +31,7 @@ class UsersmsLog extends StorageNode {
 	 * @return boolean
 	 */
 	static function check_vcode($vcode, $mobile, $type='reg_account') {
-		$row = D()->query("SELECT * FROM ".self::table()." WHERE `receivePhone`='%s' AND `verifyCode`='%s' AND `type`='%s' AND `result`=1",
+		$row = D()->query("SELECT * FROM ".self::table()." WHERE `receivePhone`='%s' AND `verifyCode`='%s' AND `type`='%s' AND `result`>0",
 		                  $mobile,$vcode,$type)->get_one();
 		if (!empty($row)) {
 			if ((simphp_time()-$row['touchTime']) < 60*5) { //验证码5分钟内有效

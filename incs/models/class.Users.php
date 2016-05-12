@@ -830,11 +830,12 @@ class Users extends StorageNode {
 		if ($uParent->is_exist()) {
 			$extra = ['friendname'=>$this->nickname,'regtime'=>WxTplMsg::human_dtime($this->regtime)];
 			$ta    = self::TA($this->sex);
-			$url   = U('partner','',true); //TODO url 还需要精细化
+			$url   = U('partner/my/child','',true); //TODO url 还需要精细化
+			$utitle= Users::displayUserLevel($this->level);
 				
 			//通知一级上级
 			if (!empty($uParent->openid)) {
-				WxTplMsg::invite_reg($uParent->openid, "你邀请的好友已注册成为米客了", "{$this->nickname}({$this->uid})是你的一级米客，{$ta}需要你的指导", $url, $extra);
+				WxTplMsg::invite_reg($uParent->openid, "你邀请的好友已注册成为{$utitle}了", "{$this->nickname}({$this->uid})是你的一级米客，{$ta}需要你的指导", $url, $extra);
 			}
 				
 			//通知二级上级
@@ -842,14 +843,14 @@ class Users extends StorageNode {
 				$uParent2 = self::load($uParent->parentid);
 				if ($uParent2->is_exist()) {
 					if (!empty($uParent2->openid)) {
-						WxTplMsg::invite_reg($uParent2->openid, "你的下级邀请的好友已注册成为米客了", "{$this->nickname}是你的二级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
+						WxTplMsg::invite_reg($uParent2->openid, "你的下级邀请的好友已注册成为{$utitle}了", "{$this->nickname}是你的二级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
 					}
 					
 					//通知三级上级
 					$uParent3 = self::load($uParent2->parentid);
 					if ($uParent3->is_exist()) {
 						if (!empty($uParent3->openid)) {
-							WxTplMsg::invite_reg($uParent3->openid, "你的下级邀请的好友已注册成为米客了", "{$this->nickname}是你的三级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
+							WxTplMsg::invite_reg($uParent3->openid, "你的下级邀请的好友已注册成为{$utitle}了", "{$this->nickname}是你的三级米客，推荐人：{$uParent->nickname}({$uParent->uid})", $url, $extra);
 						}
 					}
 				}

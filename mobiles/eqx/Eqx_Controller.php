@@ -191,11 +191,6 @@ class Eqx_Controller extends MobileController {
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
-				/*
-				if ($parent_id!=104 && $parent_id!=114111&&$parent_id!=7058) {
-					$ret['msg'] = '系统暂时关闭注册';
-					$response->sendJSON($ret);
-				}*/
 				if (''==$mobile || !Fn::check_mobile($mobile)) {
 					$ret['msg'] = '手机号不对';
 					$response->sendJSON($ret);
@@ -296,6 +291,13 @@ class Eqx_Controller extends MobileController {
 					if (isset($_SESSION['eqx_mobi'])) unset($_SESSION['eqx_mobi']);
 					
 					Users::set_account_logined();
+					
+					//微信消息
+					if ($parent_id) {
+						$loginedUser = Users::load($GLOBALS['user']->uid, true);
+						$loginedUser->notify_reg_succ();
+					}
+					
 					$ret = ['flag' => 'SUCC', 'msg'=>'注册成功', 'uid'=>$GLOBALS['user']->uid];
 					$response->sendJSON($ret);
 				}
@@ -359,24 +361,28 @@ class Eqx_Controller extends MobileController {
 			$ret = ['flag'=>'FAIL', 'msg'=>''];
 			if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
 				$ret['msg'] = '手机号不存在';
-				$response->send($ret);
+				$response->sendJSON($ret);
 			}
 			$inapp = $request->get('inapp','');
 			
 			$type = $inapp=='edm' ? 'reg_account' : 'reg_eqx';
-			$row_vc = D()->query("SELECT `id`,`overdueTime`,`verifyCode` FROM ".UsersmsLog::table()." WHERE `receivePhone`='%s' AND `type`='%s' AND `result`=1 ORDER BY `id` DESC LIMIT 0,1",
+			$row_vc = D()->query("SELECT `id`,`overdueTime`,`verifyCode` FROM ".UsersmsLog::table()." WHERE `receivePhone`='%s' AND `type`='%s' AND `result`>0 ORDER BY `id` DESC LIMIT 0,1",
 			                     $_SESSION['eqx_mobi'], $type)->get_one();
 			$now = simphp_time();
-			if (!empty($row_vc) && $row_vc['overdueTime']>simphp_time()) {
+			if (!empty($row_vc) && $row_vc['overdueTime']>$now) {
 				$ret['msg'] = '一分钟后才能重新获取';
-				$response->send($ret);
+				$response->sendJSON($ret);
 			}
 			
-			$ret = ['flag'=>'SUCC', 'msg'=>'发送成功'];
-			if (!Sms::sendVCode($_SESSION['eqx_mobi'], $type, rand_code(6))) {
-				$ret['msg'] = '发送失败';
+			$send_code = Sms::sendVCode($_SESSION['eqx_mobi'], $type, rand_code(6));
+			if ($send_code > 0) {
+				$ret = ['flag'=>'SUCC', 'msg'=>'发送成功'];
+				$response->sendJSON($ret);
 			}
-			$response->sendJSON($ret);
+			else {
+				$ret['msg'] = '发送失败！<br>原因：'.Sms::code_msg($send_code);
+				$response->sendJSON($ret);
+			}
 			
 		}
 	}
