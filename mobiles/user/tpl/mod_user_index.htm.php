@@ -27,7 +27,11 @@ $is_agent = Users::isAgent($curuser->level);
     		</td>
 			<td>
 			<?php if($is_account_logined):?>
-				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z"></p>
+				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z">
+				<?php if(Users::isAgent($curuser->level) && !Users::isGoldAgent($curuser->level)):?>
+				<img src="/themes/mobiles/img/wysj.png" onclick="_link('<?=U('trade/order/agent') ?>', event)" style="width:52px;height:19px;border-radius:0;margin-left:0px;"/>
+				<?php endif;?>
+				</p>
 				<p class="become_name_id">多米号：<?=$uid ?></p>
 			<?php else:?>
 				<p class="become_name">注册/登录</p>
@@ -186,9 +190,15 @@ $(function(){
 	}
 });
 
-function _link(url){
+function _link(url, event){
 	if (required_account_logined()) {
 		return false;
+	}
+	if(event){
+		event.stopPropagation();
+	}
+	if(!url){
+		return;
 	}
 	window.location.href=url;
 }

@@ -122,7 +122,7 @@ function fileupload(e){
     	valid = reg.test(file.type);
     }
     if(!valid){
-    	myAlert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
+    	weui_alert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
 		return;
     }
     var fr = new FileReader();
@@ -132,7 +132,7 @@ function fileupload(e){
     		if(ret.flag=='SUC'){
     			$("#userHeaderImg").find("img").attr("src",ret.result+'?r='+Math.random());
     		}else{
-    			myAlert(ret.errMsg);
+    			weui_alert(ret.errMsg);
     		}
     	});
     };

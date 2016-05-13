@@ -35,7 +35,7 @@
 	function saveUserMobile(){
 		var phone = $('.phone_text').val();
 		if(!phone){
-			myAlert('请输入手机号码！');
+			weui_alert('请输入手机号码！');
 			return;
 		}
 		var reg = /^1\d{10}$/;  //11数字
@@ -48,7 +48,7 @@
 	    }
 	    F.postWithLoading('/user/mobile/update', {mobile : phone}, function(ret){
 		    if(ret['result'] == 'FAIL'){
-		    	myAlert(ret['msg']);
+		    	weui_alert(ret['msg']);
 		    	return;
 		    }
     		setTimeout(function(){
@@ -60,7 +60,7 @@
 	function saveUserNickname(){
 		var name=$('.phone_text').val();
 		if(!name){
-			myAlert('请输入昵称！');
+			weui_alert('请输入昵称！');
 			return;
 		}
 		if(nickname==name){
@@ -68,7 +68,7 @@
 		}
 		F.postWithLoading('/user/nickname/update', {'nickname' : name}, function(ret){
 			if(ret['result'] == 'FAIL'){
-				myAlert(ret['msg']);
+				weui_alert(ret['msg']);
 				return;
 			}
 			setTimeout(function(){

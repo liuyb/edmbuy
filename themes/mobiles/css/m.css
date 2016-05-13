@@ -5343,6 +5343,14 @@ td.cash_td2 img {
 }
 .navig_next li{
 	display: inline-block;
+	width:33.3%;
+	text-align:center;
+	line-height:44px;
+	font-size:15px;
+	color:#323232;
+}
+.navig_two_next li{
+	display: inline-block;
 	width:50%;
 	text-align:center;
 	line-height:44px;
@@ -6582,4 +6590,10 @@ td.cash_td2 img {
 	font-size:15px;
 	color:#f26427;
 	border-radius:4px;
+}
+.agency_tip_info {
+	margin:20px;color:#333;font-size:15px;
+}
+.agency_tip_info p {
+	margin-bottom:10px;
 }

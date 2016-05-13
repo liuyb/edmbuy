@@ -351,6 +351,8 @@ class Fn extends Func {
               $ret = "退款已拒绝";
           }else if($order_status == OS_REFUND_FAILED){
               $ret = "退款失败";
+          }else{
+              $ret = "申请退款中";
           }
       }
       return $ret;

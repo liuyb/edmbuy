@@ -59,7 +59,31 @@ class Platform_Controller extends MerchantController
      */
     public function fillIn(Request $request, Response $response)
     {
-        Platform_Model::checkMerchantStatus($response);
+        $merchant_id = $GLOBALS['user']->uid;
+        $action = $request->get('action', '');
+        $merchant = Merchant::load($merchant_id);
+        $this->v->assign('show', 'all');
+        if($action == 'refill'){
+            if($merchant->merchant_type == Merchant::MERCHANT_TYPE_EMPLOY){
+                $this->v->assign('show', 'qy');
+            }else if($merchant->merchant_type == Merchant::MERCHANT_TYPE_PERSON){
+                $this->v->assign('show', 'gr');
+            }else{
+                $this->v->assign('show', '');
+            }
+        }else if($action == 'edit'){
+            //如果是个人商家 审核成功后 可以升级为企业商家
+            if($merchant->merchant_type != Merchant::MERCHANT_TYPE_PERSON || $merchant->verify != Merchant::VERIFY_SUCC){
+                $response->redirect('/platform/authent');
+            }
+            $this->v->assign('show', 'qy');
+        }else{
+            //已经验证过只能通过 refill 跟 edit 进来
+            if($merchant->verify){
+                $this->v->assign('show', '');
+            }
+            Platform_Model::checkMerchantStatus($response);
+        }
         $this->v->set_tplname("mod_platform_fillin");
         $this->setPageLeftMenu('platform', 'authent');
         $response->send($this->v);
@@ -72,11 +96,11 @@ class Platform_Controller extends MerchantController
      */
     public function company(Request $request, Response $response)
     {
-        $show_page = true;
-        if ($show_page) {
-            $v = new PageView('mod_platform_company', '_page_box');
-            $response->send($v);
-        }
+        $v = new PageView('mod_platform_company', '_page_box');
+        $merchant_id = $GLOBALS['user']->uid;
+        $result = D()->query("select * from shp_shop_company where merchant_id = '%s'", $merchant_id)->fetch_array();
+        $this->v->assign("result", $result);
+        $response->send($v);
     }
 
     /**个人资料填写
@@ -85,11 +109,11 @@ class Platform_Controller extends MerchantController
      */
     public function personal(Request $request, Response $response)
     {
-        $show_page = true;
-        if ($show_page) {
-            $v = new PageView('mod_platform_pensonal', '_page_box');
-            $response->send($v);
-        }
+        $v = new PageView('mod_platform_pensonal', '_page_box');
+        $merchant_id = $GLOBALS['user']->uid;
+        $result = D()->query("select * from shp_shop_personal where merchant_id = '%s'", $merchant_id)->fetch_array();
+        $this->v->assign("result", $result);
+        $response->send($v);
     }
 
     /**图片上传

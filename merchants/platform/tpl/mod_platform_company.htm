@@ -2,22 +2,22 @@
 <table cellspacing="0" cellpadding="0" class="cret_tab_list" >
         <tr>
             <td class="cret_tab_left"><span class="fill_red">*</span>公司名称：</td>
-            <td class="cret_tab_right"><input type="text" required name="company_name"></td>
+            <td class="cret_tab_right"><input type="text" required name="company_name" value="<!--{$result.company_name}-->"></td>
         </tr>
         <tr>
             <td class="cret_tab_left"><span class="fill_red">*</span>法人姓名：</td>
-            <td class="cret_tab_right"><input type="text" required name="legal_name"></td>
+            <td class="cret_tab_right"><input type="text" required name="legal_name" value="<!--{$result.legal_name}-->"></td>
         </tr>
         <tr>
             <td class="cret_tab_left"><span class="fill_red">*</span>身份证号码：</td>
-            <td class="cret_tab_right"><input type="text" required name="card_num" id="card_num"></td>
+            <td class="cret_tab_right"><input type="text" required name="card_num" id="card_num" value="<!--{$result.card_num}-->"></td>
         </tr>
         <tr>
             <td class="cret_tab_left cert_top_common">营业执照：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="business_img" value="" class="img_hidden"/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="business_img" value="<!--{$result.business_img}-->" class="img_hidden"/>
+                    <img src="<!--{ if $result.business_img}--><!--{$result.business_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -29,8 +29,8 @@
             <td class="cret_tab_left cert_top_common">税务登记照：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="tax_img" value="" class="img_hidden"/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="tax_img" value="<!--{$result.tax_img}-->" class="img_hidden"/>
+                    <img src="<!--{ if $result.tax_img}--><!--{$result.tax_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -42,8 +42,8 @@
             <td class="cret_tab_left cert_top_common">组织结构代码证：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="org_img" value="" class="img_hidden"/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="org_img" value="<!--{$result.org_img}-->" class="img_hidden"/>
+                    <img src="<!--{ if $result.org_img}--><!--{$result.org_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -55,8 +55,8 @@
             <td class="cret_tab_left cert_top_common">商标注册证：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="mark_img" value="" class="img_hidden"/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="mark_img" value="<!--{$result.mark_img}-->" class="img_hidden"/>
+                    <img src="<!--{ if $result.mark_img}--><!--{$result.mark_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -68,8 +68,8 @@
             <td class="cret_tab_left cert_top_common">品牌销售授权证明：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="sales_img" class="img_hidden" value=""/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="sales_img" class="img_hidden" value="<!--{$result.sales_img}-->"/>
+                    <img src="<!--{ if $result.sales_img}--><!--{$result.sales_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -81,8 +81,8 @@
             <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
             <td>
                 <div class="file_common_img">
-                    <input type="hidden" name="product_img" class="img_hidden" value=""/>
-                    <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                    <input type="hidden" name="product_img" class="img_hidden" value="<!--{$result.product_img}-->"/>
+                    <img src="<!--{ if $result.product_img}--><!--{$result.product_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                     <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
                 </div>
                 <div class="ts_com">
@@ -105,8 +105,8 @@
         image_upload(url, e, obj, function (ret) {
             var path = ret.stdpath;
             var thumb = ret.thumb;
-            $obj.parent().find(".img_upload").attr("src", thumb);
-            $obj.parent().find("input").val(path);
+            $obj.siblings(".img_upload").attr("src", thumb);
+            $obj.siblings(".img_hidden").val(path);
         });
     }
     function submitForm(){

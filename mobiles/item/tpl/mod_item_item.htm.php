@@ -407,7 +407,7 @@ function add_to_cart(item_id, item_num, callback) {
 				callback();
 			}
 		}else{
-			myAlert(ret.msg);
+			weui_alert(ret.msg);
 		}
 	});
 }

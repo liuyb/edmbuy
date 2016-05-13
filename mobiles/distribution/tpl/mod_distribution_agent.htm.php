@@ -144,7 +144,7 @@ $(function(){
         				});	
   					}else{
   						paybtn.text('立即支付').removeClass('disabled');
-          				myAlert(ret.msg);
+  						weui_alert(ret.msg);
           			}
 	  			});
 		return false;

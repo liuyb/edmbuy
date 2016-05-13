@@ -2,18 +2,18 @@
 <table cellspacing="0" cellpadding="0" class="cret_tab_list">
     <tr>
         <td class="cret_tab_left"><span class="fill_red">*</span>真实姓名：</td>
-        <td class="cret_tab_right"><input type="text" name="real_name" maxlength="50" placeholder="请填写您的真实姓名" required></td>
+        <td class="cret_tab_right"><input type="text" name="real_name" value="<!--{$result.real_name}-->" maxlength="50" placeholder="请填写您的真实姓名" required></td>
     </tr>
     <tr>
         <td class="cret_tab_left"><span class="fill_red">*</span>身份证号码：</td>
-        <td class="cret_tab_right"><input type="text" name="card_num" id="card_num" maxlength="18" placeholder="请填写您的身份证号码" required></td>
+        <td class="cret_tab_right"><input type="text" name="card_num" value="<!--{$result.card_num}-->" id="card_num" maxlength="18" placeholder="请填写您的身份证号码" required></td>
     </tr>
     <tr>
         <td class="cret_tab_left cert_top_common">手持身份证照片：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="card_img" class="img_hidden" value="" required/>
-                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                <input type="hidden" name="card_img" class="img_hidden" value="<!--{$result.card_img}-->" required/>
+                <img src="<!--{ if $result.card_img}--><!--{$result.card_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
             <div class="ts_com">
@@ -26,8 +26,8 @@
         <td class="cret_tab_left cert_top_common">个人营业执照：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="business_img" class="img_hidden" value="" required/>
-                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                <input type="hidden" name="business_img" class="img_hidden" value="<!--{$result.business_img}-->" required/>
+                <img src="<!--{ if $result.business_img}--><!--{$result.business_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
             <div class="ts_com">
@@ -39,8 +39,8 @@
         <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
         <td>
             <div class="file_common_img">
-                <input type="hidden" name="product_img" class="img_hidden" value="" required/>
-                <img src="/themes/merchants//img/editor_plus.png" class="img_upload">
+                <input type="hidden" name="product_img" class="img_hidden" value="<!--{$result.product_img}-->" required/>
+                <img src="<!--{ if $result.product_img}--><!--{$result.product_img}--><!--{else}-->/themes/merchants/img/editor_plus.png<!--{/if}-->" class="img_upload">
                 <input type="file" name="file" class="cert_common_file" onchange="fileupload(event,this)">
             </div>
             <div class="ts_com">

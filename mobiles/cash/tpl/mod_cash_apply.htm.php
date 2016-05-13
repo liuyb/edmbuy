@@ -46,7 +46,7 @@
 function fill_wxpay_uname() {
 	var _bn = $('#bank_uname').val().trim();
 	if (!_bn) {
-		myAlert('请填写微信钱包持卡人姓名');
+		weui_alert('请填写微信钱包持卡人姓名');
 		return;
 	}
 	if (confirm('确保所填姓名与微信钱包持卡人姓名完全一致？')) {
@@ -55,7 +55,7 @@ function fill_wxpay_uname() {
 				location.reload();
 			}
 			else {
-				myAlert(ret.msg);
+				weui_alert(ret.msg);
 			}
 		});
 	}

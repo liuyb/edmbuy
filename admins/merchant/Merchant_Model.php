@@ -30,12 +30,12 @@ class Merchant_Model extends Model {
                 $where .= " AND (p.start_time > '{$time}' or p.end_time < '{$time}') ";
             }else{
                 //其他状态查询未过期的
-                $where .= " AND c.verify = {$verify} AND (p.start_time <= '{$time}' or p.end_time >= '{$time}') ";
+                $where .= " AND c.verify = {$verify} ";// AND (p.start_time <= '{$time}' or p.end_time >= '{$time}') 先注释，前期有部分商家没缴费
             }
         }
         $table  = Merchant::table();
         $sql    = "SELECT c.*,p.start_time,p.end_time FROM {$table} c left join shp_merchant_payment p on c.merchant_id = p.merchant_id WHERE 1 {$where} ORDER BY `%s` %s";
-        $sqlcnt = "SELECT COUNT(1) FROM {$table} c left join shp_merchant_payment p on c.merchant_id = p.merchant_id and p.money_paid > 0 WHERE 1 {$where}";
+        $sqlcnt = "SELECT COUNT(1) FROM {$table} c left join shp_merchant_payment p on c.merchant_id = p.merchant_id WHERE 1 {$where}";
         
         $result = D()->pager_query($sql,$limit,$sqlcnt,0,$orderby,$order)->fetch_array_all();
         if (!empty($result)) {
@@ -52,7 +52,7 @@ class Merchant_Model extends Model {
      */
     static function getMerchantDetail($mid){
         $table  = Merchant::table();
-        $sql = "select c.*,p.* from {$table} c join shp_merchant_payment p on c.merchant_id = p.merchant_id where c.merchant_id = '%s' order by p.end_time desc";
+        $sql = "select c.*,p.* from {$table} c left join shp_merchant_payment p on c.merchant_id = p.merchant_id where c.merchant_id = '%s'";
         $result = D()->query($sql, $mid)->get_one();
         if ($result) {
             $result['verifyTxt'] = self::verifyTxt($result['verify']);

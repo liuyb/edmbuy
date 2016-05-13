@@ -69,7 +69,7 @@ $(function(){
   				window.location.href = "<?php echo U('trade/order/record',['status'=>'finished'])?>";
   			}
   			else {
-  	  			myAlert(ret.msg);
+  				weui_alert(ret.msg);
   			}
   		});
 		}
@@ -79,7 +79,7 @@ $(function(){
 		return false;
 	});
 	$(".btn_refund_money").bind('click', function(){
-		F.post('/trade/order/refund',{order_id : $(this).data("order_id"),refund_reason:'无理由退款'},function(ret){
+		F.post('/trade/order/refund',{order_id : parseInt(getOrderId(this)),refund_reason:'无理由退款'},function(ret){
 			if(ret.flag == 'SUC'){
 				alert('退款申请已提交，等待商家审核。');
 				window.location.reload();

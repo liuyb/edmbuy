@@ -50,7 +50,7 @@ function fileupload(e){
     	valid = reg.test(file.type);
     }
     if(!valid){
-    	myAlert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
+    	weui_alert('请选择正确的图片格式上传，如：JPG/JPEG/PNG/GIF ');
 		return;
     }
     var fr = new FileReader();
@@ -70,12 +70,12 @@ function postImage(ev){
 		if(ret.flag=='SUC'){
 			$("#wx_uploading").find("img").attr("src",ret.result+'?r='+Math.random());//强制清缓存
 			//$(".mask,.wtxje").hide();
-			boxalert('上传成功！');
+			weui_alert('上传成功！');
 		/* 	setTimeout(function(){
 				window.location.href = '/user/setting';
 			}, 1000); */
 		}else{
-			myAlert(ret.errMsg);
+			weui_alert(ret.errMsg);
 		}
 	});
 }

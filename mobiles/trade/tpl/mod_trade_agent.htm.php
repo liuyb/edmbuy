@@ -46,13 +46,11 @@ show_topnav($('#forTopnav').html());
 </div>
 <?php endif; ?>
 <div class="agency_navig">
-	<div class="navig_next">
+	<div id="switchTab" class="<?php if(!$shopOpend):?>navig_next<?php else:?>navig_two_next<?php endif;?>">
 		<ul>
-			<li id="li1" class="navig_on" onclick="agency_switch(1)">金牌代理</li><li id="li2" onclick="agency_switch(2)">银牌代理</li>
+			<li id="li1" class="navig_on" onclick="agency_switch(1)">金牌代理</li><li id="li2" onclick="agency_switch(2)">银牌代理</li><?php if (!$shopOpend):?><li id="li3" onclick="agency_switch(3)">成为商家</li><?php endif;?>
 		</ul>
 	</div>
-	<!-- <input type='button' value='测试-支付成功后点击' onclick="testBuy();" />
-	<input type='button' value='测试-清除购买记录' onclick="clearAgent();" /> -->
 </div>
 
 <div class="agency_common" id="list1">
@@ -65,13 +63,17 @@ show_topnav($('#forTopnav').html());
 
 <script>
 function agency_switch(a){
+	if(a == 3){
+		window.location.href='<?=U('user/merchant/checkin') ?>';
+		return;
+	}
 	var _li = "#li" + a;
 	var _list = "#list" + a;
 	var _agency = "#agency" + a ;
 	
 	$(".agency_common").hide();
-	$(".gold_common").hide();
-	$(".navig_next li").removeClass("navig_on");
+	$(".agency_pay").hide();
+	$("#switchTab li").removeClass("navig_on");
 	
 	$(_li).addClass("navig_on");
 	$(_list).show();
@@ -81,27 +83,59 @@ function agency_switch(a){
 <?php if(!$isAgent):?>
 <script id="forMnav" type="text/html">
 <div class="agency_bottom_next"> 
-	<div class="agency_money gold_common" id="agency1">
+	<div class="agency_money gold_common agency_pay" id="agency1">
 		<span class="left_agency fl_d">金牌代理</span>
 		<span class="right_buy_btn fr btn-wxpay" data-val='<?=$gold_agent ?>' data-type='3'>立即支付</span>
 		<span class="right_money fr">￥698.00</span>
 	</div>
-	<div class="silver_money gold_common" id="agency2" style="display:none;">
-		<span class="left_agency fl_d">银牌代理<br><i style="font-size:10px;color: #8c8c8c;">不支持补差价升级为金牌代理</i></span>
+	<div class="agency_money gold_common agency_pay" id="agency2" style="display:none;">
+		<span class="left_agency fl_d">银牌代理</span>
 		<span class="right_buy_btn fr btn-wxpay" data-val='<?=$silver_agent ?>' data-type='4'>立即支付</span>
-		<span class="right_money_silver">￥398.00</span>
+		<span class="right_money fr">￥398.00</span>
 	</div>
 </div>
 </script>
 
-<?php form_order_script()?>
+<script>
+$(function(){
+	show_mnav($('#forMnav').html(), -1);
+});
+</script>
+<?php elseif (Users::isSilverAgent($user->level)):?>
+<script id="forMnav" type="text/html">
+<div class="agency_bottom_next"> 
+	<div class="agency_money gold_common" id="agency1">
+		<span class="left_agency fl_d">升级为金牌代理</span>
+		<span class="right_buy_btn fr upgrade btn-wxpay" data-val='<?=$gold_agent ?>' data-type='3'>立即支付</span>
+		<span class="right_money fr">￥698.00</span>
+	</div>
+</div>
+</script>
 
 <script>
 $(function(){
 	show_mnav($('#forMnav').html(), -1);
+});
+</script>
+<?php endif;?>
+
+<?php form_order_script()?>
+
+<?php include T('inc/add_as_friend');?>
+<script>
+$(function(){
+	<?php if(!$isAgent):?>
+	new AddFriend().showAgencyTips();
+	<?php endif;?>
 	
 	$(document).on('click', '.btn-wxpay', function(){
 		var _this = $(this);
+		if(_this.hasClass("upgrade")){
+			<?php if($agent->pid && !$agent->premium_id):?>
+			weui_alert('请先领取完398套餐后再升级购买金牌代理。');
+			return;
+			<?php endif;?>
+		}
 		if(_this.hasClass("disabled")){
 			return;
 		}
@@ -129,12 +163,11 @@ $(function(){
         				});	
   					}else{
   						paybtn.text('立即支付').removeClass('disabled');
-          				myAlert(ret.msg);
+  						weui_alert(ret.msg);
           			}
 	  			});
 		return false;
 	});
 });
 </script>
-<?php endif;?>
 <?php endif;?>

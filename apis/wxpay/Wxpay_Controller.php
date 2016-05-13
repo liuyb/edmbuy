@@ -128,7 +128,7 @@ class Wxpay_Controller extends Controller {
               UserCommision::generate($order);
           }
           //微信通知
-          //$cUser->notify_pay_succ($order_id);
+          $cUser->notify_buyer_pay_succ($order);
         }
         else {
           //D()->unlock_tables();// 解锁

@@ -52,7 +52,7 @@
 </table>
 <!--{if $materia}-->
 <!--{if $detail.merchant_type eq 1}-->
-<div class='section_tile'>企业相关资料/个人相关资料</div>
+<div class='section_tile'>个人相关资料</div>
 <table class='table_cls'>
 <colgroup>
 <col width="100" align="left">
@@ -67,7 +67,7 @@
 <!--{/if}-->
 </table>
 <!--{elseif $detail.merchant_type eq 2}-->
-<div class='section_tile'>企业相关资料/个人相关资料</div>
+<div class='section_tile'>企业相关资料</div>
 <table class='table_cls'>
 <colgroup>
 <col width="100" align="left">
@@ -91,8 +91,7 @@
 </table>
 <!--{/if}-->
 <!--{else}-->
-<div class='section_tile'>企业相关资料/个人相关资料</div>
-还没有提交认证资料
+<div class='section_tile'>还没有提交认证资料</div>
 <!--{/if}-->
 <!--{if $detail.verify eq 1}-->
 <div style='padding:5px;'><input type='button' value='通过' style='margin-right:20px;'onclick="checkpass();"/><input type='button' value='拒绝' onclick="checkRefused();"/></div>

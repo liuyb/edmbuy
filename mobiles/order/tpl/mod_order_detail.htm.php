@@ -116,7 +116,7 @@ function is_cft_over_7ds($cftime){
 ?>
 <div class="order_type_btn order_operation" data-orderid="<?=$order_id?>">
 <!-- 未支付 （立即付款、取消订单）-->
-<?php if ($order->pay_status == PS_UNPAYED):?>
+<?php if ($order->pay_status == PS_UNPAYED || $order->pay_status == PS_PAYING):?>
 <button class="order_but_l btn-order-cancel">取消订单</button>
 <button class="order_but_r btn-order-topay">立即付款</button>
 <!-- 已支付未发货（退款、继续购买） -->
@@ -132,6 +132,8 @@ function is_cft_over_7ds($cftime){
 <button class="order_but_l btn_refund_order">退货</button>
 <button class="order_but_r btn_rebuy_good">继续购买</button>
 <!-- 其他-->
+<?php elseif($order->pay_status == PS_REFUNDING):?>
+<button class="order_but_r btn_rebuy_good">继续购买</button>
 <?php else:?>
 <button class="order_but_l btn-order-delete indetail">删除</button>
 <button class="order_but_r btn_rebuy_good">继续购买</button>

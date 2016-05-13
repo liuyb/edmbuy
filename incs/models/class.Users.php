@@ -864,7 +864,7 @@ class Users extends StorageNode {
 	/**
 	 * 微信通知支付成功
 	 */
-	public function notify_buyer_pay_succ($cUser, $order) {
+	public function notify_buyer_pay_succ($order) {
 	    if ($order->is_exist() && $order->pay_status==PS_PAYED)
 	    {
 	        $order_id = $order->order_id;
@@ -887,8 +887,8 @@ class Users extends StorageNode {
 	            'order_id'   => $order_id,
 	            'pay_time'   => WxTplMsg::human_dtime(simphp_gmtime2std($order->pay_time))
 	        ];
-	        if (!empty($cUser->openid)) {
-	            WxTplMsg::pay_succ($cUser->openid, '你好，你的商品已支付成功!', '你可以到交易记录查看更多信息', U("order/{$order_id}/detail",'',true), $extra);
+	        if (!empty($this->openid)) {
+	            WxTplMsg::pay_succ($this->openid, '你好，你的商品已支付成功!', '你可以到交易记录查看更多信息', U("order/{$order_id}/detail",'',true), $extra);
 	        }
 	    }
 	}

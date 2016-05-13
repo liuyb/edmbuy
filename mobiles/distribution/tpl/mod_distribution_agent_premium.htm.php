@@ -60,7 +60,7 @@ function recPremiumPackage(obj){
 	var addr_id  = parseInt($('#express-it').attr('data-addrid'));
 	var order_msg= $('#order-message').val();
 	if (!addr_id) {
-		myAlert('请填写收货地址');
+		weui_alert('请填写收货地址');
 		return false;
 	}
 	$obj.addClass("buying").text("领取中...");
@@ -69,7 +69,7 @@ function recPremiumPackage(obj){
 			window.location.href='/distribution/agent/premium/succ?level=<?=$packages['type'] ?>';
 		}else{
 			$obj.removeClass("buying").text("立即免费领取");
-			myAlert(ret.msg);
+			weui_alert(ret.msg);
 		}
 	});
 }

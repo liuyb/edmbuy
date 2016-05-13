@@ -29,6 +29,9 @@
                                 <!--{if !$merchant->verify}-->
                                 <button class="fill_in" id="fill_in">填写</button>
                                 <!--{else}-->
+                                <!--{if $merchant->verify eq 2 && $merchant->merchant_type eq 1}-->
+                                	<a href="javascript:edit();">修改为企业商家</a>&nbsp;&nbsp;
+                                <!--{/if}-->
                                 	已完成
                                 <!--{/if}-->
                             </div>
@@ -48,7 +51,9 @@
                                 <!--{elseif $merchant->verify eq 3}-->
                                 	审核被拒绝  
                                 	<!--{if $merchant->verify_fail_msg}-->
-                                	<a href="javascript:alert('<!--{$merchant->verify_fail_msg}-->')">拒绝原因</a>
+                                	<a href="javascript:showRefuse('<!--{$merchant->verify_fail_msg}-->');">拒绝原因</a>
+                                	&nbsp;&nbsp;
+                                	<a href="javascript:reFill();">重新填写</a>
                                 	<!--{/if}-->
                                 <!--{else}-->
                                 	<!-- 待审核 -->
@@ -62,6 +67,23 @@
     </div>
 </div>
 <script>
+	function showRefuse(msg){
+		javascript:layer.msg(msg, {time: 0,
+			btn: ['关闭','重新填写'],
+			yes: function(){
+				layer.closeAll(); 
+		    },
+		    btn2: function(){
+		    	reFill();
+		    }
+		});
+	}
+	function reFill(){
+		window.location.href='/platform/fill/in?action=refill';
+	}
+	function edit(){
+		window.location.href='/platform/fill/in?action=edit';
+	}
     $("#fill_in").click(function () {
         window.location.href = "/platform/fill/in";
     });

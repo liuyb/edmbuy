@@ -438,14 +438,14 @@ class Trade_Controller extends MobileController {
       }
       
       //金牌银牌代理处理
-      if($this->is_agent_order($item_id)){
+      /* if($this->is_agent_order($item_id)){
         $u = Users::load($user_id);
         if(Users::isAgent($u->level)){
             D()->commit();
             $ret['msg'] = '你已经是米商代理了，不需要重复购买';
             $response->sendJSON($ret);
         }
-      }
+      } */
 
       // 生成订单信息
       $newOrder = new Order();
@@ -1311,15 +1311,18 @@ class Trade_Controller extends MobileController {
       global $user;
       $u = Users::load($user->uid);
       $is_agent = Users::isAgent($u->level);
-      if($is_agent){
+      $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
+      //金牌代理不显示支付菜单栏，银牌代理 可以购买金牌代理，支付后升级成金牌代理
+      if(Users::isGoldAgent($u->level)){
           $this->nav_no = 0;
       }
-      $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
+      $shopOpend = Merchant::userHasOpendShop($u->uid);
       $this->v->assign('user', $u);
       $this->v->assign('isAgent', $is_agent);
       $this->v->assign('agent', $agent);
       $this->v->assign('gold_agent', GOLD_AGENT_GOODS_ID);
       $this->v->assign('silver_agent', SILVER_AGENT_GOODS_ID);
+      $this->v->assign('shopOpend', $shopOpend);
       throw new ViewResponse($this->v);
   }
 }
