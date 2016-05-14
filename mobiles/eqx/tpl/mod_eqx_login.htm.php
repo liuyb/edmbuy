@@ -24,7 +24,7 @@
 </div>
 
 <div class="quertion_phone">
-	遇到问题：<i>0755-86720209</i>
+	遇到问题：<a href="tel://0755-86720209"><i>0755-86720209</i></a>
 </div>
 
 <script type="text/javascript">

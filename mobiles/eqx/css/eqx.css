@@ -37,6 +37,7 @@ a.h_btn{
 }
 .phone_left{
   font-size:14px;
+  font-size:1.4rem;
   color:#333;
 }
 .write_phone{
@@ -140,11 +141,10 @@ a.index_btm {
   width:100%;
   margin: 0;
 }
-.letter_bg{
-  background:url(../img/letter_bg.jpg) no-repeat;
-  background-size:100%;
-  padding:15px 0 44px;
-}
+.letter_bg{}
+.letter_bg img { max-width: 100%;vertical-align: top; }
+.letter_rzbtn { text-align: center;position: absolute; bottom: 5px;width: 100%; }
+.letter_rzbtn a { font-size:14px;font-size:1.4rem;font-weight: bold;color: #ef5820;margin: 0 auto;width: 300px;height:47px;line-height:47px;background: url(../img/letter_btn.png) no-repeat;background-size: auto 47px; }
 .top_img{
   margin-top:15px;
 }
@@ -166,18 +166,20 @@ a.index_btm {
   font-size:15px;
   color:#fff; 
 }
-.what_top img{
+.what_top img.ulogo{
   vertical-align: top;
   width: 50px;
-  margin: 20px;
+  margin: 20px 10px 20px 20px;
   border-radius: 50%; 
 }
-.what_center{
-  margin:10px 0;
+.what_top img.jin_z{
+	margin-bottom:-4px;
 }
-.what_center img{
-  max-width:100%;
-}
+.wytuia { color:#f1652d;height:32px;line-height:32px;border-radius:4px;background:#fff;padding:0 8px;float: right;margin: 28px 10px auto auto; }
+.what_referee { background: #fff;height:42px;line-height:42px;padding:0 10px;margin-bottom: 15px; }
+.what_referee span { float: right; }
+.what_center{position:fixed;bottom:0;}
+.what_center img{max-width:100%;vertical-align:top;}
 .what_commom{
   height:60px;
   line-height:60px;
@@ -195,11 +197,11 @@ a.index_btm {
 }
 .what_wx{
   background:url(../img/wx.png) no-repeat left;
-  padding-left:30px;
+  padding-left:25px;
   background-size:20px;
 }
 .wx_bottom{
-  margin:60px 0 20px;
+  margin:15px 0 10px;
   text-align:center;
   font-size:13px;
 }

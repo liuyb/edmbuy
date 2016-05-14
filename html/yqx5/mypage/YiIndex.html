@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>关于我们</title>
+	<link rel="stylesheet" type="text/css" href="../web/css/global.css" />
+	<script type="text/javascript" src="../web/js/jquery-1.7.1.js"></script>
+</head>
+<body class="app_bg">
+	<div class="header">
+		一起享
+		<a href="javascript:;" class="back">
+			<img src="../web/img/back.png"><span class="back_cs">返回</span>
+		</a>
+	</div>
+	<div class="index_content">
+		<div class="index_top">
+			<div class="index_hImg"><img src="../web/img/icon_1.png"/></div>
+			<div class="index_uName">
+				<h1 id="">一起享</h1>
+			</div>
+			<div class="user_versionImg"><img src="../web/img/icon_hj.png"/></div>
+			<div class="index_gExtension"><a href="javascript:;">我要推广</a></div>
+		</div>
+		<div class="index_info">
+			 我的推荐人：<span class="index_infoPhone">17000210267</span><span class="index_infoName">90年代</span>
+		</div>
+		<div class="index_info_center">
+			<ul>
+				<a href="javascript:;">
+					<li>
+						<span><img src="../web/img/icon_3.png"></span>
+						<span>去推广</span>
+					</li>
+				</a>
+				<a href="javascript:;">
+					<li>
+						<span><img src="../web/img/icon_4.png"></span>
+						<span>我的人脉</span>
+					</li>
+				</a>
+			</ul>
+		</div>
+	</div>
+	<div class="index_float">
+		<img src="../web/img/icon_5.png">
+	</div>
+	<script>
+		function sls(){
+			var ww=$(window).width();
+			var wh=$(window).height();
+			if(!(wh<ww)){
+				var sl = ww/640;
+				$(".index_float").height(Math.floor(sl*267));
+			}
+		}
+		sls();
+		$(window).resize(function(){
+			sls();
+		});
+	</script> 
+</body>
+</html>

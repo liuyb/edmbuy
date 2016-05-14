@@ -66,6 +66,7 @@ class Partner_Controller extends MobileController {
 	    $this->v->set_tplname('mod_partner_mychild');
 	    $this->nav_no = 0;
 	    $this->topnav_no = 1;
+	    $this->backurl = 'javascript:history.back()';
 	    $uid = $GLOBALS['user']->uid;
 	    $firstLevelCount = Partner::findFirstLevelCount($uid);
 	    $secondLevelCount = Partner::findSecondLevelCount($uid);

@@ -5,14 +5,24 @@
 <div class="header">一起享<!--<a href="javascript:history.back();" class="back">返回</a>--></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
-
+<!--{HEAD_CSS}-->
+<style type="text/css">
+.gicon_btn_qr { bottom: 140px; }
+.gicon_btn_gotop { display: none; }
+</style>
+<!--{/HEAD_CSS}-->
 <div class="what_top">
-	<img src="<?=$user->logo?>" alt="ulogo"/>
+	<img src="<?=$user->logo?>" alt="ulogo" class="ulogo"/>
 	<span><?=$user->nickname?></span>
+	<img src="<?=AgentPayment::getAgentIconByLevel($user->level) ?>" class="jin_z">
+	<a href="javascript:;" class="blka wytuia" onclick="gotui()">我要推广</a>
 </div>
-
-<div class="what_center">
-	<a href="<?php echo U('eqx/letter','nologin=1')?>"><img src="<?=$contextpath?>mobiles/eqx/img/whats.png"></a>
+<div class="what_referee">
+<?php if($my_parent->is_exist()):?>
+我的推荐人：<?=$my_parent->mobile?> <span><?=$my_parent->nickname?></span>
+<?php else:?>
+我的推荐人：无（挂顶层）
+<?php endif;?>
 </div>
 
 <div class="what_bottom">
@@ -22,6 +32,10 @@
 
 <div class="wx_bottom"><span class="what_wx">客服微信：<i style="color:#d3a492;">3398961935</i></span></div>
 
+<div class="fixed-wrap what_center">
+	<a href="<?php echo U('eqx/letter','nologin=1')?>" class="blka"><img src="<?=$contextpath?>mobiles/eqx/img/whats.png"></a>
+</div>
+<?php include T('inc/popqr')?>
 <script>
 var is_agent = parseInt('<?=$is_agent?>');
 function cancel_act(obj) {
@@ -32,12 +46,6 @@ function do_act(obj) {
 	weui_dialog_close();
 }
 function gotui() {
-	/*
-	if (gUser.uid!=104&&gUser.uid!=114111&&gUser.uid!=7058) {
-		weui_alert('恭喜您获得一起享优先推广权的机会，请先前往“我的人脉”查看人网关系是否正确');
-		return false;
-	}
-	*/
 	if (is_agent) {
 		location.href = '<?php echo U('eqx/tui')?>';
 	}
@@ -46,13 +54,4 @@ function gotui() {
 		weui_dialog(html,'<span style="color:red">提示</span>');
 	}
 }
-/*
-$(function(){
-	if (!is_agent) {
-		setTimeout(function(){
-			gotui();
-		},500);
-	}
-});
-*/
 </script>

@@ -57,7 +57,7 @@ class Eqx_Controller extends MobileController {
 	public function letter(Request $request, Response $response)
 	{
 		$this->v->set_tplname('mod_eqx_letter');
-		$this->topnav_no = 1;
+		$this->topnav_no = 0;
 		$this->nav_no = 0;
 		
 		$nologin = $request->get('nologin',0);
@@ -425,11 +425,14 @@ class Eqx_Controller extends MobileController {
 			}
 			
 			$this->v->set_tplname('mod_eqx_home');
-			$this->topnav_no = 1;
+			$this->topnav_no = 0;
 			$this->nav_no = 0;
 			
 			$is_agent = in_array($GLOBALS['user']->level, Users::getAgentArray()) ? 1 : 0;
 			$this->v->assign('is_agent', $is_agent);
+			
+			$my_parent = Users::load($GLOBALS['user']->parentid);
+			$this->v->assign('my_parent', $my_parent);
 			
 			throw new ViewResponse($this->v);
 		}

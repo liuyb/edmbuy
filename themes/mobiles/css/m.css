@@ -265,6 +265,7 @@ body.MPA.iOS { height: 100%;overflow: hidden; }
 @media only screen and (min-width: 1025px){
 
 	body.SPA,body.MPA,#Mbody{max-width: 480px;margin: 0 auto;}
+	body.SPA,body.MPA,#Mhead,#Mbody,#Mnav,.fixed-wrap{max-width: 480px;margin: 0 auto;}
 
 }
 
