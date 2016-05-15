@@ -74,9 +74,9 @@ class MockCreateMerchantJob extends CronJob{
         $newOrder->discount     = 0;
         $newOrder->money_paid = $amount;
         if($level == Users::USER_LEVEL_3){
-            $newOrder->commision    = 198;
-        }else if($level == Users::USER_LEVEL_4){
             $newOrder->commision    = 98;
+        }else if($level == Users::USER_LEVEL_4){
+            $newOrder->commision    = 198;
         }else if($level == Users::USER_LEVEL_5){
             $newOrder->commision    = 999;
         }

@@ -10,15 +10,17 @@ class Users extends StorageNode {
 	
 	/**
 	 * User level constant
+	 * 规则：数值越大，权限越大
 	 * @var constant
 	 */
 	const USER_LEVEL_0 = 0; //米客
 	const USER_LEVEL_1 = 1; //米商
-	const USER_LEVEL_2 = 2; //合伙人
-	const USER_LEVEL_3 = 3; //金牌代理
-	const USER_LEVEL_4 = 4; //银牌代理
-	
-	const USER_LEVEL_5 = 5; //金牌代理
+	const USER_LEVEL_2 = 2; //(备用，如铜牌代理)
+	const USER_LEVEL_3 = 3; //银牌代理
+	const USER_LEVEL_4 = 4; //金牌代理
+	const USER_LEVEL_5 = 5; //入驻商家
+	const USER_LEVEL_6 = 6; //分站商家
+	const USER_LEVEL_10= 10;//合伙人
 	
 	/**
 	 * 会员登录状态session key
@@ -29,10 +31,10 @@ class Users extends StorageNode {
 	static $level_amount = [
 			0 => 0,             //米客消费金额
 			1 => 98,            //米商消费金额
-			2 => 100000000,     //合伙人消费金额
+			10=> 100000000,     //合伙人消费金额
 	];
 	
-	static $allowed_leader_level = [1,2,3]; //运行的上级级别
+	static $allowed_leader_level = [1,2,3]; //允许的上级级别
 	
 	protected static function meta() {
 		return array(
@@ -1008,12 +1010,12 @@ class Users extends StorageNode {
 	
 	//金牌代理
 	public static function isGoldAgent($level){
-	    return ($level == Users::USER_LEVEL_3 || $level == Users::USER_LEVEL_5);
+	    return ($level == Users::USER_LEVEL_4 || $level == Users::USER_LEVEL_5);
 	}
 	
 	//银牌代理
 	public static function isSilverAgent($level){
-	    return ($level == Users::USER_LEVEL_4);
+	    return ($level == Users::USER_LEVEL_3);
 	}
 	
 	public static function displayUserLevel($level){
@@ -1022,10 +1024,10 @@ class Users extends StorageNode {
 	            return '米商';
 	        break;
 	        case Users::USER_LEVEL_3 :
-	            return '金牌代理';
+	            return '银牌代理';
 	        break;
 	        case Users::USER_LEVEL_4 :
-	            return '银牌代理';
+	            return '金牌代理';
 	        break;
 	        case Users::USER_LEVEL_5 :
 	            return '入驻商家';

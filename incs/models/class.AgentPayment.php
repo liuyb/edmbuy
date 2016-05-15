@@ -38,7 +38,7 @@ class AgentPayment extends StorageNode {
 	 * @param unknown $user_id
 	 */
 	static function getAgentByOrderId($order_id){
-	    $sql = "select pid,level from shp_agent_payment where order_id = %d and level ".Fn::db_create_in([Users::USER_LEVEL_3,Users::USER_LEVEL_4])."";
+	    $sql = "select pid,level from shp_agent_payment where order_id = %d and ".D()->in('level', [Users::USER_LEVEL_3,Users::USER_LEVEL_4]);
 	    $result = D()->query($sql, $order_id)->get_one();
 	    return $result;
 	}
@@ -119,7 +119,7 @@ class AgentPayment extends StorageNode {
 	    if(!Users::isAgent($level)){
 	        return 0;
 	    }
-	    $money = (Users::USER_LEVEL_3 == $level) ? 698 : 398;
+	    $money = (Users::USER_LEVEL_3 == $level) ? 398 : 698;
 	    if($dot){
 	        $money = sprintf("%.".$dot."f", $money);
 	    }
@@ -131,24 +131,28 @@ class AgentPayment extends StorageNode {
 	 * @param unknown $level
 	 */
 	static function getAgentIconByLevel($level){
+		  $icon = '';
 	    switch ($level){
 	        case Users::USER_LEVEL_1 :
-	            $icon = '/themes/mobiles/img/sha.png';
-	        break;
+	          $icon = '/themes/mobiles/img/sha.png';
+	        	break;
 	        case Users::USER_LEVEL_2 :
-	            $icon = '/themes/mobiles/img/he.png';
-	        break;
+	          //$icon = '/themes/mobiles/img/he.png';
+	        	break;
 	        case Users::USER_LEVEL_3 :
-	            $icon = '/themes/mobiles/img/jinpai.png';
-	        break;
-	        case Users::USER_LEVEL_5 :
-	            $icon = '/themes/mobiles/img/qiye.png';
-	        break;
+	          $icon = '/themes/mobiles/img/yinpai.png';
+	        	break;
 	        case Users::USER_LEVEL_4 :
-	            $icon = '/themes/mobiles/img/yinpai.png';
-	        break;
+	        	$icon = '/themes/mobiles/img/jinpai.png';
+	        	break;
+	        case Users::USER_LEVEL_5 :
+	          $icon = '/themes/mobiles/img/qiye.png';
+	        	break;
+	        case Users::USER_LEVEL_10 :
+	          $icon = '/themes/mobiles/img/he.png';
+	        	break;
 	        default :
-	            $icon = '/themes/mobiles/img/ke.png';
+	          $icon = '/themes/mobiles/img/ke.png';
 	    }
 	    return $icon;
 	}

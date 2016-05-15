@@ -250,9 +250,9 @@ class UserCommision extends StorageNode {
 	    if ($cUser->parentid) {
 	        $agent_type = $agent['level'];
 	        //佣金根据类型写死
-	        if($agent_type == Users::USER_LEVEL_3 || $agent_type == Users::USER_LEVEL_5){
+	        if($agent_type == Users::USER_LEVEL_4 || $agent_type == Users::USER_LEVEL_5){
 	            $exOrder->commision = 198;
-	        }else if($agent_type == Users::USER_LEVEL_4){
+	        }else if($agent_type == Users::USER_LEVEL_3){
 	            $exOrder->commision = 98;
 	        }
 	        $commision_dl = UserCommision::COMMISSION_TYPE_DL;
@@ -332,10 +332,10 @@ class UserCommision extends StorageNode {
 	        $silver_share_radio = $gold_share_radio;
 	    }
 	    $radio = 0;
-	    if($cUser->level == Users::USER_LEVEL_3 || $cUser->level == Users::USER_LEVEL_5){
+	    if($cUser->level == Users::USER_LEVEL_4 || $cUser->level == Users::USER_LEVEL_5){
 	        //金牌代理
 	        $radio = $gold_share_radio[$parent_level];
-	    }else if($cUser->level == Users::USER_LEVEL_4){
+	    }else if($cUser->level == Users::USER_LEVEL_3){
 	        //银牌代理
 	        $radio = $silver_share_radio[$parent_level];
 	    }

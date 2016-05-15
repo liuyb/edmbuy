@@ -15,11 +15,11 @@ class FrequentJob extends CronJob {
 	
 	public function main($argc, $argv) {
 		
-		// 批量更新上级昵称
-		$this->upParentNick();
+		// 批量更新上级昵称(由于新版本规则变化，这些更新已不再需要)
+		//$this->upParentNick();
 		
-		// 批量更新用户的一级下级数
-		$this->upChildNum1();
+		// 批量更新用户的一级下级数(由于新版本规则变化，这些更新已不再需要)
+		//$this->upChildNum1();
 		
 		// 批量更新收货时间
 		$this->upShippingConfirmTime();
