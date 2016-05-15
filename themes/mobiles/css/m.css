@@ -5880,7 +5880,7 @@ td.cash_td2 img {
 }
 .mstore_top_infos{
  	float: left;
-  	height: 60px;	
+  min-height: 70px;	
 }
 .m_infos_nmae {
   	font-size: 15px;

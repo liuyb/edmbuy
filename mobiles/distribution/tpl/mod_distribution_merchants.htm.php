@@ -69,7 +69,7 @@ function constructRows(ret, isInit){
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
 			HTML += "<div class=\"iance_list_infos\"><div class=\"iance_list_top\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" />";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+obj.logo+"')\" />";
 			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+obj.facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
 			HTML += "<button class=\"l_top_btn gotoshop\" data-mid=\""+obj.merchant_id+"\">进店</button></div>";
 			console.log(obj.recommend);
@@ -77,7 +77,7 @@ function constructRows(ret, isInit){
 				HTML += "<div class=\"iance_list_bottom\"><ul>";
 				for(var r = 0,rlen = obj.recommend.length; r < rlen; r++){
 					var recomm = obj.recommend[r];
-					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+recomm.goods_img+"')\" /></li>";
+					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+recomm.goods_img+"')\" /></li>";
 				}
 				HTML += "</ul></div>";
 			}

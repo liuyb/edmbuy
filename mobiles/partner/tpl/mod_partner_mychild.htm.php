@@ -28,6 +28,12 @@
 	height: 20px !important;
 	line-height:20px !important;
 }
+#showMore{
+	text-align:center;
+	height:40px;
+	line-height:40px;
+	display:none;
+}
 </style>
 <!--[/HEAD_CSS]-->
 <script id="forTopnav" type="text/html">
@@ -36,21 +42,19 @@
 	<a href="<?=$backurl?>" class="back"></a>
 </div>
 </script>
-<script>
-show_topnav($('#forTopnav').html());
-</script>
+<script>show_topnav($('#forTopnav').html());</script>
 
 <div class="store_three_list">
 	<ul id="levelBar">
-		<li class="navig_on" onclick="agencyChange(this, 1)" data-type=1><?=$level1 ?><br/>一级人脉</li>
-		<li onclick="agencyChange(this, 2)" data-type=2><?=$level2 ?><br/>二级人脉</li>
-		<li onclick="agencyChange(this, 3)" data-type=3><?=$level3 ?><br/>三级人脉</li>
+		<li class="navig_on" onclick="agencyChange(this, 1)" data-type="1"><?=$level1 ?><br/>一级人脉</li>
+		<li onclick="agencyChange(this, 2)" data-type="2"><?=$level2 ?><br/>二级人脉</li>
+		<li onclick="agencyChange(this, 3)" data-type="3"><?=$level3 ?><br/>三级人脉</li>
 	</ul>
 </div>
 
 <div class="m_store_common" id="resultList"></div>
 
-<div id="showMore" style="text-align:center;height:40px;line-height:40px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
+<div id="showMore"><span class="allicen_more">下拉加载更多</span></div>
 
 <?php include T('inc/add_as_friend');?>
 <script>
@@ -71,8 +75,8 @@ $(function(){
 		var mobilephone = $this.data("m");
 		getAddFriendInstance().showFriend(uid,wxqr,mobilephone);
 	});
-
-	$mbody.on('pullMore', function(){
+	
+	$showMore.bind('click',function(){
 		var level = $("#levelBar").find("li[class='navig_on']").data('type');
 		var curpage = $showMore.attr('data-curpage');
 		getChildList(level ? level : 1, (curpage ? curpage : 1), false);
@@ -99,7 +103,7 @@ function constructRows(ret, isInit){
 			address = (obj.province || obj.city) ? address : "&nbsp;";
 			var icon = getLevelIcon(obj.level);
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top new_partner_list\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
 			HTML += "<p class=\"new_m_infos_address\">"+address+"</p>";
 			HTML += "<p class=\"m_infos_num new_m_infos_num\"><span>推荐人数："+obj.childnum1	+"</span><span>上级："+obj.parentnick	+"</p></span></p></div><button class=\"l_top_btn new_l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
 		}

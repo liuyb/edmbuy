@@ -567,7 +567,7 @@ class Trade_Controller extends MobileController {
             
           //金牌银牌代理处理
           if($this->is_agent_order($item_id)){
-              AgentPayment::createAgentPayment($user_id, $order_id, $item_id == GOLD_AGENT_GOODS_ID ? 3 : 4);
+              AgentPayment::createAgentPayment($user_id, $order_id, $item_id == GOLD_AGENT_GOODS_ID ? 4 : 3);
           }else if($this->is_merchant_order($item_id)){
               //购买商家处理
               $merchant = Merchant::getMerchantByUserId($user_id);
