@@ -43,13 +43,16 @@ function cancel_act(obj) {
 }
 function do_act(obj) {
 	location.href = '<?php echo U('trade/order/agent')?>';
-	weui_dialog_close();
+	if(typeof(obj)!='undefined') {
+		weui_dialog_close();
+	}
 }
 function gotui() {
 	if (is_agent) {
 		location.href = '<?php echo U('eqx/tui')?>';
 	}
 	else {
+		do_act();return;
 		var html = '<p>恭喜您获得一起享优先推广权的机会，前往多米商城购买套餐立即获得推广权</p><div class="home_dlg_btns"><button class="home_btn register_btn" onclick="cancel_act(this)">我再看看</button><button class="home_btn login_btn" onclick="do_act(this)">立即前往</button></div>';
 		weui_dialog(html,'<span style="color:red">提示</span>');
 	}

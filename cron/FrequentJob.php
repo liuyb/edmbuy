@@ -19,7 +19,7 @@ class FrequentJob extends CronJob {
 		//$this->upParentNick();
 		
 		// 批量更新用户的一级下级数(由于新版本规则变化，这些更新已不再需要)
-		//$this->upChildNum1();
+		$this->upChildNum1();
 		
 		// 批量更新收货时间
 		$this->upShippingConfirmTime();
