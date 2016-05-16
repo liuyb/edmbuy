@@ -21,7 +21,7 @@
         <td><!--{$val.comment_rank}--></td>
         <td><!--{$val.user_name}--></td>
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
-        <!--{if !empty($val.comment_reply)}-->
+        <!--{if $val.is_reply}-->
         <td>已回复</td>
 		<td>
         	<a href="javascript:;"  onclick="viewCommon( <!--{$val.comment_id}-->,'view')" class="reply_mana">

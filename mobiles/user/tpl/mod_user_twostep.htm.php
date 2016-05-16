@@ -15,10 +15,10 @@
 <div id="sus_info">
     <ul>
 		<li>
-			<input id="shopPass" class="ps_common" type="password" value="" placeholder="设置店铺登录密码">
+			<input id="shopPass" class="ps_common" type="password" value="" placeholder="设置店铺登录密码" style='width:100%;'>
 		</li>
 		<li>
-			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码">
+			<input id="confirmShopPass" class="ps_common" type="password" value="" placeholder="请再次输入密码" style='width:100%;'>
 		</li>
 		<?php if(!$user->parentid): ?>
 		<li>

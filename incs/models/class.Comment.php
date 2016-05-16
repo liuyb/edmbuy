@@ -33,7 +33,8 @@ class Comment extends StorageNode {
                 'comment_thumb'  => 'comment_thumb',
                 'comment_reply'  => 'comment_reply',//商家回复
                 'obj_attr'       => 'obj_attr',//商品属性
-                'order_id'       => 'order_id'
+                'order_id'       => 'order_id',
+                'merchant_id'    => 'merchant_id'
             )
         );
     }

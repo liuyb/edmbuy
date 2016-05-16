@@ -141,10 +141,10 @@ function wk($date1) {
 ?>
 <div style="background-color: #fff;padding:20px;">
 	<div style="font-weight:bold;">
-		运单号码：<?=$express['shipping_name'] ?>
+		运单号码：<?=$express['invoice_no'] ?>
 	</div>
 	<div style="font-weight:bold;">
-		物流公司：<?=$express['invoice_no'] ?>
+		物流公司：<?=$express['shipping_name'] ?>
 	</div>
 	<div style="text-align: center;font-weight:bold;margin-top:10px;margin-bottom:10px;">包裹详情</div>
 	<div class="package-status">

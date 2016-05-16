@@ -193,8 +193,8 @@ class Wxpay {
       $input->SetOut_trade_no($params['order_no']);
       $input->SetTransaction_id($params['trans_id']);
       $input->SetOut_refund_no($params['refund_no']);
-      $input->SetRefund_fee($params['refund_fee']);
-      $input->SetTotal_fee($params['total_fee']);
+      $input->SetRefund_fee(Fn::money_fen($params['refund_fee']));
+      $input->SetTotal_fee(Fn::money_fen($params['total_fee']));
       $wxpay_ret = null;
       $err_msg = '';
       try{

@@ -68,27 +68,32 @@ class User_Controller extends MobileController
      */
     public function index(Request $request, Response $response)
     {
-        //$this->setPageView($request, $response, '_page_mpa');
-        //$this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $this->v->set_tplname('mod_user_index');
         $is_account_logined  = Users::is_account_logined();
-        
-        $u = $this->showUserBaseInfo();
-        $agent = AgentPayment::getAgentByUserId($u->uid, $u->level);
-        $this->v->assign('agent', $agent);
-        
-        $collect_shop_count = 0;
-        $collect_goods_count= 0;
-        if ($is_account_logined) {
-        	$collect_shop_count = User_Model::getCollectShopCount();
-        	$collect_goods_count = User_Model::getCollectGoodsCount();
+        if(1 || $request->is_hashreq()){
+            $currentUser = Users::load($GLOBALS['user']->uid);
+            $agent = AgentPayment::getAgentByUserId($currentUser->uid, $currentUser->level);
+            $this->v->assign('agent', $agent);
+            
+            $collect_shop_count = 0;
+            $collect_goods_count= 0;
+            if ($is_account_logined) {
+            	$collect_shop_count = User_Model::getCollectShopCount();
+            	$collect_goods_count = User_Model::getCollectGoodsCount();
+            }
+            
+            $shopOpend = Merchant::userHasOpendShop($currentUser->uid);
+            
+            $this->v->assign('shopOpend',  $shopOpend);
+            $this->v->assign('shop_count',  $collect_shop_count);
+            $this->v->assign('goods_count', $collect_goods_count);
+            
+            $this->v->assign('currentUser', $currentUser);
+            if ($currentUser->parentid) {
+                $parentUser = User_Model::findUserInfoById($currentUser->parentid);
+                $this->v->assign("parentUser", $parentUser);
+            }
         }
-        
-        $shopOpend = Merchant::userHasOpendShop($u->uid);
-        
-        $this->v->assign('shopOpend',  $shopOpend);
-        $this->v->assign('shop_count',  $collect_shop_count);
-        $this->v->assign('goods_count', $collect_goods_count);
         $this->v->assign('is_account_logined', $is_account_logined);
         throw new ViewResponse($this->v);
     }
@@ -137,9 +142,8 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_wxqr');
         $this->topnav_no = 1;
-        if (1 || $request->is_hashreq()) {
-            $user = $this->showUserBaseInfo();
-        }
+        $user = Users::load($GLOBALS['user']->uid);
+        $this->v->assign('cuser', $user);
         throw new ViewResponse($this->v);
     }
 
@@ -616,7 +620,7 @@ class User_Controller extends MobileController
             $this->v->assign("parentUid", $parentUser->uid);
             $this->v->assign("parentNickName", $parentUser->nickname);
             $this->v->assign("parentLevel", $parentUser->level);
-            $this->v->assign("ParentMobile", $parentUser->mobilephone);
+            $this->v->assign("ParentMobile", $parentUser->mobile);
             $this->v->assign("ParentWxqr", $parentUser->wxqr);
         }
         return $currentUser;
@@ -1184,11 +1188,11 @@ class User_Controller extends MobileController
             $response->redirect("/user/merchant/dosuccess");
         }
         //已是商家  - 还没支付 - 未付款 未取消 订单存在
-        $order_id = User_Model::getUnPaidOrderForMerchant();
+        /* $order_id = User_Model::getUnPaidOrderForMerchant();
         if($order_id && $order_id > 0){
             $url = U('trade/order/record','spm='.(isset($_GET['spm'])?$_GET['spm']:'').'&status=wait_pay');
             $response->redirect($url);
-        }
+        } */
         //已是商家  - 还没支付 - 订单不存在
         $response->redirect('/trade/order/confirm_sysbuy');
         

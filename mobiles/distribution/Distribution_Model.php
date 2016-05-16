@@ -17,7 +17,7 @@ class Distribution_Model extends Model{
     static function getMerchantsList(PagerPull $pager, array $options){
         $orderby = $options['orderby'] ? $options['orderby'] : 'oc';
         $sql = "select m.merchant_id as merchant_id, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc from shp_merchant m left join
-                (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and pay_status = ".PS_PAYED." and merchant_ids <> ''
+                (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and is_delete = 0 and merchant_ids <> ''
                 group by merchant_ids) mo
                 on m.merchant_id = mo.merchant_ids
                 left join
