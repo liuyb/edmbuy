@@ -13,7 +13,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	多米代理
-	<a href="/user" class="back"></a>
+	<a href="javascript:history.back();" class="back"></a>
 </div>
 </script>
 <script>

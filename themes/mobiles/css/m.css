@@ -178,7 +178,7 @@ button.clicked,button.isclick,button.isclicked { background: #999; }
 .slinav a.active{background:#ea471e;border:1px solid #ea471e;}
 
 /*pop dialog*/
-.popdlg,.popdlg-bg { display: none;position: absolute;z-index: 30000;top: 0;left: 0;width: 100%;height: 100%; }
+.popdlg,.popdlg-bg { display: none;position: fixed;z-index: 30000;top: 0;left: 0;width: 100%;height: 100%; }
 .popdlg-bg { opacity:.45; background: #000; }
 .popdlg { display: none;z-index: 30003;background: #fff;/*-webkit-box-shadow: 0 0 2px #ccc;-moz-box-shadow: 0 0 2px #ccc;box-shadow: 0 0 2px #ccc;*/ }
 .popdlg .poptit { height: 40px;line-height: 40px;text-align: center; }
@@ -4755,7 +4755,7 @@ td.cash_td2 img {
   border-bottom:1px solid #eee;
 }
 .ps_common{
-  margin-left:0px;
+  margin-left:0px;padding:10px 0px;
 }
 .common_red_x{
   float: right;

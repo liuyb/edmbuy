@@ -562,25 +562,18 @@ class Goods_Model extends Model
      */
     static function getCommentList(Pager $pager, $current)
     {
-        //comment_id ,id_value,content,comment_rank,user_name,add_time,status
-        $merchant_id = $GLOBALS['user']->uid;
-        $where = "and merchant_id='%s' ";
-        $sql = "select count(1) from shp_comment where content <> '' ";
-        if($current==2){
-            $where .= "and comment_reply=''";
-            $sql .= $where;
-        } else {
-            $sql .= $where;
+        $where = '';
+        if($current == 2){
+            $where .= ' and is_reply < 1 ';
         }
+        $merchant_id = $GLOBALS['user']->uid;
+        $sql = "select count(1) from shp_comment comment join shp_goods goods on comment.id_value = goods.goods_id where goods.merchant_id = '$merchant_id' $where ";
         $comment_count = D()->query($sql, $merchant_id)->result();
         $pager->setTotalNum($comment_count);
         $limit = "{$pager->start},{$pager->pagesize}";
-        $current == 1 ? $where = "comment.merchant_id='{$merchant_id}' and comment.content <> ''" : $where = "comment.merchant_id='{$merchant_id}' and comment.comment_reply = '' and comment.content  <> ''";
-        $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,goods.goods_img as goods_img ,comment.comment_id as comment_id,
-              comment.id_value as id_value ,comment.comment_reply as comment_reply ,comment.content as content,comment.comment_rank as comment_rank,comment.user_name
-              as user_name,comment.add_time as add_time,comment.status as status from shp_comment comment
-              LEFT JOIN shp_goods goods on comment.id_value=goods.goods_id where {$where}
-              order by add_time DESC limit {$limit}";
+        $sql = "select goods.goods_name as goods_name,goods.goods_thumb as goods_thumb ,goods.goods_img as goods_img ,comment.* from shp_comment comment
+              JOIN shp_goods goods on comment.id_value=goods.goods_id where goods.merchant_id = '$merchant_id' $where 
+              order by comment.add_time DESC limit {$limit}";
         $result = D()->query($sql)->fetch_array_all();
         $result = self::buildGoodsImg($result);
         $pager->result = $result;
@@ -593,11 +586,11 @@ class Goods_Model extends Model
      */
     static function merchantRely($comment_id, $merchart_content)
     {
-        $merchant_id = $GLOBALS['user']->uid;
-//        public function update($tablename, Array $setarr, $wherearr, $flag = '')
-        $table = "`shp_comment`";
-        $setArr['comment_reply'] = $merchart_content;
-        $whereArr['comment_id'] = $comment_id;
+       $merchant_id = $GLOBALS['user']->uid;
+       $table = "`shp_comment`";
+       $setArr['comment_reply'] = $merchart_content;
+       $setArr['is_reply'] = 1;
+       $whereArr['comment_id'] = $comment_id;
        return D()->update($table, $setArr, $whereArr);
     }
 

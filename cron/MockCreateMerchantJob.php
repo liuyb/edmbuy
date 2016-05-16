@@ -22,9 +22,9 @@ class MockCreateMerchantJob extends CronJob{
             $mobile = $user['mobile'];
             $user_id = $user['user_id'];
             if(in_array($level, [3,4])){
-                if($level == 4){
+                if($level == 3){
                     $item_id = GOLD_AGENT_GOODS_ID;
-                }else if($level == 3){
+                }else if($level == 4){
                     $item_id = SILVER_AGENT_GOODS_ID;
                 }
                 self::createOrder($user, '', $money, Order::ORDER_FLAG_AGENT, $item_id);
@@ -45,7 +45,7 @@ class MockCreateMerchantJob extends CronJob{
      * @param unknown $user_id
      * @param unknown $merchant_id
      */
-    private function createOrder($user, $merchant_id, $amount, $type, $item_id){
+    public function createOrder($user, $merchant_id, $amount, $type, $item_id){
         $user_id = $user['user_id'];
         $level = $user['level'];
         // 生成订单信息

@@ -32,17 +32,17 @@
 <div id="sus_info">
     <ul>
         <li>
-            <input id="phone_nums_p" class="ps_common" type="text" value="" placeholder="请填写正确的号码">
-            <span class="common_red_x">*</span>
+            <input id="phone_nums_p" class="ps_common" type="text" value="" placeholder="请填写正确的号码" style='width:100%;'>
+           <!--  <span class="common_red_x">*</span> -->
         </li>
         <li>
-            <input id="auth_code" class="ps_common" type="text" value="" placeholder="请输入验证码">
+            <input id="auth_code" class="ps_common" type="text" value="" placeholder="请输入验证码" style='width:65%;'>
             <?php if($user->parentid):?>
             <button id="ps_btn">获取验证码</button>
             <?php endif;?>
         </li>
         <li>
-            <input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入图形验证码">
+            <input id="ps_img" class="ps_common" type="text" value="" placeholder="请输入图形验证码" style='width:70%;'>
             <span class="common_red_x"><img id="verifyimg" src="/vc.php" onclick="this.src='/vc.php?'+Math.random()" alt="验证码" title="点击刷新验证码"></span>
         </li>
         <!-- <li>

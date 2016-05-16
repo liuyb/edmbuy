@@ -276,12 +276,9 @@ HEREDOC;
 	
 	//上传评论图片
 	public function upload_comment_pic(Request $request, Response $response){
-	    $imgDIR = '/a/comment/';
 	    if ($request->is_post()) {
 	        $img = $_POST["img"];
-            $upload = new Upload($img, $imgDIR);
-            $upload->has_thumb = true;
-            $upload->thumbwidth = 200;
+            $upload = new AliyunUpload($img, 'comment', 'goods');
             $result = $upload->saveImgData();
             $ret = $upload->buildUploadResult($result);
 	        $response->sendJSON($ret);
@@ -310,6 +307,8 @@ HEREDOC;
     	        $c->service_level = $service_level;
     	        $c->id_value = $goods_id;
     	        $c->order_id = $order_id;
+    	        $item = Items::load($goods_id);
+    	        $c->merchant_id = $item->merchant_id;
     	        Item_Model::postGoodsComment($c);
     	        $ret = 'SUCC';
     	    }

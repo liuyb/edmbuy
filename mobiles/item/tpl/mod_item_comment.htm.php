@@ -226,8 +226,16 @@ function submitComment(){
 	}
 	var clevel = $(".p_rank").attr("data-rank");
 	clevel = clevel ? clevel : 1;
-	var shipping = $(".fhsd_xj").attr("data-ship");
-	var service = $(".fwtd_xj").attr("data-service");
+	var shipping = $(".fhsd_xj").data("ship");
+	var service = $(".fwtd_xj").data("service");
+	if(shipping){
+		shipping = 6 - parseInt(shipping);
+	}
+	shipping = shipping > 5 ? 5 : shipping;
+	if(service){
+		service = 6 - parseInt(service);
+	}
+	service = service > 5 ?　5 : service;
 	var oripath = [];
 	var thumbpath = [];
 	getUploadImgs(oripath, thumbpath);

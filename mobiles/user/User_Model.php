@@ -474,9 +474,8 @@ class User_Model extends Model
      * @return mixed
      */
     static function getUnPaidOrderForMerchant(){
-        $time =date('Y-m-d H:i:s' ,time());
         $sql = "SELECT so.order_id FROM shp_merchant_payment p join shp_order_info so on p.order_id = so.order_id 
-                and p.user_id = %d and p.start_time <= '{$time}' and p.end_time >='{$time}' and p.money_paid <= 0";
+                and p.user_id = %d and p.money_paid <= 0 and so.pay_status = ".PS_UNPAYED." ";
         $order_id = D()->query($sql, $GLOBALS['user']->uid)->result();
         return $order_id;
     }

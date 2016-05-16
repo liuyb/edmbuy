@@ -5,12 +5,12 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:
-$is_agent = Users::isAgent($curuser->level);
+$is_agent = Users::isAgent($currentUser->level);
 ?>
 <?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
 <div class="member_cen_common" style="margin:0;">
 	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
-		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($curuser->level) ?>元套餐未领取!</span>
+		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($currentUser->level) ?>元套餐未领取!</span>
 		<i style="color:#f65d00;" onclick="_link('<?=U('distribution/agent/package') ?>')">立即领取</i>
 	</div>
 </div>
@@ -19,33 +19,33 @@ $is_agent = Users::isAgent($curuser->level);
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
 			<td width="70px;">
-				<?php if($is_account_logined && $logo): ?>
-    			<img src="<?=$logo?>?_=<?=$curuser->randver?>" alt="logo">
+				<?php if($is_account_logined && $currentUser->logo): ?>
+    			<img src="<?=$currentUser->logo?>?_=<?=$currentUser->randver?>" alt="logo">
     		<?php else:?>
     			<img src="/themes/mobiles/img/mt.png"/>
     		<?php endif;?>
     		</td>
 			<td>
 			<?php if($is_account_logined):?>
-				<p class="become_name"><?=$nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($curuser->level) ?>" class="jin_z">
-				<?php if(Users::isAgent($curuser->level) && !Users::isGoldAgent($curuser->level)):?>
+				<p class="become_name"><?=$currentUser->nickname ?><img src="<?=AgentPayment::getAgentIconByLevel($currentUser->level) ?>" class="jin_z">
+				<?php if(Users::isAgent($currentUser->level) && !Users::isGoldAgent($currentUser->level)):?>
 				<img src="/themes/mobiles/img/wysj.png" onclick="_link('<?=U('trade/order/agent') ?>', event)" style="width:52px;height:19px;border-radius:0;margin-left:0px;"/>
 				<?php endif;?>
 				</p>
-				<p class="become_name_id">多米号：<?=$uid ?></p>
+				<p class="become_name_id">多米号：<?=$currentUser->uid ?></p>
 			<?php else:?>
 				<p class="become_name">注册/登录</p>
-				<p class="become_name_id">多米号：<?=$uid ?></p>			
+				<p class="become_name_id">多米号：<?=$currentUser->uid ?></p>			
 			<?php endif;?>
 			</td>
 			<td class="agency_index_img"><img src="/themes/mobiles/img/shezhi.png"></td>
 		</tr>
 	</table>
 </div>
-<?php if(isset($parentUid)):?>
+<?php if(isset($parentUser)):?>
 <div class="member_cen_common">
 	<div class="in_common_agency del_bottom" onclick="_link('<?=U('distribution/my/parent') ?>')">
-		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUid ?></span><i><?=$parentNickName ?></i>
+		<img src="/themes/mobiles/img/tuijianr.png"><span>我的推荐人：<?=$parentUser->uid ?></span><i><?=$parentUser->nickname ?></i>
 	</div>
 </div>
 <?php endif;?>
@@ -171,7 +171,7 @@ $(function(){
 	
 	//好友弹框
 	$(".refer_but").on("click",function(){
-		getAddFriendInstance().showFriend("","<?=isset($ParentWxqr)?$ParentWxqr:"" ?>","<?=isset($ParentMobile )?$ParentMobile :""?>");
+		getAddFriendInstance().showFriend("","<?=isset($parentUser->wxqr)?$parentUser->wxqr:"" ?>","<?=isset($parentUser->mobile )?$parentUser->mobile : ""?>");
 	});
 	
 	var length = $(".c_n_tit").text().length;

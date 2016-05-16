@@ -16,8 +16,8 @@
 
 <div style="border-top: 0;">
 	<div class="wx_uploading" id="wx_uploading">
-		<?php if($wxqr): ?>
-			<img id="avatar1" src="<?=$wxqr ?>" style="height:100%;max-width:100%">
+		<?php if($cuser->wxqr): ?>
+			<img id="avatar1" src="<?=$cuser->wxqr ?>" style="height:100%;max-width:100%">
 		<?php else : ?>
 			<img id="avatar1" src="/themes/mobiles/img/tianj.png" style="height:100%;max-width:100%">	
 		<?php endif;?>
