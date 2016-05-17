@@ -19,7 +19,7 @@
 
 <body style="background:#eee;">
 
-<div class="member_cen_common" style="margin:0;">
+<div class="member_cen_common trans" style="margin:0;display:none;">
 	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
 		<span style="color:#994222">您还有398元套餐未领取!</span>
 		<i style="color:#f65d00;">立即领取</i>
@@ -119,10 +119,23 @@
 	</div>
 </div>
 
+<div class="mask"></div>
+
+<div class="no_get_s">
+	<div style="text-align:center;margin-top:25px;font-size:16px;">你还有<i>398元</i>套餐未领取哦!</div>
+	<button class="later_get_btn">稍后再说</button><button class="n_get_btn">立即领取</button>
+</div>
 
 
-
-
+<script>
+	$(".mask").show();
+	$(".later_get_btn").on("click",function(){
+		$(".no_get_s").addClass("tran_on");
+		$(".mask").fadeOut(2000);
+		
+		setTimeout(function(){$(".trans").addClass("tran_on_tit");},1000);
+	})
+</script>
 
 
 

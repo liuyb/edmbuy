@@ -4322,5 +4322,73 @@ td.cash_td2 img {
 }
 
 
+/* 2016-5-17 s */
+@-webkit-keyframes mOut {
+	0% {
+		-webkit-transform: translate3d(0,0,0) scale(1,1);	
+	}
+
+	100% {
+		-webkit-transform:  translate3d(0,-200%,0) scale(0,0);	
+	}
+}
+
+.tran_on{
+	-webkit-animation: mOut 1s ease 0.2s 1 both;
+}
+
+@-webkit-keyframes mIn {
+	0% {
+		-webkit-transform: translate3d(0,-100%,0)
+	}
+
+	100% {
+		-webkit-transform: translate3d(0,0,0)
+	}
+}
+
+.tran_on_tit{
+	display:block !important;
+	-webkit-animation: mIn 0.8s ease 0.2s 1 both;
+}
 
 
+.no_get_s{
+	z-index:33333;
+	position:fixed;
+	background:#fff;
+	width:260px;
+	height:120px;
+	margin-left:-130px;
+	left:50%;
+	top:30%;
+	border-radius:4px;
+}
+.later_get_btn{
+	height:43px;
+	line-height:44px;
+  	position: absolute;
+  	left: 0;
+  	width: 130px;
+  	bottom: 0;	
+	border-top:1px solid #eee;
+	background:#fff;
+	color:#f65d00;
+	font-size:14px;
+	border-bottom-left-radius: 4px;
+}
+.n_get_btn{
+  	height:44px;
+	line-height:44px;
+  	position: absolute;
+  	right: 0;
+  	width: 130px;
+  	bottom: 0;	
+	border-top:1px solid #eee;
+	background:#f65d00;
+	color:#fff;
+	font-size:14px;
+	border-bottom-right-radius: 4px;
+}
+
+/* 2016-5-17 e */
