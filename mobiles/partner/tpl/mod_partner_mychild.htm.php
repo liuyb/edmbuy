@@ -102,8 +102,9 @@ function constructRows(ret, isInit){
 			var address = obj.province+" "+obj.city;
 			address = (obj.province || obj.city) ? address : "&nbsp;";
 			var icon = getLevelIcon(obj.level);
+			var nickname = obj.nickname ? obj.nickname.substr(0,8) : obj.nickname;
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.reg_time+"</div><div class=\"mstore_list_top new_partner_list\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.nickname+"<img src=\""+icon+"\"></p>";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img new_l_top_img\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+nickname+"<img src=\""+icon+"\"></p>";
 			HTML += "<p class=\"new_m_infos_address\">"+address+"</p>";
 			HTML += "<p class=\"m_infos_num new_m_infos_num\"><span>推荐人数："+obj.childnum1	+"</span><span>上级："+obj.parentnick	+"</p></span></p></div><button class=\"l_top_btn new_l_top_btn\" data-uid=\""+obj.uid+"\" data-u=\""+obj.uid+"\" data-w=\""+obj.wxqr+"\" data-m=\""+obj.mobilephone+"\">加好友</button></div></div></div>";
 		}

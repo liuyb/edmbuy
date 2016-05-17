@@ -31,7 +31,7 @@
 		<div class="issue_gods_i">
 			<div class="issue_gods_left"><span class="fill_red">*</span>市<i class="i_length"></i>场<i class="i_length"></i>价：</div>
 			<div class="issue_gods_right">
-				<input type="text" value="<!--{$goodsinfo->market_price}-->" class="write_short" name="market_price" data-type='money' required >
+				<input type="text" value="<!--{$goodsinfo->market_price}-->" id="market_price" class="write_short" name="market_price" data-type='money' required >
 			</div>
 			
 			<div class="issue_gods_left" style="margin-left:110px"><span class="fill_red">*</span>供<i class="i_length"></i>货<i class="i_length"></i>价：</div>
@@ -41,7 +41,7 @@
 			
 			<div class="issue_gods_left" style="margin-left:110px">成<i class="i_length"></i>本<i class="i_length"></i>价：</div>
 			<div class="issue_gods_right">
-				<input type="text" value="<!--{$goodsinfo->cost_price}-->" class="write_short" name="cost_price" data-type='money'>
+				<input type="text" value="<!--{$goodsinfo->cost_price}-->" class="write_short" name="cost_price" id="cost_price" data-type='money'>
 			</div>
 			
 			<p id="sr_ts" style="margin-left:740px;">净毛利统计时会使用，买家不可见</p>
@@ -55,7 +55,7 @@
 			
 			<div class="issue_gods_left" style="margin-left:113px"><span class="fill_red">*</span>库<i class="i_length"></i><i class="i_length"></i><i class="i_length"></i>&nbsp;存：</div>
 			<div class="issue_gods_right">
-				<input type="text"maxlength="6" data-type='positive' value="<!--{$goodsinfo->item_number}-->" class="write_short" name="goods_number" required >
+				<input type="text" maxlength="6" data-type='positive' value="<!--{$goodsinfo->item_number}-->" class="write_short" id="goods_number" name="goods_number" required >
 			</div>
 			
 			<div class="issue_gods_left" style="margin-left:112px">每人限购：</div>
@@ -760,6 +760,11 @@ function generateSpecifTable(){
 		$(".goods_stockDIV").hide();
 		return;
 	}
+	var market_price = $("#market_price").val();
+	var income_price = $("#income_price").val();
+	var cost_price = $("#cost_price").val();
+	var shop_price = $("#shop_price").val();
+	var goods_number = $("#goods_number").val();
 	var result =  [];
 	dke_Array(0,null, attr_as, result);
 	TR_HD += "<th>市场价</th>";
@@ -774,11 +779,11 @@ function generateSpecifTable(){
 			item.forEach(function(attrObj){
 				TR_HD += "<td class='attrcls' data-attr='"+attrObj.attr+"'>"+attrObj.text+"</td>";
 			});
-			TR_HD += "<td><input type='text' class='attr_market_price' data-type='money' value='' required ></td>";
-			TR_HD += "<td><input type='text' class='attr_shop_price' data-type='money' value='' required ></td>";
-			TR_HD += "<td><input type='text' class='attr_income_price' data-type='money' value='' required ></td>";
-			TR_HD += "<td><input type='text' class='attr_cost_price' data-type='money' value='' required ></td>";
-			TR_HD += "<td><input type='text' data-type='positive' class='attr_goods_number' value='' required ></td></tr>";
+			TR_HD += "<td><input type='text' class='attr_market_price' data-type='money' value='"+market_price+"' required ></td>";
+			TR_HD += "<td><input type='text' class='attr_shop_price' data-type='money' value='"+shop_price+"' required ></td>";
+			TR_HD += "<td><input type='text' class='attr_income_price' data-type='money' value='"+income_price+"' required ></td>";
+			TR_HD += "<td><input type='text' class='attr_cost_price' data-type='money' value='"+cost_price+"' required ></td>";
+			TR_HD += "<td><input type='text' data-type='positive' class='attr_goods_number' value='"+goods_number+"' required ></td></tr>";
 		}
 	});
 	$(".goods_stocks").html($(TR_HD));

@@ -9,7 +9,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	领取套餐
-    <a href="/trade/order/agent" class="back"></a>
+    <a href="javascript:history.back();" class="back"></a>
 </div>
 </script>
 <script>

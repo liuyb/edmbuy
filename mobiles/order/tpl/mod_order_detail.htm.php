@@ -9,7 +9,7 @@
 <div class="header">
 	订单详情
 <?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
-<a href="/trade/order/record" class="back"></a>
+<a href="javascript:history.back();" class="back"></a>
 <a href="/user" class="back_r"></a>
 <?php endif;?>
 </div>
@@ -120,7 +120,9 @@ function is_cft_over_7ds($cftime){
 <button class="order_but_r btn-order-topay">立即付款</button>
 <!-- 已支付未发货（退款、继续购买） -->
 <?php elseif ($order->pay_status == PS_PAYED && in_array($order->shipping_status, [SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING]) ): ?>
+<?php if(!$order->order_flag && !$order->relate_order_id):?>
 <button class="order_but_l btn_refund_money">退款</button>
+<?php endif;?>
 <button class="order_but_r btn_rebuy_good">继续购买</button>
 <!-- 已支付已发货 （确认收货、继续购买）-->
 <?php elseif ($order->pay_status == PS_PAYED && in_array($order->shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART]) ): ?>
@@ -128,7 +130,9 @@ function is_cft_over_7ds($cftime){
 <button class="order_but_r btn-ship-confirm">确认收货</button>
 <!-- 已支付已发货已确认收货 - 七天内支持退货（退货、继续购买） -->
 <?php elseif ($order->shipping_status == SS_RECEIVED && !is_cft_over_7ds($order->shipping_confirm_time)):?>
+<?php if(!$order->order_flag && !$order->relate_order_id):?>
 <button class="order_but_l btn_refund_order">退货</button>
+<?php endif;?>
 <button class="order_but_r btn_rebuy_good">继续购买</button>
 <!-- 其他-->
 <?php elseif($order->pay_status == PS_REFUNDING):?>

@@ -205,6 +205,7 @@ class Distribution_Model extends Model{
                 $subOrder->merchant_ids = $m_uid;//Merchant::getMidByAdminUid($m_uid);
                 $subOrder->order_status = OS_CONFIRMED;
                 $subOrder->pay_status   = PS_PAYED;
+                $subOrder->order_flag = Order::ORDER_FLAG_PERMIUM;
                 $subOrder->relate_order_id = $agent_order_id;
                 $subOrder->save(Storage::SAVE_INSERT); //先生成一个克隆子订单
                  

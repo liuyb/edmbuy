@@ -67,8 +67,9 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
+			var facename = obj.facename ? obj.facename.substr(0,8) : obj.facename;
 			HTML += "<div class=\"mstore_list_common\"><div class=\"mstore_list_infos\"><div class=\"mstore_time\">"+obj.created+"</div><div class=\"mstore_list_top\">";
-			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+obj.facename+"</p>";
+			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\" class=\"mstore_top_imt\"/><div class=\"mstore_top_infos\"><p class=\"m_infos_nmae\">"+facename+"</p>";
 			HTML += "<p class=\"ms_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p><p class=\"ms_infos_rs\"><img src=\"/themes/mobiles/img/yiduomi-inc.png\"></p></div>";
 			HTML += "<button class=\"l_top_btn\" data-mid=\""+obj.merchant_id+"\">进店</button></div></div></div>";
 		}

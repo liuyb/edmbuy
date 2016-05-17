@@ -68,9 +68,10 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
+			var facename = obj.facename ? facename.substr(0,10) : facename;
 			HTML += "<div class=\"iance_list_infos\"><div class=\"iance_list_top\">";
 			HTML += "<img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+obj.logo+"')\" />";
-			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+obj.facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
+			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
 			HTML += "<button class=\"l_top_btn gotoshop\" data-mid=\""+obj.merchant_id+"\">进店</button></div>";
 			console.log(obj.recommend);
 			if(obj.recommend && obj.recommend.length){

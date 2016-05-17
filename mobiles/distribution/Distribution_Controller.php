@@ -447,6 +447,7 @@ class Distribution_Controller extends MobileController{
             $newOrder->confirm_time = simphp_gmtime();
             $newOrder->pay_time = simphp_gmtime();
             //...
+            $newOrder->order_flag = Order::ORDER_FLAG_PERMIUM;
             $newOrder->relate_order_id = $agent->order_id;//对应上购买代理的订单ID
             $newOrder->save(Storage::SAVE_INSERT);
             $order_id = 0;

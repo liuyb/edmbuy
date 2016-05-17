@@ -8,11 +8,15 @@
 $is_agent = Users::isAgent($currentUser->level);
 ?>
 <?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
-<div class="member_cen_common" style="margin:0;">
-	<div class="in_common_agency del_bottom" style="background:#fdea9f;margin:0;">
+<div class="member_cen_common trans" style="margin:0;display:none;">
+	<div class="in_common_agency del_bottom" style="background:#fdea9f !important;margin:0;">
 		<span style="color:#994222">您还有<?=AgentPayment::getAgentPaidMoney($currentUser->level) ?>元套餐未领取!</span>
 		<i style="color:#f65d00;" onclick="_link('<?=U('distribution/agent/package') ?>')">立即领取</i>
 	</div>
+</div>
+<div class="no_get_s" id="no_get_s">
+	<div style="text-align:center;margin-top:25px;font-size:16px;">你还有<i><?=AgentPayment::getAgentPaidMoney($currentUser->level) ?>元</i>套餐未领取哦!</div>
+	<button class="later_get_btn" id="later_get_btn">稍后再说</button><button class="n_get_btn" onclick="_link('<?=U('distribution/agent/package') ?>')">立即领取</button>
 </div>
 <?php endif;?>
 <div class="agency_become" onclick="_link('<?=U('user/setting') ?>');">
@@ -167,6 +171,10 @@ function loadAjaxData(){
 
 $(function(){
 
+	<?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
+	remindUserGetPackage();
+	<?php endif;?>
+	
 	loadAjaxData();
 	
 	//好友弹框
@@ -201,6 +209,16 @@ function _link(url, event){
 		return;
 	}
 	window.location.href=url;
+}
+
+//提醒用户领取套餐
+function remindUserGetPackage(){
+	$(".mask").show();
+	$("#later_get_btn").on("click",function(){
+		$("#no_get_s").addClass("tran_on");
+		$(".mask").fadeOut(2000);
+		setTimeout(function(){$(".trans").addClass("tran_on_tit");},1000);
+	});
 }
 </script>
 

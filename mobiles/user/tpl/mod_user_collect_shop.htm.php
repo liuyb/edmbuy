@@ -24,36 +24,6 @@
 </div>
 
 <div class="collect_common" id="resultList">
-	<div class="iance_list_infos">
-		<div class="iance_list_top">
-			<img src="../img/369.jpg" class="l_top_img">
-			<div class="l_top_infos">
-				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
-			</div>
-			<button class="l_top_btn">进店</button>
-		</div>
-	</div>
-	<div class="iance_list_infos">
-		<div class="iance_list_top">
-			<img src="../img/369.jpg" class="l_top_img">
-			<div class="l_top_infos">
-				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
-			</div>
-			<button class="l_top_btn">进店</button>
-		</div>
-	</div>
-	<div class="iance_list_infos">
-		<div class="iance_list_top">
-			<img src="../img/369.jpg" class="l_top_img">
-			<div class="l_top_infos">
-				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
-			</div>
-			<button class="l_top_btn">进店</button>
-		</div>
-	</div>
 </div>
 
 <div id="showMore" style="text-align:center;height:40px;line-height:40px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
@@ -98,8 +68,9 @@ function constructRows(ret, isInit){
 		var result = ret.result;
 		for(var i = 0,len=result.length; i < len; i++){
 			var obj = result[i];
+			var facename = obj.facename ? obj.facename.substr(0,8) : obj.facename;
 			HTML += "<div class=\"iance_list_infos\"><div class=\"iance_list_top\"><img src=\"<?php echo ploadingimg()?>\" class=\"l_top_img\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+obj.logo+"')\"/>";
-			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+obj.facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
+			HTML += "<div class=\"l_top_infos\"><p class=\"t_infos_nmae\">"+facename+"</p><p class=\"t_infos_num\"><i style=\"margin-right:10px;\">"+obj.cc+"人收藏</i><i>"+obj.oc+"个订单</i></p></div>";
 			HTML += "<button class=\"l_top_btn\" data-mid=\""+obj.merchant_id+"\">进店</button></div></div>";
 		}
 	}
