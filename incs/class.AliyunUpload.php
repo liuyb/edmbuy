@@ -13,9 +13,15 @@ use OSS\OssClient;
 
 class AliyunUpload {
     
-    const FILE_NOT_SUPPORT = - 1;
+    const FILE_NOT_SUPPORT = -1;
     
-    const FILE_UPLOAD_ERROR = - 100;
+    //图片宽度不正确
+    const FILE_WIDTH_INCORRET = -2;
+    
+    //图片高度不正确
+    const FILE_HEIGHT_INCORRET = -3;
+    
+    const FILE_UPLOAD_ERROR = -100;
     
     const FILE_UPLOAD_SUCC = 200;
     
@@ -38,6 +44,10 @@ class AliyunUpload {
     private $canvas_height;
     
     private $bgcolor = '#FFFFFF';
+    
+    //规定宽高
+    private $limitWidth;
+    private $limitHeight;
     
     /**
      * 
@@ -62,32 +72,114 @@ class AliyunUpload {
     }
     
     /**
+     * 校验图片 宽度高度限制在 规定的宽高 10px里面
+     * @param unknown $limitW
+     * @param unknown $limitH
+     * @return string
+     */
+    function checkAndSaveImg($limitW, $limitH){
+        $this->limitWidth = $limitW;
+        $this->limitHeight = $limitH;
+        
+        $img_data = $this->img_data;
+        
+        $pos = strpos($img_data, ','); // $img_data like 'data:image/jpeg;base64,/9j/4AAQSk...'
+        if (false === $pos) {
+            return AliyunUpload::FILE_NOT_SUPPORT;
+        }
+        
+        $file_data = substr($img_data, $pos + 1);
+        $file_data = base64_decode($file_data);
+        $img_info = getimagesizefromstring($file_data);
+        if (FALSE === $img_info) {
+            return AliyunUpload::FILE_NOT_SUPPORT;
+        }
+        $width = $img_info[0];
+        $height = $img_info[1];
+        if($width < ($limitW - 10) || $width > ($limitW + 10)){
+            return AliyunUpload::FILE_WIDTH_INCORRET;
+        }
+        if($height < ($limitH - 10) || $height > ($limitH + 10)){
+            return AliyunUpload::FILE_HEIGHT_INCORRET;
+        }
+        
+        $imgtype = $img_info[2];
+        $ratio = $width / ($height ?: 1);
+        
+        $extpart = '.jpg';
+        switch ($imgtype) { // image type
+            case IMAGETYPE_GIF:
+                $extpart = '.gif';
+                break;
+            case IMAGETYPE_PNG:
+                $extpart = '.png';
+                break;
+        }
+        $YM = date('Ym');
+        $filecode = date('d_His') . '_' . randstr() . $extpart;
+        $img_dir = $this->img_dir.$this->img_folder.'/';
+        $oripath = $img_dir . $YM . '/' . $filecode;
+        $remote_file = $this->img_folder . '/' . $YM . '/' . $filecode;
+        $oss_path = '';
+        try{
+            // 写ori版本
+            $oripath = $this->writeImgData($oripath, $file_data);
+            if($this->need_canvas){
+                $temp_path = $img_dir . $YM . '/temp/' . $filecode;
+                $destheight = $this->canvas_height ? $this->canvas_height : intval($this->canvas_height / $ratio);
+                $new_oripath = $this->generateNewImage($oripath, $temp_path, $this->canvas_width, $imgtype, $width, $height, $destheight, $ratio);
+                unlink(SIMPHP_ROOT . $oripath);
+                $oripath = $new_oripath;
+            }
+            $ossClient = OssCommon::getOssClient();
+            $bucket    = OssCommon::getBucketName();
+            $oripath = SIMPHP_ROOT . $oripath;
+            $ossClient->uploadFile($bucket, $remote_file, $oripath);
+            $oss_path = OssCommon::getOssImgPath($remote_file);
+            unlink($oripath);
+        }catch (Exception $e){
+        }
+        if (! $oss_path || empty($oss_path)) {
+            return UPload::FILE_UPLOAD_ERROR;
+        }
+        //通过阿里云的压缩规则处理
+        $style = C('env.picstyle.'.$this->compress_stype);
+        $stardardpath = $oss_path.'@!'.$style['std'].'.jpg';
+        $thumbpath = $oss_path.'@!'.$style['thumb'].'.jpg';
+        return array(
+            'oripath' => $oss_path,
+            'stdpath' => $stardardpath,
+            'thumbpath' => $thumbpath
+        );
+    }
+    
+    /**
      * 保存base64式图片到文件系统，返回文件路径
      *
      * @return array(result,oripath,thumbpath) result -1: 图片错误
      *         result -100: 保存发生错误
      */
-    function saveImgData()
-    {
+    function saveImgData(){
+        
         $img_data = $this->img_data;
-    
+        
         $pos = strpos($img_data, ','); // $img_data like 'data:image/jpeg;base64,/9j/4AAQSk...'
         if (false === $pos) {
-            return UPload::FILE_NOT_SUPPORT;
+            return AliyunUpload::FILE_NOT_SUPPORT;
         }
-    
+        
         $file_data = substr($img_data, $pos + 1);
         $file_data = base64_decode($file_data);
         $img_info = getimagesizefromstring($file_data);
         if (FALSE === $img_info) {
-            return UPload::FILE_NOT_SUPPORT;
+            return AliyunUpload::FILE_NOT_SUPPORT;
         }
-    
+        
         $width = $img_info[0];
         $height = $img_info[1];
         $imgtype = $img_info[2];
         $ratio = $width / ($height ?: 1);
-    
+        
         $extpart = '.jpg';
         switch ($imgtype) { // image type
             case IMAGETYPE_GIF:
@@ -250,6 +342,10 @@ class AliyunUpload {
         if (is_numeric($result)) {
             if ($result == AliyunUpload::FILE_NOT_SUPPORT) {
                 $ret['errMsg'] = '上传失败，图片格式不正确！';
+            }else if($result == AliyunUpload::FILE_WIDTH_INCORRET || $result == AliyunUpload::FILE_HEIGHT_INCORRET){
+                $w = $this->limitWidth;
+                $h = $this->limitHeight;
+                $ret['errMsg'] = "当前图片尺寸要求为 (宽：$w * 高：$h) ，上传失败。";
             }
         } else {
             $filePath = $result['oripath'];

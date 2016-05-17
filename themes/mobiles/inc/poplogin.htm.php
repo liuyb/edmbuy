@@ -46,7 +46,13 @@ function __go_login(obj) {
 			});
 		}
 		else {
-			weui_alert(ret.msg);
+			if(ret.code && ret.code == -3){
+				weui_confirm('你输入的手机号还未注册！点击确定快速注册。', '', function(){
+					__go_reg();
+				});
+			}else{
+				weui_alert(ret.msg);
+			}
 		}
 	});
 }

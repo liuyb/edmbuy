@@ -195,7 +195,7 @@ class Shop_Controller extends MerchantController
         if ($request->is_post()) {
             $img = $_POST["img"];
             $upload = new AliyunUpload($img, 'carousel', '');
-            $result = $upload->saveImgData();
+            $result = $upload->checkAndSaveImg(640, 320);
             $ret = $upload->buildUploadResult($result);
         }
         $response->sendJSON($ret);
@@ -377,7 +377,7 @@ class Shop_Controller extends MerchantController
         if ($request->is_post()) {
             $img = $_REQUEST["img"];
             $upload = new AliyunUpload($img, 'shoplogo', '', true, 320, 320);
-            $result = $upload->saveImgData();
+            $result = $upload->checkAndSaveImg(320, 320);
             $ret = $upload->buildUploadResult($result);
             $response->sendJSON($ret);
         }

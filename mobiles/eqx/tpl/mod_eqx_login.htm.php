@@ -51,7 +51,13 @@ $(function(){
 				});
 			}
 			else {
-				weui_alert(ret.msg);
+				if(ret.code && ret.code == -3){
+					weui_confirm('你输入的手机号还未注册！点击确定注册。', '', function(){
+						location.href='<?php echo U('eqx/reg')?>';
+					});
+				}else{
+    				weui_alert(ret.msg);
+				}
 			}
 		});
 	});

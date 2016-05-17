@@ -127,10 +127,11 @@ class Eqx_Controller extends MobileController {
 						$ret['msg'] = '密码不能为空';
 						break;
 					case -3:
-						$ret['msg'] = '账号不存在';
+					    $ret['code'] = -3;
+						$ret['msg'] = '你输入的手机号还未注册！';
 						break;
 					case -4:
-						$ret['msg'] = '密码不对';
+						$ret['msg'] = '你输入的密码不正确！';
 						break;
 					case -5:
 						$ret['msg'] = '当前手机号没有绑定该微信<br>(一个手机号只能绑定一个微信号)';
