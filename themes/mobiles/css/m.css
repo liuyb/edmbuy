@@ -6226,8 +6226,9 @@ td.cash_td2 img {
 /*2016-5-2 e */
 /*2016-5-3 s */
 .login_index{
-	border-top:1px solid #e6e6e6;
-	border-bottom:1px solid #e6e6e6;
+	border-style: solid;
+	border-color: #e6e6e6;
+	border-width: 0 0 1px 0;
 }
 .login_name,.login_password,.login_wirte_phone,.login_not_code{
 	background:#fff ;
@@ -6265,7 +6266,7 @@ td.cash_td2 img {
 	font-size:16px;
 	color:#fff;
 	text-align:center;
-	margin-bottom:15px;
+	margin-bottom:20px;
 	width: 100%;
 }
 .btn_common_nbg{
@@ -6322,6 +6323,7 @@ td.cash_td2 img {
 	font-size:12px;
 	color:#666;
 	margin:0 10px;
+	line-height: 18px;
 }
 .prot_on_ok{
 	background:url(../img/xz.png) no-repeat left;
@@ -6593,7 +6595,7 @@ td.cash_td2 img {
 	border-radius:4px;
 }
 .agency_tip_info {
-	margin:20px;color:#333;font-size:15px;
+	margin:10px 20px 0;color:#333;font-size:15px;
 }
 .agency_tip_info p {
 	margin-bottom:10px;

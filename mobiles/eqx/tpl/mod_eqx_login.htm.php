@@ -18,9 +18,7 @@
 
 <div class="login_bottom">
 	<button class="login_btn" id="login_btn">登录</button>
-	<!-- 
 	<div class="register_btn" onclick="location.href='<?php echo U('eqx/reg')?>'">注册</div>
-	 -->
 </div>
 
 <div class="quertion_phone">

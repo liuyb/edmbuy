@@ -5,11 +5,11 @@
 <div class="error"><?=$errmsg?></div>
 
 <?php else:?>
+<!--[HEAD_CSS]-->
 <style>
-    .disabled {
-    	opacity : 0.2;
-    }
+.disabled {opacity : 0.2;}
 </style>
+<!--[/HEAD_CSS]-->
 <script id="forTopnav" type="text/html">
 <div class="header">
 	多米代理
@@ -23,7 +23,7 @@ show_topnav($('#forTopnav').html());
 <div class="agency_become">
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
-			<td><img src="<?=$user->logo ?>"></td>
+			<td><img src="<?=$user->logo ?>" alt=""></td>
 			<td>
 				<p class="become_name"><?=$user->nickname ?>
 				<?php $img = AgentPayment::getAgentIconByLevel($user->level); ?>

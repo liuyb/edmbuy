@@ -133,7 +133,7 @@ class Eqx_Controller extends MobileController {
 						$ret['msg'] = '密码不对';
 						break;
 					case -5:
-						$ret['msg'] = '当前手机号没有绑定该微信';
+						$ret['msg'] = '当前手机号没有绑定该微信<br>(一个手机号只能绑定一个微信号)';
 						break;
 					default:
 						$ret['msg'] = '登录失败';
@@ -182,62 +182,15 @@ class Eqx_Controller extends MobileController {
 		if ($request->is_post()) {
 			$ret = ['flag' => 'FAIL', 'msg'=>''];
 			if (1==$step) {
-				$mobile = $request->post('mobile','');
-				$is_verify = $request->post('is_verify',0);
+				$mobile    = $request->post('mobile','');
+				$vcode     = $request->post('vcode','');
 				$parent_id = $request->post('parent_id',0);
-				$mobile = trim($mobile);
-				$is_verify = intval($is_verify);
+				$inapp     = $request->get('inapp','');
+				$mobile    = trim($mobile);
+				$vcode     = trim($vcode);
 				$parent_id = intval($parent_id);
 				if (!$parent_id && !empty($_SESSION['eqx_referee_uid'])) {
 					$parent_id = $_SESSION['eqx_referee_uid'];
-				}
-				if (''==$mobile || !Fn::check_mobile($mobile)) {
-					$ret['msg'] = '手机号不对';
-					$response->sendJSON($ret);
-				}
-				if (!$is_verify) {
-					$ret['msg'] = '尚未验证';
-					$response->sendJSON($ret);
-				}
-				if ($GLOBALS['user']->mobile) {
-					$ret['msg'] = '该账号已注册(注册手机号：<br>'.$GLOBALS['user']->mobile.')，请登录';
-					$response->sendJSON($ret);
-				}
-				if (Users::check_mobile_exist($mobile)) {
-					$ret['msg'] = '该手机号已注册，不能重新注册';
-					$response->sendJSON($ret);
-				}
-				if ($parent_id) {
-					$pUser = Users::load($parent_id);
-					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
-						$parent_id = 0;
-					}
-				}
-				
-				if (!$parent_id) {
-					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
-					$response->sendJSON($ret);
-				}
-				
-				$_SESSION['eqx_mobi'] = $mobile;
-				$ret = ['flag' => 'SUCC', 'msg'=>'手机号正确'];
-				$response->sendJSON($ret);
-			}
-			elseif(2==$step) {
-				$mobile = $request->post('mobile','');
-				$passwd = $request->post('passwd','');
-				$vcode  = $request->post('vcode','');
-				$parent_id = $request->post('parent_id',0);
-				$inapp  = $request->get('inapp','');
-				
-				if (!$GLOBALS['user']->uid) {
-					$ret['msg'] = '请先微信授权登录';
-					$response->sendJSON($ret);
-				}
-				
-				if (''==$mobile || !Fn::check_mobile($mobile)) {
-					$ret['msg'] = '手机号不对';
-					$response->sendJSON($ret);
 				}
 				
 				if (''==$vcode) {
@@ -253,6 +206,43 @@ class Eqx_Controller extends MobileController {
 					$response->sendJSON($ret);
 				}
 				
+				if ($GLOBALS['user']->mobile) {
+					$ret['msg'] = '该账号已注册(注册手机号：<br>'.$GLOBALS['user']->mobile.')，请登录';
+					$response->sendJSON($ret);
+				}
+				if (''==$mobile || !Fn::check_mobile($mobile)) {
+					$ret['msg'] = '手机号不对';
+					$response->sendJSON($ret);
+				}
+				if (Users::check_mobile_exist($mobile)) {
+					$ret['msg'] = '该手机号已注册，不能重新注册';
+					$response->sendJSON($ret);
+				}
+				
+				if ($parent_id) {
+					$pUser = Users::load($parent_id);
+					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
+						$parent_id = 0;
+					}
+				}
+				if (!$parent_id) {
+					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
+					$response->sendJSON($ret);
+				}
+				
+				$_SESSION['eqx_mobi'] = $mobile;
+				$ret = ['flag' => 'SUCC', 'msg'=>'手机验证通过'];
+				$response->sendJSON($ret);
+			}
+			elseif(2==$step) {
+				$passwd    = $request->post('passwd','');
+				$parent_id = $request->post('parent_id',0);
+				$inapp     = $request->get('inapp','');
+				
+				if (!$GLOBALS['user']->uid) {
+					$ret['msg'] = '请先微信授权';
+					$response->sendJSON($ret);
+				}
 				if (''==$passwd) {
 					$ret['msg'] = '密码不能为空';
 					$response->sendJSON($ret);
@@ -261,9 +251,13 @@ class Eqx_Controller extends MobileController {
 					$ret['msg'] = '密码需6位或以上';
 					$response->sendJSON($ret);
 				}
-				
 				if ($GLOBALS['user']->mobile) {
 					$ret['msg'] = '该账号已注册(注册手机号：<br>'.$GLOBALS['user']->mobile.')，请登录。';
+					$response->sendJSON($ret);
+				}
+				$mobile = isset($_SESSION['eqx_mobi']) ? $_SESSION['eqx_mobi'] : '';
+				if (''==$mobile || !Fn::check_mobile($mobile)) {
+					$ret['msg'] = '手机号没验证，请重新注册';
 					$response->sendJSON($ret);
 				}
 				if (Users::check_mobile_exist($mobile)) {
@@ -280,7 +274,6 @@ class Eqx_Controller extends MobileController {
 						$parent_id = 0;
 					}
 				}
-				
 				if (!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
@@ -339,9 +332,8 @@ class Eqx_Controller extends MobileController {
 			}
 			else {
 				if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
-					$response->redirect('/eqx/reg');
+					$response->redirect(U('eqx/reg'));
 				}
-				$this->v->assign('mobile', $_SESSION['eqx_mobi']);
 			}
 			
 			$this->v->assign('step', $step);
@@ -359,22 +351,23 @@ class Eqx_Controller extends MobileController {
 		if ($request->is_post()) {
 			
 			$ret = ['flag'=>'FAIL', 'msg'=>''];
-			if (!isset($_SESSION['eqx_mobi']) OR !Fn::check_mobile($_SESSION['eqx_mobi'])) {
-				$ret['msg'] = '手机号不存在';
+			$mobile =  $request->post('mobile', '');
+			if (''==$mobile OR !Fn::check_mobile($mobile)) {
+				$ret['msg'] = '请输入手机号';
 				$response->sendJSON($ret);
 			}
 			$inapp = $request->get('inapp','');
 			
 			$type = $inapp=='edm' ? 'reg_account' : 'reg_eqx';
 			$row_vc = D()->query("SELECT `id`,`overdueTime`,`verifyCode` FROM ".UsersmsLog::table()." WHERE `receivePhone`='%s' AND `type`='%s' AND `result`>0 ORDER BY `id` DESC LIMIT 0,1",
-			                     $_SESSION['eqx_mobi'], $type)->get_one();
+			                     $mobile, $type)->get_one();
 			$now = simphp_time();
 			if (!empty($row_vc) && $row_vc['overdueTime']>$now) {
 				$ret['msg'] = '一分钟后才能重新获取';
 				$response->sendJSON($ret);
 			}
 			
-			$send_code = Sms::sendVCode($_SESSION['eqx_mobi'], $type, rand_code(6));
+			$send_code = Sms::sendVCode($mobile, $type, rand_code(6));
 			if ($send_code > 0) {
 				$ret = ['flag'=>'SUCC', 'msg'=>'发送成功'];
 				$response->sendJSON($ret);

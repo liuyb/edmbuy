@@ -1,8 +1,8 @@
 <!-- 遮罩层 -->
 <div class="mask"></div>
 
-<div class="add_friend agency_tip" style="width:80%;height:425px;left:37%;top:40%;margin:0px;"> 
-	<div class="add_f_img" style="margin: 0px;"><img src="/themes/mobiles/img/dingtu.png" style="width:100%;"></div>
+<div class="add_friend agency_tip" style="width:80%;height:auto;left:37%;top:30%;margin:0;"> 
+	<div class="add_f_img" style="margin: 0px;"><img src="/themes/mobiles/img/dingtu.png" style="width:100%;height:auto;"></div>
 	<div class="agency_tip_info">
 	<p>1、在内测期间，推广锁定人脉争取时间优势；</p>
 	<p>2、推广收入前20名，可参加上线后的组团营销大赛，收益多多，宣传多多；</p>

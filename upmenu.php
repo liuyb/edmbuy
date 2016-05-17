@@ -30,7 +30,7 @@ $json =<<<HEREDOC
 		{
 			"type" : "view",
 			"name" : "一起享",
-			"url"  : "http://m.edmbuy.com/eqx/letter"
+			"url"  : "http://m.edmbuy.com/eqx/login"
 		},
     {
       "name" : "我的",
