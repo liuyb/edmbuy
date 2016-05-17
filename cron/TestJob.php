@@ -9,10 +9,9 @@ class TestJob extends CronJob {
   
   public function main($argc, $argv) {
     
-    echo "TestJob doing, argc={$argc}, argv=".BR;
-    print_r($argv);
-    echo BR;
-    
+      $order = Order::load(1840);
+      $cUser = Users::load_by_openid('odyFWsxLsxs9U2P6Z3sV4S7O7D5I');
+      $cUser->notify_buyer_pay_succ($order);
   }
   
 }

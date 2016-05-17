@@ -119,7 +119,7 @@ class MockCreateMerchantJob extends CronJob{
             $order_update = [];
             if ($newOI->id) {
                 // 生成表 pay_log 记录
-                PayLog::insert($order_id, $newOrder->order_sn, $newOrder->order_amount, PAY_SURPLUS, 1);
+                PayLog::insert($order_id, $newOrder->order_sn, $amount, PAY_SURPLUS, 1);
             }
             
             

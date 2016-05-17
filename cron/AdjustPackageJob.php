@@ -30,6 +30,7 @@ class AdjustPackageJob extends CronJob {
         if(!$user->is_exist()){
             exit('user not exists.');
         }
+        require SIMPHP_ROOT . "/mobiles/user/User_Model.php";
         require SIMPHP_ROOT . "/cron/MockCreateMerchantJob.php";
         
         if($old_pack == 398 || $old_pack == 698){
@@ -82,13 +83,14 @@ class AdjustPackageJob extends CronJob {
 	    $time =date('Y-m-d H:i:s' ,time());
 	    $sql = "select * from shp_merchant_payment where user_id =%d and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0 ";
 	    $result = D()->query($sql, $user_id)->fetch_array();
-	    if(empty($result) || !$result->rid){
+	    if(empty($result) || !$result['rid']){
 	        exit("merchant payment dosen't exists.");
 	    }
 	    $mid = $result['merchant_id'];
 	    $merchant = Merchant::load($mid);
 	    //商家取消激活
 	    $merchant->activation = 0;
+	    $merchant->save(Storage::SAVE_UPDATE_IGNORE);
 	    
 	    $this->removePaymentRecords($result, Order::ORDER_FLAG_MERCHANT);
 	    return $result;
@@ -110,7 +112,7 @@ class AdjustPackageJob extends CronJob {
 	    User_Model::saveMerchantInfo($mobile, $parent_id, $password,$user_id);
 	    $m = Merchant::getMerchantByUserId($user_id);
 	    $mock = new MockCreateMerchantJob();
-        $mock->createOrder(['user_id' => $user->uid, 'level' => 5 ], $m->uid, $new_pack, Order::ORDER_FLAG_MERCHANT, MECHANT_GOODS_ID);
+        $mock->createOrder(['user_id' => $user->uid, 'level' => Users::USER_LEVEL_5 ], $m->uid, $new_pack, Order::ORDER_FLAG_MERCHANT, MECHANT_GOODS_ID);
 	}
 	
 	/**
@@ -133,10 +135,10 @@ class AdjustPackageJob extends CronJob {
 	    //佣金失效
 	    D()->query('update shp_user_commision set state = %d where order_id = %d', UserCommision::STATE_INVALID, $order_id);
 	     
-	    if(Order::ORDER_FLAG_AGENT){
+	    if($type == Order::ORDER_FLAG_AGENT){
 	        //代理支付失效
 	        D()->query('update shp_agent_payment set is_paid = 0 where pid=%d', $payment['pid']);
-	    }else if(Order::ORDER_FLAG_MERCHANT){
+	    }else if($type == Order::ORDER_FLAG_MERCHANT){
 	        //商家支付取消记录
 	        D()->query("update shp_merchant_payment set money_paid = 0 where rid = %d",$payment['rid']);
 	    }

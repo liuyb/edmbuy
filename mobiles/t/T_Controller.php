@@ -30,6 +30,7 @@ class T_Controller extends MobileController {
 		return [
 			't/%d'    => 'go',
 			't/%d/%s' => 'go',
+		    't/materia' => 't_materia'
 		];
 	}
 	
@@ -131,6 +132,20 @@ class T_Controller extends MobileController {
 		}
 	
 		throw new ViewResponse($this->v);
+	}
+	
+	/**
+	 * 推广素材
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function t_materia(Request $request, Response $response){
+	    $this->setPageView($request, $response, '_page_mpa');
+	    $this->v->set_tplname('mod_t_materia');
+	    $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
+	    $this->nav_no = 0;
+	    $this->topnav_no = 1;
+	    $response->send($this->v);
 	}
 	
 }
