@@ -46,7 +46,7 @@
 </div>
 <div class="order_list">
 	<?php $first_goods_id=0; if (!empty($merchant_goods)):
-	      $total_amount = 0;$total_goods = 0;
+	      $total_goods = 0;
 	?>
 	<div class="order_tit" <?php if($merchant_goods['merchant_id']):?>onclick="window.location.href='<?=U('shop/'.$merchant_goods['merchant_id'])?>'"<?php endif;?>>
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
@@ -56,7 +56,6 @@
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
 			<?php foreach ($merchant_goods['goods'] as $gd):
-			 $total_amount = doubleval($total_amount) + (doubleval($gd['goods_price']) * intval($gd['goods_number']));
 			 $total_goods += intval($gd['goods_number']);
 			 if(!$first_goods_id) $first_goods_id = $gd['goods_id'];
 			?>
@@ -82,7 +81,7 @@
 	<div class="order_price">
 		<p>
 			<span style="padding-right:12px;">共<span><?=$total_goods ?></span>件商品 </span>
-			合计：￥ <span class="price_p"><?=doubleval($total_amount) ?></span> （含运费：￥0.00）
+			合计：￥ <span class="price_p"><?php if ($order->money_paid && $order->money_paid > 0): echo $order->money_paid; else: echo $order->order_amount; endif;?></span> （含运费：￥<?=$order->shipping_fee ?>）
 		</p>
 	</div>
 	<div class="order_serve">

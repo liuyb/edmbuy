@@ -80,7 +80,7 @@ $(function(){
 	<div class="order_price">
 		<p>
 			<span style="padding-right:12px;">共<span><?=$count ?></span>件商品 </span>
-			合计：￥ <span class="price_p"><?php if ($ord['pay_status']==PS_PAYED): echo $ord['money_paid']; else: echo $ord['order_amount']; endif;?></span> （含运费：￥<?=$ord['shipping_fee']?>）
+			合计：￥ <span class="price_p"><?php if ($ord['money_paid'] && $ord['money_paid'] > 0): echo $ord['money_paid']; else: echo $ord['order_amount']; endif;?></span> （含运费：￥<?=$ord['shipping_fee']?>）
 		</p>
 	</div>
 	<?php if($ord['show_status_html']):?>

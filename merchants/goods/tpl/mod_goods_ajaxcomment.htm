@@ -3,7 +3,7 @@
     <tr>
         <th width="280px">评价商品</th>
 		<th width="280px">评价内容</th>
-        <th>商品评分</th>
+        <th>评价类型</th>
         <th>评价人</th>
         <th>日期</th>
         <th>状态</th>
@@ -18,7 +18,7 @@
         <td>
             <p class="manage_goods_name"><!--{$val.content}--></p>
         </td>
-        <td><!--{$val.comment_rank}--></td>
+        <td><!--{$val.comment_level}--></td>
         <td><!--{$val.user_name}--></td>
         <td><!--{$val.add_time|date_format:"%Y-%m-%d"}--></td>
         <!--{if $val.is_reply}-->

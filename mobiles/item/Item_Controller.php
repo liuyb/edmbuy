@@ -295,8 +295,8 @@ HEREDOC;
     	    $comment_img = $request->post('comment_img','');
     	    $comment_thumb = $request->post('comment_thumb','');
     	    $comment_level = $request->post('comment_level',1);
-    	    $shipping_level = $request->post('shipping_level',0);
-    	    $service_level = $request->post('service_level',0);
+    	    $shipping_level = $request->post('shipping_level',5);
+    	    $service_level = $request->post('service_level',5);
     	    if ($goods_id && $content){
     	        $c = new Comment();
     	        $c->content = $content;

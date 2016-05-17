@@ -86,7 +86,7 @@
 		var _phone = phone;
 		if(_wxqr && _wxqr.length){
 			this.friendDom = $(".wxqr_friend");
-				//$(".wxqr_friend").find(".add_f_img").find("img").attr("src",_wxqr);
+				$(".wxqr_friend").find(".add_f_img").find("img").attr("src",_wxqr);
 			if(_phone){
 				$(".wxqr_friend").find(".add_f_phone").find("a").text(_phone).attr("href",'tel:'+_phone);
 			}else{

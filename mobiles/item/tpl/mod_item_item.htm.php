@@ -74,7 +74,7 @@
 			</div>
 		</div>
 		<span class="cursor p_cart_close"></span>
-		<div class="no-bounce p_cart_btn"><a href="javascript:;" id="p_cart_btn_a" <?php if(count($attr_grp) > 0):?>class='disabled_btn'<?php endif;?>>确定</a></div>
+		<div class="no-bounce p_cart_btn"><a href="javascript:;" id="p_cart_btn_a" <?php if(!$item->item_number):?>class='disabled_btn'<?php endif;?>>确定</a></div>
 	</div>
 </div>
 

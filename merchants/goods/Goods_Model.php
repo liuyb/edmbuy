@@ -576,6 +576,9 @@ class Goods_Model extends Model
               order by comment.add_time DESC limit {$limit}";
         $result = D()->query($sql)->fetch_array_all();
         $result = self::buildGoodsImg($result);
+        foreach ($result as &$item){
+            $item['comment_level'] = self::transformCommentLevel($item['comment_level']);
+        }
         $pager->result = $result;
         return $result;
     }
@@ -606,17 +609,23 @@ class Goods_Model extends Model
               from shp_comment comm left join shp_goods goods on comm.id_value=goods.goods_id
               where comm.comment_id = %d and comment_type=0";
         $result = D()->query($sql, $comment_id)->get_one();
-        switch($result['comment_level']){
+        $result['comment_level'] = self::transformCommentLevel($result['comment_level']);
+        return $result;
+    }
+    
+    static function transformCommentLevel($result){
+        $level = '';
+        switch($result){
             case 1:
-                $result['comment_level'] ="好评";
+                $level = "好评";
             case 2:
-                $result['comment_level'] ="中评";
+                $level = "中评";
             case 3:
-                $result['comment_level'] ="差评";
+                $level = "差评";
             default:
-                $result['comment_level'] ="好评";
+                $level = "好评";
         }
-            return $result;
+        return $level;
     }
 
     /**

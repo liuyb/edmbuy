@@ -59,8 +59,7 @@ class Comment extends StorageNode {
                 $where .= ' and comment_level='.$category;
             }
         }
-        $sql = "SELECT user_name, content, add_time, comment_level, shipping_level, service_level,comment_img,comment_thumb,comment_reply,obj_attr 
-                FROM shp_comment where status = %d and id_value=%d $where order by comment_rank,add_time desc limit %d,%d";
+        $sql = "SELECT * FROM shp_comment where status = %d and id_value=%d $where order by comment_rank,add_time desc limit %d,%d";
         $result = D()->query($sql, Comment::COMMENT_VALID_STATUS, $c->id_value, $pager->start, $pager->realpagesize)->fetch_array_all();
         if (!empty($result)) {
             foreach ($result AS &$g) {
