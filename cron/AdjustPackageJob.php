@@ -2,6 +2,7 @@
 
 /**
  * 调整用户套餐情况
+ * $new_pack 为空时 则表示删除套餐，$new_pack存在表示替换套餐
  * 
  * uid 398 -> 698
  * uid 698 -> 398
@@ -16,14 +17,17 @@ class AdjustPackageJob extends CronJob {
     private $packages = [398,698,999];
     
 	public function main($argc, $argv) {
-        if(count($argv) != 4){
+	    //$new_pack 为空时 则表示删除套餐，$new_pack存在表示替换套餐
+        if(count($argv) < 3){
             exit('incorrect arguments.');
         }
         $uid = $argv[1];
         $old_pack = $argv[2];
-        $new_pack = $argv[3];
-        
-        if(!in_array($old_pack, $this->packages) || !in_array($new_pack, $this->packages)){
+        $new_pack = 0;
+        if(count($argv) > 3){
+            $new_pack = $argv[3];
+        }
+        if(!in_array($old_pack, $this->packages)){
             exit('incorrect packages.');
         }
         $user = Users::load($uid);
@@ -49,7 +53,7 @@ class AdjustPackageJob extends CronJob {
             if($new_pack == 999){
                 //创建新商家
                 $this->createMerchant($user, $new_pack);
-            }else{
+            }else if($new_pack && in_array($new_pack, $this->packages)){
                 //重新创建新代理
                 $mock = new MockCreateMerchantJob();
                 $mock->createOrder(['user_id' => $uid, 'level' =>  $new_pack == 698 ? Users::USER_LEVEL_4 : Users::USER_LEVEL_3],
@@ -64,9 +68,11 @@ class AdjustPackageJob extends CronJob {
             $user->level = 0;
             $user->save(Storage::SAVE_UPDATE_IGNORE);
             //重新创建新代理
-            $mock = new MockCreateMerchantJob();
-            $mock->createOrder(['user_id' => $uid, 'level' => $new_pack == 698 ? Users::USER_LEVEL_4 : Users::USER_LEVEL_3],
-                '', $new_pack, Order::ORDER_FLAG_AGENT, ($new_pack == 698?GOLD_AGENT_GOODS_ID : SILVER_AGENT_GOODS_ID));
+            if($new_pack && in_array($new_pack, $this->packages)){
+                $mock = new MockCreateMerchantJob();
+                $mock->createOrder(['user_id' => $uid, 'level' => $new_pack == 698 ? Users::USER_LEVEL_4 : Users::USER_LEVEL_3],
+                    '', $new_pack, Order::ORDER_FLAG_AGENT, ($new_pack == 698?GOLD_AGENT_GOODS_ID : SILVER_AGENT_GOODS_ID));
+            }
         }
 	}
 	
