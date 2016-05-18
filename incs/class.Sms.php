@@ -69,12 +69,12 @@ class Sms
         	$imgCode = $_SESSION['verifycode'];
         }
         
-        $content = sprintf($content, $code, $imgCode);
         if($type=="reg_success"){
         	$pwd = $_SESSION['password'];
-        	$config = C("storage.cookie.mch");
-        	$url = $config['edmmch.fxmapp.com'];
-        	$content =sprintf($content,$url,$mobile,$pwd);
+        	$url = C('env.site.merchant');
+        	$content =sprintf($content,$url,$mobile,$pwd, $imgCode);
+        }else{
+            $content = sprintf($content, $code, $imgCode);
         }
         $uname = $SmsConfig['username'];
         $smsnumber = $SmsConfig['smsnumber'];

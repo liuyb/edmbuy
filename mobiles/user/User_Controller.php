@@ -955,8 +955,11 @@ class User_Controller extends MobileController
                     $ret['status'] =0;
                     $response->sendJSON($ret);
                 }
+                $_SESSION['password'] = $shopPass;
                 Sms::sendSms($mobile, 'reg_success');
+                
                 unset($_SESSION['mobile']);
+                unset($_SESSION['password']);
                 unset($_SESSION['reg_success']);
                 $_SESSION['step'] = 3;
                 $ret['status'] =1;
