@@ -306,7 +306,8 @@ HERESQL;
 	static function findGoodsListByCond(PagerPull $pager, array $options){
 	    $where = '';
 	    if(isset($options['shop_price']) && $options['shop_price']){
-	        $where .= " and g.shop_price = ".doubleval($options['shop_price'])." ";
+	        //98专区 临时增加过滤处理方式 为 同时满足98 跟 在后头批发管理里面出现的商品 
+	        $where .= " and g.shop_price = ".doubleval($options['shop_price'])." and goods_id in (select goods_id from shp_wholesale) ";
 	    }
 	    if(isset($options['merchant_id']) && $options['merchant_id']){
 	        $where .= " and g.merchant_id = '".D()->escape_string($options['merchant_id'])."' ";

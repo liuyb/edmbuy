@@ -2,11 +2,11 @@
 <table cellspacing="0" cellpadding="0" class="cret_tab_list">
     <tr>
         <td class="cret_tab_left"><span class="fill_red">*</span>真实姓名：</td>
-        <td class="cret_tab_right"><input type="text" name="real_name" value="<!--{$result.real_name}-->" maxlength="50" placeholder="请填写您的真实姓名" required></td>
+        <td class="cret_tab_right" colspan="2"><input type="text" name="real_name" value="<!--{$result.real_name}-->" maxlength="50" placeholder="请填写您的真实姓名" required></td>
     </tr>
     <tr>
         <td class="cret_tab_left"><span class="fill_red">*</span>身份证号码：</td>
-        <td class="cret_tab_right"><input type="text" name="card_num" value="<!--{$result.card_num}-->" id="card_num" maxlength="18" placeholder="请填写您的身份证号码" required></td>
+        <td class="cret_tab_right" colspan="2"><input type="text" name="card_num" value="<!--{$result.card_num}-->" id="card_num" maxlength="18" placeholder="请填写您的身份证号码" required></td>
     </tr>
     <tr>
         <td class="cret_tab_left cert_top_common">手持身份证照片：</td>
@@ -19,6 +19,12 @@
             <div class="ts_com">
                 <p>身份证上的所有信息清晰可见，必须能看清证件号。</p>
                 <p>支持jpg,bmp,gif格式照片，不得超过1M。</p>
+            </div>
+        </td>
+        <td>
+	        <div class="sl_file_common_img"><img src="/themes/merchants/img/1shenfenz.png" /></div>
+	        <div class="sl_ts_com">
+                <p>示例</p>
             </div>
         </td>
     </tr>
@@ -34,6 +40,12 @@
                 <p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
             </div>
         </td>
+        <td>
+        <div class="sl_file_common_img"><img src="/themes/merchants/img/2gtyyzz.png" /></div>
+	        <div class="sl_ts_com">
+                <p>示例</p>
+            </div>
+        </td>
     </tr>
     <tr>
         <td class="cret_tab_left cert_top_common">产品质量合格证明/</br>质检报告复印件：</td>
@@ -47,10 +59,19 @@
                 <p>所有信息清晰可见，支持jpg,bmp,gif格式照片，</br>不得超过1M。</p>
             </div>
         </td>
+        <td>
+	        <div class="sl_file_common_img">
+	        <img src="/themes/merchants/img/3cpxkz.png" />
+	        <img src="/themes/merchants/img/4spxkz.png" />
+	        </div>
+	        <div class="sl_ts_com">
+                <p>示例（食品许可证、代理授权书）</p>
+            </div>
+        </td>
     </tr>
     <tr>
         <td class="cret_tab_left"></td>
-        <td>
+        <td colspan="2">
             <button class="cret_btn" type="submit">提交</button>
         </td>
     </tr>
