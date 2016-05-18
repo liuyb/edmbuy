@@ -80,7 +80,7 @@ function postImage(ev){
 	});
 }
 $(function(){
-	$("#activePage > .scrollArea").css('background','#fff')
+	$("#Mbody").css('background','#fff')
 })
 </script>
 <?php endif;?>

@@ -25,7 +25,7 @@
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1"><a href='<?=$kefu_link?>' <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
-    <div class="fl cursor p_d_t5" onclick="window.location.href='/shop/<?=$merchant->uid ?>'"><p></p></div>
+    <div class="fl cursor p_d_t5" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'"><p></p></div>
 	<div class="fl cursor p_d_t2" id="collect_status" onclick="changeGoodsCollect(this);";><span class="f_num" style='display:none;' id="collect_number"></span></div>
 <?php if (!$item->is_on_sale || $item->is_delete):?>
 <div style="background: #c0c0c0;width: 52%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
@@ -187,7 +187,7 @@ $(function(){
 		<p class="t_infos_nmae" style="margin-top:13px;"><?=$merchant->facename ?></p>
 		<!-- <p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p> -->
 	</div>
-	<button class="join_top_btn" onclick="window.location.href='/shop/<?=$merchant->uid ?>'">进店逛逛  </button>
+	<button class="join_top_btn" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'">进店逛逛  </button>
 </div>
 
 <div class="p_detail_pull">

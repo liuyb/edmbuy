@@ -34,7 +34,7 @@ show_topnav($('#forTopnav').html());
 				<p class="become_name_id">多米号：<?=$user->uid ?></p>
 			</td>
 			<?php if($agent->pid && !$agent->premium_id):?>
-			<td><p class="get_become_meal" onclick="window.location.href='/distribution/agent/package';">领取<?=AgentPayment::getAgentPaidMoney($user->level) ?>元套餐</p></td>
+			<td><p class="get_become_meal" onclick="window.location.href='<?=U('distribution/agent/package') ?>';">领取<?=AgentPayment::getAgentPaidMoney($user->level) ?>元套餐</p></td>
 			<?php endif;?>
 		</tr>
 	</table>
@@ -156,7 +156,7 @@ $(function(){
         				wxpayJsApiCall(ret.js_api_params,ret.order_id,function(flag){
         	  				if(flag=='OK'){
         						var data ={'order_id':ret.order_id,'order_sn':ret.order_sn}
-        						window.location.href='/distribution/agent/paid/succ?order_type='+order_type;
+        						window.location.href='/distribution/agent/paid/succ?order_type='+order_type+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
          					}else{
 								window.location.href='<?=U('trade/order/record') ?>';
          					}

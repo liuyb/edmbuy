@@ -30,7 +30,7 @@ show_topnav($('#forTopnav').html());
 	<img src="/themes/mobiles/img/sss1.png">
 	<p style="margin:20px 0 35px 0;">您已成功领取<i class="agency_font"><?=$money ?>元</i>超值礼包</p>
 	<div class="at_get_combo" onclick="window.location.href='/'">返回首页</div>
-	<div class="agency_my_develop" onclick="window.location.href='/trade/order/record'">查看订单</div>
+	<div class="agency_my_develop" onclick="window.location.href='<?=U('trade/order/record') ?>'">查看订单</div>
 </div>
 
 <?php endif;?>

@@ -72,13 +72,13 @@ $(function(){
 });
 
 function gotoItem(itemId){
-	window.location.href='/item/'+itemId;
+	window.location.href='/item/'+itemId+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 }
 
 function confirmPackage(pid){
 	var cf = window.confirm('您是否确定领取此套餐？套餐领取后无法更改！');
 	if(cf){
-    	window.location.href='/trade/order/package/confirm?pid='+pid;
+    	window.location.href='/trade/order/package/confirm?pid='+pid+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	}
 }
 </script>

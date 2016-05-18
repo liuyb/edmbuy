@@ -66,7 +66,7 @@ function recPremiumPackage(obj){
 	$obj.addClass("buying").text("领取中...");
 	F.post('/distribution/agent/premium/buy', {address_id : addr_id, order_msg : order_msg, package_id : pid}, function(ret){
 		if(ret.flag == 'SUC'){
-			window.location.href='/distribution/agent/premium/succ?level=<?=$packages['type'] ?>';
+			window.location.href='<?=U('distribution/agent/premium/succ?level='.$packages['type']) ?>';
 		}else{
 			$obj.removeClass("buying").text("立即免费领取");
 			weui_alert(ret.msg);

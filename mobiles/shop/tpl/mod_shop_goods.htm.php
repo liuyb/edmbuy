@@ -36,7 +36,7 @@ $(function(){
 	$resultList.on('click', '.goods_li', function(){
 		var $this = $(this);
 		var id = $this.data("id");
-		window.location.href='/item/'+id;
+		window.location.href='/item/'+id+'/?spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$mbody.on('pullMore', function(){

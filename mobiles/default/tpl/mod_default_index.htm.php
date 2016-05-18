@@ -233,7 +233,7 @@ window.location.reload();
 	}
 
 	function gotoItem(goodId){
-		window.location = '/item/'+goodId+'?back=index';
+		window.location = '/item/'+goodId+'?back=index&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	}
 
 	function scrollToHistoryPosition(){

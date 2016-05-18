@@ -2,7 +2,7 @@
 <div id="pay_top">
 	<img src="/themes/mobiles/img/bzb.png">
 </div>
-<form action="/user/merchant/openshop" method="post">
+<form action="<?=U('user/merchant/openshop') ?>" method="post">
 <div>
 	<table cellspacing="0" cellpadding="0" class="pay_tab">	
 		<tr>

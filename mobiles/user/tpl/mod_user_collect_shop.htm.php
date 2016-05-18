@@ -41,7 +41,7 @@ $(function(){
 	$resultList.on('click', 'button', function(){
 		var $this = $(this);
 		var mid = $this.data("mid");
-		window.location.href='/shop/'+mid;
+		window.location.href='/shop/'+mid+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$mbody.on('pullMore', function(){

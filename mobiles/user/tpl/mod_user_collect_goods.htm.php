@@ -32,7 +32,7 @@ $(function(){
 	$resultList.on('click', '.goods_li', function(){
 		var $this = $(this);
 		var gid = $this.data("gid");
-		window.location.href='/item/'+gid;
+		window.location.href='/item/'+gid+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$mbody.on('pullMore', function(){

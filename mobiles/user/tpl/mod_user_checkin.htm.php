@@ -27,7 +27,7 @@
 	</li>
 </ul> -->
 
-<button id="gains_enter" onclick="window.location.href='/user/merchant/payment';">我要入驻</button>
+<button id="gains_enter" onclick="window.location.href='<?=U('user/merchant/payment') ?>';">我要入驻</button>
 </div>
 </script>
 <script>

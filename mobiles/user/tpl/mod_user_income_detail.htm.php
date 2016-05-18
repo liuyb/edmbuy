@@ -44,7 +44,7 @@ $(function(){
 		var uid = $this.data("uid");
 		var oid = $this.data("oid");
 		var level = $this.data("level");
-		window.location.href='/user/commission?user_id='+uid+'&order_id='+oid+'&level='+level;
+		window.location.href='/user/commission?user_id='+uid+'&order_id='+oid+'&level='+level+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$mbody.on('pullMore', function(){

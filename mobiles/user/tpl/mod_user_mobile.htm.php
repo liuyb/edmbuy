@@ -52,7 +52,7 @@
 		    	return;
 		    }
     		setTimeout(function(){
-    			window.location.href = '/user/setting';
+    			window.location.href = '<?=U('user/setting') ?>';
         	}, 500);
     	});
 	}
@@ -72,7 +72,7 @@
 				return;
 			}
 			setTimeout(function(){
-				window.location.href = '/user/setting';
+				window.location.href = '<?=U('user/setting') ?>';
 			}, 500);
 		});
 	}

@@ -17,7 +17,7 @@ show_topnav($('#forTopnav').html());
 <?php if(!isset($merchant) || empty($merchant)):?>
 <div class="no_store_c">
 	<img src="/themes/mobiles/img/wdp.png">
-	<p><button onclick="window.location.href='/user/merchant/checkin'">我要开店</button></p>
+	<p><button onclick="window.location.href='<?=U('user/merchant/checkin') ?>'">我要开店</button></p>
 </div>
 <script type="text/javascript">
 $(function(){
@@ -79,7 +79,7 @@ $(function(){
 </div>
 
 <div class="manage_btn_list">
-	<button class="enter_store_btn" onclick="window.location.href='/shop/<?=$merchant->uid ?>'">进入店铺</button>
+	<button class="enter_store_btn" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'">进入店铺</button>
 	<button class="enter_store_btn" onclick="$('#showQrcode').show()">店铺二维码</button>
 </div>
 

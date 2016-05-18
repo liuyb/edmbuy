@@ -26,19 +26,19 @@
 		</span>
     	<input type="file" name="file" onchange="fileupload(event)" class="dia_file">
 	</div>
-	<a href="/user/mobile/show?nickname=<?=$nickname ?>">
+	<a href="<?=U('user/mobile/show?nickname='.$nickname) ?>">
 		<div class="person_head_comm">
 			<span class="head_l_com">昵称</span>
 			<span class="head_r_com"><?=$nickname ?></span>
 		</div>
 	</a>
-	<a href="/user/mobile/show?mobile=<?php if(empty($mobile)){echo "1";}{echo $mobile;} ?>">
+	<a href="<?=U('user/mobile/show?mobile='.($mobile ? $mobile : '1')) ?>">
 		<div class="person_head_comm">
 			<span class="head_l_com">手机号</span>
 			<span class="head_r_com"><?=$mobile ?></span>
 		</div>
 	</a>
-	<a href="/user/wxqr/show"> 
+	<a href="<?=U('user/wxqr/show') ?>"> 
 		<div class="person_head_comm">
 			<span class="head_l_com">微信二维码</span>
 			<span class="head_r_com">
@@ -77,7 +77,7 @@
 	<div class="person_head_comment">
 		<span class="head_l_com">推荐人</span>
 		<span class="head_r_com" style="margin-right:12px;">
-			<span class="fre" style="margin-right: 5px;font-size:16px;"><?=$parentNickName?></span>
+			<span class="fre" style="margin-right: 5px;font-size:16px;"><?=substr($parentNickName, 0, 5) ?></span>
 			<button class="personInfo_but per_add_friend" id="add-friend" style="font-size:14px;">加好友</button>
 		</span>
 	</div>
@@ -94,18 +94,9 @@
 
 <script>
 
-$(function(){	
-	var length = $(".fre").text().length;
-	if(length > 5){
-		 var str = $(".fre").text();
-		 var name = str.substr(0,5);
-		 $(".fre").text(name + '...');
-	}
-});
-
 $(function(){
 	$('#be-partner').bind('click',function(){
-		window.location.href = '/riceplan';
+		window.location.href = '<?=U('riceplan') ?>';
 	});
 	//好友弹框
 	$("#add-friend").bind("click",function(){

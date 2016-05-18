@@ -142,6 +142,7 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_wxqr');
         $this->topnav_no = 1;
+        $this->nav_no = 0;
         $user = Users::load($GLOBALS['user']->uid);
         $this->v->assign('cuser', $user);
         throw new ViewResponse($this->v);
@@ -175,6 +176,7 @@ class User_Controller extends MobileController
         $this->setPageView($request, $response, '_page_mpa');
         $this->v->set_tplname('mod_user_mobile');
         $this->topnav_no = 1;
+        $this->nav_no = 0;
         if (1 || $request->is_hashreq()) {
             $mobile = $request->get('mobile', '');
             $nickname = $request->get('nickname', '');

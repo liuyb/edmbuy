@@ -168,7 +168,7 @@ $(function(){
         <li id="collectShopLi"><p class="store_up" id="collectShop">收藏<?php if($num):?>(<span><?=$num?></span>)<?php endif;?></p></li>
         <?php endif;?>
     	<li><p class="two_code">二维码</p></li>
-    	<li><p class="shop_cart_store" onclick="window.location.href='/trade/cart/list'">购物车</p></li>
+    	<li><p class="shop_cart_store" onclick="window.location.href='<?=U('trade/cart/list') ?>'">购物车</p></li>
     </ul>
 </div>
 </script>
@@ -217,7 +217,7 @@ $(function(){
 		if(name){
 			cond += "&name="+name;
 		}
-		window.location.href="/shop/goods?merchant_id="+merchant_id+""+cond+"";
+		window.location.href="/shop/goods?merchant_id="+merchant_id+""+cond+"&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>";
 	}
 
 	$(document).on("click",'.two_code',function(){

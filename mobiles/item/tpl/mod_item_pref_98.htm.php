@@ -30,7 +30,7 @@ $(document).ready(function(){
 		}
 		gotoItem(goodid);
 	});
-	$("#activePage > .scrollArea").css('background','#da284c');
+	$("#Mbody").css('background','#da284c');
 });
 
 function contructGoodsHTML(ret, isinit){

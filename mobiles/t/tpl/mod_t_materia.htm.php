@@ -1,9 +1,12 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
+<script id="forTopnav" type="text/html">
 <div class="header">
 	推广素材
 	<a href="javascript:history.back();" class="back"></a>
 </div>
+</script>
+<script>show_topnav($('#forTopnav').html())</script>
 
 <div class="code_type">
 	<ul>

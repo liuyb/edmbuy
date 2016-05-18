@@ -6601,7 +6601,7 @@ td.cash_td2 img {
 	margin-bottom:10px;
 }
 
-/*2017-05-17 会员中心领取套餐动画*/
+/*2016-05-17 会员中心领取套餐动画*/
 @-webkit-keyframes mOut {
 	0% {
 		-webkit-transform: translate3d(0,0,0) scale(1,1);	
@@ -6669,4 +6669,74 @@ td.cash_td2 img {
 	font-size:14px;
 	border-bottom-right-radius: 4px;
 }
-/*2017-05-17 会员中心领取套餐动画*/
+/*2016-05-17 会员中心领取套餐动画*/
+/*2016-05-18 推广计划*/
+.code_type{
+	position:relative;
+}
+.code_type li{
+	float:left;
+	width:50%;
+	text-align:center;
+	height:44px;
+	line-height:44px;
+	font-size:15px;
+	color:#323232;
+	background:#fff;
+}
+.code_line{
+  	position: absolute;
+  	height: 44px;
+  	border-right: 1px solid #e6e6e6;
+  	top: 0;
+  	left: 50%;	
+}
+.code_type img{
+	height:34px;
+	width:34px;
+  	margin: 5px;
+  	vertical-align: top;	
+}
+.code_common_c{
+	padding-bottom:10px;
+	background:#fff;
+	margin-top:10px;
+}
+.code_font_size{
+	font-size:13px;
+	color:#8c8c8c;
+}
+.code_i_common{
+	color:#f65d00 !important;
+}
+.plan_explain_common{
+	border:1px solid #ccc;
+	border-radius:5px;
+	margin-left:10px;
+	width:45%;
+	float:left;
+	height:32px;
+	line-height:32px;
+	text-align:center;
+}
+.plan_explain_common img{
+  	vertical-align: top;	
+	height:20px;
+	margin:6px;
+}
+.develop_explain_common{
+	border:1px solid #ccc;
+	border-radius:5px;
+	margin-right:10px;
+	width:45%;
+	float:right;
+	height:32px;
+	line-height:32px;	
+	text-align:center;
+}
+.develop_explain_common img{
+  	vertical-align: top;	
+	height:20px;
+	margin:6px;	
+}
+/*2016-05-18 推广计划*/

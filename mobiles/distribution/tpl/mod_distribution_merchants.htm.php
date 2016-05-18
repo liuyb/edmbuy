@@ -37,12 +37,12 @@ $(function(){
 
 	$resultList.on('click', '.gotoshop', function(){
 		var mid = $(this).data("mid");
-		window.location.href='/shop/'+mid;
+		window.location.href='/shop/'+mid+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$resultList.on('click', '.iance_list_bottom li', function(){
 		var gid = $(this).data("gid");
-		window.location.href='/item/'+gid;
+		window.location.href='/item/'+gid+'&spm=<?=isset($_GET['spm']) ? $_GET['spm'] : '' ?>';
 	});
 
 	$mbody.on('pullMore', function(){

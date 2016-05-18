@@ -93,7 +93,7 @@ function loadGoodsComment(curpage, isinit, category){
 				}
 				_html += "</ul></div>";
 			}
-			if(comment.is_reply){
+			if(comment.is_reply && comment.is_reply > 0){
 				_html += "<div class=\"eval_reply\">掌柜回复："+comment.comment_reply+"</div>";
 			}
 		}
