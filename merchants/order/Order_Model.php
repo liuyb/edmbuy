@@ -42,7 +42,11 @@ class Order_Model extends Model {
         if($options['orderby'] && $options['order_field']){
             $orderby .= " order by ".D()->escape_string($options['order_field'])." ".D()->escape_string($options['orderby'])." ";
         }else{
-            $orderby .= " order by o.add_time desc ";
+            if(CS_AWAIT_RECEIVE == $options['status']){
+                $orderby .= " order by o.shipping_time desc ";
+            }else{
+                $orderby .= " order by o.add_time desc ";
+            }
         }
         $sql = "SELECT count(1) FROM shp_order_info o left join shp_users u on u.user_id = o.user_id where merchant_ids='%s' and is_separate = 0 $where ";
         $count = D()->query($sql, $muid)->result();
@@ -73,6 +77,7 @@ class Order_Model extends Model {
     
     static function rebuild_order_info(&$order){
         $order['add_time'] = date('Y-m-d H:i', simphp_gmtime2std($order['add_time']));
+        $order['shipping_time'] = date('Y-m-d H:i', simphp_gmtime2std($order['shipping_time']));
         $order['order_status_text'] = Fn::get_order_text($order['pay_status'], $order['shipping_status'], $order['order_status']);
         $order['actual_order_amount'] = Order::get_actual_order_amount($order);
     }

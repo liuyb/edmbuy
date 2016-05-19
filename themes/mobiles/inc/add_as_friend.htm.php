@@ -101,6 +101,7 @@
 		this.friendDom = $(this.friendDom.prop('outerHTML'));
 		this.friendDom.attr("id", this.friendDialogId);
 		append_to_body(this.friendDom.prop('outerHTML'));
+		centerDOM($("#"+this.friendDialogId));
 		if (uid) {
 			$("#"+this.friendDialogId+" .friend_yes").attr('data-uid',uid);
 		}

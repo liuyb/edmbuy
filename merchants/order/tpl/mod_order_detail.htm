@@ -24,6 +24,11 @@
 					 <td>	
 					 	<img src="<!--{$good.goods_thumb}-->">
 					 	<span><!--{$good.goods_name}--></span>
+					 	<!--{if $good.goods_attr}-->
+					 	<div style="color:#8c8c8c;margin-left:20px;">
+					 	<!--{$good.goods_attr}-->
+					 	</div>
+					 	<!--{/if}-->
 					 </td>
 					 <td><!--{$good.goods_number}--></td>
 					 <td class="unit_price">￥<!--{$good.goods_price}--></td>
@@ -69,31 +74,44 @@
 				<tr><td class="gos_left">收货人：</td><td><!--{$order.consignee}--></td></tr>
 				<tr><td class="gos_left">地址：</td><td><!--{$order.order_region}--><!--{$order.address}--></td></tr>
 				<tr><td class="gos_left">手机号码：</td><td><!--{$order.mobile}--></td></tr>
+				<tr><td class="gos_left">买家备注：</td><td><!--{$order.postscript}--></td></tr>
 			</table>
 		</div>
 		<div class="gos_l">
 			不需要发票
 		</div>
 	</div>
-	<!--{if $expressList }-->
 	<div id="commodity_list">
 		<div id="commodity_name"><p>物流跟踪</p></div>
-		
+		<!--{if $order.invoice_no}-->
+		<div>
+			<table cellspacing="0" cellpadding="0" id="gos_tab" style="margin-left:20px;">
+				<tr><td class="gos_left">物流公司：</td><td><!--{$order.shipping_name}--></td></tr>
+				<tr><td class="gos_left">快递单号：</td><td><!--{$order.invoice_no}--></td></tr>
+				<tr><td class="gos_left">发货时间：</td><td><!--{$order.shipping_time}--></td></tr>
+			</table>
+		</div>
+		<!--{/if}-->
 		<div id="log_tracking">
 			<table cellspacing="0" cellpadding="0" id="tracking_tab">	
 				<tr>
 					<th style="width:15%;">时间</th>
 					<th>描述</th>
 				</tr>
+				<!--{if $expressList }-->
 				<!--{foreach from=$expressList item=express}-->
 				<tr>
 					<td><!--{$express->time}--></td>
 					<td><!--{$express->status}--></td>
 				</tr>
 				<!--{/foreach}-->
+				<!--{else}-->
+				<tr>
+					<td colspan="2">还没有物流跟踪信息</td>
+				</tr>
+				<!--{/if}-->
 			</table>
 		</div>
-	<!--{/if}-->
 </div>
 
 <script>

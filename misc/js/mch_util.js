@@ -1,5 +1,5 @@
-//form表单数据序列化成json
 (function ($) {
+	//form表单数据序列化成json
     $.fn.serializeJson = function () {
         var serializeObj = {};
         var array = this.serializeArray();
@@ -17,17 +17,27 @@
         });
         return serializeObj;
     };
-})(jQuery);
-//监听对象回车事件
-(function ($) {
+	//监听对象回车事件
     $.fn.enterEvent = function (callback) {
-        $(this).bind('keyup', function (e) {
-            if (e.keyCode == 13) {
-                callback.apply(this, arguments);
-            }
-        });
+    	$(this).bind('keyup', function (e) {
+    		if (e.keyCode == 13) {
+    			callback.apply(this, arguments);
+    		}
+    	});
     };
+    
+    //增对古老IE浏览器 不支持forEach 作覆写
+    if (typeof Array.prototype.forEach != "function") {
+    	Array.prototype.forEach = function (fn, context) {
+		    for (var k = 0, length = this.length; k < length; k++) {
+		      if (typeof fn === "function" && Object.prototype.hasOwnProperty.call(this, k)) {
+		          fn.call(context, this[k], k, this);
+		      }
+		    }
+    	};
+    }
 })(jQuery);
+
 //复选框勾选封装
 (function ($) {
     $(document).on({

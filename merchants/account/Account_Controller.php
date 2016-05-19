@@ -175,11 +175,11 @@ class Account_Controller extends MerchantController
             $ret['retmsg'] = "手机号码不存在!";
             $ret['status'] = 0;
             $response->sendJSON($ret);
-        } elseif ($_SESSION['bind_bank'] != $mobile_code) {
+        } elseif (!isset($_SESSION['bind_bank']) || $_SESSION['bind_bank'] != $mobile_code) {
             $ret['retmsg'] = "手机验证码错误!";
             $ret['status'] = 0;
-           // $response->sendJSON($ret);
-        } elseif($_SESSION['mobile']!=$mobile){
+            $response->sendJSON($ret);
+        } elseif(!isset($_SESSION['mobile']) || $_SESSION['mobile'] != $mobile){
             $ret['retmsg'] = "手机号码有误请重新获取!";
             $ret['status'] = 0;
             $response->sendJSON($ret);

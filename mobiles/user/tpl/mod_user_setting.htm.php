@@ -77,7 +77,7 @@
 	<div class="person_head_comment">
 		<span class="head_l_com">推荐人</span>
 		<span class="head_r_com" style="margin-right:12px;">
-			<span class="fre" style="margin-right: 5px;font-size:16px;"><?=substr($parentNickName, 0, 5) ?></span>
+			<span class="fre" style="margin-right: 5px;font-size:16px;"><?=mb_substr($parentNickName, 0, 5, 'UTF-8') ?></span>
 			<button class="personInfo_but per_add_friend" id="add-friend" style="font-size:14px;">加好友</button>
 		</span>
 	</div>
