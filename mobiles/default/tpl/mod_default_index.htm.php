@@ -51,7 +51,7 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p><a href='/item/pref/show?type=98'><img src="/themes/mobiles/img/zq/98.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
+		<p><a href='/item/pref/show?type=best'><img src="/themes/mobiles/img/zq/index_pref_best.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
 	</div>
 
 	<div class="sp_ls">

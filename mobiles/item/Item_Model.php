@@ -22,6 +22,7 @@ class Item_Model extends Model {
     const CATEGORY_BAG = 'bag';
     const CATEGORY_RICE = 'rice';
     const CATEGORY_MOML = 'moml';
+    const CATEGORY_BEST = 'best';
     
     //专区对应的分类ID
     private static $goods_category_mapping = array(
@@ -37,6 +38,7 @@ class Item_Model extends Model {
         self::CATEGORY_BAG => '55',
         self::CATEGORY_RICE => '49',
         self::CATEGORY_MOML => '63',
+        self::CATEGORY_BEST => '65'
     );
     
     //专区对应的描述信息
@@ -48,6 +50,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => '【春季特卖】2016春季必备清单',
         self::CATEGORY_RICE => '【精选好米】精选优质好米 绿色 健康 养生',
         self::CATEGORY_MOML => '【清真专区】助力回商 买卖全球',
+        self::CATEGORY_BEST => '【精选专区】多米精选特价好货'
     );
     
     //专区对应的图片
@@ -58,7 +61,8 @@ class Item_Model extends Model {
         self::CATEGORY_FOOD => 'themes/mobiles/img/food001.png',
         self::CATEGORY_CLOTHING => 'themes/mobiles/img/dress.png',
         self::CATEGORY_RICE => 'themes/mobiles/img/receal.png',
-    		self::CATEGORY_MOML => 'themes/mobiles/img/zq/moml.png',
+    	self::CATEGORY_MOML => 'themes/mobiles/img/zq/moml.png',
+        self::CATEGORY_BEST => 'themes/mobiles/img/zq/index_pref_best.png',
     );
     
     /**
@@ -112,6 +116,8 @@ class Item_Model extends Model {
             $mod = 'mod_item_pref_rice';
         }else if($type == Item_Model::CATEGORY_MOML){
             $mod = 'mod_item_pref_moml';
+        }else if($type == Item_Model::CATEGORY_BEST){
+            $mod = 'mod_item_pref_best';
         }
         return $mod;
     }

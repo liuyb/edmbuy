@@ -31,8 +31,8 @@
 <?php if(isset($category) && 'moml' != $category): ?>
 <li><a href="/item/pref/show?type=moml">清真专区</a></li>
 <?php endif; ?>
-<?php if(isset($category) && '98' != $category): ?>
-<li><a href="/item/pref/show?type=98">98专区</a></li>
+<?php if(isset($category) && 'best' != $category): ?>
+<li><a href="/item/pref/show?type=best">精选专区</a></li>
 <?php endif; ?>
 </ul>
 </div>
