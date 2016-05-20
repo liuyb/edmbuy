@@ -183,6 +183,26 @@ class Cart extends StorageNode {
 			$sess_id = session_id();
 			$shopping_uid = $user_id ? : $sess_id;
 			$num = $num > 0 ? intval($num) : 1;
+			//当前商品在购物车中的数量
+			$curItemIncat = self::getUserCartNum($shopping_uid,$item_id);
+			//限购校验
+			$perLimitBuy = $exItem->per_limit_buy;
+			if($perLimitBuy && $perLimitBuy > 0){
+			    
+			    if($perLimitBuy < $num){
+			        $ret = ['code' => -2, 'msg' => "当前商品每人限购 $perLimitBuy 件"];
+			        return $ret;
+			    }else if($perLimitBuy < ($num + $curItemIncat)){
+			        $ret = ['code' => -2, 'msg' => "当前商品每人限购 $perLimitBuy 件，你可以在购物车中直接修改数量"];
+			        return $ret;
+			    }
+			    $goodsWasBuy = Items::getgGodsWasBuy($item_id);
+			    if((($perLimitBuy - $goodsWasBuy) - ($num + $curItemIncat)) < 0){
+			        $ret = ['code' => -2, 'msg' => "当前商品每人限购 $perLimitBuy 件，您已超出购买限制"];
+			        return $ret;
+			    }
+			}
+			
 			$real_mark_price = $exItem->market_price;
 			$real_shop_price = $exItem->shop_price;
 			$real_number = $exItem->item_number;
@@ -192,7 +212,7 @@ class Cart extends StorageNode {
 			    $real_shop_price = $real_goods['shop_price'];
 			    $real_number = $real_goods['goods_number'];
 			}
-			if ($num > $real_number || self::getUserCartNum($shopping_uid,$item_id)>=$real_number) {
+			if ($num > $real_number || $curItemIncat>=$real_number) {
 				$ret = ['code' => -2, 'msg' => '商品库存不足'];
 				return $ret;
 			}

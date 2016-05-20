@@ -767,13 +767,26 @@ class Trade_Controller extends MobileController {
           if (!$cItem->is_exist() || $cItem->is_delete || !$cItem->is_on_sale ||  !$real_number) { //商品下架或者库存为0，都不能购买
             continue;
           }
-          
-          //运费
-          $goods_ship_fee = Items::getGoodsRealShipFee($cItem);
-
           //TODO 并发？
           $true_goods_number = $cg['goods_number']>$real_number ? $real_number: $cg['goods_number'];
+          //限购校验
+		  $perLimitBuy = $cItem->per_limit_buy;
+		  if($perLimitBuy && $perLimitBuy > 0){
+		      $goodsWasBuy = Items::getgGodsWasBuy($cItemId);
+		      $can_buy = $perLimitBuy - $goodsWasBuy;
+		      if($can_buy <= 0){
+		          continue;
+		      }
+		      $true_goods_number = $true_goods_number > $can_buy ? $can_buy : $true_goods_number;
+		  }
+		  
+		  if($true_goods_number <= 0){
+		      continue;
+		  }
+		  
           Items::changeStock($cItemId, -$true_goods_number, $cg['goods_attr_id']); //立即冻结商品对应数量的库存
+          //运费
+          $goods_ship_fee = Items::getGoodsRealShipFee($cItem);
 
           $newOI = new OrderItems();
           $newOI->order_id    = $order_id;

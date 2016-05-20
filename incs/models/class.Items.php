@@ -421,6 +421,18 @@ HERESQL;
 		}
 		return $attr;
 	}
+	
+	/**
+	 * 如果当前商品时限购商品，根据当前用户购买过当前商品的数量，判断当前用户是否限购
+	 * @param unknown $goods_id
+	 */
+	static function getgGodsWasBuy($goods_id){
+	    $uid = $GLOBALS['user']->uid;
+	    $sql = "select count(1) from shp_order_info oi join shp_order_goods og on oi.order_id = og.order_id 
+                where og.goods_id = $goods_id and oi.is_delete=0 and oi.pay_status=".PS_PAYED."";
+        $result = D()->query($sql)->result(); 
+        return $result;
+	}
 }
  
 /*----- END FILE: class.Items.php -----*/

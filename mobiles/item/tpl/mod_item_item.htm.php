@@ -375,11 +375,15 @@ function immediate_buy(item_id, item_num) {
 	_self.ajaxing = 1;
 	F.post('<?php echo U('trade/buy')?>',{item_id:item_id,item_num:item_num,spec:spec_ids},function(ret){
 		_self.ajaxing = 0;
-		var gourl = '<?php echo U('trade/order/confirm')?>';
-		if (gourl.lastIndexOf('?') < 0) gourl += '?';
-		else gourl += '&';
-		gourl += 'cart_rids='+ret.code+'&t='+ret.ts;
-		window.location.href = gourl;
+		if(ret.code > 0){
+			var gourl = '<?php echo U('trade/order/confirm')?>';
+			if (gourl.lastIndexOf('?') < 0) gourl += '?';
+			else gourl += '&';
+			gourl += 'cart_rids='+ret.code+'&t='+ret.ts;
+			window.location.href = gourl;	
+		}else{
+			weui_alert(ret.msg);
+		}
 	});
 }
 //加入购物车
