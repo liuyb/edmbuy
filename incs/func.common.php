@@ -640,7 +640,7 @@ function get_headscript(){
     $script .= "var wxData={isWxBrowser:{$isWxBro},browserVer:{$wxVer},isReady:false,appId:'{$wxAppId}'},gData={appName:'{$appName}',currURI:'{$currUri}',referURI:'',contextpath:'{$ctxpath}',page_render_mode:{$rendermode},token:'{$sesstoken}'},gUser={is_account_logined:{$is_account_logined}};";
     if ($user->uid) {
         foreach ($user->column_data() AS $k => $v) {
-            if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo'])) {
+            if (in_array($k, ['uid','unionid','openid','subscribe','username','nickname','sex','logo','mobile'])) {
                 $v = (is_numeric($v)&&$k!='username') ? $v : "'".$v."'";
                 $script .= 'gUser.'.$k."={$v};";
             }

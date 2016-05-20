@@ -48,6 +48,9 @@ class MerchantController extends Controller {
 		}
 		$shop = Merchant::load($GLOBALS['user']->uid);
 		$this->v->assign('global_shop', $shop);
+		//得到企业客服ID，用来全局判断用户是否开通了客服
+		$ent_id = Merchant::getMerchantKefuEntId($GLOBALS['user']->uid);
+		$this->v->assign('ent_id', $ent_id);
 		//检查商家是否支付
 		$checkIgnore = false;
   		foreach(self::$interceptWhiteList AS $key) {
@@ -59,7 +62,7 @@ class MerchantController extends Controller {
 		if($checkIgnore){
 		    return;
 		}
-  		
+  		//商家没有激活处理
 	    if(!$shop->activation){
 	        $response->redirect('/shop/need/pay');
 	    }

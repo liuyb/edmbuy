@@ -15,6 +15,9 @@
     </ul>
   </div>
   <div id="common_right">
+  	<!--{if $ent_id && $ent_id gt 0}-->
+    <button id="common_btn" class="common_shop" onclick="signKefu(this);" style='width:100px;'>登录企业客服</button>
+    <!--{/if}-->
     <button id="common_btn" class="common_shop" onclick="window.location.href='/shop/template/index'">浏览店铺</button>
     <button id="common_btn" class="common_name" data-show="0"><!--{if $global_shop->facename}--><!--{$global_shop->facename}--><!--{else}--><!--{$global_shop->mobile}--><!--{/if}--></button>
     <div class="set_pero" style="display:none;">
@@ -40,13 +43,18 @@ function navigateShow(url){
 
 //菜单开启
 $(document.body).on("click", ".common_name", function(){
-  if($(this).attr('data-show')=='0') {
+  var $this = $(this);
+  console.log($this.offset());
+  <!--{if $ent_id && $ent_id gt 0}-->
+  $(".set_pero").css('left',216);
+  <!--{/if}-->
+  if($this.attr('data-show')=='0') {
     $(".set_pero").show();
-    $(this).attr('data-show','1');
+    $this.attr('data-show','1');
   }
   else {
     $(".set_pero").hide();
-    $(this).attr('data-show','0');
+    $this.attr('data-show','0');
   }
 });
 
@@ -89,5 +97,17 @@ $(document).ready(function(){
 	$(".common_name").text(new_text);
 })
 
-
+function signKefu(obj){
+	var $this = $(obj);
+	$this.text('登录中...');
+	F.get('/user/kefu/platform/sign', {}, function(ret){
+		if(ret){
+			window.open(ret);
+			$this.text('登录企业客服');
+		}else{
+			$this.text('登录企业客服');
+			layer.msg('没有找到对应的客服，请确认您已激活企业客服');
+		}
+	});
+}
 </script>

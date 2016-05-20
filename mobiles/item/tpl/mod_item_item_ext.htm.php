@@ -220,6 +220,30 @@ function setCollectNumber(num){
 	}
 }
 
+(function(m, ei, q, i, a, j, s) {
+    m[a] = m[a] || function() {
+        (m[a].a = m[a].a || []).push(arguments)
+    };
+    j = ei.createElement(q),
+    s = ei.getElementsByTagName(q)[0];
+    j.async = true;
+    j.src = i;
+    s.parentNode.insertBefore(j, s)
+})(window, document, 'script', '//eco-api.meiqia.com/dist/meiqia.js', '_MEIQIA');
+_MEIQIA('entId', '4119');
+_MEIQIA('withoutBtn', true);
+// 在这里开启手动模式
+//_MEIQIA('manualInit', true);
+_MEIQIA('metadata', {
+    name: gUser ? gUser['nickname'] : '', 
+    tel : gUser ? gUser['mobile'] : '',
+    '多米号': gUser ? gUser['uid'] : '', // 自定义字段
+}); 
+_MEIQIA('allSet', function(servability){
+	console.log('ready..'+servability);
+	//_MEIQIA._SHOWPANEL()
+});
+
 //菜单开启
 /* $(document.body).on("click", ".p_detail_more", function(){
 	if($(this).attr('data-show')=='0') {

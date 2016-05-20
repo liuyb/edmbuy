@@ -41,7 +41,14 @@
         <button class="tem_btn_common">我要提现</button><button class="detail_btn">提现记录</button> -->
       </p>
     </div>
-    <div style="margin-top:10px;"><button class="tem_btn_common" onclick="window.location.href='/shop'">进入店铺</button></div>
+    <div style="margin-top:10px;">
+    <button class="tem_btn_common" onclick="window.location.href='/shop'">进入店铺</button>
+    <!--{if $ent_id && $ent_id gt 0}-->
+    <button class="tem_btn_common" style='margin-left:10px;width:100px;' onclick="signKefu(this);">登录企业客服</button>
+    <!--{else}-->
+    <button class="tem_btn_common" style='margin-left:10px;width:100px;' onclick="newKefu(this);">开通企业客服</button>
+    <!--{/if}-->
+    </div>
   </div>
 </div>
 
@@ -76,4 +83,38 @@ $(function(){
 		$("#run_cash_body").html($(ROW));
 	});
 });
+
+var _new_kefu = false;
+function newKefu(obj){
+	if(_new_kefu){
+		return;
+	}
+	_new_kefu = true;
+	var $this = $(obj);
+	$this.text('努力开通中...');
+	F.postWithLoading('/user/ent/kefu/new', {}, function(ret){
+		if(ret && ret.flag == 'SUCC'){
+			layer.msg('开通成功');
+			window.location.reload();
+		}else{
+			layer.msg(ret.msg);
+			$this.text('开通企业客服');
+			_new_kefu = false;
+		}
+	});
+}
+
+/* function signKefu(obj){
+	var $this = $(obj);
+	$this.text('登录中...');
+	F.get('/user/kefu/platform/sign', {}, function(ret){
+		if(ret){
+			window.open(ret);
+			$this.text('登录企业客服');
+		}else{
+			$this.text('登录企业客服');
+			layer.msg('没有找到对应的客服，请确认您已激活企业客服');
+		}
+	});
+} */
 </script>

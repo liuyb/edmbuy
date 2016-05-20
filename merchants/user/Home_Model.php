@@ -39,5 +39,117 @@ class Home_Model extends Model{
         $result['visit'] = $visit;
         return $result;
     }
-     
+    
+    /**
+     * 创建美恰企业客服
+     * @param unknown $merchant
+     * @return string[]|string[]|boolean[]
+     */
+    static function createMqEnterprise($merchant){
+        $ret = ['flag' => 'FAIL'];
+        $merchant_id = $merchant->uid;
+        $mqConfig = C('api.meiqia_edmbuy');
+        $url = $mqConfig['createEntUrl'];
+        $appKey = $mqConfig['appkey'];;
+        $secretKey = $mqConfig['secretKey'];;
+        
+        $t = time();
+        // 构造 API 请求
+        $api_params_arr = ['timestamp' => $t, 'fullname' => $merchant->facename, 'appkey' => $appKey];
+        $api_params = json_encode($api_params_arr);
+        // 本段输出结果为一个字符串：
+        // api_params_str = '{"timestamp": timestamp,"fullname": fullname,"appkey": appkey}'
+        // 使用 secret_key 对 api_params_str 进行 HMAC 计算请求签名
+        $sig = hash_hmac('sha1', (string)$api_params, $secretKey);
+        // 将 appkey 和请求加密签名放到请求头部
+        $headers = array(
+            'X-Message-Digest:'.trim($sig),
+            'X-App-Key:'.$appKey,
+            'Content-type: application/json');
+        // 最终构造的请求为
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $api_params);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $json = curl_exec($curl);
+        
+        $msg = '创建失败，请稍后重试！';
+        if(curl_errno($curl)){
+            $msg = curl_error($curl);
+        }else{
+            if($json){
+                $json = json_decode($json);
+                $create = self::createMerchantKefu($merchant_id, $json);
+                if($create){
+                    $ret['flag'] = 'SUCC';
+                    $msg = '创建成功';
+                }
+            }
+        }
+        curl_close($curl);
+        $ret['msg'] = $msg;
+        return $ret;
+    }
+    
+    /**
+     * 创建商家客服系统
+     * @param unknown $merchant_id
+     * @param unknown $json
+     * @return boolean
+     */
+    private static function createMerchantKefu($merchant_id, $json){
+        if(empty($json) || !isset($json->agent_token)){
+            return false;
+        }
+        $insertarr = array(
+            'merchant_id' => $merchant_id,
+            'agent_token' => $json->agent_token,
+            'email' => $json->email,
+            'ent_id' => $json->ent_id,
+            'ent_token' => $json->ent_token,
+            'add_time' => time()
+            
+        );
+        $rid = D()->insert('`shp_merchant_kefu`', $insertarr, true, 'IGNORE');
+        return $rid ? true : false;
+    }
+    
+    /**
+     * 根据企业信息获取一键登录美恰的链接
+     * @param unknown $merchant_id
+     * @return NULL|string
+     */
+    static function getMQkefuLink($merchant_id){
+        $ret = self::getMerchantKefu($merchant_id);
+        if(!$ret || empty($ret)){
+            return '';
+        }
+        $mqConfig = C('api.meiqia_edmbuy');
+        $ent_url = $mqConfig['entSignUrl'];
+        $appKey = $mqConfig['appkey'];;
+        $secretKey = $mqConfig['secretKey'];;
+         
+        $agent_token = $ret['agent_token'];
+        $email = $ret['email'];
+        $ent_id = $ret['ent_id'];
+        $ent_token = $ret['ent_token'];
+        $t = simphp_msec();
+        $api_params = http_build_query(['agent_token' => $agent_token, 'appkey' => $appKey, 'ent_token' => $ent_token, 'timestamp' => $t]);
+        $sig = hash_hmac('sha1', $api_params, $secretKey);
+        $request_params = http_build_query(['ent_token' => $ent_token, 'appkey' => $appKey, 'signature' => $sig, 'agent_token' => $agent_token, 'timestamp' => $t]);
+        $link = $ent_url.'?'.$request_params;
+        return $link;
+    }
+    
+    static function getMerchantKefu($merchant_id){
+        $sql = "select * from shp_merchant_kefu where merchant_id = '$merchant_id' ";
+        $result = D()->query($sql)->fetch_array();
+        return $result;
+    }
 }

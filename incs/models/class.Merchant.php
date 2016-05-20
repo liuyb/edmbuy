@@ -59,7 +59,8 @@ class Merchant extends StorageNode {
 				    'verify_fail_msg' => 'verify_fail_msg',
 				    'merchant_type' => 'merchant_type',
 				    'activation' => 'activation',
-				    'invite_code' => 'invite_code'
+				    'invite_code' => 'invite_code',
+				    'recommed_flag' => 'recommed_flag'
 				)
 		);
 	}
@@ -298,6 +299,15 @@ class Merchant extends StorageNode {
 	    $time =date('Y-m-d H:i:s' ,time());
 	    $sql = "select count(1) from shp_merchant_payment where 1 $where and start_time <= '{$time}' and end_time >='{$time}' and money_paid > 0";
 	    return D()->query($sql,$user_id)->result();
+	}
+	
+	/**
+	 * 获取商家客服ID
+	 * @param unknown $merchant_id
+	 */
+	static function getMerchantKefuEntId($merchant_id){
+	    $sql = "select ent_id from shp_merchant_kefu where merchant_id = '$merchant_id' ";
+	    return D()->query($sql)->result();
 	}
 	
 }

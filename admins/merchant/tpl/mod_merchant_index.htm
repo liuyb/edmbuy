@@ -89,6 +89,12 @@ function submitForm(){
       <!--{if $it.verify eq 1}-->
       <a href="#/merchant/<!--{$it.merchant_id}-->/detail,backurl=<!--{encodeurl str=$backurl}-->" class="oplink hashreq">审核</a>
       <!--{/if}-->
+      &nbsp;&nbsp;
+      <!--{if $it.recommed_flag}-->
+      <a href="javascript:recommend('<!--{$it.merchant_id}-->',0)" class="oplink hashreq">取消推荐</a>
+      <!--{else}-->
+      <a href="javascript:recommend('<!--{$it.merchant_id}-->',1)" class="oplink hashreq">推荐</a>
+      <!--{/if}-->
     </td>
   </tr>
   <!--{foreachelse}-->
@@ -98,4 +104,14 @@ function submitForm(){
 </div>
 
 </section>
-
+<script>
+function recommend(mid, type){
+	F.post('/merchant/recommend',{mid : mid, type : type}, function(ret){
+		if(ret && ret.flag == 'SUC'){
+			layer.msg('操作成功');
+		}else{
+			layer.msg(ret.msg);
+		}
+	});
+}
+</script>

@@ -20,7 +20,8 @@ class Merchant_Controller extends AdminController
     {
         return [
 				'merchant/%s/detail'=>'view_detail',
-	            'merchant/check'=>'check'
+	            'merchant/check'=>'check',
+                'merchant/recommend' => 'recommend'
 		];
     }
 
@@ -120,6 +121,32 @@ class Merchant_Controller extends AdminController
             $newMch->save(Storage::SAVE_UPDATE);
             if(D()->affected_rows()){
                 $ret = ['flag' => 'SUC', 'msg' => '审核通过'];
+            }
+            $response->sendJSON($ret);
+        }
+    }
+    
+    /**
+     * 商家店铺推荐
+     * @param Request $request
+     * @param Response $response
+     */
+    public function recommend(Request $request, Response $response){
+        $ret = ['flag' => 'FAIL', 'msg' => '操作失败'];
+        if($request->is_post()){
+            $mid = $request->post('mid');
+            $type = $request->post('type');
+            $merchant = Merchant::load($mid);
+            if(!$merchant->is_exist()){
+                $response->sendJSON($ret);
+            }
+            $newMch = new Merchant();
+            $newMch->uid = $mid;
+            $newMch->recommed_flag = $type;
+            $newMch->save(Storage::SAVE_UPDATE);
+            print_r(D()->getSqlFinal());
+            if(D()->affected_rows()){
+                $ret = ['flag' => 'SUC', 'msg' => '操作成功'];
             }
             $response->sendJSON($ret);
         }

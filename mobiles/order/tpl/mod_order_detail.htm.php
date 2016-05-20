@@ -51,7 +51,7 @@
 	<div class="order_tit" <?php if($merchant_goods['merchant_id']):?>onclick="window.location.href='<?=U('shop/'.$merchant_goods['merchant_id'])?>'"<?php endif;?>>
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
 		<span class="tit_name">
-		<?=$merchant_goods['facename'] ?></span>
+		<?=mb_substr($merchant_goods['facename'], 0, 15) ?></span>
 	</div>
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">

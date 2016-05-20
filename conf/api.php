@@ -22,7 +22,19 @@ return [
   	'token'          => 'JQ4W443W6D5EFBAT',
   	'encodingAesKey' => 'bbeJit1rwF6qbXnhAIxKeO2vsEMTSj6QNbJrtrpITQm',
   	'paySignKey'     => ''
-  ]
+  ],
+  'meiqia_edmbuy' => [
+      // 测试
+      /* 'appkey'       => '32e722002626500c0e830e97f67a62e8',
+      'secretKey'    => '10e4a34368837e3437835c78e0a53612',
+      'createEntUrl' => 'http://eco-api-test03.meiqia.com/platforms/enterprise/new',
+      'entSignUrl'   => 'https://app.meiqia.com/open-signin' */
+      
+      'appkey'       => '34d77bd8a0e085e12791f59cf1ef7136',
+      'secretKey'    => '253d402efa6072b779c4dd037f6a5394',
+      'createEntUrl' => 'https://eco-api.meiqia.com/platforms/enterprise/new',
+      'entSignUrl'   => 'https://app.meiqia.com/open-signin'  
+  ] 
 ];
  
 /*----- END FILE: api.php -----*/

@@ -50,7 +50,7 @@ $(function(){
 <div class="order_list">
 	<div class="order_title" <?php if($ord['merchant_id']):?>onclick="window.location.href='<?=U('/shop/'.$ord['merchant_id']) ?>'"<?php endif;?>>
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
-		<span class="title_name"><?=$ord['facename'] ?></span>
+		<span class="title_name"><?=mb_substr($ord['facename'], 0, 15) ?></span>
 		<span class="tit_type"><?=$ord['status_txt'] ?></span>
 	</div>
 	<?php foreach($ord['order_goods'] AS $g):

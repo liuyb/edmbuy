@@ -13,7 +13,9 @@ class User_Controller extends MerchantController
     {
         return [
             'user/home/trade/data'    => 'get_merchant_trade_data',
-            'user/open/shop/guide' => 'openShopQr'
+            'user/open/shop/guide' => 'openShopQr',
+            'user/ent/kefu/new'       => 'createEntKefu',
+            'user/kefu/platform/sign'      => 'signKefuPlatform'
         ];
     }
     
@@ -44,6 +46,7 @@ class User_Controller extends MerchantController
             $this->v->assign('warn_goods_number', $warn_goods_number);
             $this->v->assign('totalSales', $totalSales);
             $this->v->assign('shop', $shop);
+            
             $response->send($this->v);
         } else {
             $response->redirect('/login');
@@ -414,6 +417,35 @@ class User_Controller extends MerchantController
         $this->v->assign('qrcode', $qrcode);
         $response->send($this->v);
     }
+    
+    /**
+     * 创建企业客服
+     * @param Request $request
+     * @param Response $response
+     */
+    public function createEntKefu(Request $request, Response $response){
+        $merchant_id = $GLOBALS['user']->uid;
+        
+        $result = Merchant::getMerchantKefuEntId($merchant_id);
+        if($result){
+            $response->sendJSON(['flag' => 'FAIL', 'msg' => '客服系统已经存在，不需要重复创建！']);
+        }
+        $merchant = Merchant::load($merchant_id);
+        $ret = Home_Model::createMqEnterprise($merchant);
+        $response->sendJSON($ret);
+    }
+    
+    /**
+     * 一键登录客服平台
+     * @param Request $request
+     * @param Response $response
+     */
+    public function signKefuPlatform(Request $request, Response $response){
+        $merchant_id = $GLOBALS['user']->uid;
+        $ret = Home_Model::getMQkefuLink($merchant_id);
+        $response->sendJSON($ret);
+    }
+    
 }
 
 
