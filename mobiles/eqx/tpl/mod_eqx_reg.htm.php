@@ -1,6 +1,10 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
-
+<!--[HEAD_CSS]-->
+<style>
+.login_index {border-width: 0 0 1px 0;}
+</style>
+<!--[/HEAD_CSS]-->
 <script type="text/javascript">var inapp='<?=$inapp?>',refer='<?=$refer?>',referee_uid=parseInt('<?=$referee_uid?>');</script>
 <?php if(1==$step):?>
 

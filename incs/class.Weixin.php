@@ -433,48 +433,71 @@ class Weixin {
     $openid       = $fromUserName;
     $reqtime      = intval($postObj->CreateTime);
     
-    if (0&&('odyFWsxLsxs9U2P6Z3sV4S7O7D5I'==$openid || 'odyFWs99rfRCGphSTMTXczAP4wno'==$openid)) {
+    /*
+    if ('odyFWsxLsxs9U2P6Z3sV4S7O7D5I'==$openid) {
     	trace_debug('weixin_reply_'.($is_voice?'voice':'text'), $keyword);
     	$responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $this->helper->about(1)));
     	return $responseText;
     }
+    */
     
     $responseText = '';
     $queryResult  = $this->helper->onTextQuery($keyword, $result_type);
-    if (empty($queryResult)) {//没查找到任何可回复的信息
-    	return '';
-      $baidu_sou  = $this->helper->sou($keyword);
-      $contentText  = "抱歉，没有找到你想要的东西！小二帮你<a href=\"{$baidu_sou}\">度娘一下</a>吧/::P";
-      $responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $contentText));
+    if ('string'==$result_type) {
+    	if (!empty($queryResult)) {
+    		$responseText = self::packMsg(self::MSG_TYPE_TEXT, $fromUserName, $toUserName, array('content' => $queryResult));
+    	}
+    	elseif (in_array($keyword, ['商家认证','店铺审核','产品审核'])) {
+    		$mediaId = '';
+    		$mediaUrl= '';
+    		switch ($keyword) {
+    			case '商家认证':
+    				$mediaId = 'g-Q3naBWic4T5UnQMO_GmyQe96JrZVQE_62yiqDxZNU';
+    				$mediaUrl= 'http://mmbiz.qpic.cn/mmbiz/TmfzfPupvpR3Mpria2WrASRoziayIeDA4Ukn9pTCCM7fp0g4DI1ib8EzN1BX9xsMDWcTQnHatxukzUOiacgvBjt2kQ/0?wx_fmt=jpeg';
+    				break;
+    			case '店铺审核':
+    				$mediaId = 'g-Q3naBWic4T5UnQMO_Gm0lazCOVgTiaYKfLGLtLbWY';
+    				$mediaUrl= 'http://mmbiz.qpic.cn/mmbiz/TmfzfPupvpR3Mpria2WrASRoziayIeDA4UMJzF9cLC3FsyrtWZJOoH3LXSwIQBeb5gJxk4O6yp9mdYvVv9Cywg3A/0?wx_fmt=jpeg';
+    				break;
+    			case '产品审核':
+    				$mediaId = 'g-Q3naBWic4T5UnQMO_Gm2ZJNRQIQ-MjVjyrtuKcosk';
+    				$mediaUrl= 'http://mmbiz.qpic.cn/mmbiz/TmfzfPupvpR3Mpria2WrASRoziayIeDA4UXWbhH7pkhUjrhTzEiaiaqh3949gVahTjjurBpbMuupRFqEWGpJ6VdU1w/0?wx_fmt=jpeg';
+    				break;
+    		}
+    		if ($mediaId) {
+    			$responseText = self::packMsg(self::MSG_TYPE_IMAGE, $fromUserName, $toUserName, array('mediaId' => $mediaId));
+    			trace_debug('weixin_reply_image', $responseText);
+    		}
+    	}
+    	else {
+    		$responseText = self::packMsg(self::MSG_TYPE_CUSTOMER/*要转到多客服系统*/, $fromUserName, $toUserName, array('content' => $queryResult));
+    	}
     }
     else {
-      if ('string'==$result_type) { //一般文本
-        $responseText = self::packMsg(self::MSG_TYPE_CUSTOMER/*要转到多客服系统*/, $fromUserName, $toUserName, array('content' => $queryResult));
-      }
-      elseif ('arr_article'==$result_type) { //最新文章
-        $item  = '';
-        foreach ($queryResult AS $news) {
-          $extra = array();
-          $extra['title']       = $news['title'];
-          $extra['description'] = $news['digest'];
-          $extra['picUrl']      = $this->siteUrl.$news['thumb_media_url'];
-          $extra['url']         = $news['url'];
-          $item .= self::packMsg(self::MSG_TYPE_NEWS_ITEM, '', '', $extra);
-        }
-        $responseText = self::packMsg(self::MSG_TYPE_NEWS, $fromUserName, $toUserName, array('articleCount'=>count($queryResult), 'articles'=>$item));
-      }
-      elseif ('arr_goods'==$result_type) { //匹配搜索的商品
-        $item  = '';
-        foreach ($queryResult AS $goods) {
-          $extra = array();
-          $extra['title']       = $goods['goods_name'];
-          $extra['description'] = $goods['goods_name'];
-          $extra['picUrl']      = preg_match('/^http:\/\//', $goods['goods_thumb']) ? $goods['goods_thumb'] : Goods::goods_picurl($goods['goods_thumb']);
-          $extra['url']         = Goods::goods_url($goods['goods_id'], TRUE);
-          $item .= self::packMsg(self::MSG_TYPE_NEWS_ITEM, '', '', $extra);
-        }
-        $responseText = self::packMsg(self::MSG_TYPE_NEWS, $fromUserName, $toUserName, array('articleCount'=>count($queryResult), 'articles'=>$item));
-      }
+    	if ('arr_article'==$result_type) { //最新文章
+    		$item  = '';
+    		foreach ($queryResult AS $news) {
+    			$extra = array();
+    			$extra['title']       = $news['title'];
+    			$extra['description'] = $news['digest'];
+    			$extra['picUrl']      = $this->siteUrl.$news['thumb_media_url'];
+    			$extra['url']         = $news['url'];
+    			$item .= self::packMsg(self::MSG_TYPE_NEWS_ITEM, '', '', $extra);
+    		}
+    		$responseText = self::packMsg(self::MSG_TYPE_NEWS, $fromUserName, $toUserName, array('articleCount'=>count($queryResult), 'articles'=>$item));
+    	}
+    	elseif ('arr_goods'==$result_type) { //匹配搜索的商品
+    		$item  = '';
+    		foreach ($queryResult AS $goods) {
+    			$extra = array();
+    			$extra['title']       = $goods['goods_name'];
+    			$extra['description'] = $goods['goods_name'];
+    			$extra['picUrl']      = preg_match('/^http:\/\//', $goods['goods_thumb']) ? $goods['goods_thumb'] : Goods::goods_picurl($goods['goods_thumb']);
+    			$extra['url']         = Goods::goods_url($goods['goods_id'], TRUE);
+    			$item .= self::packMsg(self::MSG_TYPE_NEWS_ITEM, '', '', $extra);
+    		}
+    		$responseText = self::packMsg(self::MSG_TYPE_NEWS, $fromUserName, $toUserName, array('articleCount'=>count($queryResult), 'articles'=>$item));
+    	}
     }
     
     return $responseText;
@@ -519,7 +542,6 @@ class Weixin {
    * @param string $msgType      消息类型，可选值：text, image, voice, video, music, news, news_item
    * @param string $toUserName   发送目标用户openid
    * @param string $fromUserName 发送源openid(自身)
-   * @param string $createTime   消息响应时间
    * @param string $extra <br>
    *   $msgType = 'text' : $extra['content' => 'xx'] <br>
    *   $msgType = 'customer' : $extra['content' => 'xx'] <br>
@@ -1607,8 +1629,29 @@ class WeixinHelper {
     ){
       $result = $this->defaultHello();
     }
+    elseif(in_array($keyword, array('常见问题','招商','商品推荐','米商'))) {
+    	$url = '';
+    	switch ($keyword) {
+    		case '常见问题':
+    			$url = 'http://mp.weixin.qq.com/s?__biz=MzAwODc2NjMyNw==&mid=502672432&idx=1&sn=efe87a2baccb5a5ca16d88ed5303a2c0#rd';
+    			$result = "请访问: <a href=\"{$url}\">常见问题</a>";
+    			break;
+    		case '招商':
+    			$url = 'http://mp.weixin.qq.com/s?__biz=MzAwODc2NjMyNw==&mid=502672432&idx=2&sn=88f3d69bfe01b35ef00dd71e8af7eead#rd';
+    			$result = "请访问: <a href=\"{$url}\">招商计划</a>";
+    			break;
+    		case '商品推荐':
+    			$url = 'http://mp.weixin.qq.com/s?__biz=MzAwODc2NjMyNw==&mid=502672432&idx=3&sn=098868a92afbee61551713dff741b8dd#rd';
+    			$result = "请访问: <a href=\"{$url}\">商品推荐</a>";
+    			break;
+    		case '米商':
+    			$url = 'http://mp.weixin.qq.com/s?__biz=MzAwODc2NjMyNw==&mid=502672432&idx=4&sn=c1cf4352e13b12a8700e3c395d929ce2#rd';
+    			$result = "请访问: <a href=\"{$url}\">米商计划</a>";
+    			break;
+    	}
+    }
     else { //查询数据库
-    	$result = "您好老师，现在可以通过二维码进行锁定上下级和预热。18号正式上线后，下级购买了产品你就可以获得佣金了。\n\n点击底部的“推广二维码”，把这个二维码发给陌生的朋友，让他关注益多米，看看他的推荐人是不是您。";
+    	//$result = "您好老师，现在可以通过二维码进行锁定上下级和预热。18号正式上线后，下级购买了产品你就可以获得佣金了。\n\n点击底部的“推广二维码”，把这个二维码发给陌生的朋友，让他关注益多米，看看他的推荐人是不是您。";
     }
     
     return $result;
