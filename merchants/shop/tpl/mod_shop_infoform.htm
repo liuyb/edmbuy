@@ -144,6 +144,10 @@
                 $(this).addClass("business_on");
             }
         });
+        
+        <!--{if isset($incomplete) && $incomplete eq 1}-->
+        showMsg('请先完善店铺资料！');
+        <!--{/if}-->
     });
 
     function submitForm() {

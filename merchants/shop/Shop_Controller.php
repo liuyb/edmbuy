@@ -319,12 +319,14 @@ class Shop_Controller extends MerchantController
             //店铺已经存在，则跳转到店铺资料页面
             $response->redirect('/shop/details');
         }
+        $incomplete = $request->get('incomplete', '');
         $this->v->set_tplname('mod_shop_start');
         $business_scope = Merchant::getBusinessScope();
         $this->v->assign('busi_scope', $business_scope);
         $this->v->assign('province_list', Order::get_regions(1, 1));
         $this->v->assign('shop', $shop);
         $this->v->assign('act', 'complete');
+        $this->v->assign('incomplete', $incomplete);
         $response->send($this->v);
     }
 

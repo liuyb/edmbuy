@@ -74,7 +74,7 @@ class MerchantController extends Controller {
 	    
 		if($rq != 'shop/start'){
     		if(!$shop->is_completed){
-    		    $response->redirect('/shop/start');
+    		    $response->redirect('/shop/start?incomplete=1');
     		}
 		}
 	}
