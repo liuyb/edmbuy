@@ -1289,7 +1289,13 @@ a.h_btn{
   text-align: center; 
   position: relative;
 }
-.p_d_t1{
+.item_kefu_on{
+  width: 16%;
+  background: url(../img/kefu2.png) no-repeat center center;
+  background-size:20px 32px;
+  border-top: 1px solid #ccc; 
+}
+.item_kefu_off{
   width: 16%;
   background: url(../img/kefu.png) no-repeat center center;
   background-size:20px 32px;
@@ -1840,8 +1846,13 @@ a.ph_btn{
   height:40px;
   border-bottom:1px solid #eee; 
 }
-.online_serve{
-  background: url(../img/kf.png) no-repeat 25px center; 
+.online_serve_off{
+  background: url(../img/zxkf_offline.png) no-repeat 25px center; 
+  background-size: 22px;  
+  border-right:1px solid #eee;
+}
+.online_serve_on{
+  background: url(../img/zxkf_online.png) no-repeat 25px center; 
   background-size: 22px;  
   border-right:1px solid #eee;
 }
@@ -1852,8 +1863,13 @@ a.ph_btn{
   line-height:40px;
   cursor:pointer;
 }
-.after_serve{
-  background: url(../img/dh.png) no-repeat 25px center; 
+.after_serve_off{
+  background: url(../img/sh_offline.png) no-repeat 25px center; 
+  background-size: 22px;  
+}
+
+.after_serve_on{
+  background: url(../img/sh_online.png) no-repeat 25px center; 
   background-size: 22px;  
 }
 

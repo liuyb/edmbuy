@@ -75,12 +75,17 @@ class Order_Controller extends MobileController {
 	       //$order_detail = Order::getOrderDetail($order_id);
 	       $regionIds = [$order->province, $order->city, $order->district];
 	       $order_region = Order_Model::getOrderRegion($regionIds);
-	       $order->__set("order_region", $order_region);
+	       $order->order_region = $order_region;
 	       $merchant_goods = Order_Model::getOrderItems($order_id);
 	       //$this->v->assign("item", $order_detail);
 	       $this->v->assign("order", $order);
 	       $this->v->assign("order_id", $order_id);
 	       $this->v->assign("merchant_goods", $merchant_goods);
+	       $merchant = Merchant::load($order->merchant_ids);
+	       $this->v->assign('merchant', $merchant);
+	       //商家客服
+			$ent_id = Merchant::getMerchantKefu($order->merchant_ids);
+			$this->v->assign('ent_id', $ent_id);
 	    }
 	
 	    throw new ViewResponse($this->v);

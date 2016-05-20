@@ -302,6 +302,18 @@ class Merchant extends StorageNode {
 	}
 	
 	/**
+	 * 拿商家客服ID，如果不存在，返回益多米的客服ID
+	 * @param unknown $merchant_id
+	 */
+	static function getMerchantKefu($merchant_id){
+	    $ent_id = self::getMerchantKefuEntId($merchant_id);
+	    if(!$ent_id){
+	        $ent_id = C('api.meiqia_edmbuy.edm_ent_id');
+	    }
+	    return $ent_id;
+	}
+	
+	/**
 	 * 获取商家客服ID
 	 * @param unknown $merchant_id
 	 */

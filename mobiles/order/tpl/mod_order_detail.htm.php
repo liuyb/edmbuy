@@ -45,17 +45,17 @@
 	</table>
 </div>
 <div class="order_list">
-	<?php $first_goods_id=0; if (!empty($merchant_goods)):
+	<?php $first_goods_id=0; 
 	      $total_goods = 0;
 	?>
-	<div class="order_tit" <?php if($merchant_goods['merchant_id']):?>onclick="window.location.href='<?=U('shop/'.$merchant_goods['merchant_id'])?>'"<?php endif;?>>
+	<div class="order_tit" <?php if($merchant->uid):?>onclick="window.location.href='<?=U('shop/'.$merchant->uid)?>'"<?php endif;?>>
 		<span class="tit_logo"><img src="/themes/mobiles/img/shop_logo.png"></span>
 		<span class="tit_name">
-		<?=mb_substr($merchant_goods['facename'], 0, 15) ?></span>
+		<?=mb_substr($merchant->facename, 0, 15) ?></span>
 	</div>
 	<div class="order_info">
 		<table cellspacing="0" cellpadding="0" class="order_info_tab">
-			<?php foreach ($merchant_goods['goods'] as $gd):
+			<?php foreach ($merchant_goods as $gd):
 			 $total_goods += intval($gd['goods_number']);
 			 if(!$first_goods_id) $first_goods_id = $gd['goods_id'];
 			?>
@@ -86,11 +86,10 @@
 	</div>
 	<div class="order_serve">
 		<ul>
-			<li class="online_serve"><a href="<?=$merchant_goods['kefu'] ?>">在线客服</a></li>
-			<li class="after_serve"><a href="tel:<?php echo $merchant_goods['mobile']?:$merchant_goods['telphone'] ?>">售后服务</a></li>
+			<li class="online_serve_off" id="zxkf"><a href="javascript:showMEIQIA();">在线客服</a></li>
+			<li class="<?=$merchant->mobile ? 'after_serve_on' : 'after_serve_off' ?>"><a href="tel:<?=$merchant->mobile ?>">售后服务</a></li>
 		</ul>
 	</div>
-	<?php endif;?>
 </div>
 
 <div class="order_info_time">
@@ -143,6 +142,9 @@ function is_cft_over_7ds($cftime){
 <?php endif;?>
 </div>
 <?php include T('inc/order_operation');?>
+
+<?php include T('inc/meiqia');?>
+
 <script type="text/javascript">
 $().ready(function(){
 	$(".btn_refund_order").bind('click', function(){
@@ -150,6 +152,15 @@ $().ready(function(){
 	});
 	$(".btn_rebuy_good").bind('click', function(){
 		window.location.href='<?php echo $first_goods_id ? (U('/item/'.$first_goods_id)) : 'javascript:;'?>';
+	});
+
+	//监听美恰客服加载
+	$(EventBus).on('meiqiaSet', function(event, online){
+		if(online){
+			$("#zxkf").removeClass("online_serve_off").addClass("online_serve_on");
+		}else{
+			$("#zxkf").removeClass("online_serve_on").addClass("online_serve_off");
+		}
 	});
 });
 function return_product(obj) {

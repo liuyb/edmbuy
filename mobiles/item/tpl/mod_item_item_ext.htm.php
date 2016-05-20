@@ -22,6 +22,8 @@
 	</div>
 </div>
 
+<?php include T('inc/meiqia');?>
+
 <script>
 var $mbody;
 var $pullMore;
@@ -41,6 +43,14 @@ $(function(){
 		$(".pro_tab_evaluate").find("div").removeClass("evaluate_on");
 		OBJ.addClass("evaluate_on");
 		loadGoodsComment(1, true, OBJ.attr("data-cat"));
+	});
+	//监听美恰客服加载
+	$(EventBus).on('meiqiaSet', function(event, online){
+		if(online){
+			$("#zxkf").removeClass("item_kefu_off").addClass("item_kefu_on");
+		}else{
+			$("#zxkf").removeClass("item_kefu_on").addClass("item_kefu_off");
+		}
 	});
 });
 //详情、评论TAB页切换
@@ -220,29 +230,7 @@ function setCollectNumber(num){
 	}
 }
 
-(function(m, ei, q, i, a, j, s) {
-    m[a] = m[a] || function() {
-        (m[a].a = m[a].a || []).push(arguments)
-    };
-    j = ei.createElement(q),
-    s = ei.getElementsByTagName(q)[0];
-    j.async = true;
-    j.src = i;
-    s.parentNode.insertBefore(j, s)
-})(window, document, 'script', '//eco-api.meiqia.com/dist/meiqia.js', '_MEIQIA');
-_MEIQIA('entId', '4119');
-_MEIQIA('withoutBtn', true);
-// 在这里开启手动模式
-//_MEIQIA('manualInit', true);
-_MEIQIA('metadata', {
-    name: gUser ? gUser['nickname'] : '', 
-    tel : gUser ? gUser['mobile'] : '',
-    '多米号': gUser ? gUser['uid'] : '', // 自定义字段
-}); 
-_MEIQIA('allSet', function(servability){
-	console.log('ready..'+servability);
-	//_MEIQIA._SHOWPANEL()
-});
+
 
 //菜单开启
 /* $(document.body).on("click", ".p_detail_more", function(){

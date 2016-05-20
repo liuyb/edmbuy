@@ -24,7 +24,7 @@
 </script>
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
-	<div class="fl cursor p_d_t1"><a href='<?=$kefu_link?>' <?php if(''!=$kefu_link&&'javascript:;'!=$kefu_link):?>target="_blank"<?php endif;?> >&nbsp;</a></div>
+	<div class="fl cursor p_d_t1 item_kefu_off" id="zxkf"><a href='javascript:showMEIQIA();'>&nbsp;</a></div>
     <div class="fl cursor p_d_t5" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'"><p></p></div>
 	<div class="fl cursor p_d_t2" id="collect_status" onclick="changeGoodsCollect(this);";><span class="f_num" style='display:none;' id="collect_number"></span></div>
 <?php if (!$item->is_on_sale || $item->is_delete):?>

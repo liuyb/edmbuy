@@ -361,3 +361,6 @@ function escape2Html(str) {
 	var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
 	return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
 }
+//全局事件总线
+var EventBus = new Object();
+

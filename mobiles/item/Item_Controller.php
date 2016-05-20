@@ -153,27 +153,9 @@ HEREDOC;
 				//商家信息
 				$merchant = Merchant::find_one(new Query('uid', $item->merchant_id ? $item->merchant_id : 0));
 				$this->v->assign('merchant', $merchant);
-				$kefu_link = 'javascript:;';
-				if ($merchant->is_exist() && preg_match('/^http(s?):\/\//i', $merchant->kefu)) {
-					$kefu_link = $merchant->kefu;
-					//$kefu_link = 'https://eco-api.meiqia.com/dist/standalone.html?eid=4119';
-					
-					global $user;
-					$kefu_meta = [
-							'name'   => Item_Model::escape_kefu_link($user->nickname),
-							'gender' => $user->sex ? ($user->sex==1?'男':'女') : '未知',
-							'tel'    => $user->mobilephone,
-							'comment'=> '多米号'.$user->uid,
-					];
-					$kefu_link .= '&metadata={';
-					foreach ($kefu_meta AS $k => $v) {
-						$kefu_link .= '"'.$k.'":"'.$v.'",';
-					}
-					$kefu_link = substr($kefu_link, 0, -1);
-					$kefu_link .= '}';
-					
-				}
-				$this->v->assign('kefu_link', $kefu_link);
+				//商家客服
+				$ent_id = Merchant::getMerchantKefu($item->merchant_id);
+				$this->v->assign('ent_id', $ent_id);
 			}
 			//从商品详情页面点击返回链接逻辑
 			$back = $request->get('back');

@@ -15,16 +15,7 @@ class Order_Model extends Model {
      */
     static function getOrderItems($order_id) {
         $order_goods = Order::getOrderItems($order_id);
-        $merchant = null;
-        foreach ($order_goods as $item){
-            if($merchant != null){
-                array_push($merchant['goods'], $item);
-            }else{
-                $merchant = $item;
-                $merchant['goods'] = array($item);
-            }
-        }
-        return $merchant;
+        return $order_goods;
     }
 	
     /**

@@ -33,7 +33,8 @@ return [
       'appkey'       => '34d77bd8a0e085e12791f59cf1ef7136',
       'secretKey'    => '253d402efa6072b779c4dd037f6a5394',
       'createEntUrl' => 'https://eco-api.meiqia.com/platforms/enterprise/new',
-      'entSignUrl'   => 'https://app.meiqia.com/open-signin'  
+      'entSignUrl'   => 'https://app.meiqia.com/open-signin',
+      'edm_ent_id'   => '4119'
   ] 
 ];
  
