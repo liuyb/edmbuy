@@ -9,7 +9,7 @@ var isMeiQiaSet = false;
     j.async = true;
     j.src = i;
     s.parentNode.insertBefore(j, s)
-})(window, document, 'script', '/misc/js/ext/meiqia/meiqia.js', '_MEIQIA');
+})(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
 _MEIQIA('entId', '<?=$ent_id ?>');
 _MEIQIA('withoutBtn', true);
 // 在这里开启手动模式

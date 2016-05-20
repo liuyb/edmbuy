@@ -139,44 +139,7 @@ function getSelectIds(obj) {
     }
     return ids;
 }
-/*function showSucc(text){
- showBootstrapAlert('alert-success', text);
- }
- function showInfo(text){
- showBootstrapAlert('alert-info', text);
- }
- function showWarn(text){
- showBootstrapAlert('alert-warning', text);
- }
- function showError(text){
- showBootstrapAlert('alert-danger', text);
- }
- //显示一个弹出层
- function showBootstrapAlert(cls, text){
- if(!cls || !text){
- return;
- }
- if($("."+cls).is(":visible")){
- $("."+cls).hide();
- }
- var info = $("."+cls);
- topCenterDOM(info);
- info.find("span").last().text(text).fadeIn();
- var st = setTimeout(function(){
- info.fadeOut();
- if(st){
- clearTimeout(st);
- }
- }, 3000);
- }
- //居中显示一个层
- function centerDOM(obj){
- var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
- var scrolltop = $(document).scrollTop();//获取当前窗口距离页面顶部高度
- var objLeft = (screenWidth - obj.width())/2 ;
- var objTop = (screenHeight - obj.height())/2 + scrolltop;
- obj.css({left: objLeft + 'px', top: objTop + 'px','display': 'block'});
- }
+/*
  //中上部显示一个层
  function topCenterDOM(obj){
  var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
@@ -185,6 +148,23 @@ function getSelectIds(obj) {
  var objTop = obj.height() + scrolltop;
  obj.css({left: objLeft + 'px', top: objTop + 'px','display': 'block'});
  }*/
+function showDialog(width, height, content, title){
+	var dialog = $("#pop_dialog");
+	dialog.css({'width' : width, 'height': height});
+	centerDOM(dialog);
+	dialog.find(".title").html(title);
+	dialog.find(".content").html(content);
+	$('.dialog_mask').show();
+	dialog.show();
+}
+
+function centerDOM(obj){
+	 var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
+	 var scrolltop = $(document).scrollTop();//获取当前窗口距离页面顶部高度
+	 var objLeft = (screenWidth - obj.width())/2 ;
+	 var objTop = (screenHeight - obj.height())/2 + scrolltop;
+	 obj.css({left: objLeft + 'px', top: objTop + 'px','display': 'block'});
+}
 //表单验证
 (function ($) {
     $.fn.formValid = function () {

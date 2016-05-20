@@ -23,6 +23,10 @@
                 <span class="store_pay_name">使用期限：<i class="store_right_f"><!--{$year}--></i></span>
             </div>
             <!--{/if}-->
+            
+            <div style="padding:0 0 20px;">
+                <button class="data_btn_edit" style='float:none;width:100px;' onclick="get400Tel();">领取400电话</button>
+            </div>
         </div>
 
         <div id="store_infos" style="margin-top:20px;">
@@ -77,11 +81,23 @@
     </div>
 </div>
 
+<div style="display:none;" id="get400Dom">
+<div style="margin:20px;text-align:center;">
+	<p>扫描下方二维码，领取400电话</p>
+	<p>（免费赠送3个月）</p>
+	<img src="/themes/merchants/img/400phone.png">
+</div>
+</div>
+
 <script>
     $("#edit_detail").click(function(){
         window.location.href="/shop/info";
     })
     function merchantRefund(){
     	alert('请联系客服退款。');
+    }
+    function get400Tel(){
+    	var obj = $("#get400Dom").html();
+    	showDialog(400,500,obj,'领取400电话');
     }
 </script>

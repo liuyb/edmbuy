@@ -1,0 +1,29 @@
+<!--{add_css file="main.css" scope="global"}-->
+<div class="dialog_mask"></div>
+<div id="pop_dialog" class='pop_dialog'>
+	<div class='dialog_tit'>
+		<span style="margin-left:20px;" class="title"></span>
+		<a href="javascript:closeDialog();"><span class='dialog_close'><img src="/themes/merchants/img/bg_close.png"></span></a>
+	</div>
+	<div style="font-size:12px;color:#7d7d7d;margin:10px 20px 5px;height:70%;" class="content">
+	
+	</div>
+	<div class="clear"></div>
+	<div style="margin:30px 0;text-align:center;">
+		<button class="private_btn" onclick="closeDialog();">关闭</button>
+	</div>
+</div>
+
+<script>
+$(".dialog_mask").on('click',function(){
+	closeDialog();
+});
+
+function closeDialog(){
+	var dialog = $("#pop_dialog");
+	dialog.hide();
+	dialog.find(".title").html("");
+	dialog.find(".content").html("");
+	$(".dialog_mask").hide();
+}
+</script>
