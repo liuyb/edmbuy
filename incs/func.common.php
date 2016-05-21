@@ -659,7 +659,7 @@ function footscript()
 	$resjs  = '';
 
 	// Weixin js
-	$resjs .= weixin_js();
+	//$resjs .= weixin_js();
 
 	echo $resjs;
 }

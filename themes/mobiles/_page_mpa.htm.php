@@ -24,6 +24,8 @@
 <?php tplholder('HEAD_JS');?>
 <?php headscript();?>
 <?php include T('inc/common_head');?>
+<?php shareinfo(isset($share_info) ? $share_info : array());?>
+<?php echo weixin_js()?>
 </head>
 <body class="MPA<?php if(isset($extra_css)&&!empty($extra_css)) echo ' '.$extra_css?>"><?php
 
@@ -59,6 +61,5 @@ add_js('m.js',['pos'=>'foot']);
 <?php tplholder('FOOT_JS');?>
 <script>var FST=new Object();FST.autostart=1;FST.uid=parseInt(gUser.uid);</script>
 <script type="text/javascript" src="<?=$contextpath;?>misc/js/fst.min.js"></script>
-<?php shareinfo(isset($share_info) ? $share_info : array());?>
 <?php footscript();?>
 </html>
