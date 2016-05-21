@@ -84,6 +84,11 @@ class Merchant extends StorageNode {
 		return $ret;
 	}
 	
+	static function getNameByMerchantId($user_id) {
+	    $ret = D()->from(self::table())->where("user_id='%d'", $user_id)->select("facename")->result();
+	    return $ret;
+	}
+	
 	static function getMidByAdminUid($admin_uid) {
 		$ret = D()->from(self::table())->where("admin_uid=%d", $admin_uid)->select("merchant_id")->result();
 		return $ret;

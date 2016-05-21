@@ -100,9 +100,6 @@ class Wxpay_Controller extends Controller {
           
           //检查用户资格
           $cUser = Users::load_by_openid($openid);
-          if ($cUser->is_exist()) {
-          	$cUser->check_level();
-          }
           
           //更新订单下所有商品的"订单数"
           Items::updateOrderCntByOrderid($order_id);
@@ -111,12 +108,13 @@ class Wxpay_Controller extends Controller {
           Items::updatePaidNumByOrderid($order_id);
           
           $order = Order::load($order_id);
+          $oldLevel = $cUser->level;
           //当前订单是金牌银牌代理更新
           if($order->order_flag == Order::ORDER_FLAG_AGENT){
               $agent = AgentPayment::getAgentByOrderId($order_id);
               if(AgentPayment::callbackAfterAgentPay($agent, $cUser)){
                   Order::setOrderShippingReceived($order_id);
-                  UserCommision::generatForAgent($order, $cUser, $agent);
+                  UserCommision::generatForAgent($order, $cUser, $agent, $oldLevel);
               }
           }else if($order->order_flag == Order::ORDER_FLAG_MERCHANT){
               if(Merchant::setPaymentIfIsMerchantOrder($order_id, $pay_log['order_amount'])){
@@ -124,6 +122,9 @@ class Wxpay_Controller extends Controller {
                   UserCommision::generatForMerchant($order, $cUser);
               }
           }else{
+              if ($cUser->is_exist()) {
+                  $cUser->check_level();
+              }
               //普通商品交易设置佣金计算
               UserCommision::generate($order);
           }

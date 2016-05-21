@@ -110,7 +110,7 @@ class User_Model extends Model
     {
         $result = [];
         $dbDrver = D();
-        $sql = "select users.user_id,users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
+        $sql = "select users.user_id,users.level,users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
 			  from shp_users users RIGHT JOIN
 			  shp_order_info info on info.user_id=users.user_id
 			  where info.order_id=" . $order_id;
@@ -123,7 +123,9 @@ class User_Model extends Model
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
         $ismBusiness = null;
         if($userInfo['user_id']){
-            $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
+            if(!$userInfo['level']){
+                $ismBusiness = self::CheckmBusiness($userInfo['user_id']);
+            }
         }
         /**
          * 获取用户的佣金

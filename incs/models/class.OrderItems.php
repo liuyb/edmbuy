@@ -53,6 +53,23 @@ HERESQL;
 		}
 		return false;
 	}
+	
+	/**
+	 * 根据订单拿到当前订单商品名称拼装数据。
+	 * @param unknown $order_id
+	 */
+	static function getGoodsNameByOrder($order_id){
+	    $goods_desc = '';
+	    $sql = "select goods_name from shp_order_goods where order_id = %d";
+	    $names = D()->query($sql, $order_id)->fetch_column();
+	    foreach ($names as $n){
+	        $goods_desc .= $n . ',';
+	    }
+	    if($goods_desc){
+            $goods_desc = substr($goods_desc, 0, -1);
+	    }
+        return $goods_desc;        
+	}
 }
  
 /*----- END FILE: class.OrderItems.php -----*/

@@ -681,12 +681,12 @@ class Trade_Controller extends MobileController {
       }
 
       // 配送信息
-      $shipping_id = 1; //TODO 先不管配送方式，默认1先
+      /* $shipping_id = 1; //TODO 先不管配送方式，默认1先
       $exShip = Shipping::load($shipping_id);
       if (!$exShip->is_exist()) {
         $ret['msg'] = '该配送方式暂不可用，请重新选择';
         $response->sendJSON($ret);
-      }
+      } */
 
       // 购物车商品列表
       $cart_rids_arr = explode(',', $cart_rids_str);
@@ -718,8 +718,8 @@ class Trade_Controller extends MobileController {
       $newOrder->best_time    = $exAddr->best_time;
       $newOrder->sign_building= $exAddr->sign_building;
       $newOrder->postscript   = $order_msg;
-      $newOrder->shipping_id  = $exShip->shipping_id;
-      $newOrder->shipping_name = $exShip->shipping_name;
+      //$newOrder->shipping_id  = $exShip->shipping_id;
+      //$newOrder->shipping_name = $exShip->shipping_name;
       $newOrder->pay_id       = $exPay->pay_id;
       $newOrder->pay_name     = $exPay->pay_name;
       $newOrder->how_oos      = Fn::oos_status(OOS_WAIT);

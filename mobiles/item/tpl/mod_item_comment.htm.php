@@ -259,7 +259,6 @@ function submitComment(){
 	};
 	$(".comm_fb_p").attr("data-lock", "Y").css("opacity",0.2);
 	F.post('/item/comment', data, function(ret){
-		console.log(ret);
 		if(ret == 'SUCC'){
 			boxalert('谢谢你的评论！');
     		window.location.href='/trade/order/record?status=finished';

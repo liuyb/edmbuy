@@ -321,6 +321,9 @@ class Order_Controller extends MerchantController {
                 $ship_id = intval(isset($ship_ids[$i]) ? $ship_ids[$i] : 0);
                 $ship_name = isset($ship_names[$i]) ? $ship_names[$i] : '';
                 $invoice_no = isset($invoice_nos[$i]) ? $invoice_nos[$i] : '';
+                if(!$invoice_no || !$ship_id){
+                    continue;
+                }
                 $order = new Order();
                 $order->order_id = $order_id;
                 $order->shipping_id = $ship_id;
@@ -329,10 +332,32 @@ class Order_Controller extends MerchantController {
                 $order->shipping_status = SS_SHIPPED;
                 $order->shipping_time = simphp_gmtime();
                 $order->save(Storage::SAVE_UPDATE);
+                
+                self::shippingRemind($order_id, $ship_name, $invoice_no);
             }
             $ret = ['result' => 'SUCC'];
         }
         $response->sendJSON($ret);
+    }
+    
+    /**
+     * 提醒消费者已发货
+     * @param unknown $order_id
+     * @param unknown $shipping_name
+     * @param unknown $invoice_no
+     */
+    private function shippingRemind($order_id, $shipping_name, $invoice_no){
+        $od = Order::load($order_id);
+        $user_id = $od->user_id;
+        $user = Users::load($user_id);
+        $extra = [
+            'order_sn' => $od->order_sn,
+            'seller' => $GLOBALS['user']->facename,
+            'shipping_name' => $shipping_name,
+            'shipping_no' => $invoice_no,
+            'sihpping_time' => date('Y-m-d H:i:s', time())
+        ];
+        WxTplMsg::order_shipping($user->openid, "客户您好，您的订单已经发货，请注意查收", "订单详情况请点击此处，谢谢！", U("order/$order_id/detail", '', true), $extra);
     }
     
     /**

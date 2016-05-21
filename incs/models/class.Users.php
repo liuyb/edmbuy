@@ -808,6 +808,8 @@ class Users extends StorageNode {
 			$upUser = new self($this->id);
 			$upUser->level = self::USER_LEVEL_1;
 			$upUser->save(Storage::SAVE_UPDATE);
+			
+			WxTplMsg::be_member($this->openid, "尊敬的{$this->nickname}, 恭喜你成功升级为米商", "点击查看米商计划", U("riceplan",'',true), ["uid"=>$this->uid,"valid_date"=>'永久有效']);
 		}
 		return 0;
 	}

@@ -22,7 +22,7 @@
     </div>
     <div class="my_name_info">
         <div>购<i class="width_i"></i>买<i class="width_i"></i>人：<?= $userInfo['nick_name'] ?>
-        <span class="name_info_p" style="font-size: 14px;">（<?= $ismBusiness ?>）</span>
+        <span class="name_info_p" style="font-size: 14px;"><?php if ($ismBusiness):?>（<?= $ismBusiness ?>）<?php endif;?></span>
         </div>
         <div>人脉层级：<?= $leve[$level] ?></div>
         <div style="padding-bottom:15px;">订单金额：￥<?= $userInfo['money_paid'] ?></div>

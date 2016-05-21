@@ -874,7 +874,7 @@ function form_order_script($id = 'frm_order_sn') {
   	  	  callback('CANCEL');
   	  	}
   	  	else {
-  	  	  F.post('{$chstatus_uri}',{"order_id":order_id,"status_to":{$ps_fail}},function(){});
+  	  	  F.post('{$chstatus_uri}',{"order_id":order_id,"status_to":{$ps_cancel}},function(){});
   	  	  callback('FAIL');
   	  	}
   		}

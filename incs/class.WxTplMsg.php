@@ -199,7 +199,7 @@ class WxTplMsg {
 			$tplData->tplid = 'rR6CjjrrTJRKSHJdi-RIffoylTkhDUts1SvNWr4vaUQ'; //"益多米"账号
 		}
 		else {
-			$tplData->tplid = 'mgonCekQjE4N6rR-liPFhLKhjIEr_F6MQLHIquYJFJg'; //"多米测"账号
+			$tplData->tplid = 'mgonCekQjE4N6rR-liPFhLKhjIEr_F6MQLHIquYJFJg'; //"多米测"账号 
 		}
 		$tplData->tplurl   = $url;
 		$tplData->first    = self::packdata($first."\n", '#173177');
@@ -209,7 +209,6 @@ class WxTplMsg {
 		$tplData->keyword2 = self::packdata($extra['order_amount']);
 		$tplData->keyword3 = self::packdata($extra['share_amount']);
 		$tplData->keyword4 = self::packdata($extra['order_time']);
-		
 		return self::send($openid, $tplData);
 	}
 	
@@ -368,6 +367,230 @@ class WxTplMsg {
 	    $tplData->keyword3   = self::packdata($extra['refund_sn']);
 	    $tplData->keyword4   = self::packdata($extra['refund_money']);
 	    $tplData->keyword5   = self::packdata($extra['reason']);
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 成为会员提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 * keyword1 会员编号
+	 * keyword2 有效期
+	 */
+	static function be_member($openid, $first, $remark, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'GqaGlGGfO4E3mLk9y8YGBVvpf_65Zs__cgxUW_GdE4E'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'j3nZmDeHEP7SztIN8fC-jfeiM3sb4LX7KGDl5peYE4Y'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['uid']);
+	    $tplData->keyword2 = self::packdata($extra['valid_date']);
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 返利提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 * keyword1 商品名称
+	 * keyword2 返利金额
+	 * keyword3 支付金额
+	 * keyword4 支付时间
+	 */
+	static function fanli($openid, $first, $remark, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'I2VsT3BgZjfpr70RDN-Yc7ESHbtB_ZmJLBqTUxKu0W4'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'hD9Qr4JNfKMr7R93D808zw-_hAkZ6b8vpAIMXYOsHqw'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['goods_name']);
+	    $tplData->keyword2 = self::packdata($extra['fanli']);
+	    $tplData->keyword3 = self::packdata($extra['paid_money']);
+	    $tplData->keyword4 = self::packdata($extra['pay_time']);
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 会员升级提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 *  姓名：{{keyword1.DATA}}
+                现在等级：{{keyword2.DATA}}
+                升级等级：{{keyword3.DATA}}
+                通过时间：{{keyword4.DATA}}
+	 */
+	static function memberUpgrade($openid, $first, $remark, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'Y4ohSj0KMTr0bMq4bSHVbKDGfRxOfsD6ptEZKLf4HVs'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = '_PDdLZeUGcKsbYIA8VhIzB-ofW93urWVaA4_z3kUmVQ'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['nickname']);
+	    $tplData->keyword2 = self::packdata($extra['oldLevel']);
+	    $tplData->keyword3 = self::packdata($extra['newLevel']);
+	    $tplData->keyword4 = self::packdata($extra['time']);
+	
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 商家入驻提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 *  入驻商家：{{keyword1.DATA}}
+                审核：{{keyword2.DATA}}
+	 */
+	static function settleMsg($openid, $first, $remark, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'WWfmkrCy0vqnklvdQj7afx-Ob8HiUC3nBEGq21DZfL4'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'ZE1a-OhpLL003uiE4ujB8BjJCuxRPoTyBqKfekdto-I'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['facename']);
+	    $tplData->keyword2 = self::packdata($extra['check_state']);
+	
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 新增订单提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 * 订单时间：{{keyword1.DATA}}
+              订单类型：{{keyword2.DATA}}
+	 */
+	static function new_order($openid, $first, $remark, $url, Array $extra)
+	{
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = '3Rt18CIfigH8JtcEFSIbKiVcyZezcDqTIRStWGCcsWo'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'c5JQgMcByRBJMB4uBC3jI_q2W3sT7_glXdJe8_s-z1Y'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['time']);
+	    $tplData->keyword2 = self::packdata($extra['type']);
+	
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 订单发货提醒
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 *  订单编号：{{keyword1.DATA}}
+                卖家：{{keyword2.DATA}}
+                快递公司：{{keyword3.DATA}}
+                快递单号：{{keyword4.DATA}}
+                发货时间：{{keyword5.DATA}}  
+	 */
+	static function order_shipping($openid, $first, $remark, $url, Array $extra){
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'hRwNoONfC_lHiyQhDQ7ARZeLZEYPH9ZgFXlPRGBeDE8'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'LffKNZ-zey4hHoddWt98OyLAlqZLqbHVWbKxfOGzIBE'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['order_sn']);
+	    $tplData->keyword2 = self::packdata($extra['seller']);
+	    $tplData->keyword3 = self::packdata($extra['shipping_name']);
+	    $tplData->keyword4 = self::packdata($extra['shipping_no']);
+	    $tplData->keyword5 = self::packdata($extra['sihpping_time']);
+	    
+	    return self::send($openid, $tplData);
+	}
+	
+	/**
+	 * 订单自动确认收货
+	 * @param unknown $openid
+	 * @param unknown $first
+	 * @param unknown $remark
+	 * @param unknown $url
+	 * @param array $extra
+	 *  订单编号：{{keyword1.DATA}}
+                订单商品：{{keyword2.DATA}}
+                发货时间：{{keyword3.DATA}}
+                自动确认收货时间：{{keyword4.DATA}}
+	 */
+	static function order_auto_receive($openid, $first, $remark, $url, Array $extra){
+	    $tplData = new WxTplData();
+	    //固定部分
+	    if (!self::$is_debug) {
+	        $tplData->tplid = 'QYwawLj8P8SFvE1g_Fw0CpcBW_BaRaQVyU-TNiw-S8o'; //"益多米"账号
+	    }
+	    else {
+	        $tplData->tplid = 'u7DK16nP_drqUs_kWCMNFSuwKB2ID5Gvut3QGSlJbzQ'; //"多米测"账号
+	    }
+	    $tplData->tplurl   = $url;
+	    $tplData->first    = self::packdata($first."\n", '#173177');
+	    $tplData->remark   = self::packdata("\n".$remark);
+	    //额外部分
+	    $tplData->keyword1 = self::packdata($extra['order_sn']);
+	    $tplData->keyword2 = self::packdata($extra['item_desc']);
+	    $tplData->keyword3 = self::packdata($extra['sihpping_time']);
+	    $tplData->keyword4 = self::packdata($extra['receive_time']);
+	     
 	    return self::send($openid, $tplData);
 	}
 }
