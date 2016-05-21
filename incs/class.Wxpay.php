@@ -99,7 +99,11 @@ class Wxpay {
       $input->SetOpenid($openId);
       
       $order_table = Order::table();
-      D()->update($order_table, ['pay_status'=>PS_PAYING], ['order_id'=>$order['order_id']]); //支付中
+      $order_pay_status = D()->from($order_table)->where(['order_id'=>$order['order_id']])->select('pay_status')->result();
+      if (PS_UNPAYED!=$order_pay_status) {
+      	SystemLog::local_log('wxpay_order_debug', 'action=unifiedOrder,order_sn='.$order['order_sn'].',pay_status='.$order_pay_status);
+      }
+      D()->query("UPDATE {$order_table} SET pay_status=%d WHERE order_id=%d AND pay_status=%d", PS_PAYING, $order['order_id'], PS_UNPAYED); //支付中
       
       $order_wx = WxPayApi::unifiedOrder($input);
       
@@ -219,6 +223,27 @@ class Wxpay {
           $ret['msg'] = $wxpay_ret['return_msg'];
       }
       return $ret;
+  }
+  
+  /**
+   * 根据微信订单号查询订单是否有效
+   * @param string $transaction_id
+   * @return boolean
+   */
+  public static function orderQuery($transaction_id)
+  {
+  	$input = new WxPayOrderQuery();
+  	$input->SetTransaction_id($transaction_id);
+  	$result = WxPayApi::orderQuery($input);
+  	Log::DEBUG("query:" . json_encode($result));
+  	if(array_key_exists("return_code", $result)
+  			&& array_key_exists("result_code", $result)
+  			&& $result["return_code"] == "SUCCESS"
+  			&& $result["result_code"] == "SUCCESS")
+  	{
+  		return true;
+  	}
+  	return false;
   }
   
 }
