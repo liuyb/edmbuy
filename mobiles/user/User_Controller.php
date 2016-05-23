@@ -69,11 +69,15 @@ class User_Controller extends MobileController
     public function index(Request $request, Response $response)
     {
         $this->v->set_tplname('mod_user_index');
+        //$this->v->set_page_render_mode(View::RENDER_MODE_HASH);
         $is_account_logined  = Users::is_account_logined();
-        if(1 || $request->is_hashreq()){
-            $currentUser = Users::load($GLOBALS['user']->uid);
+        if(1||$request->is_hashreq()){
+            //$currentUser = Users::load($GLOBALS['user']->uid);
+            $currentUser = $GLOBALS['user'];
             $agent = AgentPayment::getAgentByUserId($currentUser->uid, $currentUser->level);
+            $is_agent = Users::isAgent($currentUser->level);
             $this->v->assign('agent', $agent);
+            $this->v->assign('is_agent', $is_agent);
             
             $collect_shop_count = 0;
             $collect_goods_count= 0;
@@ -90,7 +94,8 @@ class User_Controller extends MobileController
             
             $this->v->assign('currentUser', $currentUser);
             if ($currentUser->parentid) {
-                $parentUser = User_Model::findUserInfoById($currentUser->parentid);
+                //$parentUser = User_Model::findUserInfoById($currentUser->parentid);
+                $parentUser = Users::load($currentUser->parentid);
                 $this->v->assign("parentUser", $parentUser);
             }
         }
