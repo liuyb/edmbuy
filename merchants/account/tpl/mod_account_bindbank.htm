@@ -58,7 +58,7 @@
 
         <div class="edit_common_div">
             <span class="edit_left_common" style="letter-spacing:4px;" >手机号码：</span>
-            <input type="text" value="" id="mobile" placeholder="请输入银行预留手机号" required data-type="mobile">
+            <input type="text" value="<!--{$bank_detail.bank_phone}-->" id="mobile" placeholder="请输入银行预留手机号" required data-type="mobile">
         </div>
         <div class="edit_common_div">
             <span class="edit_left_common"><i style="letter-spacing:11px;">校验码</i>：</span>
@@ -123,8 +123,13 @@
             }
         });
     });
-
+	var time;
     $("#get_code").click(function(){
+    	var _this = $(this);
+    	//仍在倒数中
+        if(_this.hasClass("sending")){
+            return false;
+        }
         var mobile = $("#mobile").val();
         if(!isMobile(mobile)){
             showMsg("手机号码格式错误!");
@@ -135,8 +140,27 @@
         }
         var data = {mobile:mobile};
         F.postWithLoading('/account/merchant/getcode', data, function (data) {
-                 showMsg(data.retmsg);
+        	showMsg(data.retmsg);
+        	if(data.status == 1){
+        		_this.addClass('sending').attr("disabled","disabled");
+        		refresh();
+                time = setInterval("refresh();", 1000);
+        	}
         });
     })
 
+    var num = 60;
+    var count = num;
+    function refresh(){
+	    num = num - 1;
+	    var msg = num + "秒";
+	    $("#get_code").html(msg);
+	    if(num == 0){
+	        num = count;
+	        $("#get_code").removeAttr("disabled");
+	        $("#get_code").removeClass("sending").html("重新获取");
+	        clearInterval(time);
+	        return false;
+	    }
+	}
 </script>

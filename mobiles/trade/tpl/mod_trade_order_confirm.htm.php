@@ -64,9 +64,9 @@
         <div class="gnum cart-gnum">
           <span class="gnum-show">x<?=$g['goods_number']?></span>
         </div>
+        <div style="margin-top:5px;font-size:12px;">运费：<?=$g['shipping_fee'] ?></div>
       </div>
     </li>
-    <li class="it del_bottom" style="float:right;"><div style="margin-top:5px;font-size:12px;">运费：<?=$g['shipping_fee'] ?></div></li>
   <?php endforeach;?>
     <li class="it">
       <div><textarea name="remark" placeholder="有话跟商家说..." class="order-message" id="order-message"></textarea></div>

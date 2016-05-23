@@ -184,7 +184,7 @@ $(function(){
 <div class="iance_list_top">
 	<img src="<?=$merchant->logo ?>" class="l_top_img">
 	<div class="l_top_infos">
-		<p class="t_infos_nmae" style="margin-top:13px;"><?=$merchant->facename ?></p>
+		<p class="t_infos_nmae" style="margin-top:13px;"><?=mb_substr($merchant->facename, 0,10,'UTF-8') ?></p>
 		<!-- <p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p> -->
 	</div>
 	<button class="join_top_btn" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'">进店逛逛  </button>

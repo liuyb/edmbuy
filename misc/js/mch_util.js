@@ -152,8 +152,11 @@ function showDialog(width, height, content, title){
 	var dialog = $("#pop_dialog");
 	dialog.css({'width' : width, 'height': height});
 	centerDOM(dialog);
-	dialog.find(".title").html(title);
-	dialog.find(".content").html(content);
+	var $title = dialog.find(".title");
+	var $content = dialog.find(".content");
+	$content.height(height - (40+90));//title+button区
+	$title.html(title);
+	$content.html(content);
 	$('.dialog_mask').show();
 	dialog.show();
 }

@@ -201,7 +201,7 @@ class UserCommision extends StorageNode {
 	        return;
 	    }
 	    $cUser = Users::load($merchant->user_id);
-	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop', true),
+	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop','', true),
 	                       array('time' => date('Y-m-d H:i:s', $exOrder->pay_time), 'type' => $item_desc));
 	}
 	
@@ -259,7 +259,7 @@ class UserCommision extends StorageNode {
 	        return false;
 	    }
 	    WxTplMsg::memberUpgrade($cUser->openid, "恭喜您，获得多米分销代理资格，您可以邀请好友成为代理赚取佣金，也可以邀请商家入驻开店赚取佣金",
-	        "点击查看“代理计划”", U('/', true), array('nickname' => $cUser->nickname, 'oldLevel' => Users::displayUserLevel($oldLevel),
+	        "点击查看“代理计划”", U('/', '', true), array('nickname' => $cUser->nickname, 'oldLevel' => Users::displayUserLevel($oldLevel),
 	            'newLevel' => Users::displayUserLevel($cUser->level), 'time' => date('Y-m-d H:i:s', time())
 	        ));
 	    // 1级
@@ -305,7 +305,7 @@ class UserCommision extends StorageNode {
 	        return false;
 	    }
 	    WxTplMsg::settleMsg($cUser->openid, "恭喜您，已成功开通多米分销店铺",
-	        "点击进入“我的店铺”", U('distribution/shop', true), array('facename' => Merchant::getNameByMerchantId($cUser->uid),
+	        "点击进入“我的店铺”", U('distribution/shop', '', true), array('facename' => Merchant::getNameByMerchantId($cUser->uid),
 	                       'check_state' => "成功入驻（您可以电脑端登录益多米商家管理中心，管理您的店铺。）"));
 	    // 1级
 	    $parent_level= 1;

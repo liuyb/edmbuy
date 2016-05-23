@@ -125,25 +125,21 @@ class Account_Model extends Model
         $data['merchant_id'] = $GLOBALS['user']->uid;
         //先校验用户受否已经绑定过银行卡
 
-        $tablename = "`shp_user_bank`";
+        $tablename = "`shp_merchant_bank`";
         if ($rid > 0) {
             $where['rid'] = $rid;
-            D()->update($tablename, $data, $where);
+            D()->update($tablename, $data, $where, 'IGNORE');
             return 1;
         }
-        $sql = "select user_id from shp_merchant where merchant_id ='{$data['merchant_id']}'";
-        $user_id = D()->query($sql)->result();
-        $data['user_id'] = $user_id;
-        $data['bank_distict'] = "";
         $data['timeline'] = time();
-        D()->insert($tablename,$data);
+        D()->insert($tablename,$data, false, 'IGNORE');
         return 2;
     }
 
     static function checkBank()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select count(1) from shp_user_bank where merchant_id = '{$merchant_id}'";
+        $sql = "select count(1) from shp_merchant_bank where merchant_id = '{$merchant_id}'";
         return D()->query($sql)->result();
     }
 
@@ -153,7 +149,7 @@ class Account_Model extends Model
     static function getBindCard()
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select * from shp_user_bank WHERE merchant_id ='{$merchant_id}'";
+        $sql = "select * from shp_merchant_bank WHERE merchant_id ='{$merchant_id}'";
         return D()->query($sql)->fetch_array_all();
     }
 
@@ -164,7 +160,7 @@ class Account_Model extends Model
     static function getBankDetail($rid)
     {
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "select * from shp_user_bank WHERE merchant_id ='{$merchant_id}' AND rid = %d";
+        $sql = "select * from shp_merchant_bank WHERE merchant_id ='{$merchant_id}' AND rid = %d";
         return D()->query($sql, $rid)->get_one();
     }
 

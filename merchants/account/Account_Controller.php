@@ -141,6 +141,7 @@ class Account_Controller extends MerchantController
             $bank_detail['bank_province'] = "";
             $bank_detail['bank_city'] = "";
             $bank_detail['bank_code'] = "";
+            $bank_detail['bank_phone'] = "";
             $bank_detail['bank_name'] = "";
             $this->v->assign('province_list', Order::get_regions(1, 1));
             $this->v->assign('bank_detail', $bank_detail);

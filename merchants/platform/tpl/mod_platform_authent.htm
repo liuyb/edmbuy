@@ -53,7 +53,7 @@
                                 	<!--{if $merchant->verify_fail_msg}-->
                                 	<a href="javascript:showRefuse('<!--{$merchant->verify_fail_msg}-->');">拒绝原因</a>
                                 	&nbsp;&nbsp;
-                                	<a href="javascript:reFill();">重新填写</a>
+                                	<a href="javascript:reFill();">重新提交</a>
                                 	<!--{/if}-->
                                 <!--{else}-->
                                 	<!-- 待审核 -->
@@ -68,15 +68,7 @@
 </div>
 <script>
 	function showRefuse(msg){
-		javascript:layer.msg(msg, {time: 0,
-			btn: ['关闭','重新填写'],
-			yes: function(){
-				layer.closeAll(); 
-		    },
-		    btn2: function(){
-		    	reFill();
-		    }
-		});
+		showDialog(400,400,msg,'审核拒绝原因');
 	}
 	function reFill(){
 		window.location.href='/platform/fill/in?action=refill';
