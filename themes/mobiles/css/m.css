@@ -6750,3 +6750,22 @@ td.cash_td2 img {
 	margin:6px;	
 }
 /*2016-05-18 推广计划*/
+
+.edmbuy_button {
+	width: 90px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.primary_btn{
+	background: #f65d00;
+    color: #fff;
+    border: 1px solid #f65d00;
+}
+
+.second_btn{
+	background: #fff;
+    border: 1px solid #f65d00;
+    color: #f65d00;
+}
