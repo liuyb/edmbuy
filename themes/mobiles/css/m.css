@@ -5259,9 +5259,6 @@ td.cash_td2 img {
   height:300px;
   display:none;
   z-index:50000;
-  top:10%;
-  margin-left:50%;
-  left:-115px;
   background:#fff;
   border-radius:4px;
 }

@@ -163,7 +163,8 @@ class UserCommision extends StorageNode {
 	        list($share_amount, $remark) = self::buildMsgWhenIsMiKe($parent, $uc->commision, $remark);
 	        $extra['share_amount'] = $share_amount;
 	        $url    = U('user/commission',['user_id'=>$parent->uid, 'order_id'=>$order_id, 'level'=>1],true);
-	        WxTplMsg::sharecommision_succ($parent->openid, sprintf($first, '一'), $remark, $url, $extra);
+	        //WxTplMsg::sharecommision_succ($parent->openid, sprintf($first, '一'), $remark, $url, $extra);
+	        self::shareCommision($parent, $first, $remark, $url, $extra, $uc->commision);
 	        //2级
 	        $parent_level = 2;
 	        if($parent->parentid){
@@ -172,7 +173,8 @@ class UserCommision extends StorageNode {
 	            list($share_amount, $remark) = self::buildMsgWhenIsMiKe($parent2, $uc->commision, $remark);
 	            $extra['share_amount'] = $share_amount;
 	            $url    = U('user/commission',['user_id'=>$parent2->uid, 'order_id'=>$order_id, 'level'=>2],true);
-	            WxTplMsg::sharecommision_succ($parent2->openid, sprintf($first, '二'), $remark, $url, $extra);
+	            //WxTplMsg::sharecommision_succ($parent2->openid, sprintf($first, '二'), $remark, $url, $extra);
+	            self::shareCommision($parent2, $first, $remark, $url, $extra, $uc->commision);
 	            //3级
 	            $parent_level = 3;
 	            if($parent2->parentid){
@@ -181,12 +183,19 @@ class UserCommision extends StorageNode {
 	                list($share_amount, $remark) = self::buildMsgWhenIsMiKe($parent3, $uc->commision, $remark);
 	                $extra['share_amount'] = $share_amount;
 	                $url    = U('user/commission',['user_id'=>$parent3->uid, 'order_id'=>$order_id, 'level'=>3],true);
-	                WxTplMsg::sharecommision_succ($parent3->openid, sprintf($first, '三'), $remark, $url, $extra);
+	                //WxTplMsg::sharecommision_succ($parent3->openid, sprintf($first, '三'), $remark, $url, $extra);
+	                self::shareCommision($parent3, $first, $remark, $url, $extra, $uc->commision);
 	            }
 	        }
 	         
 	    }
 	    
+	}
+	
+	private static function shareCommision($parent, $first, $remark, $url, $extra, $commision){
+	    if($commision > 0){
+    	    WxTplMsg::sharecommision_succ($parent->openid, sprintf($first, '三'), $remark, $url, $extra);
+	    }
 	}
 	
 	/**
@@ -243,7 +252,10 @@ class UserCommision extends StorageNode {
 	            if(!Users::isAgent($invite_user->level)){
 	                $extra['share_amount'] .= "（你还不是代理，没有产生佣金）";
 	            }
-	            WxTplMsg::sharecommision_succ($invite_user->openid, "您推荐的商家，卖出了一笔订单", "点击进入“我的钱包”", U("user/my/wallet",'',true), $extra);
+	            //佣金大于0 或者 推荐人还不是代理时 提醒
+	            if($commision > 0 || !Users::isAgent($invite_user->level)){
+    	            WxTplMsg::sharecommision_succ($invite_user->openid, "您推荐的商家（".$merchant->facename."），卖出了一笔订单", "点击进入“我的钱包”", U("user/my/wallet",'',true), $extra);
+	            }
 	        }
 	    }
 	}
@@ -385,14 +397,15 @@ class UserCommision extends StorageNode {
         $remark = '点击查看详情';
         $url    = U('user/commission',['user_id'=>$cUser->uid, 'order_id'=>$exOrder->order_id, 'level'=>$parent_level],true);
         $order_upart = $buyer->uid . ',' . $buyer->nickname;
+        $notAgentCommision = 0;
         if(!Users::isAgent($cUser->level)){
             //不是代理的时候 以金牌代理为准 算出一个佣金给用户提醒用。
             $radio = UserCommision::$share_ratio_gold_merchant;
             if(UserCommision::COMMISSION_TYPE_DL == $type){
                 $radio = UserCommision::$share_ratio_agent;
             }
-            $comm = $exOrder->commision * $radio[$parent_level];
-            $extra['share_amount'] = $comm."元（你还不是代理，拿不到这笔佣金）";
+            $notAgentCommision = $exOrder->commision * $radio[$parent_level];
+            $extra['share_amount'] = $notAgentCommision."元（你还不是代理，拿不到这笔佣金）";
             $remark = '点击进入，了解如何成为代理';
             //这里需要一个代理连接
         }
@@ -401,7 +414,9 @@ class UserCommision extends StorageNode {
 	    }else if(UserCommision::COMMISSION_TYPE_RZ == $type){
 	        $first  = '您的%s级用户('.$order_upart.')成功入驻多米分销店铺';
 	    }
-	    WxTplMsg::sharecommision_succ($cUser->openid, sprintf($first, self::getTextByNum($parent_level)), $remark, $url, $extra);
+	    if($commision > 0 || $notAgentCommision > 0){
+    	    WxTplMsg::sharecommision_succ($cUser->openid, sprintf($first, self::getTextByNum($parent_level)), $remark, $url, $extra);
+	    }
 	}
 	
 	/**
