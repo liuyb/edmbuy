@@ -28,7 +28,7 @@
         <div style="padding-bottom:15px;">订单金额：￥<?=$userInfo['money_paid'] ?></div>
     </div>
     <div class="get_broke">
-        <span>获得佣金：￥<?=$userInfo['commision'] ?></span>
+        <span>获得佣金：￥<?=$commision ?></span>
         <span class="ck_broke"><a href="<?php echo U('user/income/detail','type=-1&state=0')?>">查看佣金明细</a></span>
     </div>
 
@@ -84,7 +84,7 @@
 <script>
     $(".my_income_btnc .btnc_share").click(function () {
         //$('#cover-wxtips').show();
-        history.back();
+    	goBack('<?php echo U("user") ?>');
     });
     $(".my_income_btnc .btnc_plan").click(function () {
         window.location = '/riceplan';

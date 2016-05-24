@@ -130,7 +130,7 @@ elseif (2==$type) { //结算给供应商统计
 	$from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantOrderDetail($from_time, $to_time);
@@ -140,12 +140,12 @@ elseif (2==$type) { //结算给供应商统计
 		$totalCommision    = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_LN;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
 			$totalOrderAmount += $it['money_paid'];
 			$totalIncomePrice += $it['income_price'];
 			$totalCommision   += $it['commision'];
 		}
-		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
 	}
 	
 }
@@ -270,7 +270,7 @@ WHERE oa.`merchant_ids`='%s' AND oa.`pay_status`=2 AND oa.`is_separate`=0
 		if ($to_time) {
 			$where .= " AND o.`pay_time`<=".$to_time;
 		}
-		$sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`
+		$sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no` 
 FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id
 WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
 ORDER BY merchant_id DESC, order_id ASC";

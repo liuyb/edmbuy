@@ -291,7 +291,7 @@ body { min-width: 1200px;}
   	width: 100%;
   	height: 100%;
   	z-index: 3000;
-	background: url(../img/black.png) no-repeat;
+	background: url(../img/black.png);
 }
 div .alert {
 	position: absolute;

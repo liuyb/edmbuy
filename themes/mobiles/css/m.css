@@ -3360,7 +3360,7 @@ td.cash_td2 img {
 }
 .head_r img{
 	width:50px;
-	heifht:50px;
+	height:50px;
 }
 .person_head_comm{
 	cursor: pointer;
@@ -4372,7 +4372,7 @@ td.cash_td2 img {
 	position:relative;
 }
 .e_info_d{
-	border-top:1px solid #ccc;
+	border-top:1px solid #e6e6e6;
 }
 .eval_name{
 	position:absolute;
@@ -4409,13 +4409,17 @@ td.cash_td2 img {
   	height: 50px;
 }
 .idea_img{
-	margin:10px 0 80px;
+	margin:10px 0 70px;
 }
 .eval_reply{
 	margin:0 5px;
-	background:#efefef;
+	background:#f1f1f1;
 	padding:5px;
 	border-radius:4px;
+}
+.comment_container{
+	border-bottom:1px solid #e6e6e6;
+	padding-bottom:10px;
 }
 .shop_remm{
 	padding:5px 5px 0;

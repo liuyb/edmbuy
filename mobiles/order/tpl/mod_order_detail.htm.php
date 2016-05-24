@@ -9,7 +9,7 @@
 <div class="header">
 	订单详情
 <?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
-<a href="javascript:history.back();" class="back"></a>
+<a href="javascript:goBack('<?php echo U("user") ?>');" class="back"></a>
 <a href="/user" class="back_r"></a>
 <?php endif;?>
 </div>

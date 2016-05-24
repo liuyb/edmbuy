@@ -822,11 +822,15 @@
 	window.cartact = cartact;
 }
 //回退的处理方式 增加直接进入页面回退失效的处理
-;function goBack(){
+;function goBack(_backurl){
 	if(history.length > 1){
 		history.back();
 	}else{
-		window.location.href = '/';
+		if(_backurl){
+			window.location.href = _backurl;
+		}else{
+			window.location.href = '/';
+		}
 	}
 };
 /**
