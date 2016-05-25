@@ -128,7 +128,7 @@
 </div>
 
 
-<a href="javascript:;"><div class="mask"></div></a>
+<a href="javascript:;"><div class="mask" id="shopQrMask"></div></a>
 
 <!-- 二维码 -->
 <script id="showQrCode" type="text/html">
@@ -221,13 +221,15 @@ $(function(){
 	}
 
 	$(document).on("click",'.two_code',function(){
-		$(".mask").show();
-		$(".store_wx").show();
+		$("#shopQrMask").show();
+		var qrdom = $(".store_wx");
+		centerDOM(qrdom);
+		qrdom.show();
 	});
 
 	//关闭
-	$(document).on("click",".mask,.store_wx_colse",function(){
-		$(".mask").hide();
+	$(document).on("click","#shopQrMask,.store_wx_colse",function(){
+		$("#shopQrMask").hide();
 		$(".store_wx").hide();
 	})
 </script>

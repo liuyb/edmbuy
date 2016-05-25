@@ -71,7 +71,7 @@
 			<img src="/themes/mobiles/img/sh3.png">
 			<span class="shipedCount"></span>
 		</li>
-		<li onclick="_link('<?php echo U('trade/order/record?status=finished') ?>')"><img src="/themes/mobiles/img/sh4.png"></li>
+		<li onclick="_link('<?php echo U('trade/order/record?status=all') ?>')"><img src="/themes/mobiles/img/sh4.png"></li>
 	</ul>
 	</div>
 </div>

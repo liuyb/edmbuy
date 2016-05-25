@@ -146,7 +146,10 @@
         });
         
         <!--{if isset($incomplete) && $incomplete eq 1}-->
-        showMsg('请先完善店铺资料！');
+        setTimeout(function(){
+        	//$(".dialog_mask").show();
+        	showWarn('请先完善店铺资料！');
+        },100);
         <!--{/if}-->
     });
 

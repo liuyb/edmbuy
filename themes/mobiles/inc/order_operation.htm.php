@@ -79,16 +79,30 @@ $(function(){
 		return false;
 	});
 	$(".btn_refund_money").bind('click', function(){
-		F.post('/trade/order/refund',{order_id : parseInt(getOrderId(this)),refund_reason:'无理由退款'},function(ret){
-			if(ret.flag == 'SUC'){
-				alert('退款申请已提交，等待商家审核。');
-				window.location.reload();
-			}else{
-				alert(ret.msg);
-			}
+		var order_id = parseInt(getOrderId(this));
+		weui_confirm('确认要申请退款吗？', '', function(){
+    		var dialog = "<textarea style=\"width: 95%;height: 100px;\" class='refuseTxt'></textarea><div style='margin-left:10px;color:red;' class='errMsg'></div>";
+    		dialog +="<div style='margin:10px 5px 10px 10px;text-align:right;'><input type='button' value='关闭' onclick='weui_dialog_close();' class='edmbuy_button second_btn'/><input type='button' value='提交' style='margin-left:10px;' class='edmbuy_button primary_btn' onclick='orderRefund(this,"+order_id+");'></div>";
+    		weui_dialog($(dialog),'请输入退款理由');
 		});
 	});
+	
 });
+
+function orderRefund(obj,order_id){
+	var $this = $(obj).closest('.weui_dialog_bd').first();
+	var txt = $this.find('.refuseTxt').val();
+	F.post('/trade/order/refund',{order_id : order_id,refund_reason:txt},function(ret){
+		if(ret.flag == 'SUC'){
+			weui_dialog_close();
+			weui_alert('退款申请已提交，等待商家审核。');
+			//window.location.reload();
+		}else{
+			$this.find('.errMsg').html(ret.msg);
+		}
+	});
+}
+
 function getOrderId(obj){
 	return $(obj).closest(".order_operation").data("orderid");
 }

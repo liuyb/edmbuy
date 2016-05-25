@@ -110,14 +110,14 @@ class User_Model extends Model
     {
         $result = [];
         $dbDrver = D();
-        $sql = "select users.user_id,users.level,users.nick_name,users.logo,info.order_sn,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
+        $sql = "select users.user_id,users.level,users.nick_name,users.logo,info.order_sn,info.shipping_fee,info.order_id,info.money_paid,info.commision,info.is_separate ,info.parent_id
 			  from shp_users users RIGHT JOIN
 			  shp_order_info info on info.user_id=users.user_id
 			  where info.order_id=" . $order_id;
         $userInfo = $dbDrver->get_one($sql);
         $result['userInfo'] = $userInfo;
         if (empty($userInfo)) {
-            return ['userInfo' => null, 'goodsInfo' => [], 'ismBusiness' => '', 'commision' => 0];
+            return ['userInfo' => null, 'goodsInfo' => [], 'ismBusiness' => '', 'commision' => 0.00];
         }
         $is_separate = $userInfo['is_separate'];
         $goodsInfo = self::getGoodsList($userInfo, $is_separate);
@@ -174,7 +174,7 @@ class User_Model extends Model
             $condition = "=" . $res;
         }
         $sql = "select orders.goods_id ,orders.goods_number,orders.goods_price,
-                info.order_status,info.shipping_status,info.pay_status,info.shipping_confirm_time,
+                info.order_status,info.shipping_status,info.pay_status,info.shipping_fee,info.shipping_confirm_time,
                 goods.goods_name,goods.goods_thumb
  				from shp_order_goods orders LEFT JOIN shp_goods goods on orders.goods_id = goods.goods_id
  				LEFT JOIN shp_order_info info on orders.order_id=info.order_id

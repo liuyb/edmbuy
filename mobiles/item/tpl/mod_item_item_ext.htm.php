@@ -86,7 +86,8 @@ function loadGoodsComment(curpage, isinit, category){
 		var _html = "";
 		for(var i = 0,len=ret.result.length; i < len; i++){
 			var comment = ret.result[i];
- 			_html += "<table cellspacing='0' cellpadding='0' class='evaluate_info'><tr>";
+			var cls = ((i+1) < len) ? 'comment_container' : '';
+ 			_html += "<div class='"+cls+"'><table cellspacing='0' cellpadding='0' class='evaluate_info'><tr>";
 			_html += "<td width=\"45px;\"><img src=\"/themes/mobiles/img/mt.png\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+comment.user_logo+"')\"></td>";
 			_html += "<td><p class=\"eval_name\">"+comment.user_name+"</p>";
 			if(comment.obj_attr){
@@ -106,6 +107,7 @@ function loadGoodsComment(curpage, isinit, category){
 			if(comment.is_reply && comment.is_reply > 0){
 				_html += "<div class=\"eval_reply\">掌柜回复："+comment.comment_reply+"</div>";
 			}
+			_html += "</div>";
 		}
 		if(isinit){
 			commentDom.html(_html);

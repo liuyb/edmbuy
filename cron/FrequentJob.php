@@ -8,10 +8,10 @@
 class FrequentJob extends CronJob {
 	
 	/**
-	 * 14天时间秒数
+	 * 7天时间秒数
 	 * @var constant
 	 */
-	const TIME_14DAYS = 1209600; //=86400*14
+	const TIME_7DAYS = 604800; //=86400*7
 	
 	public function main($argc, $argv) {
 		
@@ -56,15 +56,15 @@ WHERE a.user_id=b.parent_id";
 	}
 	
 	/**
-	 * 批量更新收货时间
+	 * 批量更新收货时间  修改成 发货T+7 自动变成收货
 	 */
 	private function upShippingConfirmTime() {
-		$this->log("update shipping confirm time(14 days after pay_time)...");
-		$the_time = simphp_gmtime() - self::TIME_14DAYS;
+		$this->log("update shipping confirm time(7 days after pay_time)...");
+		$the_time = simphp_gmtime() - self::TIME_7DAYS;
 		$sql = "UPDATE `shp_order_info`"
-				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=`pay_time`+%d"
-		     . " WHERE `pay_status`=".PS_PAYED." AND `shipping_status`=".SS_SHIPPED." AND `pay_time`<={$the_time}";
-		D()->query($sql, self::TIME_14DAYS);
+				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=%d"
+		     . " WHERE `pay_status`=".PS_PAYED." AND `shipping_status`=".SS_SHIPPED." AND `shipping_time`<={$the_time}";
+		D()->query($sql, simphp_gmtime());
 		$this->log("OK. affected rows: ".D()->affected_rows());
 	}
 	

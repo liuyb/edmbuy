@@ -39,7 +39,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	我的人脉
-	<a href="<?=$backurl?>" class="back"></a>
+	<a href="javascript:goBack('<?php echo U("user") ?>');" class="back"></a>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html());</script>
