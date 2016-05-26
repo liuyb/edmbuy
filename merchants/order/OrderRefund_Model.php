@@ -28,7 +28,7 @@ class OrderRefund_Model extends Model{
         $sql = "SELECT count(1) FROM shp_order_refund where merchant_id='%s' $where ";
         $count = D()->query($sql, $muid)->result();
         $pager->setTotalNum($count);
-        $sql = "SELECT * from shp_order_refund where merchant_id='%s' $where limit {$pager->start},{$pager->pagesize}";
+        $sql = "SELECT * from shp_order_refund where merchant_id='%s' $where order by rec_id desc limit {$pager->start},{$pager->pagesize}";
         $orders = D()->query($sql, $muid)->fetch_array_all();
         $pager->setResult($orders);
     }
@@ -48,6 +48,7 @@ class OrderRefund_Model extends Model{
         try{
             $refund->check_status = OrderRefund::CHECK_STATUS_NO;
             $refund->refuse_txt = $refuse_txt;
+            $refund->refuse_time = time();
             $refund->save(Storage::SAVE_UPDATE);
             Order::action_log($refund->order_id, ['action_note'=>'商家退款拒绝', 'action_user'=>$muid]);
             $ret = ['result' => 'SUCC'];
@@ -98,6 +99,7 @@ class OrderRefund_Model extends Model{
             $refund->wx_status = OrderRefund::WX_STATUS_SUCC;
             $refund->pay_refund_no = $result['wx_refund_no'];
             $refund->succ_time = $result['succ_time'];
+            $refund->is_done = 1;
         }else{
             $refund->wx_status = OrderRefund::WX_STATUS_FAIL;
             //修改订单状态 退款失败

@@ -17,6 +17,7 @@ class Order_Controller extends AdminController {
     {
         return [
             'order/refund'=>'refund_list',
+            'order/refund/over' => 'refund_overtime_list',
             'order/refund/detail'=>'refund_detail'
         ];
     }
@@ -102,6 +103,38 @@ class Order_Controller extends AdminController {
 	    $merchants = Merchant::getMerchantsKeyValue();
 	    $this->v->assign('merchants', $merchants);
 	    
+	    $response->send($this->v);
+	}
+	
+	public function refund_overtime_list(Request $request, Response $response)
+	{
+	    $this->v->set_tplname('mod_order_refund_overtime');
+	    $this->nav_second = 'refund_over';
+	     
+	    // 查询条件
+	    $query_conds = [];
+	    $searchinfo = [
+	        'state' => ''
+	    ];
+	    $searchinfo['state'] = $request->get('state', 0);
+	     
+	    $searchstr = 'state=' . $searchinfo['state'];
+	    $this->v->assign('searchinfo', $searchinfo);
+	    $this->v->assign('searchstr', $searchstr);
+	    $query_conds = array_merge($query_conds, $searchinfo);
+	     
+	    $this->v->assign('extraurl', $searchstr);
+	    $this->v->assign('qparturl', '#/order/refund/over');
+	     
+	    // Record List
+	    $recordList = Order_Model::getPagedRefunds('refund.rec_id', 'desc', $this->getPagerLimit(), $query_conds);
+	    $recordNum = count($recordList);
+	    $totalNum = $GLOBALS['pager_totalrecord_arr'][0];
+	     
+	    $this->v->assign('recordList', $recordList)
+	    ->assign('recordNum', $recordNum)
+	    ->assign('totalNum', $totalNum);
+	     
 	    $response->send($this->v);
 	}
 	

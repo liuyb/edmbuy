@@ -15,6 +15,14 @@
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script> 
+<?php if($order->pay_status == PS_REFUNDING):?>
+<a href="<?php echo U("order/refund/info", ['order_id' => $order_id]) ?>">
+<div class="order_number">
+	<p class="number_info">查看退款详情</p>
+</div>
+</a>
+<?php endif;?>
+
 <?php if($order->shipping_name && $order->invoice_no):?>
 <a href="<?php echo U("order/$order_id/express") ?>">
 <div class="order_number">
@@ -44,6 +52,7 @@
 		</tr>
 	</table>
 </div>
+
 <div class="order_list">
 	<?php $first_goods_id=0; 
 	      $total_goods = 0;
@@ -168,7 +177,7 @@ function return_product(obj) {
 }
 
 function orderGoodsComment(order_id, goods_id){
-	window.location.href = '/item/comment/page?order_id='+order_id+'&goods_id='+goods_id;
+	window.location.href = '<?php echo U('item/comment/page', ['1' => 1])?>&order_id='+order_id+'&goods_id='+goods_id;
 }
 </script>
 <?php endif;?>

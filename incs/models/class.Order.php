@@ -558,7 +558,8 @@ class Order extends StorageNode{
     			    }
     			}
     		}
-    		else { //支付中
+    		elseif ($order['pay_status']==PS_REFUNDING) { //支付中
+    		    $html .= '<button class="order_but_r btn-ship-refund-info">退款详情</button>';
     		}
     	}
     	else {

@@ -140,7 +140,7 @@ class UserCommision extends StorageNode {
 	        //返利通知
 	        if($uc->commision > 0){
     	        WxTplMsg::fanli($cUser->openid, "您购买的商品已付款成功，获得 $uc->commision 元的返利", "点击进入我的钱包查看详情", U("user/my/wallet",'',true),
-    	                       array('goods_name' => $itemDesc,'fanli' => $uc->commision, 'paid_money' => $uc->order_amount, 'pay_time' => date('Y-m-d H:i:s',$uc->paid_time)));
+    	                       array('goods_name' => $itemDesc,'fanli' => $uc->commision, 'paid_money' => $uc->order_amount, 'pay_time' => date('Y-m-d H:i:s',simphp_gmtime2std($uc->paid_time))));
 	        }
 	    }else{
 	        $share_radio = self::$share_ratio_fx_mike;
@@ -152,7 +152,7 @@ class UserCommision extends StorageNode {
 	            'order_sn'     => $exOrder->order_sn,
 	            'order_amount' => $exOrder->money_paid.'元',
 	            'share_amount' => 0,
-	            'order_time'  => date('Y-m-d H:i:s', $exOrder->pay_time)
+	            'order_time'  => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time))
 	        ];
 	        $order_upart = $cUser->uid . ',' . $cUser->nickname;
 	        $first  = '亲，你的%s级用户('.$order_upart.')购买了产品，又成功分销出一笔订单了';
@@ -164,7 +164,7 @@ class UserCommision extends StorageNode {
 	        $extra['share_amount'] = $share_amount;
 	        $url    = U('user/commission',['user_id'=>$parent->uid, 'order_id'=>$order_id, 'level'=>1],true);
 	        //WxTplMsg::sharecommision_succ($parent->openid, sprintf($first, '一'), $remark, $url, $extra);
-	        self::shareCommision($parent, $first, $remark, $url, $extra, $uc->commision);
+	        self::shareCommision($parent, sprintf($first, '一'), $remark, $url, $extra, $uc->commision);
 	        //2级
 	        $parent_level = 2;
 	        if($parent->parentid){
@@ -174,7 +174,7 @@ class UserCommision extends StorageNode {
 	            $extra['share_amount'] = $share_amount;
 	            $url    = U('user/commission',['user_id'=>$parent2->uid, 'order_id'=>$order_id, 'level'=>2],true);
 	            //WxTplMsg::sharecommision_succ($parent2->openid, sprintf($first, '二'), $remark, $url, $extra);
-	            self::shareCommision($parent2, $first, $remark, $url, $extra, $uc->commision);
+	            self::shareCommision($parent2, sprintf($first, '二'), $remark, $url, $extra, $uc->commision);
 	            //3级
 	            $parent_level = 3;
 	            if($parent2->parentid){
@@ -184,7 +184,7 @@ class UserCommision extends StorageNode {
 	                $extra['share_amount'] = $share_amount;
 	                $url    = U('user/commission',['user_id'=>$parent3->uid, 'order_id'=>$order_id, 'level'=>3],true);
 	                //WxTplMsg::sharecommision_succ($parent3->openid, sprintf($first, '三'), $remark, $url, $extra);
-	                self::shareCommision($parent3, $first, $remark, $url, $extra, $uc->commision);
+	                self::shareCommision($parent3, sprintf($first, '三'), $remark, $url, $extra, $uc->commision);
 	            }
 	        }
 	         
@@ -194,7 +194,7 @@ class UserCommision extends StorageNode {
 	
 	private static function shareCommision($parent, $first, $remark, $url, $extra, $commision){
 	    if($commision > 0){
-    	    WxTplMsg::sharecommision_succ($parent->openid, sprintf($first, '三'), $remark, $url, $extra);
+    	    WxTplMsg::sharecommision_succ($parent->openid, $first, $remark, $url, $extra);
 	    }
 	}
 	
@@ -211,7 +211,7 @@ class UserCommision extends StorageNode {
 	    }
 	    $cUser = Users::load($merchant->user_id);
 	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop','', true),
-	                       array('time' => date('Y-m-d H:i:s', $exOrder->pay_time), 'type' => $item_desc));
+	                       array('time' => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time)), 'type' => $item_desc));
 	}
 	
 	/**
@@ -247,7 +247,7 @@ class UserCommision extends StorageNode {
 	                'order_sn'     => $exOrder->order_sn,
 	                'order_amount' => $exOrder->money_paid.'元',
 	                'share_amount' => $commision."元（订单总佣金的 ".($radio * 100)."%） ",
-	                'order_time'  => date('Y-m-d H:i:s', $exOrder->pay_time)
+	                'order_time'  => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time))
 	            ];
 	            if(!Users::isAgent($invite_user->level)){
 	                $extra['share_amount'] .= "（你还不是代理，没有产生佣金）";
@@ -392,7 +392,7 @@ class UserCommision extends StorageNode {
             'order_sn'     => $exOrder->order_sn,
             'order_amount' => $exOrder->money_paid.'元',
             'share_amount' => $commision.'元',
-            'order_time'  => date('Y-m-d H:i:s', $exOrder->pay_time)
+            'order_time'  => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time))
         ];
         $remark = '点击查看详情';
         $url    = U('user/commission',['user_id'=>$cUser->uid, 'order_id'=>$exOrder->order_id, 'level'=>$parent_level],true);

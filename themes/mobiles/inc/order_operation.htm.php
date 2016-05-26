@@ -8,7 +8,7 @@ $(function(){
 		var $parent = $(this).closest('.order_info').first();
 		var order_id = $parent.data("rid");
 		var goods_id = $parent.data("gid");
-		window.location.href = '/item/comment/page?order_id='+order_id+'&goods_id='+goods_id;
+		window.location.href = '<?php echo U('item/comment/page', ['1' => 1]) ?>&order_id='+order_id+'&goods_id='+goods_id;
 	});
 	$('.btn-order-cancel').click(function(){
 		if (typeof(thisctx.ajaxing_cancel)=='undefined') {
@@ -80,23 +80,25 @@ $(function(){
 	});
 	$(".btn_refund_money").bind('click', function(){
 		var order_id = parseInt(getOrderId(this));
-		weui_confirm('确认要申请退款吗？', '', function(){
-    		var dialog = "<textarea style=\"width: 95%;height: 100px;\" class='refuseTxt'></textarea><div style='margin-left:10px;color:red;' class='errMsg'></div>";
-    		dialog +="<div style='margin:10px 5px 10px 10px;text-align:right;'><input type='button' value='关闭' onclick='weui_dialog_close();' class='edmbuy_button second_btn'/><input type='button' value='提交' style='margin-left:10px;' class='edmbuy_button primary_btn' onclick='orderRefund(this,"+order_id+");'></div>";
-    		weui_dialog($(dialog),'请输入退款理由');
-		});
+		var dialog = "<textarea style=\"width: 95%;height: 100px;\" maxlength='500' class='refuseTxt'></textarea><div style='margin-left:10px;color:red;' class='errMsg'></div>";
+		dialog +="<div style='margin:10px 5px 10px 10px;text-align:center;'><input type='button' value='关闭' onclick='weui_dialog_close();' class='edmbuy_button second_btn'/><input type='button' value='提交' style='margin-left:10px;' class='edmbuy_button primary_btn' onclick='orderRefund(this,"+order_id+");'></div>";
+		weui_dialog($(dialog),'请输入退款理由');
 	});
-	
+
+	$(".btn-ship-refund-info").bind('click', function(){
+		var order_id = parseInt(getOrderId(this));
+		window.location.href = '<?php echo U("order/refund/info", ['1' => 1]) ?>&order_id='+order_id;
+	});
 });
 
 function orderRefund(obj,order_id){
 	var $this = $(obj).closest('.weui_dialog_bd').first();
 	var txt = $this.find('.refuseTxt').val();
-	F.post('/trade/order/refund',{order_id : order_id,refund_reason:txt},function(ret){
+	F.post('/order/refund',{order_id : order_id,refund_reason:txt},function(ret){
 		if(ret.flag == 'SUC'){
 			weui_dialog_close();
-			weui_alert('退款申请已提交，等待商家审核。');
-			//window.location.reload();
+			alert('退款申请已提交，等待商家审核。');
+			window.location.reload();
 		}else{
 			$this.find('.errMsg').html(ret.msg);
 		}

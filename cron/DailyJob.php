@@ -10,6 +10,11 @@ class DailyJob extends CronJob {
 	
 		// 批量更新商品已成功购买的单品数
 		$this->upGoodsPaidNum();
+		
+		
+		require SIMPHP_ROOT . "/cron/RefundMonitorJob.php";
+		$monitor = new RefundMonitorJob();
+		$monitor->handleUserOvertime();
 	}
 	
 	/**

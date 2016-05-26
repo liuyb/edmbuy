@@ -200,7 +200,7 @@ class Merchant extends StorageNode {
 	 * 商家列表 键值对
 	 */
 	static function getMerchantsKeyValue(){
-	    $sql = "SELECT merchant_id, facename FROM shp_merchant order by created desc";
+	    $sql = "SELECT merchant_id, facename FROM shp_merchant where activation = 1 and facename <> '' order by created desc";
 	    return D()->query($sql)->fetch_array_all();
 	}
 	

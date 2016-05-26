@@ -35,6 +35,36 @@ class Order_Model extends Model {
         }
         return $region;
     }
+    
+    /**
+     * 订单退款详情
+     * @param unknown $order_id
+     */
+    static function getOrderRefundDetail($order_id){
+        $sql = "select * from shp_order_refund where order_id = %d and is_done = 0 order by rec_id desc";
+        $refund = D()->get_one($sql, $order_id);
+        return $refund;
+    }
+    
+    /**
+     * 取消订单退款申请
+     * @param OrderRefund $refund
+     */
+    static function OrderRefundCancel(OrderRefund $refund){
+        D()->beginTransaction();
+        
+        $refund->is_done = 1;
+        $refund->check_status = OrderRefund::CHECK_STATUS_CANCEL;
+        $refund->save(Storage::SAVE_UPDATE_IGNORE);
+        
+        $order = new Order();
+        $order->order_id = $refund->order_id;
+        $order->pay_status = PS_PAYED;
+        $order->order_status = OS_CONFIRMED;
+        $order->save(Storage::SAVE_UPDATE_IGNORE);
+        
+        D()->commit();
+    }
 }
  
 /*----- END FILE: Partner_Model.php -----*/

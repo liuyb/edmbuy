@@ -1,59 +1,47 @@
 <!--{include_file name="_smenu_refund.htm"}-->
-<script type="text/javascript" src="/misc/js/ext/date/jquery.calendar.js"></script>
-<link href="/misc/js/ext/date/calendars.css" rel="stylesheet" type="text/css" />
-<style>
-.inpshort {width: 155px;}
-</style>
 <section id="ifr-main" class="ifr-main">
 
 <!-- 页面导航 -->
-<div class="breadcrumb">当前位置：<span>订单</span>&nbsp;&gt;&nbsp;<span>退款管理</span></div>
+<div class="breadcrumb">当前位置：<span>订单</span>&nbsp;&gt;&nbsp;<span>超期退款申请</span></div>
 
 <!-- search region -->
 <div class="boxSearch">
-  <form name="searchform" id="searchform" action="/order/refund" method="post" onsubmit="return listsearch(this);">
+  <form name="searchform" id="searchform" action="/order/refund/over" method="post" onsubmit="return listsearch(this);">
   	<div id="searchPanel">
-  		<div>
-  			<span style="margin-right:20px;">
-  			<input type="text" name="from_date" value="<!--{$searchinfo.from_date}-->" class="inptxt inpshort" id="search_from_date" placeholder="开始日期(YYYY-MM-DD)" bj="cBj" />&nbsp;&nbsp;--
-     &nbsp;&nbsp;<input type="text" name="to_date" value="<!--{$searchinfo.to_date}-->" class="inptxt inpshort" id="search_to_date" placeholder="结束日期(YYYY-MM-DD)" bj="cBj" />
-  			</span>
-  			<input type="text" class="inptxt" id="order_sn" name="order_sn" placeholder="请输入订单号" value="<!--{$searchinfo.order_sn}-->"/>
-  		</div>
-  		<div>
-  			店铺：
-  			<select id="merchant_id" name="merchant_id" style='width:200px;'>
-  				<option value="">全部</option>
-  				<!--{foreach from=$merchants item=it}-->
-  				<option value='<!--{$it.merchant_id}-->' <!--{if $it.merchant_id eq $searchinfo.merchant_id}-->selected<!--{/if}-->><!--{$it.facename}--></option>
-  				<!--{/foreach}-->
-  			</select>
-  			<input type="text" style='margin-left:20px;width:200px;' class="inptxt" id="buyer" name="buyer" placeholder="请输入 “买家”或“收货人”" value="<!--{$searchinfo.buyer}-->"/>
-  			<input type="submit" name="btnsubmit" id="btnsubmit" value="搜 索" class="frmbtn" style='margin-left:20px;'/>
+  		<div id="tabBlock" style="margin-top:20px;">
+  			<a data-value='0'>全部</a>
+  			<a data-value='2'>超期两天以上</a>
+  			<a data-value='3'>超期三天以上</a>
   		</div>
   	</div>
   </form>
 <script type="text/javascript">
 
+var state = "<!--{$searchinfo.state}-->";
+state = state ? state : "all";
+
+$(document).ready(function(){
+	$("#tabBlock").find("a").removeClass("selected");
+	$("#tabBlock").find("a[data-value='"+state+"']").addClass("selected");
+	
+	$("#tabBlock").find("a").on('click', function(){
+		var OBJ = $(this);
+	  	var val = OBJ.attr("data-value");
+		$("#tabBlock").find("a").removeClass("selected");
+	 	OBJ.addClass("selected");
+	 	submitForm();
+    });
+});
+
 function listsearch(form) {
-  var url = '#/order/refund,from_date='+$('#search_from_date').val().trim()+'&to_date='+$('#search_to_date').val().trim();
-  url+= '&order_sn='+$('#order_sn').val().trim()+'&merchant_id='+$('#merchant_id').val().trim()+'&buyer='+$("#buyer").val().trim();
+  var state = $("#tabBlock").find("a.selected").data('value');
+  var url = '#/order/refund/over,state='+state;
   window.location.hash = url;
   return false;
 }
 function submitForm(){
 	$("#searchform").submit();
 }
-$(document).ready(function(){
-  $("#search_from_date").cld();
-  $("#search_to_date").cld();
-  $("#merchant_id").enterEvent(function(){
-	  submitForm();
-  });
-  $(":input").enterEvent(function(){
-	  submitForm();
-  });
-});
 
 </script>
 </div>
@@ -83,6 +71,7 @@ $(document).ready(function(){
   <tr class="rh">
     <th class="c2">订单号</th>
     <th class="c3" style='max-width:200px;'>店铺名称</th>
+    <th class="c3" style='max-width:100px;'>店铺联系电话</th>
     <th class="c4" style='max-width:200px;'>商品名称</th>
     <th class="c5">买家</th>
     <th class="c6">收货人</th>
@@ -95,6 +84,7 @@ $(document).ready(function(){
   <tr class="rb">
     <td class="c2"><!--{$it.order_sn}--></td>
     <td class="c3"><!--{$it.facename}--></td>
+    <td class="c3"><!--{$it.mobile}--></td>
     <td class="c4" style="width:320px;"><!--{$it.goods_name}--></td>
     <td class="c5"><!--{$it.nick_name}--></td>
     <td class="c6"><!--{$it.consignee}--></td>

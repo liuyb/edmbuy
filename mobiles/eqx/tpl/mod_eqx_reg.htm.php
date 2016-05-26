@@ -89,6 +89,7 @@ $(function () {
 				setTimeout(function(){
 					$ptip.hide();
 				},60*1000);
+				$("#write_vcode").focus();
 			}
 			else {
 				refresh_stop();

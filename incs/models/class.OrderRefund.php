@@ -14,6 +14,9 @@ class OrderRefund extends StorageNode {
     //商家审核拒绝
     const CHECK_STATUS_NO = 2;
     
+    //用户已取消
+    const CHECK_STATUS_CANCEL = 9;
+    
     //微信退款成功
     const WX_STATUS_SUCC = 1;
     
@@ -45,7 +48,10 @@ class OrderRefund extends StorageNode {
     					'wx_response' => 'wx_response',
     			        'consignee'   => 'consignee',
 				        'nick_name'   => 'nick_name',
-				        'merchant_id' => 'merchant_id'
+				        'merchant_id' => 'merchant_id',
+				        'action_type' => 'action_type', //0-用户处理、1-系统处理
+				        'refuse_time' => 'refuse_time',
+				        'is_done'     => 'is_done'
 				)
 		);
 	}
@@ -173,12 +179,14 @@ class OrderRefund extends StorageNode {
 	    $wx_status = intval($wx_status);
 	    $display = '';
 	    switch($check_status){
-	        case 1 :
-	            $display = ($wx_status == 1 ? '退款成功' : ($wx_status == 2 ? '退款失败' : '退款中'));
+	        case self::CHECK_STATUS_YES :
+	            $display = ($wx_status == self::WX_STATUS_SUCC ? '退款成功' : ($wx_status == self::WX_STATUS_FAIL ? '退款失败' : '退款中'));
 	            break;
-	        case 2 :
+	        case self::CHECK_STATUS_NO :
 	            $display = '已拒绝';
 	            break;
+	        case self::CHECK_STATUS_CANCEL :
+	            $display = '已取消';
 	        default :
 	            $display = '待审核';
 	    }
@@ -186,7 +194,7 @@ class OrderRefund extends StorageNode {
 	}
 	
 	static function getRefundDetails($rec_id){
-	    $sql = "SELECT refund.*,u.mobile_phone as mobilephone
+	    $sql = "SELECT refund.*,u.mobile as mobilephone
                 FROM shp_order_refund refund left join shp_users u on refund.user_id = u.user_id where refund.rec_id='%d'";
 	    $result = D()->query($sql, $rec_id)->fetch_array();
 	    return $result;
