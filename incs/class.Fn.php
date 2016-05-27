@@ -334,7 +334,11 @@ class Fn extends Func {
       $ret = "未知状态";
       if(in_array($pay_status, array(PS_CANCEL, PS_REFUND)) 
             || in_array($order_status, array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED))){
-          $ret = "已关闭";
+          if($pay_status == PS_REFUND){
+              $ret = "已退款";
+          }else{
+              $ret = "已关闭";
+          }
       }else if(in_array($pay_status, array(PS_UNPAYED, PS_PAYING))){
           $ret = "待付款";
       }else if($pay_status == PS_FAIL){

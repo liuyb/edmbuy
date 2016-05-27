@@ -16,7 +16,7 @@ class Order_Model extends Model {
      */
     static function getPagedOrders(Pager $pager, array $options){
         $muid = $GLOBALS['user']->uid;
-        $where = " and is_delete = 0 ";
+        $where = " and is_removed = 0 ";
         $orderby = "";
         if($options['order_sn']){
             $where .= " and o.order_sn like '%%".D()->escape_string(trim($options['order_sn']))."%%' ";

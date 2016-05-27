@@ -120,7 +120,7 @@ class Order_Controller extends MerchantController {
                 if(!in_array($order->pay_status, $paid_status) || !in_array($order->order_status, $order_status)){
                     continue;
                 }
-                $order->is_delete = 1;
+                $order->is_removed = 1;
                 $order->save(Storage::SAVE_UPDATE);
             }
             $response->sendJSON("");
