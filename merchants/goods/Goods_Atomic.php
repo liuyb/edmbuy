@@ -89,8 +89,7 @@ class Goods_Atomic{
      */
     public static function batch_delete_goods($goods_ids){
         $merchant_id = $GLOBALS['user']->uid;
-        /* $sql = "DELETE FROM shp_goods where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' "; */
-        $sql = "update shp_goods set where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' ";
+        $sql = "update shp_goods set is_delete = 1,is_on_sale = 0 where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' ";
         D()->query($sql,$merchant_id);
         return D()->affected_rows();
     }
@@ -99,28 +98,28 @@ class Goods_Atomic{
      * 批量删除商品分类
      * @param unknown $goods_ids
      */
-    public static function batch_delete_goods_cat($goods_ids){
+    /* public static function batch_delete_goods_cat($goods_ids){
         $sql = "DELETE FROM shp_shop_goods_cat WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
-    }
+    } */
     
     /**
      * 批量删除商品属性
      * @param unknown $goods_ids
      */
-    public static function batch_delete_goods_attr($goods_ids){
+    /* public static function batch_delete_goods_attr($goods_ids){
         $sql = "DELETE FROM shp_goods_attr WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
-    }
+    } */
     
     /**
      * 批量删除商品图片
      * @param unknown $goods_ids
      */
-    public static function batch_delete_goods_gallery($goods_ids){
+    /* public static function batch_delete_goods_gallery($goods_ids){
         $sql = "DELETE FROM shp_goods_gallery WHERE goods_id ".Fn::db_create_in($goods_ids)." ";
             D()->query($sql);
-    }
+    } */
     
     /**
      * 获取键值对的运费模板列表

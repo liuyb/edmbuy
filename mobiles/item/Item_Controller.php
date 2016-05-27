@@ -63,11 +63,11 @@ class Item_Controller extends MobileController {
 			if (!$item->is_exist()) {
 				$this->nav_no = 0;
 				throw new ViewException($this->v, "查询商品不存在(商品id: {$item_id})");
-			}/*
-			elseif (!$item->is_on_sale) {
+			}
+			elseif ($item->is_delete) {
 				$this->nav_no = 0;
-				throw new ViewException($this->v, "查询商品已下架(商品id: {$item_id})");
-			}*/
+				throw new ViewException($this->v, "查询商品已删除(商品id: {$item_id})");
+			}
 			else {
 				// 更新访问数
 				$item->add_click_count();

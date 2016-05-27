@@ -248,11 +248,11 @@ class Goods_Model extends Model
         D()->beginTransaction();
         try {
             $affected = Goods_Atomic::batch_delete_goods($goods_ids);
-            if ($affected) {
+            /* if ($affected) {
                 Goods_Atomic::batch_delete_goods_cat($goods_ids);
                 Goods_Atomic::batch_delete_goods_attr($goods_ids);
                 Goods_Atomic::batch_delete_goods_gallery($goods_ids);
-            }
+            } */
         } catch (Exception $e) {
             D()->rollback();
         }
