@@ -22,11 +22,7 @@
 	<table cellspacing="0" cellpadding="0" class="become_a_tab">	
 		<tr>
 			<td width="70px;">
-				<?php if($is_account_logined && $currentUser->logo): ?>
-    			<img src="<?=$currentUser->logo?>?_=<?=$currentUser->randver?>" alt="logo">
-    		<?php else:?>
-    			<img src="/themes/mobiles/img/mt.png"/>
-    		<?php endif;?>
+    			<img src="/themes/mobiles/img/mt.png" alt="logo" id="userLogo"/>
     		</td>
 			<td>
 			<?php if($is_account_logined):?>
@@ -71,7 +67,7 @@
 			<img src="/themes/mobiles/img/sh3.png">
 			<span class="shipedCount"></span>
 		</li>
-		<li onclick="_link('<?php echo U('trade/order/record?status=all') ?>')"><img src="/themes/mobiles/img/sh4.png"></li>
+		<li onclick="_link('<?php echo U('trade/order/record?status=all') ?>')"><img src="/themes/mobiles/img/sh4.png"><span class="returnCount"></span></li>
 	</ul>
 	</div>
 </div>
@@ -151,12 +147,19 @@ function loadAjaxData(){
 			if(data.status3 && data.status3 > 0){
 				stateDOM.find(".shipedCount").addClass("d_nums").text(data.status3);
 			}
+			if(data.status4 && data.status4 > 0){
+				stateDOM.find(".returnCount").addClass("d_nums").text(data.status4);
+			}
 		}
 	});
 }
 
 $(function(){
 
+	<?php if($is_account_logined && $currentUser->logo): ?>
+	$("#userLogo").attr("src","<?=$currentUser->logo?>?_=<?=$currentUser->randver?>");
+    <?php endif;?>
+	
 	<?php if($is_account_logined && $is_agent && $agent->pid && !$agent->premium_id):?>
 	remindUserGetPackage();
 	<?php endif;?>

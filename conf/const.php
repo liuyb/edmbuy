@@ -112,6 +112,8 @@ define('CS_AWAIT_RECEIVE',          103); // 新增 待收货 支付状态已支
 define('CS_CLOSED',                 104); // 新增 已关闭  支付状态已取消 订单状态 已取消 | 无效
 define('CS_STOCKING',               105); // 新增 备货中 支付状态已支付且配送状态为 备货中跟发货中
 
+define('CS_RETURN',                 109); // 退换货
+
 /* 缺货处理 */
 define('OOS_WAIT',                  0); // 等待货物备齐后再发
 define('OOS_CANCEL',                1); // 取消订单

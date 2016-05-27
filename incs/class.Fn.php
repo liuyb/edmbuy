@@ -308,10 +308,15 @@ class Fn extends Func {
           case CS_FINISHED : 
               $ret = array("pay_status" => PS_PAYED, "shipping_status" => SS_RECEIVED);
               break;
-          //已关闭  
+          //已关闭  状态间用或者条件
           case CS_CLOSED : 
               $ret = array("pay_status" => array(PS_CANCEL, PS_REFUND), 
-                           "order_status" => array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED, OS_REFUND_REFUSED, OS_REFUND_FAILED));
+                           "order_status" => array(OS_CANCELED, OS_INVALID, OS_REFUND, OS_RETURNED));
+              break;
+          //退换货 状态间用或者条件
+          case CS_RETURN : 
+              $ret = array("pay_status" => array(PS_REFUNDING, PS_REFUND),
+                  "order_status" => array(OS_REFUND, OS_RETURNED));
               break;
           default:
               $ret = [];

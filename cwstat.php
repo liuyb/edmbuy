@@ -23,7 +23,7 @@ SimPHP::I()->boot();
 
 //统计类型
 $type = $request->get('type', 0);
-if (!in_array($type, [0,1,2])) {
+if (!in_array($type, [0,1,2,3])) {
 	$type = 0;
 }
 
@@ -79,6 +79,7 @@ li { padding: 5px 10px; }
 	<ul>
 	  <li><a href="?type=1&from={$from_date}&to={$to_date}">汇总统计(统计时间：{$stat_time_text})</a></li>
 	  <li><a href="?type=2&from={$from_date}&to={$to_date}">结算给供应商统计(统计时间：{$stat_time_text})</a></li>
+	  <li><a href="?type=3&from={$from_date}&to={$to_date}">代理相关数据(统计时间：{$stat_time_text})</a></li>
 	</ul>
 </body>
 </html>
@@ -148,6 +149,21 @@ elseif (2==$type) { //结算给供应商统计
 		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
 	}
 	
+}
+elseif (3==$type) { //代理相关数据
+
+    $from_time = $from_time ? simphp_gmtime($from_time) : 0;
+    $to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+
+    $csv = "用户ID,用户名称,用户当前级别,购买代理,支付金额,支付时间,领取套餐名称,套餐价格,总进货价,套餐商品详情".CSV_LN;
+    //获取商家收入订单详情
+    $list = ThisFn::getAgentPackageDetail($from_time, $to_time);
+    if (!empty($list)) {
+        foreach ($list AS $it) {
+            $csv .= '"'.$it['user_id'].'"'.CSV_SEP.'"'.$it['nick_name'].'"'.CSV_SEP.'"'.$it['clevel'].'"'.CSV_SEP.'"'.$it['blevel'].'"'.CSV_SEP.$it['money_paid'].CSV_SEP.'"'.$it['pay_time'].'"'.CSV_SEP.'"'.$it['package_name'].'"'.CSV_SEP.$it['actual_price'].CSV_SEP.$it['total_income'].CSV_SEP.'"'.$it['goods_desc'].'"'.CSV_LN;
+        }
+    }
+
 }
 
 if (''!=$csv) {
@@ -276,6 +292,48 @@ WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
 ORDER BY merchant_id DESC, order_id ASC";
 		$list = D()->query($sql)->fetch_array_all();
 		return $list;
+	}
+	
+	/**
+	 * 现在是需要几个表格：
+        1.开通d代理的人员总表以及开通了什么代理
+        2.代理领取了什么套餐
+        3.套餐是怎么组合的
+	 * @param integer $from_time
+	 * @param integer $to_time
+	 * @return array
+	 */
+	static function getAgentPackageDetail($from_time, $to_time) {
+	    $where = "";
+	    if ($from_time) {
+	        $where .= " AND o.`pay_time`>=".$from_time;
+	    }
+	    if ($to_time) {
+	        $where .= " AND o.`pay_time`<=".$to_time;
+	    }
+	    $sql = "select u.user_id, u.nick_name,u.level as clevel,p.level as blevel,o.money_paid,o.pay_time,pp.name as package_name,pp.actual_price,pp.goods_ids 
+             from shp_agent_payment p left join shp_premium_package pp on p.premium_id  = pp.pid 
+            left join shp_users u on  p.user_id = u.user_id left join shp_order_info o on p.order_id = o.order_id 
+            where is_paid = 1 order by o.pay_time asc ";
+	    $list = D()->query($sql)->fetch_array_all();
+	    foreach ($list as &$item){
+    	    $total_income = 0;
+	        $goods_desc = '';
+	        if($item['goods_ids']){
+    	        $sql = "select goods_name,shop_price,income_price from shp_goods where goods_id in (".$item['goods_ids'].")";
+    	        $goods = D()->query($sql)->fetch_array_all();
+    	        foreach ($goods as $gd){
+    	            $goods_desc .= ($gd['goods_name']."(".$gd['income_price'].")").";";
+    	            $total_income += doubleval($gd['income_price']);
+    	        }
+	        }
+	        $item['clevel'] = AgentPayment::getAgentNameByLevel($item['clevel']);
+	        $item['blevel'] = AgentPayment::getAgentNameByLevel($item['blevel']);
+	        $item['pay_time'] = date('Y-m-d H:i:s', simphp_gmtime2std($item['pay_time']));
+	        $item['goods_desc'] = $goods_desc;
+	        $item['total_income'] = $total_income;
+	    }
+	    return $list;
 	}
 }
 /*----- END FILE: cwstat.php -----*/

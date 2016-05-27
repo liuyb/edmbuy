@@ -75,29 +75,30 @@ class User_Model extends Model
         $field = '';
         $condition = '';
         $i = 0;
-        foreach ($status as $statu => $val) {
+        foreach ($status as $statu) {
             ++$i;
-            if (is_array($val)) {
-                foreach ($val as $item) {
-                    $item_set = $item === SS_UNSHIPPED ? join(',', [SS_UNSHIPPED, SS_PREPARING, SS_SHIPPED_ING]) : join(',', [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART]);
-                    $pay_status = ($item === SS_UNSHIPPED || $item === SS_SHIPPED) ? ' AND pay_status=' . PS_PAYED : '';
-                    $field .= "t$i.c as status$i,";
-                    $condition .= "(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid $pay_status and $statu IN ($item_set)) t$i ,";
-                    ++$i;
+            $ret = Fn::get_order_status($statu);
+            $where = "";
+            if(CS_RETURN == $statu){
+                $where .=" AND (pay_status ".Func::db_create_in($ret['pay_status'])." or
+                order_status ".Func::db_create_in($ret['order_status']).")";
+            }else{
+                foreach ($ret as $stfield => $arr){
+                    if(is_array($arr)){
+                        $where .= " AND $stfield ".Func::db_create_in($arr);
+                    }else{
+                        $where .= " AND $stfield = $arr ";
+                    }
                 }
-            } else {
-                $field .= "t$i.c as status$i ,";
-                $condition .= "(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid and $statu = $val) t$i ,";
             }
+            $field .= "t$i.c as status$i ,";
+            $condition .= "(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid $where ) t$i ,";
         }
         $field = rtrim($field, ',');
         $condition = rtrim($condition, ',');
         $sql = "select $field from $condition";
-        $rows = D()->query($sql)->fetch_array_all();
-        if (is_array($rows) && count($rows) > 0) {
-            return $rows[0];
-        }
-        return array();
+        $rows = D()->query($sql)->fetch_array();
+        return $rows;
     }
 
     /**
