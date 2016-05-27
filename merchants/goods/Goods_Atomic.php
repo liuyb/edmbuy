@@ -89,7 +89,8 @@ class Goods_Atomic{
      */
     public static function batch_delete_goods($goods_ids){
         $merchant_id = $GLOBALS['user']->uid;
-        $sql = "DELETE FROM shp_goods where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' ";
+        /* $sql = "DELETE FROM shp_goods where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' "; */
+        $sql = "update shp_goods set where goods_id ".Fn::db_create_in($goods_ids)." and merchant_id = '%s' ";
         D()->query($sql,$merchant_id);
         return D()->affected_rows();
     }

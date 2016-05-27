@@ -16,7 +16,7 @@
 	border-bottom:1px solid #E6E6E6;
 }
 .rer_tit li{
-	line-height:44px;
+	padding: 12px 0px;
 	font-size:12px;
 	color:#333;
 	border-bottom:1px solid #E6E6E6;
@@ -87,7 +87,7 @@
 	
 	<?php if($refund['wx_status'] != 1):?>
 	<div class="rer_btn">
-		<?php if($refund['check_status']>0):?><button onclick="showRefundDialog();">修改退款申请</button><?php endif;?><button onclick="cancelRefund();">撤销退款申请</button><button onclick="showKefu();">申请客服介入</button>
+		<?php if($refund['check_status']>0):?><button onclick="showRefundDialog();">重新提交申请</button><?php endif;?><button onclick="cancelRefund();">撤销退款申请</button><button onclick="showKefu();">申请客服介入</button>
 	</div>
 	<?php endif;?>
 	
@@ -98,10 +98,10 @@
 		<p>协商详情</p>
 		<ul>
 			<li>买家退款原因： <span><?php echo $refund['refund_reason']?></span></li>
-			<li>退款状态：<span><?php echo OrderRefund::getRefundStatus($refund['check_status'], $refund['wx_status'])?></span></li>
 			<?php if($refund['check_status'] == 2):?>
 			<li>商家拒绝原因：<span><?php echo $refund['refuse_txt']?></span></li>
 			<?php endif;?>
+			<li>退款状态：<span><?php echo OrderRefund::getRefundStatus($refund['check_status'], $refund['wx_status'])?></span></li>
 			<li class="del_bottom">退款申请时间： <span><?php echo $refund['refund_time']?></span></li>
 		</ul>
 	</div>

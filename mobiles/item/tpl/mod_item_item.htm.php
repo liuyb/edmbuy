@@ -52,7 +52,7 @@
                 <div class="p_hr_select <?php if(count($attr_grp) == 0):?>hide<?php endif;?>">已选：<span id="product_select"></span></div>
 			</div>
 		</div>
-		<div class="p_cart_bd no-bounce">
+		<div class="p_cart_bd no-bounce" id="pop_cart_area">
 <?php foreach ($attr_grp AS $attrgrp): ?>
 			<div class="p_cart_item">
 				<div class="p_cart_btit"><?=$attrgrp['cat_name']?></div>
@@ -247,6 +247,7 @@ $(function(){
 		$mask.show();
 		$cartmain.find('img').show();
 		$cartmain.show().addClass("is_show");
+		hightLightSpecifi();
 		showSelect();
 	});
 	//关闭购物车
@@ -323,6 +324,16 @@ $(function(){
 		}
 	});
 });
+
+//规格没有选中时 设置默认的规格
+function hightLightSpecifi(){
+	$("#pop_cart_area ul.p_cart_ul").each(function(){
+		var $this = $(this);
+		if(!$this.find("li.on").length){
+			$this.find("li:eq(0)").addClass('on');
+		}
+	});
+}
 
 //已选择的所有属性
 var spec_ids = '';

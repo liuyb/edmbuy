@@ -232,7 +232,7 @@ class Distribution_Model extends Model{
                     $order_update = [];
                     $order_update['goods_amount'] = $goods_amount;
                     $order_update['money_paid'] = $order_amount;
-                    //$order_update['commision']    = $commision;
+                    $order_update['commision']    = $commision;
                     if (!empty($order_update)) {
                         D()->update(Order::table(), $order_update, ['order_id'=>$subOrder->id]);
                     }

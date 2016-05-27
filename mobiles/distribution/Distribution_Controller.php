@@ -493,7 +493,7 @@ class Distribution_Controller extends MobileController{
                     if ($newOI->id) {
                         $succ_goods[]     = $cg;
                         $true_amount     += $cItem->shop_price*$true_goods_number;
-                        //$total_commision += $cItem->commision *$true_goods_number;
+                        $total_commision += $cItem->commision *$true_goods_number;
         
                         //关联订单与商家
                         //Order::relateMerchant($newOrder->id, $cItem->merchant_uid);
@@ -509,7 +509,7 @@ class Distribution_Controller extends MobileController{
         
                 //检测订单变化
                 $order_update['merchant_ids'] = implode(',', $rel_merchants);
-                //$order_update['commision'] = $total_commision; //订单总佣金
+                $order_update['commision'] = $total_commision; //订单总佣金
                 //if ($true_amount!=$newOrder->goods_amount) {
                     $order_update['goods_amount'] = $true_amount;
                     $order_update['money_paid'] = $order_update['goods_amount'] + $newOrder->shipping_fee;
