@@ -92,8 +92,7 @@ class Order extends StorageNode{
                 'pay_data1'          => 'pay_data1',
                 'pay_data2'          => 'pay_data2',
                 'relate_order_id'    => 'relate_order_id',//领取套餐时对应购买代理的订单ID。
-                'order_flag'         => 'order_flag',   //0 普通订单，1 代理订单， 2 商城入驻 ，9 领取赠品
-                'is_removed'         => 'is_removed' //1 商家移除
+                'order_flag'         => 'order_flag'   //0 普通订单，1 代理订单， 2 商城入驻 ，9 领取赠品
             ));
     }
     
