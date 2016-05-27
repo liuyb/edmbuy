@@ -1115,15 +1115,14 @@ class Trade_Controller extends MobileController {
     }
     $this->v->assign('order_amount', $order_amount);
 
-    global $user;
+    /* global $user;
     $total_paid = $user->total_paid();
     $user_level = 0;
     $level_amount = Users::$level_amount[Users::USER_LEVEL_1];
     if ($total_paid >= $level_amount || $total_paid+$order_amount >= $level_amount) {
       $user_level = 1;
     }
-    $this->v->assign('user_level', $user_level);
-
+    $this->v->assign('user_level', $user_level);*/
     $response->send($this->v);
   }
 

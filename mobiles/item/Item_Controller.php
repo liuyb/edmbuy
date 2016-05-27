@@ -66,7 +66,7 @@ class Item_Controller extends MobileController {
 			}
 			elseif ($item->is_delete) {
 				$this->nav_no = 0;
-				throw new ViewException($this->v, "查询商品已删除(商品id: {$item_id})");
+				throw new ViewException($this->v, "查询商品已删除");
 			}
 			else {
 				// 更新访问数

@@ -8,15 +8,12 @@
 	<p class="pay_tit">订单支付成功</p>
 	<p class="pay_p">订单金额：<span class="price_sucee">￥<?=$order_amount?></span></p>
 <div>
-<?php if($user_level>0):?>
-<div class="becmoe_rice">恭喜您，已成为米商!</div>
-<?php endif;?>
 <div class="pay_okgo">
-	<button class="pay_check_order_but" onclick="location.href='<?php echo U('trade/order/record')?>'">查看订单</button>
+	<button class="pay_check_order_but" onclick="location.href='<?php echo U('trade/order/record', ['from'=>'trade'])?>'">查看订单</button>
 	<button class="pay_m_plan_but" onclick="location.href='<?php echo U('riceplan')?>'">米商计划</button>
 </div>
 
-<?php if($user->mobilephone==''):?>
+<?php if($user->mobile==''):?>
 <div class="pay_tier">
 	<div class="tier_c">
 		<p class="c_tit">绑定手机号，追踪物流</p>

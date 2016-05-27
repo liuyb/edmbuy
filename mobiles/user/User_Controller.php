@@ -200,7 +200,7 @@ class User_Controller extends MobileController
         if ($request->is_post()) {
             $mobile = isset($_POST['mobile']) ? $_POST['mobile'] : '';
             global $user;
-            if ($user->mobilephone == $mobile) {
+            if ($user->mobile == $mobile) {
                 return;
             }
             $nuser = Users::load_by_mobile($mobile);
@@ -208,7 +208,7 @@ class User_Controller extends MobileController
                 $ret = ['result' => 'FAIL', 'msg' => '手机号已经在系统存在！'];
                 $response->sendJSON($ret);
             }
-            User_Model::updateUserInfo(array('mobilephone' => $mobile));
+            User_Model::updateUserInfo(array('mobile' => $mobile));
             $ret = ['result' => 'SUC', 'msg' => '修改成功'];
             $response->sendJSON($ret);
         }
@@ -644,9 +644,9 @@ class User_Controller extends MobileController
             }
 
             global $user;
-            if (!$user->mobilephone) { //有手机号不给覆盖
+            if (!$user->mobile) { //有手机号不给覆盖
                 $upUser = new Users($user->uid);
-                $upUser->mobilephone = $mobile;
+                $upUser->mobile = $mobile;
                 $upUser->save(Storage::SAVE_UPDATE);
             }
             $ret = ['flag' => 'SUCC', 'msg' => '更新成功'];

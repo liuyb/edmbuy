@@ -1534,8 +1534,8 @@ class WeixinHelper {
     		$promoter = '推荐人米号: ' . $pUser->id;
     		if ($pUser->nickname) $promoter .= "\n推荐人昵称: " . $pUser->nickname;
     		$msg .= "\n".$promoter;
-    		if ($pUser->mobilephone) {
-    			$msg .= "\n推荐人手机:".$pUser->mobilephone;
+    		if ($pUser->mobile) {
+    			$msg .= "\n推荐人手机:".$pUser->mobile;
     		}
     	}
     }

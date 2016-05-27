@@ -4,7 +4,7 @@
 <div class="header h_order" style="padding:0 0 0 20px;">
 	<ul class="header_order">
 <?php if(!isset($_GET['spm']) || !preg_match('/^user\.(\d+)\.merchant$/i', $_GET['spm'])):?>
-    <li class="noon"><a href="javascript:history.back();" class="btna back">&nbsp;</a></li>
+    <li class="noon"><a href="<?php if(isset($_GET['from'])): echo U('user')?><?php else:?>javascript:goBack('<?php echo U("user") ?>');<?php endif;?>" class="btna back">&nbsp;</a></li>
 <?php endif;?>
 		<li <?php if($status == '' || $status == 'all'): ?> class="header_order_on" <?php endif;?> data_status="all">全部</li>
 		<li <?php if($status == 'wait_pay'): ?> class="header_order_on" <?php endif;?> data_status="wait_pay">待付款</li>
@@ -54,7 +54,7 @@ $(function(){
 		<span class="tit_type"><?=$ord['status_txt'] ?></span>
 	</div>
 	<?php foreach($ord['order_goods'] AS $g):
-	   $count ++;
+	   $count += $g['goods_number'];
 	?>
 		<div class="order_info" data-rid="<?=$g['order_id']?>" data-gid="<?=$g['goods_id']?>">
 			<table cellspacing="0" cellpadding="0" class="order_info_tab">
