@@ -31,7 +31,22 @@
 	margin-top:10px;
 	border-right:1px solid #d0d0d0;
 }
-
+.track_r p{
+	font-size:13px;
+}
+.track_title{
+	margin:10px;
+}
+.track_title p{
+	font-size:13px;
+	line-height:30px;
+}
+.tit_b_info{
+	border-bottom:1px solid #e6e6e6;
+	padding-left:10px;
+	line-height:40px;
+	font-size:15px;
+}
 </style>
 <body class="white_bg">
 
@@ -40,6 +55,13 @@
 	<a href="javascript:history.back();" class="back"></a>
 	<a href="ydm_member.html" class="back_r"></a>
 </div>
+
+<div class="track_title">
+	<p>订单编号：132456798467896</p>
+	<p>物流公司：顺丰快递</p>
+</div>
+
+<div class="tit_b_info">包裹详情</div>
 
 <div class="track">
 	<div class="track_l">
@@ -68,21 +90,19 @@
 </div>
 <script>
 $(function(){
+	
+	var _offset = $(".track_r div:last").offset().top + 155;
+	var _offsetTop = $(".track_r div:last").offset().top - 155;
+	$(".line").height(_offsetTop);
+	$(".track_l").height(_offset);
+	
 	$(".track_r div").each(function(){
-		var _offset = $(".track_r div:last").offset().top +65;
-		var _offsetTop = $(".track_r div:last").offset().top - 65;
-		$(".line").height(_offsetTop);
-		$(".track_l").height(_offset);
-		
 		var _setTop = $(this).offset().top + 2;
-		var _setTop1 = $(this).offset().top - 65;
-		if(_setTop < 68){
+		if(_setTop < 150){
 			$(".track_l").append('<div style="margin-left: -8px;position: absolute;top:'+_setTop+'px"><img src="./img/gly.png" style="width:18px;"></div>')
 		}else{
 			$(".track_l").append('<div style="margin-left: -8px;position: absolute;top:'+_setTop+'px"><img src="./img/hsy.png" style="width:18px;"></div>')
 		}
 	})
-	
-
 })
 </script>
