@@ -63,7 +63,7 @@ WHERE a.user_id=b.parent_id";
 		$the_time = simphp_gmtime() - self::TIME_7DAYS;
 		$sql = "UPDATE `shp_order_info`"
 				 . " SET `order_status`=".OS_CONFIRMED.",`shipping_status`=".SS_RECEIVED.",`shipping_confirm_time`=%d"
-		     . " WHERE `pay_status`=".PS_PAYED." AND `shipping_status` > 0 and `shipping_status` <> ".SS_RECEIVED." AND `shipping_time`<={$the_time}";
+		     . " WHERE `pay_status`=".PS_PAYED." AND `shipping_status` > 0 and `shipping_status` <> ".SS_RECEIVED." AND shipping_time > 0 and `shipping_time`<={$the_time}";
 		D()->query($sql, simphp_gmtime());
 		$this->log("OK. affected rows: ".D()->affected_rows());
 	}

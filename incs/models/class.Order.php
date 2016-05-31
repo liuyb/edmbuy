@@ -446,7 +446,7 @@ class Order extends StorageNode{
        return $rows;
     } */
     
-    static function getOrderExpress($order_id) {
+    /* static function getOrderExpress($order_id) {
         $sql = "select od.shipping_name as shipping_name,od.invoice_no as invoice_no,
                 express.express_trace as express_trace from edmbuy.shp_order_info od 
                 left join edmbuy.shp_order_express express  
@@ -454,7 +454,7 @@ class Order extends StorageNode{
                 where od.order_id = %d";
         $rows = D()->query($sql, $order_id)->fetch_array();
         return $rows;
-    }
+    } */
     
     /**
      * 获取订单列表
@@ -642,29 +642,6 @@ class Order extends StorageNode{
         $acutal_amount = doubleval($goods_amount) + doubleval($shipping_fee) + doubleval($insure_fee)
         + doubleval($pack_fee) + doubleval($pack_fee) + doubleval($card_fee) - doubleval($discount);
         return $acutal_amount;
-    }
-    
-    /**
-     * 物流信息json串解析成一个List对象返回
-     * @param unknown $express
-     * @return NULL
-     */
-    static function get_express_list($express){
-        $ret = [];
-        if(!$express || !$express['express_trace']){
-            return $ret;
-        }
-        $json = json_decode($express['express_trace']);
-        $list = $json->result ? $json->result->list :null;
-        if($list && count($list) > 0){
-            foreach ($list as &$ex){
-                if($ex->time && strlen($ex->time) > 19){
-                    $ex->time = substr($ex->time, 0, 19);
-                }
-            }
-            $ret = $list;
-        }
-        return $ret;
     }
     
     /**

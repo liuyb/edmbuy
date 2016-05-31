@@ -62,7 +62,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => 'themes/mobiles/img/dress.png',
         self::CATEGORY_RICE => 'themes/mobiles/img/receal.png',
     	self::CATEGORY_MOML => 'themes/mobiles/img/zq/moml.png',
-        self::CATEGORY_BEST => 'themes/mobiles/img/zq/index_pref_best.png',
+        self::CATEGORY_BEST => 'themes/mobiles/img/zq/pref_happy61.png',
     );
     
     /**

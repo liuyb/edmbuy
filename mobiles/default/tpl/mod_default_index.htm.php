@@ -2,6 +2,7 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
+    <li><a href="<?php echo U('item/pref/show',['type'=>'best'])?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_pref_happy61.png"></a></li>
     <li><a href="<?php echo U('item/2013')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/tea.jpg"></a></li>
     <li><a href='<?php echo U('item/1978')?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/cup.jpg"></a></li>
     <li><a href="<?php echo U('item/1282')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/hongzao.jpg"></a></li>
@@ -10,6 +11,7 @@
     <a href="javascript:void(0);" class="active">1</a>
     <a href="javascript:void(0);" class="">2</a>
     <a href="javascript:void(0);" class="">3</a>
+    <a href="javascript:void(0);" class="">4</a>
      </div>
   </div>
 </div>
@@ -47,11 +49,11 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p><a href='/item/pref/show?type=best'><img src="/themes/mobiles/img/zq/index_pref_best.png"></a></p><p><a href='/item/pref/show?type=moml'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
+		<p><a href='<?php echo U('item/pref/show',['type'=>'best'])?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_happybuy.png"></a></p><p><a href='<?php echo U('item/pref/show',['type'=>'moml'])?>'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
 	</div>
 
 	<div class="sp_ls">
-		<p><a href='/item/pref/show?type=teawine'><img src="/themes/mobiles/img/zq/teawine.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/zq/fruit.png"></a></p><p><a href='/item/pref/show?type=food'><img src="/themes/mobiles/img/zq/food.png"></a></p><p><a href='/item/pref/show?type=clothing'><img src="/themes/mobiles/img/zq/cloth.png"></a></p>
+		<p><a href='<?php echo U('item/pref/show',['type'=>'teawine'])?>'><img src="/themes/mobiles/img/zq/teawine.png"></a></p><p><a href='/item/pref/show?type=fruit'><img src="/themes/mobiles/img/zq/fruit.png"></a></p><p><a href='<?php echo U('item/pref/show',['type'=>'food'])?>'><img src="/themes/mobiles/img/zq/food.png"></a></p><p><a href='<?php echo U('item/pref/show',['type'=>'clothing'])?>'><img src="/themes/mobiles/img/zq/cloth.png"></a></p>
 	</div>
 </div>
 
