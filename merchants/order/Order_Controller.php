@@ -140,12 +140,33 @@ class Order_Controller extends MerchantController {
         $order_region = Order_Model::getOrderRegion($regionIds);
         $order['order_region'] = $order_region;
         $merchant_goods = Order_Model::getOrderItems($order_id);
-        $express = Order::getOrderExpress($order_id);
-        $this->v->assign("expressList", Order::get_express_list($express));
+        $express = OrderExpress::getOrderExpress($order);
+        $this->v->assign("expressList", self::get_express_list($express));
         $this->v->assign("order", $order);
         $this->v->assign("merchant_goods", $merchant_goods);
         $this->setPageLeftMenu('order', 'list');
         $response->send($this->v);
+    }
+    
+    /**
+     * 物流信息json串解析成一个List对象返回
+     * @param unknown $express
+     * @return NULL
+     */
+    private function get_express_list($express){
+        if(!$express){
+            return null;
+        }
+        $json = json_decode($express);
+        $list = $json->result ? $json->result->list :null;
+        if($list && count($list) > 0){
+            foreach ($list as &$ex){
+                if($ex->time && strlen($ex->time) > 19){
+                    $ex->time = substr($ex->time, 0, 19);
+                }
+            }
+        }
+        return $list;
     }
     
     /**
@@ -320,7 +341,7 @@ class Order_Controller extends MerchantController {
                 }
                 $ship_id = intval(isset($ship_ids[$i]) ? $ship_ids[$i] : 0);
                 $ship_name = isset($ship_names[$i]) ? $ship_names[$i] : '';
-                $invoice_no = isset($invoice_nos[$i]) ? $invoice_nos[$i] : '';
+                $invoice_no = isset($invoice_nos[$i]) ? trim($invoice_nos[$i]) : '';
                 if(!$invoice_no || !$ship_id){
                     continue;
                 }

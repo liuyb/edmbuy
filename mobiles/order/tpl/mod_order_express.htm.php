@@ -141,16 +141,16 @@ function wk($date1) {
 ?>
 <div style="background-color: #fff;padding:20px;">
 	<div style="font-weight:bold;">
-		运单号码：<?=$express['invoice_no'] ?>
+		运单号码：<?=$order['invoice_no'] ?>
 	</div>
 	<div style="font-weight:bold;">
-		物流公司：<?=$express['shipping_name'] ?>
+		物流公司：<?=$order['shipping_name'] ?>
 	</div>
 	<div style="text-align: center;font-weight:bold;margin-top:10px;margin-bottom:10px;">包裹详情</div>
 	<div class="package-status">
 		<?php 
-		  if($express['express_trace']):
-    		  $json = json_decode($express['express_trace']);
+		  if($express):
+    		  $json = json_decode($express);
     		  $list = $json->result ? $json->result->list :null;
     		  if($list && count($list) > 0):
     		  $i = 0;

@@ -110,7 +110,9 @@ class Order_Controller extends MobileController {
 	
 	    if (1||$request->is_hashreq()) {
 	        $order_id  = $request->arg(1);
-	        $express = Order::getOrderExpress($order_id);
+	        $order = D()->query("select * from shp_order_info where order_id = $order_id ")->fetch_array();
+	        $express = OrderExpress::getOrderExpress($order);
+	        $this->v->assign("order", $order);
 	        $this->v->assign("express", $express);
 	    }
 	
