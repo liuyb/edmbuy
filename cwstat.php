@@ -355,7 +355,7 @@ ORDER BY merchant_id DESC, order_id ASC";
 	    if ($to_time) {
 	        $where .= " AND o.`pay_time`<=".$to_time;
 	    }
-	    $sql = "select u.user_id, u.nick_name,u.level as clevel,p.level as blevel,o.money_paid,o.pay_time,pp.name as package_name,pp.actual_price,pp.goods_ids 
+	    $sql = "select u.user_id, u.nick_name,p.order_id,u.level as clevel,p.level as blevel,o.money_paid,o.pay_time,pp.name as package_name,pp.actual_price,pp.goods_ids 
              from shp_agent_payment p left join shp_premium_package pp on p.premium_id  = pp.pid 
             left join shp_users u on  p.user_id = u.user_id left join shp_order_info o on p.order_id = o.order_id 
             where is_paid = 1 and p.premium_id > 0 order by o.pay_time asc ";
@@ -364,10 +364,11 @@ ORDER BY merchant_id DESC, order_id ASC";
     	    $total_income = 0;
 	        $goods_desc = '';
 	        if($item['goods_ids']){
-    	        $sql = "select goods_name,shop_price,income_price from shp_goods where goods_id in (".$item['goods_ids'].")";
+    	        $sql = "select og.goods_id,og.income_price from shp_order_goods og join shp_order_info oi 
+    	            on og.order_id = oi.order_id where oi.relate_order_id = ".$item['order_id']." and oi.is_separate=0 ";
     	        $goods = D()->query($sql)->fetch_array_all();
     	        foreach ($goods as $gd){
-    	            $goods_desc .= ($gd['goods_name']."(".$gd['income_price'].")").";";
+    	            $goods_desc .= ($gd['goods_id']."(".$gd['income_price'].")").";";
     	            $total_income += doubleval($gd['income_price']);
     	        }
 	        }
@@ -398,9 +399,9 @@ ORDER BY merchant_id DESC, order_id ASC";
         $time = simphp_gmtime() - (7*86400);
         //无退换货 t+7结算
 	    if($canSettlement){
-	        $where .= " and (shipping_status = ".SS_RECEIVED." or (shipping_status > 0 and shipping_status <> 2 and shipping_time <= {$time})) ";
+	        $where .= " and (shipping_status = ".SS_RECEIVED." or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time <= {$time})) ";
 	    }else{
-	        $where .= " and (shipping_status = 0 or (shipping_status > 0 and shipping_status <> 2 and shipping_time > {$time})) ";
+	        $where .= " and (shipping_status = 0 or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time > {$time})) ";
 	    }
 	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
 	    FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id

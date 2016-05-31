@@ -28,11 +28,11 @@ class Home_Model extends Model{
         $sql = "select count(*) from shp_merchant_visiting where merchant_id='%s' $where";
         $visit = D()->query($sql, $muid)->result();
         //所有未删除的订单
-        $sql = "SELECT count(1) as totalOrder from shp_order_info where merchant_ids='%s' and is_separate=0 and is_delete=0 $where";
+        $sql = "SELECT count(1) as totalOrder from shp_order_info where merchant_ids='%s' and is_separate=0 and is_removed=0 $where";
         $totalOrder = D()->query($sql, $muid)->result();
         //所有已支付的订单
         $sql = "SELECT ifnull(sum(money_paid),0) money_paid, ifnull(sum(commision),0) as commision, ifnull(sum(discount),0) as discount 
-                from shp_order_info where merchant_ids='%s' and is_separate=0 and is_delete=0 and pay_status = ".PS_PAYED." $where";
+                from shp_order_info where merchant_ids='%s' and is_separate=0 and pay_status = ".PS_PAYED." $where";
         $result = D()->query($sql, $muid)->fetch_array();
         $result['totalOrder'] = $totalOrder;
         $result['income'] = number_format((doubleval($result['money_paid']) - doubleval($result['commision']) - doubleval($result['discount'])), 2);
