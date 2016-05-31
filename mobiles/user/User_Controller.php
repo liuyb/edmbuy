@@ -197,6 +197,8 @@ class User_Controller extends MobileController
 
     public function update_mobile(Request $request, Response $response)
     {
+        $ret = ['result' => 'FAIL', 'msg' => '该功能暂未开发！'];
+        $response->sendJSON($ret);
         if ($request->is_post()) {
             $mobile = isset($_POST['mobile']) ? $_POST['mobile'] : '';
             global $user;
@@ -635,6 +637,8 @@ class User_Controller extends MobileController
 
     public function chmobile(Request $request, Response $response)
     {
+        $ret = ['result' => 'FAIL', 'msg' => '该功能暂未开发！'];
+        $response->sendJSON($ret);
         if ($request->is_post()) {
             $mobile = $request->post('mobile', '');
             $ret = ['flag' => 'FAIL', 'msg' => ''];

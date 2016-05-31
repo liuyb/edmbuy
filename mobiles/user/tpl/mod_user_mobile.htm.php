@@ -11,7 +11,7 @@
 	个人信息
 <a href="javascript:history.back();" class="back"></a>
 	<?php if($ismoblie):?>
-<a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserMobile();'>保存</a>
+<a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserMobile();' style='display:none;'>保存</a>
 	<?php else:?>
 	<a href="javascript:;" class="h_btn" id="cart_edit"  onclick='saveUserNickname();'>保存</a>
 	<?php endif;?>

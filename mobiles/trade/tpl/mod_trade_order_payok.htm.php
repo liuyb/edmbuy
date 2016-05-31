@@ -14,6 +14,7 @@
 </div>
 
 <?php if($user->mobile==''):?>
+<!-- 
 <div class="pay_tier">
 	<div class="tier_c">
 		<p class="c_tit">绑定手机号，追踪物流</p>
@@ -23,6 +24,7 @@
 	</div>
 	<div class="tier_but"><a href="javascript:;" class="btna" style="color: #fff">确认手机号</a></div>
 </div>
+ -->
 <script>
 	$(function(){
 		$(".pay_tier").show();
