@@ -1172,33 +1172,34 @@ a.h_btn{
   background: #fff;
 }
 .p_d_title{
-  font-size: 18px;
   color: #111;
+  font-size:15px;width:75%;float:left;
 }
 .p_d_intro{
-  font-size: 12px;
-  color: #666;
-  margin: 10px 0 12px;    
+  float:right;
+  text-align:center;
+  width:20%;
+  margin:0 !important;
+  font-size:12px !important;
+  color:#8c8c8c !important;
+  padding-left:5px !important;
+  border-left:1px solid #e6e6e6;
 }
+.p_d_intro span{font-size:14px;color:#ff0036;}
 .p_d_price span{
-  color: #f00;
-  font-size: 20px;  
+  font-size:24px;color:#f65d00;
 }
-.p_d_price b{
-  font-size: 12px;
-  font-weight: normal;
-  color: #666;
-  margin-left: 10px;  
-  text-decoration: line-through;
+.p_d_price i{
+  font-size:18px;color:#f65d00;
 }
-.p_d_sale span,.p_d_sale b{
+.p_d_sale span{
   font-size: 12px;
-  color: #666;  
+  color: #8c8c8c;  
   font-weight: normal;  
 }
 .p_d_sale{
   overflow: hidden;
-  margin-top: 10px; 
+  margin-top: 5px; 
 }
 .p_detail_friend{
   background: #fff8f3;
@@ -5259,7 +5260,7 @@ td.cash_td2 img {
   margin-top:0px;
 }
 .store_wx,.store_up_t{
-  position:fixed;
+  position:absolute;
   width:230px;
   height:300px;
   display:none;

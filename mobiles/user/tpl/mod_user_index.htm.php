@@ -126,7 +126,7 @@
 
 <div class="member_cen_common" style="margin-bottom:60px;">
 	<div class="in_common_agency del_bottom">
-		<a class="blka" href="<?php echo U('eqx/letter')?>"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
+		<a class="blka" href="http://eqx.edmbuy.com/index.jsp"><img src="/themes/mobiles/img/yqx.png"><span>一起享</span></a>
 	</div>
 </div>
 

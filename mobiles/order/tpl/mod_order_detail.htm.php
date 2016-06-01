@@ -93,10 +93,13 @@
 			合计：￥ <span class="price_p"><?php if ($order->money_paid && $order->money_paid > 0): echo $order->money_paid; else: echo $order->order_amount; endif;?></span> （含运费：￥<?=$order->shipping_fee ?>）
 		</p>
 	</div>
+	<?php 
+	   $contact = $merchant->telphone ? $merchant->telphone : $merchant->mobile;
+	?>
 	<div class="order_serve">
 		<ul>
 			<li class="online_serve_off" id="zxkf"><a href="javascript:showMEIQIA();">在线客服</a></li>
-			<li class="<?=$merchant->mobile ? 'after_serve_on' : 'after_serve_off' ?>"><a href="tel:<?=$merchant->mobile ?>">售后服务</a></li>
+			<li class="<?=$contact ? 'after_serve_on' : 'after_serve_off' ?>"><a href="tel:<?=$contact ?>">售后服务</a></li>
 		</ul>
 	</div>
 </div>

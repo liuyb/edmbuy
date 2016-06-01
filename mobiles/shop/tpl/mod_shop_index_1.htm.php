@@ -132,7 +132,7 @@
 
 <!-- 二维码 -->
 <script id="showQrCode" type="text/html">
-<div class="store_wx">
+<div class="store_wx" id="shopQR">
 <div class="store_wx_tit">更多优惠，请关注店铺公众号</div>
 <?php if($shop_info->wxqr):?>
 <div class="store_wx_img"><img src="<?=$shop_info->wxqr?>"></div>
@@ -222,7 +222,7 @@ $(function(){
 
 	$(document).on("click",'.two_code',function(){
 		$("#shopQrMask").show();
-		var qrdom = $(".store_wx");
+		var qrdom = $("#shopQR");
 		centerDOM(qrdom);
 		qrdom.show();
 	});
@@ -230,7 +230,7 @@ $(function(){
 	//关闭
 	$(document).on("click","#shopQrMask,.store_wx_colse",function(){
 		$("#shopQrMask").hide();
-		$(".store_wx").hide();
+		$("#shopQR").hide();
 	})
 </script>
 <?php include T('inc/popqr');?>

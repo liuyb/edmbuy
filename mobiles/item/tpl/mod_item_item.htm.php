@@ -11,21 +11,21 @@
 
 <?php if(''!==$errmsg):?>
 
-<div class="error"><?=$errmsg?></div>
+<div class="error"><?php echo $errmsg?></div>
 
 <?php else:?>
 
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
-	<span class="p_detail_back" onclick="<?=$back ?>"></span>
+	<span class="p_detail_back" onclick="<?php echo $back ?>"></span>
     <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
-	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?=$cartnum?></span>
+	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?php echo $cartnum?></span>
 </div>
 </script>
 <script id="forMnav" type="text/html">
 <div class="p_detail_tool">
 	<div class="fl cursor p_d_t1 item_kefu_off" id="zxkf"><a href='javascript:showMEIQIA();'>&nbsp;</a></div>
-    <div class="fl cursor p_d_t5" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'"><p></p></div>
+    <div class="fl cursor p_d_t5" onclick="window.location.href='<?php echo U('/shop/'.$merchant->uid) ?>'"><p></p></div>
 	<div class="fl cursor p_d_t2" id="collect_status" onclick="changeGoodsCollect(this);";><span class="f_num" style='display:none;' id="collect_number"></span></div>
 <?php if (!$item->is_on_sale || $item->is_delete):?>
 <div style="background: #c0c0c0;width: 52%;font-size:16px;color:#fff;font-weight:bold;">产品已下架</div>
@@ -40,25 +40,25 @@
 <div class="mask no-bounce" id="bodymask" style="display:none;"></div>
 <div class="p_cart_main no-bounce" id="p_cart_main" style="display:none;">
 	<input type="hidden" id="frm_buy_type" value="cart"/>
-	<input type="hidden" id="frm_item_id" value="<?=$item->item_id?>"/>
+	<input type="hidden" id="frm_item_id" value="<?php echo $item->item_id?>"/>
 	<div class="p_cart_content">
 		<div class="p_cart_hd no-bounce clearfix">
 			<div class="p_cart_hl fl">
-				<img src="<?=$item->item_thumb?>" alt="" class="img_item_thumb">
+				<img src="<?php echo $item->item_thumb?>" alt="" class="img_item_thumb">
 			</div>
 			<div class="p_cart_hr fl">
-				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?=$item->shop_price?>"><?=$item->shop_price?></span></div>
-				<div class="p_hr_stock">库存<span id="stock-num"><?=$item->item_number?></span>件</div>
+				<div class="p_hr_price">￥<span id="cart_shop_price" data-base_price="<?php echo $item->shop_price?>"><?php echo $item->shop_price?></span></div>
+				<div class="p_hr_stock">库存<span id="stock-num"><?php echo $item->item_number?></span>件</div>
                 <div class="p_hr_select <?php if(count($attr_grp) == 0):?>hide<?php endif;?>">已选：<span id="product_select"></span></div>
 			</div>
 		</div>
 		<div class="p_cart_bd no-bounce" id="pop_cart_area">
 <?php foreach ($attr_grp AS $attrgrp): ?>
 			<div class="p_cart_item">
-				<div class="p_cart_btit"><?=$attrgrp['cat_name']?></div>
+				<div class="p_cart_btit"><?php echo $attrgrp['cat_name']?></div>
 				<ul class="p_cart_ul clearfix">
 	<?php $i=0; foreach ($attrgrp['attrs'] AS $attr): ?>
-					<li data-id="<?=$attr['attr_id']?>"><?=$attr['attr_value']?></li>
+					<li data-id="<?php echo $attr['attr_id']?>"><?php echo $attr['attr_value']?></li>
 	<?php $i++; endforeach;?>
 					<input type="hidden"/>
 				</ul>
@@ -156,18 +156,31 @@ $(function(){
   });
 });
 </script>
-
+<?php 
+$commision = 0;
+if($GLOBALS['user']->level > 0){
+    $commision = number_format($item->commision * 0.8 * 0.25, 2);
+}
+?>
 <div class="p_detail_msg">
-	<div class="p_d_title"><?=$item->item_name?></div>
-	<div class="p_d_intro"><?=$item->item_brief?></div>
-	<div class="p_d_price"><span>￥<?=$item->shop_price?></span><b>市场价: ￥<?=$item->market_price?></b></div>
-	<div class="p_d_sale"><span class="fr">销量：<?=$item->paid_goods_number?>件</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span></div>
+	<div class="p_d_title" <?php if(!$commision || $commision <= 0):?> style='width:100%;'<?php endif;?>><?php echo $item->item_name?></div>
+	<?php if($commision && $commision > 0):?>
+	<div class="p_d_intro"><span>￥<?php echo $commision ?></span></br>返利</div>
+	<?php endif;?>
+	<div class="clear"></div>
+	<div class="p_d_price">
+		<span><i>￥</i><?php echo $item->shop_price?></span>
+	</div>
+	<div class="p_d_sale"><span class="fl" style="text-decoration: line-through;">原价：<?php echo $item->market_price?></span></div>
+	<div class="p_d_sale">
+		<span class="fr">销量：<?php echo $item->paid_goods_number?>笔</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span>
+	</div>
 </div>
 
 <?php if($referee):?>
 <div class="p_detail_friend">
 	<div class="fl p_friend_left"><img src="<?php echo !empty($referee->logo) ? $referee->logo : '/themes/mobiles/img/mt.png' ?>" alt=""/></div>
-	<div class="fl p_friend_right">你的好友“<b><?=$referee->nickname?></b>”向你推荐！</div>
+	<div class="fl p_friend_right">你的好友“<b><?php echo $referee->nickname?></b>”向你推荐！</div>
 </div>
 <?php endif;?>
 
@@ -180,16 +193,16 @@ $(function(){
 		</ul>
 	</div>
 </div>
-
+<a href="<?php echo U('shop/'.$merchant->uid) ?>">
 <div class="iance_list_top">
-	<img src="<?=$merchant->logo ?>" class="l_top_img">
+	<img src="<?php echo $merchant->logo ?>" class="l_top_img">
 	<div class="l_top_infos">
-		<p class="t_infos_nmae" style="margin-top:13px;"><?=mb_substr($merchant->facename, 0,10,'UTF-8') ?></p>
+		<p class="t_infos_nmae" style="margin-top:13px;"><?php echo mb_substr($merchant->facename, 0,10,'UTF-8') ?></p>
 		<!-- <p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p> -->
 	</div>
-	<button class="join_top_btn" onclick="window.location.href='<?=U('/shop/'.$merchant->uid) ?>'">进店逛逛  </button>
+	<button class="join_top_btn">进店逛逛  </button>
 </div>
-
+</a>
 <div class="p_detail_pull">
 	<!-- <h1><p>向上拖动查看图文详情</p></h1> -->
 </div>
@@ -209,14 +222,14 @@ $(function(){
 		<div class="clear"></div> 
 	</div>
 	<div class="pro_comment" id="list1">
-		<div class="product_detail"><?=$item_desc ?></div>
+		<div class="product_detail"><?php echo $item_desc ?></div>
 	</div>
 	<?php include T('mod_item_item_ext');?>
 </div>
 
 <script>
-var goods_id = <?=$item->item_id ?>;
-var attrmap = <?=$attrmap ?>;
+var goods_id = <?php echo $item->item_id ?>;
+var attrmap = <?php echo $attrmap ?>;
 $(function(){
 	getGoodsCollectNum();
 	//缓存对象

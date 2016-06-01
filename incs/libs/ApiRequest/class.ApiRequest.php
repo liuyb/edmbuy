@@ -60,6 +60,7 @@ class ApiRequest implements ApiRequestInterface {
               'protocol'=> 'http',      //请求协议，http/https
               'method'  => 'get',       //请求方法, get/post
               'packto'  => '',       		//当请求方法为get时，设置此参数可以让所有提交参数(包括签名字段)都用base64编码打包到一个参数，比如'd'
+              'sendfmt' => '',          //请求格式，默认''，表示http form表单，可选值: '','xml','json'
               'outfile' => '',          //输出目标地，当非空和不等于STDOUT时，将输出重定向到该参数指定的文件路径
               'timeout' => 10,          //请求执行超时时间(单位：秒)
               'timeout_connect' => 5,   //请求连接超时时间(单位：秒)
@@ -245,7 +246,7 @@ class ApiRequest implements ApiRequestInterface {
 	 *        0 => neither key nor value rawurlencode
 	 * @return String
 	 */
-	public function makeQueryString($params,$encode_level=2) {
+	public static function makeQueryString($params,$encode_level=2) {
 		if (is_string($params)) {
 			return $params;
 		}
@@ -272,12 +273,39 @@ class ApiRequest implements ApiRequestInterface {
 					break;
 				case 0:
 				default:
+					if (is_array($val)) {
+						$val = json_encode($val,JSON_UNESCAPED_SLASHES);
+					}
 			}
 			array_push($query_string, $key . '=' . $val);
 		}
 		$query_string = join('&', $query_string);
 		
 		return $query_string;
+	}
+	
+	/**
+	 * 生成Json数据
+	 * @param mixed $params
+	 * @return string
+	 */
+	public function makeJsonData($params) {
+		if (is_string($params)) {
+			return $params;
+		}
+		return json_encode($params,JSON_UNESCAPED_SLASHES);
+	}
+	
+	/**
+	 * 生成Xml数据
+	 * @param mixed $params
+	 * @return string
+	 */
+	public function makeXmlData($params) {
+		if (is_string($params)) {
+			return $params;
+		}
+		return $params;
 	}
 	
 	/**
@@ -356,8 +384,13 @@ class ApiRequest implements ApiRequestInterface {
 	 * @param Array $signinfo
 	 * @return ApiRequest
 	 */
-	public function setSigninfo(Array $signinfo) {
-		$this->apiConfig['signinfo'] = $signinfo;
+	public function setSigninfo(Array $signinfo, $iscover = FALSE) {
+		if ($iscover) {
+			$this->apiConfig['signinfo'] = array_merge($this->apiConfig['signinfo'], $signinfo);
+		}
+		else {
+			$this->apiConfig['signinfo'] = $signinfo;
+		}
 		return $this;
 	}
 	

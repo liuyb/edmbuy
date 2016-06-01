@@ -21,8 +21,17 @@ class ApiIOCurl extends ApiIO {
 			throw new ApiRequestException('ApiRequest->url required setting');
 		}
 		
-		$query_string  = $request->makeQueryString($request->params);
 		$cookie_string = $request->makeCookieString($request->cookies);
+		if ($request->sendfmt=='json') {
+			$query_string = $request->makeJsonData($request->params);
+		}
+		elseif ($request->sendfmt=='xml') {
+			$query_string = $request->makeXmlData($request->params);
+		}
+		else {
+			$query_string  = $request->makeQueryString($request->params, 2);
+		}
+		
 		if ($request->packto) {
 			$query_string = 'd='.base64_encode($query_string);
 		}
@@ -42,7 +51,15 @@ class ApiIOCurl extends ApiIO {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $request->mergeQueryParams($request->params,$request->files));
 			}
 			else { //no files, just ordinary variables to post
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded","Content-Length: ".strlen($query_string)));
+				if ($request->sendfmt=='json') {
+					curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json","Content-Length: ".strlen($query_string)));
+				}
+				elseif ($request->sendfmt=='xml') {
+					curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml","Content-Length: ".strlen($query_string)));
+				}
+				else {
+					curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded","Content-Length: ".strlen($query_string)));
+				}
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $query_string);
 			}
 		}

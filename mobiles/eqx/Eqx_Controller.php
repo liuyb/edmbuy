@@ -194,6 +194,11 @@ class Eqx_Controller extends MobileController {
 					$parent_id = $_SESSION['eqx_referee_uid'];
 				}
 				
+				if (1) {
+					$ret['msg'] = '系统升级，暂时关闭注册，请谅解。';
+					$response->sendJSON($ret);
+				}
+				
 				if (''==$vcode) {
 					$ret['msg'] = '验证码不能为空';
 					$response->sendJSON($ret);
@@ -222,14 +227,14 @@ class Eqx_Controller extends MobileController {
 				
 				if ($parent_id) {
 					$pUser = Users::load($parent_id);
-					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
+					if (!$pUser->is_exist()/* || $pUser->level<Users::USER_LEVEL_3*/) {
 						$parent_id = 0;
 					}
-				}
+				}/*
 				if (!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
-				}
+				}*/
 				
 				$_SESSION['eqx_mobi'] = $mobile;
 				$ret = ['flag' => 'SUCC', 'msg'=>'手机验证通过'];
@@ -239,6 +244,11 @@ class Eqx_Controller extends MobileController {
 				$passwd    = $request->post('passwd','');
 				$parent_id = $request->post('parent_id',0);
 				$inapp     = $request->get('inapp','');
+				
+				if (1) {
+					$ret['msg'] = '系统升级，暂时关闭注册，请谅解。';
+					$response->sendJSON($ret);
+				}
 				
 				if (!$GLOBALS['user']->uid) {
 					$ret['msg'] = '请先微信授权';
@@ -271,14 +281,16 @@ class Eqx_Controller extends MobileController {
 				}
 				if ($parent_id) {
 					$pUser = Users::load($parent_id);
-					if (!$pUser->is_exist() || $pUser->level<Users::USER_LEVEL_3) {
+					if (!$pUser->is_exist()/* || $pUser->level<Users::USER_LEVEL_3*/) {
 						$parent_id = 0;
 					}
 				}
+				/*
 				if (!$parent_id) {
 					$ret['msg'] = '封闭期内只能邀请注册，<br>请先获取邀请链接';
 					$response->sendJSON($ret);
 				}
+				*/
 				
 				if (Users::reg_account($mobile, $passwd, $parent_id, $GLOBALS['user']->uid)) {
 					if (isset($_SESSION['eqx_referee_uid'])) unset($_SESSION['eqx_referee_uid']);
@@ -490,6 +502,20 @@ class Eqx_Controller extends MobileController {
 			
 			throw new ViewResponse($this->v);
 		}
+	}
+	
+
+	/**
+	 * 同步一起享登录
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function sync_login(Request $request, Response $response)
+	{
+		ApiEqx::parseEqxRequest();
+		Users::set_account_logined();
+		$response->redirect(U('user'));
 	}
 	
 }

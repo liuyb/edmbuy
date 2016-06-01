@@ -151,7 +151,7 @@ HEREDOC;
 				$cartnum = Cart::getUserCartNum(Cart::shopping_uid());
 				$this->v->assign('cartnum', $cartnum);
 				//商家信息
-				$merchant = Merchant::find_one(new Query('uid', $item->merchant_id ? $item->merchant_id : 0));
+				$merchant = Merchant::load($item->merchant_id);
 				$this->v->assign('merchant', $merchant);
 				//商家客服
 				$ent_id = Merchant::getMerchantKefu($item->merchant_id);
