@@ -20,8 +20,6 @@ class Eqxmq_Controller extends Controller {
 	 */
 	private $logData = [];
 	
-	private $argName = 'res';
-	
 	/**
 	 * hook init
 	 * @param string $action
@@ -97,7 +95,7 @@ class Eqxmq_Controller extends Controller {
 		}
 		
 		// 检查接口参数字段是否存在
-		if (!isset($mq_data[$this->argName])) {
+		if (!isset($mq_data[ApiEqx::$argName])) {
 			$this->response_mq(400, 'args not exist');
 		}
 		
@@ -144,7 +142,8 @@ class Eqxmq_Controller extends Controller {
 	 */
 	public function mq_sync_reg($data)
 	{
-		$res = $data[$this->argName];
+		//ApiEqx::sync_login($data);
+		$res  = $data[ApiEqx::$argName];
 		
 		//~ 检查上级
 		$parent_id   = 0;
@@ -181,12 +180,12 @@ class Eqxmq_Controller extends Controller {
 		//~ 处理当前用户
 		$passwd_raw = '';
 		if (!empty($res['passwd'])) {
-			$passwd_raw = AuthCode::decrypt($res['passwd'], Eqxmq_Model::AUTH_KEY_5);
+			$passwd_raw = AuthCode::decrypt($res['passwd'], ApiEqx::AUTH_KEY_5);
 		}
 		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if ($cUser->is_exist()) { //已存在，更新部分信息
-			
+		
 			if (!$cUser->parentid || !$cUser->password) { //只有上级为空，或者密码为空时才会去更新
 				$nUser = new Users($cUser->id);
 				if (''!=$passwd_raw) {
@@ -204,13 +203,13 @@ class Eqxmq_Controller extends Controller {
 				}
 				$nUser->save(Storage::SAVE_UPDATE);
 			}
-
+		
 		}
 		else { //不存在，新增用户
 			$salt = gen_salt();
 			$passwd_enc = !empty($passwd_raw) ? gen_salt_password($passwd_raw, $salt) : '';
 			$p2layers = Users::get_parent_ids($parent_id, TRUE);
-			
+		
 			$nUser = new Users();
 			$nUser->mobile   = $res['mobile'];
 			$nUser->nickname = base64url_decode($res['nick']);
@@ -232,7 +231,6 @@ class Eqxmq_Controller extends Controller {
 			$nUser->randver  = randstr(6);
 			$nUser->save(Storage::SAVE_INSERT_IGNORE);
 		}
-		
 		return true;
 	}
 	
@@ -243,7 +241,7 @@ class Eqxmq_Controller extends Controller {
 	 */
 	public function mq_sync_parent($data)
 	{
-		$res = $data[$this->argName];
+		$res = $data[ApiEqx::$argName];
 		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if (!$cUser->is_exist()) { //用户不存在，则忽略该消息请求
@@ -273,7 +271,7 @@ class Eqxmq_Controller extends Controller {
 	 */
 	public function mq_sync_passwd($data)
 	{
-		$res = $data[$this->argName];
+		$res = $data[ApiEqx::$argName];
 		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if (!$cUser->is_exist()) { //用户不存在，则忽略该消息请求

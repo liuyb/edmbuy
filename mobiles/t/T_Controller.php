@@ -71,7 +71,18 @@ class T_Controller extends MobileController {
 		$the_uid = intval($the_uid);
 		$flag = $request->arg(2);
 		if ($flag && $flag=='eqx') {
-			$response->redirect('/eqx/intro?spm='.Spm::user_spm($the_uid));
+			$tUser = Users::load($the_uid);
+			$tGuid = 0;
+			if ($tUser->is_exist()) {
+				if ($tUser->guid) {
+					$tGuid = $tUser->guid;
+				}
+				else {
+					//$tGuid = $tUser->mobile;
+				}
+			}
+			//$response->redirect('/eqx/intro?spm='.Spm::user_spm($the_uid));
+			$response->redirect('http://eqx.edmbuy.com/regtemp.jsp?flag=1&markid='.$tGuid);
 		}
 		else {
 			$response->redirect('/?spm='.Spm::user_spm($the_uid));

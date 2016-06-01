@@ -29,8 +29,8 @@ $json =<<<HEREDOC
 		},
 		{
 			"type" : "view",
-			"name" : "一起享",
-			"url"  : "http://m.edmbuy.com/eqx/login"
+			"name" : "登录使用",
+			"url"  : "http://eqx.edmbuy.com/login.jsp?appid=4"
 		},
     {
       "name" : "我的",
