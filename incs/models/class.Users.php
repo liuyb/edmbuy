@@ -189,11 +189,16 @@ class Users extends StorageNode {
 	 * @return Users
 	 */
 	static function load_by_guid($guid) {
-		return self::find_one(new Query('guid', $mobile));
+		return self::find_one(new Query('guid', $guid));
 	}
 	
-	static function load_by_nickname($mobile) {
-		return self::find_one(new Query('nickname', $mobile));
+	/**
+	 * Load user by nick name
+	 * @param string $nick
+	 * @return StorageNode
+	 */
+	static function load_by_nickname($nick) {
+		return self::find_one(new Query('nickname', $nick));
 	}
 
 

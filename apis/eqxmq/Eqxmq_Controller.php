@@ -9,6 +9,12 @@ defined('IN_SIMPHP') or die('Access Denied');
 class Eqxmq_Controller extends Controller {
 
 	/**
+	 * log id
+	 * @var integer
+	 */
+	private $logId   = 0;
+	
+	/**
 	 * 用于记录log数据
 	 * @var array
 	 */
@@ -39,7 +45,7 @@ class Eqxmq_Controller extends Controller {
 				'reqTime'   => simphp_msec(),
 				'dealTime'  => 0,
 				'execResult'=> 0,
-				'respCode'  => '',
+				'respCode'  => 0,
 				'respMsg'   => '',
 		];
 		
@@ -86,14 +92,17 @@ class Eqxmq_Controller extends Controller {
 		}
 		
 		// 检查时间戳是否有效时间内
-		if (isset($mq_data['ts']) && simphp_msec() > ($mq_data['ts'] + 5*60*1000)) { //5分钟内有效(ts是毫秒)
+		if (isset($mq_data['ts']) && simphp_msec() > ($mq_data['ts'] + 50*60*1000)) { //5分钟内有效(ts是毫秒)
 			$this->response_mq(400, 'ts expired');
 		}
 		
 		// 检查接口参数字段是否存在
-		if (!isset($data[$this->argName])) {
-			$this->response_mq(400, 'args no exist');
+		if (!isset($mq_data[$this->argName])) {
+			$this->response_mq(400, 'args not exist');
 		}
+		
+		// 先保存日志
+		$this->save_log();
 		
 		// 调用消息aciton
 		$ret = $this->$mq_action($mq_data);
@@ -170,6 +179,7 @@ class Eqxmq_Controller extends Controller {
 		if (!empty($res['passwd'])) {
 			$passwd_raw = AuthCode::decrypt($res['passwd'], Eqxmq_Model::AUTH_KEY_5);
 		}
+		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if ($cUser->is_exist()) { //已存在，更新部分信息
 			
@@ -275,9 +285,23 @@ class Eqxmq_Controller extends Controller {
 		//保存日志
 		$this->logData['respCode'] = $http_code;
 		$this->logData['respMsg']  = $http_msg;
-		$this->logData['dealTime'] = simphp_msec()-$this->logData['reqTime'];
-		D()->insert('{eqxmq_log}', $this->logData);
+		$this->save_log();
 		exit;
+	}
+	
+	/**
+	 * 保存日志
+	 */
+	public function save_log() {
+		//保存日志
+		$this->logData['dealTime'] = simphp_msec()-$this->logData['reqTime'];
+		if (!$this->logId) {
+			D()->insert('{eqxmq_log}', $this->logData);
+			$this->logId = D()->insert_id();
+		}
+		else {
+			D()->update('{eqxmq_log}', $this->logData, ['logId'=>$this->logId]);
+		}
 	}
 
 }
