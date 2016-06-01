@@ -100,7 +100,8 @@ class AuthCode {
 				return '';
 			}
 		} else {
-			return $keyc.str_replace('=', '', base64_encode($result));
+			//return $keyc.str_replace('=', '', base64_encode($result));
+			return $keyc.base64_encode($result);
 		}
 	}
 	

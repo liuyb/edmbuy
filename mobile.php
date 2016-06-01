@@ -4,14 +4,16 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+//error_reporting(E_ALL);
+//ini_set('display_errors', 'on');
 
 //~ require init.php
 require (__DIR__.'/core/init.php');
 
 $request  = new Request();
 $response = new Response();
+
+//Fn::show_error_message('系统升级维护中，请稍后再访问...');
 
 try {
   SimPHP::I(['modroot'=>'mobiles'])

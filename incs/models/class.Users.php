@@ -92,6 +92,9 @@ class Users extends StorageNode {
 						'childnum1'   => 'childnum_1',
 						'childnum2'   => 'childnum_2',
 						'childnum3'   => 'childnum_3',
+						'guid'        => 'guid',
+						'parent_guid' => 'parent_guid',
+						'from_sync'   => 'from_sync',
 						'flag'        => 'flag',
 						'alias'       => 'alias',
 						'msn'         => 'msn',
@@ -180,6 +183,15 @@ class Users extends StorageNode {
 		return self::find_one(new Query('mobile', $mobile));
 	}
 
+	/**
+	 * Load user by user
+	 * @param int $guid
+	 * @return Users
+	 */
+	static function load_by_guid($guid) {
+		return self::find_one(new Query('guid', $mobile));
+	}
+	
 	static function load_by_nickname($mobile) {
 		return self::find_one(new Query('nickname', $mobile));
 	}
@@ -192,6 +204,20 @@ class Users extends StorageNode {
 	 */
 	static function load_by_appuid($appuid) {
 		return self::find_one(new Query('appuserid', $appuid));
+	}
+	
+	/**
+	 * Find eqx user object
+	 * @param integer $guid
+	 * @param string $mobile
+	 * @return Users
+	 */
+	static function find_eqx_user($guid, $mobile) {
+		$cUser = self::load_by_guid($guid);
+		if (!$cUser->is_exist()) {
+			$cUser = self::load_by_mobile($mobile);
+		}
+		return $cUser;
 	}
 	
 	/**

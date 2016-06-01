@@ -172,6 +172,24 @@ class Api extends Model {
 		return $params_parsed;
 	}
 	
+	/**
+	 * 封装默认的json encode函数
+	 * @param mixed $value
+	 * @return string
+	 */
+	static function json_encode($value) {
+		return json_encode($value, JSON_UNESCAPED_SLASHES);
+	}
+	
+	/**
+	 * 封装默认的json decode函数
+	 * @param string $json
+	 * @param int    $depth
+	 * @return mixed
+	 */
+	static function json_decode($json, $depth = 512) {
+		return json_decode($json, TRUE, $depth, JSON_BIGINT_AS_STRING);
+	}
 }
 
 class ApiException extends Exception {
