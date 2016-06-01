@@ -160,8 +160,8 @@ class Eqxmq_Controller extends Controller {
 				$nPUser->sex      = $res['parent_gender'];
 				$nPUser->regip    = Request::ip();
 				$nPUser->regtime  = simphp_time();
-				$nPUser->ecsalt   = gen_salt();
-				$nPUser->salt     = $nPUser->ecsalt;
+				$nPUser->ecsalt   = '';
+				$nPUser->salt     = gen_salt();
 				$nPUser->guid     = $res['parent_guid'];
 				$nPUser->parent_guid = 0;
 				$nPUser->from_sync= 1;
@@ -171,6 +171,10 @@ class Eqxmq_Controller extends Controller {
 				$parent_id   = $nPUser->id;
 				$parent_nick = $nPUser->nickname;
 				unset($nPUser);
+			}
+			else {
+				$parent_id   = $pUser->uid;
+				$parent_nick = $pUser->nickname;
 			}
 		}
 		
@@ -189,9 +193,12 @@ class Eqxmq_Controller extends Controller {
 					$passwd_enc = gen_salt_password($passwd_raw, $cUser->salt);
 					$nUser->password = $passwd_enc;
 				}
-				if (!$cUser->parentid) {
+				if (!$cUser->parentid && $cUser->from_sync) { //只有在from_sync==1 并且 上级不存在时才修改
+					$p2layers = Users::get_parent_ids($parent_id, TRUE);
 					$nUser->parentid    = $parent_id;
 					$nUser->parentnick  = $parent_nick;
+					$nUser->parentid2   = $p2layers['parent_id2'];
+					$nUser->parentid3   = $p2layers['parent_id3'];
 					$nUser->guid        = $res['guid'];
 					$nUser->parent_guid = $res['parent_guid'];
 				}
@@ -202,6 +209,7 @@ class Eqxmq_Controller extends Controller {
 		else { //不存在，新增用户
 			$salt = gen_salt();
 			$passwd_enc = !empty($passwd_raw) ? gen_salt_password($passwd_raw, $salt) : '';
+			$p2layers = Users::get_parent_ids($parent_id, TRUE);
 			
 			$nUser = new Users();
 			$nUser->mobile   = $res['mobile'];
@@ -211,10 +219,12 @@ class Eqxmq_Controller extends Controller {
 			$nUser->sex      = $res['gender'];
 			$nUser->regip    = Request::ip();
 			$nUser->regtime  = simphp_time();
-			$nUser->ecsalt   = $salt;
-			$nUser->salt     = $nUser->ecsalt;
-			$nUser->parentid   = $nUser->parentid;
-			$nUser->parentnick = $nUser->parentnick;
+			$nUser->ecsalt   = '';
+			$nUser->salt     = $salt;
+			$nUser->parentid   = $p2layers['parent_id'];
+			$nUser->parentnick = $p2layers['parent_nick'];
+			$nUser->parentid2  = $p2layers['parent_id2'];
+			$nUser->parentid3  = $p2layers['parent_id3'];
 			$nUser->guid     = $res['guid'];
 			$nUser->parent_guid = $res['parent_guid'];
 			$nUser->from_sync= 1;
@@ -237,12 +247,16 @@ class Eqxmq_Controller extends Controller {
 		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if (!$cUser->is_exist()) { //用户不存在，则忽略该消息请求
-			return false;
+			return true;
+		}
+		
+		if (!$cUser->from_sync) { //如果当前用户from_sync==0，也忽略该请求
+			return true;
 		}
 		
 		$pUser = Users::find_eqx_user($res['parent_guid'], $res['parent_mobile']);
 		if (!$pUser->is_exist()) { //如果提供的上级用户也不存在，也忽略该消息请求
-			return false;
+			return true;
 		}
 		
 		// 到这里可以强制覆盖上级了
@@ -263,13 +277,13 @@ class Eqxmq_Controller extends Controller {
 		
 		$cUser = Users::find_eqx_user($res['guid'], $res['mobile']);
 		if (!$cUser->is_exist()) { //用户不存在，则忽略该消息请求
-			return false;
+			return true;
 		}
 		
 		// 到这里可以强制覆盖密码了
 		$passwd_raw = AuthCode::decrypt($res['passwd'],Eqxmq_Model::AUTH_KEY_5);
 		$passwd_enc = gen_salt_password($passwd_raw, $cUser->salt);
-		D()->update(Users::table(), ['password'=>$passwd_enc,'salt'=>$salt], ['user_id'=>$cUser->uid]);
+		D()->update(Users::table(), ['password'=>$passwd_enc], ['user_id'=>$cUser->uid]);
 		
 		return true;
 	}
