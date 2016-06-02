@@ -28,7 +28,7 @@ class OrderExpress extends CStatic{
             return $trace;
         }
         if(!$order['shipping_id']){
-            return null;
+            return $trace;
         }
         if(!$express || empty($express) || count($express) == 0){
             $trace = self::pullExpressData($order, true);
@@ -62,16 +62,11 @@ class OrderExpress extends CStatic{
         $url = self::EXPRESS_QUERY_API;
         $url .= "&type=$shipping_type&number=$invoice_no";
         $expressJson = file_get_contents($url);
-        if(!$expressJson){
-            return null;
-        }
-        $expressObj = json_decode($expressJson);
-        //status:0 表示抓取状态成功
-        if(!$expressObj || $expressObj->status != '0'){
-            return null;
+        if(empty($expressJson)){
+            return $expressJson;
         }
         if(!$is_insert){
-            self::monitorExpressIsDone($order['order_id'], $expressObj);
+            self::monitorExpressIsDone($order['order_id'], $expressJson);
         }
         return $expressJson;
     }
@@ -81,7 +76,12 @@ class OrderExpress extends CStatic{
      * @param unknown $order_id
      * @param unknown $expressJson
      */
-    private static function monitorExpressIsDone($order_id, $expressObj){
+    private static function monitorExpressIsDone($order_id, $expressJson){
+        $expressObj = json_decode($expressJson);
+        //status:0 表示抓取状态成功
+        if(empty($expressObj)){
+            return;
+        }
         if($expressObj->result->issign == "1"){
             D()->query("update shp_order_express set is_done = 1 where order_id = $order_id ");
         }

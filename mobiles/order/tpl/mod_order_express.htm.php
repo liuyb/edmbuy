@@ -7,115 +7,39 @@
 <?php else:?>
 <style>
 <!--
-.package-status .status-box {
-    position: relative
+.track{
+	margin-top:20px;
 }
-.package-status .status-list {
-    margin-top: 0
+.track_l{
+	margin:0 20px;
+	float:left;
 }
-
-.package-status .status-info {
-    background: 0 0
+.track_r{
+	width:auto;
+  	margin-right: 12px;	
 }
-
-.package-status .status-list .latest {
-    border: none;
-	margin-bottom:20px;
-}
-
-.package-status .status-list li {
-    margin-bottom: -2px
-}
-
-.package-status {
-    padding: 18px 0 0 0
-}
-
-.package-status .status-list {
-    margin: 0;
-    padding: 0;
-    margin-top: -9px;
-    padding-left: 10px;
-    list-style: none;
-    font-size: 12px
-}
-
-.package-status .status-list li {
-    height: 50px;
-    border-left: 1px solid #d9d9d9
-}
-
-.package-status .status-list li:before {
-    content: '';
-    border: 3px solid #f3f3f3;
-    background-color: #d9d9d9;
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    border-radius: 5px;
-    margin-left: -6px;
-    margin-right: 10px;
+.line{
 	margin-top:10px;
+	border-right:1px solid #d0d0d0;
 }
-
-.package-status .status-list .date {
-    font-weight: 700;
-    margin-right: 8px;
-    font-family: Arial
+.track_r p{
+	font-size:13px;
 }
-
-.package-status .status-list .time {
-    margin-right: 18px;
-    margin-left: 5px
+.track_title{
+	margin:10px;
 }
-
-.package-status .status-list .week {
-    font-weight: 700
+.track_title p{
+	font-size:13px;
+	line-height:30px;
 }
-
-.package-status .status-list .latest:before {
-    background-color: #fe4300;
-    border-color: #f8e9e4
+.tit_b_info{
+	border-bottom:1px solid #e6e6e6;
+	padding-left:10px;
+	line-height:40px;
+	font-size:15px;
 }
-
-.package-status .status-list em {
-    color: #ff4207
-}
-
-.package-status .status-list .hidden {
-    display: inline
-}
-
-.package-status .status-box {
-    overflow: hidden
-}
-
-.package-status .status-action {
-    text-align: right;
-    color: #ff4200;
-    padding-right: 10px
-}
-
-.package-status .status-action .action-handler {
-    cursor: pointer
-}
-
-.package-status .status-info {
-    margin-top: -10px;
-    margin-left: 22px;
-    margin-right: 10px;
-    background-color: #f3f3f3;
-    overflow: hidden;
-    line-height: 28px;
-    color: #959595;
-    text-align: right
-}
-
-.package-status .status-info .info-inner {
-    margin-top: 20px;
-    margin-left: 18px;
-    border-top: 1px solid #e8e8e8;
-    height: 28px
+#Mbody{
+	background : #ffffff !important;
 }
 -->
 </style>
@@ -139,15 +63,19 @@ function wk($date1) {
     return $weekarray[$shuchu];
 }
 ?>
-<div style="background-color: #fff;padding:20px;">
-	<div style="font-weight:bold;">
-		运单号码：<?=$order['invoice_no'] ?>
+<div class="track_title">
+	<p>订单编号：<?=$order['invoice_no'] ?></p>
+	<p>物流公司：<?=$order['shipping_name'] ?></p>
+</div>
+
+<div class="tit_b_info">包裹详情</div>
+
+<div class="track">
+	<div class="track_l">
+		<div class="line"></div>
 	</div>
-	<div style="font-weight:bold;">
-		物流公司：<?=$order['shipping_name'] ?>
-	</div>
-	<div style="text-align: center;font-weight:bold;margin-top:10px;margin-bottom:10px;">包裹详情</div>
-	<div class="package-status">
+	
+	<div class="track_r">
 		<?php 
 		  if($express):
     		  $json = json_decode($express);
@@ -157,34 +85,38 @@ function wk($date1) {
     		  $count = count($list);
     		  $new_exp_arr = array();
 		?>
-		<div class="status-box" id="status_list">
-    		<ul id="J_listtext2" class="status-list">
-    			<?php foreach ($list as $item):?>
-    				<?php 
-    				    $time = explode(" ", $item->time);
-    				    $date = $time[0];
-    				    $new_exp_arr[date("Y-m-d H:i:s",strtotime($item->time))] = array("date" => $date,"time"=>$time[1], "week" => wk($date), "status" => $item->status);
-    				  endforeach;
-    				  ksort($new_exp_arr);
-    				  foreach ($new_exp_arr as $item => $val):
-    				    $i++;
-    				    $licls = "";
-    				    if($i == $count){
-    				        $licls = "latest";
-    				    }
-    				?>
-    				<li class="<?=$licls ?>"><span class="date"><?=$val['date'] ?></span><span class="week"><?=$val['week'] ?></span>
-        			<span class="time"><?=$val['time'] ?></span><span class="text"><?=$val['status'] ?></span></li>
-    			<?php endforeach;?>
-    		</ul>
+		<?php foreach ($list as $item):?>
+		<div style="margin-bottom:30px;" class='track'>
+			<p style="margin-bottom:12px;"><?php echo $item->status ?></p>
+			<p><?php echo $item->time ?></p>
 		</div>
-			<?php else: ?>
+		<?php endforeach;?>
+		<?php else: ?>
 			暂时还没有物流记录！
 			<?php endif;?>
-		<?php else : echo "暂时还没有物流记录！"; endif;?>		
+		<?php else : echo "<div style='text-align:center;'>暂时还没有物流记录！</div>"; endif;?>		
 	</div>
+	
 </div>
 <script>
+$(function(){
+	var contentH = $(".track_r").height();
+	$(".line").height(contentH);
+	$(".track_l").height(contentH + 100);
 
+	var i = 0;
+	$(".track_r div.track").each(function(){
+		var _top = $(this).offset().top - 44;//header height
+		var _setTop = _top + 2;
+		var img = "";
+		if(i == 0){
+			img = "/themes/mobiles/img/gly.png";
+		}else{
+			img = "/themes/mobiles/img/hsy.png";
+		}
+		$(".track_l").append('<div style="margin-left: -8px;position: absolute;top:'+_setTop+'px"><img src="'+img+'" style="width:18px;"></div>')
+		i++;
+	})
+})
 </script>
 <?php endif;?>

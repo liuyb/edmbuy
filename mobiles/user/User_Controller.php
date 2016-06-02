@@ -106,7 +106,7 @@ class User_Controller extends MobileController
     public function index_ajax(Request $request, Response $response)
     {
         $uid = $GLOBALS['user']->uid;
-        $status = array(CS_AWAIT_PAY, CS_AWAIT_SHIP, CS_AWAIT_RECEIVE, CS_RETURN);
+        $status = array(CS_AWAIT_PAY, CS_AWAIT_SHIP, CS_AWAIT_RECEIVE);//CS_RETURN
         $orderStatusMap = User_Model::findOrderStatusCountByUser($uid, $status);
         $response->sendJSON($orderStatusMap);
     }

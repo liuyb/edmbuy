@@ -2,7 +2,7 @@
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">
-    <li><a href="<?php echo U('item/pref/show',['type'=>'best'])?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_pref_happy61.png"></a></li>
+    <li><a href="<?php echo U('item/2322')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_dw.png"></a></li>
     <li><a href="<?php echo U('item/2013')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/tea.jpg"></a></li>
     <li><a href='<?php echo U('item/1978')?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/cup.jpg"></a></li>
     <li><a href="<?php echo U('item/1282')?>"><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/hongzao.jpg"></a></li>
@@ -49,7 +49,7 @@ window.location.reload();
 
 <div class="sp_info">
 	<div class="sp_t">	
-		<p><a href='<?php echo U('item/pref/show',['type'=>'best'])?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_happybuy.png"></a></p><p><a href='<?php echo U('item/pref/show',['type'=>'moml'])?>'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
+		<p><a href='<?php echo U('item/pref/show',['type'=>'best'])?>'><img src="http://fdn.oss-cn-hangzhou.aliyuncs.com/images/index_pref_dw.png"></a></p><p><a href='<?php echo U('item/pref/show',['type'=>'moml'])?>'><img src="/themes/mobiles/img/zq/moml.png"></a></p>
 	</div>
 
 	<div class="sp_ls">
