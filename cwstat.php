@@ -194,7 +194,7 @@ elseif (3==$type) { //代理相关数据
 $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,折扣后金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantPackageOrderDetail($from_time, $to_time, true);
@@ -202,20 +202,22 @@ $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 		$totalOrderAmount  = 0.00;
 		$totalIncomePrice  = 0.00;
 		$totalCommision    = 0.00;
+		$totalDiscount = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['discount'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
 			$totalOrderAmount += $it['money_paid'];
 			$totalIncomePrice += $it['income_price'];
 			$totalCommision   += $it['commision'];
+			$totalDiscount += $it['discount'];
 		}
-		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalDiscount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
 	}
 }elseif (5 == $type){
     $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,折扣后金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantPackageOrderDetail($from_time, $to_time);
@@ -223,14 +225,16 @@ $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 		$totalOrderAmount  = 0.00;
 		$totalIncomePrice  = 0.00;
 		$totalCommision    = 0.00;
+		$totalDiscount = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['discount'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
 			$totalOrderAmount += $it['money_paid'];
 			$totalIncomePrice += $it['income_price'];
 			$totalCommision   += $it['commision'];
+			$totalDiscount += $it['discount'];
 		}
-		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalDiscount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
 	}
 }elseif (6 == $type){
     $from_time = $from_time ? simphp_gmtime($from_time) : 0;
@@ -513,11 +517,27 @@ ORDER BY merchant_id DESC, order_id ASC";
 	    }else{
 	        $where .= " and (shipping_status = 0 or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time > {$time})) ";
 	    }
-	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`,o.parent_id,o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
+	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name,o.relate_order_id, o.`order_id`,o.parent_id,o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
 	    FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id
 	    WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
 	    ORDER BY merchant_id DESC, order_id ASC";
 	    $list = D()->query($sql)->fetch_array_all();
+	    foreach ($list as &$it){
+	        $relate_order_id = $it['relate_order_id'];
+	        $order = Order::load($relate_order_id);
+	        $money = $order->money_paid;
+	        $radio = 0;
+	        if($money == 698){
+	            $radio = 500;
+	        }else if($money == 398){
+	            $radio = 300;
+	        }
+	        $it['discount'] = $it['money_paid'];
+	        if($radio){
+	            $it['discount'] = number_format(($it['money_paid']/$money), 3) * $radio;
+	            $it['commision'] = $it['discount'] - $it['income_price'];
+	        }
+	    }
 	    /* if($canSettlement){
 	        foreach ($list as $order){
 	            D()->query("insert into tb_tmp_settlement(order_id) values($order[order_id])");

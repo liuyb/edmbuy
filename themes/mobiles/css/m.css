@@ -1511,8 +1511,8 @@ a.ph_btn{
 }
 
 .is_confirm{
-  top: 55%;
-  left: -20%;
+  top: -35%;
+  left: 30%;
   -webkit-animation: cartFly .6s ease 0s 1 both;
   animation: cartFly .6s ease 0s 1 both; 
 }
@@ -5467,37 +5467,45 @@ td.cash_td2 img {
   	text-align: center;	
 }
 
-#s_sy{
-	background:url(../img/sy1.png) no-repeat center;
-	background-size:40px 36px;
+#s_sy {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: 0px 5px;
+	background-size: auto 37px;
 }
-#s_sy.on{
-	background:url(../img/sy2.png) no-repeat center;
-	background-size:40px 36px;
+#s_sy.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: 0 5px;
+	background-size: auto 37px;
 }
-#s_gwc{
-	background:url(../img/gwc1.png) no-repeat center;
-	background-size:40px 36px;
+#s_gwc {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -78px 5px;
+	background-size: auto 37px;
 }
-#s_gwc.on{
-	background:url(../img/gwc2.png) no-repeat center;
-	background-size:40px 36px;
+#s_gwc.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -78px 5px;
+	background-size: auto 37px;
 }
-#s_lmsj{
-	background:url(../img/lmsj1.png) no-repeat center;
-	background-size:40px 36px;
+#s_lmsj {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -160px 5px;
+	background-size: auto 37px;
 }
-#s_lmsj.on{
-	background:url(../img/lmsj2.png) no-repeat center;
-	background-size:40px 36px;
+#s_lmsj.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -160px 5px;
+	background-size: auto 37px;
 }
-#s_hyzx{
-	background:url(../img/hyzx1.png) no-repeat center;
-	background-size:40px 36px;
+#s_hyzx {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -240px 5px;	
+	background-size: auto 37px;
 }
-#s_hyzx.on{
-	background:url(../img/hyzx2.png) no-repeat center;
-	background-size:40px 36px;
+#s_hyzx.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -240px 5px;
+	background-size: auto 37px;
 }
 
 /* 支付成功*/

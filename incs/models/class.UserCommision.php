@@ -124,7 +124,7 @@ class UserCommision extends StorageNode {
 	    $itemDesc = OrderItems::getGoodsNameByOrder($order_id);
 	    self::merchantHandle($cUser, $exOrder, $itemDesc);
 	    $total_commision = $exOrder->commision;
-	    if(!$total_commision){
+	    if(!$total_commision || $total_commision <= 0){
 	        return false;
 	    }
 	    //扣除平台的20%
@@ -258,7 +258,7 @@ class UserCommision extends StorageNode {
 	        return;
 	    }
 	    $commision = $exOrder->commision;
-	    if(!$commision){
+	    if(!$commision || $commision <= 0){
 	        return;
 	    }
 	    //查找当前订单商家对应的推荐人
@@ -460,6 +460,9 @@ class UserCommision extends StorageNode {
 	 * @param unknown $share_radio
 	 */
 	static function createCommisionForGoodsFX($buyer, $cUser, $exOrder, $commision, $parent_level, $type, $share_radio){
+	    if($commision <= 0){
+	        return;
+	    }
 	    $radio = $share_radio[$parent_level];
 	    $radio = $radio ? $radio : 0;
 	    $commision = number_format($commision*$radio,2);
@@ -477,6 +480,9 @@ class UserCommision extends StorageNode {
 	 * @param unknown $commision
 	 */
 	static function createCommision($buyer, $cUser, $exOrder, $parent_level, $type, $radio, $commision){
+	    if($commision <= 0){
+	        return;
+	    }
 	    $upUC = new UserCommision();
 	    $upUC->user_id      = $cUser->uid;
 	    $upUC->parent_level = $parent_level;

@@ -313,10 +313,11 @@ class OverviewData{
         }
         if($orderFlag === 0){
             $where .= " and order_flag = 0 ";
-        }else if($orderFlag > 0){
+            $sql = "select sum(commision) from shp_order_info where pay_status = 2 and is_separate = 0 $where ";
+        }else if($orderFlag == 1 || $orderFlag == 2){
             $where .= " and order_flag = $orderFlag ";
+            $sql = "select sum(money_paid) from shp_order_info where pay_status = 2 and is_separate = 0 $where ";
         }
-        $sql = "select sum(money_paid) from shp_order_info where pay_status = 2 and is_separate = 0 $where ";
         return D()->query($sql)->result();    
     }
     
@@ -351,26 +352,6 @@ class OverviewData{
     }
     
     public function platformAnalysis(){
-        //商品销售毛收入
-        $gpaid = $this->getOrderMoney('', 0);
-        $gpaidInDay = $this->getOrderMoney(self::DAY, 0);
-        $gpaidInWeek = $this->getOrderMoney(self::WEEK, 0);
-        $gpaidInMonth = $this->getOrderMoney(self::MONTH, 0);
-        //代理毛收入
-        $dlpaid = $this->getOrderMoney('', 1);
-        $dlpaidInDay = $this->getOrderMoney(self::DAY, 1);
-        $dlpaidInWeek = $this->getOrderMoney(self::WEEK, 1);
-        $dlpaidInMonth = $this->getOrderMoney(self::MONTH, 1);
-        //商品入驻毛收入
-        $rzpaid = $this->getOrderMoney('', 2);
-        $rzpaidInDay = $this->getOrderMoney(self::DAY, 2);
-        $rzpaidInWeek = $this->getOrderMoney(self::WEEK, 2);
-        $rzpaidInMonth = $this->getOrderMoney(self::MONTH, 2);
-        //平台毛收入
-        $paid = $gpaid + $dlpaid + $rzpaid;
-        $paidInDay = $gpaidInDay + $dlpaidInDay + $rzpaidInDay;
-        $paidInWeek = $gpaidInWeek + $dlpaidInWeek + $rzpaidInWeek;
-        $paidInMonth = $gpaidInMonth + $dlpaidInMonth + $rzpaidInMonth;
         //商品销售佣金
         $gcommision = $this->getCommisionMoney('', "".UserCommision::COMMISSION_TYPE_FX.",".UserCommision::COMMISSION_TYPE_JY."");
         $gcommisionInD = $this->getCommisionMoney(self::DAY, "".UserCommision::COMMISSION_TYPE_FX.",".UserCommision::COMMISSION_TYPE_JY."");
@@ -386,11 +367,32 @@ class OverviewData{
         $rzcommisionInD = $this->getCommisionMoney(self::DAY, UserCommision::COMMISSION_TYPE_RZ);
         $rzcommisionInW = $this->getCommisionMoney(self::WEEK, UserCommision::COMMISSION_TYPE_RZ);
         $rzcommisionInM = $this->getCommisionMoney(self::MONTH, UserCommision::COMMISSION_TYPE_RZ);
+        //商品销售毛收入 = 所有佣金 - 拨出佣金
+        $gpaid = $this->getOrderMoney('', 0) - $gcommision;
+        $gpaidInDay = $this->getOrderMoney(self::DAY, 0) - $gcommisionInD;
+        $gpaidInWeek = $this->getOrderMoney(self::WEEK, 0) - $gcommisionInW;
+        $gpaidInMonth = $this->getOrderMoney(self::MONTH, 0) - $gcommisionInM;
         //套餐成本
         $package = $this->getPackageIncome();
         $packageInD = $this->getPackageIncome(self::DAY);
         $packageInW = $this->getPackageIncome(self::WEEK);
         $packageInM = $this->getPackageIncome(self::MONTH);
+        //平台代理毛收入 = 总收入 - 拨出的佣金 - 套餐成本
+        $dlpaid = $this->getOrderMoney('', 1) - $dlcommision - $package;
+        $dlpaidInDay = $this->getOrderMoney(self::DAY, 1) - $dlcommisionInD - $packageInD;
+        $dlpaidInWeek = $this->getOrderMoney(self::WEEK, 1) - $dlcommisionInW - $packageInW;
+        $dlpaidInMonth = $this->getOrderMoney(self::MONTH, 1) - $dlcommisionInM - $packageInM;
+        //商品入驻毛收入 = 所有支付金额 - 拨出佣金
+        $rzpaid = $this->getOrderMoney('', 2) - $rzcommision;
+        $rzpaidInDay = $this->getOrderMoney(self::DAY, 2) - $rzcommisionInD;
+        $rzpaidInWeek = $this->getOrderMoney(self::WEEK, 2) - $rzcommisionInW;
+        $rzpaidInMonth = $this->getOrderMoney(self::MONTH, 2) - $rzcommisionInM;
+        //平台毛收入
+        $paid = $gpaid + $dlpaid + $rzpaid;
+        $paidInDay = $gpaidInDay + $dlpaidInDay + $rzpaidInDay;
+        $paidInWeek = $gpaidInWeek + $dlpaidInWeek + $rzpaidInWeek;
+        $paidInMonth = $gpaidInMonth + $dlpaidInMonth + $rzpaidInMonth;
+        
         return array($gpaid,$gpaidInDay,$gpaidInWeek,$gpaidInMonth,$dlpaid,$dlpaidInDay,$dlpaidInWeek,$dlpaidInMonth,
             $rzpaid,$rzpaidInDay,$rzpaidInWeek,$rzpaidInMonth,$paid,$paidInDay,$paidInWeek,$paidInMonth,
             $gcommision,$gcommisionInD,$gcommisionInW,$gcommisionInM,$dlcommision,$dlcommisionInD,$dlcommisionInW,$dlcommisionInM,
