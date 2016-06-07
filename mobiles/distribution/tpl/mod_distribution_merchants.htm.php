@@ -77,7 +77,7 @@ function constructRows(ret, isInit){
 				HTML += "<div class=\"iance_list_bottom\"><ul>";
 				for(var r = 0,rlen = obj.recommend.length; r < rlen; r++){
 					var recomm = obj.recommend[r];
-					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+recomm.goods_img+"')\" /></li>";
+					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+recomm.goods_img+"')\" /></li>";
 				}
 				HTML += "</ul></div>";
 			}
