@@ -50,7 +50,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => '【春季特卖】2016春季必备清单',
         self::CATEGORY_RICE => '【精选好米】精选优质好米 绿色 健康 养生',
         self::CATEGORY_MOML => '【清真专区】助力回商 买卖全球',
-        self::CATEGORY_BEST => '【端午节专场】汇集端午送节好礼'
+        self::CATEGORY_BEST => '【端午节专场】汇集端午送礼好货'
     );
     
     //专区对应的图片

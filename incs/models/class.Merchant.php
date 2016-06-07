@@ -327,6 +327,21 @@ class Merchant extends StorageNode {
 	    return D()->query($sql)->result();
 	}
 	
+	/**
+	 * 根据订单返回对应的商家，父订单有多个商家
+	 * @param unknown $order
+	 */
+	static function getMerchantByOrder($order){
+	    if(!$order->is_separate){
+	        return array($order->merchant_ids => self::load($order->merchant_ids));
+	    }
+	    $ids = explode(',', $order->merchant_ids);
+	    $ms = [];
+	    foreach ($ids as $id){
+	        $ms[$id] = self::load($id);
+	    }
+	    return $ms;
+	}
 }
  
 /*----- END FILE: class.Merchant.php -----*/
