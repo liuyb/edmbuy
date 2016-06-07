@@ -131,6 +131,7 @@ class AdjustPackageJob extends CronJob {
 	    $order_id = $payment['order_id'];
 	    $order = new Order();
 	    $order->order_id = $order_id;
+	    $order->pay_status = PS_REFUND;
 	    $order->money_paid = 0;
 	    $order->is_delete = 1;
 	    $order->save(Storage::SAVE_UPDATE_IGNORE);

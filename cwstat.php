@@ -23,13 +23,15 @@ SimPHP::I()->boot();
 
 //统计类型
 $type = $request->get('type', 0);
-if (!in_array($type, [0,1,2,3,4,5])) {
+if (!in_array($type, [0,1,2,3,4,5,6])) {
 	$type = 0;
 }
 
 //获取统计时间
 $from = $request->get('from', '');
 $to   = $request->get('to',   '');
+$target = $request->get('target');
+$settle = $request->get('settle');
 $from_time = 0;
 $to_time   = 0;
 if (strlen($from)==10 && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from)) {
@@ -62,6 +64,9 @@ else {
 }
 
 if (0==$type) { //显示链接
+    $aafrom_time = $from_time ? simphp_gmtime($from_time) : 0;
+    $aato_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+    
 	$html  =<<<HEREDOC
 <!DOCTYPE html>
 <html>
@@ -79,9 +84,13 @@ li { padding: 5px 10px; }
 	<ul>
 	  <li><a href="?type=1&from={$from_date}&to={$to_date}">汇总统计(统计时间：{$stat_time_text})</a></li>
 	  <li><a href="?type=2&from={$from_date}&to={$to_date}">结算给供应商统计(统计时间：{$stat_time_text})</a></li>
+	  <li><a href="?type=1&from={$from_date}&to={$to_date}&target=platform">益多米商城汇总统计(统计时间：{$stat_time_text})</a></li>
+	  <li><a href="?type=2&from={$from_date}&to={$to_date}&target=platform">益多米商城结算给统计(统计时间：{$stat_time_text})</a></li>
 	  <li><a href="?type=3&from={$from_date}&to={$to_date}">代理相关数据(统计时间：{$stat_time_text})</a></li>
 	  <li><a href="?type=4&from={$from_date}&to={$to_date}">可以结算代理订单数据(统计时间：{$stat_time_text})</a></li>
       <li><a href="?type=5&from={$from_date}&to={$to_date}">不可用结算代理订单数据(统计时间：{$stat_time_text})</a></li>
+      <li><a href="?type=6&from={$from_date}&to={$to_date}&settle=y">可以结算供应商零售收入(统计时间：{$stat_time_text})</a></li>
+      <li><a href="?type=6&from={$from_date}&to={$to_date}&settle=n">不可用结算供应商零售收入(统计时间：{$stat_time_text})</a></li>    
 	</ul>
 </body>
 </html>
@@ -97,15 +106,19 @@ if (1==$type) { //汇总统计
 	$from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,平台总收入,商家收入,产生总佣金,米商佣金收入,平台佣金收入".CSV_LN;
+	$isPlatform = ($target == "platform") ? true : false;
 	
+	$csv = "商家名称,商家ID,平台总收入,商家收入,产生总佣金,米商佣金收入,平台佣金收入,扣除套餐佣金收入".CSV_LN;
+	$duplicate = 0;
 	//获取商家总收入列表
-	$list = ThisFn::getMerchantTotalIncome($from_time, $to_time);
+	$list = ThisFn::getMerchantTotalIncome($from_time, $to_time, $isPlatform, $duplicate);
 	if (!empty($list)) {
 		$totalIncome        = 0.00;
 		$totalMerchantIncome= 0.00;
 		$totalCommision     = 0.00;
 		$totalMsIncome      = 0.00;
+		$totalPlatCommision = 0.00;
+		$actotalPlatCommision = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
 			$merchant_income  = 0.00;
@@ -118,13 +131,16 @@ if (1==$type) { //汇总统计
 			}
 			$ms_income = ThisFn::getMishangIncome($it['merchant_id'], $from_time, $to_time);
 			$totalMsIncome += $ms_income;
-			
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['total_income'].CSV_SEP.$merchant_income.CSV_SEP.$total_commistion.CSV_SEP.$ms_income.CSV_SEP.Fn::money_yuan($total_commistion-$ms_income).CSV_LN;
+			$plat_commision = Fn::money_yuan($total_commistion-$ms_income);
+			$acplat_commision = $plat_commision - $duplicate;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['total_income'].CSV_SEP.$merchant_income.CSV_SEP.$total_commistion.CSV_SEP.$ms_income.CSV_SEP.$plat_commision.CSV_SEP.$acplat_commision.CSV_LN;
 			$totalIncome += $it['total_income'];
 			$totalMerchantIncome += $merchant_income;
 			$totalCommision += $total_commistion;
+			$totalPlatCommision += $plat_commision;
+			$actotalPlatCommision += $acplat_commision;
 		}
-		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.$totalIncome.CSV_SEP.$totalMerchantIncome.CSV_SEP.$totalCommision.CSV_SEP.$totalMsIncome.CSV_SEP.Fn::money_yuan($totalCommision-$totalMsIncome).CSV_LN;
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.$totalIncome.CSV_SEP.$totalMerchantIncome.CSV_SEP.$totalCommision.CSV_SEP.$totalMsIncome.CSV_SEP.$totalPlatCommision.CSV_SEP.$actotalPlatCommision.CSV_LN;
 	}
 	
 }
@@ -133,10 +149,12 @@ elseif (2==$type) { //结算给供应商统计
 	$from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
+	$isPlatform = ($target == "platform") ? true : false;
+	
 	$csv = "商家名称,商家ID,用户ID,用户昵称,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号,米商佣金收入,平台佣金收入".CSV_LN;
 	
 	//获取商家收入订单详情
-	$list = ThisFn::getMerchantOrderDetail($from_time, $to_time);
+	$list = ThisFn::getMerchantOrderDetail($from_time, $to_time, $isPlatform);
 	if (!empty($list)) {
 		$totalOrderAmount  = 0.00;
 		$totalIncomePrice  = 0.00;
@@ -163,12 +181,12 @@ elseif (3==$type) { //代理相关数据
     $from_time = $from_time ? simphp_gmtime($from_time) : 0;
     $to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 
-    $csv = "用户ID,用户名称,用户当前级别,购买代理,支付金额,支付时间,领取套餐名称,套餐价格,总进货价,套餐商品详情".CSV_LN;
+    $csv = "用户ID,用户名称,用户当前级别,购买代理,支付金额,领取时间,订单编号,领取套餐名称,套餐价格,总进货价,套餐商品详情".CSV_LN;
     //获取商家收入订单详情
     $list = ThisFn::getAgentPackageDetail($from_time, $to_time);
     if (!empty($list)) {
         foreach ($list AS $it) {
-            $csv .= '"'.$it['user_id'].'"'.CSV_SEP.'"'.$it['nick_name'].'"'.CSV_SEP.'"'.$it['clevel'].'"'.CSV_SEP.'"'.$it['blevel'].'"'.CSV_SEP.$it['money_paid'].CSV_SEP.'"'.$it['pay_time'].'"'.CSV_SEP.'"'.$it['package_name'].'"'.CSV_SEP.$it['actual_price'].CSV_SEP.$it['total_income'].CSV_SEP.'"'.$it['goods_desc'].'"'.CSV_LN;
+            $csv .= '"'.$it['user_id'].'"'.CSV_SEP.'"'.$it['nick_name'].'"'.CSV_SEP.'"'.$it['clevel'].'"'.CSV_SEP.'"'.$it['blevel'].'"'.CSV_SEP.$it['money_paid'].CSV_SEP.'"'.$it['pay_time'].'"'.CSV_SEP.$it['order_id'].CSV_SEP.'"'.$it['package_name'].'"'.CSV_SEP.$it['actual_price'].CSV_SEP.$it['total_income'].CSV_SEP.'"'.$it['goods_desc'].'"'.CSV_LN;
         }
     }
 
@@ -176,7 +194,7 @@ elseif (3==$type) { //代理相关数据
 $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantPackageOrderDetail($from_time, $to_time, true);
@@ -186,7 +204,7 @@ $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 		$totalCommision    = 0.00;
 		foreach ($list AS $it) {
 			$it['merchant_id'] = $it['merchant_id'] ? : '';
-			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
 			$totalOrderAmount += $it['money_paid'];
 			$totalIncomePrice += $it['income_price'];
 			$totalCommision   += $it['commision'];
@@ -197,10 +215,32 @@ $from_time = $from_time ? simphp_gmtime($from_time) : 0;
     $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
 	
-	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
+	$csv = "商家名称,商家ID,订单号,父订单编号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
 	
 	//获取商家收入订单详情
 	$list = ThisFn::getMerchantPackageOrderDetail($from_time, $to_time);
+	if (!empty($list)) {
+		$totalOrderAmount  = 0.00;
+		$totalIncomePrice  = 0.00;
+		$totalCommision    = 0.00;
+		foreach ($list AS $it) {
+			$it['merchant_id'] = $it['merchant_id'] ? : '';
+			$csv .= '"'.$it['merchant_name'].'"'.CSV_SEP.$it['merchant_id'].CSV_SEP.$it['order_sn'].CSV_SEP.$it['parent_id'].CSV_SEP.$it['pay_trade_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['income_price'].CSV_SEP.$it['commision'].CSV_SEP.'"'.simphp_dtime('std',simphp_gmtime2std($it['pay_time'])).'"'.CSV_SEP.'"'.$it['invoice_no'].'"'.CSV_LN;
+			$totalOrderAmount += $it['money_paid'];
+			$totalIncomePrice += $it['income_price'];
+			$totalCommision   += $it['commision'];
+		}
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
+	}
+}elseif (6 == $type){
+    $from_time = $from_time ? simphp_gmtime($from_time) : 0;
+	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+	$canSettle = ($settle == "y") ? true : false;
+	
+	$csv = "商家名称,商家ID,订单号,微信交易号,订单金额,进货价(商家收入),产生佣金,订单时间,快递单号".CSV_LN;
+	
+	//获取商家收入订单详情
+	$list = ThisFn::getMerchantNormalOrderDetail($from_time, $to_time, $canSettle);
 	if (!empty($list)) {
 		$totalOrderAmount  = 0.00;
 		$totalIncomePrice  = 0.00;
@@ -239,7 +279,7 @@ class ThisFn {
 	 * @param integer $to_time
 	 * @return array
 	 */
-	static function getMerchantTotalIncome($from_time, $to_time) {
+	static function getMerchantTotalIncome($from_time, $to_time, $isPlatform = false, &$duplicate) {
 		$where = "";
 		if ($from_time) {
 			$where .= " AND o.`pay_time`>=".$from_time;
@@ -247,9 +287,28 @@ class ThisFn {
 		if ($to_time) {
 			$where .= " AND o.`pay_time`<=".$to_time;
 		}
-		$sql = "SELECT o.`merchant_ids` AS merchant_id, SUM( o.`money_paid` ) AS total_income, IFNULL(m.facename,'【测试商家】') AS merchant_name
+		if($isPlatform){
+		    $where .= " AND o.`merchant_ids` = 'mc_570b4e6b540ae' ";
+		    $sqltmp = "SELECT o.`merchant_ids` AS merchant_id, o.`money_paid`  AS total_income,o.order_flag, IFNULL(m.facename,'【测试商家】') AS merchant_name
+		    FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id left join shp_agent_payment p on o.order_id = p.order_id
+		    WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
+		    ORDER BY total_income DESC";
+		    $list = D()->query($sqltmp)->fetch_array_all();
+		    foreach ($list as $it){
+		        if($it['order_flag'] == Order::ORDER_FLAG_AGENT){
+		            if($it['total_income'] == 698){
+		                $duplicate += 198;
+		            }else if($it['total_income'] == 398){
+		                $duplicate += 98;
+		            }
+		        }
+		    }
+		}else{
+		    $where .= " AND o.`merchant_ids` <> 'mc_570b4e6b540ae' ";
+		}
+		$sql = "SELECT o.`merchant_ids` AS merchant_id, SUM( o.`money_paid` ) AS total_income,o.order_flag, IFNULL(m.facename,'【测试商家】') AS merchant_name
 FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id left join shp_agent_payment p on o.order_id = p.order_id 
-WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where} and o.order_flag <> 9  
+WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}   
 GROUP BY o.`merchant_ids`
 ORDER BY total_income DESC";
 		$list = D()->query($sql)->fetch_array_all();
@@ -275,7 +334,7 @@ ORDER BY total_income DESC";
 FROM (
 SELECT o.`merchant_ids` AS merchant_id,o.`order_id`, o.`commision`,SUM(og.`goods_number` * og.`income_price`) AS income_amount
 FROM  `shp_order_info` AS o INNER JOIN `shp_order_goods` AS og ON o.`order_id` = og.`order_id`
-WHERE o.`merchant_ids`='%s' AND o.`pay_status`=2 AND o.`is_separate`=0 {$where} and o.order_flag <> 9  
+WHERE o.`merchant_ids`='%s' AND o.`pay_status`=2 AND o.`is_separate`=0 {$where} 
 GROUP BY o.`order_id`
 ) AS a";
 		$row = D()->query($sql,$merchant_id)->get_one();
@@ -367,7 +426,7 @@ WHERE oa.`merchant_ids`='%s' AND oa.`pay_status`=2 AND oa.`is_separate`=0
 	 * @param integer $to_time
 	 * @return array
 	 */
-	static function getMerchantOrderDetail($from_time, $to_time) {
+	static function getMerchantOrderDetail($from_time, $to_time, $isPlatform = false) {
 		$where = "";
 		if ($from_time) {
 			$where .= " AND o.`pay_time`>=".$from_time;
@@ -375,9 +434,14 @@ WHERE oa.`merchant_ids`='%s' AND oa.`pay_status`=2 AND oa.`is_separate`=0
 		if ($to_time) {
 			$where .= " AND o.`pay_time`<=".$to_time;
 		}
+		if($isPlatform){
+		    $where .= " AND o.`merchant_ids` = 'mc_570b4e6b540ae' ";
+		}else{
+		    $where .= " AND o.`merchant_ids` <> 'mc_570b4e6b540ae' ";
+		}
 		$sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name,u.user_id,u.nick_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no` 
 FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id left join shp_users u on o.user_id = u.user_id 
-WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where} and o.order_flag <> 9  
+WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where} 
 ORDER BY merchant_id DESC, order_id ASC";
 		$list = D()->query($sql)->fetch_array_all();
 		return $list;
@@ -395,15 +459,16 @@ ORDER BY merchant_id DESC, order_id ASC";
 	static function getAgentPackageDetail($from_time, $to_time) {
 	    $where = "";
 	    if ($from_time) {
-	        $where .= " AND o.`pay_time`>=".$from_time;
+	        $where .= " AND po.`pay_time`>=".$from_time;
 	    }
 	    if ($to_time) {
-	        $where .= " AND o.`pay_time`<=".$to_time;
+	        $where .= " AND po.`pay_time`<=".$to_time;
 	    }
-	    $sql = "select u.user_id, u.nick_name,p.order_id,u.level as clevel,p.level as blevel,o.money_paid,o.pay_time,pp.name as package_name,pp.actual_price,pp.goods_ids 
+	    $sql = "select u.user_id, u.nick_name,p.order_id,u.level as clevel,p.level as blevel,o.money_paid,po.pay_time,po.order_id,pp.name as package_name,pp.actual_price,pp.goods_ids 
              from shp_agent_payment p left join shp_premium_package pp on p.premium_id  = pp.pid 
-            left join shp_users u on  p.user_id = u.user_id left join shp_order_info o on p.order_id = o.order_id 
-            where is_paid = 1 and p.premium_id > 0 order by o.pay_time asc ";
+            left join shp_users u on  p.user_id = u.user_id left join shp_order_info o on p.order_id = o.order_id
+	        left join shp_order_info po on o.order_id = po.relate_order_id and po.is_separate=1 
+            where is_paid = 1 and p.premium_id > 0 $where order by po.pay_time asc ";
 	    $list = D()->query($sql)->fetch_array_all();
 	    foreach ($list as &$item){
     	    $total_income = 0;
@@ -448,16 +513,46 @@ ORDER BY merchant_id DESC, order_id ASC";
 	    }else{
 	        $where .= " and (shipping_status = 0 or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time > {$time})) ";
 	    }
-	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`, o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
+	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`,o.parent_id,o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
 	    FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id
 	    WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where}
 	    ORDER BY merchant_id DESC, order_id ASC";
 	    $list = D()->query($sql)->fetch_array_all();
-	    if($canSettlement){
+	    /* if($canSettlement){
 	        foreach ($list as $order){
 	            D()->query("insert into tb_tmp_settlement(order_id) values($order[order_id])");
 	        }
+	    } */
+	    return $list;
+	}
+	
+	/**
+	 * 供应商零售收入
+	 * @param integer $from_time
+	 * @param integer $to_time
+	 * @return array
+	 */
+	static function getMerchantNormalOrderDetail($from_time, $to_time, $canSettlement = false) {
+	    $where = "";
+	    if ($from_time) {
+	        $where .= " AND o.`pay_time`>=".$from_time;
 	    }
+	    if ($to_time) {
+	        $where .= " AND o.`pay_time`<=".$to_time;
+	    }
+	    $time7 = simphp_gmtime() - (7*86400);
+	    $time14 = simphp_gmtime() - (14*86400);
+	    //无退换货 t+7结算
+	    if($canSettlement){//已收货并且收货时间大于等于7天，或者已发货并且发货时间大于等于14天
+	        $where .= " and ((shipping_status = ".SS_RECEIVED." and shipping_confirm_time <= $time7) or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time <= {$time14})) ";
+	    }else{//已收货但收货时间小于7天，没发货 或 已发货，发货时间小于1天
+	        $where .= " and ((shipping_status = ".SS_RECEIVED." and shipping_confirm_time > $time7) or (shipping_status = 0 or (shipping_status > 0 and shipping_status <> 2 and shipping_time > 0 and shipping_time > {$time14}))) ";
+	    }
+	    $sql = "SELECT o.`merchant_ids` AS merchant_id, IFNULL(m.facename,'【测试商家】') AS merchant_name, o.`order_id`,o.parent_id,o.`order_sn`, o.`pay_trade_no`, o.`money_paid`, (o.`money_paid`-o.`commision`) AS income_price, o.`commision`, o.`pay_time`, o.`invoice_no`
+	    FROM  `shp_order_info` AS o LEFT JOIN `shp_merchant` AS m ON o.`merchant_ids` = m.merchant_id
+	    WHERE o.`pay_status`=2 AND o.`is_separate`=0 {$where} and o.order_flag=0 
+	    ORDER BY merchant_id DESC, order_id ASC";
+	    $list = D()->query($sql)->fetch_array_all();
 	    return $list;
 	}
 }

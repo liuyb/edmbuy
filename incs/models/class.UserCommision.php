@@ -122,16 +122,13 @@ class UserCommision extends StorageNode {
 	    $cUser  = Users::load($exOrder->user_id, true);
 	    $order_id = $exOrder->order_id;
 	    $itemDesc = OrderItems::getGoodsNameByOrder($order_id);
-	    $merchant = Merchant::load($exOrder->merchant_ids);
-	    self::newOrderRemind($merchant, $exOrder, $itemDesc);
+	    self::merchantHandle($cUser, $exOrder, $itemDesc);
 	    $total_commision = $exOrder->commision;
 	    if(!$total_commision){
 	        return false;
 	    }
 	    //扣除平台的20%
 	    $commision = self::can_share($total_commision);
-	    //推荐商家终身提点 从平台20%扣除 用总佣金计算
-	    self::merchantInviteCommision($merchant, $cUser, $exOrder, ($total_commision));
 	    $share_radio = 0;
 	    //米商及米商以上
 	    if($cUser->level){
@@ -204,14 +201,15 @@ class UserCommision extends StorageNode {
 	 * @param unknown $exOrder
 	 * @param unknown $item_desc
 	 */
-	public static function newOrderRemind($merchant, $exOrder, $item_desc){
+	public static function newOrderRemind($merchantList, $exOrder, $item_desc){
+	    $merchant = $merchantList[$exOrder->merchant_ids];
 	    //商家没有绑定用户
-	    if(!$merchant->user_id){
+	    if(empty($merchant) || !$merchant->user_id){
 	        return;
 	    }
 	    $cUser = Users::load($merchant->user_id);
 	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop','', true),
-	                       array('time' => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time)), 'type' => $item_desc));
+    	                       array('time' => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time)), 'type' => $item_desc));
 	}
 	
 	/**
@@ -228,9 +226,41 @@ class UserCommision extends StorageNode {
 	    }
 	    return [$share_amount, $remark];
 	}
+	/**
+	 * 商家关联处理
+	 * @param unknown $cUser
+	 * @param unknown $exOrder
+	 * @param unknown $itemDesc
+	 */
+	static function merchantHandle($cUser, $exOrder, $itemDesc){
+	    $merchantList = Merchant::getMerchantByOrder($exOrder);
+	    $orderList = [];
+	    if($exOrder->is_separate){
+	        $orders = Order::find(new Query('parent_id', $exOrder->order_id));
+	        foreach ($orders as $od){
+	            array_push($orderList, $od);
+	            $itemDesc = OrderItems::getGoodsNameByOrder($od->order_id);
+	            self::newOrderRemind($merchantList, $od, $itemDesc);
+	        }
+	    }else{
+	        array_push($orderList, $exOrder);
+    	    self::newOrderRemind($merchantList, $exOrder, $itemDesc);
+	    }
+	    //推荐商家终身提点 从平台20%扣除 用总佣金计算
+        foreach ($orderList as $od){
+            self::merchantInviteCommision($merchantList[$od->merchant_ids], $cUser, $od);
+        }
+	}
 	
 	//商品交易时给商家推荐人分佣
-	static function merchantInviteCommision($merchant, $cUser, $exOrder, $platf_commision){
+	static function merchantInviteCommision($merchant, $cUser, $exOrder){
+	    if(empty($merchant)){
+	        return;
+	    }
+	    $commision = $exOrder->commision;
+	    if(!$commision){
+	        return;
+	    }
 	    //查找当前订单商家对应的推荐人
 	    if($merchant->invite_code){
 	        $invite_user = Users::load($merchant->invite_code);
@@ -241,7 +271,7 @@ class UserCommision extends StorageNode {
 	            }else if(Users::isSilverAgent($invite_user->level)){
 	                $radio = self::$share_radio_trade_silver;
 	            }
-	            $commision = number_format($platf_commision*$radio,2);
+	            $commision = number_format($commision*$radio,2);
 	            self::createCommision($cUser, $invite_user, $exOrder, 0, UserCommision::COMMISSION_TYPE_JY, $radio, $commision);
 	            $extra = [
 	                'order_sn'     => $exOrder->order_sn,
@@ -254,7 +284,7 @@ class UserCommision extends StorageNode {
 	            }
 	            //佣金大于0 或者 推荐人还不是代理时 提醒
 	            if($commision > 0 || !Users::isAgent($invite_user->level)){
-    	            WxTplMsg::sharecommision_succ($invite_user->openid, "您推荐的商家（".$merchant->facename."），卖出了一笔订单", "点击进入“我的钱包”", U("user/my/wallet",'',true), $extra);
+    	           WxTplMsg::sharecommision_succ($invite_user->openid, "您推荐的商家（".$merchant->facename."），卖出了一笔订单", "点击进入“我的钱包”", U("user/my/wallet",'',true), $extra);
 	            }
 	        }
 	    }
