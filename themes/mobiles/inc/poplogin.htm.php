@@ -60,6 +60,9 @@ function __go_login(obj) {
 function __go_reg(obj) {
 	location.href='<?php echo U('eqx/reg','refer='.Request::uri())?>';
 }
+function __sync_login_cb(ret){
+	
+}
 function __sync_login(url) {
 	var head = document.getElementsByTagName('head')[0];
 	var script = document.createElement('script');
