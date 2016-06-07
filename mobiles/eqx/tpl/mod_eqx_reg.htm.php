@@ -5,11 +5,11 @@
 .login_index {border-width: 0 0 1px 0;}
 </style>
 <!--[/HEAD_CSS]-->
-<script type="text/javascript">var inapp='<?=$inapp?>',refer='<?=$refer?>',referee_uid=parseInt('<?=$referee_uid?>');</script>
+<script type="text/javascript">var refer='<?=$refer?>',referee_uid=parseInt('<?=$referee_uid?>');</script>
 <?php if(1==$step):?>
 
 <script type="text/html" id="forTopNav">
-<div class="header"><?php if('edm'==$inapp):?>欢迎加入益多米<span class="find_password" onclick="show_login_dlg()">登录</span><?php else:?>欢迎加入一起享<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span><?php endif;?></div>
+<div class="header">欢迎加入益多米<span class="find_password" onclick="location.href='<?php echo U('eqx/login')?>'">登录</span></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
@@ -28,13 +28,14 @@
 <div class="bottom_common" style="margin:0">
 	<button class="btn_common_bg" id="btn_next">下一步</button>
 </div>
-<div class="use_protocol prot_on_ok">我已阅读并同意<?php if($inapp=='edm'):?>《益多米用户服务协议》<?php else:?>《一起享用户服务协议》<?php endif;?></div>
+<div class="use_protocol prot_on_ok">注册即表示同意《益多米用户服务协议》</div>
 
 <!-- 
 <div class="quertion_phone">
-	遇到问题：<a href="tel://0755-86720209"><i>0755-86720209</i></a>
+	遇到问题请致电：<a href="tel://0755-86720209"><i>0755-86720209</i></a>
 </div>
 -->
+ 
 <script>
 var num = 60;
 var count = num;
@@ -74,6 +75,20 @@ function check_mobile_input() {
 	}
 	return mobi;
 }
+function check_vcode_input() {
+	if(typeof(check_vcode_input._vcode)=='undefined') {
+		check_vcode_input._vcode = $('#write_vcode');
+	}
+	var vcode= check_vcode_input._vcode.val().trim();
+	if (''==vcode) {
+		weui_alert('请输入短信验证码');
+		return false;
+	}else if(!/^\d{6}$/.test(vcode)) {
+		weui_alert('短信验证码错误');
+		return false;
+	}
+	return vcode;
+}
 $(function () {
 	$("#get_note_code").bind("click",function(){
 		if (ajaxing) return;
@@ -83,7 +98,7 @@ $(function () {
 		ajaxing = 1;
 		refresh();
 		timer = setInterval("refresh();", 1000);
-		F.post('<?php echo U('eqx/get_vcode','inapp='.$inapp)?>',{mobile: mobi},function(ret){
+		F.post('<?php echo U('eqx/get_vcode')?>',{mobile: mobi},function(ret){
 			if (ret.flag=='SUCC') {
 				$ptip.show();
 				setTimeout(function(){
@@ -101,23 +116,17 @@ $(function () {
 	$('#btn_next').bind('click',function(){
 		var mobi = check_mobile_input();
 		if (!mobi) return;
-		var vcode= $('#write_vcode').val().trim();
-		if (''==vcode) {
-			weui_alert('请输入短信验证码');
-			return;
-		}else if(vcode.length!=6) {
-			weui_alert('短信验证码错误');
-			return;
-		}
+		var vcode = check_vcode_input();
+		if (!vcode) return;
 
 		var _this = this;
 		$(_this).attr('disabled',true);
 		weui_toast('loading',0,'验证中...');
-		F.post('<?php echo U('eqx/reg','step=1&inapp='.$inapp)?>',{mobile: mobi,vcode: vcode,parent_id: referee_uid},function(ret){
+		F.post('<?php echo U('eqx/reg','step=1')?>',{mobile: mobi,vcode: vcode,parent_id: referee_uid},function(ret){
 			weui_toast_hide('loading');
 			if(ret.flag=='SUCC') {
 				weui_toast('finish',1,'手机验证通过',function(d){
-					location.href = '<?php echo U('eqx/reg','step=2&inapp='.$inapp.'&refer='.$refer)?>';
+					location.href = '<?php echo U('eqx/reg','step=2&refer='.$refer)?>';
 				});
 			}
 			else {
@@ -136,7 +145,7 @@ $(function () {
 <div class="header">
 	注册
 	<a href="javascript:history.back();" class="back">返回</a>
-	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass','inapp='.$inapp.'&refer='.$refer)?>'">找回密码</span>
+	<span class="find_password" onclick="location.href='<?php echo U('eqx/findpass','refer='.$refer)?>'">找回密码</span>
 </div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
@@ -177,7 +186,7 @@ $(function(){
 		var _this = this;
 		$(_this).attr('disabled',true);
 		weui_toast('loading',0,'注册中...');
-		F.post('<?php echo U('eqx/reg','step=2&inapp='.$inapp)?>',{passwd: _pwd, parent_id: referee_uid},function(ret){
+		F.post('<?php echo U('eqx/reg','step=2')?>',{passwd: _pwd, parent_id: referee_uid},function(ret){
 			weui_toast_hide('loading');
 			if (ret.flag=='SUCC') {
 				weui_toast('finish',1,'注册成功！',function(d){
@@ -185,12 +194,7 @@ $(function(){
 						location.href = refer;
 					}
 					else {
-						if ('edm'==inapp) {
-							location.href = '<?php echo U('user')?>';
-						}
-						else {
-							location.href = '<?php echo U('eqx/home')?>';
-						}
+						location.href = '<?php echo U('user')?>';
 					}
 				});
 			}

@@ -30,7 +30,7 @@ class T_Controller extends MobileController {
 		return [
 			't/%d'    => 'go',
 			't/%d/%s' => 'go',
-		    't/materia' => 't_materia'
+			't/materia' => 't_materia'
 		];
 	}
 	

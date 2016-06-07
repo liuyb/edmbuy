@@ -8,10 +8,15 @@ class TestJob extends CronJob {
   
   
   public function main($argc, $argv) {
+  	
+  	$order_id = 6632;
+    $order = Order::load($order_id);
+    UserCommision::generate($order);
     
-      $order = Order::load(1840);
+      /*
       $cUser = Users::load_by_openid('odyFWsxLsxs9U2P6Z3sV4S7O7D5I');
       $cUser->notify_buyer_pay_succ($order);
+      */
   }
   
 }

@@ -13,7 +13,7 @@ require (__DIR__.'/core/init.php');
 $request  = new Request();
 $response = new Response();
 
-//if ($request->ip()!='183.37.228.180') {
+//if ($request->ip()!='14.153.245.212') {
 //	Fn::show_error_message('系统升级维护中，请稍后再访问...');
 //}
 

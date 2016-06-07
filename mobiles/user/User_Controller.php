@@ -68,6 +68,9 @@ class User_Controller extends MobileController
      */
     public function index(Request $request, Response $response)
     {
+    	if (!Users::is_logined()) {
+    		$response->redirect(U('eqx/login','refer='.rawurlencode(U('user'))));
+    	}
         $this->v->set_tplname('mod_user_index');
         //$this->v->set_page_render_mode(View::RENDER_MODE_HASH);
         $is_account_logined  = Users::is_account_logined();
@@ -315,7 +318,6 @@ class User_Controller extends MobileController
      */
     public function oauth(Request $request, Response $response)
     {
-        //trace_debug('weixin_oauth2_callback_doing', $_GET);
         $code = $request->get('code', '');
         $code = trim($code);
         if ('' == $code) { //授权未通过
@@ -347,29 +349,26 @@ class User_Controller extends MobileController
             Fn::show_error_message('微信授权错误<br/><span style="font-size:16px;">' . $code_ret['errcode'] . '(' . $code_ret['errmsg'] . ')</span>');
         }
 
-        //获取到openid
+        //获取到openid和unionid(openid比unionid更可靠)
         $openid = $code_ret['openid'];
         $unionid = isset($code_ret['unionid']) ? $code_ret['unionid'] : '';
-        //trace_debug('weixin_oauth2_code_set', $code_ret);
 
         if (!empty($unionid)) {
-            $localUser = Users::load_by_unionid($unionid);
+        	$extUPending = UsersPending::load_by_unionid($unionid);
         } else {
-            $localUser = Users::load_by_openid($openid);
+        	$extUPending = UsersPending::load_by_openid($openid);
         }
-
+        //Response::dump($extUPending);
         //查询本地是否存在对应openid的用户
         $auth_method = "oauth2_{$state}"; //OAuth2认证方式
-        $loginedUser = $localUser;
-        if ($localUser->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息，但不会变更上下级关系
+        if ($extUPending->is_exist()) { //用户已存在，如果对base授权，不用进行保存操作(没有额外信息可保存)；如果对detail授权，则要保存详细信息，但不会变更上下级关系
 
             if (Weixin::OAUTH_BASE == $state) {
-                if (empty($localUser->openid)) { //openid为空，就更新
-                    D()->update(Users::table(), ['openid' => $openid], ['user_id' => $localUser->uid]);
-                }
-                if (empty($localUser->nickname) || empty($localUser->logo)) { //基本登录后，如果昵称或头像没有设置，则重定向到详细授权获取信息
+            	
+                if (empty($extUPending->nick) || empty($extUPending->logo)) { //基本授权后，如果昵称或头像没有设置，则重定向到详细授权获取信息
                     $wx->authorizing_detail($auth_action, $refer);
                 }
+                
             } elseif (Weixin::OAUTH_DETAIL == $state) { //detail认证模式，需更新用户数据
 
                 $uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
@@ -378,51 +377,40 @@ class User_Controller extends MobileController
                 }
 
                 //保存微信用户信息到本地库
-                $upUser = new Users($localUser->uid);
-                $upUser->openid = $openid;
-                $upUser->lasttime = simphp_dtime();
-                $upUser->lastip = Request::ip();
+                $upUser = new UsersPending($extUPending->id);
+                if (empty($unionid)) {
+                	$unionid = isset($uinfo_wx['unionid']) ? $uinfo_wx['unionid'] : '';
+                }
+                if (empty($extUPending->unionid)) {
+                	$upUser->unionid = $unionid;
+                }
                 if (isset($uinfo_wx['subscribe'])) {
                     $upUser->subscribe = $uinfo_wx['subscribe'];
-                    $upUser->subscribetime = $uinfo_wx['subscribe_time'];
+                    $upUser->subscribe_time = $uinfo_wx['subscribe_time'];
                 }
-                if (empty($localUser->nickname)) {
-                    $upUser->nickname = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
-                }
-                if (empty($localUser->logo)) {
-                    $upUser->logo = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
-                }
-                if (empty($localUser->sex)) {
-                    $upUser->sex = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
-                }
-                if (empty($localUser->lang)) {
-                    $upUser->lang = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
-                }
-                if (empty($localUser->country)) {
-                    $upUser->country = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
-                }
-                if (empty($localUser->province)) {
-                    $upUser->province = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
-                }
-                if (empty($localUser->city)) {
-                    $upUser->city = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
-                }
+                $upUser->nick = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+                $upUser->logo = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+                $upUser->gender = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+                $upUser->lang = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+                $upUser->country = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+                $upUser->province = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+                $upUser->city = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
 
                 //尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
-                if (!$localUser->subscribe && !$upUser->subscribe) {
+                if (!$extUPending->subscribe && !$upUser->subscribe) {
                     $uinfo_wx = $wx->userInfo($openid);
                     if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
 
                     } else { //成功！说明之前已经关注，得更新关注标记
                         $upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
                         if ($upUser->subscribe) {
-                            $upUser->subscribetime = $uinfo_wx['subscribe_time'];
+                            $upUser->subscribe_time = $uinfo_wx['subscribe_time'];
                         }
                     }
                 }
 
+                $upUser->update_time = simphp_dtime();
                 $upUser->save(Storage::SAVE_UPDATE);
-                $loginedUser = $upUser;
 
             } //End: if (Weixin::OAUTH_DETAIL===$state)
 
@@ -433,36 +421,29 @@ class User_Controller extends MobileController
                 $wx->authorizing_detail($auth_action, $refer);
             }
 
-            $upUser = new Users();
-            $upUser->unionid = $unionid;
-            $upUser->openid = $openid;
-            $upUser->regip = $request->ip();
-            $upUser->regtime = simphp_time();
-            $upUser->lasttime = simphp_dtime();
-            $upUser->lastip = $request->ip();
-            $upUser->salt = gen_salt();
-            $upUser->parentid = 0;
-            $upUser->state = 0; //0:正常;1:禁止
-            $upUser->from = $auth_action == 'login_tym' ? TymUser::APP_ID : $from;
-            $upUser->authmethod = $auth_method;
+            //先保存基本信息
+            $upUser = new UsersPending();
+            $upUser->unionid   = $unionid;
+            $upUser->openid    = $openid;
+            $upUser->parent_id = 0;
+            $upUser->auth_method= $auth_method;
 
             //检查spm
             $parent_id = 0;
-            $parent_nick = '';
             $spm = Spm::check_spm($refer);
             if ($spm && preg_match('/^user\.(\d+)(\.\w+)?$/i', $spm, $matchspm)) {
                 $pUser = Users::load($matchspm[1]);
                 if ($pUser->is_exist()) {
                     $parent_id = $pUser->id;
-                    $parent_nick = $pUser->nickname;
                 }
+                unset($pUser);
             }
-            $upUser->parentid0 = $parent_id;
-            //$upUser->parentnick = $parent_nick;
-
+            $upUser->parent_id = $parent_id;
+            $upUser->touch_time= simphp_dtime();
+            $upUser->update_time= simphp_dtime();
             $upUser->save(Storage::SAVE_INSERT_IGNORE); //先快速保存insert
-            $upUser = new Users($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
-
+            
+            $upUser = new UsersPending($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
             if (Weixin::OAUTH_DETAIL == $state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
 
                 $uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
@@ -471,14 +452,14 @@ class User_Controller extends MobileController
                 }
 
                 $upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
-                $upUser->subscribetime = isset($uinfo_wx['subscribetime']) ? $uinfo_wx['subscribetime'] : 0;
-                $upUser->nickname = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
-                $upUser->logo = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
-                $upUser->sex = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
-                $upUser->lang = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
-                $upUser->country = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
-                $upUser->province = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
-                $upUser->city = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
+                $upUser->subscribe_time = isset($uinfo_wx['subscribetime']) ? $uinfo_wx['subscribetime'] : 0;
+                $upUser->nick      = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+                $upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+                $upUser->gender    = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+                $upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+                $upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+                $upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+                $upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
 
                 //尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
                 if (!$upUser->subscribe) {
@@ -487,31 +468,21 @@ class User_Controller extends MobileController
 
                     } else { //成功！说明之前已经关注，得更新关注标记
                         $upUser->subscribe = $uinfo_wx['subscribe'];
-                        $upUser->subscribetime = $upUser->subscribe ? $uinfo_wx['subscribe_time'] : 0;
+                        $upUser->subscribe_time = $upUser->subscribe ? $uinfo_wx['subscribe_time'] : 0;
                     }
                 }
 
             }
 
+            $upUser->update_time= simphp_dtime();
             $upUser->save(Storage::SAVE_UPDATE);
-            $loginedUser = $upUser;
 
-            //微信模板消息通知
-            if (0&&$parent_id) {
-                $loginedUser = Users::load($upUser->id, true);
-                $loginedUser->notify_reg_succ();
-            }
-
-        } //END: if ($localUser->is_exist()) else
+        } //END: if ($extUPending->is_exist()) else
 
         //设置本地登录状态
         if (preg_match('/^login/i', $auth_action)) {
 
-            if (!$loginedUser->is_exist()) {
-                Fn::show_error_message('微信授权登录失败！');
-            }
-
-            $loginedUser->set_logined_status();
+            Users::set_weixin_auth($openid);
         }
 
         //跳转
@@ -1028,7 +999,7 @@ class User_Controller extends MobileController
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         $order_id = $request->post("order_id");
         $order_sn = $request->post("order_sn");
-        $password = rand_code();
+        $password = randnum();
         $_SESSION['password'] = $password;
         $mobile = $_SESSION['mobile'];
         $invite_code = isset($_SESSION['invite_code']) ? $_SESSION['invite_code'] : '';
