@@ -1448,42 +1448,28 @@ class WeixinHelper {
    * @return string
    */
   public function onSubscribe($openid, $reqtime, $event, $eventKey = NULL, $ticket = NULL) {
-    $parent_id = 0;
-    $my_uid    = 0;
-    $can_save  = true;
+  	
     $wxuinfo   = $this->wx->userInfo($openid);
-    //trace_debug('weixin_onsubscribe', $event.','.$eventKey.','.print_r($wxuinfo, TRUE));
     
     if (empty($wxuinfo['errcode'])) {
-    	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作
+    	if (isset($wxuinfo['unionid']) && ''!=$wxuinfo['unionid']) { //只有有unionid时才操作(因为UNIQUE索引)
     		
     		$save_type = Storage::SAVE_INSERT_IGNORE;
-    		$exUser = Users::load_by_unionid($wxuinfo['unionid'], $this->from);
+    		$exUser = UsersPending::load_by_unionid($wxuinfo['unionid']);
+    		
     		if ($exUser->is_exist()) { //已存在，已存在不会变更上级关系
-    			$upUser = new Users($exUser->id);
-    			$parent_id = $exUser->parentid;
-    			if (!$exUser->openid) {
-    				$upUser->openid  = $openid;
-    			}
-    			if (empty($exUser->parentnick) && $parent_id) {
-    				$upUser->parentnick = Users::getNick($parent_id);
-    			}
-    			$upUser->lasttime  = simphp_dtime();
-    			$upUser->lastip    = Request::ip();
+    			$upUser = new UsersPending($exUser->id);
+    			$upUser->update_time = simphp_dtime();
     			$save_type = Storage::SAVE_UPDATE;
     		}
     		else { //未存在，会"尝试"建立上下级关系
-    			$upUser = new Users();
+    			$upUser = new UsersPending();
     			$upUser->unionid   = $wxuinfo['unionid'];
     			$upUser->openid    = $openid;
-    			$upUser->parentid  = 0;
-    			$upUser->parentnick= '';
-    			$upUser->regip     = Request::ip();
-    			$upUser->regtime   = simphp_time();
-    			$upUser->salt      = gen_salt();
-    			$upUser->state     = 0; //0:正常;1:禁止
-    			$upUser->from      = $this->from;
-    			$upUser->authmethod= !empty($eventKey) ? 'scan' : 'base';
+    			$upUser->parent_id = 0;
+    			$upUser->auth_method= !empty($eventKey) ? 'scan' : 'base';
+    			$upUser->touch_time = simphp_dtime();
+    			$upUser->update_time= simphp_dtime();
     			if(isset($eventKey) && $eventKey) { //确定上级
     				if (preg_match('/^qrscene_(\d+)$/', $eventKey, $matches)) {
     					$scene_id = $matches[1];
@@ -1494,21 +1480,18 @@ class WeixinHelper {
     				if (is_numeric($scene_id)) {
     					$wxqr = Wxqrcode::load($scene_id); //EventKey就是scene_id
     					if ($wxqr->is_exist()) {
-    						//$parent_id = $wxqr->user_id;
-    						//$upUser->parentid0  = $parent_id;
-    						$upUser->parentid0  = $wxqr->user_id;
-    						//$upUser->parentnick= Users::getNick($parent_id);
+    						$upUser->parent_id  = $wxqr->user_id;
     					}
     				}
     			}
     		}
     		
-    		if ('subscribe'==$event || !$exUser->is_exist() || $exUser->required_uinfo_empty()) {
+    		if ('subscribe'==$event || !$exUser->is_exist()) {
     			$upUser->subscribe   = $wxuinfo['subscribe'];
-    			$upUser->subscribetime = $wxuinfo['subscribe_time'];
-    			$upUser->nickname  = $wxuinfo['nickname'];
+    			$upUser->subscribe_time = $wxuinfo['subscribe_time'];
+    			$upUser->nick      = $wxuinfo['nickname'];
     			$upUser->logo      = $wxuinfo['headimgurl'];
-    			$upUser->sex       = $wxuinfo['sex'];
+    			$upUser->gender    = $wxuinfo['sex'];
     			$upUser->lang      = $wxuinfo['lang'];
     			$upUser->country   = $wxuinfo['country'];
     			$upUser->province  = $wxuinfo['province'];
@@ -1516,26 +1499,22 @@ class WeixinHelper {
     		}
     		
     		$upUser->save($save_type);
-    		$my_uid = $upUser->id;
-    		
-    		if (in_array($save_type, [Storage::SAVE_INSERT_IGNORE, Storage::SAVE_INSERT])) {
-    			$upUser->notify_reg_succ();
-    		}
     	}
     }
     
     $msg = $this->about();
-    if ($my_uid) {
-    	$msg .= "\n\n你的多米号: {$my_uid}";
-    }
-    if ($parent_id) {
-    	$pUser = Users::load($parent_id);
-    	if ($pUser->is_exist()) {
-    		$promoter = '推荐人米号: ' . $pUser->id;
-    		if ($pUser->nickname) $promoter .= "\n推荐人昵称: " . $pUser->nickname;
-    		$msg .= "\n".$promoter;
-    		if ($pUser->mobile) {
-    			$msg .= "\n推荐人手机:".$pUser->mobile;
+    $cUser = Users::load_by_openid($openid, $this->from);
+    if ($cUser->is_exist()) {
+    	$msg .= "\n\n您的多米号: ".$cUser->id;
+    	if ($cUser->parentid) {
+    		$pUser = Users::load($cUser->parentid);
+    		if ($pUser->is_exist()) {
+    			$promoter = '推荐人米号: ' . $pUser->id;
+    			if ($pUser->nickname) $promoter .= "\n推荐人昵称: " . $pUser->nickname;
+    			$msg .= "\n".$promoter;
+    			if ($pUser->mobile) {
+    				$msg .= "\n推荐人手机:".$pUser->mobile;
+    			}
     		}
     	}
     }

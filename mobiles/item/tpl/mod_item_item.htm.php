@@ -173,7 +173,7 @@ if($GLOBALS['user']->level > 0){
 	</div>
 	<div class="p_d_sale"><span class="fl" style="text-decoration: line-through;">原价：<?php echo $item->market_price?></span></div>
 	<div class="p_d_sale">
-		<span class="fr">销量：<?php echo $item->paid_goods_number?>笔</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span>
+		<span class="fr"><!-- 销量：<?php echo $item->paid_goods_number?>件　 -->成交：<?php echo $item->paid_order_count?>笔</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span>
 	</div>
 </div>
 

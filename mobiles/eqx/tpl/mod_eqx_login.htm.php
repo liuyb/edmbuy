@@ -2,12 +2,12 @@
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
 <script type="text/html" id="forTopNav">
-<div class="header">登录<span class="find_password hide" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span></div>
+<div class="header"><span class="find_password lt" onclick="location.href='<?php echo U()?>'">&lt;返回</span>登录益多米<span class="find_password hide" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopNav').html());</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机账号：</span>
+	<span class="phone_left">手机帐号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
@@ -20,11 +20,11 @@
 	<button class="login_btn" id="login_btn">登录</button>
 	<div class="register_btn" onclick="location.href='<?php echo U('eqx/reg')?>'">注册</div>
 </div>
-
+<!-- 
 <div class="quertion_phone">
-	遇到问题：<a href="tel://0755-86720209"><i>0755-86720209</i></a>
+	遇到问题请致电：<a href="tel://0755-86720209"><i>0755-86720209</i></a>
 </div>
-
+-->
 <script type="text/javascript">
 $(function(){
 	$('#login_btn').bind('click',function(){
@@ -46,13 +46,14 @@ $(function(){
 			weui_toast_hide('loading');
 			$(_this).attr('disabled',false);
 			if (ret.flag=='SUCC') {
+				__sync_login(ret.sync_login_url);
 				weui_toast('finish',1,'登录成功',function(){
-					location.href = '<?php echo U('eqx/home')?>';
+					location.href = '<?php echo U('user')?>';
 				});
 			}
 			else {
 				if(ret.code && ret.code == -3){
-					weui_confirm('你输入的手机号还未注册！点击确定注册。', '', function(){
+					weui_confirm('您输入的手机号还未注册！点击确定注册。', '', function(){
 						location.href='<?php echo U('eqx/reg')?>';
 					});
 				}else{

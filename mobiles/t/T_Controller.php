@@ -30,7 +30,7 @@ class T_Controller extends MobileController {
 		return [
 			't/%d'    => 'go',
 			't/%d/%s' => 'go',
-		    't/materia' => 't_materia'
+			't/materia' => 't_materia'
 		];
 	}
 	
@@ -78,7 +78,7 @@ class T_Controller extends MobileController {
 					$tGuid = $tUser->guid;
 				}
 				else {
-					//$tGuid = $tUser->mobile;
+					$tGuid = $tUser->mobile;
 				}
 			}
 			//$response->redirect('/eqx/intro?spm='.Spm::user_spm($the_uid));

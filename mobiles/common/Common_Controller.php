@@ -18,6 +18,8 @@ class Common_Controller extends Controller {
     'default/app_activate',
     'default/app_doactivate',
     't/%d',
+    't/%d/%s',
+    't/%s',
   ];
   
   /**
@@ -57,7 +59,7 @@ class Common_Controller extends Controller {
     }
     
     // 检查登录状态
-    if(!$loginIgnore && !Users::is_logined()){
+    if(!$loginIgnore && !Users::is_weixin_auth()){
       import('user/*');
       $user_Controller = new User_Controller();
       $user_Controller->login($request, $response);

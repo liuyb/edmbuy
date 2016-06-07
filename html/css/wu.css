@@ -965,8 +965,8 @@ a.ph_btn{
 }
 
 .is_confirm{
-	top: 55%;
-	left: -20%;
+	top: -35%;
+	left: 30%;
 	-webkit-animation: cartFly .6s ease 0s 1 both;
 	animation: cartFly .6s ease 0s 1 both; 
 }

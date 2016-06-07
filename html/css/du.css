@@ -3120,6 +3120,7 @@ td.cash_td2 img {
 	width:100%;
 }
 .agency_bottom{
+	border-top:1px solid #e6e6e6;	
 	background:#fff;
 	position:fixed;
 	left:0;
@@ -3183,39 +3184,47 @@ td.cash_td2 img {
   	height: 49px;
   	text-align: center;	
 }
-#s_sy{
-	background:url(../img/sy1.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_sy.on{
-	background:url(../img/sy2.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_gwc{
-	background:url(../img/gwc1.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_gwc.on{
-	background:url(../img/gwc2.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_lmsj{
-	background:url(../img/lmsj1.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_lmsj.on{
-	background:url(../img/lmsj2.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_hyzx{
-	background:url(../img/hyzx1.png) no-repeat center;
-	background-size:40px 36px;
-}
-#s_hyzx.on{
-	background:url(../img/hyzx2.png) no-repeat center;
-	background-size:40px 36px;
-}
 
+#s_sy {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: 0px 5px;
+	background-size: auto 37px;
+}
+#s_sy.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: 0 5px;
+	background-size: auto 37px;
+}
+#s_gwc {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -78px 5px;
+	background-size: auto 37px;
+}
+#s_gwc.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -78px 5px;
+	background-size: auto 37px;
+}
+#s_lmsj {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -160px 5px;
+	background-size: auto 37px;
+}
+#s_lmsj.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -160px 5px;
+	background-size: auto 37px;
+}
+#s_hyzx {
+	background: url(../img/bot_n.png) no-repeat;
+	background-position: -240px 5px;	
+	background-size: auto 37px;
+}
+#s_hyzx.on {
+	background: url(../img/bot_p.png) no-repeat;
+	background-position: -240px 5px;
+	background-size: auto 37px;
+}
 
 /* 支付成功*/
 .agency_infos_pay{

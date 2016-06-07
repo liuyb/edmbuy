@@ -1119,18 +1119,19 @@ function verify_email($email)
 }
 
 /**
- * 生成6位数随机验证码
- * @param int $length
+ * 生成$length位随机数字串
+ * @param number $length
  * @return string
  */
-function rand_code($length = 6)
+function randnum($length = 6)
 {
-    $chars = '123456789';
-    for ($i = 0, $count = strlen($chars); $i < $count; $i++) {
-        $arr[$i] = $chars[$i];
-    }
-    mt_srand((double)microtime() * 1000000);//随机数播种器
-    shuffle($arr);//重新排序随机数
-    return substr(implode('', $arr), 3, $length);
+	$arr = ['0','1','2','3','4','5','6','7','8','9'];
+	$len = count($arr);
+	if ($length > $len) $length = $len;
+	mt_srand((double)microtime() * 1000000);//随机数播种器
+	shuffle($arr);//重新排序随机数
+	return substr(implode('', $arr), rand(0,$len-$length), $length);
 }
+
+
 /*----- END FILE: func.global.php -----*/

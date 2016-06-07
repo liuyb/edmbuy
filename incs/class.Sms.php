@@ -61,10 +61,10 @@ class Sms
         $SmsConfig    = C("port.sms");
         $contentArray = C("msg.sms");
         $content      = $contentArray[$type];
-        $code         = rand_code();
+        $code         = randnum();
         $_SESSION[$type] = $code;
         if (!$verify) {
-        	$imgCode = rand_code();
+        	$imgCode = randnum();
         } else {
         	$imgCode = $_SESSION['verifycode'];
         }

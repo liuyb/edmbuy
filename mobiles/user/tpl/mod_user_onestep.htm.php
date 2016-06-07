@@ -1,5 +1,5 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
-<?php if(isset($parent) && $parent && Users::isAgent($parent->level)):?>
+<?php if(1||isset($parent) && $parent && Users::isAgent($parent->level)):?>
 <div id="sus_flow">
     <ul>
         <li class="li_co bottom_f">商家注册</li>
@@ -13,14 +13,14 @@
     <div class="clear"></div>
 </div>
 <?php endif;?>
-<?php if(!$user->parentid):?>
+<?php if(0&&!$user->parentid):?>
 <div class="no_top">
 	<img src="/themes/mobiles/img/no_data.png">
 	<p class="no_ancegy">您还没有推荐人，无法完成入驻</p>
 	<p class="no_ancegy">5月16号前，需要代理商推荐才能进入</p>
 	<button class="back_member_btn" onclick="window.location.href='<?=U('user') ?>'">返回会员中心</button>
 </div>
-<?php elseif(isset($parent) && !Users::isAgent($parent->level)):?>
+<?php elseif(0&&isset($parent) && !Users::isAgent($parent->level)):?>
 <div class="no_top">
 	<img src="/themes/mobiles/img/no_data.png">
 	<p class="you_refer">您的推荐人：<?=$parent->nickname ?></p>
@@ -37,7 +37,7 @@
         </li>
         <li>
             <input id="auth_code" class="ps_common" type="text" value="" placeholder="请输入验证码" style='width:65%;'>
-            <?php if($user->parentid):?>
+            <?php if(1||$user->parentid):?>
             <button id="ps_btn">获取验证码</button>
             <?php endif;?>
         </li>
@@ -53,7 +53,7 @@
 </div>
 <div id="wx_success_pay"  style="margin-top:30px;">
     <span id="red_deal">我已阅读，同意接受《益多米商家入驻协议》</span>
-    <?php if($user->parentid):?>
+    <?php if(1||$user->parentid):?>
     <button id="next_step">下一步</button>
     <?php else :?>
     <button style='background:#bdbdbd;'>下一步</button>
@@ -66,72 +66,72 @@ $(function(){
 </script>
 <?php endif;?>
 <script>
-$(function () {
-    $("input").css("border","none");
-});
-
 var num = 60;
 var count = num;
 var time;
 
-$("#ps_btn").click(function () {
-    _this = $(this);
+$(function () {
+	$("input").css("border","none");
+	$("#ps_btn").click(function () {
+	    _this = $(this);
+	
+	    //仍在倒数中
+	    if(_this.hasClass("sending")){
+	        return false;
+	    }
+	
+	    var mobile = $("#phone_nums_p").val();
+	    if(mobile == ""){
+	        myAlert("手机号不能为空！");
+	        return false;
+	    }
+	    if(!validPhone(mobile)){
+			return false;
+	    }
+	    var url = "/user/merchant/getcode";
+	    _this.addClass("sending");
+	    var data = {"mobile": mobile};
+	    $.post(url, data,function (ret) {
+	        if(ret.status==1){
+	            myAlert(ret.retmsg);
+	            refresh();
+	            $("#ps_btn").css("display","block");
+	            time = setInterval("refresh();", 1000);
+	            $("#ps_btn").attr("disabled","disabled").css("background","grey");
+	        }else if(ret.status==0){
+	            myAlert(ret.retmsg);
+	            _this.removeClass("sending");
+	        }
+	    });
+	});
+	$("#next_step").click(function(){
+	    var mobile=$("#phone_nums_p").val();
+	    var auth_code = $("#auth_code").val();
+	    var shop_face = $("#ps_email").val();
+	    var verifycode = $("#ps_img").val();
+	
+	    var url ="/user/merchant/doonestep";
+	    if(mobile == ""){
+	        myAlert("手机号不能为空！");return;
+	    };
+	    if(auth_code == ""){
+	        myAlert("验证码不能为空！");return;
+	    };
+	    if(!validPhone(mobile)){
+				return false;
+	    }
+	    var data ={'mobile':mobile,'mobile_code':auth_code,'verifycode':verifycode,'shop_face':shop_face};
+	    F.post(url,data,function(ret){
+	        if(ret.status==1){
+	            window.location.href="/user/merchant/twostep";
+	        }else{
+	            myAlert(ret.retmsg);
+	        }
+	    });
+	});
 
-    //仍在倒数中
-    if(_this.hasClass("sending")){
-        return false;
-    }
-
-    var mobile = $("#phone_nums_p").val();
-    if(mobile == ""){
-        myAlert("手机号不能为空！");
-        return false;
-    }
-    if(!validPhone(mobile)){
-		return false;
-    }
-    var url = "/user/merchant/getcode";
-    _this.addClass("sending");
-    var data = {"mobile": mobile};
-    $.post(url, data,function (ret) {
-
-        if(ret.status==1){
-            myAlert(ret.retmsg);
-            refresh();
-            $("#ps_btn").css("display","block");
-            time = setInterval("refresh();", 1000);
-            $("#ps_btn").attr("disabled","disabled").css("background","grey");
-        }else if(ret.status==0){
-            myAlert(ret.retmsg);
-            _this.removeClass("sending");
-        }
-    })
 });
-$("#next_step").click(function(){
-    var mobile=$("#phone_nums_p").val();
-    var auth_code = $("#auth_code").val();
-    var shop_face = $("#ps_email").val();
-    var verifycode = $("#ps_img").val();
 
-    var url ="/user/merchant/doonestep";
-    if(mobile == ""){
-        myAlert("手机号不能为空！");return;
-    };
-    if(auth_code == ""){
-        myAlert("验证码不能为空！");return;
-    };
-    if(!validPhone(mobile)){
-		return false;
-    }
-    var data ={'mobile':mobile,'mobile_code':auth_code,'verifycode':verifycode,'shop_face':shop_face};
-    F.post(url,data,function(ret){
-        if(ret.status==1){
-            window.location.href="/user/merchant/twostep";
-        }else{
-            myAlert(ret.retmsg);
-        }
-    })
-});
 //电话号码验证
 function validPhone(phone) {
     var r = isphone(phone);

@@ -86,7 +86,7 @@
 
 <div style="height:20px;"></div>
 <div style="text-align: center">
-<button onclick="location.href='<?php echo U('/user/logout_account')?>'" class="btn_common_bg" style="width:90%;margin:0 auto;">退出登录</button>
+<button onclick="location.href='<?php echo U('eqx/logout')?>'" class="btn_common_bg" style="width:90%;margin:0 auto;">退出登录</button>
 </div>
 <div style="height:30px;"></div>
 

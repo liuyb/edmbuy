@@ -36,6 +36,7 @@ function __go_login(obj) {
 		$(_this).attr('disabled',false);
 		weui_toast_hide('loading');
 		if (ret.flag=='SUCC') {
+			__sync_login(ret.sync_login_url);
 			weui_toast('finish',1,'登录成功',function(){
 				if (!__login_refer) {
 					location.reload(true);
@@ -47,7 +48,7 @@ function __go_login(obj) {
 		}
 		else {
 			if(ret.code && ret.code == -3){
-				weui_confirm('你输入的手机号还未注册！点击确定快速注册。', '', function(){
+				weui_confirm('您输入的手机号还未注册！点击确定快速注册。', '', function(){
 					__go_reg();
 				});
 			}else{
@@ -57,7 +58,15 @@ function __go_login(obj) {
 	});
 }
 function __go_reg(obj) {
-	location.href='<?php echo U('eqx/reg','inapp=edm&refer='.Request::uri())?>';
+	location.href='<?php echo U('eqx/reg','refer='.Request::uri())?>';
+}
+function __sync_login(url) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.charset = "UTF-8";
+	script.type = "text/javascript";
+	script.src = url;
+	head.appendChild(script);
 }
 function show_login_dlg(){
 	show_popdlg('登录益多米',$('#forGlobalLogin').html());
@@ -70,7 +79,7 @@ function required_account_logined(touri) {
 	else {
 		__login_refer = touri;
 	}
-	if(!gUser.is_account_logined) {
+	if(!gUser.uid) {
 		show_popdlg('登录益多米',$('#forGlobalLogin').html());
 		return true;
 	}

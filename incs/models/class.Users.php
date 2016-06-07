@@ -27,6 +27,7 @@ class Users extends StorageNode {
 	 * @var constant
 	 */
 	const AC_LOGINED_KEY = 'AC_LOGINED';
+	const AC_WXAUTH_KEY  = 'AC_WXAUTH';
 	
 	static $level_amount = [
 			0 => 0,             //米客消费金额
@@ -123,14 +124,14 @@ class Users extends StorageNode {
 		//设置登录session uid
 		$GLOBALS['user']->uid = $this->id;
 
+		$_SESSION[self::AC_LOGINED_KEY] = simphp_time();
+		
 		//重新变更session id
 		SimPHP::$session->regenerate_id();
 		
-		//新起一个对象来编辑，避免过多更新
-		$nUser = new self($this->id);
-		$nUser->lastlogin = simphp_time();
-		$nUser->lastip    = Request::ip();
-		$nUser->save();
+		//更新登录信息
+		D()->query("UPDATE ".self::table()." SET last_login=%d,last_ip='%s',visit_count=visit_count+1 WHERE user_id=%d",
+		          simphp_time(), Request::ip(), $this->id);
 	}
 	
 	/**
@@ -268,6 +269,22 @@ class Users extends StorageNode {
 	 */
 	static function set_account_logined() {
 		$_SESSION[self::AC_LOGINED_KEY] = simphp_time();
+	}
+	
+	/**
+	 * 检查是否微信授权登录
+	 * @return boolean
+	 */
+	static function is_weixin_auth() {
+		return isset($_SESSION[self::AC_WXAUTH_KEY]) && strlen($_SESSION[self::AC_WXAUTH_KEY])>20 ? TRUE : FALSE;
+	}
+	
+	/**
+	 * 设置微信授权openid
+	 * @param string $openid
+	 */
+	static function set_weixin_auth($openid) {
+		$_SESSION[self::AC_WXAUTH_KEY] = $openid;
 	}
 	
 	/**
