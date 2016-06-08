@@ -290,7 +290,7 @@ class ApiEqx extends Model {
 		$sig  = sha1($qstr);
 		$params['sig'] = $sig;
 		$d = base64url_encode(json_encode($params,JSON_UNESCAPED_SLASHES));
-		return self::PAGEAPI_BASE_URL.$api.'?d='.$d;
+		return self::PAGEAPI_BASE_URL.$api.'?jsoncb=__sync_login_cb&d='.$d;
 	}
 	
 	private static function call_api($api, Array $params_args) {
