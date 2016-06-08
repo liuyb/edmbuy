@@ -118,6 +118,10 @@ function showRefundDialog(){
 function modifyRefund(obj, order_id){
 	var $this = $(obj).closest('.weui_dialog_bd').first();
 	var txt = $this.find('.refuseTxt').val();
+	if(!txt || txt.length == 0){
+		$this.find('.errMsg').html('请输入退款原因！');
+		return;
+	}
 	F.post('/order/refund/again',{order_id : order_id, rec_id : <?=$refund['rec_id']?>, refund_reason:txt},function(ret){
 		if(ret.flag == 'SUC'){
 			weui_dialog_close();

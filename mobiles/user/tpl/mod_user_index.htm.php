@@ -79,7 +79,7 @@
 	</div>
 </div>
 <?php endif;?>
-<?php if(!$is_agent):?>
+<?php if(1 || !$is_agent):?>
 <div class="member_cen_common">
 	<div class="in_common_agency del_bottom" onclick="_link('<?php echo U('trade/order/agent') ?>')">
 		<img src="/themes/mobiles/img/wydl.png"><span>我要代理</span>

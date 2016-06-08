@@ -23,7 +23,7 @@ SimPHP::I()->boot();
 
 //统计类型
 $type = $request->get('type', 0);
-if (!in_array($type, [0,1,2,3,4,5,6])) {
+if (!in_array($type, [0,1,2,3,4,5,6,7])) {
 	$type = 0;
 }
 
@@ -90,7 +90,8 @@ li { padding: 5px 10px; }
 	  <li><a href="?type=4&from={$from_date}&to={$to_date}">可以结算代理订单数据(统计时间：{$stat_time_text})</a></li>
       <li><a href="?type=5&from={$from_date}&to={$to_date}">不可用结算代理订单数据(统计时间：{$stat_time_text})</a></li>
       <li><a href="?type=6&from={$from_date}&to={$to_date}&settle=y">可以结算供应商零售收入(统计时间：{$stat_time_text})</a></li>
-      <li><a href="?type=6&from={$from_date}&to={$to_date}&settle=n">不可用结算供应商零售收入(统计时间：{$stat_time_text})</a></li>    
+      <li><a href="?type=6&from={$from_date}&to={$to_date}&settle=n">不可用结算供应商零售收入(统计时间：{$stat_time_text})</a></li>  
+      <li><a href="?type=7&from={$from_date}&to={$to_date}&settle=n">供应商退款查询(统计时间：{$stat_time_text})</a></li>  
 	</ul>
 </body>
 </html>
@@ -257,6 +258,23 @@ $from_time = $from_time ? simphp_gmtime($from_time) : 0;
 			$totalCommision   += $it['commision'];
 		}
 		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalOrderAmount.CSV_SEP.$totalIncomePrice.CSV_SEP.$totalCommision.CSV_SEP.'--'.'--'.CSV_LN;
+	}
+}elseif (7 == $type){
+    $from_time = $from_time ? simphp_gmtime($from_time) : 0;
+	$to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+	
+	$csv = "商家名称,订单号,退款单号,微信退款流水号,订单金额,退款金额,退款时间".CSV_LN;
+	
+	//获取商家收入订单详情
+	$list = ThisFn::getRefundList($from_time, $to_time);
+	if (!empty($list)) {
+		$totalRefund    = 0.00;
+		foreach ($list AS $it) {
+			$it['merchant_id'] = $it['merchant_id'] ? : '';
+			$csv .= '"'.$it['facename'].'"'.CSV_SEP.$it['order_sn'].CSV_SEP.$it['refund_sn'].CSV_SEP.$it['pay_refund_no'].CSV_SEP.$it['money_paid'].CSV_SEP.$it['refund_money'].CSV_SEP.'"'.$it['succ_time'].'"'.CSV_LN;
+			$totalRefund += $it['refund_money'];
+		}
+		$csv .= '合计'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.'--'.CSV_SEP.$totalRefund.CSV_LN;
 	}
 }
 
@@ -574,6 +592,21 @@ ORDER BY merchant_id DESC, order_id ASC";
 	    ORDER BY merchant_id DESC, order_id ASC";
 	    $list = D()->query($sql)->fetch_array_all();
 	    return $list;
+	}
+	
+	static function getRefundList($from_time, $to_time){
+	    if ($from_time) {
+	        $where .= " AND reund.succ_time >= '".date('Y-m-d H:i:s',$from_time)."' ";
+	    }
+	    if ($to_time) {
+	        $where .= " AND reund.succ_time <= '".date('Y-m-d H:i:s',$to_time)."' ";
+	    }
+	    $sql = "select m.facename,o.order_sn,reund.refund_sn,reund.pay_refund_no,o.money_paid,reund.refund_money,reund.succ_time 
+	    from shp_order_refund reund join shp_order_info o on reund.order_sn = o.order_sn 
+        left join shp_merchant m on o.merchant_ids = m.merchant_id where reund.succ_time <> '' $where order by m.merchant_id ";
+	    $list = D()->query($sql)->fetch_array_all();
+	    return $list;
+	    
 	}
 }
 /*----- END FILE: cwstat.php -----*/

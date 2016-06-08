@@ -70,6 +70,9 @@ class UserCommision extends StorageNode {
 	    '3' => 0.05
 	];
 	
+	//商品分销时是否微信通知，退款时不通知
+	private static $has_notify = true;
+	
 	protected static function meta() {
 		return array(
 				'table' => '`shp_user_commision`',
@@ -115,7 +118,9 @@ class UserCommision extends StorageNode {
 		return number_format($total_commision*self::$share_ratio[$leader_level],2);
 	} */
 	
-	static function generate($exOrder) {
+	static function generate($exOrder, $has_notify = true) {
+	    self::$has_notify = $has_notify;
+	    
 	    if (!$exOrder->is_exist()) {
 	        return false;
 	    }
@@ -135,7 +140,7 @@ class UserCommision extends StorageNode {
 	        $share_radio = self::$share_ratio_fx_misha;
 	        $uc = self::createCommisionForGoodsFX($cUser, $cUser, $exOrder, $commision, 0, self::COMMISSION_TYPE_FX, $share_radio);
 	        //返利通知
-	        if($uc->commision > 0){
+	        if(self::$has_notify && $uc->commision > 0){
     	        WxTplMsg::fanli($cUser->openid, "您购买的商品已付款成功，获得 $uc->commision 元的返利", "点击进入我的钱包查看详情", U("user/my/wallet",'',true),
     	                       array('goods_name' => $itemDesc,'fanli' => $uc->commision, 'paid_money' => $uc->order_amount, 'pay_time' => date('Y-m-d H:i:s',simphp_gmtime2std($uc->paid_time))));
 	        }
@@ -190,27 +195,11 @@ class UserCommision extends StorageNode {
 	}
 	
 	private static function shareCommision($parent, $first, $remark, $url, $extra, $commision){
-	    if($commision > 0){
+	    if(self::$has_notify && $commision > 0){
     	    WxTplMsg::sharecommision_succ($parent->openid, $first, $remark, $url, $extra);
 	    }
 	}
 	
-	/**
-	 * 商家新订单提醒
-	 * @param unknown $cUser
-	 * @param unknown $exOrder
-	 * @param unknown $item_desc
-	 */
-	public static function newOrderRemind($merchantList, $exOrder, $item_desc){
-	    $merchant = $merchantList[$exOrder->merchant_ids];
-	    //商家没有绑定用户
-	    if(empty($merchant) || !$merchant->user_id){
-	        return;
-	    }
-	    $cUser = Users::load($merchant->user_id);
-	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop','', true),
-    	                       array('time' => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time)), 'type' => $item_desc));
-	}
 	
 	/**
 	 * 当发送消息方还是米客时提醒模板
@@ -252,6 +241,22 @@ class UserCommision extends StorageNode {
         }
 	}
 	
+	/**
+	 * 商家新订单提醒
+	 * @param unknown $cUser
+	 * @param unknown $exOrder
+	 * @param unknown $item_desc
+	 */
+	public static function newOrderRemind($merchantList, $exOrder, $item_desc){
+	    $merchant = $merchantList[$exOrder->merchant_ids];
+	    //商家没有绑定用户
+	    if(!self::$has_notify || empty($merchant) || !$merchant->user_id){
+	        return;
+	    }
+	    $cUser = Users::load($merchant->user_id);
+	    WxTplMsg::new_order($cUser->openid, "你的店铺有一笔新订单", "登录电脑端处理订单，点击进入“我的店铺”", U('distribution/shop','', true),
+    	                       array('time' => date('Y-m-d H:i:s', simphp_gmtime2std($exOrder->pay_time)), 'type' => $item_desc));
+	}
 	//商品交易时给商家推荐人分佣
 	static function merchantInviteCommision($merchant, $cUser, $exOrder){
 	    if(empty($merchant)){
@@ -283,7 +288,7 @@ class UserCommision extends StorageNode {
 	                $extra['share_amount'] .= "（你还不是代理，没有产生佣金）";
 	            }
 	            //佣金大于0 或者 推荐人还不是代理时 提醒
-	            if($commision > 0 || !Users::isAgent($invite_user->level)){
+	            if(self::$has_notify && ($commision > 0 || !Users::isAgent($invite_user->level))){
     	           WxTplMsg::sharecommision_succ($invite_user->openid, "您推荐的商家（".$merchant->facename."），卖出了一笔订单", "点击进入“我的钱包”", U("user/my/wallet",'',true), $extra);
 	            }
 	        }

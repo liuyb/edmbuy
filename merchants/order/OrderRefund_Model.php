@@ -91,6 +91,16 @@ class OrderRefund_Model extends Model{
         //微信退款处理
         $params = array('order_no' => $refund->order_sn, 'trans_id' => $refund->pay_trade_no,
                         'refund_no' => $refund->refund_sn, 'refund_fee' => $refund->refund_money, 'total_fee' => $refund->trade_money);
+        //首先判断订单是否有父订单，如果有父订单 判断是用的父订单支付还是用的子订单支付。
+        if($order->parent_id){
+            $porder = Order::load($order->parent_id);
+            //如果子订单单独支付 没有交易号
+            if($porder->pay_trade_no){
+                $params['order_no'] = $porder->order_sn;
+                $params['trans_id'] = $porder->pay_trade_no;
+                $params['total_fee'] = $porder->money_paid;
+            }
+        }
         $result = Wxpay::orderRefund($params);
         //退款成功
         if($result && $result['code'] == 'SUCC'){

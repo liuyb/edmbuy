@@ -43,7 +43,7 @@ $json =<<<HEREDOC
         {
     			"type" : "view",
     			"name" : "我的订单",
-    			"url"  : "http://m.edmbuy.com/trade/order/record"
+    			"url"  : "http://m.edmbuy.com/trade/order/record?status=all"
         },
         {
     			"type" : "view",

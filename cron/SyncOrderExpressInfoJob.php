@@ -11,7 +11,7 @@ class SyncOrderExpressInfoJob extends CronJob {
     static $EXPRESS_QUERY_API = "http://api.jisuapi.com/express/query?appkey=416b541d684c9988";
     
     public function main($argc, $argv) {
-        //$this->sync_express_info();
+        $this->sync_express_info();
     }
     
     /**

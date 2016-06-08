@@ -80,7 +80,7 @@ function agency_switch(a){
 	$(_agency).show();
 }
 </script>
-<?php if(!$isAgent):?>
+<?php if(!$isAgent || Users::isGoldAgent($user->level)):?>
 <script id="forMnav" type="text/html">
 <div class="agency_bottom_next"> 
 	<div class="agency_money gold_common agency_pay" id="agency1">
@@ -132,10 +132,14 @@ $(function(){
 		var _this = $(this);
 		if(_this.hasClass("upgrade")){
 			<?php if($agent->pid && !$agent->premium_id):?>
-			weui_alert('请先领取完398套餐后再升级购买金牌代理。');
+			weui_alert('请先领取完398套餐后再升级购买金牌代理');
 			return;
 			<?php endif;?>
 		}
+		<?php if(Users::isGoldAgent($user->level)):?>
+    		weui_alert('你已是金牌代理');
+    		return;
+		<?php endif;?>
 		if(_this.hasClass("disabled")){
 			return;
 		}
