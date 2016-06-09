@@ -230,6 +230,29 @@ function default_logo()
 }
 
 /**
+ * 显示性别
+ * @param number $gender
+ */
+function show_ta($gender = 0) {
+	$ta = 'TA';
+	if (1==$gender) {
+		$ta = '他';
+	}
+	elseif (2==$gender) {
+		$ta = '她';
+	}
+	return $ta;
+}
+
+/**
+ * 显示返回执行脚本
+ * @return string
+ */
+function backscript() {
+	return Request::refer() ? 'javascript:history.back()' : 'javascript:closeWxWindow()';
+}
+
+/**
  * 检测用户是否登录
  */
 function checkLogin_ajax()
