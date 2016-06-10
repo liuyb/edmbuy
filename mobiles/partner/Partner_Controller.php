@@ -19,6 +19,7 @@ class Partner_Controller extends MobileController {
 	{
 		$this->nav_flag1 = 'partner';
 		parent::init($action, $request, $response);
+		Users::required_account_logined();
 	}
 	
 	/**

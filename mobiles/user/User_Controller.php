@@ -58,6 +58,10 @@ class User_Controller extends MobileController
     {
         $this->nav_flag1 = 'user';
         parent::init($action, $request, $response);
+        
+        if (!in_array($action, ['login','oauth'])) {
+        	Users::required_account_logined();
+        }
     }
 
     /**
@@ -67,10 +71,7 @@ class User_Controller extends MobileController
      * @param Response $response
      */
     public function index(Request $request, Response $response)
-    {
-    	if (!Users::is_logined()) {
-    		$response->redirect(U('eqx/login','refer='.rawurlencode(U('user'))));
-    	}
+    {    	
         $this->v->set_tplname('mod_user_index');
         //$this->v->set_page_render_mode(View::RENDER_MODE_HASH);
         $is_account_logined  = Users::is_account_logined();

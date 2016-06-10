@@ -291,11 +291,10 @@ class Users extends StorageNode {
 	 * 请求帐号登录
 	 */
 	static function required_account_logined() {
-		if (!self::is_account_logined()) {
-			//Response::redirect('user/login_account');
-			Response::redirect('eqx/reg');
+		if (!self::is_logined() || !self::is_account_logined()) {
+			Response::redirect(U('eqx/login','refer='.rawurlencode(Request::uri())));
 		}
-		return true;
+		return false;
 	}
 	
 	/**
