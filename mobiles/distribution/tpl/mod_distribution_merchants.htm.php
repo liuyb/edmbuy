@@ -22,7 +22,7 @@ show_topnav($('#forTopnav').html());
 <div class="alliance_list_common" id="resultList">
 </div>
 
-<div id="showMore" style="text-align:center;height:40px;line-height:40px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
+<div id="showMore" class="moreblk"><span class="allicen_more">下拉加载更多</span></div>
 
 <script>
 var $showMore;

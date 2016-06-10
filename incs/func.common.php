@@ -246,10 +246,12 @@ function show_ta($gender = 0) {
 
 /**
  * 显示返回执行脚本
+ * 
+ * @param boolean $is_pure 是否返回“纯”js
  * @return string
  */
-function backscript() {
-	return Request::refer() ? 'javascript:history.back()' : 'javascript:closeWxWindow()';
+function backscript($is_pure = FALSE) {
+	return Request::refer() ? ($is_pure ? 'history.back();' : 'javascript:history.back();') : ($is_pure ? 'closeWxWindow();' : 'javascript:closeWxWindow();');
 }
 
 /**
