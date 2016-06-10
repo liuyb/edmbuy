@@ -1,4 +1,9 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
+<?php if(!Users::is_logined()):?>
+<span class="pre_m">
+<?php echo icon_nologined();?>
+</span>
+<?php endif;?>
 <div class="mainb">
   <div class="swipe">
     <ul id="slider" class="slider">

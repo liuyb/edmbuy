@@ -4,7 +4,13 @@
 <script id="forMtop" type="text/html">
 <div class="bg_prefe">
 <span class="pre_h"><a href='/'><img src="/themes/mobiles/img/home.png" style="width:30px;"></a></span>
-<span class="pre_s"><a href='/trade/cart/list'><img src="/themes/mobiles/img/shopping00.png" style="width:30px;"></a></span>
+<span class="pre_s">
+<?php if(Users::is_logined()):?>
+<a href='/trade/cart/list'><img src="/themes/mobiles/img/shopping00.png" style="width:30px;"></a>
+<?php else:?>
+<?php echo icon_nologined();?>
+<?php endif;?>
+</span>
 <span class="pre_m" data-show="0"><img src="/themes/mobiles/img/more.png" style="width:30px;"></span>
 <?php if($cartnum): ?>
 <span class="ydm_com"><?=$cartnum ?></span>

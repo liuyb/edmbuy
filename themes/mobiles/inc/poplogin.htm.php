@@ -2,8 +2,8 @@
 
 <script type="text/html" id="forGlobalLogin">
 <div class="login_index">
-	<div class="login_name"><input type="text" name="frm_mobile" id="global_frm_mobile" value="" placeholder="请输入用户名/手机号"></div>
-	<div class="login_password del_bottom"><input type="password" name="frm_password" id="global_frm_passwd" value="" placeholder="请输入密码"></div>
+	<div class="login_name"><input type="text" name="frm_mobile" id="global_frm_mobile" value="" placeholder="请输入您的手机号"></div>
+	<div class="login_password del_bottom"><input type="password" name="frm_password" id="global_frm_passwd" value="" placeholder="请输入您的密码"></div>
 </div>
 <div class="bottom_common">
 	<button class="btn_common_bg" id="login_btn" onclick="__go_login(this)">登录</button>

@@ -255,6 +255,14 @@ function backscript($is_pure = FALSE) {
 }
 
 /**
+ * no logined icon
+ * @return string
+ */
+function icon_nologined() {
+	return '<a href="'.U('eqx/login').'" class="gicon_img_p" onclick="required_account_logined();return false;"><img src="'.emptyimg().'" class="gicon_nologined_img" alt=""/><img src="'.emptyimg().'" class="gicon_nologined_img_i" alt=""/></a>';
+}
+
+/**
  * 检测用户是否登录
  */
 function checkLogin_ajax()
