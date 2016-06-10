@@ -240,6 +240,9 @@ class SimPHP {
         if ('mm' == $sess_handler) {
           self::$session = new SessionMM($sessnode);
         }
+        if ('redis' == $sess_handler) {
+          self::$session = new SessionRedis($sessnode);
+        }
         elseif ('db' == $sess_handler) {
           self::$session = new SessionDB($sessnode);
         }

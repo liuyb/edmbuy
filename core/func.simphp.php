@@ -462,19 +462,31 @@ function D() {
 }
 
 /**
- * Memcache object generator
+ * Memcache/Redis object generator
  * 
+ * @param  string $type cache type, option values: 'memcache':Memcache; 'redis':Redis
  * @return object
  */
-function M() {
-  static $_mm;
-  if (!isset($_mm)) {
-    $mm_node = C('storage.memcache.node');
-    $mm_node = $mm_node[0];
-    $_mm = new Memcache();
-    $_mm->connect($mm_node['host'], $mm_node['port']) or die('Connect to Memcache Fail.');
+function M($type = 'memcache') {
+  static $_mm = array();
+  if (!in_array($type, array('memcache','redis'))) {
+  	$type = 'memcache';
   }
-  return $_mm;
+  if (!isset($_mm[$type])) {
+    $mm_node = C('storage.'.$type.'.node');
+    $mm_node = $mm_node[0];
+    if ('memcache'==$type) {
+    	$_mm[$type] = new Memcache();
+    	$_mm[$type]->connect($mm_node['host'], $mm_node['port']) or die('Connect to Memcache Fail.');
+    }
+    elseif ('redis'==$type) {
+    	$_mm[$type] = new Redis();
+    	$_mm[$type]->connect($mm_node['host'], $mm_node['port']) or die('Connect to Redis Fail.');
+    	$_mm[$type]->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+    	$_mm[$type]->setOption(Redis::OPT_PREFIX, $mm_node['prefix']);
+    }
+  }
+  return $_mm[$type];
 }
 
 /**
