@@ -579,12 +579,20 @@ body.MPA.iOS { height: 100%;overflow: hidden; }
   bottom: 60px;
 }
 .gicon_img_p { display: inline-block; position: relative; }
-.gicon_img_p img.gicon_nologined_img {
+.gicon_img_p img.gicon_img { width: 30px;background-size: 100%; }
+.gicon_img_p img.gicon_home_img {
+  background: url(../img/home.png) no-repeat;
+  background-size: 100%;
+}
+.gicon_img_p img.gicon_nologin_img {
 	background: url(../img/nologined.png) no-repeat;
 	background-size: 100%;
-	width: 30px;
 }
-.gicon_img_p img.gicon_nologined_img_i {
+.gicon_img_p img.gicon_cart_img {
+	background: url(../img/shopping00.png) no-repeat;
+	background-size: 100%;
+}
+.gicon_img_p img.gicon_nologin_img_i {
 	background: url(../img/nologined_i.png) no-repeat;
 	background-size: 100%;
 	width: 16px;

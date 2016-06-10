@@ -161,15 +161,16 @@ HEREDOC;
 			$back = $request->get('back');
 			$backhref = '';
 			if(isset($back) && $back == 'index'){
-			    $backhref = "location.href='/';";
+			    $backhref = "location.href='".U()."';";
 			}else if(isset($back) && $back == 'pref'){
 			    $category = $request->get('category','');
 			    if(isset($category) && $category){
-    			    $backhref = "location.href='/item/pref/show?type=".$category."';";
+    			    $backhref = "location.href='".U('item/pref/show','type='.$category)."';";
 			    }
 			}
 			if(empty($backhref)){
-			    $backhref = "goBack()";
+			  //$backhref = "goBack('".U()."')";
+				$backhref = backscript(true, U());
 			}
 			$this->v->assign('back', $backhref);
 		}

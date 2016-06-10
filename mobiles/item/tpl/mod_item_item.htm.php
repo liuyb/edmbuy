@@ -17,7 +17,7 @@
 <div class="p_header_btn">
 	<span class="p_detail_back" onclick="<?php echo $back ?>"></span>
 <?php if(!Users::is_logined()):?>
-<span class="pre_m"><?php echo icon_nologined();?></span>
+<span class="pre_m"><?php echo icon_html('nologin');?></span>
 <?php else:?>
 <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
 <?php endif;?>

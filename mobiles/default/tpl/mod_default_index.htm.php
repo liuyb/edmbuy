@@ -1,7 +1,7 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 <?php if(!Users::is_logined()):?>
 <span class="pre_m">
-<?php echo icon_nologined();?>
+<?php echo icon_html('nologin');?>
 </span>
 <?php endif;?>
 <div class="mainb">
