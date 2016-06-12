@@ -208,20 +208,11 @@ class User_Model extends Model
                 } else {
                     $msg = "已签收" . $days . "天";
                 }
-            } elseif (in_array($shipping_status, [SS_SHIPPED, SS_SHIPPED_PART, OS_SHIPPED_PART])) {
-                $msg = "已发货";
-            } else {
-                $msg = "未发货";
-            }
-        } else {
-            $msg = "未支付";
-            if ($order_status == OS_CANCELED) {
-                $msg = "已取消";
-            } elseif (in_array($order_status, [OS_REFUND, OS_REFUND_PART])) {
-                $msg = "已退款";
+                return $msg;
             }
         }
-        return $msg;
+        
+        return Fn::get_order_text($pay_status, $shipping_status, $order_status);
     }
 
     /**

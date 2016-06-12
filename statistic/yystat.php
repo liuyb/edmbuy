@@ -4,8 +4,8 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-//~ require init.php
-require (__DIR__.'/core/init.php');
+$root = substr(getcwd(), 0, -9);
+require ($root.'/core/init.php');
 
 define('ONE_DAY_TIME', 86400);
 define('DAY_SEP', ' ');
@@ -151,7 +151,7 @@ if (1==$type) { //汇总统计
     }
     
 }else if(3 == $type){
-    $csv = "会员总数,米客总数,米商总数,金牌总数,银牌总数,商家总数".CSV_LN;
+    $csv = "会员总数,米客总数,米商总数,银牌总数,金牌总数,商家总数".CSV_LN;
     $rows = ThisFn::getMemberData($from_time, $to_time);
     $mk = 0;$ms = 0;$yp=0;$jp=0;$sj=0;$total=0;
 	foreach ($rows as $r){
@@ -222,7 +222,14 @@ group by parent_id) t on u.user_id = t.parent_id order by t.c desc";
     }
     
     static function getMemberData($from_time,$to_time){
-        $sql = "select count(1) c,level from shp_users where mobile <> '' and reg_time >= $from_time and reg_time <= $to_time group by level";
+        $where = "";
+        if ($from_time) {
+            $where .= " AND u.`reg_time`>=".$from_time;
+        }
+        if ($to_time) {
+            $where .= " AND u.`reg_time`<=".$to_time;
+        }
+        $sql = "select count(1) c,level from shp_users u where mobile <> '' $where group by level";
         return D()->query($sql)->fetch_array_all();
     }
 }

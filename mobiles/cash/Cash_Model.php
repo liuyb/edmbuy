@@ -22,6 +22,11 @@ class Cash_Model extends Model {
 		return false;
 	}
 	
+	static function check_valid_commision($user_id, $item_list){
+	    $sql = "select count(1) from shp_user_commision where user_id = %d and state = %d and ".Fn::db_create_in($item_list,'rid')."";
+	    return D()->query($sql, $user_id, UserCommision::STATE_ACTIVE)->result();
+	}
+	
 }
  
 /*----- END FILE: Cash_Model.php -----*/
