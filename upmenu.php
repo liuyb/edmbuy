@@ -29,8 +29,8 @@ $json =<<<HEREDOC
 		},
 		{
 			"type" : "view",
-			"name" : "登录使用",
-			"url"  : "http://m.edmbuy.com/eqx/login?from=mp"
+			"name" : "商家入驻",
+			"url"  : "http://m.edmbuy.com/user/merchant/checkin"
 		},
     {
       "name" : "我的",
