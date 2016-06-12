@@ -24,8 +24,8 @@
 <script type="text/javascript">$('#Mnav').on('click','a',function(){
 	var rel = $(this).attr('rel');
 	var href= $(this).attr('href');
-	$(this).parents('.nav').find('a').removeClass('on');
-	$(this).addClass('on');
+	$(this).parents('.nav').find('li').removeClass('on');
+	$(this).parent().addClass('on');
 	if (rel=='cart') {
 		if (required_account_logined(href)) {
 			return false;
