@@ -38,7 +38,7 @@ $tableRow = $overview->genTableRow();
 <table class="tb_cls" cellspacing="0" cellpadding="0">
 <?php foreach ($tableRow as $label => $bigrow):?>
 <tr style="line-height:40px;background-color:#fff6f2;">
-<td colspan="7" style="text-align: center;font-weight:bold;"><?php echo $label?></td>
+<td colspan="9" style="text-align: center;font-weight:bold;"><?php echo $label?></td>
 </tr>
 <?php 
 $i = 0;

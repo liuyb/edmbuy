@@ -64,8 +64,8 @@ else {
 }
 
 if (0==$type) { //显示链接
-    $aafrom_time = $from_time ? simphp_gmtime($from_time) : 0;
-    $aato_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+    $from_time = $from_time ? simphp_gmtime($from_time) : 0;
+    $to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
     
 	$html  =<<<HEREDOC
 <!DOCTYPE html>
