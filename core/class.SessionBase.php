@@ -31,6 +31,9 @@ class SessionBase implements SessionHandlerInterface {
     $this->_lifetime = Config::get("storage.session.{$this->_sessnode}.lifetime", 1440);// default 24 minutes
     $this->_lifetime_cookie = Config::get("storage.cookie.{$this->_sessnode}.lifetime", 2592000);// default 30 days
     $this->_sessname = 'PHPSESSID'; // default session name
+    $this->_interval = intval($this->_interval);
+    $this->_lifetime = intval($this->_lifetime);
+    $this->_lifetime_cookie = intval($this->_lifetime_cookie);
     
     // Set cookie domain, for muti-host sharing sesssion id
     ini_set('session.cookie_domain', Config::get("storage.cookie.{$this->_sessnode}.domain", ''));

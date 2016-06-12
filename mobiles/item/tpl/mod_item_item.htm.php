@@ -16,7 +16,11 @@
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
 	<span class="p_detail_back" onclick="<?php echo $back ?>"></span>
-    <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
+<?php if(!Users::is_logined()):?>
+<span class="pre_m"><?php echo icon_html('nologin');?></span>
+<?php else:?>
+<a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
+<?php endif;?>
 	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?php echo $cartnum?></span>
 </div>
 </script>

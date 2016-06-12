@@ -593,6 +593,37 @@ class WxTplMsg {
 	     
 	    return self::send($openid, $tplData);
 	}
+	
+	/**
+	 * 账号(预)锁定提醒
+	 * @param string $openid
+	 * @param string $first
+	 * @param string $remark
+	 * @param string $url
+	 * @param array  $extra 包括:
+	 *   $extra['locked_account']  锁定账号
+	 *   $extra['locked_time']     锁定时间
+	 * @return boolean
+	 */
+	static function account_locked($openid, $first, $remark, $url, Array $extra)
+	{
+		$tplData = new WxTplData();
+		//固定部分
+		if (!self::$is_debug) {
+			$tplData->tplid = 'VTU1FGk5rkDiwWB6UZGgULt_msdhUTjpd4My6dkDyE0'; //"益多米"账号
+		}
+		else {
+			$tplData->tplid = 'm46gGkGoJRdfpjNG4Q2hPgJKp3Qwav0O7htheG0EJCo'; //"多米测"账号
+		}
+		$tplData->tplurl   = $url;
+		$tplData->first    = self::packdata($first."\n", '#173177');
+		$tplData->remark   = self::packdata("\n".$remark);
+		//额外部分
+		$tplData->keyword1 = self::packdata($extra['locked_account']);
+		$tplData->keyword2 = self::packdata($extra['locked_time']);
+	
+		return self::send($openid, $tplData);
+	}
 }
 
 /**

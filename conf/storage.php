@@ -40,26 +40,31 @@ return [
       ['host' => '127.0.0.1', 'port' => '11211', 'prefix' => 'EDM_'],
     ],
   ],
+  'redis' => [
+    'node' => [
+      ['host' => '127.0.0.1', 'port' => '6379', 'prefix' => 'EDM_'],
+    ],
+  ],
   'session' => [
     'default' => [
       'sessname'  => '',		//new session name, if keep empty, default to 'PHPSESSID'
       'interval'	=> '300',
       'lifetime'	=> '1800',
-      'handler'	  => 'db',	//option value: 'file', 'mm', 'db'
+      'handler'	  => 'db',	//option value: 'file', 'mm', 'redis', 'db'
       'dbtable'	  => 'tb_session',	//when handler=='db', indicating the session table
     ],
     'adm' => [
       'sessname'  => 'PHPSESSID_ADM',		//new session name, if keep empty, default to 'PHPSESSID'
       'interval'	=> '300',
       'lifetime'	=> '1800',
-      'handler'	  => 'db',	//option value: 'file', 'mm', 'db'
+      'handler'	  => 'db',	//option value: 'file', 'mm', 'redis', 'db'
       'dbtable'	  => 'tb_session_adm',	//when handler=='db', indicating the session table
     ],
     'mch' => [
       'sessname'  => 'PHPSESSID_MCH',		//new session name, if keep empty, default to 'PHPSESSID'
       'interval'	=> '300',
       'lifetime'	=> '1800',
-      'handler'	  => 'db',	//option value: 'file', 'mm', 'db'
+      'handler'	  => 'db',	//option value: 'file', 'mm', 'redis', 'db'
       'dbtable'	  => 'tb_session_mch',	//when handler=='db', indicating the session table
     ],
   ],

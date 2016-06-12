@@ -8,6 +8,8 @@ defined('IN_SIMPHP') or die('Access Denied');
 
 class Eqx_Controller extends MobileController {
 
+	static $reset_passwd_url = 'http://eqx.edmbuy.com/regtemp.jsp?flag=2&appid=4';
+	
 	/**
 	 * hook init
 	 *
@@ -19,6 +21,7 @@ class Eqx_Controller extends MobileController {
 	{
 		$this->nav_flag1 = 'eqx';
 		parent::init($action, $request, $response);
+		$this->v->assign('reset_passwd_url', self::$reset_passwd_url);
 		
 		//SEO信息
 		$seo = [
@@ -166,11 +169,14 @@ class Eqx_Controller extends MobileController {
 			$response->sendJSON($ret);
 		}
 		else { //登录页面
+			$refer = $request->get('refer','');
+			$refer = $refer ? : U('user');
 			if (Users::is_logined()) {
-				$response->redirect(U('user'));
+				$response->redirect($refer);
 			}
 			
 			$this->v->set_tplname('mod_eqx_login');
+			$this->v->assign('refer', $refer);
 			$this->topnav_no = 1;
 			$this->nav_no = 0;
 			throw new ViewResponse($this->v);

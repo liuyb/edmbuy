@@ -58,6 +58,10 @@ class User_Controller extends MobileController
     {
         $this->nav_flag1 = 'user';
         parent::init($action, $request, $response);
+        
+        if (!in_array($action, ['login','oauth'])) {
+        	Users::required_account_logined();
+        }
     }
 
     /**
@@ -67,10 +71,7 @@ class User_Controller extends MobileController
      * @param Response $response
      */
     public function index(Request $request, Response $response)
-    {
-    	if (!Users::is_logined()) {
-    		$response->redirect(U('eqx/login','refer='.rawurlencode(U('user'))));
-    	}
+    {    	
         $this->v->set_tplname('mod_user_index');
         //$this->v->set_page_render_mode(View::RENDER_MODE_HASH);
         $is_account_logined  = Users::is_account_logined();
@@ -443,39 +444,46 @@ class User_Controller extends MobileController
             $upUser->update_time= simphp_dtime();
             $upUser->save(Storage::SAVE_INSERT_IGNORE); //先快速保存insert
             
-            $upUser = new UsersPending($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
-            if (Weixin::OAUTH_DETAIL == $state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
-
-                $uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
-                if (!empty($uinfo_wx['errcode'])) { //失败！则报错
-                    Fn::show_error_message('微信获取用户信息出错！<br/><span style="font-size:16px;">' . $uinfo_wx['errcode'] . '(' . $uinfo_wx['errmsg'] . ')</span>');
-                }
-
-                $upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
-                $upUser->subscribe_time = isset($uinfo_wx['subscribetime']) ? $uinfo_wx['subscribetime'] : 0;
-                $upUser->nick      = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
-                $upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
-                $upUser->gender    = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
-                $upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
-                $upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
-                $upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
-                $upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
-
-                //尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
-                if (!$upUser->subscribe) {
-                    $uinfo_wx = $wx->userInfo($openid);
-                    if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
-
-                    } else { //成功！说明之前已经关注，得更新关注标记
-                        $upUser->subscribe = $uinfo_wx['subscribe'];
-                        $upUser->subscribe_time = $upUser->subscribe ? $uinfo_wx['subscribe_time'] : 0;
-                    }
-                }
-
+            if ($upUser->id) {
+            	$upUser = new UsersPending($upUser->id);    //再新建一个对象更新，避免过多并发重复插入
+            	if (Weixin::OAUTH_DETAIL == $state) { //对不存在的用户，初始登录使用detail授权，则得保存用户详细信息
+            	
+            		$uinfo_wx = $wx->userInfoByOAuth2($openid, $code_ret['access_token']);
+            		if (!empty($uinfo_wx['errcode'])) { //失败！则报错
+            			Fn::show_error_message('微信获取用户信息出错！<br/><span style="font-size:16px;">' . $uinfo_wx['errcode'] . '(' . $uinfo_wx['errmsg'] . ')</span>');
+            		}
+            	
+            		$upUser->subscribe = isset($uinfo_wx['subscribe']) ? $uinfo_wx['subscribe'] : 0;
+            		$upUser->subscribe_time = isset($uinfo_wx['subscribetime']) ? $uinfo_wx['subscribetime'] : 0;
+            		$upUser->nick      = isset($uinfo_wx['nickname']) ? $uinfo_wx['nickname'] : '';
+            		$upUser->logo      = isset($uinfo_wx['headimgurl']) ? $uinfo_wx['headimgurl'] : '';
+            		$upUser->gender    = isset($uinfo_wx['sex']) ? $uinfo_wx['sex'] : 0;
+            		$upUser->lang      = isset($uinfo_wx['language']) ? $uinfo_wx['language'] : '';
+            		$upUser->country   = isset($uinfo_wx['country']) ? $uinfo_wx['country'] : '';
+            		$upUser->province  = isset($uinfo_wx['province']) ? $uinfo_wx['province'] : '';
+            		$upUser->city      = isset($uinfo_wx['city']) ? $uinfo_wx['city'] : '';
+            	
+            		//尝试用基本型接口获取用户信息，以便确认用户是否已经关注(基本型接口存在 50000000次/日 调用限制，且仅对关注者有效)
+            		if (!$upUser->subscribe) {
+            			$uinfo_wx = $wx->userInfo($openid);
+            			if (!empty($uinfo_wx['errcode'])) { //失败！说明很可能没关注，维持现状不处理
+            	
+            			} else { //成功！说明之前已经关注，得更新关注标记
+            				$upUser->subscribe = $uinfo_wx['subscribe'];
+            				$upUser->subscribe_time = $upUser->subscribe ? $uinfo_wx['subscribe_time'] : 0;
+            			}
+            		}
+            	
+            	}
+            	
+            	$upUser->update_time= simphp_dtime();
+            	$upUser->save(Storage::SAVE_UPDATE);
+            	
+            	// 通知“预锁定”成功
+            	$upUser = UsersPending::load($upUser->id, TRUE);
+            	Users::notify_locked_account($upUser);
             }
-
-            $upUser->update_time= simphp_dtime();
-            $upUser->save(Storage::SAVE_UPDATE);
+            
 
         } //END: if ($extUPending->is_exist()) else
 
@@ -1181,6 +1189,40 @@ class User_Controller extends MobileController
         //已是商家  - 还没支付 - 订单不存在
         $response->redirect('/trade/order/confirm_sysbuy');
         
+    }
+    
+    /**
+     * 预锁定用户列表
+     * @param Request $request
+     * @param Response $response
+     */
+    public function prelocked_account(Request $request, Response $response)
+    {
+    	$this->v->set_tplname('mod_user_prelocked_account');
+    	$this->topnav_no = 1;
+    	$this->nav_no = 0;
+    	
+    	$theuid = $request->get('theuid',0);
+    	if (!$theuid) {
+    		$theuid = $GLOBALS['user']->uid;
+    	}
+    	
+    	$limit = 20;
+    	$page  = $request->get('p', 1);
+    	$start = ($page-1) * $limit;
+    	$totalnum = 0;
+    	$maxpage  = 1;
+    	
+    	$list = [];
+    	if ($theuid) {
+    		$list = Users::find_locked_accounts($theuid, $start, $limit, $totalnum, $maxpage);
+    	}
+    	$this->v->assign('totalnum', $totalnum);
+    	$this->v->assign('maxpage', $maxpage);
+    	$this->v->assign('curpage', $page);
+    	$this->v->assign('theuid', $theuid);
+    	$this->v->assign('pending_list', $list);
+    	$response->send($this->v);
     }
 
 }

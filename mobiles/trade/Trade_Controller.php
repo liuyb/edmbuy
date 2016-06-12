@@ -19,6 +19,7 @@ class Trade_Controller extends MobileController {
   {
     $this->nav_flag1 = 'cart';
     parent::init($action, $request, $response);
+    Users::required_account_logined();
   }
 
   /**
@@ -237,6 +238,10 @@ class Trade_Controller extends MobileController {
    */
   public function order_record(Request $request, Response $response)
   {
+  	if (!Users::is_logined()) {
+  		$response->redirect(U('eqx/login','refer='.rawurlencode(U('trade/order/record','status=all'))));
+  	}
+  	
     $this->setPageView($request, $response, '_page_mpa');
     $this->v->set_tplname('mod_trade_order_record');
     $this->nav_flag2 = 'buyrecord';

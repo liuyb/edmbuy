@@ -25,6 +25,7 @@ class Cash_Controller extends MobileController {
 	{
 		$this->nav_flag1 = 'cash';
 		parent::init($action, $request, $response);
+		Users::required_account_logined();
 	}
 	
 	/**

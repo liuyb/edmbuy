@@ -230,6 +230,54 @@ function default_logo()
 }
 
 /**
+ * 显示性别
+ * @param number $gender
+ */
+function show_ta($gender = 0) {
+	$ta = 'TA';
+	if (1==$gender) {
+		$ta = '他';
+	}
+	elseif (2==$gender) {
+		$ta = '她';
+	}
+	return $ta;
+}
+
+/**
+ * 显示返回执行脚本
+ * 
+ * @param boolean $is_pure 是否返回“纯”js
+ * @param string  $default_uri
+ * @return string
+ */
+function backscript($is_pure = FALSE, $default_uri = '') {
+	return Request::refer() ? ($is_pure ? 'history.back();' : 'javascript:history.back();') : ($is_pure ? ($default_uri ? ("location.href='{$default_uri}'") : 'closeWxWindow();') : ($default_uri ? : 'javascript:closeWxWindow();'));
+}
+
+/**
+ * 显示各种样式按钮
+ * @param unknown $type
+ * @return string
+ */
+function icon_html($type) {
+	$html = '';
+	$emptyimg = emptyimg();
+	switch ($type) {
+		case 'home':
+			$html = '<a href="'.U().'" class="gicon_img_p"><img src="'.$emptyimg.'" class="gicon_img gicon_home_img" alt=""></a>';
+			break;
+		case 'nologin':
+			$html = '<a href="'.U('eqx/login').'" class="gicon_img_p" onclick="required_account_logined();return false;"><img src="'.$emptyimg.'" class="gicon_img gicon_nologin_img" alt=""/><img src="'.emptyimg().'" class="gicon_nologin_img_i" alt=""/></a>';
+			break;
+		case 'cart':
+			$html = '<a href="'.U('trade/cart/list').'" class="gicon_img_p"><img src="'.$emptyimg.'" class="gicon_img gicon_cart_img" alt=""/></a>';
+			break;
+	}
+	return $html;
+}
+
+/**
  * 检测用户是否登录
  */
 function checkLogin_ajax()
