@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-title" content="益多米管理后台">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="Edmbuy Technical Team">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>益多米</title>
+<link rel="stylesheet" href="../mch/css/c.min.css" />
+<link rel="stylesheet" href="../mch/css/index.css" />
+<link rel="stylesheet" href="../mch/css/main.css" />
+<link rel="stylesheet" href="../mch/css/finance.css" />
+<script src="../mch/js/ext/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<style>
+</style>
+
+<!--#include file="header_commen.html"-->
+
+<div id="body" class="ifr-body">
+	<!--#include file="finance_left_common.html"-->
+	
+	<div id="new_common">
+		<div class="finance_tit_top_common">
+			<div class="finance_left_common" style="margin-bottom:10px;">
+				<p class="top_name_f">账户余额</p>
+				<p class="top_infos_f"><i>12005.00元</i><button class="finacen_btn_common">申请提现</button></p>
+			</div>
+			<div class="finance_left_common">
+				<p class="top_name_f">待结算余额</p>
+				<p class="top_infos_f"><i>12005.00元</i></p>
+			</div>
+		</div>
+		
+		<div class="finance_tit_top_common" style="margin-left:19px;">
+			<div class="finance_left_common" style="margin-bottom:10px;">
+				<p class="top_name_f">本月收入（截止今日0点）</p>
+				<p class="top_infos_f"><i>12005.00元</i></p>
+			</div>
+			<div class="finance_left_common">
+				<p class="top_name_f">总收入（截止今日0点）</p>
+				<p class="top_infos_f"><i>12005.00元</i></p>
+			</div>
+		</div>
+		
+		<div class="finance_tit_top_common" style="margin-left:19px;">
+			<div class="finance_right_common">
+				<p class="top_name_f">银行卡</p>
+				
+				<div class="top_back_infos">
+					<div class="back_infos_left"><img src="../mch/img/cha.png"></div>
+					<div class="back_infos_right">
+						<p>中国招商银行</p>
+						<p style="width:190px;"><i>**665</i><i style="float:right;">**熊</i></p>
+					</div>
+				</div>
+				
+				<div class="bottom_back_d">
+					<button class="">修改银行卡</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+		
+		<div class="finance_bottom_list">
+			<div class="bottom_list_tit"><p>交易记录</p></div>
+			
+			<div id="choose_condition" style="line-height:70px;">
+				<div class="check_time_left" id="time_left">dd</div> 
+				<span style="padding-left:15px;">至</span>
+				<div class="check_time_left" id="time_right">dd</div>
+				<input class="check_time_left" contenteditable="" id="order_num" placeholder="流水号">
+				<select class="finance_select_type">
+					<option value="1">请选择...</option>
+					<option value="2">第三方</option>
+				</select>
+				<button id="search_type_infos">搜索</button>
+			</div>
+			
+			<div class="finance_lsit_infos">
+				<table cellspacing="0" cellpadding="0" id="finance_list_tab">
+					<tr>
+						<th>提现号</th>
+						<th>时间</th>
+						<th>金额</th>
+						<th>状态</th>
+						<th>类型</th>
+						<th>明细</th>
+					</tr>
+					<tr>
+						<td>46325</td>
+						<td>123456789545</td>
+						<td>haojaitom</td>
+						<td>2016-5-5 14:20</td>
+						<td>￥88.88</td>
+						<td>待发货</td>
+					</tr>
+					<tr>
+						<td>46325</td>
+						<td>123456789545</td>
+						<td>haojaitom</td>
+						<td>2016-5-5 14:20</td>
+						<td>￥88.88</td>
+						<td>待发货</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="foot" class="ifr-foot"><!--#include file="_footer.html"--></div>
+
+<script>
+//菜单高亮
+$("#zjgl").addClass("order_left_common");
+</script>
+
+  
