@@ -92,7 +92,16 @@ class OrderRefund extends StorageNode {
 	    self::updatePaylog($order_id);
 	    //订单存在父订单
 	    if($order->parent_id){
+	        //推荐商家要根据子订单生成佣金，这里需要处理这种情况。
+            self::removeCommision($order_id);
+	        //是通过父订单支付情况
 	        $p_order_id = $order->parent_id;
+	        $porder = Order::load($p_order_id);
+	        if(!$porder->pay_trade_no){
+	            //如果不是父订单支付情况 直接去掉子订单佣金
+	            //self::removeCommision($order_id);
+	            return;
+	        }
 	        $subOrdersCount = D()->from(Order::table())->where("parent_id = '%d' and pay_status <> %d ", $p_order_id, PS_REFUND)->select('count(1)')->result();
 	        if($subOrdersCount && $subOrdersCount > 0){
 	            //部分子订单退款
@@ -100,12 +109,12 @@ class OrderRefund extends StorageNode {
 	            //删除佣金记录 insert时因为唯一索引原因，这里需要删除  
 	            D()->raw_query("DELETE FROM shp_user_commision WHERE `order_id`=%d AND `state`<%d", $p_order_id, UserCommision::STATE_CASHED);
 	            //父订单佣金需要减去退款订单的佣金，并重新生成佣金
-	            D()->raw_query("UPDATE shp_order_info SET `commision`=`commision`-%d WHERE `order_id`=%d", $order->commision, $p_order_id);
-	            $porder = Order::load($p_order_id);
-	            UserCommision::generate($porder);
+	            D()->raw_query("UPDATE shp_order_info SET `commision`=`commision`-%f WHERE `order_id`=%d", $order->commision, $p_order_id);
+	            $porder = Order::load($p_order_id, true);
+	            UserCommision::generate($porder, false);
 	            
 	            //写order_action的日志
-	            $action_note = sprintf("子订单%d退款，删除原佣金记录，从shp_order_info的父订单%d的commision扣减%d，并重新生成佣金。",
+	            $action_note = sprintf("子订单%d退款，删除原佣金记录，从shp_order_info的父订单%d的commision扣减%.2f，并重新生成佣金。",
 	                $order_id, $order->parent_id, $refundMoney, $order->commision);
 	            Order::action_log($order_id, ['action_note'=>$action_note, 'action_user' => $GLOBALS['user']->uid]);
 	        }else{

@@ -2,12 +2,12 @@
 <?php add_css('eqx.css',['scope'=>'module', 'mod'=>'eqx']);?>
 
 <script type="text/html" id="forTopNav">
-<div class="header"><span class="find_password lt" onclick="location.href='<?php echo U()?>'">&lt;返回</span>登录益多米<span class="find_password hide" onclick="location.href='<?php echo U('eqx/findpass')?>'">找回密码</span></div>
+<div class="header"><span class="find_password lt" onclick="<?php echo backscript(TRUE)?>"><img src="http://eqx.edmbuy.com/web/img/com_back.png" alt="" style="width:7px;margin-right:2px;" />返回</span>登录益多米<span class="find_password" onclick="location.href='<?=$reset_passwd_url?>'">找回密码</span></div>
 </script>
-<script type="text/javascript">show_topnav($('#forTopNav').html());</script>
+<script type="text/javascript">show_topnav($('#forTopNav').html());var refer='<?=$refer?>';</script>
 
 <div class="login_phone">
-	<span class="phone_left">手机帐号：</span>
+	<span class="phone_left">手机账号：</span>
 	<input class="write_phone" id="write_phone" type="text" value="" placeholder="请输入您的手机号">
 </div>
 
@@ -48,16 +48,22 @@ $(function(){
 			if (ret.flag=='SUCC') {
 				__sync_login(ret.sync_login_url);
 				weui_toast('finish',1,'登录成功',function(){
-					location.href = '<?php echo U('user')?>';
+					location.href = refer;
 				});
 			}
 			else {
-				if(ret.code && ret.code == -3){
-					weui_confirm('您输入的手机号还未注册！点击确定注册。', '', function(){
+				if(ret.code == -3){
+					weui_confirm('您输入的手机号还未注册！点击确定去注册。', '', function(){
 						location.href='<?php echo U('eqx/reg')?>';
 					});
-				}else{
-    				weui_alert(ret.msg);
+				}
+				else if(ret.code == -4) {
+					weui_confirm('输入的密码不正确，请返回重试，<br>如果忘记密码，可以去重置密码。', '', function(){
+						location.href='<?=$reset_passwd_url?>';
+					},null,{ok_text:'重置密码',cancel_text:'返回重试'});
+				}
+				else{
+    			weui_alert(ret.msg);
 				}
 			}
 		});

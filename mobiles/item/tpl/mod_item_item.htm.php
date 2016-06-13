@@ -1,13 +1,11 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
+<!--[HEAD_CSS]-->
 <style>
-#Mbody {
-	background-color : #fff;
-}
-.disabled_btn {
-	background-color : #c0c0c0 !important;
-}
+#Mbody {background-color : #fff;}
+.disabled_btn {background-color : #c0c0c0 !important;}
 </style>
+<!--[/HEAD_CSS]-->
 
 <?php if(''!==$errmsg):?>
 
@@ -18,7 +16,11 @@
 <script id="forMtop" type="text/html">
 <div class="p_header_btn">
 	<span class="p_detail_back" onclick="<?php echo $back ?>"></span>
-    <a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
+<?php if(!Users::is_logined()):?>
+<span class="pre_m"><?php echo icon_html('nologin');?></span>
+<?php else:?>
+<a href="<?php echo U('trade/cart/list')?>"><span class="p_detail_carts cursor"></span></a>
+<?php endif;?>
 	<span class="carts_nums_n cursor" id="cart_number" <?php if(!$cartnum):?>style="display:none;"<?php endif;?>><?php echo $cartnum?></span>
 </div>
 </script>
@@ -173,7 +175,7 @@ if($GLOBALS['user']->level > 0){
 	</div>
 	<div class="p_d_sale"><span class="fl" style="text-decoration: line-through;">原价：<?php echo $item->market_price?></span></div>
 	<div class="p_d_sale">
-		<span class="fr"><!-- 销量：<?php echo $item->paid_goods_number?>件　 -->成交：<?php echo $item->paid_order_count?>笔</span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span>
+		<span class="fr">销量：<?php echo $item->paid_goods_number?>件<!-- 成交：<?php echo $item->paid_order_count?>笔 --></span><span class="fl">快递：<?php echo ($item->shipFee > 0 ? $item->shipFee : '免运费' )?></span>
 	</div>
 </div>
 

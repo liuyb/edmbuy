@@ -28,6 +28,9 @@ class Partner extends StorageNode {
      * @return mixed
      */
     static function findFirstLevelCount($uid, $options = ''){
+        if(!$uid){
+            return 0;
+        }
         $where = self::setLevelQueryCondition($options);
         $sql = "SELECT count(1) FROM edmbuy.shp_users where `parent_id` = %d $where ";
         $count = D()->query($sql, $uid)->result();
@@ -40,6 +43,9 @@ class Partner extends StorageNode {
      * @return mixed
      */
     static function findSecondLevelCount($uid, $options = ''){
+        if(!$uid){
+            return 0;
+        }
         $where = self::setLevelQueryCondition($options);
         $sql = "SELECT count(1) FROM edmbuy.shp_users u where parent_id2 = %d $where ";
         $count = D()->query($sql, $uid)->result();
@@ -52,6 +58,9 @@ class Partner extends StorageNode {
      * @return mixed
      */
     static function findThirdLevelCount($uid, $options = ''){
+        if(!$uid){
+            return 0;
+        }
         $where = self::setLevelQueryCondition($options);
         $sql = "SELECT count(1) FROM edmbuy.shp_users tu where parent_id3 = %d $where ";
         $count = D()->query($sql, $uid)->result();
@@ -64,6 +73,9 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findFirstLevelList($uid, PagerPull $pager, $options = ''){
+        if(!$uid){
+            return [];
+        }
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users where `parent_id` = '%d' $where order by reg_time desc limit %d,%d";
@@ -79,6 +91,9 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findSecondLevelList($uid, PagerPull $pager, $options = ''){
+        if(!$uid){
+            return [];
+        }
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users u where parent_id2 = '%d' $where 
@@ -95,6 +110,9 @@ class Partner extends StorageNode {
      * @param Pager $pager
      */
     static function findThirdLevelList($uid, PagerPull $pager, $options = ''){
+        if(!$uid){
+            return [];
+        }
         $where = self::setLevelQueryCondition($options);
         $column = self::outputLevelListQueryColumn();
         $sql = "SELECT $column FROM edmbuy.shp_users tu where parent_id3 = '%d' $where order by reg_time desc limit %d,%d";

@@ -8,7 +8,7 @@
 <script id="forTopnav" type="text/html">
 <div class="header">
 	我的钱包
-<a href="javascript:goBack('<?php echo U("user") ?>');" class="back"></a>
+<a href="<?php echo U("user")?>" class="back"></a>
 </div>
 </script>
 <script>show_topnav($('#forTopnav').html())</script>

@@ -14,6 +14,8 @@ class Cash_Controller extends MobileController {
 	//默认提现银行代码
 	static $default_bank_code = 'WXPAY';
 	
+	//自助提现金额上限
+	static $money_limit = 500;
 	/**
 	 * hook init
 	 *
@@ -25,6 +27,7 @@ class Cash_Controller extends MobileController {
 	{
 		$this->nav_flag1 = 'cash';
 		parent::init($action, $request, $response);
+		Users::required_account_logined();
 	}
 	
 	/**
@@ -154,15 +157,15 @@ class Cash_Controller extends MobileController {
 				$ret['detail'] = '未登录，请先登录';
 				$response->sendJSON($ret);
 			}
-			if (1) {
-				$ret['msg'] = '暂不能提现';
-				$ret['detail'] = '为保资金安全，在种子内测期间暂停提现功能，待内测过后再开放';
-				$response->sendJSON($ret);
-			}
 			if (empty($cashing_amount) || $cashing_amount < self::CASH_THRESHOLD) {
 				$ret['msg'] = '无法提现';
 				$ret['detail'] = '可提现金额须'.self::CASH_THRESHOLD.'元起';
 				$response->sendJSON($ret);
+			}
+			if ($cashing_amount > self::$money_limit) {
+			    $ret['msg'] = '暂不能提现';
+			    $ret['detail'] = '提现金额超过500元，为保资金安全，待内测过后再开放';
+			    $response->sendJSON($ret);
 			}
 			$commision_ids = trim($commision_ids);
 			if (empty($commision_ids)) {
@@ -175,12 +178,18 @@ class Cash_Controller extends MobileController {
 				$ret['detail'] = '提现记录非法';
 				$response->sendJSON($ret);
 			}
+			global $user;
 			//重排序保证id已升序排列
 			$commision_ids_arr = explode(',', $commision_ids);
 			asort($commision_ids_arr);
 			$commision_ids = join(',', $commision_ids_arr);
 			
-			global $user;
+			$validCommsions = Cash_Model::check_valid_commision($user->uid, $commision_ids_arr);
+			if(count($commision_ids_arr) != $validCommsions){
+			    $ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>'提现记录和对应的可提现记录不一致'];
+			    $response->sendJSON($ret);
+			}
+			
 			$bank_code = self::$default_bank_code;
 			
 			if (1==$step) { //提交提现申请
@@ -216,9 +225,6 @@ class Cash_Controller extends MobileController {
 						
 						$cashing_id = $nUC->id;
 						
-						//立马更新佣金记录状态为“锁定”
-						UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
-
 						//尽早提交事务，避免锁表太久
 						D()->commit();
 						
@@ -243,13 +249,25 @@ class Cash_Controller extends MobileController {
 						//: 检查提现订单是否有正确的支付交易号
 						if (!UserCashing::check_out_trade_no($commision_ids)) {
 							//设置提现记录状态为“人工审核”
-							UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_MANUALCHECK, '提交人工审核');
+							UserCashing::change_state($cashing_id, UserCashing::STATE_NOPASS_AUTOCHECK, '提交人工审核');
 							$ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>'提现金额和对应的订单佣金总额不相等'];
 							$response->sendJSON($ret);
 						}
 						
+						if($cashing_amount > self::$money_limit){
+						    //立马更新佣金记录状态为“锁定”
+						    UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
+						    //设置提现记录状态为“人工审核”
+						    UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_MANUALCHECK, '提交人工审核');
+						    $ret = ['flag'=>'SUCC','msg'=>'提交人工审核','detail'=>'提现金额超出限制，已转为人工审核，5个工作日内完成提现，请留意微信通知。'];
+						    $response->sendJSON($ret);
+						}
+						
 						//设置提现记录状态为“提交银行转账中”
 						UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_BANK, '提交银行转账');
+						
+						//立马更新佣金记录状态为“锁定”
+						UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
 						
 						//对接微信接口
 						$wx_ret = Wxpay::enterprisePay($cashing_no, '米商提现');

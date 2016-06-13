@@ -3,6 +3,13 @@
 	<div class="error"><?= $errmsg ?></div>
 <?php else: ?>
 
+<span class="pre_h"><?php echo icon_html('home');?></span>
+<?php if(!Users::is_logined()):?>
+<span class="pre_m">
+<?php echo icon_html('nologin');?>
+</span>
+<?php endif;?>
+
 <div class="store_index_tit">
 	<?php if ($shop_info->slogan):?>
 	<img src="<?=$shop_info->slogan?>" />

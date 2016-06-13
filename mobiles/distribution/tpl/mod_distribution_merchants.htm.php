@@ -22,7 +22,7 @@ show_topnav($('#forTopnav').html());
 <div class="alliance_list_common" id="resultList">
 </div>
 
-<div id="showMore" style="text-align:center;height:40px;line-height:40px;display:none;"><span class="allicen_more">下拉加载更多</span></div>
+<div id="showMore" class="moreblk"><span class="allicen_more">下拉加载更多</span></div>
 
 <script>
 var $showMore;
@@ -77,7 +77,7 @@ function constructRows(ret, isInit){
 				HTML += "<div class=\"iance_list_bottom\"><ul>";
 				for(var r = 0,rlen = obj.recommend.length; r < rlen; r++){
 					var recomm = obj.recommend[r];
-					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgQueueLoad(this,'"+recomm.goods_img+"')\" /></li>";
+					HTML += "<li data-gid=\""+recomm.goods_id+"\"><img src=\"<?php echo ploadingimg()?>\" data-loaded=\"0\" onload=\"imgLazyLoad(this,'"+recomm.goods_img+"')\" /></li>";
 				}
 				HTML += "</ul></div>";
 			}

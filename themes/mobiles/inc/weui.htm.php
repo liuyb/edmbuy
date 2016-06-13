@@ -5,6 +5,7 @@
 <style>
 .weui_mask, .weui_mask_transition, .weui_mask_transparent {z-index: 50000;}
 .weui_dialog,.weui_toast {z-index: 50005;}
+.weui_dialog_confirm .weui_dialog .weui_dialog_bd {text-align: center;}
 .weui_btn_dialog.primary{color: #ff6d14;}
 </style>
 <!--[/HEAD_CSS]-->
@@ -78,4 +79,4 @@
     </div>
 </div>
 </script>
-<?php add_js($contextpath.'misc/js/ext/weui/weui.js',['pos'=>'current','ver'=>'0.1.0']);?>
+<?php add_js($contextpath.'misc/js/ext/weui/weui.js',['pos'=>'current','ver'=>'0.1.1']);?>

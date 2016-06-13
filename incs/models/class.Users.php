@@ -291,11 +291,10 @@ class Users extends StorageNode {
 	 * 请求帐号登录
 	 */
 	static function required_account_logined() {
-		if (!self::is_account_logined()) {
-			//Response::redirect('user/login_account');
-			Response::redirect('eqx/reg');
+		if (!self::is_logined() || !self::is_account_logined()) {
+			Response::redirect(U('eqx/login','refer='.rawurlencode(Request::uri())));
 		}
-		return true;
+		return false;
 	}
 	
 	/**
@@ -1049,6 +1048,56 @@ class Users extends StorageNode {
 			}
 			
 		}
+	}
+	
+	/**
+	 * 通知账号“预锁定”
+	 * 
+	 * @param UsersPending $oUP
+	 */
+	public static function notify_locked_account(UsersPending $oUP) {
+		if ($oUP->parent_id) {
+			$pUser = self::load($oUP->parent_id);
+			if ($pUser->is_exist() && strlen($pUser->openid)>20) {
+				$ta     = 'TA';
+				$gender = '';
+				if (1==$oUP->gender) {
+					$gender = '(男)';
+					$ta = '他';
+				}
+				elseif (2==$oUP->gender) {
+					$gender = '(女)';
+					$ta = '她';
+				}
+				WxTplMsg::account_locked($pUser->openid,
+				                         '恭喜您，'.$pUser->nickname.'，您刚刚成功预锁定了一个伙伴：',
+				                         '“预锁定”不表示“真锁定”，请提示'.$ta.'尽快注册以最终确定关系。',
+				                         U('user/prelocked_account','theuid='.$pUser->uid, true),
+				                         ['locked_account'=>$oUP->nick.$gender,
+				                          'locked_time'=>WxTplMsg::human_dtime(strtotime($oUP->touch_time))]);
+			}
+		}
+	}
+	
+	/**
+	 * 查找预锁定用户
+	 * @param integer $theuid
+	 * @param integer $start
+	 * @param integer $limit
+	 * @param integer $totalnum output
+	 * @param integer $maxpage output
+	 * @return array
+	 */
+	public static function find_locked_accounts($theuid, $start = 0, $limit = 20, &$totalnum = 0, &$maxpage = 0) {
+		$list = [];
+		if ($theuid) {
+			$sql_cnt  = "SELECT COUNT(unionid) FROM `shp_users_pending` WHERE `parent_id`=%d";
+			$totalnum = D()->query($sql_cnt, $theuid)->result();
+			$maxpage  = ceil($totalnum / ($limit?:20));
+			$sql = "SELECT up.unionid,up.openid,up.parent_id,up.nick,up.logo,up.gender,up.touch_time,up.update_time,IF(u.user_id is NULL,0,1) AS is_reg FROM `shp_users_pending` AS up LEFT JOIN `shp_users` AS u ON u.mobile<>'' AND up.openid=u.openid WHERE up.parent_id=%d ORDER BY up.rid DESC LIMIT %d,%d";
+			$list = D()->query($sql,$theuid,$start,$limit)->fetch_array_all();
+		}
+		return $list;
 	}
 	
 	/**

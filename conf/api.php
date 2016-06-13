@@ -21,7 +21,7 @@ return [
   	'appSecret'      => '93b1b2d4883a7332184d524c660f543c',
   	'token'          => 'JQ4W443W6D5EFBAT',
   	'encodingAesKey' => 'bbeJit1rwF6qbXnhAIxKeO2vsEMTSj6QNbJrtrpITQm',
-  	'paySignKey'     => ''
+  	'paySignKey'     => '',
   ],
   'meiqia_edmbuy' => [
       // 测试

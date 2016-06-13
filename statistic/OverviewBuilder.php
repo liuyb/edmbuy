@@ -31,7 +31,8 @@ class OverviewBuilder {
         list($gpaid,$gpaidInDay,$gpaidInWeek,$gpaidInMonth,$dlpaid,$dlpaidInDay,$dlpaidInWeek,$dlpaidInMonth,
             $rzpaid,$rzpaidInDay,$rzpaidInWeek,$rzpaidInMonth,$paid,$paidInDay,$paidInWeek,$paidInMonth,
             $gcommision,$gcommisionInD,$gcommisionInW,$gcommisionInM,$dlcommision,$dlcommisionInD,$dlcommisionInW,$dlcommisionInM,
-            $rzcommision,$rzcommisionInD,$rzcommisionInW,$rzcommisionInM,$package,$packageInD,$packageInW,$packageInM) = $p;
+            $rzcommision,$rzcommisionInD,$rzcommisionInW,$rzcommisionInM,$package,$packageInD,$packageInW,$packageInM,
+            $pv,$pvInDay,$pvInWeek,$pvInMonth,$uv,$uvInDay,$uvInWeek,$uvInMonth,$ip,$ipInDay,$ipInWeek,$ipInMonth) = $p;
         
         $overview = array(
             '商家' => array(
@@ -220,6 +221,27 @@ class OverviewBuilder {
                     'day'   => $rzcommisionInD,
                     'week'  => $rzcommisionInW,
                     'month' => $rzcommisionInM
+                ),
+                array(
+                    'label' => '平台PV',
+                    'total' => $pv,
+                    'day'   => $pvInDay,
+                    'week'  => $pvInWeek,
+                    'month' => $pvInMonth
+                ),
+                array(
+                    'label' => '平台UV',
+                    'total' => $uv,
+                    'day'   => $uvInDay,
+                    'week'  => $uvInWeek,
+                    'month' => $uvInMonth
+                ),
+                array(
+                    'label' => '平台IP',
+                    'total' => $ip,
+                    'day'   => $ipInDay,
+                    'week'  => $ipInWeek,
+                    'month' => $ipInMonth
                 )
             )
         );

@@ -228,13 +228,14 @@ class Order_Controller extends MerchantController {
             $commission = $order->commision;
             $now_price = Order::get_actual_orderobj_amount($order, $discount);
             if($now_price < 0 || $now_price < $commission){
-                $ret = ['result' => 'FAIL', 'msg' => '折扣后价格不能小于佣金！'];
+                $ret = ['result' => 'FAIL', 'msg' => "折扣后的订单金额不能小于当前订单佣金 $commission 元 "];
                 $response->sendJSON($ret);
             }
             $order = new Order();
             $order->order_id = $order_id;
             $order->order_amount = $now_price;
             $order->discount = $discount;
+            $order->order_sn = Fn::gen_order_no();
             $order->save(Storage::SAVE_UPDATE);
             $ret = ['result' => 'SUCC'];
         }else{

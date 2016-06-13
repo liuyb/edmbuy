@@ -88,7 +88,12 @@ function runImgQueue() {
 $(function(){
 	imgQueueLoad();
 });
-
+//Close WxWindow
+function closeWxWindow() {
+	if(typeof WeixinJSBridge === "undefined") window.close();
+	else WeixinJSBridge.invoke("closeWindow",{},function(res){});
+	return false;
+}
 //Form checking
 ;function checkUsername(username){
 	var _self = checkUsername;
