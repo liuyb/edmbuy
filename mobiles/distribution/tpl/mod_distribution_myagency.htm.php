@@ -49,7 +49,7 @@ $(function(){
 
 	$mbody.on('pullMore', function(){
 		var level = $("#levelBar").find("li[class='navig_on']").data('type');
-		var curpage = $showMore.attr('data-curpage');
+		var curpage = $("#showMore").attr('data-curpage');
 		getAgencyList(level ? level : 1, (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);

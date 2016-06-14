@@ -48,7 +48,7 @@ $(function(){
 	});
 
 	$mbody.on('pullMore', function(){
-		var curpage = $showMore.attr('data-curpage');
+		var curpage = $("#showMore").attr('data-curpage');
 		getIncomeDetail((curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);

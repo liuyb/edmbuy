@@ -46,7 +46,7 @@ $(function(){
 
 	$mbody.on('pullMore', function(){
 		var orderby = $("#orderBar").find("li[class='coll_on']").data('type');
-		var curpage = $showMore.attr('data-curpage');
+		var curpage = $("#showMore").attr('data-curpage');
 		getShopList(orderby, (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);
