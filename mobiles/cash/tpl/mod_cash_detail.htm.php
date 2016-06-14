@@ -1,7 +1,7 @@
 <?php defined('IN_SIMPHP') or die('Access Denied');?>
 
 <script type="text/html" id="forTopnav">
-<div class="header">提现明细<a href="javascript:history.back();" class="back"></a></div>
+<div class="header">提现明细<a href="<?php echo U('user/my/wallet') ?>" class="back"></a></div>
 </script>
 <script type="text/javascript">show_topnav($('#forTopnav').html())</script>
 
@@ -11,7 +11,7 @@
   
 	<div class="cashlist_item_ydm">
 		<div class="cashlist_tit_ydm">
-			提现金额：<?=$cash['cashing_amount']?>元
+			提现金额：<?=$cash['actual_amount']?>元
 			<?php if(1==$cash['state_type']):?>
 			<span class="cashlist_status_ydm cashlist_ing_ydm">提现中</span>
 			<?php elseif (2==$cash['state_type']):?>
