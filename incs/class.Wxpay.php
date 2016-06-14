@@ -66,7 +66,10 @@ class Wxpay {
     //获取用户openid
     $tools = new JsApiPay();
     if (empty($openId)) {
-      $openId = $tools->GetOpenid();      
+    	$openId = isset($_SESSION[Users::AC_WXAUTH_KEY]) ? $_SESSION[Users::AC_WXAUTH_KEY] : '';
+    	if (empty($openId)) {
+    		$openId = $tools->GetOpenid();
+    	}
     }
     
     $order_detail  = '';
