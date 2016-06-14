@@ -30,11 +30,11 @@
 <div class="wallet_type_list">
 	<ul>
 		<li onclick="showDetail(2,-1);"><p>已提现</p><p class="wallet_li_font">￥<?=$commision['2'] ?></p></li>
-		<li onclick="showDetail(0,-1, 1);"><p>返利收入</p><p class="wallet_li_font">￥<?=$rebate_commision ?></p></li>
-		<li onclick="showDetail(0,0);"><p>商品分销收入</p><p class="wallet_li_font">￥<?=$type_commision['0'] ?></p></li>
-		<li onclick="showDetail(0,1);"><p>代理收入</p><p class="wallet_li_font">￥<?=$type_commision['1'] ?></p></li>
-		<li onclick="showDetail(0,2);"><p>商家入驻收入</p><p class="wallet_li_font">￥<?=$type_commision['2'] ?></p></li>
-		<li onclick="showDetail(0,3);"><p>商家交易收入</p><p class="wallet_li_font">￥<?=$type_commision['3'] ?></p></li>
+		<li onclick="showDetail(1,-1, 1);"><p>返利收入</p><p class="wallet_li_font">￥<?=$rebate_commision ?></p></li>
+		<li onclick="showDetail(1,0);"><p>商品分销收入</p><p class="wallet_li_font">￥<?=$type_commision['0'] ?></p></li>
+		<li onclick="showDetail(1,1);"><p>代理收入</p><p class="wallet_li_font">￥<?=$type_commision['1'] ?></p></li>
+		<li onclick="showDetail(1,2);"><p>商家入驻收入</p><p class="wallet_li_font">￥<?=$type_commision['2'] ?></p></li>
+		<li onclick="showDetail(1,3);"><p>商家交易收入</p><p class="wallet_li_font">￥<?=$type_commision['3'] ?></p></li>
 		<div class="clear"></div>
 		<span class="line9"></span>
 		<span class="line10"></span>

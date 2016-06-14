@@ -98,9 +98,15 @@ var ids  = '<?=$available_ids?>';
 var cash = '<?=$available_cash?>';
 $(document).on("click", "#apply_cash_btn", function(){
 	var _this = this;
-	weui_alert('为保资金安全，在种子内测期间暂停提现功能，待内测过后再开放','提示');
-	return;
-	weui_confirm('确定现在提现？','确认',function(){
+	/* if(gUser.uid != 7217){
+    	weui_alert('为保资金安全，在种子内测期间暂停提现功能，待内测过后再开放','提示');
+    	return;
+	} */
+	if(cash > 500){
+		weui_alert('提现金额超过500元，为保资金安全，待内测过后再开放','提示');
+		return;
+	}
+	weui_confirm('确定现在提现？','',function(){
 		$(_this).attr('disabled',true);
 		showWaiting();
 		F.post('<?php echo U('cash/doapply','step=1')?>',{cashing_amount:cash,commision_ids:ids},function(ret){

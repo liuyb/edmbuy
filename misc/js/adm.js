@@ -587,4 +587,5 @@ function tickDuplicate(str, sep) {
 	
 	//~ return it
 	return retstr.substring(0, retstr.length-1);  
-}
+};
+var EventBus = new Object();

@@ -6,7 +6,7 @@
 
 <?php else:?>
 <?php 
-$page_head_pic = 'http://fdn.oss-cn-hangzhou.aliyuncs.com/images/pref_heade_dw.png';
+$page_head_pic = '/themes/mobiles/img/zq/pref_best.png';
 $category = 'best';
 
 include T('inc/pref_popup_menu');?>
@@ -30,7 +30,7 @@ $(document).ready(function(){
 		}
 		gotoItem(goodid);
 	});
-	$("#Mbody").css('background','#0e9623');
+	$("#Mbody").css('background','#da284c');
 });
 
 function contructGoodsHTML(ret, isinit){

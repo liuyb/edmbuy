@@ -126,7 +126,7 @@
 				</div>
 				<button onclick="deleteSpecif(this);" class='deletelink'>删除</button>
 				<!-- <span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span> -->
-				<div style="height:40px;" class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
+				<div class="add_del_y"><span class="add_common_a" style="display:none;">+添加</span></div>
 				<div class="common_a_tow">
 		 			<div class="result_d">
 		 				<div  class="common_a_li" style="display:none;">
@@ -152,9 +152,9 @@
 				</div>
 				<!-- <span onclick="deleteSpecif(this);" class='deletelink'><a href='javascript:void(0)'>删除</a></span> -->
 				<button onclick="deleteSpecif(this);" class='deletelink'>删除</button>
-				<div style="height:40px;" class="add_del_y">
+				<div class="add_del_y">
 				<!--{foreach from=$type.display_attrs item=attr}-->
-				<span class="yjtj" data-attr="<!--{$attr.attr_id}-->" style="display: inline;"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
+				<span class="yjtj" data-attr="<!--{$attr.attr_id}-->"><!--{$attr.attr_value}--><img src="/themes/merchants/img/close_gire.png" onclick="yjtjclick(this)" class="close_gg" style="display: none;"></span>
 				<!--{/foreach}-->
 				<span class="add_common_a">+添加</span></div>
 				<div class="common_a_tow">
@@ -293,7 +293,6 @@ function goods_submit(){
 	if(!buildGoodsSpecif(data)){
 		return false;
 	}
-	console.log(data);
 	$("#submitBtn").attr("disabled", "disabled");
 	F.postWithLoading('/goods/publish', data, function(ret){
 		if(ret && ret.result == 'SUCC'){
@@ -816,6 +815,7 @@ function buildGoodsSpecif(data){
 		}
 		attrdata.push(attr);
 	});
+	attrdata = JSON.stringify(attrdata);
 	data.attribute_list = attrdata;
 	return valid;
 }

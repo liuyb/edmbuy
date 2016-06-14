@@ -380,11 +380,11 @@
 	border-radius: 4px;
 	position: relative;
 	color: #333;
-	margin-right: 10px;
-	display: none;
+	margin: 0px 10px 5px 0px;
+	display: inline-block !IMPORTANT;
 	cursor: pointer;
 	color: #7d7d7d;
-	padding: 10px 20px;
+	padding: 0px 20px;
 }
 .dj_fil{
 	position: absolute;
@@ -625,7 +625,6 @@
 	top: 6px;
 }
 .add_del_y{
-	height: 40px;
 	margin: 10px;
 }
 .yjtj img{

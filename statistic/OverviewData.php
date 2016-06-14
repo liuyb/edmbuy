@@ -350,7 +350,45 @@ class OverviewData{
                 and o.order_flag=9 and o.is_separate = 0 $where ";
         return D()->query($sql)->result();        
     }
-    
+    //PV
+    private function getPV($period = ''){
+        $where = "";
+        if($period == self::DAY){
+            $where .= " and created >= $this->day ";
+        }else if($period == self::WEEK){
+            $where .= " and created >= $this->week ";
+        }else if($period  == self::MONTH){
+            $where .= " and created >= $this->month ";
+        }
+        $sql = "SELECT count(1) FROM tb_visiting where 1 $where ";
+        return D()->query($sql)->result();
+    }
+    //UV
+    private function getUV($period = ''){
+        $where = "";
+        if($period == self::DAY){
+            $where .= " and created >= $this->day ";
+        }else if($period == self::WEEK){
+            $where .= " and created >= $this->week ";
+        }else if($period  == self::MONTH){
+            $where .= " and created >= $this->month ";
+        }
+        $sql = "SELECT count(distinct uv) FROM tb_visiting where 1 $where ";
+        return D()->query($sql)->result();
+    }
+    //IP
+    private function getIP($period = ''){
+        $where = "";
+        if($period == self::DAY){
+            $where .= " and created >= $this->day ";
+        }else if($period == self::WEEK){
+            $where .= " and created >= $this->week ";
+        }else if($period  == self::MONTH){
+            $where .= " and created >= $this->month ";
+        }
+        $sql = "SELECT count(distinct ip) FROM tb_visiting where 1 $where ";
+        return D()->query($sql)->result();
+    }
     public function platformAnalysis(){
         //商品销售佣金
         $gcommision = $this->getCommisionMoney('', "".UserCommision::COMMISSION_TYPE_FX.",".UserCommision::COMMISSION_TYPE_JY."");
@@ -393,10 +431,27 @@ class OverviewData{
         $paidInWeek = $gpaidInWeek + $dlpaidInWeek + $rzpaidInWeek;
         $paidInMonth = $gpaidInMonth + $dlpaidInMonth + $rzpaidInMonth;
         
+        //PV UV IP
+        $pv = $this->getPV();
+        $pvInDay = $this->getPV(self::DAY);
+        $pvInWeek = $this->getPV(self::WEEK);
+        $pvInMonth = $this->getPV(self::MONTH);
+        
+        $uv = $this->getUV();
+        $uvInDay = $this->getUV(self::DAY);
+        $uvInWeek = $this->getUV(self::WEEK);
+        $uvInMonth = $this->getUV(self::MONTH);
+        
+        $ip = $this->getIP();
+        $ipInDay = $this->getIP(self::DAY);
+        $ipInWeek = $this->getIP(self::WEEK);
+        $ipInMonth = $this->getIP(self::MONTH);
+        
         return array($gpaid,$gpaidInDay,$gpaidInWeek,$gpaidInMonth,$dlpaid,$dlpaidInDay,$dlpaidInWeek,$dlpaidInMonth,
             $rzpaid,$rzpaidInDay,$rzpaidInWeek,$rzpaidInMonth,$paid,$paidInDay,$paidInWeek,$paidInMonth,
             $gcommision,$gcommisionInD,$gcommisionInW,$gcommisionInM,$dlcommision,$dlcommisionInD,$dlcommisionInW,$dlcommisionInM,
-            $rzcommision,$rzcommisionInD,$rzcommisionInW,$rzcommisionInM,$package,$packageInD,$packageInW,$packageInM
+            $rzcommision,$rzcommisionInD,$rzcommisionInW,$rzcommisionInM,$package,$packageInD,$packageInW,$packageInM,
+            $pv,$pvInDay,$pvInWeek,$pvInMonth,$uv,$uvInDay,$uvInWeek,$uvInMonth,$ip,$ipInDay,$ipInWeek,$ipInMonth
         );
     }
     

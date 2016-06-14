@@ -29,6 +29,7 @@ class FrequentJob extends CronJob {
 		
 		// 批量更新佣金状态变化时间
 		$this->upCommisionState();
+		$this->upRZCommisionState();
 	}
 	
 	/**
@@ -137,7 +138,7 @@ WHERE a.user_id=b.parent_id";
 	}
 	
 	/**
-	 * 批量更新佣金状态变化时间
+	 * 批量更新商品分销佣金状态变化时间
 	 */
 	private function upCommisionState() {
 		$this->log("update commision state and time(7 days after shipping_confirm_time)...");
@@ -145,9 +146,23 @@ WHERE a.user_id=b.parent_id";
 		$now_time = simphp_time();
 		$sql = "UPDATE `shp_user_commision` uc, `shp_order_info` o
 SET uc.`state`=1, uc.`state_time`={$now_time}
-WHERE o.`pay_status`=".PS_PAYED." AND o.`shipping_status`=".SS_RECEIVED." AND o.`shipping_confirm_time`<{$the_time} AND o.`shipping_confirm_time`>0 AND uc.`state`=0 AND uc.order_id=o.order_id";
+WHERE o.`pay_status`=".PS_PAYED." AND o.`order_flag` = 0 AND o.`shipping_status`=".SS_RECEIVED." AND o.`shipping_confirm_time`<{$the_time} AND o.`shipping_confirm_time`>0 AND uc.`state`=0 AND uc.order_id=o.order_id";
 		D()->query($sql);
 		$this->log("OK. affected rows: ".D()->affected_rows());
+	}
+	
+	/**
+	 * 批量更新商家入驻佣金状态变化时间  商家入驻有3天退款期，保险起见，这里设置生效时间为支付后的4天。
+	 */
+	private function upRZCommisionState() {
+	    $this->log("update merchant commision state and time(4 days after pay time)...");
+	    $the_time = simphp_gmtime() - 86400*4;
+	    $now_time = simphp_time();
+	    $sql = "UPDATE `shp_user_commision` uc, `shp_order_info` o
+	    SET uc.`state`=1, uc.`state_time`={$now_time}
+	    WHERE o.`pay_status`=".PS_PAYED." AND o.`order_flag` = ".Order::ORDER_FLAG_MERCHANT." AND o.`pay_time`<{$the_time} AND o.`pay_time`>0 AND uc.`state`=0 AND uc.order_id=o.order_id";
+	    D()->query($sql);
+	    $this->log("OK. affected rows: ".D()->affected_rows());
 	}
 	
 }

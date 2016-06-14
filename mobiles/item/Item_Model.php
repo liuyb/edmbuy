@@ -50,7 +50,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => '【春季特卖】2016春季必备清单',
         self::CATEGORY_RICE => '【精选好米】精选优质好米 绿色 健康 养生',
         self::CATEGORY_MOML => '【清真专区】助力回商 买卖全球',
-        self::CATEGORY_BEST => '【端午节专场】汇集端午送礼好货'
+        self::CATEGORY_BEST => '【精选专场】精选超值产品，好货不可错过'
     );
     
     //专区对应的图片
@@ -62,7 +62,7 @@ class Item_Model extends Model {
         self::CATEGORY_CLOTHING => 'themes/mobiles/img/dress.png',
         self::CATEGORY_RICE => 'themes/mobiles/img/receal.png',
     	self::CATEGORY_MOML => 'themes/mobiles/img/zq/moml.png',
-        self::CATEGORY_BEST => 'themes/mobiles/img/zq/pref_heade_dw.png',
+        self::CATEGORY_BEST => 'themes/mobiles/img/zq/pref_best.png',
     );
     
     /**

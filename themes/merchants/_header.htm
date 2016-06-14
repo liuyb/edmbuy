@@ -44,6 +44,7 @@ function navigateShow(url){
 //菜单开启
 $(document.body).on("click", ".common_name", function(){
   var $this = $(this);
+  mockCreateConsole();
   console.log($this.offset());
   <!--{if $ent_id && $ent_id gt 0}-->
   $(".set_pero").css('left',216);
@@ -148,5 +149,17 @@ function browserVerLessThanIE8(){
 		}
 	}
 	return false;
+}
+//兼容console不存在情况
+function mockCreateConsole(){
+	if(!window.console || window.console == undefined){
+		window.console = {};
+		 var funcs = ['info','log','warn'];
+         for(var i=0,l=funcs.length;i<l;i++){
+         	var func = funcs[i];
+         	if(!console[func])
+         	console[func] = function(){};
+         }
+	}
 }
 </script>

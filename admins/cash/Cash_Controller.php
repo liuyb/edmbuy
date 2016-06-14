@@ -31,7 +31,8 @@ class Cash_Controller extends AdminController {
 	public function menu(){
 		return [
 				'cash/%d/detail'=>'detail',
-	            'cash/export/excel'=>'export_excel'
+	            'cash/export/excel'=>'export_excel',
+		        'cash/check' => 'check'
 		];
 	}
 	
@@ -197,6 +198,49 @@ class Cash_Controller extends AdminController {
 		$response->send($this->v);
 	}
 	
+	/**
+	 * 审核 state -1 拒绝 1 通过
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function check(Request $request, Response $response){
+	    $ret = ['flag' => 'FAIL', 'msg' => '数据不存在，操作失败'];
+	    if($request->is_post()){
+	        $cashing_id = $request->post('cash_id');
+	        $state = $request->post('state');
+	        $remark = $request->post('remark');
+	        $exUC = UserCashing::load($cashing_id);
+	        if(!$exUC->is_exist()){
+	            $response->sendJSON($ret);
+	        }
+	        if($exUC->state != UserCashing::STATE_SUBMIT_MANUALCHECK){
+	            $ret = ['flag' => 'FAIL', 'msg' => '当前状态还不是待审核状态'];
+	            $response->sendJSON($ret);
+	        }
+	        $commision_ids = $exUC->commision_ids;
+	        if(Cash_Model::hasNoLockedCommisions($commision_ids)){
+	            $ret = ['flag' => 'FAIL', 'msg' => '提现订单存在非锁定状态的佣金数据，操作失败'];
+	            $response->sendJSON($ret);
+	        }
+	        $user = Users::load($exUC->user_id);
+	        //拒绝
+	        if($state == -1){
+	            //设置提现记录状态为“人工审核拒绝”
+	            UserCashing::change_state($cashing_id, UserCashing::STATE_NOPASS_MANUALCHECK, $remark);
+	            //拒绝后还原佣金状态为激活状态
+	            UserCommision::change_state($commision_ids, UserCommision::STATE_ACTIVE);
+	            //微信模板消息通知提现失败
+	            WxTplMsg::cashing_fail($user->openid, "您的提现申请审核失败！\n\n失败原因: ".$remark, '有任何疑问，请联系客服。', U('cash/detail','',true), ['money'=>strval($exUC->cashing_amount),'time'=>simphp_dtime('std',$exUC->apply_time),'cashing_no'=>$exUC->cashing_no]);
+	            $ret = ['flag' => 'SUCC', 'msg' => '操作成功'];
+	        }else if($state == 1){
+	            $result = Cash_Model::checkAccept($exUC, $user);
+	            if($result){
+	                $ret = $result;
+	            }
+	        }
+	        $response->sendJSON($ret);
+	    }
+	}
 }
  
 /*----- END FILE: Cash_Controller.php -----*/

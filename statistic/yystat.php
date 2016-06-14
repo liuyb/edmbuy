@@ -4,8 +4,8 @@
  *
  * @author Gavin<laigw.vip@gmail.com>
  */
-//~ require init.php
-require (__DIR__.'/core/init.php');
+$root = substr(getcwd(), 0, -9);
+require ($root.'/core/init.php');
 
 define('ONE_DAY_TIME', 86400);
 define('DAY_SEP', ' ');
@@ -80,6 +80,9 @@ li { padding: 5px 10px; }
 	  <li><a href="?type=1&from={$from_date}&to={$to_date}">会员发展的一级排名统计</a></li>
 	  <li><a href="?type=2&from={$from_date}&to={$to_date}">团队挑战赛(统计时间：{$stat_time_text})</a></li>
 	  <li><a href="?type=3&from={$from_date}&to={$to_date}">会员统计(统计时间：{$stat_time_text})</a></li>
+      <li><a href="?type=6&from={$from_date}&to={$to_date}">订单统计(统计时间：{$stat_time_text})</a></li>    
+      <li><a href="?type=4&from={$from_date}&to={$to_date}">商家统计</a></li>
+      <li><a href="?type=5&from={$from_date}&to={$to_date}">商品统计</a></li>
 	</ul>
 </body>
 </html>
@@ -151,7 +154,7 @@ if (1==$type) { //汇总统计
     }
     
 }else if(3 == $type){
-    $csv = "会员总数,米客总数,米商总数,金牌总数,银牌总数,商家总数".CSV_LN;
+    $csv = "会员总数,米客总数,米商总数,银牌总数,金牌总数,商家总数".CSV_LN;
     $rows = ThisFn::getMemberData($from_time, $to_time);
     $mk = 0;$ms = 0;$yp=0;$jp=0;$sj=0;$total=0;
 	foreach ($rows as $r){
@@ -176,6 +179,27 @@ if (1==$type) { //汇总统计
 	    }
 	}
 	$csv .= $total.CSV_SEP.$mk.CSV_SEP.$ms.CSV_SEP.$yp.CSV_SEP.$jp.CSV_SEP.$sj.CSV_LN;
+}else if(4 == $type){
+    $csv = "商家名称,订单数量".CSV_LN;
+    $list = ThisFn::getMerchantsList();
+    foreach ($list as $row){
+        $csv .= '"'.$row['facename'].'"'.CSV_SEP.'"'.$row['c'].'"'.CSV_LN;
+    }
+}else if(5 == $type){
+    $csv = "商品名称,销售价,供货价,销量".CSV_LN;
+    $list = ThisFn::getGoodsList();
+    foreach ($list as $row){
+        $csv .= '"'.$row['goods_name'].'"'.CSV_SEP.$row['shop_price'].CSV_SEP.$row['income_price'].CSV_SEP.$row['paid_goods_number'].CSV_LN;
+    }
+}else if(6 == $type){
+    $from_time = $from_time ? simphp_gmtime($from_time) : 0;
+    $to_time   = $to_time   ? simphp_gmtime($to_time)   : 0;
+    $csv = "订单号,支付金额,下单时间".CSV_LN;
+    $list = ThisFn::getOrderList($from_time, $to_time);
+    foreach ($list as $row){
+        $time = date('Y-m-d H:i:s',simphp_gmtime2std($row['pay_time']));
+        $csv .= '"'.$row['order_sn'].'"'.CSV_SEP.$row['money_paid'].CSV_SEP.'"'.$time.'"'.CSV_LN;
+    }
 }
 
 if (''!=$csv) {
@@ -222,7 +246,38 @@ group by parent_id) t on u.user_id = t.parent_id order by t.c desc";
     }
     
     static function getMemberData($from_time,$to_time){
-        $sql = "select count(1) c,level from shp_users where mobile <> '' and reg_time >= $from_time and reg_time <= $to_time group by level";
+        $where = "";
+        if ($from_time) {
+            $where .= " AND u.`reg_time`>=".$from_time;
+        }
+        if ($to_time) {
+            $where .= " AND u.`reg_time`<=".$to_time;
+        }
+        $sql = "select count(1) c,level from shp_users u where mobile <> '' $where group by level";
+        return D()->query($sql)->fetch_array_all();
+    }
+    
+    static function getMerchantsList(){
+        $sql = "SELECT m.facename,ifnull(t.c,0) c FROM `shp_merchant` m left join  
+(select count(1) c,merchant_ids from shp_order_info where pay_status = ".PS_PAYED." and is_separate=0 group by merchant_ids) t 
+on m.merchant_id = t.merchant_ids and m.activation = 1 order by c desc";
+        return D()->query($sql)->fetch_array_all();
+    }
+    
+    static function getGoodsList(){
+        $sql = "select goods_name,shop_price,income_price,paid_goods_number from shp_goods where is_delete=0 order by paid_goods_number desc";
+        return D()->query($sql)->fetch_array_all();
+    }
+    
+    static function getOrderList($from_time,$to_time){
+        $where = "";
+        if ($from_time) {
+            $where .= " AND o.`pay_time`>=".$from_time;
+        }
+        if ($to_time) {
+            $where .= " AND o.`pay_time`<=".$to_time;
+        }
+        $sql = "select order_sn,money_paid,pay_time from shp_order_info o where pay_status = 2 and is_separate=0 $where order by order_id ";
         return D()->query($sql)->fetch_array_all();
     }
 }

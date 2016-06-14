@@ -189,7 +189,7 @@ class Goods_Controller extends MerchantController
             }
             $response->sendJSON(["result" => $ret ? 'SUCC' : 'FAIL']);
         } else {
-            Fn::show_pcerror_message();
+            $response->sendJSON(["result" => 'FAIL']);
         }
     }
 
