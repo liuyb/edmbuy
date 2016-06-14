@@ -1,0 +1,33 @@
+<div class="dialog_mask"></div>
+<div id="pop_dialog" class='pop_dialog'>
+	<div class='dialog_tit'>
+		<span style="margin-left:20px;" class="title"></span>
+		<a href="javascript:closeCommonDialog();"><span class='dialog_close'><img src="/themes/admins/img/bg_close.png"></span></a>
+	</div>
+	<div style="font-size:12px;color:#7d7d7d;margin:10px 20px 5px 10px;" class="content">
+	
+	</div>
+	<div class="clear"></div>
+	<div style="margin:30px 10;text-align:center;">
+		<button class="private_btn" onclick="dialogConfirm(this);">确定</button>
+		<button class="private_btn" onclick="closeCommonDialog();">取消</button>
+	</div>
+</div>
+
+<script>
+$(".dialog_mask").on('click',function(){
+	closeCommonDialog();
+});
+
+function dialogConfirm(obj){
+	$(EventBus).trigger('DIALOG_CONFIRM_EVENT',[obj]);
+}
+
+function closeCommonDialog(){
+	var dialog = $("#pop_dialog");
+	dialog.hide();
+	dialog.find(".title").html("");
+	dialog.find(".content").html("");
+	$(".dialog_mask").hide();
+}
+</script>

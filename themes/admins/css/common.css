@@ -34,7 +34,49 @@ body {font: 12px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif;word-wrap:break
 #rtWrap {height: 100%;min-height: 100%;overflow-y: auto;position: relative;}
 .main {width: 640px;margin: 0 auto;background-color: #fff;position: relative;overflow-x:hidden;}
 
-
+/**dialog s*/
+.pop_dialog{
+	display:none;
+	position:fixed;
+	z-index:22222;
+	min-width:200px;
+	min-height:200px;
+	border:1px solid #f8f8f8;
+	background:#fff;
+}
+.dialog_tit{
+	height:39px;
+	line-height:40px;
+	border-bottom:1px solid #eee;
+	background:#f7f7f7;
+	font-size:12px;
+	color:#333;
+}
+.dialog_close{
+	float:right;
+	padding:0 20px;
+}
+.private_btn{
+  	width: 80px;
+  	height: 40px;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 13px;
+  	border: 0;
+  	margin-left: 20px;
+  	border-radius: 4px;	
+}
+.dialog_mask {
+	display:none;
+  	position: fixed;
+  	top: 0;
+  	left: 0;
+  	width: 100%;
+  	height: 100%;
+  	z-index: 3000;
+	background: url(../img/black.png);
+}
+/**dialog e*/
 
 
 

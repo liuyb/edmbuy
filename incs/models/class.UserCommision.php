@@ -541,7 +541,7 @@ class UserCommision extends StorageNode {
 	static function get_commision_income_bytype($uid, $type = NULL)
 	{
 	    $table = self::table();
-	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision,`type` FROM {$table} WHERE `user_id` = %d AND `state`>=0 GROUP BY `type`";
+	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision,`type` FROM {$table} WHERE `user_id` = %d AND `state`>0 GROUP BY `type`";
 	    $list = D()->query($sql, $uid)->fetch_array_all();
 	    $ret  = [
 	        self::COMMISSION_TYPE_FX => 0.00,
@@ -564,7 +564,7 @@ class UserCommision extends StorageNode {
 	static function get_rebate_commision($uid)
 	{
 	    $table = self::table();
-	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision FROM {$table} WHERE `user_id` = `order_uid` and `user_id` = %d AND `state`>=0 ";
+	    $sql  = "SELECT ifnull(SUM(`commision`), 0) AS commision FROM {$table} WHERE `user_id` = `order_uid` and `user_id` = %d AND `state`>0 ";
 	    return D()->query($sql, $uid)->result();
 	}
 	
@@ -576,10 +576,13 @@ class UserCommision extends StorageNode {
 	static function get_commision_list(PagerPull $pager, $options){
 	    $where = '';
         if(isset($options['state']) && $options['state'] >= 0){
-            $where .= ' AND `state` >= 0 ';
+            $state = $options['state'];
+            $where .= " AND `state` = $state ";
         }else{
+            //累计收入
             $where .= ' AND `state` in ('.UserCommision::STATE_ACTIVE.', '.UserCommision::STATE_CASHED.') ';
         }
+        //判断佣金类型
         if(isset($options['type']) && $options['type'] >= 0){
             $where .= ' AND `type` =  '.intval($options['type']);
         }

@@ -59,12 +59,12 @@ class Common_Controller extends Controller {
     }
     
     // 检查登录状态
-    if(!$loginIgnore && !Users::is_weixin_auth()){
+    /* if(!$loginIgnore && !Users::is_weixin_auth()){
       import('user/*');
       $user_Controller = new User_Controller();
       $user_Controller->login($request, $response);
       exit;
-    }
+    } */
     
     //读取最新用户信息以客户端缓存
     global $user;
