@@ -191,7 +191,7 @@ class Cash_Controller extends MobileController {
 				$exUBank = UserBank::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('bank_code', $bank_code)));
 				
 				D()->beginTransaction();
-				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids), new Query('state', UserCashing::STATE_FAIL,'<')),[Storage::SELECT_FOR_UPDATE=>1]);
+				$exUCash = UserCashing::find_one(new AndQuery(new Query('user_id', $user->uid), new Query('commision_ids', $commision_ids), new Query('state', UserCashing::STATE_FAIL,'<'), new Query('state', UserCashing::STATE_CHECK_PENDING,'>=')),[Storage::SELECT_FOR_UPDATE=>1]);
 				if (!$exUCash->is_exist()) { //不存在才需要新建记录
 					$cashing_no = UserCashing::gen_cashing_no();
 					$nUC = new UserCashing();

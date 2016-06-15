@@ -102,6 +102,7 @@ class Cash_Model extends Model {
 	        $where_cond .= " AND c.`apply_time`<=".$endtime;
 	    }
 	    
+	    $where_cond .= " AND c.`state`>=".UserCashing::STATE_CHECK_PENDING;
 	    if(isset($query_conds['status']) && $query_conds['status']){
 	        $status = $query_conds['status'];
 	        /* if("wait_check" == $status){
