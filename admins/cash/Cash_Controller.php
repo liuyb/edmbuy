@@ -36,7 +36,8 @@ class Cash_Controller extends AdminController {
 	            'cash/export/excel'=>'export_excel',
 		        'cash/check' => 'check',
 		        'cash/config/info' => 'cash_config',
-		        'cash/config' => 'cash_config_save'
+		        'cash/config' => 'cash_config_save',
+		        'cash/order/export' => 'exportOrderList'
 		];
 	}
 	
@@ -179,25 +180,24 @@ class Cash_Controller extends AdminController {
 		if ($exUC->is_exist()) {
 			$exUC->state_txt = Cash_Model::stateTxt($exUC->state);
 			$exUC->is_pass_auto = in_array($exUC->state, [UserCashing::STATE_NOPASS_AUTOCHECK,UserCashing::STATE_SUBMIT_MANUALCHECK,UserCashing::STATE_NOPASS_MANUALCHECK,UserCashing::STATE_PASS_MANUALCHECK]) ? false : true;
-			
 			$order_list = Cash_Model::getCashingOrderList($exUC->commision_ids);
 			foreach ($order_list AS &$it) {
-				$total_commision += $it['commision'];
-				if (!empty($it['pay_trade_no']) && PS_PAYED==$it['pay_status']) {
-					$it['order_status_txt'] = '<em style="color:green">有效订单</em>';
-				}
-				elseif(empty($it['pay_trade_no'])) {
-					if ($it['order_flag']>0 && $it['pay_time']>0) {
-						$it['order_status_txt'] = '<em style="color:green">有效订单</em>';
-					}
-					else {
-						$it['order_status_txt'] = '<em style="color:red">无效订单</em>';
-					}
-				}
-				else {
-					$_status = Fn::pay_status($it['pay_status']);
-					$it['order_status_txt'] = '<em style="color:blue">异常订单('.$_status.')</em>';
-				}
+			    $total_commision += $it['commision'];
+			    if (!empty($it['pay_trade_no']) && PS_PAYED==$it['pay_status']) {
+			        $it['order_status_txt'] = '<em style="color:green">有效订单</em>';
+			    }
+			    elseif(empty($it['pay_trade_no'])) {
+			        if ($it['order_flag']>0 && $it['pay_time']>0) {
+			            $it['order_status_txt'] = '<em style="color:green">有效订单</em>';
+			        }
+			        else {
+			            $it['order_status_txt'] = '<em style="color:red">无效订单</em>';
+			        }
+			    }
+			    else {
+			        $_status = Fn::pay_status($it['pay_status']);
+			        $it['order_status_txt'] = '<em style="color:blue">异常订单('.$_status.')</em>';
+			    }
 			}
 		}
 		$this->v->assign('userCash', $exUC);
@@ -205,6 +205,45 @@ class Cash_Controller extends AdminController {
 		$this->v->assign('total_commision', $total_commision);
 		
 		$response->send($this->v);
+	}
+	
+	public function exportOrderList(Request $request, Response $response){
+	    $cash_id = $request->get('cash_id');
+	    $exUC =  UserCashing::load($cash_id);
+	    $order_list = Cash_Model::getCashingOrderList($exUC->commision_ids);
+	    foreach ($order_list AS &$it) {
+	        $total_commision += $it['commision'];
+	        if (!empty($it['pay_trade_no']) && PS_PAYED==$it['pay_status']) {
+	            $it['order_status_txt'] = '有效订单';
+	        }
+	        elseif(empty($it['pay_trade_no'])) {
+	            if ($it['order_flag']>0 && $it['pay_time']>0) {
+	                $it['order_status_txt'] = '有效订单';
+	            }
+	            else {
+	                $it['order_status_txt'] = '无效订单';
+	            }
+	        }
+	        else {
+	            $_status = Fn::pay_status($it['pay_status']);
+	            $it['order_status_txt'] = '异常订单('.$_status.')';
+	        }
+	    }
+	    $filename  = SIMPHP_ROOT . '/var/tmp/CASH_ORDER_LIST_%s.csv';
+	    
+	    $filename  = sprintf($filename, $exUC->cashing_no);
+	    $csv = "订单编号,订单金额,佣金,支付交易号,订单有效检测".self::CSV_LN;
+	    $CSV_SEP = self::CSV_SEP;
+	    //获取商家收入订单详情
+	    if (!empty($order_list)) {
+	        foreach ($order_list AS $it) {
+	            $csv .= '"'.$it['order_sn'].'"'.$CSV_SEP.$it['order_amount'].$CSV_SEP.$it['commision'].$CSV_SEP.'"'."'".$it['pay_trade_no'].'"'.$CSV_SEP.'"'.$it['order_status_txt'].'"'.self::CSV_LN;
+	        }
+	    }
+	    if (''!=$csv) {
+	        file_put_contents($filename, $csv);
+	        download($filename);
+	    }
 	}
 	
 	/**

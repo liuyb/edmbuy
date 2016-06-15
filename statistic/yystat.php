@@ -19,7 +19,7 @@ $response = new Response();
 
 SimPHP::I()->boot();
 
-@header("Content-Type: text/html;charset=UTF-8");
+@header("Content-Type: text/html;charset=GBK");
 
 //统计类型
 $type = $request->get('type', 0);

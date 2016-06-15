@@ -50,6 +50,7 @@
         </tr>
         <tr>
           <td class="c1" colspan="3">
+          <input type="button" value="导出EXCEL" style="margin-bottom:5px;" onclick="excelExport();"/>
             <table class="frmTable oListTb">
               <tr><th>订单编号</th><th>订单金额</th><th>佣金</th><th>支付交易号</th><th>支付方式</th><th>订单检测状态</th></tr>
             <!--{foreach from=$order_list item=it}-->
@@ -102,5 +103,10 @@ function postCheck(state, remark){
 			showMsg(ret.msg);
 		}
 	});
+}
+
+function excelExport(){
+	var url = '/cash/order/export?cash_id='+cash_id;
+	window.location = url;
 }
 </script>

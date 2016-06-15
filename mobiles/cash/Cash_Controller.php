@@ -253,7 +253,7 @@ class Cash_Controller extends MobileController {
 						    UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
 						    //设置提现记录状态为“人工审核”
 						    UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_MANUALCHECK, '提交人工审核');
-						    $ret = ['flag'=>'SUCC','msg'=>'提交人工审核','detail'=>'提现金额超出限制，已转为人工审核，等待审核完成，请留意微信通知。'];
+						    $ret = ['flag'=>'SUCC','msg'=>'提交人工审核','detail'=>"提现金额超出 $money_limit 元限制，已转为人工审核，等待审核完成，请留意微信通知。"];
 						    $response->sendJSON($ret);
 						}
 						
