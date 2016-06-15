@@ -187,7 +187,12 @@ class Cash_Controller extends AdminController {
 					$it['order_status_txt'] = '<em style="color:green">有效订单</em>';
 				}
 				elseif(empty($it['pay_trade_no'])) {
-					$it['order_status_txt'] = '<em style="color:red">无效订单</em>';
+					if ($it['order_flag']>0 && $it['pay_time']>0) {
+						$it['order_status_txt'] = '<em style="color:green">有效订单</em>';
+					}
+					else {
+						$it['order_status_txt'] = '<em style="color:red">无效订单</em>';
+					}
 				}
 				else {
 					$_status = Fn::pay_status($it['pay_status']);

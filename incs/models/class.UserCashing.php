@@ -115,7 +115,7 @@ class UserCashing extends StorageNode {
 		if (empty($record_ids)) return false;
 		$tb_uc = UserCommision::table();
 		$tb_od = Order::table();
-		$sql = "SELECT COUNT(uc.`rid`) AS num FROM {$tb_uc} uc INNER JOIN {$tb_od} o ON uc.order_id=o.order_id WHERE uc.`rid` IN(%s) AND o.pay_trade_no<>'' AND o.pay_status=2";
+		$sql = "SELECT COUNT(uc.`rid`) AS num FROM {$tb_uc} uc INNER JOIN {$tb_od} o ON uc.order_id=o.order_id WHERE uc.`rid` IN(%s) AND o.pay_status=2 AND ( (o.order_flag=0 AND o.pay_trade_no<>'') OR (o.order_flag>0 AND o.pay_time>0) )";
 		$num = D()->query($sql, $record_ids)->result();
 		return $num==count(explode(',', $record_ids)) ? true : false;
 	}

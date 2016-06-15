@@ -130,7 +130,7 @@ class Cash_Model extends Model {
 	
 	static function getCashingOrderList($commision_ids) {
 		if (empty($commision_ids)) return [];
-		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,o.pay_trade_no,o.pay_name,o.pay_status
+		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,o.pay_trade_no,o.pay_name,o.pay_status,o.pay_time,o.order_flag
 				FROM `shp_user_commision` uc INNER JOIN `shp_order_info` o ON uc.order_id=o.order_id
 				WHERE uc.rid IN(%s)
 				";
