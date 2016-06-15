@@ -15,12 +15,12 @@
 
 <div class="wallet_top"  onclick="showDetail(1,-1);">
 	<div class="wallet_infos"><span class="ye_account">账户余额</span><span class="ye_infos">明细</span></div>
-	<div class="wallet_money">￥<?=$commision['1'] ?></div>
+	<div class="wallet_money">￥<?=$totalye ?></div>
 </div>
 
 <div class="income_money">
 	<ul>
-		<li onclick="showDetail(-1,-1);"><p>累计收入</p><p class="in_com_money">￥<?=$commision['1'] ?></p></li>
+		<li onclick="showDetail(-1,-1);"><p>累计收入</p><p class="in_com_money">￥<?=$totalIncome ?></p></li>
 		<li onclick="showDetail(0,-1);"><p>未生效收入</p><p class="no_force_money">￥<?=$commision['0'] ?></p></li>
 		<div class="clear"></div>
 		<span class="line7"></span>
@@ -30,11 +30,11 @@
 <div class="wallet_type_list">
 	<ul>
 		<li onclick="showDetail(2,-1);"><p>已提现</p><p class="wallet_li_font">￥<?=$commision['2'] ?></p></li>
-		<li onclick="showDetail(1,-1, 1);"><p>返利收入</p><p class="wallet_li_font">￥<?=$rebate_commision ?></p></li>
-		<li onclick="showDetail(1,0);"><p>商品分销收入</p><p class="wallet_li_font">￥<?=$type_commision['0'] ?></p></li>
-		<li onclick="showDetail(1,1);"><p>代理收入</p><p class="wallet_li_font">￥<?=$type_commision['1'] ?></p></li>
-		<li onclick="showDetail(1,2);"><p>商家入驻收入</p><p class="wallet_li_font">￥<?=$type_commision['2'] ?></p></li>
-		<li onclick="showDetail(1,3);"><p>商家交易收入</p><p class="wallet_li_font">￥<?=$type_commision['3'] ?></p></li>
+		<li onclick="showDetail(9,-1, 1);"><p>返利收入</p><p class="wallet_li_font">￥<?=$rebate_commision ?></p></li>
+		<li onclick="showDetail(9,0);"><p>商品分销收入</p><p class="wallet_li_font">￥<?=$type_commision['0'] ?></p></li>
+		<li onclick="showDetail(9,1);"><p>代理收入</p><p class="wallet_li_font">￥<?=$type_commision['1'] ?></p></li>
+		<li onclick="showDetail(9,2);"><p>商家入驻收入</p><p class="wallet_li_font">￥<?=$type_commision['2'] ?></p></li>
+		<li onclick="showDetail(9,3);"><p>商家交易收入</p><p class="wallet_li_font">￥<?=$type_commision['3'] ?></p></li>
 		<div class="clear"></div>
 		<span class="line9"></span>
 		<span class="line10"></span>

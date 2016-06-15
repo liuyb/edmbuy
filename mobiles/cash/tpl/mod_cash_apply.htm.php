@@ -102,10 +102,6 @@ $(document).on("click", "#apply_cash_btn", function(){
     	weui_alert('为保资金安全，在种子内测期间暂停提现功能，待内测过后再开放','提示');
     	return;
 	} */
-	if(cash > 500){
-		weui_alert('提现金额超过500元，为保资金安全，待内测过后再开放','提示');
-		return;
-	}
 	weui_confirm('确定现在提现？','',function(){
 		$(_this).attr('disabled',true);
 		showWaiting();

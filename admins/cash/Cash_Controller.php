@@ -11,6 +11,8 @@ class Cash_Controller extends AdminController {
     const CSV_SEP = ',';
     const CSV_LN = "\n";
     
+    const CONFIG_CASH_MONEY_LIMIT = 'config_cash_money_limit';
+    
 	/**
 	 * init hook
 	 *
@@ -32,7 +34,9 @@ class Cash_Controller extends AdminController {
 		return [
 				'cash/%d/detail'=>'detail',
 	            'cash/export/excel'=>'export_excel',
-		        'cash/check' => 'check'
+		        'cash/check' => 'check',
+		        'cash/config/info' => 'cash_config',
+		        'cash/config' => 'cash_config_save'
 		];
 	}
 	
@@ -226,7 +230,7 @@ class Cash_Controller extends AdminController {
 	        //拒绝
 	        if($state == -1){
 	            //设置提现记录状态为“人工审核拒绝”
-	            UserCashing::change_state($cashing_id, UserCashing::STATE_NOPASS_MANUALCHECK, $remark);
+	            UserCashing::change_state($cashing_id, UserCashing::STATE_FAIL, $remark);
 	            //拒绝后还原佣金状态为激活状态
 	            UserCommision::change_state($commision_ids, UserCommision::STATE_ACTIVE);
 	            //微信模板消息通知提现失败
@@ -240,6 +244,35 @@ class Cash_Controller extends AdminController {
 	        }
 	        $response->sendJSON($ret);
 	    }
+	}
+	
+	public function cash_config(Request $request, Response $response){
+	    $this->v->set_tplname('mod_cash_config');
+	    $this->nav_second = 'config';
+	    
+	    $limit = config_get(self::CONFIG_CASH_MONEY_LIMIT);
+	    $this->v->assign('limitMoney', $limit);
+	    
+	    $response->send($this->v);
+	}
+	
+	/**
+	 * 保存提现配置
+	 * @param Request $request
+	 * @param Response $response
+	 */
+	public function cash_config_save(Request $request, Response $response){
+	    
+	    $limit = $request->post('limit', 500);
+	    
+	    $affect = config_set(self::CONFIG_CASH_MONEY_LIMIT, $limit);
+	    
+	    $ret = ['flag' => 'FAIL', 'msg' => '保存失败！'];
+	    if($affect){
+	        $ret['flag'] = 'SUCC';
+	    }
+	     
+	    $response->sendJSON($ret);
 	}
 }
  

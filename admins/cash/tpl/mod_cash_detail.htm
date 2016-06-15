@@ -94,8 +94,9 @@ function doCheck(state){
 }
 function postCheck(state, remark){
 	F.post('/cash/check',{cash_id : cash_id, state : state, remark : remark}, function(ret){
-		if(ret && ret.flag == 'SUC'){
+		if(ret && ret.flag == 'SUCC'){
 			showMsg('操作成功');
+			closeCommonDialog();
 			window.location.reload();
 		}else{
 			showMsg(ret.msg);

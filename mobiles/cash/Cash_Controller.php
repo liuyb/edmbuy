@@ -14,8 +14,7 @@ class Cash_Controller extends MobileController {
 	//默认提现银行代码
 	static $default_bank_code = 'WXPAY';
 	
-	//自助提现金额上限
-	static $money_limit = 500;
+	const CONFIG_CASH_MONEY_LIMIT = 'config_cash_money_limit';
 	/**
 	 * hook init
 	 *
@@ -162,11 +161,6 @@ class Cash_Controller extends MobileController {
 				$ret['detail'] = '可提现金额须'.self::CASH_THRESHOLD.'元起';
 				$response->sendJSON($ret);
 			}
-			if ($cashing_amount > self::$money_limit) {
-			    $ret['msg'] = '暂不能提现';
-			    $ret['detail'] = '提现金额超过500元，为保资金安全，待内测过后再开放';
-			    $response->sendJSON($ret);
-			}
 			$commision_ids = trim($commision_ids);
 			if (empty($commision_ids)) {
 				$ret['msg'] = '无法提现';
@@ -253,13 +247,13 @@ class Cash_Controller extends MobileController {
 							$ret = ['flag'=>'FAIL','msg'=>'提现失败','detail'=>'提现金额和对应的订单佣金总额不相等'];
 							$response->sendJSON($ret);
 						}
-						
-						if($cashing_amount > self::$money_limit){
+						$money_limit = config_get(self::CONFIG_CASH_MONEY_LIMIT);
+						if($cashing_amount > $money_limit){
 						    //立马更新佣金记录状态为“锁定”
 						    UserCommision::change_state($commision_ids, UserCommision::STATE_LOCKED);
 						    //设置提现记录状态为“人工审核”
 						    UserCashing::change_state($cashing_id, UserCashing::STATE_SUBMIT_MANUALCHECK, '提交人工审核');
-						    $ret = ['flag'=>'SUCC','msg'=>'提交人工审核','detail'=>'提现金额超出限制，已转为人工审核，5个工作日内完成提现，请留意微信通知。'];
+						    $ret = ['flag'=>'SUCC','msg'=>'提交人工审核','detail'=>'提现金额超出限制，已转为人工审核，等待审核完成，请留意微信通知。'];
 						    $response->sendJSON($ret);
 						}
 						

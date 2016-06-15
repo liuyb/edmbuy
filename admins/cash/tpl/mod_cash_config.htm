@@ -1,0 +1,28 @@
+<!--{include_file name="_smenu_cash.htm"}-->
+<section id="ifr-main" class="ifr-main">
+
+<div class="breadcrumb">当前位置：<span>提现管理</span>&nbsp;&gt;&nbsp;<span>参数配置</span></div>
+	<div>
+	无需审核金额上限（大于需要审核）：<input type="text" id="limitMoney" value="<!--{$limitMoney}-->"/>
+	<br/>
+	<br/>
+	<input type="button" value="保存" id="updateMenu"  class="button" onclick="cashConfigSet();"/>
+	</div>
+</section>
+
+<script>
+function cashConfigSet(){
+	var limitMoney = $("#limitMoney").val();
+	if(!limitMoney || isNaN(limitMoney)){
+		showMsg('请输入正确的金额');
+		return;
+	}
+	F.post('/cash/config', {limit : limitMoney}, function(ret){
+		if(ret.flag == 'SUCC'){
+			showMsg('更新成功');
+		}else{
+			showMsg(ret.msg);
+		}
+	});
+}
+</script>
