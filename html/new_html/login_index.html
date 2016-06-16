@@ -17,19 +17,104 @@
 <!-- head end -->
 </head>
 
-<body style="background:#eee;">
-<div class="login_index">
-	<div class="login_name"><input type="text" value="" placeholder="请输入用户名/手机号"></div>
-	<div class="login_password del_bottom"><input type="text" value="" placeholder="请输入密码"></div>
+<style>
+.newset_login{
+	text-align:center;
+}
+.newset_img{
+	margin-top:40px;
+	width:100px;
+	height:100px;
+	border-radius:5px;
+}
+.newset_reg{
+	position:absolute;	
+	font-size:16px;
+	color:#333;
+	right:20px;
+	top:10px;
+}
+.newset_name{
+	font-size:17px;
+	color:#000;
+	margin:15px 0 30px;
+}
+.newset_login input{
+	margin-bottom:15px;
+}
+.newest_comm_in{
+	width:240px;
+	height:45px;
+	border:1px solid #dee0e0;
+	border-radius:5px;	
+	line-height:45px;
+}
+.newest_phone{
+	background:url(../img/phone.png) no-repeat 10px;
+	background-size:16px 19px;
+	padding-left:40px;
+}
+.newest_password{
+	background:url(../img/suo.png) no-repeat 10px;
+	background-size:18px;
+	padding-left:40px;	
+}
+.newset_reg_btn{
+	width:280px;
+	height:45px;
+	background:#Ff6d14;
+	line-height:45px;	
+	border-radius:5px;
+	font-size:17px;
+	color:#fff;
+	margin-top:35px;
+}
+.newset_serv{
+	width:280px;
+	display: inline-block;
+	text-align:left;
+	margin-top:15px;
+}
+.newset_serv img{
+	width:15px;
+	height:15px;
+	vertical-align:sub;
+	margin-right:5px;
+}
+.newset_forget_passoword{
+	position:absolute;  
+	display: inline-block;
+	bottom:10px;
+	text-align:center;
+	width:100%;
+}
+.input_color_c{
+	border:1px solid #ff6d14 !important;	
+}
+</style>
+
+
+<body style="background:#fff;">
+
+<div class="newset_login">
+	<a href="javascript:;" class="newset_reg">注册</a>
+	<img src="../img/msjh.png" class="newset_img">
+	<p class="newset_name">暗地法师</p>
+	<input type="text" value="" placeholder="请输入手机号码" class="newest_phone newest_comm_in">
+	<input type="text" value="" placeholder="设置登录密码" class="newest_password newest_comm_in">
+	<button class="newset_reg_btn">登录</button>	
 </div>
 
-<div class="bottom_common">
-	<div class="btn_common_bg" id="login_btn">登录</div>
-	<div class="btn_common_nbg" id="login_btn">手机快速注册</div>
-</div>
+<a href="javascript:;" class="newset_forget_passoword">忘记密码？</a>
+
 
 <script>
-
+$(".newset_login input").focus(function(){
+	  $(this).addClass("input_color_c");
+});
+$(".newset_login input").blur(function(){
+	  $(this).removeClass("input_color_c");
+});
 </script>
 
 

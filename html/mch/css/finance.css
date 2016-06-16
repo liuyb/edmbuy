@@ -1,0 +1,235 @@
+#zjgl{
+	background:url("../img/zjgl.png") no-repeat 20px;	
+	padding-left:45px;
+}
+#txmmsz{
+	background:url("../img/mmsz.png") no-repeat 20px;
+	padding-left:45px;
+}
+
+.finance_tit_top_common{
+	float:left;
+	height:230px;
+	width:333px;
+}
+.finance_left_common{
+	height:110px;
+	background:#fff;	
+	width:333px;
+	border-radius:4px;
+}
+.finacen_btn_common {
+  	width: 80px;
+  	height: 40px;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 13px;
+  	border: 0;
+  	margin-left: 40px;
+  	border-radius: 4px;
+}
+.finance_left_common i{
+	font-size:18px;
+	color:#f26427;	
+}
+.top_infos_f{
+	padding:0 20px;
+	font-size:13px;
+	color:#666;	
+}
+.top_name_f{
+	padding:20px 20px 15px;
+	font-size:13px;
+	color:#666;		
+}
+.finance_right_common{
+	height:230px;
+	background:#fff;	
+	width:333px;
+	border-radius:4px;	
+}
+.top_back_infos{
+	background:#ecf1f5;
+	height:80px;
+	width:297px;
+	margin:10px 0 25px 20px;
+}
+.back_infos_right,.back_infos_left{
+	float:left;	
+	margin:10px;
+	height:60px;	
+}
+.back_infos_left img{
+	height:60px;
+	width:60px;
+}
+.back_infos_right img{
+	height:60px;
+	width:60px;
+}
+.back_infos_right p{
+	height:30px;
+	line-height:30px;
+}
+.back_infos_right i{
+	font-size:13px;
+	color:#7d7d7d;
+}
+.bottom_back_d{
+	margin-left:20px;
+}
+.bottom_back_d button{
+  	width: 80px;
+  	height: 40px;
+  	background: #fff;
+  	color: #7d7d7d;
+  	font-size: 13px;
+  	border: 1px solid #dcdfe2;
+  	border-radius: 4px;	
+}
+.finance_bottom_list{
+	margin-top:20px;
+	background:#fff;
+}
+.bottom_list_tit{
+	height:40px;
+	line-height:40px;	
+}
+.bottom_list_tit p {
+	margin: 0 20px;
+  	height: 39px;
+  	border-bottom: 1px solid #f26427;
+  	display: inline-block;
+  	ine-height: 39px;
+  	font-size: 14px;
+  	color: #f26427;
+}
+#finance_list_tab{
+	width:100%;
+}
+#finance_list_tab th{
+	font-size:12px;
+	color:#333;
+	text-align:center;
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #e6e6e6;
+}
+#finance_list_tab td{
+	font-size:12px;
+	color:#7d7d7d;
+	text-align:center;
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #e6e6e6;
+}
+.finance_select_type{
+  	background: #fff url(../img/f26427.png) no-repeat scroll 93% center;
+  	width: 195px;
+  	height: 44px;
+	line-height:34px;
+  	margin-left: 7px;
+  	border: 1px solid #dcdfe2;
+  	border-radius: 5px;
+  	font-size: 13px;
+  	color: #7d7d7d;	
+	display:inline-block;
+	padding-left:10px;
+}
+
+.back_checking_title{
+	 background: url(../img/left_l.png) no-repeat left;
+  	padding-left: 20px;
+  	font-size: 14px;
+  	color: #1f1f1f;
+  	margin-bottom: 10px;
+}
+.checking_bank_infos select{
+  	background: #fff url(../img/f26427.png) no-repeat scroll 93% center;
+  	width: 195px;
+  	height: 44px;
+	line-height:34px;
+  	margin-left: 10px;
+  	border: 1px solid #dcdfe2;
+  	border-radius: 5px;
+  	font-size: 13px;
+  	color: #7d7d7d;	
+	display:inline-block;
+	padding-left:10px;	
+}
+
+.checking_bank_infos{
+	background:#fff;
+	min-height:600px;
+	padding:30px 20px;
+}
+.checking_bank_infos p{
+	font-size:12px;
+	margin-bottom:30px;
+	color:#7D7D7D;
+}
+.checking_bank_infos input{
+  	width: 395px;
+  	background: #ecf1f5;
+  	border: 0;
+  	height: 40px;
+  	line-height: 40px;
+  	padding-left: 10px;
+  	border-radius: 4px;
+	margin-left:10px;
+}
+.checking_bank_infos i{
+	margin-right:10px;
+}
+.get_checking_code{
+  	height: 40px;
+  	line-height: 40px;
+  	border: 1px solid #ccc;
+  	font-size: 13px;
+  	color: #7d7d7d;
+  	padding: 0 20px;
+  	border-radius: 4px;
+  	background: #fff;
+  	margin-left: 40px;	
+}
+.finance_btn_common{
+  	width: 80px;
+  	height: 40px;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 13px;
+  	border: 0;
+  	border-radius: 4px;	
+}
+
+.finance_btn_common{
+  	width: 80px;
+  	height: 40px;
+  	background: #f26427;
+  	color: #fff;
+  	font-size: 13px;
+  	border: 1px solid #f26427;
+  	border-radius: 4px;	
+}
+.finacne_forget_password{
+  	height: 40px;
+  	line-height: 40px;
+  	border: 1px solid #ccc;
+  	font-size: 13px;
+  	color: #7d7d7d;
+  	padding: 0 10px;
+  	border-radius: 4px;
+  	background: #fff;
+  	margin-left: 20px;	
+}
+
+
+
+
+
+
+
+
+
+
+

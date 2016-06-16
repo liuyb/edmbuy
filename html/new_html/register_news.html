@@ -1,0 +1,170 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="../css/c.css" />
+<link rel="stylesheet" href="../css/animate.min.css" />
+<link rel="stylesheet" href="../css/wu.css" />
+<link rel="stylesheet" href="../css/du.css" />
+<script src="../js/jquery-1.8.3.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/j.js"></script>
+<!-- head end -->
+</head>
+
+<style>
+.newset_login{
+	text-align:center;
+}
+.newset_img{
+	margin-top:40px;
+	width:100px;
+	height:100px;
+	border-radius:5px;
+}
+.newset_reg{
+	position:absolute;	
+	font-size:16px;
+	color:#333;
+	right:20px;
+	top:10px;
+}
+.newset_name{
+	font-size:17px;
+	color:#000;
+	margin:15px 0 30px;
+}
+.newset_login input{
+	margin-bottom:15px;
+}
+.newest_comm_in{
+	width:240px;
+	height:45px;
+	border:1px solid #dee0e0;
+	border-radius:5px;	
+	line-height:45px;
+}
+.newest_phone{
+	background:url(../img/phone.png) no-repeat 10px;
+	background-size:16px 19px;
+	padding-left:40px;
+}
+.newest_check_code{
+	background:url(../img/yzm.png) no-repeat 10px;
+	background-size:17px 20px;
+	padding-left:40px;	
+}
+.newest_password{
+	background:url(../img/suo.png) no-repeat 10px;
+	background-size:18px;
+	padding-left:40px;	
+}
+.newset_reg_btn{
+	width:280px;
+	height:45px;
+	background:#Ff6d14;
+	line-height:45px;	
+	border-radius:5px;
+	font-size:17px;
+	color:#fff;
+	margin-top:35px;	
+}
+.newset_serv{
+	width:280px;
+	display: inline-block;
+	text-align:left;
+	margin-top:15px;
+}
+.newset_serv img{
+	width:15px;
+	height:15px;
+	vertical-align:sub;
+	margin-right:5px;
+}
+.new_forget{
+  	display: inline-block;
+  	width: 280px;
+  	height: 45px;
+  	border: 1px solid #dee0e0;
+  	border-radius: 5px;
+  	line-height: 45px;	
+  	margin-bottom:15px;
+	text-align:left;
+}
+.forget_check_c{
+  	margin-bottom:15px !important;	
+	width:140px;
+	height:45px;
+	border-radius:5px;	
+	line-height:45px;	
+}
+.new_get_code{
+	font-size:15px;
+	color:#f56105;
+	background:#fff;
+	height:45px;
+	line-height:45px;	
+}
+.input_color_c{
+	border:1px solid #ff6d14 !important;	
+}
+</style>
+
+
+<body style="background:#fff;">
+<div class="newset_login">
+	<a href="javascript:;" class="newset_reg">登录</a>
+	<img src="../img/msjh.png" class="newset_img">
+	<p class="newset_name">暗地法师</p>
+	<input type="text" value="" placeholder="请输入手机号码" class="newest_phone newest_comm_in">
+	<div class="new_forget">
+		<input type="text" value="" placeholder="请输入验证码" class="newest_check_code forget_check_c">
+		<button class="new_get_code">获取验证码</button>
+	</div>
+	<input type="text" value="" placeholder="设置登录密码" class="newest_password newest_comm_in">
+	<button class="newset_reg_btn">注册</button>
+	<a href="javascript:;"><p class="newset_serv"><img src="../img/gou.png">同意《益多米注册服务协议》</p></a>
+</div>
+
+<script>
+$(".newest_comm_in").focus(function(){
+	  $(this).addClass("input_color_c");
+});
+
+$(".newest_comm_in").blur(function(){
+	  $(this).removeClass("input_color_c");
+});
+
+$(".new_forget input").focus(function(){
+	  $(this).parent().addClass("input_color_c");
+});
+
+$(".new_forget input").blur(function(){
+	  $(this).parent().removeClass("input_color_c");
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
