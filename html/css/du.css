@@ -1236,21 +1236,12 @@ td.cash_td2 img {
 	margin:10px 0;
 	padding: 12px 0;
 }
-.pay_logo{
-	text-align:center;
-	margin:87px 0 30px;
-}
 .pay_logo img{
 	width:91px;
 	height:95px;
 }
 .pay_price{
 	text-align:center;	
-}
-.pay_tit{
-	font-size:18px;
-	color:#333;
-	margin-bottom:15px;
 }
 .pay_p{
 	font-size:14px;
@@ -3186,44 +3177,44 @@ td.cash_td2 img {
 }
 
 #s_sy {
-	background: url(../img/bot_n.png) no-repeat;
-	background-position: 0px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px 6px;
+	background-size: 40px;
 }
 #s_sy.on {
-	background: url(../img/bot_p.png) no-repeat;
-	background-position: 0 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -262px;
+	background-size: 40px;
 }
 #s_gwc {
-	background: url(../img/bot_n.png) no-repeat;
-	background-position: -78px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -61px;
+	background-size:40px;
 }
 #s_gwc.on {
-	background: url(../img/bot_p.png) no-repeat;
-	background-position: -78px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -329px;
+	background-size:40px;
 }
 #s_lmsj {
-	background: url(../img/bot_n.png) no-repeat;
-	background-position: -160px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -128px;
+	background-size: 40px;
 }
 #s_lmsj.on {
-	background: url(../img/bot_p.png) no-repeat;
-	background-position: -160px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -396px;
+	background-size: 40px;
 }
 #s_hyzx {
-	background: url(../img/bot_n.png) no-repeat;
-	background-position: -240px 5px;	
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -195px;	
+	background-size: 40px;
 }
 #s_hyzx.on {
-	background: url(../img/bot_p.png) no-repeat;
-	background-position: -240px 5px;
-	background-size: auto 37px;
+	background: url(../img/bot.png) no-repeat;
+	background-position: 20px -463px;
+	background-size: 40px;
 }
 
 /* 支付成功*/
@@ -3395,9 +3386,6 @@ td.cash_td2 img {
 
 /*2016-4-28*/
 
-.agency_index_img{
-	text-align:right;
-}
 .agency_index_img img{
 	width:20px;
 	height:20px;
@@ -3491,11 +3479,6 @@ td.cash_td2 img {
 .alliance{
   	font-weight: normal !important;
   	padding: 0px !important;
-}
-.alliance li{
-	display:inline-block;
-	width:50%;
-	height:43px;
 }
 .allliance_on{
 	font-size:17px;
@@ -4287,47 +4270,12 @@ td.cash_td2 img {
   	margin: 5px;
   	vertical-align: top;	
 }
-.code_common_c{
-	padding-bottom:10px;
-	background:#fff;
-	margin-top:10px;
-}
 .code_font_size{
 	font-size:13px;
 	color:#8c8c8c;
 }
 .code_i_common{
 	color:#f65d00 !important;
-}
-.plan_explain_common{
-	border:1px solid #ccc;
-	border-radius:5px;
-	margin-left:10px;
-	width:45%;
-	float:left;
-	height:32px;
-	line-height:32px;
-	text-align:center;
-}
-.plan_explain_common img{
-  	vertical-align: top;	
-	height:20px;
-	margin:6px;
-}
-.develop_explain_common{
-	border:1px solid #ccc;
-	border-radius:5px;
-	margin-right:10px;
-	width:45%;
-	float:right;
-	height:32px;
-	line-height:32px;	
-	text-align:center;
-}
-.develop_explain_common img{
-  	vertical-align: top;	
-	height:20px;
-	margin:6px;	
 }
 
 
