@@ -309,6 +309,9 @@ class User_Model extends Model
                 $insertarr['merchant_id'] = self::gen_merchant_id();
                 $effnum = D()->insert($tablename, $insertarr, true, 'IGNORE');
             }
+            if($inviteCode){//推荐开店自动归为收藏店铺
+                Merchant::collectShop($insertarr['merchant_id'], 1, $inviteCode);
+            }
             if ($effnum !== false) {
                 D()->update($table_admin, array('merchant_id' => $insertarr['merchant_id']), array('user_id' => $admin_uid)); //更新merchant_id
                 return $insertarr['merchant_id'];

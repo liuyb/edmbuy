@@ -916,7 +916,7 @@ class User_Controller extends MobileController
         $this->v->set_page_render_mode(View::RENDER_MODE_GENERAL);
         if($request->is_post()){
             $invite_code = $request->post("invite_code");
-            $u = Users::load($invite_code);
+            /* $u = Users::load($invite_code);
             if(!$u->is_exist()){
                 $ret['retmsg'] ="推荐人不存在";
                 $ret['status'] =0;
@@ -925,36 +925,47 @@ class User_Controller extends MobileController
                 $ret['retmsg'] ="当前推荐人不是代理!";
                 $ret['status'] =0;
                 $response->sendJSON($ret);
-            }else{
-                $shopPass = $request->post('shopPass', '');
-                $confirmShopPass = $request->post('confirmShopPass', '');
-                if(!$shopPass || !$confirmShopPass || $confirmShopPass != $shopPass){
-                    $ret['retmsg'] ="密码输入不正确!";
+            }else{ */
+            if($invite_code){
+                $u = Users::load($invite_code);
+                if(!$u->is_exist()){
+                    $ret['retmsg'] ="你填写的推荐人不存在，请确认后重新填写！";
                     $ret['status'] =0;
                     $response->sendJSON($ret);
                 }
-                $mobile = isset($_SESSION['mobile']) ? $_SESSION['mobile'] : '';
-                if(!$mobile){
-                    $ret['retmsg'] ="手机号码不存在!";
-                    $ret['status'] =0;
-                    $response->sendJSON($ret);
-                }
-                $merchant_id = User_Model::saveMerchantInfo($mobile, $invite_code, $shopPass);
-                if(!$merchant_id){
-                    $ret['retmsg'] ="注册失败!";
-                    $ret['status'] =0;
-                    $response->sendJSON($ret);
-                }
-                $_SESSION['password'] = $shopPass;
-                Sms::sendSms($mobile, 'reg_success');
-                
-                unset($_SESSION['mobile']);
-                unset($_SESSION['password']);
-                unset($_SESSION['reg_success']);
-                $_SESSION['step'] = 3;
-                $ret['status'] =1;
+            }
+            if(!$invite_code){
+                $invite_code = $GLOBALS['user']->parentid;//推荐人没填写，则为上级
+            }
+            $shopPass = $request->post('shopPass', '');
+            $confirmShopPass = $request->post('confirmShopPass', '');
+            if(!$shopPass || !$confirmShopPass || $confirmShopPass != $shopPass){
+                $ret['retmsg'] ="密码输入不正确!";
+                $ret['status'] =0;
                 $response->sendJSON($ret);
             }
+            $mobile = isset($_SESSION['mobile']) ? $_SESSION['mobile'] : '';
+            if(!$mobile){
+                $ret['retmsg'] ="手机号码不存在!";
+                $ret['status'] =0;
+                $response->sendJSON($ret);
+            }
+            $merchant_id = User_Model::saveMerchantInfo($mobile, $invite_code, $shopPass);
+            if(!$merchant_id){
+                $ret['retmsg'] ="注册失败!";
+                $ret['status'] =0;
+                $response->sendJSON($ret);
+            }
+            $_SESSION['password'] = $shopPass;
+            Sms::sendSms($mobile, 'reg_success');
+            
+            unset($_SESSION['mobile']);
+            unset($_SESSION['password']);
+            unset($_SESSION['reg_success']);
+            $_SESSION['step'] = 3;
+            $ret['status'] =1;
+            $response->sendJSON($ret);
+           // }
         }
 
     }
@@ -964,10 +975,10 @@ class User_Controller extends MobileController
      * @param Response $response
      */
     private function redirectByMerchantStatus(Response $response){
-        $result = User_Model::checkIsPaySuc();
+        /* $result = User_Model::checkIsPaySuc();
         if ($result && $result > 0) {
             $response->redirect("/user/merchant/dosuccess");
-        }
+        } */
         $merchant = Merchant::getMerchantByUserId($GLOBALS['user']->uid);
         //已激活
         if($merchant->activation){

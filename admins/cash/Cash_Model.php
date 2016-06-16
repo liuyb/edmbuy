@@ -131,11 +131,29 @@ class Cash_Model extends Model {
 	
 	static function getCashingOrderList($commision_ids) {
 		if (empty($commision_ids)) return [];
-		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,o.pay_trade_no,o.pay_name,o.pay_status,o.pay_time,o.order_flag
+		$sql = "SELECT uc.order_sn,uc.order_amount,uc.commision,uc.type,o.pay_trade_no,o.pay_name,o.pay_status,o.pay_time,o.order_flag
 				FROM `shp_user_commision` uc INNER JOIN `shp_order_info` o ON uc.order_id=o.order_id
 				WHERE uc.rid IN(%s)
 				";
 		$list = D()->query($sql,$commision_ids)->fetch_array_all();
+		foreach ($list as &$it){
+		    $type = $it['type'];
+		    $txt = '';
+		    switch ($type){
+		        case 1:
+		            $txt = '代理';
+		        break;
+		        case 1:
+		            $txt = '入驻';
+		        break;
+		        case 1:
+		            $txt = '终身分佣';
+		        break;
+		        default:
+		            $txt = '商品分销';
+		    }
+		    $it['type_txt'] = $txt;
+		}
 		return $list;
 	}
 	

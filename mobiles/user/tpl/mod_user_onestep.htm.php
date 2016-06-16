@@ -82,7 +82,7 @@ $(function () {
 	
 	    var mobile = $("#phone_nums_p").val();
 	    if(mobile == ""){
-	        myAlert("手机号不能为空！");
+	    	weui_alert("手机号不能为空！");
 	        return false;
 	    }
 	    if(!validPhone(mobile)){
@@ -93,13 +93,13 @@ $(function () {
 	    var data = {"mobile": mobile};
 	    $.post(url, data,function (ret) {
 	        if(ret.status==1){
-	            myAlert(ret.retmsg);
+	            weui_alert(ret.retmsg);
 	            refresh();
 	            $("#ps_btn").css("display","block");
 	            time = setInterval("refresh();", 1000);
 	            $("#ps_btn").attr("disabled","disabled").css("background","grey");
 	        }else if(ret.status==0){
-	            myAlert(ret.retmsg);
+	            weui_alert(ret.retmsg);
 	            _this.removeClass("sending");
 	        }
 	    });
@@ -112,10 +112,10 @@ $(function () {
 	
 	    var url ="/user/merchant/doonestep";
 	    if(mobile == ""){
-	        myAlert("手机号不能为空！");return;
+	        weui_alert("手机号不能为空！");return;
 	    };
 	    if(auth_code == ""){
-	        myAlert("验证码不能为空！");return;
+	        weui_alert("验证码不能为空！");return;
 	    };
 	    if(!validPhone(mobile)){
 				return false;
@@ -125,7 +125,7 @@ $(function () {
 	        if(ret.status==1){
 	            window.location.href="/user/merchant/twostep";
 	        }else{
-	            myAlert(ret.retmsg);
+	            weui_alert(ret.retmsg);
 	        }
 	    });
 	});
@@ -136,7 +136,7 @@ $(function () {
 function validPhone(phone) {
     var r = isphone(phone);
     if(!r){
-        myAlert('您输入的手机号不正确！');
+        weui_alert('您输入的手机号不正确！');
 		return false;
     }
     return true;

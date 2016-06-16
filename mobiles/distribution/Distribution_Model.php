@@ -16,13 +16,23 @@ class Distribution_Model extends Model{
      */
     static function getMerchantsList(PagerPull $pager, array $options){
         $orderby = $options['orderby'] ? $options['orderby'] : 'oc';
-        $sql = "select m.merchant_id as merchant_id, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc from shp_merchant m left join
+        $join = "";
+        $where = "";
+        if($orderby == 'sc'){//个人收藏
+            $orderby = 'oc';
+            $join .= " join shp_collect_shop ss on m.merchant_id = ss.merchant_id ";
+            $where .= " and ss.user_id = ".$GLOBALS['user']->uid." ";
+        }else{
+            $where .= " and m.recommed_flag = 1 and m.is_completed = 1 ";
+        }
+        $sql = "select m.merchant_id as merchant_id,m.verify, m.facename as facename, m.logo as logo, ifnull(mo.oc, 0) oc, ifnull(cs.cc, 0) cc 
+                from shp_merchant m $join left join
                 (select merchant_ids, count(order_id) oc from shp_order_info where is_separate = 0 and is_delete = 0 and merchant_ids <> ''
                 group by merchant_ids) mo
                 on m.merchant_id = mo.merchant_ids
                 left join
                 (select count(1) as cc, merchant_id from shp_collect_shop group by merchant_id) cs
-                on m.merchant_id = cs.merchant_id where m.recommed_flag = 1 and m.is_completed = 1 order by $orderby desc limit %d,%d";
+                on m.merchant_id = cs.merchant_id where m.activation = 1 $where order by $orderby desc limit %d,%d";
         $result = D()->query($sql, $pager->start, $pager->realpagesize)->fetch_array_all();
         foreach ($result as &$mch){
             $recomm_goods = self::findGoodsRcoment($mch['merchant_id'], 4);

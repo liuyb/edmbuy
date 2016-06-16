@@ -97,7 +97,7 @@ class Shop_Controller extends MobileController
         if($request->is_post()){
             $merchant_id = $request->post('merchant_id', 0);
             $action = $request->post('action', 0);
-            Shop_Model::collectShop($merchant_id, $action);
+            Merchant::collectShop($merchant_id, $action);
         }
         $response->sendJSON("");
     }

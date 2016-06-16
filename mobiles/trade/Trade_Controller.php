@@ -854,6 +854,11 @@ class Trade_Controller extends MobileController {
 
         // 生成子订单(如果有多个商家)
         Order::genSubOrder($order_id, $rel_merchants);
+        
+        //购买商品自动归为收藏商家
+        foreach ($rel_merchants as $mid){
+            Merchant::collectShop($mid, 1);
+        }
 
         // 清除购物车
         Cart::deleteItems($cart_rids_arr, $user_id);
@@ -1120,14 +1125,16 @@ class Trade_Controller extends MobileController {
     }
     $this->v->assign('order_amount', $order_amount);
 
-    /* global $user;
-    $total_paid = $user->total_paid();
-    $user_level = 0;
-    $level_amount = Users::$level_amount[Users::USER_LEVEL_1];
-    if ($total_paid >= $level_amount || $total_paid+$order_amount >= $level_amount) {
-      $user_level = 1;
+    global $user;
+    if(!$user->level){
+        //米客
+        $total_paid = $user->total_paid($order_id);
+        $level_amount = Users::$level_amount[Users::USER_LEVEL_1];
+        if ($total_paid+$order_amount < $level_amount) {
+          $this->v->assign('msgap', $level_amount - ($total_paid+$order_amount));
+        }
     }
-    $this->v->assign('user_level', $user_level);*/
+    $this->v->assign('user', $user);
     $response->send($this->v);
   }
 

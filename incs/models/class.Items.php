@@ -383,7 +383,7 @@ HERESQL;
 	         if($count){
 	             return;
 	         }
-	         $sql = "insert into shp_collect_goods(user_id, goods_id, add_time) values(%d, %d, %d)";
+	         $sql = "insert ignore into shp_collect_goods(user_id, goods_id, add_time) values(%d, %d, %d)";
 	         D()->query($sql, $user_id, $goods_id, time());
 	     }else if($action < 0){
 	         $sql = "delete from shp_collect_goods where user_id = %d and goods_id = %d";

@@ -342,6 +342,35 @@ class Merchant extends StorageNode {
 	    }
 	    return $ms;
 	}
+	
+	/**
+	 * 店铺收藏/取消收藏
+	 * @param unknown $merchant_id
+	 * @param unknown $action
+	 */
+	static function collectShop($merchant_id, $action, $user_id = 0){
+	    if(!$action){
+	        return;
+	    }
+	    if(!$user_id){
+    	    $user_id =$GLOBALS['user']->uid;
+	    }
+	    if($action < 0){
+	        $sql = "delete from shp_collect_shop where user_id=%d and merchant_id = '%s'";
+	        D()->query($sql,$user_id,$merchant_id);
+	    }else{
+	        $sql="select count(1) from shp_collect_shop where user_id = %d AND merchant_id ='%s'";
+	        $result = D()->query($sql,$user_id,$merchant_id)->result();
+	        if($result && $result > 0){
+	            return;
+	        }
+	        $tablename = "`shp_collect_shop`";
+	        $insertarr['merchant_id'] = $merchant_id;
+	        $insertarr['user_id'] = $user_id;
+	        $insertarr['add_time'] = time();
+	        D()->insert($tablename,$insertarr,false,'IGNORE');
+	    }
+	}
 }
  
 /*----- END FILE: class.Merchant.php -----*/

@@ -839,8 +839,12 @@ class Users extends StorageNode {
 	 * 查询当前用户总购买金额
 	 * @return double
 	 */
-	public function total_paid() {
-		$total = D()->query("SELECT SUM( money_paid ) AS totalpaid FROM ".Order::table()." WHERE user_id =%d AND `pay_status`=%d", $this->id, PS_PAYED)->result();
+	public function total_paid($order_id = 0) {
+	    $where = '';
+	    if($order_id){
+	        $where .= " and order_id <> $order_id ";//刚支付时当前订单可能还不存在
+	    }
+		$total = D()->query("SELECT SUM( money_paid ) AS totalpaid FROM ".Order::table()." WHERE user_id =%d AND `pay_status`=%d $where ", $this->id, PS_PAYED)->result();
 		return $total;
 	}
 	

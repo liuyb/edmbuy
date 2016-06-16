@@ -2809,21 +2809,12 @@ td.cash_td2 img {
   margin:10px 0;
   padding: 12px 0;
 }
-.pay_logo{
-  text-align:center;
-  margin:87px 0 30px;
-}
 .pay_logo img{
   width:91px;
   height:95px;
 }
 .pay_price{
   text-align:center;  
-}
-.pay_tit{
-  font-size:18px;
-  color:#333;
-  margin-bottom:15px;
 }
 .pay_p{
   font-size:14px;
@@ -5489,44 +5480,41 @@ td.cash_td2 img {
   height: 49px;
   text-align: center;	
 }
-.agency_bottom_menu li a{
-	background: url(../img/bot_n.png) no-repeat;
-}
-.agency_bottom_menu li.on a{
-  background: url(../img/bot_p.png) no-repeat;
+.agency_bottom_menu li {
+  background: url(../img/bot.png) no-repeat;
 }
 
-#s_sy a {
-	background-position: 0px 5px;
-	background-size: auto 37px;
+#s_sy {
+	background-position: 20px 6px;
+	background-size: 40px;
 }
-#s_sy.on a {
-	background-position: 0 5px;
-	background-size: auto 37px;
+#s_sy.on {
+	background-position: 20px -262px;
+	background-size: 40px;
 }
-#s_gwc a {
-	background-position: -78px 5px;
-	background-size: auto 37px;
+#s_gwc {
+	background-position: 20px -61px;
+	background-size:40px;
 }
-#s_gwc.on a {
-	background-position: -78px 5px;
-	background-size: auto 37px;
+#s_gwc.on {
+	background-position: 20px -329px;
+	background-size:40px;
 }
-#s_lmsj a {
-	background-position: -160px 5px;
-	background-size: auto 37px;
+#s_lmsj {
+	background-position: 20px -128px;
+	background-size: 40px;
 }
-#s_lmsj.on a {
-	background-position: -160px 5px;
-	background-size: auto 37px;
+#s_lmsj.on {
+	background-position: 20px -396px;
+	background-size: 40px;
 }
-#s_hyzx a {
-	background-position: -240px 5px;	
-	background-size: auto 37px;
+#s_hyzx {
+	background-position: 20px -195px;	
+	background-size: 40px;
 }
-#s_hyzx.on a {
-	background-position: -240px 5px;
-	background-size: auto 37px;
+#s_hyzx.on {
+	background-position: 20px -463px;
+	background-size: 40px;
 }
 
 /* 支付成功*/
@@ -5710,11 +5698,6 @@ td.cash_td2 img {
   	font-weight: normal !important;
   	padding: 0px !important;
 }
-.alliance li{
-	display:inline-block;
-	width:50%;
-	height:43px;
-}
 .allliance_on{
 	font-size:17px;
 	color:#f65d00;
@@ -5725,7 +5708,7 @@ td.cash_td2 img {
 }
 .iance_list_infos{
 	border-bottom:1px solid #e6e6e6;
-	margin-bottom:10px;
+	margin-top:10px;
 	background:#fff;
 }
 .iance_list_top{
@@ -5778,9 +5761,9 @@ td.cash_td2 img {
 	width:100%;
 }
 .moreblk {
-	text-align: center;
+  text-align: center;
   height: 40px;
-  line-height: 25px;
+  line-height: 40px;
   display: none;
 }
 .allicen_more{
@@ -5792,9 +5775,6 @@ td.cash_td2 img {
 }
 /*2016-4-28*/
 
-.agency_index_img{
-	text-align:right;
-}
 .agency_index_img img{
 	width:20px;
 	height:20px;
@@ -6408,32 +6388,6 @@ td.cash_td2 img {
 	background:#fff;
 }
 
-.wallet_type_list{
-  	background: #fff;
-  	position: relative;	
-}
-.wallet_type_list li {
-  	border-bottom: 1px solid #e6e6e6;
-  	width: 33.3%;
-  	float: left;
-  	text-align: center;
-  	padding: 20px 0;
-}
-.wallet_type_list p {
-  	font-size: 12px;
-  	color: #8d8d8d;
-}
-.wallet_li_font{
-  	color: #f65d00 !important;
-  	font-size: 16px !important;	
-}
-.wallet_top{
-	height:90px;
-	background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#ff7420), to(#f65d00));
-}
-.wallet_infos{
-	padding:15px 10px 5px;
-}
 .ye_account{
 	font-size:12px;
 	color:#fff;
@@ -6446,68 +6400,7 @@ td.cash_td2 img {
 	color:#fff;	
 	float:right;
 }
-.wallet_money{
-	padding:0 5px;
-	font-size:22px;
-	color:#fff;
-}
-.line5{
-  	position: absolute;
-  	height: 60px;
-  	border-right: 1px solid #e6e6e6;
-  	top: 95px;
-  	right: 66.3%;
-}	
-.line6{
-  	position: absolute;
-  	height: 60px;
-  	border-right: 1px solid #e6e6e6;
-  	top: 95px;
-  	right: 33.3%;
-}	
-.line9{
-  	position: absolute;
-  	height: 60px;
-  	border-right: 1px solid #e6e6e6;
-  	top: 12px;
-  	right: 66.3%;
-}	
-.line10{
-  	position: absolute;
-  	height: 60px;
-  	border-right: 1px solid #e6e6e6;
-  	top: 12px;
-  	right: 33.3%;
-}
-.income_money{
-	height:90px;
-	position:relative;
-}
-.income_money li{
-	float:left;
-	text-align:center;
-	width:50%;
-	margin-top:20px;
-}
-.income_money p{
-	color:#8d8d8d;
-	font-size:12px;	
-}
-.in_com_money{
-	font-size:22px !important;	
-	color:#f65d00 !important;	
-}
-.no_force_money{
-	font-size:22px !important;	
-	color:#1fa761 !important;	
-}
-.line7{
-  	position: absolute;
-  	height: 60px;
-  	border-right: 1px solid #e1e1e1;
-  	top: 15px;
-  	right: 50%;	
-}
+
 /*2016-5-3 e*/
 
 /*2016-5-5  s */
@@ -6747,47 +6640,12 @@ td.cash_td2 img {
   	margin: 5px;
   	vertical-align: top;	
 }
-.code_common_c{
-	padding-bottom:10px;
-	background:#fff;
-	margin-top:10px;
-}
 .code_font_size{
 	font-size:13px;
 	color:#8c8c8c;
 }
 .code_i_common{
 	color:#f65d00 !important;
-}
-.plan_explain_common{
-	border:1px solid #ccc;
-	border-radius:5px;
-	margin-left:10px;
-	width:45%;
-	float:left;
-	height:32px;
-	line-height:32px;
-	text-align:center;
-}
-.plan_explain_common img{
-  	vertical-align: top;	
-	height:20px;
-	margin:6px;
-}
-.develop_explain_common{
-	border:1px solid #ccc;
-	border-radius:5px;
-	margin-right:10px;
-	width:45%;
-	float:right;
-	height:32px;
-	line-height:32px;	
-	text-align:center;
-}
-.develop_explain_common img{
-  	vertical-align: top;	
-	height:20px;
-	margin:6px;	
 }
 /*2016-05-18 推广计划*/
 

@@ -211,33 +211,32 @@ class Cash_Controller extends AdminController {
 	    $cash_id = $request->get('cash_id');
 	    $exUC =  UserCashing::load($cash_id);
 	    $order_list = Cash_Model::getCashingOrderList($exUC->commision_ids);
-	    foreach ($order_list AS &$it) {
-	        $total_commision += $it['commision'];
-	        if (!empty($it['pay_trade_no']) && PS_PAYED==$it['pay_status']) {
-	            $it['order_status_txt'] = '有效订单';
+	    foreach ($order_list AS &$order) {
+	        if (!empty($order['pay_trade_no']) && PS_PAYED==$order['pay_status']) {
+	            $order['order_status_txt'] = '有效订单';
 	        }
-	        elseif(empty($it['pay_trade_no'])) {
-	            if ($it['order_flag']>0 && $it['pay_time']>0) {
-	                $it['order_status_txt'] = '有效订单';
+	        elseif(empty($order['pay_trade_no'])) {
+	            if ($order['order_flag']>0 && $order['pay_time']>0) {
+	                $order['order_status_txt'] = '有效订单';
 	            }
 	            else {
-	                $it['order_status_txt'] = '无效订单';
+	                $order['order_status_txt'] = '无效订单';
 	            }
 	        }
 	        else {
-	            $_status = Fn::pay_status($it['pay_status']);
-	            $it['order_status_txt'] = '异常订单('.$_status.')';
+	            $_status = Fn::pay_status($order['pay_status']);
+	            $order['order_status_txt'] = '异常订单('.$_status.')';
 	        }
 	    }
 	    $filename  = SIMPHP_ROOT . '/var/tmp/CASH_ORDER_LIST_%s.csv';
 	    
 	    $filename  = sprintf($filename, $exUC->cashing_no);
-	    $csv = "订单编号,订单金额,佣金,支付交易号,订单有效检测".self::CSV_LN;
+	    $csv = "订单编号,订单金额,佣金,支付交易号,佣金类型,订单有效检测".self::CSV_LN;
 	    $CSV_SEP = self::CSV_SEP;
 	    //获取商家收入订单详情
 	    if (!empty($order_list)) {
 	        foreach ($order_list AS $it) {
-	            $csv .= '"'.$it['order_sn'].'"'.$CSV_SEP.$it['order_amount'].$CSV_SEP.$it['commision'].$CSV_SEP.'"'."'".$it['pay_trade_no'].'"'.$CSV_SEP.'"'.$it['order_status_txt'].'"'.self::CSV_LN;
+	            $csv .= '"'.$it['order_sn'].'"'.$CSV_SEP.$it['order_amount'].$CSV_SEP.$it['commision'].$CSV_SEP.'"'."'".$it['pay_trade_no'].'"'.$CSV_SEP.'"'.$it['type_txt'].'"'.$CSV_SEP.'"'.$it['order_status_txt'].'"'.self::CSV_LN;
 	        }
 	    }
 	    if (''!=$csv) {
