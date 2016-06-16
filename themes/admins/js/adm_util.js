@@ -9,6 +9,26 @@
     };
 })(jQuery);
 
+/**
+ * 通用dialog
+ */
+function showDialog(width, height, content, title) {
+	var dialog = $("#pop_dialog");
+	dialog.css({
+		'width' : width,
+		'height' : height
+	});
+	centerDOM(dialog);
+	var $title = dialog.find(".title");
+	var $content = dialog.find(".content");
+	$content.height(height - (40 + 90));// title+button区
+	$title.html(title);
+	$content.html(content);
+	$('.dialog_mask').show();
+	dialog.show();
+	return dialog;
+}
+
 //居中显示一个层
  function centerDOM(obj){
 	 var screenWidth = $(window).width(), screenHeight = $(window).height();  //当前浏览器窗口的 宽高
@@ -74,3 +94,24 @@ function formatDate(date) {
 	} 
 	return (myyear+"-"+mymonth + "-" + myweekday); 
 } 
+
+function showMsg(msg) {
+	layer.msg(msg);
+}
+/**
+ * confirm提示
+ * 
+ * @param msg
+ * @param handler
+ */
+function showConfirm(msg, handler) {
+	layer.confirm(msg, {
+		btn : [ '确定', '取消' ]
+	// 按钮
+	}, function() {
+		layer.closeAll();
+		handler.apply(this, arguments);
+	}, function() {
+		layer.closeAll();
+	});
+}

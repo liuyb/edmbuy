@@ -47,7 +47,7 @@ $(function(){
 
 	$mbody.on('pullMore', function(){
 		var orderby = $("#order_bar").find("li[class='allliance_on']").data('type');
-		var curpage = $showMore.attr('data-curpage');
+		var curpage = $("#showMore").attr('data-curpage');
 		getMerchantsList(orderby ? orderby : 'oc', (curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);

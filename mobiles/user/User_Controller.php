@@ -1113,14 +1113,21 @@ class User_Controller extends MobileController
         $uid = $GLOBALS['user']->uid;
         $commision = UserCommision::get_commision_income($uid);
         $totalIncome    = 0.00;
+        $totalye        = 0.00;
         foreach ($commision as $item => $val){
-            if(in_array($item, [UserCommision::STATE_ACTIVE,UserCommision::STATE_CASHED])){ //总收入
+            //账户余额= 激活
+            if(in_array($item, [UserCommision::STATE_ACTIVE])){
+                $totalye += $val;
+            }
+            //累计收入= 激活+锁定+提现
+            if(in_array($item, [UserCommision::STATE_ACTIVE,UserCommision::STATE_LOCKED,UserCommision::STATE_CASHED])){ //总收入
                 $totalIncome += $val;
             }
         }
         $type_commision = UserCommision::get_commision_income_bytype($uid);
         $rebate_commision = UserCommision::get_rebate_commision($uid);
         $this->v->assign('commision', $commision);
+        $this->v->assign('totalye', $totalye);
         $this->v->assign('totalIncome', $totalIncome);
         $this->v->assign('type_commision', $type_commision);
         $this->v->assign('rebate_commision', $rebate_commision);

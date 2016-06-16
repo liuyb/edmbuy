@@ -34,7 +34,7 @@ class Goods_Model extends Model
 
             self::handle_goods_gallery($is_insert, $goods_id, $request->post('gallery_list', []));
 
-            self::handle_goods_attribute($is_insert, $goods_id, $request->post('attribute_list', []));
+            self::handle_goods_attribute($is_insert, $goods_id, $request->post('attribute_list', ''));
 
         } catch (Exception $e) {
             D()->rollback();
@@ -118,13 +118,15 @@ class Goods_Model extends Model
     }
 
     //商品属性处理
-    private static function handle_goods_attribute($is_insert, $goods_id, array $attribute_list)
+    private static function handle_goods_attribute($is_insert, $goods_id, $attribute_list)
     {
         if (!$is_insert) {
             // 删除原数据
             Goods_Atomic::delete_goods_attr($goods_id);
         }
-
+        if($attribute_list){
+            $attribute_list = json_decode($attribute_list);
+        }
         foreach ($attribute_list as $attr) {
             $sql = "INSERT INTO shp_goods_attr(goods_id, cat1_id,cat1_name,cat2_id,cat2_name,cat3_id,cat3_name,
                     attr1_id, attr1_value, attr2_id, attr2_value, attr3_id, attr3_value,
@@ -135,8 +137,8 @@ class Goods_Model extends Model
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id1', 0) . "', '" . self::setDefaultValueIfUnset($attr, 'attr_value1', '') . "',
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id2', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value2', '') . "',
                         '" . self::setDefaultValueIfUnset($attr, 'attr_id3', 0) . "','" . self::setDefaultValueIfUnset($attr, 'attr_value3', '') . "',
-                        ".doubleval($attr['market_price']).",".doubleval($attr['shop_price']).",
-                        ".doubleval($attr['income_price']).",".doubleval($attr['cost_price']).",".intval($attr['goods_number']).")";
+                        ".doubleval($attr->market_price).",".doubleval($attr->shop_price).",
+                        ".doubleval($attr->income_price).",".doubleval($attr->cost_price).",".intval($attr->goods_number).")";
             D()->query($sql);
         }
     }
@@ -144,8 +146,8 @@ class Goods_Model extends Model
     private static function setDefaultValueIfUnset($arr, $key, $default)
     {
         if ($arr && $key) {
-            if (isset($arr[$key])) {
-                return D()->escape_string($arr[$key]);
+            if (isset($arr->$key)) {
+                return D()->escape_string($arr->$key);
             }
         }
         return $default;

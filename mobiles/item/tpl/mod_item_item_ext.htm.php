@@ -32,7 +32,7 @@ $(function(){
 	$pullMore = $("#pullMore");
 	$mbody.pullMoreDataEvent($pullMore);
 	$mbody.on('pullMore', function(){
-		loadGoodsComment($pullMore.attr("curpage"), false, $pullMore.attr("category"));
+		loadGoodsComment($("#pullMore").attr("curpage"), false, $pullMore.attr("category"));
 	});
 	//好评中评差评切换
 	$(".pro_tab_evaluate").find("div").on('click', function(){

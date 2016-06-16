@@ -576,10 +576,17 @@ class UserCommision extends StorageNode {
 	static function get_commision_list(PagerPull $pager, $options){
 	    $where = '';
         if(isset($options['state']) && $options['state'] >= 0){
-            $where .= ' AND `state` >= 0 ';
+            $state = $options['state'];
+            if($state == 9){//包含未生效跟已生效佣金
+                $where .= " AND `state` >= 0 ";
+            }else{
+                $where .= " AND `state` = $state ";
+            }
         }else{
-            $where .= ' AND `state` in ('.UserCommision::STATE_ACTIVE.', '.UserCommision::STATE_CASHED.') ';
+            //累计收入
+            $where .= ' AND `state` in ('.UserCommision::STATE_ACTIVE.', '.UserCommision::STATE_LOCKED.', '.UserCommision::STATE_CASHED.') ';
         }
+        //判断佣金类型
         if(isset($options['type']) && $options['type'] >= 0){
             $where .= ' AND `type` =  '.intval($options['type']);
         }

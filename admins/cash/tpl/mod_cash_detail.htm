@@ -17,6 +17,12 @@
   <form name="cash_detail"  action="" method="post" id="cash_detail" onsubmit="return false;">
     <table class="frmTable">
       <tbody>
+        <!--{if $userCash->state eq 4}-->
+      	<tr>
+          <td colspan="3">操作：<span><input type='button' value='审核通过' onclick="doCheck(1)"/>
+          <input style="margin-left:20px;" type='button' value='审核拒绝' onclick="doCheck(-1)"/></span></td>
+        </tr>
+        <!--{/if}-->
         <tr>
           <td class="c1"><em class="ht">提现订单编号：</em><!--{$userCash->cashing_no}--></td>
           <td class="c2"><em class="ht">订单提交时间：</em><!--{trans_time time=$userCash->apply_time is_real=1}--></td>
@@ -62,3 +68,39 @@
 </div>
 
 </section>
+
+<script>
+$(function(){
+	$(EventBus).on('DIALOG_CONFIRM_EVENT', function(e, o){
+		var $this = $(o);
+		var text = $this.closest(".pop_dialog").find(".refuseTxt").val();
+		if(!text || !text.length){
+			showMsg("请输入拒绝原因");
+			return;
+		}
+		postCheck(-1, text);
+	});
+});
+var cash_id = "<!--{$userCash->cashing_id}-->";
+function doCheck(state){
+	if(state == 1){
+		showConfirm('确定审核通过当前提现订单吗？',function(){
+			postCheck(1);
+		});
+	}else if(state == -1){
+		var dialog = "<textarea style=\"width: 95%;height: 100px;\" maxlength='500' class='refuseTxt'></textarea><div style='margin-left:10px;color:red;' class='errMsg'></div>";
+		showDialog(400,250,dialog,'提现审核');
+	}
+}
+function postCheck(state, remark){
+	F.post('/cash/check',{cash_id : cash_id, state : state, remark : remark}, function(ret){
+		if(ret && ret.flag == 'SUCC'){
+			showMsg('操作成功');
+			closeCommonDialog();
+			window.location.reload();
+		}else{
+			showMsg(ret.msg);
+		}
+	});
+}
+</script>

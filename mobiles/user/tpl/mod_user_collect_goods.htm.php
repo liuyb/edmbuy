@@ -36,7 +36,7 @@ $(function(){
 	});
 
 	$mbody.on('pullMore', function(){
-		var curpage = $showMore.attr('data-curpage');
+		var curpage = $("#showMore").attr('data-curpage');
 		getGoodsList((curpage ? curpage : 1), false);
 	});
 	$mbody.pullMoreDataEvent($showMore);

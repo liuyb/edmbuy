@@ -92,7 +92,7 @@ class User_Model extends Model
                 }
             }
             $field .= "t$i.c as status$i ,";
-            $condition .= "(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and user_id=$uid $where ) t$i ,";
+            $condition .= "(SELECT count(1) c FROM edmbuy.shp_order_info where is_separate = 0 and is_delete=0 and user_id=$uid $where ) t$i ,";
         }
         $field = rtrim($field, ',');
         $condition = rtrim($condition, ',');
