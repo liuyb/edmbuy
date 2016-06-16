@@ -18,25 +18,48 @@
 </head>
 
 <style>
+.alliance li{
+	display:inline-block;
+	width:33.3%;
+	height:43px;
+}
+.new_collects{
+	background:url(../img/scdp.png) no-repeat left;
+	background-size:14px 13px;
+	padding-left:20px;
+	margin-right:10px;
+}
+.new_order_bg{
+	background:url(../img/ding.png) no-repeat left;
+	background-size:13px 15px;
+	padding-left:20px;
+}
+.new_mer_type{
+	vertical-align: middle;
+	margin-left:5px;
+	width:17px;
+	height:19px;
+}
 </style>
 
 <body style="background:#eee;">
 
 <div class="header alliance">
-	<div style="padding:0 20px;">
-	<ul>	
-		<li id="li1" onclick="f(1)" class="allliance_on">销量</li><li id="li2" onclick="f(2)">粉丝</li>
-	</ul>
+	<div style="width:80%;float:left;">
+		<ul>	
+			<li id="li1" onclick="f(1)" class="allliance_on">销量</li><li id="li2" onclick="f(2)">粉丝</li><li id="li3" onclick="f(3)">我的收藏</li>
+		</ul>
 	</div>
+	<div style="float:right;"><img src="../img/ruz.png" style="height:45px;"></div>
 </div>
-
+ 
 <div class="alliance_list_common" id="list1">
 	<div class="iance_list_infos">
 		<div class="iance_list_top">
-			<img src="../img/369.jpg" class="l_top_img">
+			<img src="../img/369.jpg" class="l_top_img"> 
 			<div class="l_top_infos">
-				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				<p class="t_infos_nmae">初一茶社<img src="../img/shang_22.png" class="new_mer_type"></p>
+				<p class="t_infos_num"><i class="new_collects">3366人</i><i class="new_order_bg">2255个订单</i></p>
 			</div>
 			<button class="l_top_btn">进店</button>
 		</div>
@@ -53,7 +76,7 @@
 			<img src="../img/369.jpg" class="l_top_img">
 			<div class="l_top_infos">
 				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				<p class="t_infos_num"><i class="new_collects">3366人</i><i class="new_order_bg">2255个订单</i></p>
 			</div>
 			<button class="l_top_btn">进店</button>
 		</div>
@@ -73,7 +96,7 @@
 			<img src="../img/123.jpg" class="l_top_img">
 			<div class="l_top_infos">
 				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				<p class="t_infos_num"><i class="new_collects">3366人</i><i class="new_order_bg">2255个订单</i></p>
 			</div>
 			<button class="l_top_btn">进店</button>
 		</div>
@@ -89,7 +112,7 @@
 			<img src="../img/369.jpg" class="l_top_img">
 			<div class="l_top_infos">
 				<p class="t_infos_nmae">初一茶社</p>
-				<p class="t_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+				<p class="t_infos_num"><i class="new_collects">3366人</i><i class="new_order_bg">2255个订单</i></p>
 			</div>
 			<button class="l_top_btn">进店</button>
 		</div>

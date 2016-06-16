@@ -16,63 +16,119 @@
 <script src="../js/j.js"></script>
 <!-- head end -->
 </head>
+<style>
+.header li{
+	float:left;
+	width:50%;
+	height:43px;
+}
+.header{
+	font-weight:400 !important;
+}
+.new_deve_on{
+	color:#F65D00 !important;
+	border-bottom:1px solid #F65D00 !important;
+}
+.code_common_c{
+	background:#fff;
+	margin-bottom:10px;
+}
+.plan_explain_common{
+	border-top:1px solid #f1f1f1;
+	width:50%;
+	float:left;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+}
+.plan_explain_common img{
+  	vertical-align: top;	
+	height:16px;
+	margin:12px 5px 0;
+}
+.develop_explain_common {
+  	border-top: 1px solid #f1f1f1;
+  	width: 50%;
+  	float: right;
+	height:40px;
+	line-height:40px;
+	text-align:center;	
+}
+.develop_explain_common img {
+  	vertical-align: top;	
+	height:16px;
+	margin:12px 5px 0;	
+}
+</style>
 
 <body style="background:#f1f1f1;">
 
 <div class="header">
-	推广素材
+	<ul>
+		<li id="li1" onclick="f(1)" class="new_deve_on">去推广</li>
+		<li id="li2" onclick="f(2)">找素材</li>
+	</ul>
 	<a href="javascript:history.back();" class="back"></a>
 </div>
 
-<div class="code_type">
-	<ul>
-		<li><img src="../img/wdewm.png">我的二维码</li>
-		<li><img src="../img/tgewm.png">推广二维码</li>
-		<span class="code_line"></span>
+<div class="new_common_list" id="list1">
+	<div class="code_common_c">
+		<div class="iance_list_top">
+			<img src="../img/msjh.png" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">益多米：<i class="code_i_common">米商计划</i></p>
+				<p class="t_infos_num code_font_size">让你的好友圈变得更有价值</p>
+			</div>
+		</div>
+		<div class="plan_explain_common"><img src="../img/scm.png">计划说明</div>
+		<div class="develop_explain_common"><img src="../img/lian.png">推广链接</div>
 		<div class="clear"></div>
-	</ul>
-</div>
-
-<div class="code_common_c">
-	<div class="iance_list_top">
-		<img src="../img/msjh.png" class="l_top_img">
-		<div class="l_top_infos">
-			<p class="t_infos_nmae">益多米：<i class="code_i_common">米商计划</i></p>
-			<p class="t_infos_num code_font_size">让你的好友圈变得更有价值</p>
-		</div>
 	</div>
-	<div class="plan_explain_common"><img src="../img/jhsm.png">计划说明</div>
-	<div class="develop_explain_common"><img src="../img/tglj.png">推广链接</div>
-	<div class="clear"></div>
-</div>
-
-<div class="code_common_c">
-	<div class="iance_list_top">
-		<img src="../img/dljh.png" class="l_top_img">
-		<div class="l_top_infos">
-			<p class="t_infos_nmae">益多米：<i class="code_i_common">代理计划</i></p>
-			<p class="t_infos_num code_font_size">全民代理，益多米分销系统更值得信赖</p>
+	
+	<div class="code_common_c">
+		<div class="iance_list_top">
+			<img src="../img/msjh.png" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">益多米：<i class="code_i_common">米商计划</i></p>
+				<p class="t_infos_num code_font_size">让你的好友圈变得更有价值</p>
+			</div>
 		</div>
+		<div class="plan_explain_common"><img src="../img/scm.png">计划说明</div>
+		<div class="develop_explain_common"><img src="../img/lian.png">推广链接</div>
+		<div class="clear"></div>
 	</div>
-	<div class="plan_explain_common"><img src="../img/jhsm.png">计划说明</div>
-	<div class="develop_explain_common"><img src="../img/tglj.png">推广链接</div>
-	<div class="clear"></div>
 </div>
 
-<div class="code_common_c">
-	<div class="iance_list_top">
-		<img src="../img/zsjh.png" class="l_top_img">
-		<div class="l_top_infos">
-			<p class="t_infos_nmae">益多米：<i class="code_i_common">招商计划</i></p>
-			<p class="t_infos_num code_font_size">商家必看的渠道推广新思路</p>
+<div class="new_common_list" id="list2" style="display:none;">
+	<div class="code_common_c">
+		<div class="iance_list_top">
+			<img src="../img/msjh.png" class="l_top_img">
+			<div class="l_top_infos">
+				<p class="t_infos_nmae">益多米：<i class="code_i_common">米商计划</i></p>
+				<p class="t_infos_num code_font_size">让你的好友圈变得更有价值</p>
+			</div>
 		</div>
+		<div class="plan_explain_common"><img src="../img/scm.png">计划说明</div>
+		<div class="develop_explain_common"><img src="../img/lian.png">推广链接</div>
+		<div class="clear"></div>
 	</div>
-	<div class="plan_explain_common"><img src="../img/jhsm.png">计划说明</div>
-	<div class="develop_explain_common"><img src="../img/tglj.png">推广链接</div>
-	<div class="clear"></div>
 </div>
 
 
+<script>
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".new_common_list").hide();
+	$(".header li").removeClass("new_deve_on");
+	
+	$(_li).addClass("new_deve_on");
+	$(_list).show();
+}
+
+</script>
 
 
 

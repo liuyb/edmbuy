@@ -16,9 +16,52 @@
 <script src="./js/j.js"></script>
 <!-- head end -->
 </head>
-<style>
 
+<style>
+.pay_logo{
+	text-align:center;
+	margin:40px 0 30px;
+}
+.pay_tit{
+	font-size:18px;
+	color:#000;
+	margin-bottom:15px;
+}
+.new_order_money{
+	font-size:14px;
+	color:#333;
+	margin-bottom:20px;
+}
+.new_order_money i{
+	font-size:14px;
+	color:#FF0101;	
+}
+.pay_t{
+	font-size:16px;
+	color:#000;
+	margin-bottom:20px;	
+}
+.new_check_order_btn{
+	width:128px;
+	height:40px;
+	line-height:40px;
+	border-radius:5px;
+	background:#fff;
+	font-size:16px;
+	color:#333;
+	border:1px solid #e6e6e6;
+	margin-bottom:40px;
+}
+.weix_code_n{
+	width:128px;
+	height:128px;
+}
+.pay_t_b{
+	font-size:14px;
+	color:#333;
+}
 </style>
+
 <body class="white_bg has_footer">
 
 <div class="pay_logo">
@@ -26,14 +69,16 @@
 </div>
 
 <div class="pay_price">
-	<p class="pay_tit">支付成功</p>
-	<p class="pay_tit">多米分销系统</p>
-	<p class="pay_p"><span class="price_sucee">￥138.00</span></p>
+	<p class="pay_tit">购物成功</p>
+	<p class="new_order_money">订单金额：<i>38.00元</i></p>
+	<p class="pay_t">您还差53元，即可成为米商。</p>
+	<p style="display:none;"><button class="new_check_order_btn">查看订单</button></p>
+	<p style="font-size:16px;color:#3e8427;">查看订单？</p>
+	<p><img src="./img/zhiyin.png" width="30px" height="41px"></p>
+	<img src="./img/ydm.png" class="weix_code_n">
+	<p class="pay_t_b">关注益多米公众号</p>
 </div>
 
-<div id="wx_success_pay"  style="margin-top:30px;">
-	<button id="sus_pay">微信安全支付</button>
-</div>
 
 
 

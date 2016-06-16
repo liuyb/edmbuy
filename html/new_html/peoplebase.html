@@ -1,0 +1,284 @@
+<!-- head start -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="telephone=no" name="format-detection">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>益多米</title>
+<link rel="stylesheet" href="../css/c.css" />
+<link rel="stylesheet" href="../css/animate.min.css" />
+<link rel="stylesheet" href="../css/wu.css" />
+<link rel="stylesheet" href="../css/du.css" />
+<script src="../js/jquery-1.8.3.js"></script>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/j.js"></script>
+<!-- head end -->
+</head>
+
+<style>
+.ppbase_nums{
+	font-size:20px;
+	cololr:#333;
+}
+.store_three_listbase{
+  	height: 59px;
+  	border-bottom: 1px solid #e6e6e6;
+  	background: #fff;	
+}
+.store_three_listbase li{
+	font-size:12px;
+	color:#8A8A8A;
+  	padding: 5px 0;
+  	float: left;
+  	width: 33.3%;
+  	text-align: center;
+  	font-size: 12px;	
+}
+.navigbase_on {
+  	border-bottom: 1px solid #f65d00;
+}
+.jin_base{
+	width:17px;
+	height:19px;
+	vertical-align:middle;
+}
+.base_click{
+  	float: right;
+  	margin-top: 15px;	
+}
+.base_click img{
+	width:30px;
+	height:30px;
+}
+.base_check{
+	position:absolute;
+	right:0px;
+	font-size:16px;
+}
+.base_seek{
+	position:fixed;
+	bottom:0;
+	height:295px;
+	width:100%;
+	left:0;
+	z-index:55555;	
+}
+.seek_lists{
+	background:#FFF;
+	margin:0 20px;
+	border-radius:5px;
+}
+.seek_lists li{
+	height:45px;
+	line-height:45px;
+	border-bottom:1px solid #e6e6e6;
+	text-align:center;
+	font-size:17px;
+	color:#000;
+}
+.seek_cancel{
+	background:#FFF;
+	margin:0 20px;
+	border-radius:5px;	
+	height:45px;
+	line-height:45px;	
+	margin-top:10px;
+	color:#f56105;
+	font-size:17px;
+	text-align:center;
+}
+</style>
+
+<body style="background:#eee;">
+<div class="header">
+	我的人脉
+	<a href="javascript:history.back();" class="back"></a>
+	<a href="javascript:;" class="base_check">筛选</a>
+</div>
+
+<div class="store_three_listbase">
+	<ul>
+		<li class="navigbase_on" id="li1" onclick="f(1)">一级人脉</br><i class="ppbase_nums">14人</i></li>
+		<li class="" id="li2" onclick="f(2)">二级人脉</br><i class="ppbase_nums">14人</i></li>
+		<li class="" id="li3" onclick="f(3)">三级人脉</br><i class="ppbase_nums">14人</i></li>
+	</ul>
+</div>
+
+<div class="m_store_common" id="list1">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="m_store_common" id="list2" style="display:none;">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="m_store_common" id="list3" style="display:none;">
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+	<div class="mstore_list_common">
+		<div class="mstore_list_infos">
+			<div class="mstore_time">
+				2016-12-12 12:00
+				<span style="float:right;">
+					<img src="../img/shang_22.png" class="jin_base">
+					<img src="../img/shang_22.png" class="jin_base">
+				</span>
+			</div>
+			<div class="mstore_list_top">
+				<img src="../img/369.jpg" class="mstore_top_imt">
+				<div class="mstore_top_infos">
+					<p class="ms_infos_nmae">初一茶社</p>
+					<p class="ms_infos_num"><i style="margin-right:10px;">3366人收藏</i><i>2255个订单</i></p>
+					<p class="ms_infos_rs">益多米Edmbuy</p>
+				</div>
+				<a href="javascript:;" class="base_click"><img src="../img/erm.png"></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="mask"></div>
+
+<div class="base_seek" style="display:none;">
+	<div class="seek_lists">
+		<ul>	
+			<li>搜索人脉</li>
+			<li>只看二维码人脉</li>
+			<li>只看商家人脉</li>
+			<li>只看代理人脉</li>
+			<li class="del_bottom">只看米商人脉</li>
+		</ul>
+	</div>
+	<div class="seek_cancel">
+		取消
+	</div>
+</div>
+
+<script>
+$(".base_check").on("click",function(){
+	$(".mask").fadeIn();
+	$(".base_seek").fadeIn();
+})
+
+$(".seek_cancel").on("click",function(){
+	$(".mask").fadeOut();
+	$(".base_seek").fadeOut();
+})
+//切换
+function f(a){
+	var _li = "#li" + a;
+	var _list = "#list" + a;
+	
+	$(".m_store_common").hide();
+	$(".store_three_listbase li").removeClass("navigbase_on");
+	
+	$(_li).addClass("navigbase_on");
+	$(_list).show();
+}
+
+</script>
+
+
+
+
+
+
+
