@@ -3607,22 +3607,15 @@ td.cash_td2 img {
   	vertical-align: middle;	
 	margin-left:10px;
 }
-.ms_infos_nmae {
-  	font-size: 15px;
-  	color: #323232;
-  	margin-left: 10px;
- 	height: 26px;
-	line-height:26px;
-}
 .ms_infos_num {
   	margin-left: 10px;
-  	height: 17px;
-	line-height:17px;
+  	height: 19px;
+	line-height:19px;
 }
 .ms_infos_rs {
 	margin-left: 10px;
-  	height: 17px;
-	line-height:17px;
+  	height: 19px;
+	line-height:19px;
   	font-size: 12px;
 	color:#f65d00;	
 }
