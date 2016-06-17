@@ -3570,13 +3570,6 @@ td.cash_td2 img {
 	background:#fff;
 	margin-top:10px;
 }
-.mstore_time{
-	height:34px;
-	line-height:35px;
-	font-size:15px;
-	color:#323232;
-	border-bottom:1px solid #e6e6e6;
-}
 .mstore_list_infos{
 	margin:10px 10px 0;
 }
@@ -3618,22 +3611,18 @@ td.cash_td2 img {
   	font-size: 15px;
   	color: #323232;
   	margin-left: 10px;
- 	height: 20px;
-	line-height:20px;
+ 	height: 26px;
+	line-height:26px;
 }
 .ms_infos_num {
   	margin-left: 10px;
-  	height: 20px;
-	line-height:20px;
-}
-.ms_infos_num i{
-  	font-size: 12px;
-	color:#8c8c8c;	
+  	height: 17px;
+	line-height:17px;
 }
 .ms_infos_rs {
 	margin-left: 10px;
-  	height: 20px;
-	line-height:20px;
+  	height: 17px;
+	line-height:17px;
   	font-size: 12px;
 	color:#f65d00;	
 }
