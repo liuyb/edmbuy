@@ -45,6 +45,9 @@ return [
       ['host' => '127.0.0.1', 'port' => '6379', 'prefix' => 'EDM_'],
     ],
   ],
+	'cache-config' => [
+		'engine' => 'db', // Cache engine, 'redis' or 'memcache' or 'db'...
+	],
   'session' => [
     'default' => [
       'sessname'  => '',		//new session name, if keep empty, default to 'PHPSESSID'
